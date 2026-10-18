@@ -58,9 +58,9 @@
     "recurrence": 1,
     "suggested_acceptance": "After an explicit vocabulary difficulty, give a brief Czech meaning and one short English example. Achieve at least 80% at-band partner turns.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-5",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "No repeated Czech request for explanation; he never asked for one in #2–#5."
+    "recertify_evidence": "Viktor made no Czech repeat requests; the moment never arose."
   },
   {
     "id": "LT-viktor-67-J3-2",
@@ -211,12 +211,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 8,
+    "recurrence": 9,
     "suggested_acceptance": "Use familiar language such as \"A yellow ball! Do you like it?\" and give one simple question every turn.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#12 'Rex is a nice name! Is Rex a large dog?'; #16 'Wow, Rex is fast and strong! Do you walk Rex here?'",
+    "recertify_evidence": "#17 'Sleeping is nice! Where does he sleep at night?' and #11 two-sentence turns; mild drift.",
     "recurred_as": "LT-tomas-9-J4-3"
   },
   {
@@ -243,12 +243,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "After supported practice, provide an explicit unaided attempt and verify improvement before treating the replay goal as achieved.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "No replay offered; moments empty."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#15-#16 the replay is a retype of \"The tree is green.\" with no fresh question and no independent improvement shown.",
+    "recurred_as": "LT-viktor-67-J4-2"
   },
   {
     "id": "LT-viktor-67-J3-4",
@@ -582,12 +583,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 8,
+    "recurrence": 9,
     "suggested_acceptance": "Offer an accessible replay and capture a fresh, improved answer without a cue before claiming this journey complete.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#9 'Back to the conversation' then #10 'Thank you! Do you have a dog?': no retry of the fix.",
+    "recertify_evidence": "#16 'Back to the conversation' leads to #17 new question.",
     "recurred_as": "LT-tomas-9-J4-2"
   },
   {
@@ -614,12 +615,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "Check the intended meaning and offer a short model such as \"I have tomatoes in my garden.\" Avoid treating uncertain recognition as a proven learner mistake.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-5",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "No article slips in his lines (#2, #3, #5), so the repeated-article gap was not tested.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#2 \"I have garden\" passed with no moment and no recap line, although the same slip was corrected at #6.",
     "recurred_as": "LT-viktor-67-J3-3"
   },
   {

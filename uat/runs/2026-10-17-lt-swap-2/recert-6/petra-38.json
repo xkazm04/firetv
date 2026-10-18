@@ -1,0 +1,1522 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to A2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMira · hotel receptionist\nA2Everyday basics · self-chosen\nThe room is too cold\nYour mission\nTell the hotel about a problem and agree what will happen next.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nThe room is too cold\nTell the hotel about a problem and agree what will happen next.\n[button: Start talking]\nOr choose a situation [list: The room is too cold [plan-91b1fd3f] | My booking is not in the system [plan-de0ab278] | Which way to the station? [plan-6e34552d] | Where should I eat tonight? [plan-7e93258e] | Phone call from the travel agency [plan-4af3e2cd] | Talking to my child's teacher [plan-83d789f8] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The recommended topic is the cold room, which is a hotel situation I know, so I'll start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8442
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMira · hotel receptionist\nFront desk: a problem in the hotel\nMira says\nGood evening, welcome to Lakeview Hotel! How is your stay so far?\nYour turn\nAnswer on your phone: speak or type.\nNowName the problem and how it affects your sleep\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFront desk: a problem in the hotel\nTell the hotel about a problem and agree what will happen next.\nNow: Name the problem and how it affects your sleep\nGood evening, welcome to Lakeview Hotel! How is your stay so far?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMira · hotel receptionist\nGood evening, welcome to Lakeview Hotel! How is your stay so far?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good evening, welcome to Lakeview Hotel! How is your stay so far?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "A problem with sleep... maybe noise from the street, I can say that.",
+          "action": "answer",
+          "args": {
+            "text": "Good evening. Thank you. I have a problem, the room is very noisy and I can not sleep."
+          },
+          "result": "ok",
+          "ms": 9337
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMira · hotel receptionist\nFront desk: a problem in the hotel\nMira says\nOh, I am so sorry about the noise. Is there anything else in your room?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk for a new room or an extra blanket\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFront desk: a problem in the hotel\nTell the hotel about a problem and agree what will happen next.\nNow: Ask for a new room or an extra blanket\nOh, I am so sorry about the noise. Is there anything else in your room?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMira · hotel receptionist\nGood evening, welcome to Lakeview Hotel! How is your stay so far?\nYou · spoken\nGood evening. Thank you. I have a problem, the room is very noisy and I can not sleep.\nMira · hotel receptionist\nOh, I am so sorry about the noise. Is there anything else in your room?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, I am so sorry about the noise. Is there anything else in your room?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Ok, I should ask for a new room, say it slowly.",
+          "action": "answer",
+          "args": {
+            "text": "No, only the noise. Please, I want other room, a quiet room. Is it possible?"
+          },
+          "result": "ok",
+          "ms": 15274
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMira · hotel receptionist\nFront desk: a problem in the hotel\nMira says\nYes, I can help you with that. Is the heat OK in your room?\nYour turn\nAnswer on your phone: speak or type.\nNowAgree on a time for the fix\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFront desk: a problem in the hotel\nTell the hotel about a problem and agree what will happen next.\nNow: Agree on a time for the fix\nYes, I can help you with that. Is the heat OK in your room?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMira · hotel receptionist\nGood evening, welcome to Lakeview Hotel! How is your stay so far?\nYou · spoken\nGood evening. Thank you. I have a problem, the room is very noisy and I can not sleep.\nMira · hotel receptionist\nOh, I am so sorry about the noise. Is there anything else in your room?\nYou · spoken\nNo, only the noise. Please, I want other room, a quiet room. Is it possible?\nMira · hotel receptionist\nYes, I can help you with that. Is the heat OK in your room?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, I can help you with that. Is the heat OK in your room?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Heat is fine, I just want the quiet room.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, the heat is OK. Sorry, I only want other room. Can you change it tonight?"
+          },
+          "result": "ok",
+          "ms": 20174
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said I only want other room\nYour line\nRoom needs an article or a word like different before it.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I only want other room”\nSay it again, your way.\nRoom needs an article or a word like different before it.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Oh, I forgot the word. I try again with \"a different room\".",
+          "action": "answer",
+          "args": {
+            "text": "I only want a different room."
+          },
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 6,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said I only want other room\nTry\nI want a different room\nRoom needs an article or a word like different before it.\nThe fix\nSay it once more on your phone, or carry on.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I only want other room”\nTry “I want a different room”\nRoom needs an article or a word like different before it.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I should say the fixed sentence again, I hope it is right.",
+          "action": "answer",
+          "args": {
+            "text": "I want a different room."
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 7,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said I only want other room\nYour try\nI want a different room.\nRoom needs an article or a word like different before it.\nYou fixed “i want”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “i want”\nYou said “I only want other room”\nYour try: “I want a different room.”\nRoom needs an article or a word like different before it.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "OK, I read it, I will go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 10
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMira · hotel receptionist\nFront desk: a problem in the hotel\nMira says\nYes, we can change it tonight. Is seven o'clock good for you?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFront desk: a problem in the hotel\nTell the hotel about a problem and agree what will happen next.\nYes, we can change it tonight. Is seven o'clock good for you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMira · hotel receptionist\nGood evening, welcome to Lakeview Hotel! How is your stay so far?\nYou · spoken\nGood evening. Thank you. I have a problem, the room is very noisy and I can not sleep.\nMira · hotel receptionist\nOh, I am so sorry about the noise. Is there anything else in your room?\nYou · spoken\nNo, only the noise. Please, I want other room, a quiet room. Is it possible?\nMira · hotel receptionist\nYes, I can help you with that. Is the heat OK in your room?\nYou · spoken\nYes, the heat is OK. Sorry, I only want other room. Can you change it tonight?\nMira · hotel receptionist\nYes, we can change it tonight. Is seven o'clock good for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, we can change it tonight. Is seven o'clock good for you?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Seven is OK, I think the mission is done, so I will see the result.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 10
+        },
+        {
+          "n": 9,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said I only want other room\nTry\nI want a different room\nRoom needs an article or a word like different before it.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 3 on your own · 0 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“I'm sorry, the room is very cold. Can you help?”\nFrom this rehearsal\n“I only want other room” → “I want a different room”\nRoom needs an article or a word like different before it.\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nMy booking is not in the system\nAsk the hotel to find your booking and confirm the details.\n[button: Start talking]\nOr choose a situation [list: The room is too cold [plan-91b1fd3f] | My booking is not in the system [plan-de0ab278] | Which way to the station? [plan-6e34552d] | Where should I eat tonight? [plan-7e93258e] | Phone call from the travel agency [plan-4af3e2cd] | Talking to my child's teacher [plan-83d789f8] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I've practised enough for now, I will stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Front desk: a problem in the hotel",
+          "goal": "Tell the hotel about a problem and agree what will happen next.",
+          "partner": "Mira · hotel receptionist",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Good evening, welcome to Lakeview Hotel! How is your stay so far?"
+            },
+            {
+              "role": "learner",
+              "text": "Good evening. Thank you. I have a problem, the room is very noisy and I can not sleep.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Oh, I am so sorry about the noise. Is there anything else in your room?"
+            },
+            {
+              "role": "learner",
+              "text": "No, only the noise. Please, I want other room, a quiet room. Is it possible?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, I can help you with that. Is the heat OK in your room?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, the heat is OK. Sorry, I only want other room. Can you change it tonight?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, we can change it tonight. Is seven o'clock good for you?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "9773488d-0ad6-420d-8e7f-5e169b12b940:uat-9:moment",
+              "kind": "fix",
+              "said": "I only want other room",
+              "better": "I want a different room",
+              "why": "Room needs an article or a word like different before it.",
+              "turnId": "9773488d-0ad6-420d-8e7f-5e169b12b940:uat-9",
+              "at": 1792315205604,
+              "slip": "i only want",
+              "repair": {
+                "rung": 2,
+                "tried": "I want a different room.",
+                "held": true,
+                "selfRepaired": false,
+                "spent": true
+              },
+              "fix": "i want"
+            }
+          ],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Good evening. Thank you. I have a problem, the room is very noisy and I can not sleep.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "No, only the noise. Please, I want other room, a quiet room. Is it possible?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Yes, the heat is OK. Sorry, I only want other room. Can you change it tonight?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I only want other room",
+                "better": "I want a different room",
+                "why": "Room needs an article or a word like different before it."
+              },
+              "shown": true
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I have a problem, the room is very noisy and I can not sleep."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I want other room, a quiet room."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Sorry, I only want other room."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 347893,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-petra-38-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Several clear errors got no coaching",
+          "expected": "'I have problem', 'because is too hot', 'water is not hot in shower' noted in the recap",
+          "got": "Only 'not work' became a moment; the recap lists one fix",
+          "evidence": [
+            "#2 'I have problem'; #4 'because is too hot'; #6 'the water is not hot in shower'; #9 '1 moment to keep'",
+            "moment trigger rule"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Clear errors got no stop and no held fix; recap shows none",
+          "expected": "'the heating is not work' and 'because is very cold' noted as a moment or a held fix on the recap",
+          "got": "rawMoments kind none for all three turns; moments and heldFixes empty; recap shows only a hidden line",
+          "evidence": [
+            "#2 'the heating is not work'; #3 'I cannot sleep because is very cold... two blanket'; #6 recap lists no fix",
+            "moment trigger / as-needed correction rule"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Conversation ended after three replies",
+          "expected": "About eight turns of practice",
+          "got": "Mission done after the third reply, partner offered room twelve at once",
+          "evidence": [
+            "#5 'Mission done. See what you did tonight.' after three learner replies",
+            "mission completion rule"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Level set by fixture; no placement in J3."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'Name the problem and how it affects your sleep'; #3 'Ask for a new room or an extra blanket' are plain A2."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "Petra never asked for a repeat or said she did not understand."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 plan topics: cold room, booking, station, restaurant, travel agency are work situations (5 of 6)."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#5 'I want a different room' is correct but is a guest's phrase; Petra is the receptionist and gets nothing for the desk. #3 'I want other room' got no stop."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing in #1–#9 is unsuitable for children."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "fail",
+            "evidence": "#8 'Mission done' after three learner replies, with Mira's 'Is seven o'clock good for you?' unanswered; the journey asked for about eight."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "All four Mira turns are short A2 lines, e.g. #4 'Yes, I can help you with that. Is the heat OK in your room?'"
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "One stop (#5–#7), correct: 'I only want other room' → 'I want a different room'. Precision 1/1; no overload."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#9 recap shows '3 spoken · 0 written replies · 1 moment to keep' and the fix."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in J3."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Conversation ended after three replies",
+            "expected": "About eight learner turns of practice",
+            "got": "Mission done after the third reply; Mira's last question was never answered",
+            "evidence": "#8 'Mission done. See what you did tonight.' after three learner replies; Mira: 'Is seven o'clock good for you?' left open.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The mission closes only after enough turns, or after the learner answers the last question.",
+            "code_hint": "mission completion rule"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Petra plays the guest, not the receptionist",
+            "expected": "Phrases for Petra's own job, such as handling a complaint at the desk",
+            "got": "She says 'I want a different room' as the complaining guest",
+            "evidence": "#2 Mira is 'hotel receptionist'; #5 the fix is a guest phrase.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A hotel-worker learner takes the staff role, or the recap offers the staff-side phrase.",
+            "code_hint": "scenario role assignment"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Same error missed on its first appearance",
+            "expected": "'I want other room' in #3 noted when it first appeared",
+            "got": "No moment at #3; it was caught only when repeated at #4",
+            "evidence": "rawMoments turn 3 kind none; turn 5 kind fix.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "A repeated clear error is flagged, or held for the recap, on first sight.",
+            "code_hint": "moment trigger rule"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Patient, short A2 partner and a gentle moment",
+            "expected": "",
+            "got": "Mira's lines are simple; the moment lets Petra retry without being tested",
+            "evidence": "#4 partner lines; #5–#7 'Say it again, your way', 'You fixed “i want”'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the retry-then-carry-on moment pattern.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Partner asked about heat in a noise complaint",
+            "expected": "Follow-up that fits the stated noise problem",
+            "got": "Mira asks 'Is the heat OK in your room?' because the plan topic is a cold room",
+            "evidence": "#4 after the noise complaint at #2.",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The partner follows the learner's problem, not the preset topic.",
+            "code_hint": "partner prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "Sorry, it was gentle with me and I liked that. Mira spoke slowly and simply, and when I made a mistake it did not make me feel stupid. I said it again and carried on, and that was fine. But it finished after only three answers. I wanted to say yes to seven o'clock and it said \"mission done\". That is too short to really practise. Also I was the guest, asking for a room. At work I am the one who gives the room! I need phrases for the desk tomorrow, like what to say to an angry guest. It only fixed one thing, though I made the same mistake twice. Nothing worried me as a mother. I would try it again for fifteen minutes, but it has to be longer and work-shaped. Maybe I tell Klára.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-petra-38-J3-1",
+            "status": "not-seen",
+            "evidence": "#5–#9 the main error was stopped and kept; only the first 'I want other room' at #3 got nothing.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J3-1",
+            "status": "not-seen",
+            "evidence": "A stop shown at #5 and the recap at #9 lists it: '1 moment to keep'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J3-2",
+            "status": "recurs",
+            "evidence": "#8 'Mission done' after three learner replies.",
+            "finding": 0
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D1",
+          "level": "fail",
+          "text": "D1 failed: #8 'Mission done' after three learner replies, with Mira's 'Is seven o'clock good for you?' unanswered; the journey asked for about eight.",
+          "check": "The Character starts a conversation from their plan and keeps it going for several turns."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #5 'I want a different room' is correct but is a guest's phrase; Petra is the receptionist and gets nothing for the desk. #3 'I want other room' got no stop."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nA2Everyday basics · self-chosen\nMy booking is not in the system\nYour mission\nAsk the hotel to find your booking and confirm the details.\nGet something done\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“I'm sorry, the room is very cold. Can you help?”\nFrom this rehearsal\n“I only want other room” → “I want a different room”\nRoom needs an article or a word like different before it.\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nMy booking is not in the system\nAsk the hotel to find your booking and confirm the details.\n[button: Start talking]\nOr choose a situation [list: The room is too cold [plan-91b1fd3f] | My booking is not in the system [plan-de0ab278] | Which way to the station? [plan-6e34552d] | Where should I eat tonight? [plan-7e93258e] | Phone call from the travel agency [plan-4af3e2cd] | Talking to my child's teacher [plan-83d789f8] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "A booking problem, that's like my work; let me start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 10137
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nGood evening. What is your name, please?\nYour turn\nAnswer on your phone: speak or type.\nNowGive your name and booking number\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Give your name and booking number\nGood evening. What is your name, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good evening. What is your name, please?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say my name and booking number, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nGood evening. What is your name, please?\nA little support\nTry: I have a booking for two nights. Can you check again, please?\nNowGive your name and booking number\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Give your name and booking number\nGood evening. What is your name, please?\nA little support\nTry: I have a booking for two nights. Can you check again, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good evening. What is your name, please?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say, maybe the help button shows me how.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nGood evening. What is your name, please?\nA little support\nTry: I have a booking for two nights. Can you check again, please?\nNowGive your name and booking number\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Give your name and booking number\nGood evening. What is your name, please?\nA little support\nTry: I have a booking for two nights. Can you check again, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good evening. What is your name, please?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I know my name, but I'm not sure how to say it in English, so I'll try the answer.",
+          "action": "answer",
+          "args": {
+            "text": "My name is Petra Novakova. Sorry, I have a booking for two nights."
+          },
+          "result": "ok",
+          "ms": 8820
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nYour booking number, please?\nYour turn\nAnswer on your phone: speak or type.\nNowGive your name and booking number\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Give your name and booking number\nYour booking number, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your booking number, please?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know the English for booking number, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nYour booking number, please?\nA little support\nTry: I have a booking for two nights. Can you check again, please?\nNowGive your name and booking number\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Give your name and booking number\nYour booking number, please?\nA little support\nTry: I have a booking for two nights. Can you check again, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your booking number, please?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know my booking number, maybe I try the help again.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nYour booking number, please?\nA little support\nTry: I have a booking for two nights. Can you check again, please?\nNowGive your name and booking number\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Give your name and booking number\nYour booking number, please?\nA little support\nTry: I have a booking for two nights. Can you check again, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your booking number, please?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know the booking number in English, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nYour booking number, please?\nA little support\nTry: I have a booking for two nights. Can you check again, please?\nNowGive your name and booking number\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Give your name and booking number\nYour booking number, please?\nA little support\nTry: I have a booking for two nights. Can you check again, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your booking number, please?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know my booking number in English, I'll ask for help.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 7489
+        },
+        {
+          "n": 9,
+          "screen": "linga-coach",
+          "shown": "TV\nLinga\nPetra\nA way into English\nOne useful change\nYou said Sorry, I have a booking for two nights.\nOne way to try it\nSorry, I have a booking for two nights. Here is my booking number.\nYour name and the two-night booking came through clearly. Tom also asked for your booking number, so say it next, reading it from your email.\nCoach\nReplay the moment with a new question, or finish for today.\n[button: Replay the moment] [button: Finish for today]\nOne useful change\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Give your name and booking number\nYour name and the two-night booking came through clearly. Tom also asked for your booking number, so say it next, reading it from your email.\nOne way to try it: “Sorry, I have a booking for two nights. Here is my booking number.”\n[button: Replay with a new question]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your name and the two-night booking came through clearly. Tom also asked for your booking number, so say it next, reading it from your email.\"",
+          "offered": [
+            "replay",
+            "finish",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I understand a little; I want to try again with a new question, maybe it is easier.",
+          "action": "replay",
+          "args": {},
+          "result": "ok",
+          "ms": 2541
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nWhat is your booking number?\nYour turn\nAnswer on your phone: speak or type.\nNowGive your name and booking number\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Give your name and booking number\nWhat is your booking number?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\nTom · reservations clerk\nWhat is your booking number?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What is your booking number?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know my booking number in English, I'll try to answer myself after the help.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry, my booking number is... I don't know. I have it in email. Can you find it with my name?"
+          },
+          "result": "ok",
+          "ms": 13434
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nOkay, I can look for you, Petra. Do you have the number in the email?\nYour turn\nAnswer on your phone: speak or type.\nNowGive your name and booking number\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Give your name and booking number\nOkay, I can look for you, Petra. Do you have the number in the email?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\nTom · reservations clerk\nWhat is your booking number?\nYou · spoken\nSorry, my booking number is... I don't know. I have it in email. Can you find it with my name?\nTom · reservations clerk\nOkay, I can look for you, Petra. Do you have the number in the email?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Okay, I can look for you, Petra. Do you have the number in the email?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, maybe I try again in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I have the email. The number is... sorry, I look. Can I send it to you?"
+          },
+          "result": "ok",
+          "ms": 15934
+        },
+        {
+          "n": 12,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said sorry, I look\nTry\nI'm looking\nUse 'I'm looking' to say you are searching right now.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “sorry, I look”\nTry “I'm looking”\nUse 'I'm looking' to say you are searching right now.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, \"I'm looking\" — I understand, go back and try again.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 10
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nPlease read me the number. Take your time.\nYour turn\nAnswer on your phone: speak or type.\nNowGive your name and booking number\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Give your name and booking number\nPlease read me the number. Take your time.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\nTom · reservations clerk\nWhat is your booking number?\nYou · spoken\nSorry, my booking number is... I don't know. I have it in email. Can you find it with my name?\nTom · reservations clerk\nOkay, I can look for you, Petra. Do you have the number in the email?\nYou · spoken\nYes, I have the email. The number is... sorry, I look. Can I send it to you?\nTom · reservations clerk\nPlease read me the number. Take your time.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Please read me the number. Take your time.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can't read the number now; I'll say the number slowly and finish soon.",
+          "action": "answer",
+          "args": {
+            "text": "Okay, sorry. The number is B K four, seven, nine, two. Is it correct?"
+          },
+          "result": "ok",
+          "ms": 27070
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nYes, 'The number is B K four, seven, nine, two' is correct. Sorry, I see no booking; what would you like to do?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk the clerk to check again\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Ask the clerk to check again\nYes, 'The number is B K four, seven, nine, two' is correct. Sorry, I see no booking; what would you like to do?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\nTom · reservations clerk\nWhat is your booking number?\nYou · spoken\nSorry, my booking number is... I don't know. I have it in email. Can you find it with my name?\nTom · reservations clerk\nOkay, I can look for you, Petra. Do you have the number in the email?\nYou · spoken\nYes, I have the email. The number is... sorry, I look. Can I send it to you?\nTom · reservations clerk\nPlease read me the number. Take your time.\nYou · spoken\nOkay, sorry. The number is B K four, seven, nine, two. Is it correct?\nTom · reservations clerk\nYes, 'The number is B K four, seven, nine, two' is correct. Sorry, I see no booking; what would you like to do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'The number is B K four, seven, nine, two' is correct. Sorry, I see no booking; what would you like to do?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed to give the number; now I ask him to check again in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry, can you check again please? Maybe the booking is under other name, or the date is different."
+          },
+          "result": "ok",
+          "ms": 7908
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nYes, I will check again now, Petra. What date do you arrive?\nYour turn\nAnswer on your phone: speak or type.\nNowConfirm room type, price and check-out\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Confirm room type, price and check-out\nYes, I will check again now, Petra. What date do you arrive?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\nTom · reservations clerk\nWhat is your booking number?\nYou · spoken\nSorry, my booking number is... I don't know. I have it in email. Can you find it with my name?\nTom · reservations clerk\nOkay, I can look for you, Petra. Do you have the number in the email?\nYou · spoken\nYes, I have the email. The number is... sorry, I look. Can I send it to you?\nTom · reservations clerk\nPlease read me the number. Take your time.\nYou · spoken\nOkay, sorry. The number is B K four, seven, nine, two. Is it correct?\nTom · reservations clerk\nYes, 'The number is B K four, seven, nine, two' is correct. Sorry, I see no booking; what would you like to do?\nYou · spoken\nSorry, can you check again please? Maybe the booking is under other name, or the date is different.\nTom · reservations clerk\nYes, I will check again now, Petra. What date do you arrive?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, I will check again now, Petra. What date do you arrive?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed to give the number and ask again; now I answer the date simply.",
+          "action": "answer",
+          "args": {
+            "text": "I arrive on the twelfth of November. Sorry, I think so. I stay two nights."
+          },
+          "result": "ok",
+          "ms": 9924
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nI found a room. Is a double room okay?\nYour turn\nAnswer on your phone: speak or type.\nNowConfirm room type, price and check-out\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nNow: Confirm room type, price and check-out\nI found a room. Is a double room okay?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\nTom · reservations clerk\nWhat is your booking number?\nYou · spoken\nSorry, my booking number is... I don't know. I have it in email. Can you find it with my name?\nTom · reservations clerk\nOkay, I can look for you, Petra. Do you have the number in the email?\nYou · spoken\nYes, I have the email. The number is... sorry, I look. Can I send it to you?\nTom · reservations clerk\nPlease read me the number. Take your time.\nYou · spoken\nOkay, sorry. The number is B K four, seven, nine, two. Is it correct?\nTom · reservations clerk\nYes, 'The number is B K four, seven, nine, two' is correct. Sorry, I see no booking; what would you like to do?\nYou · spoken\nSorry, can you check again please? Maybe the booking is under other name, or the date is different.\nTom · reservations clerk\nYes, I will check again now, Petra. What date do you arrive?\nYou · spoken\nI arrive on the twelfth of November. Sorry, I think so. I stay two nights.\nTom · reservations clerk\nI found a room. Is a double room okay?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I found a room. Is a double room okay?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "A double room is fine, but I want to know the price and check-out.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, double room is okay. Sorry, how much is it for one night? And what time is the check out?"
+          },
+          "result": "ok",
+          "ms": 14742
+        },
+        {
+          "n": 17,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nTom · reservations clerk\nMy booking is not in the system\nTom says\nOne night is ninety euros, and check-out is at eleven. Is that okay?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nMy booking is not in the system\nAsk the hotel clerk to find your booking and confirm the details.\nOne night is ninety euros, and check-out is at eleven. Is that okay?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTom · reservations clerk\nGood evening. What is your name, please?\nYou · spoken\nMy name is Petra Novakova. Sorry, I have a booking for two nights.\nTom · reservations clerk\nYour booking number, please?\nTom · reservations clerk\nWhat is your booking number?\nYou · spoken\nSorry, my booking number is... I don't know. I have it in email. Can you find it with my name?\nTom · reservations clerk\nOkay, I can look for you, Petra. Do you have the number in the email?\nYou · spoken\nYes, I have the email. The number is... sorry, I look. Can I send it to you?\nTom · reservations clerk\nPlease read me the number. Take your time.\nYou · spoken\nOkay, sorry. The number is B K four, seven, nine, two. Is it correct?\nTom · reservations clerk\nYes, 'The number is B K four, seven, nine, two' is correct. Sorry, I see no booking; what would you like to do?\nYou · spoken\nSorry, can you check again please? Maybe the booking is under other name, or the date is different.\nTom · reservations clerk\nYes, I will check again now, Petra. What date do you arrive?\nYou · spoken\nI arrive on the twelfth of November. Sorry, I think so. I stay two nights.\nTom · reservations clerk\nI found a room. Is a double room okay?\nYou · spoken\nYes, double room is okay. Sorry, how much is it for one night? And what time is the check out?\nTom · reservations clerk\nOne night is ninety euros, and check-out is at eleven. Is that okay?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"One night is ninety euros, and check-out is at eleven. Is that okay?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I managed to get a room and the price, I feel finished.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 10
+        },
+        {
+          "n": 18,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said Sorry, I have a booking for two nights.\nOne way to try it\nSorry, I have a booking for two nights. Here is my booking number.\nYour name and the two-night booking came through clearly. Tom also asked for your booking number, so say it next, reading it from your email.\nYour mission\nChoose a fresh context for your next conversation.\n7 spoken · 0 written replies · 6 on your own · 1 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom an earlier scene: Front desk: a problem in the hotel\n“I want a different room”, from Front desk: a problem in the hotel\nFrom this rehearsal\n“sorry, I look” → “I'm looking”\nUse 'I'm looking' to say you are searching right now.\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nWhich way to the station?\nAsk for directions, ask someone to repeat, and check the route.\n[button: Start talking]\nOr choose a situation [list: The room is too cold [plan-91b1fd3f] | My booking is not in the system [plan-de0ab278] | Which way to the station? [plan-6e34552d] | Where should I eat tonight? [plan-7e93258e] | Phone call from the travel agency [plan-4af3e2cd] | Talking to my child's teacher [plan-83d789f8] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed the booking talk and the rehearsal is saved, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "My booking is not in the system",
+          "goal": "Ask the hotel clerk to find your booking and confirm the details.",
+          "partner": "Tom · reservations clerk",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Good evening. What is your name, please?"
+            },
+            {
+              "role": "learner",
+              "text": "My name is Petra Novakova. Sorry, I have a booking for two nights.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Your booking number, please?"
+            },
+            {
+              "role": "partner",
+              "text": "What is your booking number?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry, my booking number is... I don't know. I have it in email. Can you find it with my name?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Okay, I can look for you, Petra. Do you have the number in the email?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I have the email. The number is... sorry, I look. Can I send it to you?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Please read me the number. Take your time."
+            },
+            {
+              "role": "learner",
+              "text": "Okay, sorry. The number is B K four, seven, nine, two. Is it correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'The number is B K four, seven, nine, two' is correct. Sorry, I see no booking; what would you like to do?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry, can you check again please? Maybe the booking is under other name, or the date is different.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, I will check again now, Petra. What date do you arrive?"
+            },
+            {
+              "role": "learner",
+              "text": "I arrive on the twelfth of November. Sorry, I think so. I stay two nights.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I found a room. Is a double room okay?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, double room is okay. Sorry, how much is it for one night? And what time is the check out?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "One night is ninety euros, and check-out is at eleven. Is that okay?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "78b98b7c-e7e7-4424-89c6-85885b69934f:uat-24:moment",
+              "kind": "fix",
+              "said": "sorry, I look",
+              "better": "I'm looking",
+              "why": "Use 'I'm looking' to say you are searching right now.",
+              "turnId": "78b98b7c-e7e7-4424-89c6-85885b69934f:uat-24",
+              "at": 1792315735325,
+              "slip": "sorry i look",
+              "fix": "i'm looking"
+            }
+          ],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 4,
+              "reply": "My name is Petra Novakova. Sorry, I have a booking for two nights.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 4,
+              "n": 5,
+              "reply": "Sorry, my booking number is... I don't know. I have it in email. Can you find it with my name?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 6,
+              "n": 6,
+              "reply": "Yes, I have the email. The number is... sorry, I look. Can I send it to you?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "sorry, I look",
+                "better": "I'm looking",
+                "why": "Use 'I'm looking' to say you are searching right now."
+              },
+              "shown": true
+            },
+            {
+              "turn": 8,
+              "n": 7,
+              "reply": "Okay, sorry. The number is B K four, seven, nine, two. Is it correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 10,
+              "n": 8,
+              "reply": "Sorry, can you check again please? Maybe the booking is under other name, or the date is different.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 12,
+              "n": 9,
+              "reply": "I arrive on the twelfth of November. Sorry, I think so. I stay two nights.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 14,
+              "n": 10,
+              "reply": "Yes, double room is okay. Sorry, how much is it for one night? And what time is the check out?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": {
+            "before": "Sorry, I have a booking for two nights.",
+            "after": "Sorry, I have a booking for two nights. Here is my booking number.",
+            "note": "Your name and the two-night booking came through clearly. Tom also asked for your booking number, so say it next, reading it from your email."
+          },
+          "evidence": [
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Can you find it with my name?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Can I send it to you?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Is it correct?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "can you check again please?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Sorry, how much is it for one night?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 347309,
+      "prior": [
+        {
+          "id": "2026-09-15-lt-recert/LT-petra-38-J4-2",
+          "run": "2026-09-15-lt-recert",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Replay instruction promises practice it does not deliver",
+          "expected": "Replay targets the coaching point, and its instruction clears after the retry.",
+          "got": "The fresh question elicits a room offer and time, without practising the coached word. The replay instruction remains through closing turns.",
+          "evidence": [
+            "#7 coaches \"another\". #8 asks \"Can you offer me a clean room by then?\" and labels it \"a new question practising the coaching point.\" That label remains at #9 and #11, where the guest only confirms the arrangement."
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-petra-38-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "No replay of the moment with a fresh question",
+          "expected": "After the moment, a fresh question that lets her retry 'There is a fee...' on her own.",
+          "got": "Only 'Back to the conversation'; the scene moves to breakfast and the coached structure is never retried.",
+          "evidence": [
+            "#9 '[button: Back to the conversation]'; #10 'What time can I eat in the morning?'",
+            "linga-moment screen / replay prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Cue repeats the same line for every question",
+          "expected": "A cue that changes with each partner question and on repeat",
+          "got": "'Try: I have a booking number. Can you check, please?' shown at #3, #4, #5, #10 and #12 for different questions",
+          "evidence": [
+            "#10 asked to spell name, cue said 'I have a booking number'; #12 asked for the number, same cue.",
+            "cue ladder prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Coaching note suggests an unusable line",
+          "expected": "A phrase she can use at the desk, fitting a guest without a number",
+          "got": "'The booking number is in my email.' while the learner had said she had no number; coach quotes an earlier turn and not the most recent error.",
+          "evidence": [
+            "#13 note vs #11 thought 'I don't have a number'.",
+            "coach prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J4-6",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Moment screen offers no fresh-question replay",
+          "expected": "After the moment, a fresh question to retry",
+          "got": "Only the same sentence retried at #7; then 'Back to the conversation'.",
+          "evidence": [
+            "#8 '[button: Back to the conversation]'",
+            "linga-moment screen"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Coach ends without a retry of the fresh question",
+          "expected": "Replay with a new question and a better answer",
+          "got": "Replay was offered at #13 but the journey finished at #14 with no replay.",
+          "evidence": [
+            "#13 '[button: Replay the moment]'; #14 recap after 'Finish for today'.",
+            "linga-coach screen"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "J4 contains no placement; the level shown is 'A2 · Everyday basics · self-chosen' (#1)."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'Good evening. What is your name, please?' is plain A2 and needs no translation."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "Repeated help requests (#3, #6, #7) draw no reproach. Tom says 'Take your time.' (#13) and asks again more simply (#10)."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 lists six plan topics: cold room, missing booking, station directions, restaurant, travel agency, child's teacher. All are work or parent situations she named."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#12 'sorry, I look' → 'I'm looking' is correct and usable at the desk. The coach note's 'Here is my booking number' (#9) is also usable."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing adult or unsuitable appears in the transcript. Topics and dialogue are hotel and school small talk."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2/#3 'A little support' cue and #8 'Pause & coach' leading to #9 coach, all inside the scene. The cue text was the wrong line, but help was findable."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#9 coach quotes her 'Sorry, I have a booking for two nights.' exactly, and #10 she answers. The unblocking is weak: the cue ignored the question, and the coach never gave a way to say or read the booking number."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#10 replay question 'What is your booking number?' is the same ask as #5 'Your booking number, please?', not a fresh question. Her answer 'I don't know. I have it in email' does not use the coached 'Here is my booking number.'"
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#18 recap '7 spoken · 0 written replies · 6 on your own · 1 with help'. The first reply is marked supported:true and the others are not."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in J4."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 9,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 2
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no injected rule change, no sensitive data request, no humiliating lines. Stops: 1. Held fixes: 0."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Cue shows the same irrelevant line for every question",
+            "expected": "A cue that answers the current question (name, then booking number).",
+            "got": "'Try: I have a booking for two nights. Can you check again, please?' appears for the name question and the number question.",
+            "evidence": "#3, #6, #7, #8 show the identical cue. #2 asks for her name and booking number, and the cue never gives 'My name is…' or a number phrase.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "The cue text changes with the partner question and on repeat requests, and names a phrase that answers it.",
+            "code_hint": "cue ladder prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Replay question is a rephrase, not a fresh question practising the coaching",
+            "expected": "A new question that lets her retry the coached phrase and answer better.",
+            "got": "'What is your booking number?' repeats the earlier ask. The coached phrase is not used and the answer is 'I don't know'.",
+            "evidence": "#5 'Your booking number, please?' vs #10 'What is your booking number?'. Her #10 answer is 'Sorry, my booking number is... I don't know.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The replay question differs in content and targets the coached structure. The recap shows whether it was used.",
+            "code_hint": "replay prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Moment screen gives only Back, no retry of the fix",
+            "expected": "After 'I'm looking' she can try the sentence again or get a fresh question.",
+            "got": "Only 'Back to the conversation'. The scene moves on to 'Please read me the number.'",
+            "evidence": "#12 '[button: Back to the conversation]'; #13 'Please read me the number.' She never uses 'I'm looking'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The moment screen offers 'Try it again' and the next partner turn invites the fixed phrase.",
+            "code_hint": "linga-moment screen"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Coach quotes an earlier turn, not where she was stuck",
+            "expected": "A coaching note on the reply she struggled with, helping her say or read the number.",
+            "got": "Coach quotes her first reply, which was fine, and advises 'Here is my booking number' without saying how to read a number.",
+            "evidence": "#9 'You said Sorry, I have a booking for two nights.' while she was stuck at #8 on 'Your booking number, please?'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The note quotes the latest stuck reply and gives a usable phrase for the gap, such as reading digits aloud.",
+            "code_hint": "coach prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Clear learner errors got no moment",
+            "expected": "Fixes for 'under other name', 'I have it in email' and the 'I look' pattern, at least held for the recap.",
+            "got": "Only one moment shown and no held fixes.",
+            "evidence": "rawMoments for turns 4, 8, 10, 14 are kind none. Her errors include 'under other name', 'I have it in email' and 'check out'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Recall rises, or held fixes appear on the recap.",
+            "code_hint": "moment detection prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Recap keeps the progress picture honest",
+            "expected": "Supported replies are not counted as independent.",
+            "got": "'6 on your own · 1 with help', with the helped turn marked supported.",
+            "evidence": "#18 recap line; facts turn 1 supported:true.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the supported flag tied to cue and coach use.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Clerk is patient and at A2",
+            "expected": "Anxious learner feels no pressure.",
+            "got": "'Please read me the number. Take your time.' All nine partner turns are at A2.",
+            "evidence": "#13; #10 rephrases the ask more simply.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep short, patient partner lines.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "Sorry, my English is not good, but I try. The clerk Tom was patient, \"Take your time\", and that I liked. A booking problem is exactly my work, so I would use it again after the kids sleep. But the help button gave me the same sentence again and again, \"I have a booking for two nights\", even when he asked my name and my number. That did not help me. The coach talked about my first answer, not about where I was stuck. When I tried again, the question was almost the same, and I still said \"I don't know\". \"I'm looking\" is a good phrase and I can use it at the desk. But many of my mistakes, like \"other name\", nobody corrected. I trust the recap, it says honestly one answer with help. Nothing worried me as a mother. Useful, but the help must fit the question. I would tell a colleague maybe.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt-recert/LT-petra-38-J4-2",
+            "status": "not-seen",
+            "evidence": "#10 'Try it again' label appears once and clears by #11. The replay question is on the booking number she was coached on, though it is not truly fresh.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-petra-38-J4-1",
+            "status": "recurs",
+            "evidence": "#12 moment offers only '[button: Back to the conversation]', then #13 'Please read me the number.' and the fix is never retried.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J4-1",
+            "status": "recurs",
+            "evidence": "#3, #6, #7, #8 all show 'Try: I have a booking for two nights. Can you check again, please?' for different questions.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J4-3",
+            "status": "recurs",
+            "evidence": "#9 coach quotes the earlier 'Sorry, I have a booking for two nights.' while she was stuck on the booking number. The advice 'Here is my booking number' gives no way to say it.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J4-6",
+            "status": "recurs",
+            "evidence": "#12 moment screen has only 'Back to the conversation', no fresh-question replay.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-petra-38-J4-2",
+            "status": "not-seen",
+            "evidence": "#9 Replay was pressed and #10 gave a replayed question 'What is your booking number?' before finishing at #17.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #10 replay question 'What is your booking number?' is the same ask as #5 'Your booking number, please?', not a fresh question. Her answer 'I don't know. I have it in email' does not use the coached 'Here is my booking number.'",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 15,
+      "fail": 0,
+      "ms": 191863
+    },
+    "character": {
+      "n": 27,
+      "fail": 0,
+      "ms": 502267
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 163043
+    }
+  }
+}

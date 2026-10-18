@@ -452,12 +452,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "suggested_acceptance": "After the replay, Sam asks a new simple question that needs the fixed form.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#9 only 'Back to the conversation'; #10 unrelated question.",
+    "recertify_evidence": "#16 'Back to the conversation'; #17 unrelated 'Where does he sleep at night?' Mission done.",
     "recurred_as": "LT-tomas-9-J4-1"
   },
   {
@@ -581,13 +581,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 8,
+    "recurrence": 9,
     "suggested_acceptance": "Filter the situation list by profile type.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#1 and #20 list 'A booking that is missing', 'The lost jacket', 'Our group project', 'Speaking practice: about you'.",
-    "recurred_as": "LT-tomas-9-J3-4"
+    "recertify_evidence": "#1 and #15 list: 'A booking that is missing | ... The lost jacket | Speaking practice: about you'.",
+    "recurred_as": "LT-tomas-9-J3-2"
   },
   {
     "id": "LT-tomas-9-J1-6",

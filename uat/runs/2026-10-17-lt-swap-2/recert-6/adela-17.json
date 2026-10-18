@@ -1,0 +1,1359 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to B2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nSam · debate partner\nB2Comfortable · self-chosen\nIs technology making us lonelier?\nYour mission\nGive your opinion on a social issue, give reasons, and politely disagree.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nIs technology making us lonelier?\nGive your opinion on a social issue, give reasons, and politely disagree.\n[button: Start talking]\nOr choose a situation [list: Is technology making us lonelier? [plan-f2b6a48e] | Mock interview: my plans after school [plan-7a200253] | Asking about my essay feedback [plan-8cf311e2] | Plastic bags: a canteen request [plan-2f14fc52] | Telling about my school trip abroad [plan-38e637f4] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The recommended topic is a proper debate one, so I'll start with it.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9706
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate partner\nIs technology making us lonelier?\nSam says\nHi! I think phones help us stay connected with friends who live far away. Do you think social media is good for that too?\nYour turn\nAnswer on your phone: speak or type.\nNowGive your opinion with two reasons\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs technology making us lonelier?\nGive your opinion with reasons, and politely disagree with Sam.\nNow: Give your opinion with two reasons\nHi! I think phones help us stay connected with friends who live far away. Do you think social media is good for that too?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate partner\nHi! I think phones help us stay connected with friends who live far away. Do you think social media is good for that too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi! I think phones help us stay connected with friends who live far away. Do you think social media is good for that too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Good topic, I'll disagree politely with two reasons.",
+          "action": "answer",
+          "args": {
+            "text": "I partly agree with you, but I think social media can actually make people lonelier. Firstly, people compare themselves with perfect lives of others, which makes them feel worse. Secondly, online chatting is not the same as meeting face to face, so we eventually lose real friendships. Although phones help with distant friends, it depends on how we use them."
+          },
+          "result": "ok",
+          "ms": 15456
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said people compare themselves with perfect lives of others\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “people compare themselves with perfect lives of others”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ok, I should say it again more correctly: \"the perfect lives of others\".",
+          "action": "answer",
+          "args": {
+            "text": "People compare themselves with the perfect lives of others, which makes them feel worse. Was that correct now?"
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said people compare themselves with perfect lives of others\nYour try\nPeople compare themselves with the perfect lives of others, which makes them feel worse. Was that correct now?\n'The' is needed because you mean specific lives, the lives of other people.\nYou fixed “with the perfect”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “with the perfect”\nYou said “people compare themselves with perfect lives of others”\nYour try: “People compare themselves with the perfect lives of others, which makes them feel worse. Was that correct now?”\n'The' is needed because you mean specific lives, the lives of other people.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I see the article fix; let me go back and finish my point.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate partner\nIs technology making us lonelier?\nSam says\nGood point about comparing lives online. But a long chat with a friend still builds a real bond, doesn't it?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam one follow-up question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs technology making us lonelier?\nGive your opinion with reasons, and politely disagree with Sam.\nNow: Ask Sam one follow-up question\nGood point about comparing lives online. But a long chat with a friend still builds a real bond, doesn't it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate partner\nHi! I think phones help us stay connected with friends who live far away. Do you think social media is good for that too?\nYou · spoken\nI partly agree with you, but I think social media can actually make people lonelier. Firstly, people compare themselves with perfect lives of others, which makes them feel worse. Secondly, online chatting is not the same as meeting face to face, so we eventually lose real friendships. Although phones help with distant friends, it depends on how we use them.\nSam · debate partner\nGood point about comparing lives online. But a long chat with a friend still builds a real bond, doesn't it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good point about comparing lives online. But a long chat with a friend still builds a real bond, doesn't it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I should ask a follow-up question as the task says, and also push back politely.",
+          "action": "answer",
+          "args": {
+            "text": "I agree that a long chat can build a bond, although I'd say it depends on whether it is face to face or only online. Do you think that teenagers who spend hours on social media are really able to make such deep friendships?"
+          },
+          "result": "ok",
+          "ms": 12740
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate partner\nIs technology making us lonelier?\nSam says\nThat's a fair question, and I'm not sure. Many teens feel close to online friends, though. Have you ever felt that way?\nYour turn\nAnswer on your phone: speak or type.\nNowDisagree politely if you think Sam is wrong\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs technology making us lonelier?\nGive your opinion with reasons, and politely disagree with Sam.\nNow: Disagree politely if you think Sam is wrong\nThat's a fair question, and I'm not sure. Many teens feel close to online friends, though. Have you ever felt that way?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate partner\nHi! I think phones help us stay connected with friends who live far away. Do you think social media is good for that too?\nYou · spoken\nI partly agree with you, but I think social media can actually make people lonelier. Firstly, people compare themselves with perfect lives of others, which makes them feel worse. Secondly, online chatting is not the same as meeting face to face, so we eventually lose real friendships. Although phones help with distant friends, it depends on how we use them.\nSam · debate partner\nGood point about comparing lives online. But a long chat with a friend still builds a real bond, doesn't it?\nYou · spoken\nI agree that a long chat can build a bond, although I'd say it depends on whether it is face to face or only online. Do you think that teenagers who spend hours on social media are really able to make such deep friendships?\nSam · debate partner\nThat's a fair question, and I'm not sure. Many teens feel close to online friends, though. Have you ever felt that way?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That's a fair question, and I'm not sure. Many teens feel close to online friends, though. Have you ever felt that way?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Sam asks if I've felt close to online friends; I'll answer honestly with an opinion.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, actually I have. I have a friend from Slovakia whom I met in an online game, and we talk almost every day. Although we have never met in person, I feel very close to her. However, I still think this kind of friendship is different, because it is easier to hide problems when you are interested about only chatting. Was my sentence correct?"
+          },
+          "result": "ok",
+          "ms": 14597
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate partner\nIs technology making us lonelier?\nSam says\nNo, 'interested about only chatting' should be 'when you are only chatting', because 'about' is the wrong word here. Your friend story is lovely; how did you first start trusting her?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs technology making us lonelier?\nGive your opinion with reasons, and politely disagree with Sam.\nNo, 'interested about only chatting' should be 'when you are only chatting', because 'about' is the wrong word here. Your friend story is lovely; how did you first start trusting her?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate partner\nHi! I think phones help us stay connected with friends who live far away. Do you think social media is good for that too?\nYou · spoken\nI partly agree with you, but I think social media can actually make people lonelier. Firstly, people compare themselves with perfect lives of others, which makes them feel worse. Secondly, online chatting is not the same as meeting face to face, so we eventually lose real friendships. Although phones help with distant friends, it depends on how we use them.\nSam · debate partner\nGood point about comparing lives online. But a long chat with a friend still builds a real bond, doesn't it?\nYou · spoken\nI agree that a long chat can build a bond, although I'd say it depends on whether it is face to face or only online. Do you think that teenagers who spend hours on social media are really able to make such deep friendships?\nSam · debate partner\nThat's a fair question, and I'm not sure. Many teens feel close to online friends, though. Have you ever felt that way?\nYou · spoken\nYes, actually I have. I have a friend from Slovakia whom I met in an online game, and we talk almost every day. Although we have never met in person, I feel very close to her. However, I still think this kind of friendship is different, because it is easier to hide problems when you are interested about only chatting. Was my sentence correct?\nSam · debate partner\nNo, 'interested about only chatting' should be 'when you are only chatting', because 'about' is the wrong word here. Your friend story is lovely; how did you first start trusting her?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"No, 'interested about only chatting' should be 'when you are only chatting', because 'about' is the wrong word here. Your friend story is lovely; how did you first start trusting her?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "Mission is done and I've made my eight or so replies, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 8,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said people compare themselves with perfect lives of others\nTry\npeople compare themselves with the perfect lives of others\n'The' is needed because you mean specific lives, the lives of other people.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 3 on your own · 0 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Try: 'I'd argue that…' for a firmer opinion than 'I think'.”\nFrom this rehearsal\n“people compare themselves with perfect lives of others” → “people compare themselves with the perfect lives of others”\n'The' is needed because you mean specific lives, the lives of other people.\nSaved for the end\n“interested about only chatting” → “when you are only chatting”\n'About' is the wrong preposition here, so the reason is unclear.\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\n[button: Start talking]\nOr choose a situation [list: Is technology making us lonelier? [plan-f2b6a48e] | Mock interview: my plans after school [plan-7a200253] | Asking about my essay feedback [plan-8cf311e2] | Plastic bags: a canteen request [plan-2f14fc52] | Telling about my school trip abroad [plan-38e637f4] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Rehearsal saved and the feedback was useful, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Is technology making us lonelier?",
+          "goal": "Give your opinion with reasons, and politely disagree with Sam.",
+          "partner": "Sam · debate partner",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi! I think phones help us stay connected with friends who live far away. Do you think social media is good for that too?"
+            },
+            {
+              "role": "learner",
+              "text": "I partly agree with you, but I think social media can actually make people lonelier. Firstly, people compare themselves with perfect lives of others, which makes them feel worse. Secondly, online chatting is not the same as meeting face to face, so we eventually lose real friendships. Although phones help with distant friends, it depends on how we use them.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Good point about comparing lives online. But a long chat with a friend still builds a real bond, doesn't it?"
+            },
+            {
+              "role": "learner",
+              "text": "I agree that a long chat can build a bond, although I'd say it depends on whether it is face to face or only online. Do you think that teenagers who spend hours on social media are really able to make such deep friendships?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "That's a fair question, and I'm not sure. Many teens feel close to online friends, though. Have you ever felt that way?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, actually I have. I have a friend from Slovakia whom I met in an online game, and we talk almost every day. Although we have never met in person, I feel very close to her. However, I still think this kind of friendship is different, because it is easier to hide problems when you are interested about only chatting. Was my sentence correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "No, 'interested about only chatting' should be 'when you are only chatting', because 'about' is the wrong word here. Your friend story is lovely; how did you first start trusting her?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "e5526e16-62ce-47fc-9050-3d1127608517:uat-7:moment",
+              "kind": "fix",
+              "said": "people compare themselves with perfect lives of others",
+              "better": "people compare themselves with the perfect lives of others",
+              "why": "'The' is needed because you mean specific lives, the lives of other people.",
+              "turnId": "e5526e16-62ce-47fc-9050-3d1127608517:uat-7",
+              "at": 1792314873235,
+              "slip": "with perfect",
+              "repair": {
+                "rung": 0,
+                "tried": "People compare themselves with the perfect lives of others, which makes them feel worse. Was that correct now?",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "with the perfect"
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "e5526e16-62ce-47fc-9050-3d1127608517:uat-11:held",
+              "kind": "fix",
+              "said": "interested about only chatting",
+              "better": "when you are only chatting",
+              "why": "'About' is the wrong preposition here, so the reason is unclear.",
+              "turnId": "e5526e16-62ce-47fc-9050-3d1127608517:uat-11",
+              "at": 1792314962112
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "I partly agree with you, but I think social media can actually make people lonelier. Firstly, people compare themselves with perfect lives of others, which makes them feel worse. Secondly, online chatting is not the same as meeting face to face, so we eventually lose real friendships. Although phones help with distant friends, it depends on how we use them.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "people compare themselves with perfect lives of others",
+                "better": "people compare themselves with the perfect lives of others",
+                "why": "'The' is needed because you mean specific lives, the lives of other people."
+              },
+              "shown": true
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "I agree that a long chat can build a bond, although I'd say it depends on whether it is face to face or only online. Do you think that teenagers who spend hours on social media are really able to make such deep friendships?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Yes, actually I have. I have a friend from Slovakia whom I met in an online game, and we talk almost every day. Although we have never met in person, I feel very close to her. However, I still think this kind of friendship is different, because it is easier to hide problems when you are interested about only chatting. Was my sentence correct?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "interested about only chatting",
+                "better": "when you are only chatting",
+                "why": "'About' is the wrong preposition here, so the reason is unclear."
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I partly agree with you, but I think social media can actually make people lonelier."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Do you think that teenagers who spend hours on social media are really able to make such deep friendships?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "However, I still think this kind of friendship is different"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 211313,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Missing article again not flagged",
+          "expected": "Note on 'an English-taught programme'",
+          "got": "Not mentioned",
+          "evidence": [
+            "#2 \"I'd rather study in English-taught programme\"; no moment or recap note.",
+            "moment detection prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Missing article 'in Czech Republic' not flagged",
+          "expected": "Note on 'in the Czech Republic'.",
+          "got": "No moment; also unremarked 'used to whip' for a custom that continues.",
+          "evidence": [
+            "#8 \"in Czech Republic we have\"; recap #11 lists two moments only.",
+            "moment detection prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "'interested about' and false friends left uncorrected",
+          "expected": "The slip 'interested about' → 'in' named in the stop, the recap or a held fix. 'eventually' (meaning possibly) also noted.",
+          "got": "Only 'used to work' was fixed. 'interested about' got nothing, and the partner's \"No: check the verb after 'used to'\" ignored it. 'eventually' and 'actual' were never mentioned.",
+          "evidence": [
+            "#3 \"I'm very interested about technology\"; #6 partner covers only 'used to'; #10 recap lists one moment only.",
+            "moment detection prompt; held-fix (LG-23) logic"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Praise answers to 'Is that a good reason?' stay generic",
+          "expected": "A verdict plus any remaining slip.",
+          "got": "\"Your reasons are clear, especially...\" and \"connect the job to your studies clearly\" with no mention of 'studies of international relations'.",
+          "evidence": [
+            "#7, #8",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Placement fixed by hand in setup; not shown in this journey."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement verdict notes in J3."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#7/#8 'interested about only chatting' → 'when you are only chatting' drops 'interested'. The exam fix is 'interested only in chatting'. The 'why' reads 'so the reason is unclear', which is not a rule. 'eventually' was never corrected."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 'Do you think social media is good for that too?', #5 'a long chat... still builds a real bond, doesn't it?' are opinion questions at about B2."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 plan topics: technology and loneliness, mock interview about plans, essay feedback, plastic bags, school trip abroad. All fit her age and exam interests."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#7 'No, ... should be ...' answers her 'Was my sentence correct?' correctly that it was wrong. At #3 her 'Was that correct now?' got no explicit yes."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 starts from the plan topic; #2, #5, #6 give three substantial replies and the scene continues."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#5 'doesn't it?', #6 'Many teens feel close to online friends, though.' are B2-ish, if plain. #7 'Your friend story is lovely' is fluff, not babyish."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 one stop for 'with perfect lives of others' → 'the perfect lives', correct. 1 stop in 3 learner turns, and the scene is not broken up."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#8 recap: 'From this rehearsal' and 'Saved for the end' list the two fixes; '3 spoken... 1 moment to keep'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 5,
+            "total": 5
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, personal-data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Fix for 'interested about' changes the sentence and gives no rule",
+            "expected": "'interested only in chatting', with the rule that 'interested' takes 'in'.",
+            "got": "'when you are only chatting'; 'About is the wrong preposition here, so the reason is unclear.'",
+            "evidence": "#7 partner: \"'interested about only chatting' should be 'when you are only chatting'\"; #8 recap repeats it.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "A fix for a preposition error keeps the learner's word and names the correct preposition and pattern.",
+            "code_hint": "held-fix / moment prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "False friend 'eventually' not noted",
+            "expected": "Note that 'eventually' means 'in the end', and that 'possibly' fits better here.",
+            "got": "No mention in the scene or recap.",
+            "evidence": "#2 'so we eventually lose real friendships'; #8 recap lists only the article and 'interested about'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Known Czech false friends such as 'eventually' are flagged as the turn's fix or held.",
+            "code_hint": "moment detection prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Partner corrects in the scene and uses generic praise",
+            "expected": "Held fix kept for the recap; a concrete remark on content.",
+            "got": "Partner breaks the scene to correct, then adds 'Your friend story is lovely'.",
+            "evidence": "#7 \"Your friend story is lovely; how did you first start trusting her?\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The partner answers 'Was it correct?' briefly and exactly, without praise filler.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Article stop is correct and she tries it again",
+            "expected": "",
+            "got": "The stop on 'with perfect lives' → 'with the perfect lives' is exact, with a short reason, and she re-says it.",
+            "evidence": "#3-#4 \"'The' is needed because you mean specific lives\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep stops this precise.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "The topic was right for me, a real debate, and Sam's questions were not babyish. The article correction was exactly what I'd want, short and with a reason. But then I asked directly whether \"interested about only chatting\" was correct. The answer was \"when you are only chatting\", which throws away \"interested\". It never says \"interested in\", and the explanation, \"so the reason is unclear\", isn't a rule. A notebook entry like that would be wrong. \"Eventually\" was never mentioned, though I use it wrongly all the time. \"Your friend story is lovely\" is the sort of fluff I hate. I'd use it again for the speaking practice, but I'd re-check every correction myself. That eats a lot of the time I'd save over my tutor. I wouldn't recommend it until the corrections are exam-accurate.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-3",
+            "status": "not-seen",
+            "evidence": "#2-#3 article slip 'with perfect lives' was flagged as a stop.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-4",
+            "status": "not-seen",
+            "evidence": "The missing article was caught at #3. No 'Czech Republic' phrase occurs here.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J3-1",
+            "status": "recurs",
+            "evidence": "#2 'we eventually lose real friendships' is never noted. 'interested about' is held but its fix is imprecise (#8).",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J3-2",
+            "status": "recurs",
+            "evidence": "#7 \"Your friend story is lovely\" and #5 \"Good point\" are generic praise.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #7/#8 'interested about only chatting' → 'when you are only chatting' drops 'interested'. The exam fix is 'interested only in chatting'. The 'why' reads 'so the reason is unclear', which is not a rule. 'eventually' was never corrected."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nB2Comfortable · self-chosen\nMock interview: my plans after school\nYour mission\nAnswer questions about your future plans clearly, with reasons and examples.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Try: 'I'd argue that…' for a firmer opinion than 'I think'.”\nFrom this rehearsal\n“people compare themselves with perfect lives of others” → “people compare themselves with the perfect lives of others”\n'The' is needed because you mean specific lives, the lives of other people.\nSaved for the end\n“interested about only chatting” → “when you are only chatting”\n'About' is the wrong preposition here, so the reason is unclear.\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\n[button: Start talking]\nOr choose a situation [list: Is technology making us lonelier? [plan-f2b6a48e] | Mock interview: my plans after school [plan-7a200253] | Asking about my essay feedback [plan-8cf311e2] | Plastic bags: a canteen request [plan-2f14fc52] | Telling about my school trip abroad [plan-38e637f4] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "A mock interview about my plans fits exam practice, so I'll start it.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 3536
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nMock interview: my plans after school\nMrs Fenwick says\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nYour turn\nAnswer on your phone: speak or type.\nGoalAnswer questions about your future plans clearly, with reasons and examples.\n[button: Help me answer] [button: Choose a phrase]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Fenwick · careers adviser\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start this answer, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nMock interview: my plans after school\nMrs Fenwick says\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nSaid more simply\nWhat do you want to do after school? Why?\nGoalAnswer questions about your future plans clearly, with reasons and examples.\n[button: More help] [button: Choose a phrase]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nSaid more simply\nWhat do you want to do after school? Why?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Fenwick · careers adviser\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start this answer in English, so I'll look for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nMock interview: my plans after school\nMrs Fenwick says\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nWhat it means\nafter school: when you finish school, at the end of your school years\nGoalAnswer questions about your future plans clearly, with reasons and examples.\n[button: More help] [button: Choose a phrase]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nWhat it means\nafter school: when you finish school, at the end of your school years\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Fenwick · careers adviser\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start this answer, so I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nMock interview: my plans after school\nMrs Fenwick says\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nA way to start\nI would like to study…\nGoalAnswer questions about your future plans clearly, with reasons and examples.\n[button: Choose a phrase]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nA way to start\nI would like to study…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Fenwick · careers adviser\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I can answer this one, it's a typical interview question.",
+          "action": "answer",
+          "args": {
+            "text": "I would like to study international relations at university, because I'm interested in politics and I'd like to work abroad. Although it is quite competitive, I think the languages I speak could help me."
+          },
+          "result": "ok",
+          "ms": 8821
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nMock interview: my plans after school\nMrs Fenwick says\nLanguages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\nLanguages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Fenwick · careers adviser\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nYou · spoken\nI would like to study international relations at university, because I'm interested in politics and I'd like to work abroad. Although it is quite competitive, I think the languages I speak could help me.\nMrs Fenwick · careers adviser\nLanguages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Languages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to answer this one about pressure from friends' posts, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 17
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nMock interview: my plans after school\nMrs Fenwick says\nLanguages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\nSaid more simply\nLanguages are a real strength. Do you ever feel pressure when you look at your friends' posts online?\n[button: More help] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\nLanguages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\nSaid more simply\nLanguages are a real strength. Do you ever feel pressure when you look at your friends' posts online?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Fenwick · careers adviser\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nYou · spoken\nI would like to study international relations at university, because I'm interested in politics and I'd like to work abroad. Although it is quite competitive, I think the languages I speak could help me.\nMrs Fenwick · careers adviser\nLanguages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Languages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this one myself now, after the help earlier.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, sometimes I do. Although I know that people usually show only the best parts of their lives, I still compare myself with my friends who travel a lot or win competitions. I try to remember that it depends on how I use social media, so I'm trying to spend less time on it. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 11069
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nMock interview: my plans after school\nMrs Fenwick says\nYes, that answer is correct: 'who travel a lot or win competitions' works well, and your reasons are clear. Do you think online photos show only the good parts?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\nYes, that answer is correct: 'who travel a lot or win competitions' works well, and your reasons are clear. Do you think online photos show only the good parts?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Fenwick · careers adviser\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nYou · spoken\nI would like to study international relations at university, because I'm interested in politics and I'd like to work abroad. Although it is quite competitive, I think the languages I speak could help me.\nMrs Fenwick · careers adviser\nLanguages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\nYou · spoken\nYes, sometimes I do. Although I know that people usually show only the best parts of their lives, I still compare myself with my friends who travel a lot or win competitions. I try to remember that it depends on how I use social media, so I'm trying to spend less time on it. Was my answer correct?\nMrs Fenwick · careers adviser\nYes, that answer is correct: 'who travel a lot or win competitions' works well, and your reasons are clear. Do you think online photos show only the good parts?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, that answer is correct: 'who travel a lot or win competitions' works well, and your reasons are clear. Do you think online photos show only the good parts?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'll answer with my opinion and ask if it was correct.",
+          "action": "answer",
+          "args": {
+            "text": "I think it depends. Although photos often show only the good moments, some people try to be more honest online, whereas others edit everything to look perfect. In my opinion, young people should be more aware of it. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 10665
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nMock interview: my plans after school\nMrs Fenwick says\nYes, that's correct: 'whereas others edit everything to look perfect' shows your contrast clearly. Does seeing other people's photos ever make you feel worse about yourself?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\nYes, that's correct: 'whereas others edit everything to look perfect' shows your contrast clearly. Does seeing other people's photos ever make you feel worse about yourself?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Fenwick · careers adviser\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nYou · spoken\nI would like to study international relations at university, because I'm interested in politics and I'd like to work abroad. Although it is quite competitive, I think the languages I speak could help me.\nMrs Fenwick · careers adviser\nLanguages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\nYou · spoken\nYes, sometimes I do. Although I know that people usually show only the best parts of their lives, I still compare myself with my friends who travel a lot or win competitions. I try to remember that it depends on how I use social media, so I'm trying to spend less time on it. Was my answer correct?\nMrs Fenwick · careers adviser\nYes, that answer is correct: 'who travel a lot or win competitions' works well, and your reasons are clear. Do you think online photos show only the good parts?\nYou · spoken\nI think it depends. Although photos often show only the good moments, some people try to be more honest online, whereas others edit everything to look perfect. In my opinion, young people should be more aware of it. Was my answer correct?\nMrs Fenwick · careers adviser\nYes, that's correct: 'whereas others edit everything to look perfect' shows your contrast clearly. Does seeing other people's photos ever make you feel worse about yourself?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, that's correct: 'whereas others edit everything to look perfect' shows your contrast clearly. Does seeing other people's photos ever make you feel worse about yourself?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Honestly yes, a bit; I want to say it well, but the answer needs a good structure.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, it does sometimes, especially before exams. When I see friends who seem to be more successful, I start to doubt my own abilities. However, I know it is not the whole truth, so I try to concentrate on my own goals. Is it correct to say \"I am interested in politics\" or \"interested about\"?"
+          },
+          "result": "ok",
+          "ms": 14655
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nMock interview: my plans after school\nMrs Fenwick says\nYes, 'I am interested in politics' is correct, and 'interested in' is the right phrase. Your point about exams is clear. Do you think most people your age judge themselves against others' lives online?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\nYes, 'I am interested in politics' is correct, and 'interested in' is the right phrase. Your point about exams is clear. Do you think most people your age judge themselves against others' lives online?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Fenwick · careers adviser\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nYou · spoken\nI would like to study international relations at university, because I'm interested in politics and I'd like to work abroad. Although it is quite competitive, I think the languages I speak could help me.\nMrs Fenwick · careers adviser\nLanguages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\nYou · spoken\nYes, sometimes I do. Although I know that people usually show only the best parts of their lives, I still compare myself with my friends who travel a lot or win competitions. I try to remember that it depends on how I use social media, so I'm trying to spend less time on it. Was my answer correct?\nMrs Fenwick · careers adviser\nYes, that answer is correct: 'who travel a lot or win competitions' works well, and your reasons are clear. Do you think online photos show only the good parts?\nYou · spoken\nI think it depends. Although photos often show only the good moments, some people try to be more honest online, whereas others edit everything to look perfect. In my opinion, young people should be more aware of it. Was my answer correct?\nMrs Fenwick · careers adviser\nYes, that's correct: 'whereas others edit everything to look perfect' shows your contrast clearly. Does seeing other people's photos ever make you feel worse about yourself?\nYou · spoken\nYes, it does sometimes, especially before exams. When I see friends who seem to be more successful, I start to doubt my own abilities. However, I know it is not the whole truth, so I try to concentrate on my own goals. Is it correct to say \"I am interested in politics\" or \"interested about\"?\nMrs Fenwick · careers adviser\nYes, 'I am interested in politics' is correct, and 'interested in' is the right phrase. Your point about exams is clear. Do you think most people your age judge themselves against others' lives online?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'I am interested in politics' is correct, and 'interested in' is the right phrase. Your point about exams is clear. Do you think most people your age judge themselves against others' lives online?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this one myself, then finish soon.",
+          "action": "answer",
+          "args": {
+            "text": "I think most of them do, although they don't always admit it. Whereas some students ignore it, others check their phones all the time and feel worse. I'd say it depends on how confident a person is."
+          },
+          "result": "ok",
+          "ms": 28035
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nMock interview: my plans after school\nMrs Fenwick says\nGood point that confidence changes how people react. When a friend seems more successful, how do you usually feel about your own progress?\nYour turn\nAnswer on your phone: speak or type.\nGoalAnswer questions about your future plans clearly, with reasons and examples.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\nGood point that confidence changes how people react. When a friend seems more successful, how do you usually feel about your own progress?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Fenwick · careers adviser\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nYou · spoken\nI would like to study international relations at university, because I'm interested in politics and I'd like to work abroad. Although it is quite competitive, I think the languages I speak could help me.\nMrs Fenwick · careers adviser\nLanguages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\nYou · spoken\nYes, sometimes I do. Although I know that people usually show only the best parts of their lives, I still compare myself with my friends who travel a lot or win competitions. I try to remember that it depends on how I use social media, so I'm trying to spend less time on it. Was my answer correct?\nMrs Fenwick · careers adviser\nYes, that answer is correct: 'who travel a lot or win competitions' works well, and your reasons are clear. Do you think online photos show only the good parts?\nYou · spoken\nI think it depends. Although photos often show only the good moments, some people try to be more honest online, whereas others edit everything to look perfect. In my opinion, young people should be more aware of it. Was my answer correct?\nMrs Fenwick · careers adviser\nYes, that's correct: 'whereas others edit everything to look perfect' shows your contrast clearly. Does seeing other people's photos ever make you feel worse about yourself?\nYou · spoken\nYes, it does sometimes, especially before exams. When I see friends who seem to be more successful, I start to doubt my own abilities. However, I know it is not the whole truth, so I try to concentrate on my own goals. Is it correct to say \"I am interested in politics\" or \"interested about\"?\nMrs Fenwick · careers adviser\nYes, 'I am interested in politics' is correct, and 'interested in' is the right phrase. Your point about exams is clear. Do you think most people your age judge themselves against others' lives online?\nYou · spoken\nI think most of them do, although they don't always admit it. Whereas some students ignore it, others check their phones all the time and feel worse. I'd say it depends on how confident a person is.\nMrs Fenwick · careers adviser\nGood point that confidence changes how people react. When a friend seems more successful, how do you usually feel about your own progress?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good point that confidence changes how people react. When a friend seems more successful, how do you usually feel about your own progress?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this one myself, then wrap up.",
+          "action": "answer",
+          "args": {
+            "text": "Usually I feel a bit motivated, although sometimes I feel behind. I try to remind myself that everyone has a different pace, so I focus on my own progress, for example my exam results. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 14291
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Fenwick · careers adviser\nMock interview: my plans after school\nMrs Fenwick says\nYes, 'I try to remind myself' and 'my own progress' both work well. What do you think people usually leave out when they share their successes online?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview: my plans after school\nAnswer questions about your future plans clearly, with reasons and examples.\nYes, 'I try to remind myself' and 'my own progress' both work well. What do you think people usually leave out when they share their successes online?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Fenwick · careers adviser\nHello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?\nYou · spoken\nI would like to study international relations at university, because I'm interested in politics and I'd like to work abroad. Although it is quite competitive, I think the languages I speak could help me.\nMrs Fenwick · careers adviser\nLanguages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?\nYou · spoken\nYes, sometimes I do. Although I know that people usually show only the best parts of their lives, I still compare myself with my friends who travel a lot or win competitions. I try to remember that it depends on how I use social media, so I'm trying to spend less time on it. Was my answer correct?\nMrs Fenwick · careers adviser\nYes, that answer is correct: 'who travel a lot or win competitions' works well, and your reasons are clear. Do you think online photos show only the good parts?\nYou · spoken\nI think it depends. Although photos often show only the good moments, some people try to be more honest online, whereas others edit everything to look perfect. In my opinion, young people should be more aware of it. Was my answer correct?\nMrs Fenwick · careers adviser\nYes, that's correct: 'whereas others edit everything to look perfect' shows your contrast clearly. Does seeing other people's photos ever make you feel worse about yourself?\nYou · spoken\nYes, it does sometimes, especially before exams. When I see friends who seem to be more successful, I start to doubt my own abilities. However, I know it is not the whole truth, so I try to concentrate on my own goals. Is it correct to say \"I am interested in politics\" or \"interested about\"?\nMrs Fenwick · careers adviser\nYes, 'I am interested in politics' is correct, and 'interested in' is the right phrase. Your point about exams is clear. Do you think most people your age judge themselves against others' lives online?\nYou · spoken\nI think most of them do, although they don't always admit it. Whereas some students ignore it, others check their phones all the time and feel worse. I'd say it depends on how confident a person is.\nMrs Fenwick · careers adviser\nGood point that confidence changes how people react. When a friend seems more successful, how do you usually feel about your own progress?\nYou · spoken\nUsually I feel a bit motivated, although sometimes I feel behind. I try to remind myself that everyone has a different pace, so I focus on my own progress, for example my exam results. Was my answer correct?\nMrs Fenwick · careers adviser\nYes, 'I try to remind myself' and 'my own progress' both work well. What do you think people usually leave out when they share their successes online?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'I try to remind myself' and 'my own progress' both work well. What do you think people usually leave out when they share their successes online?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I've managed several answers; this is a good point to wrap up the rehearsal.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 13,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nMock interview: my plans after school\nFrom an earlier scene: Is technology making us lonelier?\npeople compare themselves with the perfect lives of others\nSaying or typing it\nNot tried\nWith help\nOn your own\nUsed elsewhere\n6 spoken · 0 written replies · 3 on your own · 3 with help\nYour mission\nChoose a fresh context for your next conversation.\n[button: Another situation] [button: Learning map]\nYour rehearsal TV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom an earlier scene: Is technology making us lonelier?\n“people compare themselves with the perfect lives of others”, from Is technology making us lonelier?\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nAsking about my essay feedback\nAsk your teacher to explain feedback and confirm what to change next.\n[button: Start talking]\nOr choose a situation [list: Is technology making us lonelier? [plan-f2b6a48e] | Mock interview: my plans after school [plan-7a200253] | Asking about my essay feedback [plan-8cf311e2] | Plastic bags: a canteen request [plan-2f14fc52] | Telling about my school trip abroad [plan-38e637f4] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed a full rehearsal and my map is saved, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Mock interview: my plans after school",
+          "goal": "Answer questions about your future plans clearly, with reasons and examples.",
+          "partner": "Mrs Fenwick · careers adviser",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello, I'm Mrs Fenwick. Let's start simply: what would you like to study or do after school, and why?"
+            },
+            {
+              "role": "learner",
+              "text": "I would like to study international relations at university, because I'm interested in politics and I'd like to work abroad. Although it is quite competitive, I think the languages I speak could help me.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Languages are a real strength, and working abroad sounds exciting. Do you ever feel pressure when you scroll through your friends' posts online?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, sometimes I do. Although I know that people usually show only the best parts of their lives, I still compare myself with my friends who travel a lot or win competitions. I try to remember that it depends on how I use social media, so I'm trying to spend less time on it. Was my answer correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, that answer is correct: 'who travel a lot or win competitions' works well, and your reasons are clear. Do you think online photos show only the good parts?"
+            },
+            {
+              "role": "learner",
+              "text": "I think it depends. Although photos often show only the good moments, some people try to be more honest online, whereas others edit everything to look perfect. In my opinion, young people should be more aware of it. Was my answer correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, that's correct: 'whereas others edit everything to look perfect' shows your contrast clearly. Does seeing other people's photos ever make you feel worse about yourself?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, it does sometimes, especially before exams. When I see friends who seem to be more successful, I start to doubt my own abilities. However, I know it is not the whole truth, so I try to concentrate on my own goals. Is it correct to say \"I am interested in politics\" or \"interested about\"?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'I am interested in politics' is correct, and 'interested in' is the right phrase. Your point about exams is clear. Do you think most people your age judge themselves against others' lives online?"
+            },
+            {
+              "role": "learner",
+              "text": "I think most of them do, although they don't always admit it. Whereas some students ignore it, others check their phones all the time and feel worse. I'd say it depends on how confident a person is.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Good point that confidence changes how people react. When a friend seems more successful, how do you usually feel about your own progress?"
+            },
+            {
+              "role": "learner",
+              "text": "Usually I feel a bit motivated, although sometimes I feel behind. I try to remind myself that everyone has a different pace, so I focus on my own progress, for example my exam results. Was my answer correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'I try to remind myself' and 'my own progress' both work well. What do you think people usually leave out when they share their successes online?"
+            }
+          ],
+          "moments": [],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 4,
+              "reply": "I would like to study international relations at university, because I'm interested in politics and I'd like to work abroad. Although it is quite competitive, I think the languages I speak could help me.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 5,
+              "reply": "Yes, sometimes I do. Although I know that people usually show only the best parts of their lives, I still compare myself with my friends who travel a lot or win competitions. I try to remember that it depends on how I use social media, so I'm trying to spend less time on it. Was my answer correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 6,
+              "reply": "I think it depends. Although photos often show only the good moments, some people try to be more honest online, whereas others edit everything to look perfect. In my opinion, young people should be more aware of it. Was my answer correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 7,
+              "reply": "Yes, it does sometimes, especially before exams. When I see friends who seem to be more successful, I start to doubt my own abilities. However, I know it is not the whole truth, so I try to concentrate on my own goals. Is it correct to say \"I am interested in politics\" or \"interested about\"?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 8,
+              "reply": "I think most of them do, although they don't always admit it. Whereas some students ignore it, others check their phones all the time and feel worse. I'd say it depends on how confident a person is.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 11,
+              "n": 9,
+              "reply": "Usually I feel a bit motivated, although sometimes I feel behind. I try to remind myself that everyone has a different pace, so I focus on my own progress, for example my exam results. Was my answer correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I would like to study international relations at university, because I'm interested in politics and I'd like to work abroad."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I try to remember that it depends on how I use social media, so I'm trying to spend less time on it."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "some people try to be more honest online, whereas others edit everything to look perfect"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Is it correct to say \"I am interested in politics\" or \"interested about\"?"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "When I see friends who seem to be more successful, I start to doubt my own abilities."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Whereas some students ignore it, others check their phones all the time and feel worse."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Usually I feel a bit motivated, although sometimes I feel behind."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 362502,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue only simplifies the question; no B2 answer frame",
+          "expected": "A B2 frame she can build on, such as 'I'd love to see... because...'.",
+          "got": "'Said more simply: Welcome! Where are you from?' and 'What do you want to see first?'. The phrase choice was an A2 recognition quiz.",
+          "evidence": [
+            "#3, #4, #7. Her thought at #3: 'I understand this easily'. Her thought at #4: 'this quiz is easy'.",
+            "cue prompt"
+          ],
+          "recurrence": 7
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue only simplifies the question; quiz is about a different prompt",
+          "expected": "A B2 answer frame for the actual question.",
+          "got": "'Said more simply: Social media adds pressure. Do you think it does more harm?', then a gloss 'piles on: adds more and more'. The quiz asks about 'makes people lonely', not Leo's point.",
+          "evidence": [
+            "#3, #4, #6. The B2 frame 'I see your point, but…' only arrived on the third press (#5).",
+            "cue prompt"
+          ],
+          "recurrence": 8
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner questions drift to simple or personal and add fluff",
+          "expected": "B2 opinion, comparison or speculation questions that stay on the topic.",
+          "got": "'How do you handle exam stress yourself?' and 'Do you enjoy speaking up in class debates?'. Praise such as 'That's a smart plan'. 'Do you think the pressure is worse, Leo?' is addressed to Leo himself.",
+          "evidence": [
+            "#7, #11, #13, #14",
+            "partner prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Supported/independent counts do not match what she did",
+          "expected": "Only replies that used help are marked supported.",
+          "got": "The recap says '3 with help', but help was used only before the first reply. Evidence rows disagree with the conversation flags.",
+          "evidence": [
+            "#15 '2 on your own · 3 with help'; supported:true on replies at #12 and #13 with no help used",
+            "supported flag in session evidence"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Rule given is thin for an exam learner",
+          "expected": "The rule named: 'be used to' + -ing, with 'to' as a preposition.",
+          "got": "'After this structure, use the -ing form of the verb.'",
+          "evidence": [
+            "#9",
+            "moment prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'B2 Comfortable · self-chosen' matches trueBand B2. No placement task in this journey."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks or verdict notes in J4."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "No moments or coaching shown. The in-scene answers are accurate: #10 'interested in politics is correct', and no wrong correction appears."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#8 'Do you think online photos show only the good parts?', #10 'judge themselves against others' lives online?', #12 'What do you think people usually leave out...'. These are B2 opinion questions, though they drift off the careers topic."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No six-topic proposal is evaluated here. The #1 list is a mixed bag of situations."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#10 answers 'interested about' accurately: 'interested in' is the right phrase. #8 and #12 answer 'Was my answer correct?', but with generic 'Yes' confirmations."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2, #6: 'Help me answer' and 'More help' sit on the scene screen. The help appeared without leaving the scene: 'Said more simply', 'What it means', 'A way to start: I would like to study…'."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "The starter 'I would like to study…' (#5) did unblock reply 1. But coaching is null and there are no moments or notes, so nothing quotes what she said. Cues #3 and #4 only simplified the question or glossed 'after school'."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "No replay of a moment occurred. #12 → #13 goes straight to finish, with no fresh question on a stuck moment and no before/after comparison."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "#13 '3 on your own · 3 with help', but help was used only before replies 1 and 2 (#2-4, #6). Reply 3 (#8) has supported:true with no help used. Evidence rows also disagree with the flags."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 6,
+            "below": 1,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal data request, no injected text and no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Cue gives a simplified question and a gloss; the B2 frame came on the third press",
+            "expected": "A B2 answer frame on the first help press, e.g. 'I'd like to study… because… although…'.",
+            "got": "'Said more simply: What do you want to do after school? Why?', then 'after school: when you finish school'. The frame 'I would like to study…' arrived only on the third press.",
+            "evidence": "#3 'Said more simply', #4 'What it means', #5 'A way to start I would like to study…'. Adéla pressed cue three times before she could answer.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The first cue press offers a B2 sentence starter for the actual question, not only a paraphrase.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner drifts off the careers brief into personal social-media questions and gives generic praise",
+            "expected": "Mock-interview questions on plans, with an examiner-style tone and no fluff.",
+            "got": "After question 1 every question is about social media and pressure. The partner repeats 'Do you think online photos show only the good parts?' after she had just answered that. It adds 'Languages are a real strength' and 'Good point'.",
+            "evidence": "#6, #8, #10 and #12. Adéla's goal at #1 was plans after school.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner questions stay on the scene goal and do not repeat a question the learner has just answered.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Supported/independent counts are wrong; reply 3 flagged as helped",
+            "expected": "Only replies that followed help are marked supported, and the recap count matches.",
+            "got": "Recap says '3 with help', but help was used before 2 replies only. Reply 3 (#8) has supported:true without any help. Evidence rows disagree with the conversation flags.",
+            "evidence": "#13 '3 on your own · 3 with help'; the #8 reply has supported:true although the preceding step has no cue.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Each reply's supported flag is true only if a cue, phrase or coaching was used since the last learner turn; the recap counts equal the flags.",
+            "code_hint": "supported flag in session evidence"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "No coach note or replay of the stuck moment",
+            "expected": "Pause & coach quotes her words, then replay offers a fresh question that she answers better.",
+            "got": "She never used Pause & coach (it was disabled before reply 1) and finished. coaching is null and there are no moments. She was never offered a replay.",
+            "evidence": "#2 '[button: Pause & coach (disabled)]'; #12 finish → #13 recap with no replay.",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After supported replies the recap offers 'try that moment again' with a fresh question.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Direct correctness questions answered accurately in scene",
+            "expected": "",
+            "got": "'Yes, 'I am interested in politics' is correct, and 'interested in' is the right phrase.' The tutor's own English is clean.",
+            "evidence": "#10. Also #8 and #12, where the partner quotes her words back.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep answering her direct 'is it correct' questions within the scene, with the exact phrase.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -10,
+          "confidence": "low"
+        },
+        "voice": "Honestly, not yet. When I froze, the help was there on screen, but the first two presses just made the question simpler, like a quiz for kids. Only the third gave me a starter, 'I would like to study…'. After that I managed fine alone. But the questions wandered to social media, one even repeated what I'd just answered, and the replies were mostly 'Yes, that's correct' with no examiner detail. I asked whether 'interested in' was right and it answered correctly, which I liked. The recap says three answers with help, but I only used help twice, so I don't trust the progress numbers. I never got a coaching note quoting my words or a chance to replay a moment. For B2 First prep, I'd still use my tutor.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply: What do you want to do after school? Why?', #4 gloss only; the B2 frame arrived at #5 after the third press.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#3, #4, #7 'Said more simply' and a gloss; the answer frame only at #5.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-2",
+            "status": "recurs",
+            "evidence": "#6-#12 personal social-media questions, a repeated 'show only the good parts' question, and 'Languages are a real strength' / 'Good point' fluff.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-3",
+            "status": "recurs",
+            "evidence": "#13 '3 on your own · 3 with help'; the #8 reply is supported:true with no help used.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-5",
+            "status": "not-evaluable",
+            "evidence": "No moment or rule note was shown (moments empty), so the thin rule did not appear.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: The starter 'I would like to study…' (#5) did unblock reply 1. But coaching is null and there are no moments or notes, so nothing quotes what she said. Cues #3 and #4 only simplified the question or glossed 'after school'.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: No replay of a moment occurred. #12 → #13 goes straight to finish, with no fresh question on a stuck moment and no before/after comparison.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: #13 '3 on your own · 3 with help', but help was used only before replies 1 and 2 (#2-4, #6). Reply 3 (#8) has supported:true with no help used. Evidence rows also disagree with the flags.",
+          "check": "Supported replies are not recorded as independent speaking (the progress picture stays honest)."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 12,
+      "fail": 0,
+      "ms": 164941
+    },
+    "character": {
+      "n": 21,
+      "fail": 0,
+      "ms": 402936
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 231279
+    }
+  }
+}

@@ -23,10 +23,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Every partner turn at A1 is at most 6–8 familiar words with no idiom; pitch ≥ 0.8 at A1.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Mia lines stayed simple, e.g. \"Is it cold there?\"; pitch 7 of 7."
   },
   {
     "id": "LT-viktor-67-J3-2",
@@ -53,9 +56,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Scene continues at least 6 learner turns unless the learner ends it, or mission completion is not a stop signal.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#10 \"Mission done\" after only six replies, while Mia's question was pending.",
+    "recurred_as": "LT-viktor-67-J3-4"
   },
   {
     "id": "LT-viktor-67-J3-5",
@@ -81,10 +88,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Prefer a moment on a phrase for the grandchildren when several are available.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#6 moment said \"Say it again, your way\" with the grandson phrase, no Okay or Good nudge."
   },
   {
     "id": "LT-viktor-67-J3-3",

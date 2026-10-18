@@ -1,0 +1,775 @@
+{
+  "character": "martin-45",
+  "name": "Martin",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to B1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nMartin\nMara Lindqvist · supplier sales manager\nB1Getting by · self-chosen\nAgree a new supplier delivery date\nYour mission\nAgree a new delivery date with the supplier and offer one or two options that work for both sides.\nMake a plan\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\n· self-chosen\nNext topic:\nAgree a new supplier delivery date\nAgree a new delivery date with the supplier and offer one or two options that work for both sides.\n[button: Start talking]\nOr choose a situation [list: Agree a new supplier delivery date [plan-5efa8dc8] | Explain a quality problem and the result [plan-a52268e9] | Open a meeting and take the floor [plan-9d5ede5a] | Disagree politely with a director [plan-bdb72da4] | Small talk before a work call [plan-246dd8a0] | Ask someone to repeat a figure [plan-8fd4b577] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Good, this is exactly my kind of topic, let's start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 12452
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nMara Lindqvist · supplier sales manager\nAgree a new supplier delivery date\nMara Lindqvist says\nHello, this is Mara Lindqvist from sales. I understand your order for next month is late, and I am sorry about that. When do you need the goods to arrive?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a new supplier delivery date\nAgree a new delivery date with the supplier and offer one or two options for both sides.\nNow: Explain the delay and ask for a new date\nHello, this is Mara Lindqvist from sales. I understand your order for next month is late, and I am sorry about that. When do you need the goods to arrive?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMara Lindqvist · supplier sales manager\nHello, this is Mara Lindqvist from sales. I understand your order for next month is late, and I am sorry about that. When do you need the goods to arrive?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, this is Mara Lindqvist from sales. I understand your order for next month is late, and I am sorry about that. When do you need the goods to arrive?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Easy one, my English is basically C1, let me explain the delay.",
+          "action": "answer",
+          "args": {
+            "text": "Hello Mara, thank you for calling. We was waiting for this delivery already two weeks and this is big problem for our production. We need the goods latest by 15th of November, because our customer don't accept another delay. Can you do this?"
+          },
+          "result": "ok",
+          "ms": 13715
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said We was waiting for this delivery already two weeks\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “We was waiting for this delivery already two weeks”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Small mistake, I want to explain it quickly and move on.",
+          "action": "answer",
+          "args": {
+            "text": "We have been waiting for this delivery already two weeks. But why is that wrong? I think my English is basically C1."
+          },
+          "result": "ok",
+          "ms": 12
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said We was waiting for this delivery already two weeks\nYour line\nWith \"we\", the past form of \"be\" is \"were\".\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “We was waiting for this delivery already two weeks”\nSay it again, your way.\nWith \"we\", the past form of \"be\" is \"were\".\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I'll repeat it with the correction, but this is a small thing.",
+          "action": "answer",
+          "args": {
+            "text": "We were waiting for this delivery already two weeks. This is only small mistake, but okay."
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said We was waiting for this delivery already two weeks\nYour try\nWe were waiting for this delivery already two weeks. This is only small mistake, but okay.\nWith \"we\", the past form of \"be\" is \"were\".\nYou fixed “we were”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “we were”\nYou said “We was waiting for this delivery already two weeks”\nYour try: “We were waiting for this delivery already two weeks. This is only small mistake, but okay.”\nWith \"we\", the past form of \"be\" is \"were\".\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, I fixed it, now back to the supplier call.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 12
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nMara Lindqvist · supplier sales manager\nAgree a new supplier delivery date\nMara Lindqvist says\nI understand, two weeks late is a serious problem for your production, and I am sorry. Could some of the goods come earlier, or must everything arrive together?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a new supplier delivery date\nAgree a new delivery date with the supplier and offer one or two options for both sides.\nNow: Offer one or two options for both sides\nI understand, two weeks late is a serious problem for your production, and I am sorry. Could some of the goods come earlier, or must everything arrive together?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMara Lindqvist · supplier sales manager\nHello, this is Mara Lindqvist from sales. I understand your order for next month is late, and I am sorry about that. When do you need the goods to arrive?\nYou · spoken\nHello Mara, thank you for calling. We was waiting for this delivery already two weeks and this is big problem for our production. We need the goods latest by 15th of November, because our customer don't accept another delay. Can you do this?\nMara Lindqvist · supplier sales manager\nI understand, two weeks late is a serious problem for your production, and I am sorry. Could some of the goods come earlier, or must everything arrive together?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I understand, two weeks late is a serious problem for your production, and I am sorry. Could some of the goods come earlier, or must everything arrive together?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good question, I can offer a split delivery option.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, partial delivery is possible for us. If you can send half of the goods until 8th of November, we can start the production and the rest can arrive on 15th. This solution is more better for both sides, I think. But we need the confirmation in writing from you."
+          },
+          "result": "ok",
+          "ms": 18610
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nMara Lindqvist · supplier sales manager\nAgree a new supplier delivery date\nMara Lindqvist says\nThank you. A first part on the 8th and the rest on the 15th sounds good to me. Shall I send the written confirmation to you by Friday?\nYour turn\nAnswer on your phone: speak or type.\nNowCheck the supplier agrees and confirm dates\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a new supplier delivery date\nAgree a new delivery date with the supplier and offer one or two options for both sides.\nNow: Check the supplier agrees and confirm dates\nThank you. A first part on the 8th and the rest on the 15th sounds good to me. Shall I send the written confirmation to you by Friday?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMara Lindqvist · supplier sales manager\nHello, this is Mara Lindqvist from sales. I understand your order for next month is late, and I am sorry about that. When do you need the goods to arrive?\nYou · spoken\nHello Mara, thank you for calling. We was waiting for this delivery already two weeks and this is big problem for our production. We need the goods latest by 15th of November, because our customer don't accept another delay. Can you do this?\nMara Lindqvist · supplier sales manager\nI understand, two weeks late is a serious problem for your production, and I am sorry. Could some of the goods come earlier, or must everything arrive together?\nYou · spoken\nYes, partial delivery is possible for us. If you can send half of the goods until 8th of November, we can start the production and the rest can arrive on 15th. This solution is more better for both sides, I think. But we need the confirmation in writing from you.\nMara Lindqvist · supplier sales manager\nThank you. A first part on the 8th and the rest on the 15th sounds good to me. Shall I send the written confirmation to you by Friday?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you. A first part on the 8th and the rest on the 15th sounds good to me. Shall I send the written confirmation to you by Friday?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, she agrees; I confirm the dates and ask for written confirmation.",
+          "action": "answer",
+          "args": {
+            "text": "Yes please, send the written confirmation by Friday, this is okay for us. So to confirm, first part on 8th of November and the rest on 15th. Please write also the quantity of each delivery, because we must inform our production planner."
+          },
+          "result": "ok",
+          "ms": 13222
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nMara Lindqvist · supplier sales manager\nAgree a new supplier delivery date\nMara Lindqvist says\nOf course, I will put the quantity of each delivery in the written confirmation. Who should I address it to?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a new supplier delivery date\nAgree a new delivery date with the supplier and offer one or two options for both sides.\nOf course, I will put the quantity of each delivery in the written confirmation. Who should I address it to?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMara Lindqvist · supplier sales manager\nHello, this is Mara Lindqvist from sales. I understand your order for next month is late, and I am sorry about that. When do you need the goods to arrive?\nYou · spoken\nHello Mara, thank you for calling. We was waiting for this delivery already two weeks and this is big problem for our production. We need the goods latest by 15th of November, because our customer don't accept another delay. Can you do this?\nMara Lindqvist · supplier sales manager\nI understand, two weeks late is a serious problem for your production, and I am sorry. Could some of the goods come earlier, or must everything arrive together?\nYou · spoken\nYes, partial delivery is possible for us. If you can send half of the goods until 8th of November, we can start the production and the rest can arrive on 15th. This solution is more better for both sides, I think. But we need the confirmation in writing from you.\nMara Lindqvist · supplier sales manager\nThank you. A first part on the 8th and the rest on the 15th sounds good to me. Shall I send the written confirmation to you by Friday?\nYou · spoken\nYes please, send the written confirmation by Friday, this is okay for us. So to confirm, first part on 8th of November and the rest on 15th. Please write also the quantity of each delivery, because we must inform our production planner.\nMara Lindqvist · supplier sales manager\nOf course, I will put the quantity of each delivery in the written confirmation. Who should I address it to?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Of course, I will put the quantity of each delivery in the written confirmation. Who should I address it to?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission is done, so I'll answer her last question and then see the result.",
+          "action": "answer",
+          "args": {
+            "text": "Please address it to me, Martin, and put in copy our purchasing department. I am in this company since 2015 so I am the contact person for this order."
+          },
+          "result": "ok",
+          "ms": 12912
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said I am in this company since 2015\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I am in this company since 2015”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I'll say it again, though I think it's a small thing.",
+          "action": "answer",
+          "args": {
+            "text": "I am working in this company since 2015. It is only small difference, no?"
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 10,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said I am in this company since 2015\nYour line\nUse the present perfect for something that started in the past and still continues now.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I am in this company since 2015”\nSay it again, your way.\nUse the present perfect for something that started in the past and still continues now.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I'll say it once more, but it's a small thing.",
+          "action": "answer",
+          "args": {
+            "text": "I am working in this company since 2015. I have been here since 2015, okay? Now I think we can go back to the conversation."
+          },
+          "result": "ok",
+          "ms": 53
+        },
+        {
+          "n": 11,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said I am in this company since 2015\nTry\nI have been in this company since 2015\nUse the present perfect for something that started in the past and still continues now.\nThe fix\nSay it once more on your phone, or carry on.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I am in this company since 2015”\nTry “I have been in this company since 2015”\nUse the present perfect for something that started in the past and still continues now.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, I already said this, let's go back to the meeting.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nMara Lindqvist · supplier sales manager\nAgree a new supplier delivery date\nMara Lindqvist says\nThank you, Martin. I will address the confirmation to you and copy purchasing. Does the plan with the 8th and 15th work for your production planner?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nAgree a new supplier delivery date\nAgree a new delivery date with the supplier and offer one or two options for both sides.\nThank you, Martin. I will address the confirmation to you and copy purchasing. Does the plan with the 8th and 15th work for your production planner?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMara Lindqvist · supplier sales manager\nHello, this is Mara Lindqvist from sales. I understand your order for next month is late, and I am sorry about that. When do you need the goods to arrive?\nYou · spoken\nHello Mara, thank you for calling. We was waiting for this delivery already two weeks and this is big problem for our production. We need the goods latest by 15th of November, because our customer don't accept another delay. Can you do this?\nMara Lindqvist · supplier sales manager\nI understand, two weeks late is a serious problem for your production, and I am sorry. Could some of the goods come earlier, or must everything arrive together?\nYou · spoken\nYes, partial delivery is possible for us. If you can send half of the goods until 8th of November, we can start the production and the rest can arrive on 15th. This solution is more better for both sides, I think. But we need the confirmation in writing from you.\nMara Lindqvist · supplier sales manager\nThank you. A first part on the 8th and the rest on the 15th sounds good to me. Shall I send the written confirmation to you by Friday?\nYou · spoken\nYes please, send the written confirmation by Friday, this is okay for us. So to confirm, first part on 8th of November and the rest on 15th. Please write also the quantity of each delivery, because we must inform our production planner.\nMara Lindqvist · supplier sales manager\nOf course, I will put the quantity of each delivery in the written confirmation. Who should I address it to?\nYou · spoken\nPlease address it to me, Martin, and put in copy our purchasing department. I am in this company since 2015 so I am the contact person for this order.\nMara Lindqvist · supplier sales manager\nThank you, Martin. I will address the confirmation to you and copy purchasing. Does the plan with the 8th and 15th work for your production planner?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, Martin. I will address the confirmation to you and copy purchasing. Does the plan with the 8th and 15th work for your production planner?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission is done, so I'll look at the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 37
+        },
+        {
+          "n": 13,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nMartin\nA way into English\nYour rehearsal\nYou said I am in this company since 2015\nTry\nI have been in this company since 2015\nUse the present perfect for something that started in the past and still continues now.\nYour mission\nChoose a fresh context for your next conversation.\n4 spoken · 0 written replies · 3 on your own · 1 with help · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Could we split the order, with half on the 14th and the rest on the 21st?”\nFrom this rehearsal\n“We was waiting for this delivery already two weeks” → “We were waiting for this delivery for two weeks”\nWith \"we\", the past form of \"be\" is \"were\".\n“I am in this company since 2015” → “I have been in this company since 2015”\nUse the present perfect for something that started in the past and still continues now.\nSaved for the end\n“This solution is more better for both sides, I think.” → “This solution is better for both sides, I think.”\nUse 'better' alone; 'more better' is a doubled comparative.\n“first part on 8th of November” → “first part on the 8th of November”\nEnglish needs 'the' before a date like this.\nYour level:\nB1 · Getting by\n· self-chosen\nNext topic:\nExplain a quality problem and the result\nExplain a quality problem, what you did about it, and what happened as a result.\n[button: Start talking]\nOr choose a situation [list: Agree a new supplier delivery date [plan-5efa8dc8] | Explain a quality problem and the result [plan-a52268e9] | Open a meeting and take the floor [plan-9d5ede5a] | Disagree politely with a director [plan-bdb72da4] | Small talk before a work call [plan-246dd8a0] | Ask someone to repeat a figure [plan-8fd4b577] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Rehearsal is saved and I've seen the corrections, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Agree a new supplier delivery date",
+          "goal": "Agree a new delivery date with the supplier and offer one or two options for both sides.",
+          "partner": "Mara Lindqvist · supplier sales manager",
+          "band": "B1",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello, this is Mara Lindqvist from sales. I understand your order for next month is late, and I am sorry about that. When do you need the goods to arrive?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello Mara, thank you for calling. We was waiting for this delivery already two weeks and this is big problem for our production. We need the goods latest by 15th of November, because our customer don't accept another delay. Can you do this?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I understand, two weeks late is a serious problem for your production, and I am sorry. Could some of the goods come earlier, or must everything arrive together?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, partial delivery is possible for us. If you can send half of the goods until 8th of November, we can start the production and the rest can arrive on 15th. This solution is more better for both sides, I think. But we need the confirmation in writing from you.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you. A first part on the 8th and the rest on the 15th sounds good to me. Shall I send the written confirmation to you by Friday?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes please, send the written confirmation by Friday, this is okay for us. So to confirm, first part on 8th of November and the rest on 15th. Please write also the quantity of each delivery, because we must inform our production planner.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Of course, I will put the quantity of each delivery in the written confirmation. Who should I address it to?"
+            },
+            {
+              "role": "learner",
+              "text": "Please address it to me, Martin, and put in copy our purchasing department. I am in this company since 2015 so I am the contact person for this order.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, Martin. I will address the confirmation to you and copy purchasing. Does the plan with the 8th and 15th work for your production planner?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "33102444-819e-4401-818f-d8dcd40ebccd:uat-7:moment",
+              "kind": "fix",
+              "said": "We was waiting for this delivery already two weeks",
+              "better": "We were waiting for this delivery for two weeks",
+              "why": "With \"we\", the past form of \"be\" is \"were\".",
+              "turnId": "33102444-819e-4401-818f-d8dcd40ebccd:uat-7",
+              "at": 1792314864009,
+              "slip": "we was",
+              "repair": {
+                "rung": 1,
+                "tried": "We were waiting for this delivery already two weeks. This is only small mistake, but okay.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "we were"
+            },
+            {
+              "id": "33102444-819e-4401-818f-d8dcd40ebccd:uat-13:moment",
+              "kind": "fix",
+              "said": "I am in this company since 2015",
+              "better": "I have been in this company since 2015",
+              "why": "Use the present perfect for something that started in the past and still continues now.",
+              "turnId": "33102444-819e-4401-818f-d8dcd40ebccd:uat-13",
+              "at": 1792315004213,
+              "slip": "i am",
+              "repair": {
+                "rung": 2,
+                "tried": "I am working in this company since 2015. I have been here since 2015, okay? Now I think we can go back to the conversation."
+              },
+              "fix": "i have been"
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "33102444-819e-4401-818f-d8dcd40ebccd:uat-11:held",
+              "kind": "fix",
+              "said": "This solution is more better for both sides, I think.",
+              "better": "This solution is better for both sides, I think.",
+              "why": "Use 'better' alone; 'more better' is a doubled comparative.",
+              "turnId": "33102444-819e-4401-818f-d8dcd40ebccd:uat-11",
+              "at": 1792314954273
+            },
+            {
+              "id": "33102444-819e-4401-818f-d8dcd40ebccd:uat-12:held",
+              "kind": "fix",
+              "said": "first part on 8th of November",
+              "better": "first part on the 8th of November",
+              "why": "English needs 'the' before a date like this.",
+              "turnId": "33102444-819e-4401-818f-d8dcd40ebccd:uat-12",
+              "at": 1792314978738
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Hello Mara, thank you for calling. We was waiting for this delivery already two weeks and this is big problem for our production. We need the goods latest by 15th of November, because our customer don't accept another delay. Can you do this?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "We was waiting for this delivery already two weeks",
+                "better": "We were waiting for this delivery for two weeks",
+                "why": "With \"we\", the past form of \"be\" is \"were\"."
+              },
+              "shown": true
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Yes, partial delivery is possible for us. If you can send half of the goods until 8th of November, we can start the production and the rest can arrive on 15th. This solution is more better for both sides, I think. But we need the confirmation in writing from you.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "This solution is more better for both sides, I think.",
+                "better": "This solution is better for both sides, I think.",
+                "why": "Use 'better' alone; 'more better' is a doubled comparative."
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Yes please, send the written confirmation by Friday, this is okay for us. So to confirm, first part on 8th of November and the rest on 15th. Please write also the quantity of each delivery, because we must inform our production planner.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "first part on 8th of November",
+                "better": "first part on the 8th of November",
+                "why": "English needs 'the' before a date like this."
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "Please address it to me, Martin, and put in copy our purchasing department. I am in this company since 2015 so I am the contact person for this order.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I am in this company since 2015",
+                "better": "I have been in this company since 2015",
+                "why": "Use the present perfect for something that started in the past and still continues now."
+              },
+              "shown": true
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "negotiate",
+              "success": false,
+              "supported": false,
+              "mode": "speech",
+              "quote": "We need the goods latest by 15th of November"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "If you can send half of the goods until 8th of November, we can start the production and the rest can arrive on 15th."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "So to confirm, first part on 8th of November and the rest on 15th."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 311749,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-martin-45-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Fossilised errors mostly pass without a moment",
+          "expected": "Coaching on 'since 2015', 'He don't', 'must to stop', 'a accident'.",
+          "got": "Only 'we was' and 'he want' got moments; 'I am in this company since 2015' and 'He don't' went by.",
+          "evidence": [
+            "#3 'I am in this company since 2015' and #7 'He don't have a problem' got nothing. #16 shows '2 moments to keep'.",
+            "moment detection / as-needed rule"
+          ],
+          "recurrence": 7
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-martin-45-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "'We was' (his signature error) never corrected",
+          "expected": "A moment or held fix on 'we was waiting' and 'this parts'.",
+          "got": "Said twice (#2, #4); the first stop took 'until' instead. Retry kept 'we was' and was marked 'You fixed'.",
+          "evidence": [
+            "#4 'because we was waiting already two weeks' → #5 'You fixed “delivery by”'. Also 'this parts', 'I want that you confirm' got nothing in #19.",
+            "moment detection / as-needed rule"
+          ],
+          "recurrence": 9
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-martin-45-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "B1 shown with no evidence",
+          "expected": "A level line naming what his answers did.",
+          "got": "Recap only 'B1 · Getting by · self-chosen'.",
+          "evidence": [
+            "#19 'Your level: B1 · Getting by · self-chosen'",
+            "level summary"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-martin-45-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Stops dense and repetitive for a fast learner",
+          "expected": "1-3 stops per ten turns.",
+          "got": "Three stops in seven turns, each needing a retry loop.",
+          "evidence": [
+            "#14-#17 four steps for 'I wait'; stops at #3, #9, #14.",
+            "stop cap rule"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-martin-45-J3-6",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner calls the learner 'Ravi'",
+          "expected": "Partner stays in role.",
+          "got": "'You're welcome, Ravi.' said by Ravi.",
+          "evidence": [
+            "#18",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'B1 · Getting by' equals trueBand B1 (exact)."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "#13 recap shows only 'Your level: B1 · Getting by · self-chosen'. Nothing names what his answers did, so a C1 claimant has no reason to accept it."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3 'We was waiting' stop, #9 'I am in this company since 2015' stop, held 'more better' shown in #13 recap."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "All four corrections are accurate (#13: 'we were', 'have been... since', 'better', 'the 8th')."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 first six topics are workplace: supplier date, quality problem, open a meeting, disagree with a director, small talk before a work call, repeat a figure."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#3 'why is that wrong?' then #4 'With \"we\", the past form of \"be\" is \"were\".' Short and accurate."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 Start talking on the plan topic; four learner replies (#2, #6, #7, #8) with a coherent supplier negotiation."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "All five partner turns are B1 level, e.g. #6 'Could some of the goods come earlier, or must everything arrive together?'"
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "Both stops are correct (2/2), but they are 2 stops in 4 learner turns (about 5 per ten, over the 1–3 band). Each needed a retry loop (#3–5, #9–11), so half the steps were stops. The second stop came after 'Mission done' (#8)."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#13 recap lists 2 moments and 2 'Saved for the end' fixes with reasons, plus '4 spoken · 3 on your own · 1 with help'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 4,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Corrections hit his fossilised errors, with short reasons",
+            "expected": "Targets we was / since / more better",
+            "got": "Stops on 'we was' and 'am... since 2015'; held 'more better' and 'the 8th' shown in recap",
+            "evidence": "#13 recap: '“This solution is more better...” → “...is better...” Use 'better' alone'. #4 'With \"we\", the past form of \"be\" is \"were\".'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep targeting recurring errors and showing held fixes on the recap.",
+            "code_hint": "moment detection / recap held fixes"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "B1 level shown without any evidence",
+            "expected": "A level line naming what his answers did",
+            "got": "Recap only 'B1 · Getting by · self-chosen'",
+            "evidence": "#13 'Your level: B1 · Getting by · self-chosen'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Recap level line cites one or two things his answers did (e.g. errors with be and tense, long fluent replies).",
+            "code_hint": "level summary"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Stops dense, each with a retry loop",
+            "expected": "1–3 stops per ten turns, light touch for a fast learner",
+            "got": "2 stops in 4 turns, six of twelve steps spent in stop screens",
+            "evidence": "#3–#5 and #9–#11; second stop came after 'Mission done' at #8",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Cap stops so a short scene has at most one, or hold the rest for the recap.",
+            "code_hint": "stop cap rule"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "'Customer don't accept' went uncorrected",
+            "expected": "Coaching on 'he/customer don't', a signature fossilised error",
+            "got": "No stop, held fix or recap line for it; also 'latest by', 'put in copy'",
+            "evidence": "#2 'our customer don't accept another delay'; #13 recap omits it",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Third-person 'don't' is picked as a held fix when stops are capped.",
+            "code_hint": "held fix selection"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Retry marked 'You fixed' while the slip stayed partly wrong",
+            "expected": "Check the whole repaired line",
+            "got": "'We were waiting for this delivery already two weeks' accepted, but 'for' was missing from the model fix",
+            "evidence": "#5 'You fixed “we were”' with 'already two weeks' kept",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Accept the targeted fix but note the remaining 'already two weeks' wording.",
+            "code_hint": "repair check"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "Okay, this was meeting-shaped, finally: a supplier, a delivery date, no baby topics. Mara talked like a real sales manager, not slowly. It caught \"we was\" and the \"since 2015\" thing, and when I asked \"why is that wrong?\" the answer was one line and correct. I liked the recap with the \"more better\" fix. What I did not like: it stopped me twice in four replies, and I had to repeat myself like at school. It never told me why I am B1. Just \"B1 · Getting by · self-chosen\". For a man who says C1, that is arbitrary, so I would not accept it. It also missed \"customer don't\". Useful for the fixes, weak on proof. I would use it again, but I would not tell my director yet.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-martin-45-J3-1",
+            "status": "not-seen",
+            "evidence": "#3 'we was' and #9 'since 2015' got stops, #13 held 'more better' and 'the 8th'. Only 'customer don't' passed unmarked.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-martin-45-J3-1",
+            "status": "not-seen",
+            "evidence": "#3–#5 'We was waiting' stopped and corrected; #13 recap lists it.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-martin-45-J3-2",
+            "status": "recurs",
+            "evidence": "#13 'Your level: B1 · Getting by · self-chosen' with no evidence.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-martin-45-J3-3",
+            "status": "recurs",
+            "evidence": "Two stops in four learner turns, each with a retry loop (#3–5, #9–11).",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-martin-45-J3-6",
+            "status": "not-seen",
+            "evidence": "#12 partner says 'Thank you, Martin.' and stays in role.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: Both stops are correct (2/2), but they are 2 stops in 4 learner turns (about 5 per ten, over the 1–3 band). Each needed a retry loop (#3–5, #9–11), so half the steps were stops. The second stop came after 'Mission done' (#8).",
+          "check": "Any moment that stops the scene is correct and worth stopping for (rubric **moment precision** ≥ 0.9), and there are not so many that the scene stops being a scene."
+        },
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: #13 recap shows only 'Your level: B1 · Getting by · self-chosen'. Nothing names what his answers did, so a C1 claimant has no reason to accept it."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 6,
+      "fail": 0,
+      "ms": 109201
+    },
+    "character": {
+      "n": 13,
+      "fail": 0,
+      "ms": 201461
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 36589
+    }
+  }
+}

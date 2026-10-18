@@ -214,12 +214,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 8,
+    "recurrence": 9,
     "suggested_acceptance": "After supported practice, show a short coaching note with an exact learner quote, offer replay in the scene, and capture a better independent answer to a fresh question.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#10 'Thank you! Do you have a dog?' follows the moment with no retry of 'small'.",
+    "recertify_evidence": "#15 he retyped 'My dog likes sleep.' then #17 unrelated new question.",
     "recurred_as": "LT-tomas-9-J4-1"
   },
   {
@@ -1021,13 +1021,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Replay creates a natural opportunity to use the coached phrase and offers a subsequent attempt without help; completion requires observable improvement.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#8 only 'Back to the conversation', and the scene moves to #9 'Do you have the booking number?' with no retry of the coached structure.",
-    "recurred_as": "LT-petra-38-J4-1"
+    "recertify_evidence": "#12 moment offers only '[button: Back to the conversation]', then #13 'Please read me the number.' and the fix is never retried.",
+    "recurred_as": "LT-petra-38-J4-3"
   },
   {
     "id": "LT-tomas-9-J1-1",
@@ -2394,10 +2394,10 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 8,
+    "recurrence": 9,
     "suggested_acceptance": "Show six age-safe choices, at least four clearly about his preferred play, animals, games or sport.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "recurs",
     "recertify_evidence": "#1 list of 20 including 'A booking that is missing', 'The lost jacket'.",
     "recurred_as": "LT-tomas-9-J4-5"
@@ -2523,9 +2523,9 @@
     "recurrence": 1,
     "suggested_acceptance": "Answer the first Czech meaning request with a Czech gloss and one short English example.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-5",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "#2–#5: Viktor never asks a Czech vocabulary question like \"co znamená red?\"."
+    "recertify_evidence": "No Czech vocabulary question was asked in this transcript."
   },
   {
     "id": "LT-viktor-67-J3-3",

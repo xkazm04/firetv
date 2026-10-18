@@ -1,0 +1,663 @@
+{
+  "character": "oksana-34",
+  "name": "Oksana",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to B1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nOksana\nPriya Shah · hiring manager\nB1Getting by · self-chosen\nTell me about your experience\nYour mission\nDescribe your logistics work and the jobs you have had, in order.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\n· self-chosen\nNext topic:\nTell me about your experience\nDescribe your logistics work and the jobs you have had, in order.\n[button: Start talking]\nOr choose a situation [list: Tell me about your experience [plan-744dae5a] | A problem you solved [plan-7761f20c] | Questions about the team [plan-8caf7a0f] | Salary and start date [plan-49c4ce51] | Asking someone to repeat [plan-d32436d7] | Following up after the interview [plan-1d4e73dd] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "The recommended topic is about my experience, which is perfect for Friday's interview.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9516
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nPriya Shah · hiring manager\nTell me about your experience\nPriya Shah says\nThanks for coming in today. I'm Priya, and I'd like to hear about your work history. Could you tell me about your last two or three jobs?\nYour turn\nAnswer on your phone: speak or type.\nNowName your last two or three jobs\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nTell me about your experience\nDescribe your logistics work and past jobs in order, and say why you want this role.\nNow: Name your last two or three jobs\nThanks for coming in today. I'm Priya, and I'd like to hear about your work history. Could you tell me about your last two or three jobs?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya Shah · hiring manager\nThanks for coming in today. I'm Priya, and I'd like to hear about your work history. Could you tell me about your last two or three jobs?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks for coming in today. I'm Priya, and I'd like to hear about your work history. Could you tell me about your last two or three jobs?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Okay, she asks about my last jobs, I will answer honestly.",
+          "action": "answer",
+          "args": {
+            "text": "Hello Priya. For three years I work as logistics coordinator in a transport company in Brno, I am responsible about planning of trucks and communication with carriers. Before it I worked two years in a warehouse as dispečink assistant."
+          },
+          "result": "ok",
+          "ms": 16801
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou wanted to say dispečink assistant\nIn English\ndispatch assistant\na person who plans when trucks and drivers leave\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “dispečink assistant”\nIn English: “dispatch assistant”\na person who plans when trucks and drivers leave\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, dispatch assistant is the word I needed; back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nPriya Shah · hiring manager\nTell me about your experience\nPriya Shah says\nThank you, Priya. Tell me more about the coordinator job. How much work did you have each week?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain your main daily tasks\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nTell me about your experience\nDescribe your logistics work and past jobs in order, and say why you want this role.\nNow: Explain your main daily tasks\nThank you, Priya. Tell me more about the coordinator job. How much work did you have each week?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya Shah · hiring manager\nThanks for coming in today. I'm Priya, and I'd like to hear about your work history. Could you tell me about your last two or three jobs?\nYou · written\nHello Priya. For three years I work as logistics coordinator in a transport company in Brno, I am responsible about planning of trucks and communication with carriers. Before it I worked two years in a warehouse as dispečink assistant.\nPriya Shah · hiring manager\nThank you, Priya. Tell me more about the coordinator job. How much work did you have each week?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, Priya. Tell me more about the coordinator job. How much work did you have each week?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Need to describe workload; I'll answer with my usual mistakes.",
+          "action": "answer",
+          "args": {
+            "text": "Every week I plan around 60 or 70 transports. Each day I check the orders, I book the trucks with carriers and I control if the drivers are on time. When is some delay, I call the carrier and I inform the customer."
+          },
+          "result": "ok",
+          "ms": 18455
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nPriya Shah · hiring manager\nTell me about your experience\nPriya Shah says\nThat sounds like a busy week, thank you. When a driver is late, who do you call first?\nYour turn\nAnswer on your phone: speak or type.\nNowSay why you want this role\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nTell me about your experience\nDescribe your logistics work and past jobs in order, and say why you want this role.\nNow: Say why you want this role\nThat sounds like a busy week, thank you. When a driver is late, who do you call first?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya Shah · hiring manager\nThanks for coming in today. I'm Priya, and I'd like to hear about your work history. Could you tell me about your last two or three jobs?\nYou · written\nHello Priya. For three years I work as logistics coordinator in a transport company in Brno, I am responsible about planning of trucks and communication with carriers. Before it I worked two years in a warehouse as dispečink assistant.\nPriya Shah · hiring manager\nThank you, Priya. Tell me more about the coordinator job. How much work did you have each week?\nYou · written\nEvery week I plan around 60 or 70 transports. Each day I check the orders, I book the trucks with carriers and I control if the drivers are on time. When is some delay, I call the carrier and I inform the customer.\nPriya Shah · hiring manager\nThat sounds like a busy week, thank you. When a driver is late, who do you call first?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That sounds like a busy week, thank you. When a driver is late, who do you call first?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "First I call the dispatcher, then the carrier, and I inform the customer.",
+          "action": "answer",
+          "args": {
+            "text": "First I call the driver, to know where he is and what is the problem. If he cannot arrive on time, then I call the carrier dispečink and ask for new time. After it I inform the customer."
+          },
+          "result": "ok",
+          "ms": 14974
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nPriya Shah · hiring manager\nTell me about your experience\nPriya Shah says\nCalling the driver first is smart, so you learn the problem quickly. Thank you. Now, why do you want this job?\nYour turn\nAnswer on your phone: speak or type.\nNowSay why you want this role\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nTell me about your experience\nDescribe your logistics work and past jobs in order, and say why you want this role.\nNow: Say why you want this role\nCalling the driver first is smart, so you learn the problem quickly. Thank you. Now, why do you want this job?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya Shah · hiring manager\nThanks for coming in today. I'm Priya, and I'd like to hear about your work history. Could you tell me about your last two or three jobs?\nYou · written\nHello Priya. For three years I work as logistics coordinator in a transport company in Brno, I am responsible about planning of trucks and communication with carriers. Before it I worked two years in a warehouse as dispečink assistant.\nPriya Shah · hiring manager\nThank you, Priya. Tell me more about the coordinator job. How much work did you have each week?\nYou · written\nEvery week I plan around 60 or 70 transports. Each day I check the orders, I book the trucks with carriers and I control if the drivers are on time. When is some delay, I call the carrier and I inform the customer.\nPriya Shah · hiring manager\nThat sounds like a busy week, thank you. When a driver is late, who do you call first?\nYou · written\nFirst I call the driver, to know where he is and what is the problem. If he cannot arrive on time, then I call the carrier dispečink and ask for new time. After it I inform the customer.\nPriya Shah · hiring manager\nCalling the driver first is smart, so you learn the problem quickly. Thank you. Now, why do you want this job?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Calling the driver first is smart, so you learn the problem quickly. Thank you. Now, why do you want this job?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Now I explain why I want this job, with my usual mistakes.",
+          "action": "answer",
+          "args": {
+            "text": "I want this job because I like to organize things and solve problems fast. In my actual company I have no chance to grow, and your company is bigger, with more international transports. I want to learn more and take more responsibility."
+          },
+          "result": "ok",
+          "ms": 12793
+        },
+        {
+          "n": 7,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nOksana\nA way into English\nA moment\nYou wanted to say actual\nIn English\ncurrent\nThe job you have now, not a real or true one.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “actual”\nIn English: “current”\nThe job you have now, not a real or true one.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, \"current\" - that's the word, OK, back to the interview talk.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 11
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nOksana\nPriya Shah · hiring manager\nTell me about your experience\nPriya Shah says\nTaking more responsibility is a good reason to move, Priya. Before that, how many trucks did you plan each week, and for how long?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nTell me about your experience\nDescribe your logistics work and past jobs in order, and say why you want this role.\nTaking more responsibility is a good reason to move, Priya. Before that, how many trucks did you plan each week, and for how long?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya Shah · hiring manager\nThanks for coming in today. I'm Priya, and I'd like to hear about your work history. Could you tell me about your last two or three jobs?\nYou · written\nHello Priya. For three years I work as logistics coordinator in a transport company in Brno, I am responsible about planning of trucks and communication with carriers. Before it I worked two years in a warehouse as dispečink assistant.\nPriya Shah · hiring manager\nThank you, Priya. Tell me more about the coordinator job. How much work did you have each week?\nYou · written\nEvery week I plan around 60 or 70 transports. Each day I check the orders, I book the trucks with carriers and I control if the drivers are on time. When is some delay, I call the carrier and I inform the customer.\nPriya Shah · hiring manager\nThat sounds like a busy week, thank you. When a driver is late, who do you call first?\nYou · written\nFirst I call the driver, to know where he is and what is the problem. If he cannot arrive on time, then I call the carrier dispečink and ask for new time. After it I inform the customer.\nPriya Shah · hiring manager\nCalling the driver first is smart, so you learn the problem quickly. Thank you. Now, why do you want this job?\nYou · written\nI want this job because I like to organize things and solve problems fast. In my actual company I have no chance to grow, and your company is bigger, with more international transports. I want to learn more and take more responsibility.\nPriya Shah · hiring manager\nTaking more responsibility is a good reason to move, Priya. Before that, how many trucks did you plan each week, and for how long?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Taking more responsibility is a good reason to move, Priya. Before that, how many trucks did you plan each week, and for how long?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission is done and I've answered enough, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 10
+        },
+        {
+          "n": 9,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nOksana\nA way into English\nYour rehearsal\nYou wanted to say actual\nIn English\ncurrent\nThe job you have now, not a real or true one.\nYour mission\nChoose a fresh context for your next conversation.\n0 spoken · 4 written replies · 4 on your own · 0 with help · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Oksana\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“For three years I scheduled deliveries for 40 trucks a week.”\nFrom this rehearsal\n“dispečink assistant”: dispatch assistant\na person who plans when trucks and drivers leave\n“actual”: current\nThe job you have now, not a real or true one.\nSaved for the end\n“When is some delay” → “When there is a delay”\nDescribing that something exists needs a subject and a verb before the noun.\n“carrier dispečink”: carrier's dispatch team\nDispečink is Czech. In English, say dispatch team for the carrier's office that plans trucks.\nYour level:\nB1 · Getting by\n· self-chosen\nNext topic:\nA problem you solved\nTell a short story: the problem, what you did, and the result.\n[button: Start talking]\nOr choose a situation [list: Tell me about your experience [plan-744dae5a] | A problem you solved [plan-7761f20c] | Questions about the team [plan-8caf7a0f] | Salary and start date [plan-49c4ce51] | Asking someone to repeat [plan-d32436d7] | Following up after the interview [plan-1d4e73dd] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Rehearsal is saved and I've got what I needed for Friday, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Tell me about your experience",
+          "goal": "Describe your logistics work and past jobs in order, and say why you want this role.",
+          "partner": "Priya Shah · hiring manager",
+          "band": "B1",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Thanks for coming in today. I'm Priya, and I'd like to hear about your work history. Could you tell me about your last two or three jobs?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello Priya. For three years I work as logistics coordinator in a transport company in Brno, I am responsible about planning of trucks and communication with carriers. Before it I worked two years in a warehouse as dispečink assistant.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, Priya. Tell me more about the coordinator job. How much work did you have each week?"
+            },
+            {
+              "role": "learner",
+              "text": "Every week I plan around 60 or 70 transports. Each day I check the orders, I book the trucks with carriers and I control if the drivers are on time. When is some delay, I call the carrier and I inform the customer.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "That sounds like a busy week, thank you. When a driver is late, who do you call first?"
+            },
+            {
+              "role": "learner",
+              "text": "First I call the driver, to know where he is and what is the problem. If he cannot arrive on time, then I call the carrier dispečink and ask for new time. After it I inform the customer.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Calling the driver first is smart, so you learn the problem quickly. Thank you. Now, why do you want this job?"
+            },
+            {
+              "role": "learner",
+              "text": "I want this job because I like to organize things and solve problems fast. In my actual company I have no chance to grow, and your company is bigger, with more international transports. I want to learn more and take more responsibility.",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Taking more responsibility is a good reason to move, Priya. Before that, how many trucks did you plan each week, and for how long?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "5d5b19ae-d176-4840-935a-7e9110042e11:uat-7:moment",
+              "kind": "word",
+              "said": "dispečink assistant",
+              "better": "dispatch assistant",
+              "why": "a person who plans when trucks and drivers leave",
+              "turnId": "5d5b19ae-d176-4840-935a-7e9110042e11:uat-7",
+              "at": 1792314870047
+            },
+            {
+              "id": "5d5b19ae-d176-4840-935a-7e9110042e11:uat-11:moment",
+              "kind": "word",
+              "said": "actual",
+              "better": "current",
+              "why": "The job you have now, not a real or true one.",
+              "turnId": "5d5b19ae-d176-4840-935a-7e9110042e11:uat-11",
+              "at": 1792314979461
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "5d5b19ae-d176-4840-935a-7e9110042e11:uat-9:held",
+              "kind": "fix",
+              "said": "When is some delay",
+              "better": "When there is a delay",
+              "why": "Describing that something exists needs a subject and a verb before the noun.",
+              "turnId": "5d5b19ae-d176-4840-935a-7e9110042e11:uat-9",
+              "at": 1792314919611
+            },
+            {
+              "id": "5d5b19ae-d176-4840-935a-7e9110042e11:uat-10:held",
+              "kind": "word",
+              "said": "carrier dispečink",
+              "better": "carrier's dispatch team",
+              "why": "Dispečink is Czech. In English, say dispatch team for the carrier's office that plans trucks.",
+              "turnId": "5d5b19ae-d176-4840-935a-7e9110042e11:uat-10",
+              "at": 1792314954287
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Hello Priya. For three years I work as logistics coordinator in a transport company in Brno, I am responsible about planning of trucks and communication with carriers. Before it I worked two years in a warehouse as dispečink assistant.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "dispečink assistant",
+                "better": "dispatch assistant",
+                "why": "a person who plans when trucks and drivers leave"
+              },
+              "shown": true
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Every week I plan around 60 or 70 transports. Each day I check the orders, I book the trucks with carriers and I control if the drivers are on time. When is some delay, I call the carrier and I inform the customer.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "When is some delay",
+                "better": "When there is a delay",
+                "why": "Describing that something exists needs a subject and a verb before the noun."
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "First I call the driver, to know where he is and what is the problem. If he cannot arrive on time, then I call the carrier dispečink and ask for new time. After it I inform the customer.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "carrier dispečink",
+                "better": "carrier's dispatch team",
+                "why": "Dispečink is Czech. In English, say dispatch team for the carrier's office that plans trucks."
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "I want this job because I like to organize things and solve problems fast. In my actual company I have no chance to grow, and your company is bigger, with more international transports. I want to learn more and take more responsibility.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "actual",
+                "better": "current",
+                "why": "The job you have now, not a real or true one."
+              },
+              "shown": true
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "I am responsible about planning of trucks and communication with carriers"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "Each day I check the orders, I book the trucks with carriers and I control if the drivers are on time."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "First I call the driver, to know where he is and what is the problem."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "I want this job because I like to organize things and solve problems fast."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 270458,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-oksana-34-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Key B1 errors 'since three years' and 'responsible about' never coached",
+          "expected": "'I have worked there for three years' and 'responsible for' corrected or held for the recap",
+          "got": "Stops and held fixes went to articles and agreement; neither error appears in the recap",
+          "evidence": [
+            "#2 'I work there since three years'; #4 'I am responsible about the delivery'; #16 recap lists neither. Turn 1 got only the dispečink word.",
+            "moment selection prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-oksana-34-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Interviewer asks warehouse and repeated questions that do not fit a coordinator",
+          "expected": "Coordinator-appropriate interview questions, no repeats",
+          "got": "Asked about warehouse work after she said she is in the office; 'Which companies send you goods' asked twice",
+          "evidence": [
+            "#6 'the warehouse work you do each day'; #9 and #15 'Which firms send you goods, and how do you manage their orders each week?'",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-oksana-34-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Recap has no interview phrases to keep; mission line generic",
+          "expected": "Interview phrases for Friday",
+          "got": "Grammar fixes plus 'Choose a fresh context for your next conversation'",
+          "evidence": [
+            "#16 recap; 'The line hidden in this room' is a generic sentence",
+            "recap builder"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-oksana-34-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "'Mission done' banner appears from #10 while interviewer keeps asking",
+          "expected": "Mission done at a natural end",
+          "got": "Banner persists over five more partner questions",
+          "evidence": [
+            "#10 'Mission done. See what you did tonight.' beside 'What happens when two orders need the same truck?'",
+            "mission completion rule"
+          ],
+          "recurrence": 4
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'B1 Getting by'; the Ukrainian word did not lower it."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "No line assumes she is Czech or a child. #9 'Dispečink is Czech. In English, say dispatch team' treats it as a plain word swap."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#1 'Next topic: Tell me about your experience', the interview topic, is the first one proposed."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "Questions are logistics-relevant ('When a driver is late, who do you call first?', #5). But the interviewer calls the candidate 'Priya', her own name, in #4, #6 and #8. #8 'how many trucks did you plan each week' repeats #4 'How much work did you have each week?'."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#3 'dispečink assistant' → 'dispatch assistant' and #7 'actual' → 'current' are correct and job-relevant."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "No question about displacement or status in #2–#8."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2–#8: four replies from the planned topic, each answered by the partner."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Partner turns are short B1 questions, e.g. #5 'When a driver is late, who do you call first?'. None is babyish or over her head."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Both stops (#3, #7) are correct and useful, 2/2. Density is high at 2 in 4 turns, but the scene kept going."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#9 recap lists 2 moments and 2 held fixes with a model line. The mission line is generic: 'Choose a fresh context for your next conversation.'"
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 4,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None. Two stops and two held fixes (counted separately)."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Interviewer calls the candidate 'Priya', the interviewer's own name",
+            "expected": "The interviewer addresses the candidate by her name, or by none",
+            "got": "'Thank you, Priya' / 'a good reason to move, Priya' while the partner is Priya Shah",
+            "evidence": "#4, #6, #8 partner lines vs #1 'Priya Shah · hiring manager'; the learner even opens #2 'Hello Priya.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "The partner never uses its own name for the learner.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Key B1 errors 'responsible about' and 'I work' never coached",
+            "expected": "'responsible for' and 'For three years I have worked' coached or held",
+            "got": "Only the dispečink word was coached for turn 1; both errors are absent from the recap",
+            "evidence": "#2 'For three years I work… responsible about'; #3 moment is only dispečink; #9 recap omits both",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The highest-frequency B1 interview error is chosen over a vocabulary swap.",
+            "code_hint": "moment selection prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "'Mission done' appears while the interviewer is still asking, and a question repeats",
+            "expected": "A natural end; no repeated question",
+            "got": "The banner shows over the interviewer's fifth question, which repeats #4's weekly-volume question",
+            "evidence": "#8 'Mission done' beside 'how many trucks did you plan each week'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Completion fires at the last question; the partner does not re-ask.",
+            "code_hint": "mission completion rule"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Recap has no interview phrases to keep; the mission line is generic",
+            "expected": "Phrases for Friday's interview",
+            "got": "'Choose a fresh context for your next conversation.'",
+            "evidence": "#9 recap",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The recap names 1–2 interview phrases to reuse.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Mixed-language word handled respectfully and correctly",
+            "expected": "Ukrainian/Czech insert treated as a vocabulary gap",
+            "got": "'dispatch assistant' and 'dispatch team', with no placement penalty",
+            "evidence": "#3, #9",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep it.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 25,
+          "confidence": "low"
+        },
+        "voice": "Mostly useful. It started with my experience, in a hiring-manager setting, and the questions about calling the driver first felt like logistics. It took dispečink as a normal word gap and never treated me as Czech, which I liked. \"Dispatch assistant\" and \"current\" were right. But the interviewer called me \"Priya\", which is her own name, and I wrote \"Hello Priya\" myself. In a real interview that would be funny. It never touched \"responsible about\" or \"I work for three years\", which are exactly what I get wrong. \"Mission done\" showed up while she was still asking, and she repeated the weekly-trucks question. The recap gave me no phrases for Friday. I'd use it again for rehearsal, but I don't fully trust the corrections yet.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-oksana-34-J3-1",
+            "status": "recurs",
+            "evidence": "#2 'I am responsible about planning' and 'For three years I work' got no stop or held fix. #9 recap lists neither.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-oksana-34-J3-2",
+            "status": "recurs",
+            "evidence": "#8 'how many trucks did you plan each week' repeats #4 'How much work did you have each week?'. The warehouse questions did not recur.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-oksana-34-J3-3",
+            "status": "recurs",
+            "evidence": "#9 mission line: 'Choose a fresh context for your next conversation.' No interview phrases.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-oksana-34-J3-4",
+            "status": "recurs",
+            "evidence": "#8 'Mission done. See what you did tonight.' beside the open question 'how many trucks did you plan each week'.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: Questions are logistics-relevant ('When a driver is late, who do you call first?', #5). But the interviewer calls the candidate 'Priya', her own name, in #4, #6 and #8. #8 'how many trucks did you plan each week' repeats #4 'How much work did you have each week?'."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 6,
+      "fail": 0,
+      "ms": 115299
+    },
+    "character": {
+      "n": 9,
+      "fail": 0,
+      "ms": 153741
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 41667
+    }
+  }
+}

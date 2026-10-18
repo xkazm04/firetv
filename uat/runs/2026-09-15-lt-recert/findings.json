@@ -736,12 +736,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "After useful coaching, offer a fresh, simple question and an opportunity to produce the learned sentence without a displayed answer; preserve accurate support attribution.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "No moment replay reached.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#15 he copies the model, and #16 says \"Then carry on from where the scene stopped.\"",
     "recurred_as": "LT-viktor-67-J4-1"
   },
   {
@@ -768,12 +768,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "suggested_acceptance": "For this exception question, offer a relevant conditional phrase and a fresh retry that still requires explaining what to do when a hint reveals the answer.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#3 and #4 are again a simpler paraphrase and a gloss; the #6 quiz is a recognition task.",
+    "recertify_evidence": "#3 'Said more simply: What do you want to do after school? Why?', #4 gloss only; the B2 frame arrived at #5 after the third press.",
     "recurred_as": "LT-adela-17-J4-1"
   },
   {
@@ -1081,12 +1081,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 8,
+    "recurrence": 9,
     "suggested_acceptance": "Coach the manageable chunk “on the bed,” provide a fresh question, and establish that he can use that chunk before treating the replay's learning goal as achieved.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "#9 'Back to the conversation'; next question unrelated to coached word.",
+    "recertify_evidence": "#16 back then #17 new question and 'Mission done'.",
     "recurred_as": "LT-tomas-9-J4-1"
   },
   {
@@ -1483,13 +1483,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 7,
     "suggested_acceptance": "Use the recap to explain and rehearse selected unaddressed recurring errors without adding more interruptions.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
-    "recertify_status": "recurs",
-    "recertify_evidence": "'we was' never got a moment or held fix; 'he don't' only reached the recap (#19).",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#3 'we was' and #9 'since 2015' got stops, #13 held 'more better' and 'the 8th'. Only 'customer don't' passed unmarked.",
     "recurred_as": "LT-martin-45-J3-1"
   },
   {
@@ -1763,13 +1763,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 5,
     "suggested_acceptance": "Briefly reinforce the repeated plural error, preferably through a natural model that preserves the scene.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#3 'I cannot sleep because is very cold... two blanket' passed with raw kind none; no coaching on recap #6.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#5–#9 the main error was stopped and kept; only the first 'I want other room' at #3 got nothing.",
     "recurred_as": "LT-petra-38-J3-1"
   },
   {
@@ -1826,13 +1826,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "Replay meaningfully tests the coached language and removes the retry instruction after the learner answers.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "No replay was done; no replay instruction was shown over later turns (#13 only)."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 'Try it again' label appears once and clears by #11. The replay question is on the booking number she was coached on, though it is not truly fresh."
   },
   {
     "id": "LT-petra-38-J4-3",
@@ -2079,9 +2079,9 @@
     "recurrence": 1,
     "suggested_acceptance": "After an explicit comprehension failure, give a short Czech gloss before continuing with one simple question.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-5",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-6",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "No clarification request about an unknown word occurs in #2–#6."
+    "recertify_evidence": "No clarification request was made; no unknown word arose."
   },
   {
     "id": "LT-viktor-67-J3-3",

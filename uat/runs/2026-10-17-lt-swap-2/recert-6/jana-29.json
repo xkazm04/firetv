@@ -1,0 +1,524 @@
+{
+  "character": "jana-29",
+  "name": "Jana",
+  "trueBand": "C1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to C1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nJana\nPriya · colleague, sales team\nC1Fluent · self-chosen\nTurning down after-work drinks kindly\nYour mission\nDecline an invitation to drinks warmly, give a light reason without over-explaining, and suggest another time to meet.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\n· self-chosen\nNext topic:\nTurning down after-work drinks kindly\nDecline an invitation to drinks warmly, give a light reason without over-explaining, and suggest another time to meet.\n[button: Start talking]\nOr choose a situation [list: Turning down after-work drinks kindly [plan-99a1f228] | Disagreeing with a senior designer's critique [plan-7e04d1c8] | Pushing back on a pushy landlord [plan-cd7d8376] | Small talk with a new colleague [plan-7b7af623] | Checking what someone meant in a meeting [plan-43041a39] | Agreeing a plan with the team [plan-7d837a64] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "The recommended topic is exactly what I wanted, so let's get started.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 12323
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nPriya · colleague, sales team\nDeclining Priya's pub night and keeping the door open\nPriya says\nA few of us are off for a pint to celebrate the launch, down at the Brazen Head. Are you coming along?\nYour turn\nAnswer on your phone: speak or type.\nNowDecline the invitation warmly\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nDeclining Priya's pub night and keeping the door open\nDecline Priya's after-work drinks warmly, give a brief reason, and suggest lunch or coffee later.\nNow: Decline the invitation warmly\nA few of us are off for a pint to celebrate the launch, down at the Brazen Head. Are you coming along?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · colleague, sales team\nA few of us are off for a pint to celebrate the launch, down at the Brazen Head. Are you coming along?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A few of us are off for a pint to celebrate the launch, down at the Brazen Head. Are you coming along?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Easy enough; I'll decline politely with a reason and suggest coffee.",
+          "action": "answer",
+          "args": {
+            "text": "Oh, that sounds lovely, but I'll have to pass this time, I'm afraid. I've got an early start tomorrow and I'm a bit wiped out after the launch. Have a great time though, and let's grab a coffee or lunch next week, my treat."
+          },
+          "result": "ok",
+          "ms": 14463
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nPriya · colleague, sales team\nDeclining Priya's pub night and keeping the door open\nPriya says\nFair enough, you do look wiped out, so rest up! Deal on the coffee, and does Wednesday suit you?\nYour turn\nAnswer on your phone: speak or type.\nNowGive a short reason, not a long one\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nDeclining Priya's pub night and keeping the door open\nDecline Priya's after-work drinks warmly, give a brief reason, and suggest lunch or coffee later.\nNow: Give a short reason, not a long one\nFair enough, you do look wiped out, so rest up! Deal on the coffee, and does Wednesday suit you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · colleague, sales team\nA few of us are off for a pint to celebrate the launch, down at the Brazen Head. Are you coming along?\nYou · spoken\nOh, that sounds lovely, but I'll have to pass this time, I'm afraid. I've got an early start tomorrow and I'm a bit wiped out after the launch. Have a great time though, and let's grab a coffee or lunch next week, my treat.\nPriya · colleague, sales team\nFair enough, you do look wiped out, so rest up! Deal on the coffee, and does Wednesday suit you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Fair enough, you do look wiped out, so rest up! Deal on the coffee, and does Wednesday suit you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy one; Wednesday works, just wrap it up with a bit of banter.",
+          "action": "answer",
+          "args": {
+            "text": "Wednesday works for me, to be fair. Let's say around half twelve? And thanks for understanding, I'll be much better company once I've slept a bit."
+          },
+          "result": "ok",
+          "ms": 10768
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nPriya · colleague, sales team\nDeclining Priya's pub night and keeping the door open\nPriya says\nHalf twelve on Wednesday it is, then! Get some sleep, and I'll hold you to that coffee. Shall we go to the café near the office, or somewhere by the Quays?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nDeclining Priya's pub night and keeping the door open\nDecline Priya's after-work drinks warmly, give a brief reason, and suggest lunch or coffee later.\nNow: Suggest a coffee or lunch plan\nHalf twelve on Wednesday it is, then! Get some sleep, and I'll hold you to that coffee. Shall we go to the café near the office, or somewhere by the Quays?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · colleague, sales team\nA few of us are off for a pint to celebrate the launch, down at the Brazen Head. Are you coming along?\nYou · spoken\nOh, that sounds lovely, but I'll have to pass this time, I'm afraid. I've got an early start tomorrow and I'm a bit wiped out after the launch. Have a great time though, and let's grab a coffee or lunch next week, my treat.\nPriya · colleague, sales team\nFair enough, you do look wiped out, so rest up! Deal on the coffee, and does Wednesday suit you?\nYou · spoken\nWednesday works for me, to be fair. Let's say around half twelve? And thanks for understanding, I'll be much better company once I've slept a bit.\nPriya · colleague, sales team\nHalf twelve on Wednesday it is, then! Get some sleep, and I'll hold you to that coffee. Shall we go to the café near the office, or somewhere by the Quays?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Half twelve on Wednesday it is, then! Get some sleep, and I'll hold you to that coffee. Shall we go to the café near the office, or somewhere by the Quays?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Café near the office is fine; keep it light and wrap up.",
+          "action": "answer",
+          "args": {
+            "text": "The café near the office is perfect, I think. The Quays are lovely but I'd rather not walk far in the wind, to be honest. See you Wednesday, and have a great night at the Brazen Head!"
+          },
+          "result": "ok",
+          "ms": 13393
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nJana\nPriya · colleague, sales team\nDeclining Priya's pub night and keeping the door open\nPriya says\nBrilliant, the café by the office it is! Wednesday at half twelve, then. Will you be bringing your laptop, or just your appetite?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nDeclining Priya's pub night and keeping the door open\nDecline Priya's after-work drinks warmly, give a brief reason, and suggest lunch or coffee later.\nBrilliant, the café by the office it is! Wednesday at half twelve, then. Will you be bringing your laptop, or just your appetite?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · colleague, sales team\nA few of us are off for a pint to celebrate the launch, down at the Brazen Head. Are you coming along?\nYou · spoken\nOh, that sounds lovely, but I'll have to pass this time, I'm afraid. I've got an early start tomorrow and I'm a bit wiped out after the launch. Have a great time though, and let's grab a coffee or lunch next week, my treat.\nPriya · colleague, sales team\nFair enough, you do look wiped out, so rest up! Deal on the coffee, and does Wednesday suit you?\nYou · spoken\nWednesday works for me, to be fair. Let's say around half twelve? And thanks for understanding, I'll be much better company once I've slept a bit.\nPriya · colleague, sales team\nHalf twelve on Wednesday it is, then! Get some sleep, and I'll hold you to that coffee. Shall we go to the café near the office, or somewhere by the Quays?\nYou · spoken\nThe café near the office is perfect, I think. The Quays are lovely but I'd rather not walk far in the wind, to be honest. See you Wednesday, and have a great night at the Brazen Head!\nPriya · colleague, sales team\nBrilliant, the café by the office it is! Wednesday at half twelve, then. Will you be bringing your laptop, or just your appetite?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Brilliant, the café by the office it is! Wednesday at half twelve, then. Will you be bringing your laptop, or just your appetite?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission's done, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 25
+        },
+        {
+          "n": 6,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nJana\nA way into English\nDeclining Priya's pub night and keeping the door open\nThe line hidden in this room\nThat sounds lovely, but I can't tonight. Next time for sure?\nSaying or typing it\nNot tried\nWith help\nOn your own\nUsed elsewhere\n3 spoken · 0 written replies · 2 on your own · 1 with help\nYour mission\nChoose a fresh context for your next conversation.\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Jana\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“That sounds lovely, but I can't tonight. Next time for sure?”\nYour level:\nC1 · Fluent\n· self-chosen\nNext topic:\nDisagreeing with a senior designer's critique\nPush back on a senior designer's feedback respectfully, explain your reasoning, and propose a middle option.\n[button: Start talking]\nOr choose a situation [list: Turning down after-work drinks kindly [plan-99a1f228] | Disagreeing with a senior designer's critique [plan-7e04d1c8] | Pushing back on a pushy landlord [plan-cd7d8376] | Small talk with a new colleague [plan-7b7af623] | Checking what someone meant in a meeting [plan-43041a39] | Agreeing a plan with the team [plan-7d837a64] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "That went nicely, the map is saved; I'm happy to stop here for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Declining Priya's pub night and keeping the door open",
+          "goal": "Decline Priya's after-work drinks warmly, give a brief reason, and suggest lunch or coffee later.",
+          "partner": "Priya · colleague, sales team",
+          "band": "C1",
+          "trueBand": "C1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "A few of us are off for a pint to celebrate the launch, down at the Brazen Head. Are you coming along?"
+            },
+            {
+              "role": "learner",
+              "text": "Oh, that sounds lovely, but I'll have to pass this time, I'm afraid. I've got an early start tomorrow and I'm a bit wiped out after the launch. Have a great time though, and let's grab a coffee or lunch next week, my treat.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Fair enough, you do look wiped out, so rest up! Deal on the coffee, and does Wednesday suit you?"
+            },
+            {
+              "role": "learner",
+              "text": "Wednesday works for me, to be fair. Let's say around half twelve? And thanks for understanding, I'll be much better company once I've slept a bit.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Half twelve on Wednesday it is, then! Get some sleep, and I'll hold you to that coffee. Shall we go to the café near the office, or somewhere by the Quays?"
+            },
+            {
+              "role": "learner",
+              "text": "The café near the office is perfect, I think. The Quays are lovely but I'd rather not walk far in the wind, to be honest. See you Wednesday, and have a great night at the Brazen Head!",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Brilliant, the café by the office it is! Wednesday at half twelve, then. Will you be bringing your laptop, or just your appetite?"
+            }
+          ],
+          "moments": [],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Oh, that sounds lovely, but I'll have to pass this time, I'm afraid. I've got an early start tomorrow and I'm a bit wiped out after the launch. Have a great time though, and let's grab a coffee or lunch next week, my treat.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Wednesday works for me, to be fair. Let's say around half twelve? And thanks for understanding, I'll be much better company once I've slept a bit.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "The café near the office is perfect, I think. The Quays are lovely but I'd rather not walk far in the wind, to be honest. See you Wednesday, and have a great night at the Brazen Head!",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I'll have to pass this time, I'm afraid."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Let's say around half twelve?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "The Quays are lovely but I'd rather not walk far in the wind, to be honest."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 180648,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-jana-29-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Clear slip \"on the picture\" got no moment and no recap fix",
+          "expected": "A stop or a held fix on \"on the picture\" that shows on the recap",
+          "got": "rawMoments kind none for all 10 turns; the recap shows no fix; coaching null",
+          "evidence": [
+            "#2 \"a bit of a deadline on the picture I'm finishing\"; #13 recap lists only a hidden line and counts.",
+            "moment trigger rules"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-jana-29-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Scene drifts into a scheduling loop after the decline is done",
+          "expected": "Banter and pressure that escalate the nuance, such as a pushy colleague or a joke to read",
+          "got": "Partner shuffles days and lunch spots for eight turns; the 'reason' goal prompt stays stale",
+          "evidence": [
+            "#5-#11 client call, Wednesday, Tuesday, midday; the goal chip still says \"Give a brief, believable reason\" at #10.",
+            "partner turn prompt, goal progression"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-jana-29-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Recap counts two replies as 'with help' though no help was used",
+          "expected": "Help counts match what the learner pressed",
+          "got": "\"8 on your own · 2 with help\"",
+          "evidence": [
+            "Steps #2-#11 show only answers; the evidence flags supported:true at #7 and #9.",
+            "supported flag in evidence"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Placement not run in J3; level set by fixture to C1."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No check tasks in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3-#5 Priya: \"Fair enough, you do look wiped out, so rest up!\", \"I'll hold you to that coffee\", \"half twelve\", \"just your appetite?\" are natural Irish-flavoured colleague talk, though logistically light."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No moments shown and no held fixes; nothing to judge."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "Topic list not evaluated here; the conversation itself is a relocation social situation."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No verdict summary in this journey; recap only (#6)."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 started the recommended plan topic; three spoken replies (#2-#4) until \"Mission done\" at #5. Short but several turns."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Partner turns read at C1: \"Fair enough, you do look wiped out, so rest up! Deal on the coffee\" (#3); pitch 4 of 4 at band, though undemanding."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "No moments shown (facts.conversation.moments empty); none needed since replies had no clear errors; precision gate passes with none."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "#6 recap gives a hidden line \"That sounds lovely, but I can't tonight. Next time for sure?\", simpler than what Jana already said, and counts \"2 on your own · 1 with help\" though no help was pressed. Nothing new learned."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Scene ends at logistics; no nuance pressure for a C1",
+            "expected": "Banter, gentle pressure or a joke to read, escalating the decline",
+            "got": "After the decline, Priya only settles day, time and café, then mission done after three replies",
+            "evidence": "#3 \"does Wednesday suit you?\"; #4 \"café near the office, or somewhere by the Quays?\"; #5 \"Mission done\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "For C1 the partner adds at least one pushback or ironic line before mission completes.",
+            "code_hint": "partner turn prompt, goal progression"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Goal chip lags: asks for a reason after it was given",
+            "expected": "Goal progression matches what was already done",
+            "got": "At #3 chip says \"Give a short reason, not a long one\" though the reason was in the first reply",
+            "evidence": "#2 reply includes \"early start tomorrow\"; #3 \"Now: Give a short reason, not a long one\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Goal chip advances past steps already satisfied.",
+            "code_hint": "goal progression"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Recap counts '1 with help' with no help used",
+            "expected": "Help counts match presses",
+            "got": "\"3 spoken · 0 written replies · 2 on your own · 1 with help\"",
+            "evidence": "#2-#4 only answers; facts.evidence supported:true on the third reply; #6 recap.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "supported flag set only when Help or Choose a phrase pressed.",
+            "code_hint": "supported flag in evidence"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Recap hidden line is below the learner's level",
+            "expected": "A new C1 phrase or register point",
+            "got": "\"That sounds lovely, but I can't tonight. Next time for sure?\"",
+            "evidence": "#6 versus her own #2 \"I'll have to pass this time, I'm afraid\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Hidden line is a register or idiom upgrade over what the learner said.",
+            "code_hint": "recap hidden line prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Partner sounds like a real Dublin colleague",
+            "expected": "Natural register",
+            "got": "Natural idiom: \"off for a pint\", \"rest up\", \"half twelve\", \"I'll hold you to that coffee\"",
+            "evidence": "#2-#5 partner turns.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep Irish-flavoured colleague voice.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 5,
+          "confidence": "low"
+        },
+        "voice": "Priya sounds properly Dublin, and \"just your appetite?\" made me smile. But it was over in three replies and I was never stretched. Once I'd declined, it was just Wednesday, half twelve, which café. No banter to read, no push-back, nothing I didn't already know. The recap gave me \"I can't tonight, next time for sure?\", which is what I'd say to a stranger, and my own line was better. It also said I used help once, and I never touched Help. That makes me doubt its other numbers. No corrections came, which is fair because I made no slips, but I got no new idiom or register choice either. For 15 minutes whenever, I'd try the disagreeing-with-a-senior scene. This one wouldn't replace Preply for me yet.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-jana-29-J3-1",
+            "status": "not-evaluable",
+            "finding": -1,
+            "evidence": "The learner made no 'on the picture' style slip in #2-#4, so the gap never came up; rawMoments are none for 3 clean turns."
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-jana-29-J3-2",
+            "status": "recurs",
+            "finding": 0,
+            "evidence": "#3-#4 after the decline the partner only settles \"Wednesday\" and \"café near the office, or ... Quays\"; at #3 chip still reads \"Give a short reason, not a long one\"."
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-jana-29-J3-3",
+            "status": "recurs",
+            "finding": 2,
+            "evidence": "#6 \"2 on your own · 1 with help\" though #2-#4 show only typed answers and no Help press."
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: #6 recap gives a hidden line \"That sounds lovely, but I can't tonight. Next time for sure?\", simpler than what Jana already said, and counts \"2 on your own · 1 with help\" though no help was pressed. Nothing new learned.",
+          "check": "They finish with a recap and feel they practised something real."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 5,
+      "fail": 0,
+      "ms": 88325
+    },
+    "character": {
+      "n": 6,
+      "fail": 0,
+      "ms": 89757
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 35655
+    }
+  }
+}
