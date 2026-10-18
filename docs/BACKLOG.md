@@ -44,7 +44,7 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - status: open
   - recert 2026-10-14-lt: 0 fixed / 3 open (lt/LT-adela-17-J4-4, lt/LT-petra-38-J4-1, lt/LT-viktor-67-J4-1). New origin: recert-1/LT-tomas-9-J4-5 (the moment cannot be replayed)
   - ruling 2026-10-18 (owner): path from the moment to Replay. After a moment, the next partner turn hands off to the existing Replay with a fresh question built on the coached form; no new card; the recap records the replay; then a J4 recertify
-  - status: built (aa342258): moment Back hands off to Replay; closes on the next J4 recertify. recert-6 rows LT-tomas-9-J4-1, LT-petra-38-J4-2/-3, LT-viktor-67-J4-1, LT-adela-17-J4-4. The replay answer is supported only by the turn rules (it already was: `conversation.ts` sets supported false on a replay; the `:347` above is stale)
+  - status: built (aa342258, 52000ea4): moment Back hands off to Replay; closes on the next J4 recertify. recert-6 rows LT-tomas-9-J4-1, LT-petra-38-J4-2/-3, LT-viktor-67-J4-1, LT-adela-17-J4-4. The replay answer is supported only by the turn rules (it already was: `conversation.ts` sets supported false on a replay; the `:347` above is stale)
   - ceiling: one retry in the same scene shows reuse, not retention
 - **LG-5** — Beginner partner language runs above band and does not ease after "nevím"
   - origin: 2026-09-15-lt/LT-tomas-9-J3-1, 2026-09-15-lt/LT-viktor-67-J3-1, 2026-09-15-lt/LT-klara-13-J3-1, 2026-09-15-lt-recert/LT-tomas-9-J3-1, 2026-09-15-lt-recert2-beginners/LT-tomas-9-J4-3, 2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-4; "I said nevím and he said almost the same thing again." (tomas-9, 2026-09-15-lt)
