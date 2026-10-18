@@ -1024,7 +1024,7 @@ function rp3Paper(){
 const escH=(x)=>x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const flat3=(h)=>h.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ');
 
-test('RP3 a: one walk - the topics, then the off-desk statements; Select does nothing on a statement; Back and Menu go to the first unit',()=>{
+test('RP3 a: one walk - the topics, then the off-desk statements; Select does nothing on a statement; Back and Menu land on the last topic row of the list (L1-vojtech-18-MB4-2)',()=>{
  const K=require(path.join(root,'src/tv/keys.ts')),{paperView,paperStopCount}=PAPER();
  const prof=[{id:'ema',name:'Ema',type:'elementary',age:12,system:'uk',modules:['maths']}];
  const mk=(f)=>({...paperSession(rp3Paper(),{},f),profiles:prof});
@@ -1038,7 +1038,7 @@ test('RP3 a: one walk - the topics, then the off-desk statements; Select does no
  for(let f=t;f<n;f++){
   const sel=K.tvKey(mk(f),'select',K.LOCAL);
   assert.deepEqual(sel.events,[]);assert.deepEqual(sel.calls,[]);assert.deepEqual(sel.local,{},'local unchanged');
-  for(const k of ['back','menu']){const r=K.tvKey(mk(f),k,K.LOCAL);assert.deepEqual(r.events,[{type:'nav',screen:'prepare',focus:0}],k);assert.deepEqual(r.local,{prepareAsk:null});}
+  for(const k of ['back','menu']){const r=K.tvKey(mk(f),k,K.LOCAL);const row=K.tvKey(mk(t-1),k,K.LOCAL).events;assert.ok(row[0].focus>0,'the last topic row has a unit past the first');assert.deepEqual(r.events,row,'Back from an off-desk row lands where the last topic row of the list does, not on the first unit: '+k);assert.deepEqual(r.local,{prepareAsk:null});}
  }
 });
 

@@ -545,7 +545,12 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       // the unit goes with it as the paper's aim (MB-B40): the set asked for on it is aimed at what this paper lost
       o.ev({ type: "nav", screen: "prepare", focus: ix, aim: t.id });
     }
-    if (k === "back" || k === "menu") { o.local.prepareAsk = null; o.nav("prepare", Math.max(0, ix)); }
+    if (k === "back" || k === "menu") {
+      // an off-desk row has no unit of its own: Back lands on the last topic row of the list it was walked from
+      const last = t ?? topics[topics.length - 1];
+      const at = last ? prepareStops(s).findIndex((u) => u.id === last.id) : -1;
+      o.local.prepareAsk = null; o.nav("prepare", Math.max(0, at));
+    }
   },
   // the set on paper is parked, not thrown away: Tonight's continue card puts it back
   practice: (_, k, __, o) => { if (k === "back") o.nav("tonight"); },
