@@ -986,7 +986,7 @@ test('the Essay box starts and resets empty; the sample is only a placeholder; a
  const {paragraphsOf}=require(path.join(SRC,'lib/rules/essay.ts'));
  const run=(value,pasted)=>{
   const loaded=[];let prevented=false;
-  const f=new Function('paragraphsOf','setSource','setPieceId','loadParagraphs',`${js}\nreturn onEssayPaste;`)(paragraphsOf,()=>{},()=>{},(ps)=>loaded.push(ps));
+  const f=new Function('paragraphsOf','setSource','setPieceId','setPieceTitle','loadParagraphs',`${js}\nreturn onEssayPaste;`)(paragraphsOf,()=>{},()=>{},()=>{},(ps)=>loaded.push(ps));
   f({preventDefault(){prevented=true;},clipboardData:{getData:()=>pasted},currentTarget:{value,selectionStart:value.length,selectionEnd:value.length}});
   return {loaded,prevented};
  };

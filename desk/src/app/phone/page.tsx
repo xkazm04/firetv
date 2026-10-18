@@ -102,6 +102,8 @@ export default function Phone() {
   const [keep, setKeep] = useState(true);
   /** What the kept piece is; nothing is preselected, so a keep waits for a choice (recert-5/L1-helena-46-EM5-2). */
   const [pieceFormat, setPieceFormat] = useState("");
+  /** An optional name for a new kept piece; empty keeps the desk's "Untitled" name (recert-6/L1-helena-46-EM5-6). */
+  const [pieceTitle, setPieceTitle] = useState("");
   const [notice, setNotice] = useState<string | null>(null);
   /** Which read the one-time notice interrupted: the whole piece (kept on the shelf) or the single paragraph showing. */
   const [noticeFor, setNoticeFor] = useState<"piece" | "paragraph">("piece");
@@ -270,7 +272,7 @@ export default function Phone() {
     if (after) return setNote(after);
     const ps = paragraphsOf(text);
     if (!ps.length) return setNote("That file is empty. Pick one with some writing in it.");
-    setSource("file"); setPieceId(undefined);
+    setSource("file"); setPieceId(undefined); setPieceTitle("");
     loadParagraphs(ps, ps.length > 1 ? `${f.name}: ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.` : "");
   };
   /** A pasted message with blank lines is split the same way; a paste without any goes in as it always did. */
@@ -278,7 +280,7 @@ export default function Phone() {
     const t = e.currentTarget, pasted = e.clipboardData.getData("text");
     const ps = paragraphsOf(t.value.slice(0, t.selectionStart) + pasted + t.value.slice(t.selectionEnd));
     if (ps.length < 2) return;
-    e.preventDefault(); setSource("paste"); setPieceId(undefined); loadParagraphs(ps, `That is ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.`);
+    e.preventDefault(); setSource("paste"); setPieceId(undefined); setPieceTitle(""); loadParagraphs(ps, `That is ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.`);
   };
   /** The whole piece to the TV (v2 E1): kept on the shelf first when asked; a 428 means the one-time notice is due. */
   const readPiece = async (keepIt = keep) => {
@@ -288,7 +290,7 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNote(""); setInfo(""); setBusy(true); setMsg(stranded ? `${rewriteStaysLine(stranded)} The desk is reading your piece…` : "the desk is reading your piece…");
     try {
-      const r = await call("/api/analyse", { kind: "piece", text: whole, type: etype, keep: keepIt, pieceId, source, ...(pieceFormat ? { format: pieceFormat } : {}) });
+      const r = await call("/api/analyse", { kind: "piece", text: whole, type: etype, keep: keepIt, pieceId, source, ...(pieceFormat ? { format: pieceFormat } : {}), ...(keepIt && !pieceId && pieceTitle.trim() ? { title: pieceTitle.trim() } : {}) });
       const j = await r.json().catch(() => ({} as { error?: string; notice?: boolean; piece?: { pieceId?: string } }));
       if (moved()) return;
       if (r.status === 428 && (j as { notice?: boolean }).notice) { setMsg(""); setNotice((j as { error?: string }).error ?? ""); return; }
@@ -735,6 +737,7 @@ export default function Phone() {
           {paras.length > 1 && <div className="field" data-role="essay-piece">
             <label className="pkeep"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} data-role="essay-keep" /><span>Keep it on my shelf</span></label>
             {keep && !pieceId && <div className="pkeep" role="radiogroup" aria-label="What is it?" data-role="essay-format">{([["message", "Message"], ["email", "Email"], ["essay", "Essay"]] as const).map(([id, label]) => <label key={id}><input type="radio" name="piece-format" checked={pieceFormat === id} onChange={() => setPieceFormat(id)} data-role={`essay-format-${id}`} /><span>{label}</span></label>)}</div>}
+            {keep && !pieceId && <input className="pkeep" type="text" value={pieceTitle} maxLength={80} onChange={(e) => setPieceTitle(e.target.value)} placeholder="Name this piece (optional)" aria-label="Name this piece (optional)" data-role="essay-title" />}
             {stranded > 0 && <p className="pnote" data-role="essay-rewrites-stay" aria-live="polite">{rewriteStaysLine(stranded)}</p>}
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()))}>Dictate</button>

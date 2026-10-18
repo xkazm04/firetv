@@ -16,7 +16,7 @@ import { sentenceProblem } from "@/lib/rules/english";
 export const dynamic = "force-dynamic";
 type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: string; type: AnalysisType; task?: string } | { kind: "rewrite"; n: number; text: string }
   | { kind: "piece-again" }
-  | { kind: "piece"; text: string; type: AnalysisType; keep?: boolean; pieceId?: string; source?: string; format?: string; task?: string };
+  | { kind: "piece"; text: string; type: AnalysisType; keep?: boolean; pieceId?: string; source?: string; format?: string; title?: string; task?: string };
 
 /** E3-b: a reading refused before any run with a line for the learner says the line on the TV's status line too, whichever door sent it. */
 /** A refusal said before any run: on the session as the status, and as an essay refusal when it is one (the essay screens caption it). */
@@ -127,11 +127,11 @@ export async function POST(req: Request) {
       // a reading already running refuses this one: refused before the piece is kept, so a refused send leaves no piece on the shelf
       if (blocksRun(getSession().jobs?.analyse, who.id)) return refused({ status: 409, error: BUSY });
       if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });
-      let kept = target ? addVersion(who.id, target, { text: body.text, source: body.source }) : addPiece(who.id, { text: body.text, source: body.source, format: body.format });
+      let kept = target ? addVersion(who.id, target, { text: body.text, source: body.source }) : addPiece(who.id, { text: body.text, source: body.source, format: body.format, title: body.title });
       // the same text kept again is not a failure: the reading goes ahead on the version already kept
       if (!kept.ok && target && kept.status === 400 && /kept last/.test(kept.error)) { pieceId = target; kept = { ok: true, value: getPiece(who.id, target)! }; }
       // a guessed match that cannot take a version (full) is a new piece, if the phone named a format; one the learner named is told
-      else if (!kept.ok && target && !named && hasFormat(body.format)) kept = addPiece(who.id, { text: body.text, source: body.source, format: body.format });
+      else if (!kept.ok && target && !named && hasFormat(body.format)) kept = addPiece(who.id, { text: body.text, source: body.source, format: body.format, title: body.title });
       if (kept.ok) pieceId = kept.value.id;
       else return NextResponse.json({ error: kept.error }, { status: kept.status });
     }

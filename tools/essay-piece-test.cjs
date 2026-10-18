@@ -545,6 +545,20 @@ test('EM5-2: a phone keep names its format: email lands as email in the Emails c
   assert.equal(channelOf(cards[0].format), 'email', 'it counts toward the Emails channel');
   texts.deleteAll('ema');
 });
+test('L1-helena-46-EM5-6 (recert-6): a phone keep with a name sends title and the shelf card shows it; without a name the Untitled fallback stays', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = []; texts.deleteAll('ema'); texts.markNoticed('ema');
+  const MAIL = 'Hi Anna,\n\nThanks for your note about Friday. I can bring the slides.\n\nBest wishes,\nEma';
+  answer = observing([{ n: 1, job: 'context' }, { n: 2, job: 'claim' }, { n: 3, job: 'link' }]);
+  const named = await quietly(() => post({ kind: 'piece', text: MAIL, type: 'structure', keep: true, source: 'paste', format: 'email', title: 'Note to Anna' }));
+  assert.equal(named.status, 200);
+  assert.deepEqual(texts.listPieces('ema').map((c) => c.title), ['Note to Anna'], 'the shelf card shows the name');
+  const plain = await quietly(() => post({ kind: 'piece', text: 'Hello Ben,\n\nCould you send me the notes from Monday please?\n\nThank you,\nEma', type: 'structure', keep: true, source: 'paste', format: 'email' }));
+  assert.equal(plain.status, 200);
+  assert.ok(texts.listPieces('ema').some((c) => /^Untitled email \d+$/.test(c.title)), 'no name keeps the Untitled fallback');
+  texts.deleteAll('ema');
+  const phone = fs.readFileSync(path.join(root, 'src/app/phone/page.tsx'), 'utf8');
+  assert.match(phone, /data-role="essay-title"/); assert.match(phone, /title: pieceTitle\.trim\(\)/);
+});
 test('EM5-2: /drop starts with no format chosen, the shelf shows each format, the phone asks before it keeps', () => {
   const drop = fs.readFileSync(path.join(root, 'src/app/drop/page.tsx'), 'utf8');
   assert.match(drop, /useState<string>\(""\)/, '/drop preselects nothing'); assert.doesNotMatch(drop, /useState<string>\("message"\)/);
