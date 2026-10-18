@@ -48,6 +48,7 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - origin: 2026-09-15-lt/LT-tomas-9-J3-1, 2026-09-15-lt/LT-viktor-67-J3-1, 2026-09-15-lt/LT-klara-13-J3-1, 2026-09-15-lt-recert/LT-tomas-9-J3-1, 2026-09-15-lt-recert2-beginners/LT-tomas-9-J4-3, 2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-4; "I said nevím and he said almost the same thing again." (tomas-9, 2026-09-15-lt)
   - recommendation: build — pitch is prompt text only (`lib/english/conversation.ts:72`), and adaptation reads the stored record, not this turn (`conversation.ts:87`). Code reads the last reply for signs of not understanding (another language, "nevím", "don't understand", help twice) and asks for one short question with a one-word answer next; a length cap on A1–A2 partner lines is checked in code. That prompt-only pitch is the cause is a hypothesis (judge-rated on codex)
   - status: open
+  - status: built (3ba83d30): turn-level easing after a not-understanding reply; length cap was LG-56; closes on the next J3/J4 recertify
   - recert 2026-10-14-lt: 0 fixed / 5 open, shared with LG-14 (lt/LT-tomas-9-J1-1, lt/LT-tomas-9-J2-2, lt/LT-tomas-9-J4-3, lt/LT-viktor-67-J1-1, lt/LT-viktor-67-J3-1). New origins: recert-1/LT-petra-38-J4-1 (partner at B1, above A2), recert-1/LT-tomas-9-J3-1 (partner at B1 to an A1 child; its cause is the B1 placement, LG-48)
   - ceiling: vocabulary fit stays the model's judgement; a length cap does not make a rare word easy
 - **LG-6** — Planning screens assume an adult reader of English
