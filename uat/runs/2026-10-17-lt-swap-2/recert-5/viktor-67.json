@@ -1,0 +1,673 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter\nA1First words · self-chosen\nAsk about school\nYour mission\nAsk simple questions about school and understand short answers.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nAsk about school\nAsk simple questions about school and understand short answers.\n[button: Start talking]\nOr choose a situation [list: Ask about school [plan-e60a6124] | Tell them about my garden [plan-3a8856af] | Say hello and start the call [plan-5b36f863] | Ask them to say that again [plan-ebf96063] | Pick a time for our next call [plan-709da002] | Ask them to show me a drawing [plan-c510175a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Good, school topic is about the grandchildren, I will start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6164
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter\nVideo call: Mia's school day\nMia says\nMia, you look happy! How is school today?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk one simple question about school\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nVideo call: Mia's school day\nAsk Mia one simple question about school and understand her short answer.\nNow: Ask one simple question about school\nMia, you look happy! How is school today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter\nMia, you look happy! How is school today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Mia, you look happy! How is school today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I understand \"school\" and \"happy\"; I'll try a simple question to Mia.",
+          "action": "answer",
+          "args": {
+            "text": "Mia, hello. School good?"
+          },
+          "result": "ok",
+          "ms": 10954
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter\nVideo call: Mia's school day\nMia says\nYes, school is nice. I have a test today.\nYour turn\nAnswer on your phone: speak or type.\nNowUnderstand a short answer from Mia\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nVideo call: Mia's school day\nAsk Mia one simple question about school and understand her short answer.\nNow: Understand a short answer from Mia\nYes, school is nice. I have a test today.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter\nMia, you look happy! How is school today?\nYou · spoken\nMia, hello. School good?\nMia · granddaughter\nYes, school is nice. I have a test today.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, school is nice. I have a test today.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "She has a test today; I understand \"school\" and \"test\" a little, so I'll wish her luck simply.",
+          "action": "answer",
+          "args": {
+            "text": "Ah, test. Dobře. Good, Mia. I love you."
+          },
+          "result": "ok",
+          "ms": 12728
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou wanted to say Dobře\nIn English\nOkay\nDobře is Czech for good or okay. Say Okay or Good in English.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “Dobře”\nIn English: “Okay”\nDobře is Czech for good or okay. Say Okay or Good in English.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, dobře means okay. I understand, go on.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter\nVideo call: Mia's school day\nMia says\nThank you, Grandpa! I feel a bit nervous about it.\nYour turn\nAnswer on your phone: speak or type.\nNowSay something kind about her day\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nVideo call: Mia's school day\nAsk Mia one simple question about school and understand her short answer.\nNow: Say something kind about her day\nThank you, Grandpa! I feel a bit nervous about it.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter\nMia, you look happy! How is school today?\nYou · spoken\nMia, hello. School good?\nMia · granddaughter\nYes, school is nice. I have a test today.\nYou · spoken\nAh, test. Dobře. Good, Mia. I love you.\nMia · granddaughter\nThank you, Grandpa! I feel a bit nervous about it.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, Grandpa! I feel a bit nervous about it.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "She is nervous; I want to say something kind, but simple words.",
+          "action": "answer",
+          "args": {
+            "text": "Mia, ne nervous. You are good. I love you."
+          },
+          "result": "ok",
+          "ms": 12267
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter\nVideo call: Mia's school day\nMia says\nThank you. You make me smile.\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nVideo call: Mia's school day\nAsk Mia one simple question about school and understand her short answer.\nThank you. You make me smile.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter\nMia, you look happy! How is school today?\nYou · spoken\nMia, hello. School good?\nMia · granddaughter\nYes, school is nice. I have a test today.\nYou · spoken\nAh, test. Dobře. Good, Mia. I love you.\nMia · granddaughter\nThank you, Grandpa! I feel a bit nervous about it.\nYou · spoken\nMia, ne nervous. You are good. I love you.\nMia · granddaughter\nThank you. You make me smile.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you. You make me smile.\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "Mission is done, so I'll look at what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 7,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nViktor\nA way into English\nYour rehearsal\nYou wanted to say Dobře\nIn English\nOkay\nDobře is Czech for good or okay. Say Okay or Good in English.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 3 on your own · 0 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Good luck! Is it hard?”\nFrom this rehearsal\n“Dobře”: Okay\nDobře is Czech for good or okay. Say Okay or Good in English.\nSaved for the end\n“ne nervous”: Don't be nervous\n'ne' means 'no' in Czech. Say 'don't be' to tell someone not to feel something.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nTell them about my garden\nDescribe your garden with a few simple words, such as flowers, tomatoes and water.\n[button: Start talking]\nOr choose a situation [list: Ask about school [plan-e60a6124] | Tell them about my garden [plan-3a8856af] | Say hello and start the call [plan-5b36f863] | Ask them to say that again [plan-ebf96063] | Pick a time for our next call [plan-709da002] | Ask them to show me a drawing [plan-c510175a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Dobře, I learned \"okay\" today; that is enough for me now, I'll rest.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Video call: Mia's school day",
+          "goal": "Ask Mia one simple question about school and understand her short answer.",
+          "partner": "Mia · granddaughter",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Mia, you look happy! How is school today?"
+            },
+            {
+              "role": "learner",
+              "text": "Mia, hello. School good?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, school is nice. I have a test today."
+            },
+            {
+              "role": "learner",
+              "text": "Ah, test. Dobře. Good, Mia. I love you.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, Grandpa! I feel a bit nervous about it."
+            },
+            {
+              "role": "learner",
+              "text": "Mia, ne nervous. You are good. I love you.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you. You make me smile."
+            }
+          ],
+          "moments": [
+            {
+              "id": "fca9e344-6ea5-4597-ba5c-316a4d65d554:uat-8:moment",
+              "kind": "word",
+              "said": "Dobře",
+              "better": "Okay",
+              "why": "Dobře is Czech for good or okay. Say Okay or Good in English.",
+              "turnId": "fca9e344-6ea5-4597-ba5c-316a4d65d554:uat-8",
+              "at": 1792309240459
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "fca9e344-6ea5-4597-ba5c-316a4d65d554:uat-10:held",
+              "kind": "word",
+              "said": "ne nervous",
+              "better": "Don't be nervous",
+              "why": "'ne' means 'no' in Czech. Say 'don't be' to tell someone not to feel something.",
+              "turnId": "fca9e344-6ea5-4597-ba5c-316a4d65d554:uat-10",
+              "at": 1792309262669
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Mia, hello. School good?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Ah, test. Dobře. Good, Mia. I love you.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Dobře",
+                "better": "Okay",
+                "why": "Dobře is Czech for good or okay. Say Okay or Good in English."
+              },
+              "shown": true
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Mia, ne nervous. You are good. I love you.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "ne nervous",
+                "better": "Don't be nervous",
+                "why": "'ne' means 'no' in Czech. Say 'don't be' to tell someone not to feel something."
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": []
+        }
+      },
+      "endedBy": "done",
+      "ms": 92287,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-viktor-67-J3-2",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "A Czech vocabulary question requires a second request",
+          "expected": "Resolve a beginner’s explicit vocabulary question in language he understands.",
+          "got": "Viktor asks what “red” means in Czech, receives an English analogy, and must ask again before receiving the translation.",
+          "evidence": [
+            "#7 “co znamená red?”; #8 “like a strawberry” and “Můžeš mi prosím říct česky”; #9 “červená” finally produces “Now I understand.”"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-viktor-67-J3-2",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "One clarification remains too difficult",
+          "expected": "Explain an unknown word using Czech or an immediately understandable example.",
+          "got": "An English definition and another question leave him guessing. Eight of nine partner turns are at band, meeting the aggregate pitch threshold, but this repair fails locally.",
+          "evidence": [
+            "#6: \"co jsou rolls?\" #7: \"Rolls are small, round breads. How many would you like?\" His thought: \"I still do not understand rolls\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-1",
+          "run": "2026-09-15-lt-recert2-beginners",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated Czech requests do not produce understandable explanations",
+          "expected": "Very short language, familiar words, and Czech clarification when English explanations fail.",
+          "got": "Pitch is at band on #7, #10 and #12 only: 3/9, below the required 0.8. Turns #2, #4, #5, #6, #9 and #11 introduce too much unfamiliar language for this learner. Slow pacing is asserted but not verifiable.",
+          "evidence": [
+            "#5: \"Tomu drawing bohužel nerozumím\". #6: \"Drawing means making a picture with a pencil.\" #10 asks what \"eat\" means; #11 responds with \"put food in your mouth and chew\", followed by \"pořád tomu nerozumím\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-viktor-67-J3-2",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated and obvious errors get no moment",
+          "expected": "Consistent as-needed correction of repeated errors.",
+          "got": "After the #12 moment on 'I water garden', the same slip at #18 passed silently. 'Grandson come Sunday' and 'He like tomatoes. He play garden' also got none.",
+          "evidence": [
+            "#18, #21, #23: no moment. Only 2 moments in 19 turns, with about 6 of 8 error turns missed.",
+            "moment trigger rule"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Most repeated article slips get no moment",
+          "expected": "Consistent as-needed handling of the same slip.",
+          "got": "Only 2 moments. 'I have apple tree', 'I like apple', 'She helps in garden', 'in kitchen' and 'Green apple' pass silently, though 'I have garden' was corrected earlier.",
+          "evidence": [
+            "#7 'I have apple tree'; #8 'I like apple'; #20 'She helps in garden'; #21 'in kitchen'",
+            "moment trigger rule"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-6",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Plural correction of 'My apple is red' is arguable",
+          "expected": "Moment only when the original is wrong.",
+          "got": "He has an apple tree; the fix to plural is defensible given Mia's 'your apples' but not certain.",
+          "evidence": [
+            "#10 'More than one apple needs 'apples' and 'are'.'",
+            "moment trigger rule"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated article slips pass without a moment",
+          "expected": "Consistent as-needed handling of 'in garden' and missing 'are'.",
+          "got": "'I am in garden' (#3), 'Garden, many flowers' (#4), 'My flowers red and yellow' (#5) got nothing; only the fourth 'Bees in garden' got a moment.",
+          "evidence": [
+            "#3, #4, #5 no moment; #7 moment on identical slip",
+            "moment trigger rule"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Mia ignores 'how is school?' and mission is marked done",
+          "expected": "Viktor asks about school and hears a short answer.",
+          "got": "Mia answers 'Do you have flowers?'; mission shows 'Mission done' at #5 with the school answer never given.",
+          "evidence": [
+            "#3 'Mia, how is school?' → #4 'Do you have flowers?'; #5 'Mission done'",
+            "partner prompt / mission tracker"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Moment teaches an article, not a Sunday family phrase",
+          "expected": "Words and phrases for the grandchildren.",
+          "got": "Only 'in the garden' article fix.",
+          "evidence": [
+            "#7, #10",
+            "moment selection / recap builder"
+          ],
+          "recurrence": 3
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Level shown as \"A1 · First words\" (#1), equal to trueBand A1 (exact)."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#3 \"Ah, test. Dobře.\" accepted; the moment explains \"Dobře is Czech for good or okay\" without scolding (#4). He was not forced into English he could not produce."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening task or 'Show the words' in this journey; he understood Mia's lines from the TV alone."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "Plan topics are Ask about school, Tell them about my garden, Say hello to start the call, Pick a time for our next call, and similar: nearly all are about the grandchildren (#1)."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#5 \"I feel a bit nervous about it\" and #6 \"You make me smile\" are idiomatic and longer than very short A1 sentences. #2 also mixes a statement with the question."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Moment \"Dobře\"→\"Okay\" is correct. The held fix \"ne nervous\" → \"Don't be nervous\" (#7) is a usable phrase for a grandchild. It is more general than family-specific, but correct."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "fail",
+            "evidence": "Only 3 learner replies (#2, #3, #5) before \"Mission done\" at #6, against about eight expected. It started from the plan (\"Ask about school\") but did not run for several turns."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Pitch 3 of 4 at band = 0.75, below 0.8. \"I feel a bit nervous about it\" and especially \"You make me smile\" are above a true A1 beginner."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "One stop (#4, \"Dobře\" → \"Okay\"), correct, precision 1/1. The second fix was held to the recap instead of stopping the scene."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#7 recap shows \"3 spoken · 0 written replies · 3 on your own · 1 moment to keep\" plus \"Saved for the end: ne nervous\". He took away \"okay\" (his thought at #7)."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey (level set by fixture)."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 3,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal-data request, no humiliating line. The tone is kind throughout."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Mia's lines drift above A1",
+            "expected": "Very short, slow, known words for a first-time 67-year-old learner.",
+            "got": "\"I feel a bit nervous about it.\" and \"You make me smile.\" use idiom and hedging; pitch 0.75.",
+            "evidence": "#5 \"Thank you, Grandpa! I feel a bit nervous about it.\" #6 \"Thank you. You make me smile.\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Every partner turn at A1 is at most 6–8 familiar words with no idiom; pitch ≥ 0.8 at A1.",
+            "code_hint": "partner prompt level constraint"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Mission closes after three replies",
+            "expected": "A conversation lasting several turns, about eight replies.",
+            "got": "\"Mission done\" appears after the third reply, and Viktor then finishes.",
+            "evidence": "#6 \"Mission done. See what you did tonight.\" after 3 learner turns",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Scene continues at least 6 learner turns unless the learner ends it, or mission completion is not a stop signal.",
+            "code_hint": "mission tracker"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Czech word handled kindly, with a correct moment",
+            "expected": "Czech accepted and turned into the English word.",
+            "got": "\"Dobře\" → \"Okay\" with a short Czech-aware explanation; the scene resumes cleanly.",
+            "evidence": "#4 \"Dobře is Czech for good or okay.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep Czech-to-English moments short and non-judgmental.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Held fix kept for the recap, scene not interrupted",
+            "expected": "Second error doesn't stop the scene but is not lost.",
+            "got": "\"ne nervous\" → \"Don't be nervous\" is shown under \"Saved for the end\".",
+            "evidence": "#7 \"Saved for the end: 'ne nervous': Don't be nervous\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the held-fix recap list.",
+            "code_hint": "LG-23"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "The moment's \"Say Okay or Good in English\" nudges a non-typing beginner",
+            "expected": "Plain, minimal guidance for the learner; the moment names the exact words for Sunday.",
+            "got": "Generic word swap; \"Okay\" is not a family phrase. \"A way into English\" label is mild.",
+            "evidence": "#4 \"Say Okay or Good in English.\"",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Prefer a moment on a phrase for the grandchildren when several are available.",
+            "code_hint": "moment selection"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 45,
+          "confidence": "low"
+        },
+        "voice": "Víte, it was kind and quick, and I could follow Mia. She did not rush me, and when I said \"Dobře\" it did not laugh, it just told me \"Okay\". I liked \"Don't be nervous\", because I can say that to my granddaughter on Sunday. But it finished after only three of my sentences. Some of Mia's words, \"make me smile\", \"a bit nervous\", were harder than I know. I did not need to type, I could speak, that is good. Would I use it again? Yes, on Saturday, for fifteen minutes, instead of the tram to the library. I would tell my friend, but I would ask for a longer talk with Mia and simpler words from her.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-viktor-67-J3-2",
+            "status": "not-evaluable",
+            "evidence": "#2–#5: Viktor never asks a Czech vocabulary question like \"co znamená red?\".",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-viktor-67-J3-2",
+            "status": "not-evaluable",
+            "evidence": "No clarification request about an unknown word occurs in #2–#6.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-1",
+            "status": "not-evaluable",
+            "evidence": "No repeated Czech request for explanation; he never asked for one in #2–#5.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-viktor-67-J3-2",
+            "status": "not-evaluable",
+            "evidence": "No repeated error in his three replies; \"I love you\" is correct, so the repeated-slip case didn't arise.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-3",
+            "status": "not-evaluable",
+            "evidence": "No article slips in his lines (#2, #3, #5), so the repeated-article gap was not tested.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-6",
+            "status": "not-evaluable",
+            "evidence": "No plural correction occurred; the only moment is \"Dobře\" (#4).",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-2",
+            "status": "not-evaluable",
+            "evidence": "No repeated article slips such as \"in garden\" in this garden-free topic.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-3",
+            "status": "not-seen",
+            "evidence": "#2 \"School good?\" → #3 Mia answers \"Yes, school is nice. I have a test today.\"; Mission done came only at #6.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-4",
+            "status": "not-seen",
+            "evidence": "The moment is a Czech word swap (#4), not an article, and the held fix \"Don't be nervous\" is a usable phrase (#7).",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D1",
+          "level": "fail",
+          "text": "D1 failed: Only 3 learner replies (#2, #3, #5) before \"Mission done\" at #6, against about eight expected. It started from the plan (\"Ask about school\") but did not run for several turns.",
+          "check": "The Character starts a conversation from their plan and keeps it going for several turns."
+        },
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Pitch 3 of 4 at band = 0.75, below 0.8. \"I feel a bit nervous about it\" and especially \"You make me smile\" are above a true A1 beginner.",
+          "check": "The partner's English sits at their band — not babyish, not over their head (rubric **pitch** ≥ 0.8)."
+        },
+        {
+          "kind": "gate",
+          "id": "pitch",
+          "level": "fail",
+          "text": "pitch 3/4 (75%) under 80%"
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #5 \"I feel a bit nervous about it\" and #6 \"You make me smile\" are idiomatic and longer than very short A1 sentences. #2 also mixes a statement with the question."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 5,
+      "fail": 0,
+      "ms": 58888
+    },
+    "character": {
+      "n": 7,
+      "fail": 0,
+      "ms": 32997
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 36566
+    }
+  }
+}

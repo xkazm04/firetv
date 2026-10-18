@@ -1,0 +1,1024 @@
+{
+  "character": "martin-45",
+  "name": "Martin",
+  "trueBand": "B1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to B1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nMartin\nRavi · Supplier account manager\nB1Getting by · self-chosen\nMoving the supplier delivery date\nYour mission\nAgree a new delivery date that works for both sides.\nMake a plan\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\n· self-chosen\nNext topic:\nMoving the supplier delivery date\nAgree a new delivery date that works for both sides.\n[button: Start talking]\nOr choose a situation [list: Moving the supplier delivery date [plan-1cae03f2] | Presenting a quality problem [plan-c4a5f17e] | Small talk with the US director [plan-fe1709a0] | Disagreeing politely in a meeting [plan-0207c424] | Running the meeting on time [plan-ee0e6f25] | Giving a short project update [plan-8fb6aa0f] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "This is my topic, supplier delivery date, good.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8208
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nRavi · Supplier account manager\nMoving a late parts delivery with Ravi\nRavi says\nHello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nMoving a late parts delivery with Ravi\nAgree a new delivery day that works for both sides.\nNow: Explain why the order is late\nHello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nRavi · Supplier account manager\nHello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Easy, I'll explain the delay problem and ask for a new date.",
+          "action": "answer",
+          "args": {
+            "text": "Hello Ravi, thank you for call. We was waiting for this parts already two weeks and this is big problem for our production. I need the delivery until next Friday, otherwise we must stop the line and our customer will be very unhappy. What is the reason of this delay?"
+          },
+          "result": "ok",
+          "ms": 18039
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said I need the delivery until next Friday\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I need the delivery until next Friday”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Why is that wrong? I need delivery by Friday, fine, I'll say it again.",
+          "action": "answer",
+          "args": {
+            "text": "I need the delivery until next Friday, because we was waiting already two weeks. Why is it wrong?"
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said I need the delivery until next Friday\nYour line\n'until' suggests a period that continues; 'by' means no later than that day.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I need the delivery until next Friday”\nSay it again, your way.\n'until' suggests a period that continues; 'by' means no later than that day.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Why is it wrong? I think my sentence is fine, but I'll try it with by.",
+          "action": "answer",
+          "args": {
+            "text": "Okay, but in my opinion until is also correct. I need the delivery by next Friday, because we was waiting already two weeks."
+          },
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said I need the delivery until next Friday\nYour try\nOkay, but in my opinion until is also correct. I need the delivery by next Friday, because we was waiting already two weeks.\n'until' suggests a period that continues; 'by' means no later than that day.\nYou fixed “delivery by”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “delivery by”\nYou said “I need the delivery until next Friday”\nYour try: “Okay, but in my opinion until is also correct. I need the delivery by next Friday, because we was waiting already two weeks.”\n'until' suggests a period that continues; 'by' means no later than that day.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I made my point, let's get back to the supplier call.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nRavi · Supplier account manager\nMoving a late parts delivery with Ravi\nRavi says\nThe delay was a part shortage at our factory, and I know your line cannot stop. Shall I check the trucks and email you the new date?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain why the order is late\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nMoving a late parts delivery with Ravi\nAgree a new delivery day that works for both sides.\nNow: Explain why the order is late\nThe delay was a part shortage at our factory, and I know your line cannot stop. Shall I check the trucks and email you the new date?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nRavi · Supplier account manager\nHello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?\nYou · spoken\nHello Ravi, thank you for call. We was waiting for this parts already two weeks and this is big problem for our production. I need the delivery until next Friday, otherwise we must stop the line and our customer will be very unhappy. What is the reason of this delay?\nRavi · Supplier account manager\nThe delay was a part shortage at our factory, and I know your line cannot stop. Shall I check the trucks and email you the new date?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"The delay was a part shortage at our factory, and I know your line cannot stop. Shall I check the trucks and email you the new date?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, he offers to check; I need a firm date and confirmation.",
+          "action": "answer",
+          "args": {
+            "text": "Yes please, check the trucks and send me the new date today. I can accept delivery on Thursday morning, but not later, because we have the production plan fixed. If you can not make it, we must discuss a partial delivery, I think this is more better solution for both sides."
+          },
+          "result": "ok",
+          "ms": 23571
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nRavi · Supplier account manager\nMoving a late parts delivery with Ravi\nRavi says\nThursday morning could work, so I will check the trucks now and email you a firm date today. Can you take the rest of the order the following week?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nMoving a late parts delivery with Ravi\nAgree a new delivery day that works for both sides.\nNow: Explain why the order is late\nThursday morning could work, so I will check the trucks now and email you a firm date today. Can you take the rest of the order the following week?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nRavi · Supplier account manager\nHello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?\nYou · spoken\nHello Ravi, thank you for call. We was waiting for this parts already two weeks and this is big problem for our production. I need the delivery until next Friday, otherwise we must stop the line and our customer will be very unhappy. What is the reason of this delay?\nRavi · Supplier account manager\nThe delay was a part shortage at our factory, and I know your line cannot stop. Shall I check the trucks and email you the new date?\nYou · spoken\nYes please, check the trucks and send me the new date today. I can accept delivery on Thursday morning, but not later, because we have the production plan fixed. If you can not make it, we must discuss a partial delivery, I think this is more better solution for both sides.\nRavi · Supplier account manager\nThursday morning could work, so I will check the trucks now and email you a firm date today. Can you take the rest of the order the following week?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thursday morning could work, so I will check the trucks now and email you a firm date today. Can you take the rest of the order the following week?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Ravi asks about the rest of the order; I'll answer confidently with my usual mistakes.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, the rest of the order we can take next week, but I need the exact quantity and the date in writing. Also I want that you confirm the quality certificates, because last time we had a quality issue with this supplier and he don't send the documents."
+          },
+          "result": "ok",
+          "ms": 28895
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nRavi · Supplier account manager\nMoving a late parts delivery with Ravi\nRavi says\nYes, I will send the exact quantity and date in writing today. Which quality certificates do you need for this batch?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain why the order is late\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nMoving a late parts delivery with Ravi\nAgree a new delivery day that works for both sides.\nNow: Explain why the order is late\nYes, I will send the exact quantity and date in writing today. Which quality certificates do you need for this batch?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nRavi · Supplier account manager\nHello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?\nYou · spoken\nHello Ravi, thank you for call. We was waiting for this parts already two weeks and this is big problem for our production. I need the delivery until next Friday, otherwise we must stop the line and our customer will be very unhappy. What is the reason of this delay?\nRavi · Supplier account manager\nThe delay was a part shortage at our factory, and I know your line cannot stop. Shall I check the trucks and email you the new date?\nYou · spoken\nYes please, check the trucks and send me the new date today. I can accept delivery on Thursday morning, but not later, because we have the production plan fixed. If you can not make it, we must discuss a partial delivery, I think this is more better solution for both sides.\nRavi · Supplier account manager\nThursday morning could work, so I will check the trucks now and email you a firm date today. Can you take the rest of the order the following week?\nYou · spoken\nYes, the rest of the order we can take next week, but I need the exact quantity and the date in writing. Also I want that you confirm the quality certificates, because last time we had a quality issue with this supplier and he don't send the documents.\nRavi · Supplier account manager\nYes, I will send the exact quantity and date in writing today. Which quality certificates do you need for this batch?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, I will send the exact quantity and date in writing today. Which quality certificates do you need for this batch?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Easy question, I answer with certificates I need.",
+          "action": "answer",
+          "args": {
+            "text": "I need the material certificate and the inspection report for every batch, also the certificate of conformity. Without this documents we can not use the parts in production. Please send it together with the delivery, not after."
+          },
+          "result": "ok",
+          "ms": 18155
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said Without this documents\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “Without this documents”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I'll say it again, but I think my English is correct.",
+          "action": "answer",
+          "args": {
+            "text": "Without these documents we can not use the parts in production."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 10,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said Without this documents\nYour try\nWithout these documents we can not use the parts in production.\n'this' goes with one item; plural 'documents' needs 'these'.\nYou fixed “without these”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “without these”\nYou said “Without this documents”\nYour try: “Without these documents we can not use the parts in production.”\n'this' goes with one item; plural 'documents' needs 'these'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I fixed it, let's carry on with the call.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 14
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nRavi · Supplier account manager\nMoving a late parts delivery with Ravi\nRavi says\nI will add the certificates and inspection reports to the delivery note. The truck can come Thursday at 8 or 11. Which time suits your team?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain why the order is late\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nMoving a late parts delivery with Ravi\nAgree a new delivery day that works for both sides.\nNow: Explain why the order is late\nI will add the certificates and inspection reports to the delivery note. The truck can come Thursday at 8 or 11. Which time suits your team?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nRavi · Supplier account manager\nHello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?\nYou · spoken\nHello Ravi, thank you for call. We was waiting for this parts already two weeks and this is big problem for our production. I need the delivery until next Friday, otherwise we must stop the line and our customer will be very unhappy. What is the reason of this delay?\nRavi · Supplier account manager\nThe delay was a part shortage at our factory, and I know your line cannot stop. Shall I check the trucks and email you the new date?\nYou · spoken\nYes please, check the trucks and send me the new date today. I can accept delivery on Thursday morning, but not later, because we have the production plan fixed. If you can not make it, we must discuss a partial delivery, I think this is more better solution for both sides.\nRavi · Supplier account manager\nThursday morning could work, so I will check the trucks now and email you a firm date today. Can you take the rest of the order the following week?\nYou · spoken\nYes, the rest of the order we can take next week, but I need the exact quantity and the date in writing. Also I want that you confirm the quality certificates, because last time we had a quality issue with this supplier and he don't send the documents.\nRavi · Supplier account manager\nYes, I will send the exact quantity and date in writing today. Which quality certificates do you need for this batch?\nYou · spoken\nI need the material certificate and the inspection report for every batch, also the certificate of conformity. Without this documents we can not use the parts in production. Please send it together with the delivery, not after.\nRavi · Supplier account manager\nI will add the certificates and inspection reports to the delivery note. The truck can come Thursday at 8 or 11. Which time suits your team?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I will add the certificates and inspection reports to the delivery note. The truck can come Thursday at 8 or 11. Which time suits your team?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Thursday at 8 is fine; the second reply is enough to wrap up soon.",
+          "action": "answer",
+          "args": {
+            "text": "Thursday at 8 is better for us, because we start the production at 9. Please confirm me this time by email today, and then I think we have agreement. Thank you for your help Ravi."
+          },
+          "result": "ok",
+          "ms": 21969
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nRavi · Supplier account manager\nMoving a late parts delivery with Ravi\nRavi says\nThursday at 8 is fine, and I will email the firm date and truck time to you today. Who should sign for the delivery at your gate?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain why the order is late\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nMoving a late parts delivery with Ravi\nAgree a new delivery day that works for both sides.\nNow: Explain why the order is late\nThursday at 8 is fine, and I will email the firm date and truck time to you today. Who should sign for the delivery at your gate?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nRavi · Supplier account manager\nHello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?\nYou · spoken\nHello Ravi, thank you for call. We was waiting for this parts already two weeks and this is big problem for our production. I need the delivery until next Friday, otherwise we must stop the line and our customer will be very unhappy. What is the reason of this delay?\nRavi · Supplier account manager\nThe delay was a part shortage at our factory, and I know your line cannot stop. Shall I check the trucks and email you the new date?\nYou · spoken\nYes please, check the trucks and send me the new date today. I can accept delivery on Thursday morning, but not later, because we have the production plan fixed. If you can not make it, we must discuss a partial delivery, I think this is more better solution for both sides.\nRavi · Supplier account manager\nThursday morning could work, so I will check the trucks now and email you a firm date today. Can you take the rest of the order the following week?\nYou · spoken\nYes, the rest of the order we can take next week, but I need the exact quantity and the date in writing. Also I want that you confirm the quality certificates, because last time we had a quality issue with this supplier and he don't send the documents.\nRavi · Supplier account manager\nYes, I will send the exact quantity and date in writing today. Which quality certificates do you need for this batch?\nYou · spoken\nI need the material certificate and the inspection report for every batch, also the certificate of conformity. Without this documents we can not use the parts in production. Please send it together with the delivery, not after.\nRavi · Supplier account manager\nI will add the certificates and inspection reports to the delivery note. The truck can come Thursday at 8 or 11. Which time suits your team?\nYou · spoken\nThursday at 8 is better for us, because we start the production at 9. Please confirm me this time by email today, and then I think we have agreement. Thank you for your help Ravi.\nRavi · Supplier account manager\nThursday at 8 is fine, and I will email the firm date and truck time to you today. Who should sign for the delivery at your gate?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thursday at 8 is fine, and I will email the firm date and truck time to you today. Who should sign for the delivery at your gate?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, now I answer who signs at the gate.",
+          "action": "answer",
+          "args": {
+            "text": "Our warehouse manager Petr will sign for the delivery at the gate. He is there from 7:30, so no problem. Please send his name to the driver, and thank you Ravi, I think we are finished."
+          },
+          "result": "ok",
+          "ms": 14246
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nRavi · Supplier account manager\nMoving a late parts delivery with Ravi\nRavi says\nGood, Petr will be at the gate from 7:30. I will send his name to the driver now. Is there anything else you need before we finish?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain why the order is late\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nMoving a late parts delivery with Ravi\nAgree a new delivery day that works for both sides.\nNow: Explain why the order is late\nGood, Petr will be at the gate from 7:30. I will send his name to the driver now. Is there anything else you need before we finish?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nRavi · Supplier account manager\nHello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?\nYou · spoken\nHello Ravi, thank you for call. We was waiting for this parts already two weeks and this is big problem for our production. I need the delivery until next Friday, otherwise we must stop the line and our customer will be very unhappy. What is the reason of this delay?\nRavi · Supplier account manager\nThe delay was a part shortage at our factory, and I know your line cannot stop. Shall I check the trucks and email you the new date?\nYou · spoken\nYes please, check the trucks and send me the new date today. I can accept delivery on Thursday morning, but not later, because we have the production plan fixed. If you can not make it, we must discuss a partial delivery, I think this is more better solution for both sides.\nRavi · Supplier account manager\nThursday morning could work, so I will check the trucks now and email you a firm date today. Can you take the rest of the order the following week?\nYou · spoken\nYes, the rest of the order we can take next week, but I need the exact quantity and the date in writing. Also I want that you confirm the quality certificates, because last time we had a quality issue with this supplier and he don't send the documents.\nRavi · Supplier account manager\nYes, I will send the exact quantity and date in writing today. Which quality certificates do you need for this batch?\nYou · spoken\nI need the material certificate and the inspection report for every batch, also the certificate of conformity. Without this documents we can not use the parts in production. Please send it together with the delivery, not after.\nRavi · Supplier account manager\nI will add the certificates and inspection reports to the delivery note. The truck can come Thursday at 8 or 11. Which time suits your team?\nYou · spoken\nThursday at 8 is better for us, because we start the production at 9. Please confirm me this time by email today, and then I think we have agreement. Thank you for your help Ravi.\nRavi · Supplier account manager\nThursday at 8 is fine, and I will email the firm date and truck time to you today. Who should sign for the delivery at your gate?\nYou · spoken\nOur warehouse manager Petr will sign for the delivery at the gate. He is there from 7:30, so no problem. Please send his name to the driver, and thank you Ravi, I think we are finished.\nRavi · Supplier account manager\nGood, Petr will be at the gate from 7:30. I will send his name to the driver now. Is there anything else you need before we finish?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good, Petr will be at the gate from 7:30. I will send his name to the driver now. Is there anything else you need before we finish?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Everything is agreed, so I can wrap up the call.",
+          "action": "answer",
+          "args": {
+            "text": "No, I think this is all. Thank you Ravi, I wait for your email today. Have a nice day."
+          },
+          "result": "ok",
+          "ms": 24263
+        },
+        {
+          "n": 14,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said I wait for your email today\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I wait for your email today”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I'll say it again, though I think my sentence was okay.",
+          "action": "answer",
+          "args": {
+            "text": "I wait for your email today. Why is that wrong? I think it is correct, but okay, I will wait for your email today, I am waiting."
+          },
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 15,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said I wait for your email today\nYour line\nFor something you are expecting in the future, use 'will' or 'am waiting', not the simple present.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I wait for your email today”\nSay it again, your way.\nFor something you are expecting in the future, use 'will' or 'am waiting', not the simple present.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I'll say it again with will, though I think it was okay.",
+          "action": "answer",
+          "args": {
+            "text": "I will wait for your email today. Thank you Ravi."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 16,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said I wait for your email today\nTry\nI'll wait for your email today\nFor something you are expecting in the future, use 'will' or 'am waiting', not the simple present.\nThe fix\nSay it once more on your phone, or carry on.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I wait for your email today”\nTry “I'll wait for your email today”\nFor something you are expecting in the future, use 'will' or 'am waiting', not the simple present.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I'll say it once more and finish.",
+          "action": "answer",
+          "args": {
+            "text": "I'll wait for your email today."
+          },
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 17,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nMartin\nA way into English\nA moment\nYou said I wait for your email today\nYour try\nI'll wait for your email today.\nFor something you are expecting in the future, use 'will' or 'am waiting', not the simple present.\nYou fixed “i'll wait”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “i'll wait”\nYou said “I wait for your email today”\nYour try: “I'll wait for your email today.”\nFor something you are expecting in the future, use 'will' or 'am waiting', not the simple present.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Fine, I fixed it; let's go back and finish.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 13
+        },
+        {
+          "n": 18,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nMartin\nRavi · Supplier account manager\nMoving a late parts delivery with Ravi\nRavi says\nYou're welcome, Ravi. I will email you the firm date and truck time today. Have a good day, and good luck with production.\nYour turn\nAnswer on your phone: speak or type.\nNowExplain why the order is late\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nMoving a late parts delivery with Ravi\nAgree a new delivery day that works for both sides.\nNow: Explain why the order is late\nYou're welcome, Ravi. I will email you the firm date and truck time today. Have a good day, and good luck with production.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nRavi · Supplier account manager\nHello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?\nYou · spoken\nHello Ravi, thank you for call. We was waiting for this parts already two weeks and this is big problem for our production. I need the delivery until next Friday, otherwise we must stop the line and our customer will be very unhappy. What is the reason of this delay?\nRavi · Supplier account manager\nThe delay was a part shortage at our factory, and I know your line cannot stop. Shall I check the trucks and email you the new date?\nYou · spoken\nYes please, check the trucks and send me the new date today. I can accept delivery on Thursday morning, but not later, because we have the production plan fixed. If you can not make it, we must discuss a partial delivery, I think this is more better solution for both sides.\nRavi · Supplier account manager\nThursday morning could work, so I will check the trucks now and email you a firm date today. Can you take the rest of the order the following week?\nYou · spoken\nYes, the rest of the order we can take next week, but I need the exact quantity and the date in writing. Also I want that you confirm the quality certificates, because last time we had a quality issue with this supplier and he don't send the documents.\nRavi · Supplier account manager\nYes, I will send the exact quantity and date in writing today. Which quality certificates do you need for this batch?\nYou · spoken\nI need the material certificate and the inspection report for every batch, also the certificate of conformity. Without this documents we can not use the parts in production. Please send it together with the delivery, not after.\nRavi · Supplier account manager\nI will add the certificates and inspection reports to the delivery note. The truck can come Thursday at 8 or 11. Which time suits your team?\nYou · spoken\nThursday at 8 is better for us, because we start the production at 9. Please confirm me this time by email today, and then I think we have agreement. Thank you for your help Ravi.\nRavi · Supplier account manager\nThursday at 8 is fine, and I will email the firm date and truck time to you today. Who should sign for the delivery at your gate?\nYou · spoken\nOur warehouse manager Petr will sign for the delivery at the gate. He is there from 7:30, so no problem. Please send his name to the driver, and thank you Ravi, I think we are finished.\nRavi · Supplier account manager\nGood, Petr will be at the gate from 7:30. I will send his name to the driver now. Is there anything else you need before we finish?\nYou · spoken\nNo, I think this is all. Thank you Ravi, I wait for your email today. Have a nice day.\nRavi · Supplier account manager\nYou're welcome, Ravi. I will email you the firm date and truck time today. Have a good day, and good luck with production.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You're welcome, Ravi. I will email you the firm date and truck time today. Have a good day, and good luck with production.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "The talk is finished, so I'll end the rehearsal now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 11
+        },
+        {
+          "n": 19,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nMartin\nA way into English\nYour rehearsal\nYou said I wait for your email today\nTry\nI'll wait for your email today\nFor something you are expecting in the future, use 'will' or 'am waiting', not the simple present.\nYour mission\nChoose a fresh context for your next conversation.\n7 spoken · 0 written replies · 4 on your own · 3 with help · 3 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Martin\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Ask for a firm date and confirm it”\nFrom this rehearsal\n“I need the delivery until next Friday” → “I need the delivery by next Friday”\n'until' suggests a period that continues; 'by' means no later than that day.\n“Without this documents” → “Without these documents”\n'this' goes with one item; plural 'documents' needs 'these'.\n“I wait for your email today” → “I'll wait for your email today”\nFor something you are expecting in the future, use 'will' or 'am waiting', not the simple present.\nSaved for the end\n“more better solution” → “a better solution”\nDo not use 'more' with 'better'; one comparative is enough.\n“he don't send the documents” → “he doesn't send the documents”\nThe present verb must agree with he; use the -s form or the negative form for not sending.\n“Please confirm me this time by email today” → “Please confirm this to me by email today”\nThe verb confirm needs 'to' before the person who receives the confirmation.\nYour level:\nB1 · Getting by\n· self-chosen\nNext topic:\nPresenting a quality problem\nExplain a defect, its impact, and the next steps clearly.\n[button: Start talking]\nOr choose a situation [list: Moving the supplier delivery date [plan-1cae03f2] | Presenting a quality problem [plan-c4a5f17e] | Small talk with the US director [plan-fe1709a0] | Disagreeing politely in a meeting [plan-0207c424] | Running the meeting on time [plan-ee0e6f25] | Giving a short project update [plan-8fb6aa0f] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "Okay, the negotiation is saved and I got my feedback; that's enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Moving a late parts delivery with Ravi",
+          "goal": "Agree a new delivery day that works for both sides.",
+          "partner": "Ravi · Supplier account manager",
+          "band": "B1",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello, this is Ravi from the supplier team. I can see your parts order is two weeks late, and I'm sorry about that. What would you like to do about it?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello Ravi, thank you for call. We was waiting for this parts already two weeks and this is big problem for our production. I need the delivery until next Friday, otherwise we must stop the line and our customer will be very unhappy. What is the reason of this delay?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The delay was a part shortage at our factory, and I know your line cannot stop. Shall I check the trucks and email you the new date?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes please, check the trucks and send me the new date today. I can accept delivery on Thursday morning, but not later, because we have the production plan fixed. If you can not make it, we must discuss a partial delivery, I think this is more better solution for both sides.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thursday morning could work, so I will check the trucks now and email you a firm date today. Can you take the rest of the order the following week?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, the rest of the order we can take next week, but I need the exact quantity and the date in writing. Also I want that you confirm the quality certificates, because last time we had a quality issue with this supplier and he don't send the documents.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, I will send the exact quantity and date in writing today. Which quality certificates do you need for this batch?"
+            },
+            {
+              "role": "learner",
+              "text": "I need the material certificate and the inspection report for every batch, also the certificate of conformity. Without this documents we can not use the parts in production. Please send it together with the delivery, not after.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I will add the certificates and inspection reports to the delivery note. The truck can come Thursday at 8 or 11. Which time suits your team?"
+            },
+            {
+              "role": "learner",
+              "text": "Thursday at 8 is better for us, because we start the production at 9. Please confirm me this time by email today, and then I think we have agreement. Thank you for your help Ravi.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thursday at 8 is fine, and I will email the firm date and truck time to you today. Who should sign for the delivery at your gate?"
+            },
+            {
+              "role": "learner",
+              "text": "Our warehouse manager Petr will sign for the delivery at the gate. He is there from 7:30, so no problem. Please send his name to the driver, and thank you Ravi, I think we are finished.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Good, Petr will be at the gate from 7:30. I will send his name to the driver now. Is there anything else you need before we finish?"
+            },
+            {
+              "role": "learner",
+              "text": "No, I think this is all. Thank you Ravi, I wait for your email today. Have a nice day.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "You're welcome, Ravi. I will email you the firm date and truck time today. Have a good day, and good luck with production."
+            }
+          ],
+          "moments": [
+            {
+              "id": "df156e71-8681-4248-8e96-30cb22660413:uat-7:moment",
+              "kind": "fix",
+              "said": "I need the delivery until next Friday",
+              "better": "I need the delivery by next Friday",
+              "why": "'until' suggests a period that continues; 'by' means no later than that day.",
+              "turnId": "df156e71-8681-4248-8e96-30cb22660413:uat-7",
+              "at": 1792307326853,
+              "slip": "delivery until",
+              "repair": {
+                "rung": 1,
+                "tried": "Okay, but in my opinion until is also correct. I need the delivery by next Friday, because we was waiting already two weeks.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "delivery by"
+            },
+            {
+              "id": "df156e71-8681-4248-8e96-30cb22660413:uat-13:moment",
+              "kind": "fix",
+              "said": "Without this documents",
+              "better": "Without these documents",
+              "why": "'this' goes with one item; plural 'documents' needs 'these'.",
+              "turnId": "df156e71-8681-4248-8e96-30cb22660413:uat-13",
+              "at": 1792307546057,
+              "slip": "without this",
+              "repair": {
+                "rung": 0,
+                "tried": "Without these documents we can not use the parts in production.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "without these"
+            },
+            {
+              "id": "df156e71-8681-4248-8e96-30cb22660413:uat-18:moment",
+              "kind": "fix",
+              "said": "I wait for your email today",
+              "better": "I'll wait for your email today",
+              "why": "For something you are expecting in the future, use 'will' or 'am waiting', not the simple present.",
+              "turnId": "df156e71-8681-4248-8e96-30cb22660413:uat-18",
+              "at": 1792307747544,
+              "slip": "i wait",
+              "repair": {
+                "rung": 2,
+                "tried": "I'll wait for your email today.",
+                "held": true,
+                "selfRepaired": false,
+                "spent": true
+              },
+              "fix": "i'll wait"
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "df156e71-8681-4248-8e96-30cb22660413:uat-11:held",
+              "kind": "fix",
+              "said": "more better solution",
+              "better": "a better solution",
+              "why": "Do not use 'more' with 'better'; one comparative is enough.",
+              "turnId": "df156e71-8681-4248-8e96-30cb22660413:uat-11",
+              "at": 1792307415111
+            },
+            {
+              "id": "df156e71-8681-4248-8e96-30cb22660413:uat-12:held",
+              "kind": "fix",
+              "said": "he don't send the documents",
+              "better": "he doesn't send the documents",
+              "why": "The present verb must agree with he; use the -s form or the negative form for not sending.",
+              "turnId": "df156e71-8681-4248-8e96-30cb22660413:uat-12",
+              "at": 1792307491511
+            },
+            {
+              "id": "df156e71-8681-4248-8e96-30cb22660413:uat-16:held",
+              "kind": "fix",
+              "said": "Please confirm me this time by email today",
+              "better": "Please confirm this to me by email today",
+              "why": "The verb confirm needs 'to' before the person who receives the confirmation.",
+              "turnId": "df156e71-8681-4248-8e96-30cb22660413:uat-16",
+              "at": 1792307664153
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Hello Ravi, thank you for call. We was waiting for this parts already two weeks and this is big problem for our production. I need the delivery until next Friday, otherwise we must stop the line and our customer will be very unhappy. What is the reason of this delay?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I need the delivery until next Friday",
+                "better": "I need the delivery by next Friday",
+                "why": "'until' suggests a period that continues; 'by' means no later than that day."
+              },
+              "shown": true
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Yes please, check the trucks and send me the new date today. I can accept delivery on Thursday morning, but not later, because we have the production plan fixed. If you can not make it, we must discuss a partial delivery, I think this is more better solution for both sides.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "more better solution",
+                "better": "a better solution",
+                "why": "Do not use 'more' with 'better'; one comparative is enough."
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Yes, the rest of the order we can take next week, but I need the exact quantity and the date in writing. Also I want that you confirm the quality certificates, because last time we had a quality issue with this supplier and he don't send the documents.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "he don't send the documents",
+                "better": "he doesn't send the documents",
+                "why": "The present verb must agree with he; use the -s form or the negative form for not sending."
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "I need the material certificate and the inspection report for every batch, also the certificate of conformity. Without this documents we can not use the parts in production. Please send it together with the delivery, not after.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "Without this documents",
+                "better": "Without these documents",
+                "why": "'this' goes with one item; plural 'documents' needs 'these'."
+              },
+              "shown": true
+            },
+            {
+              "turn": 9,
+              "n": 5,
+              "reply": "Thursday at 8 is better for us, because we start the production at 9. Please confirm me this time by email today, and then I think we have agreement. Thank you for your help Ravi.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "Please confirm me this time by email today",
+                "better": "Please confirm this to me by email today",
+                "why": "The verb confirm needs 'to' before the person who receives the confirmation."
+              },
+              "shown": false
+            },
+            {
+              "turn": 11,
+              "n": 6,
+              "reply": "Our warehouse manager Petr will sign for the delivery at the gate. He is there from 7:30, so no problem. Please send his name to the driver, and thank you Ravi, I think we are finished.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 13,
+              "n": 7,
+              "reply": "No, I think this is all. Thank you Ravi, I wait for your email today. Have a nice day.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I wait for your email today",
+                "better": "I'll wait for your email today",
+                "why": "For something you are expecting in the future, use 'will' or 'am waiting', not the simple present."
+              },
+              "shown": true
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I need the delivery until next Friday, otherwise we must stop the line"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I can accept delivery on Thursday morning, but not later, because we have the production plan fixed."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Yes, the rest of the order we can take next week, but I need the exact quantity and the date in writing."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Please send it together with the delivery, not after."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Thursday at 8 is better for us, because we start the production at 9."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "He is there from 7:30, so no problem."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 606105,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-martin-45-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Most fossilised errors get no moment",
+          "expected": "Coaching on \"this parts\", \"will be not happy\", \"confirm me\", \"must to move\".",
+          "got": "Only \"we was\" was picked. \"confirm me\" in turn 3 and \"this parts\" went by.",
+          "evidence": [
+            "#7 \"Please confirm me by email\" got nothing. #2 \"this parts since Monday\" got nothing. #9 lists 1 moment.",
+            "moment detection / as-needed rule"
+          ],
+          "recurrence": 8
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-martin-45-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Learner's \"why is it wrong?\" not answered",
+          "expected": "A short direct reply to his challenge.",
+          "got": "The rule was repeated and \"You fixed we were\" shown.",
+          "evidence": [
+            "#4 he asks why; #5 no reply to it."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-martin-45-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "B2 shown with no reasons",
+          "expected": "A level reason that names his own errors.",
+          "got": "Recap shows 'B2 · Comfortable' and an unrelated 'this delay makes'.",
+          "evidence": [
+            "#16 'From the level check “this delay makes”'.",
+            "level summary"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-martin-45-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Fossilised errors mostly pass without a moment",
+          "expected": "Coaching on 'since 2015', 'He don't', 'must to stop', 'a accident'.",
+          "got": "Only 'we was' and 'he want' got moments; 'I am in this company since 2015' and 'He don't' went by.",
+          "evidence": [
+            "#3 'I am in this company since 2015' and #7 'He don't have a problem' got nothing. #16 shows '2 moments to keep'.",
+            "moment detection / as-needed rule"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-martin-45-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "'You fixed' accepted a retry still missing 'for'",
+          "expected": "Retry holds only if 'for two weeks' is present.",
+          "got": "Retry 'have been waiting ... already two weeks' was marked 'You fixed “we have been”'.",
+          "evidence": [
+            "#5-#6 try keeps 'already two weeks'."
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 level 'B1 Getting by', equals true band B1 (exact), though 'self-chosen'."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "#19 recap shows 'B1 · Getting by · self-chosen' with no reason from his answers; nothing a C1 claimant could accept."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#19 'Saved for the end': 'more better solution' → 'a better solution' and 'he don't send' → 'he doesn't send'."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#19 all six fixes are accurate (by/until, these documents, I'll wait, a better, doesn't, confirm this to me)."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 all six plan topics are workplace: 'Moving the supplier delivery date', 'Presenting a quality problem', 'Running the meeting on time'…"
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#3-#4 and #14-#15 'Why is it wrong?' met with a one-line accurate rule: \"'until' suggests a period that continues; 'by' means no later than that day.\""
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#18 seven replies in the plan topic 'Moving a late parts delivery with Ravi'."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Ravi's lines are short, business-plain B1: 'Which quality certificates do you need for this batch?' Not babyish. One slip: 'You're welcome, Ravi.' (#18)."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "Three stops in seven learner turns (≈4 per ten, above 1-3); #14-#17 spent four steps on 'I wait'. 'We was' never taught (#2, #4)."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#19 recap: '7 spoken · 4 on your own · 3 with help · 3 moments to keep' plus three saved fixes."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 8,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 3,
+            "total": 3,
+            "learnerTurnsWithClearErrors": 6,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "'We was' (his signature error) never corrected",
+            "expected": "A moment or held fix on 'we was waiting' and 'this parts'.",
+            "got": "Said twice (#2, #4); the first stop took 'until' instead. Retry kept 'we was' and was marked 'You fixed'.",
+            "evidence": "#4 'because we was waiting already two weeks' → #5 'You fixed “delivery by”'. Also 'this parts', 'I want that you confirm' got nothing in #19.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Recurring errors (was/were, this+plural, want that you) get priority for the stop or held fix.",
+            "code_hint": "moment detection / as-needed rule"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "B1 shown with no evidence",
+            "expected": "A level line naming what his answers did.",
+            "got": "Recap only 'B1 · Getting by · self-chosen'.",
+            "evidence": "#19 'Your level: B1 · Getting by · self-chosen'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Recap shows one reason from his own lines for the band.",
+            "code_hint": "level summary"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Stops dense and repetitive for a fast learner",
+            "expected": "1-3 stops per ten turns.",
+            "got": "Three stops in seven turns, each needing a retry loop.",
+            "evidence": "#14-#17 four steps for 'I wait'; stops at #3, #9, #14.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Cap stops; hold more fixes for the recap.",
+            "code_hint": "stop cap rule"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Short accurate reasons and a useful held-fix recap",
+            "expected": "",
+            "got": "",
+            "evidence": "#4 and #19: 'Do not use 'more' with 'better'; one comparative is enough.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the held-fix recap and one-line reasons.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Scene fits his job",
+            "expected": "",
+            "got": "",
+            "evidence": "#2-#18 Ravi's supplier negotiation fully relevant, with certificates and truck times.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep meeting-shaped plan topics.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner calls the learner 'Ravi'",
+            "expected": "Partner stays in role.",
+            "got": "'You're welcome, Ravi.' said by Ravi.",
+            "evidence": "#18",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Partner never uses own name for learner.",
+            "code_hint": "partner prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "low"
+        },
+        "voice": "Look, the supplier scene was right on target: certificates, truck times, my real Monday. Ravi spoke at a sensible pace and I never felt slowed down. The reasons were short and I could not argue with \"by means no later than that day\". Recap with saved fixes (more better, he don't) was useful. But the worst one, \"we was\", I said twice and nobody touched it, and it even marked my retry \"fixed\" with it still there. I'd say that is my main problem. Also B1 appears with just \"self-chosen\" and no reason, so why should I believe it? Three stops in seven turns plus retries felt a bit schoolish. I'd use it again for meeting practice, but I need evidence about my level before I tell the director's team.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-martin-45-J3-1",
+            "status": "recurs",
+            "evidence": "#19 'this parts' and 'I want that you confirm' got nothing; 'we was' missed (#2, #4).",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-martin-45-J3-3",
+            "status": "not-seen",
+            "evidence": "#3-#4 and #14-#15 'Why is it wrong?' answered with a one-line rule clue.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-martin-45-J3-2",
+            "status": "recurs",
+            "evidence": "#19 'B1 · Getting by · self-chosen' with no reason from his answers.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-martin-45-J3-1",
+            "status": "recurs",
+            "evidence": "'we was' never got a moment or held fix; 'he don't' only reached the recap (#19).",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-martin-45-J3-3",
+            "status": "not-seen",
+            "evidence": "#5 retry contained 'by' as required; 'You fixed “delivery by”' correct for that fix.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: Three stops in seven learner turns (≈4 per ten, above 1-3); #14-#17 spent four steps on 'I wait'. 'We was' never taught (#2, #4).",
+          "check": "Any moment that stops the scene is correct and worth stopping for (rubric **moment precision** ≥ 0.9), and there are not so many that the scene stops being a scene."
+        },
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: #19 recap shows 'B1 · Getting by · self-chosen' with no reason from his answers; nothing a C1 claimant could accept."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 9,
+      "fail": 0,
+      "ms": 179294
+    },
+    "character": {
+      "n": 19,
+      "fail": 0,
+      "ms": 425488
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 42386
+    }
+  }
+}

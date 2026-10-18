@@ -58,9 +58,9 @@
     "recurrence": 1,
     "suggested_acceptance": "After an explicit vocabulary difficulty, give a brief Czech meaning and one short English example. Achieve at least 80% at-band partner turns.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-5",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "No Czech repair requests; all partner turns at band."
+    "recertify_evidence": "No repeated Czech request for explanation; he never asked for one in #2–#5."
   },
   {
     "id": "LT-viktor-67-J3-2",
@@ -85,13 +85,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "Model \"How is school?\", let Viktor use it, and support understanding of one short answer before finishing.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#3 'Mia, how is school?' never answered; #4 'Do you have flowers?'; planned school exchange not delivered.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-5",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#2 \"School good?\" → #3 Mia answers \"Yes, school is nice. I have a test today.\"; Mission done came only at #6.",
     "recurred_as": "LT-viktor-67-J3-3"
   },
   {
@@ -117,13 +117,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "For each current question, offer an answer pattern and usable vocabulary that let Viktor respond without changing the subject.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#19 the cue does not address 'Is your place big?'."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#11 cue fits 'Can you ask me about school?'; no mismatched colour cue."
   },
   {
     "id": "LT-viktor-67-J4-2",
@@ -211,13 +211,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "suggested_acceptance": "Use familiar language such as \"A yellow ball! Do you like it?\" and give one simple question every turn.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "#10 'Ha, Biscuit loved the splash! What happened at the end?' two sentences.",
-    "recurred_as": "LT-tomas-9-J4-2"
+    "recertify_evidence": "#12 'Rex is a nice name! Is Rex a large dog?'; #16 'Wow, Rex is fast and strong! Do you walk Rex here?'",
+    "recurred_as": "LT-tomas-9-J4-3"
   },
   {
     "id": "LT-viktor-67-J4-3",
@@ -246,9 +246,9 @@
     "recurrence": 2,
     "suggested_acceptance": "After supported practice, provide an explicit unaided attempt and verify improvement before treating the replay goal as achieved.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-1",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#8 and #16 move on with no fresh question, and the improvement is not shown on his own."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "not-evaluable",
+    "recertify_evidence": "No replay offered; moments empty."
   },
   {
     "id": "LT-viktor-67-J3-4",
@@ -582,12 +582,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "suggested_acceptance": "Offer an accessible replay and capture a fresh, improved answer without a cue before claiming this journey complete.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "No fresh question to retry; #6 'What did he do next?' is unrelated to the moment.",
+    "recertify_evidence": "#9 'Back to the conversation' then #10 'Thank you! Do you have a dog?': no retry of the fix.",
     "recurred_as": "LT-tomas-9-J4-2"
   },
   {
@@ -617,9 +617,9 @@
     "recurrence": 3,
     "suggested_acceptance": "Check the intended meaning and offer a short model such as \"I have tomatoes in my garden.\" Avoid treating uncertain recognition as a proven learner mistake.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
-    "recertify_status": "recurs",
-    "recertify_evidence": "Repeated 'in garden' slips (#3, #4) got no moment; one moment only.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-5",
+    "recertify_status": "not-evaluable",
+    "recertify_evidence": "No article slips in his lines (#2, #3, #5), so the repeated-article gap was not tested.",
     "recurred_as": "LT-viktor-67-J3-3"
   },
   {

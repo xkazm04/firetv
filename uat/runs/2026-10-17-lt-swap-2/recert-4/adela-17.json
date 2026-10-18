@@ -1,0 +1,1466 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to B2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nMs Carter · interview panel\nB2Comfortable · self-chosen\nMock job interview about my plans\nYour mission\nExplain my study and career plans clearly and answer follow-up questions with reasons and examples.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nMock job interview about my plans\nExplain my study and career plans clearly and answer follow-up questions with reasons and examples.\n[button: Start talking]\nOr choose a situation [list: Mock job interview about my plans [plan-e249052a] | Is social media good for teens? [plan-bf96fa90] | Choosing between two study options [plan-212685ee] | Reducing plastic at the canteen [plan-3d78389f] | Asking a guide about local customs [plan-70b5e0a6] | Tell about a trip that went wrong [plan-fed03d78] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Good, a mock interview about my plans is just what I need for B2 First.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9214
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMs Carter · interview panel\nMock interview at a tech café\nMs Carter says\nGood morning, and thanks for coming in. Could you tell me about your studies and your plans for the next two years?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain your studies clearly\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview at a tech café\nExplain your study and career plans with reasons and one real example.\nNow: Explain your studies clearly\nGood morning, and thanks for coming in. Could you tell me about your studies and your plans for the next two years?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Carter · interview panel\nGood morning, and thanks for coming in. Could you tell me about your studies and your plans for the next two years?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, and thanks for coming in. Could you tell me about your studies and your plans for the next two years?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Good, a mock interview, exactly what I want; I'll answer properly.",
+          "action": "answer",
+          "args": {
+            "text": "Good morning, thank you for having me. I'm currently in my third year at a grammar school in Brno, and I'm focusing on English, maths and biology. I'm preparing for the B2 First exam because I'd like to study international relations at university. During the next two years I want to pass my school-leaving exam and eventually spend a semester abroad. For example, last summer I took part in an exchange programme in Germany, and it made me more confident in speaking."
+          },
+          "result": "ok",
+          "ms": 10088
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMs Carter · interview panel\nMock interview at a tech café\nMs Carter says\nThank you, that's a clear picture of your studies and goals. Why do you think this weekend job would suit you?\nYour turn\nAnswer on your phone: speak or type.\nNowGive a reason for each plan\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview at a tech café\nExplain your study and career plans with reasons and one real example.\nNow: Give a reason for each plan\nThank you, that's a clear picture of your studies and goals. Why do you think this weekend job would suit you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Carter · interview panel\nGood morning, and thanks for coming in. Could you tell me about your studies and your plans for the next two years?\nYou · spoken\nGood morning, thank you for having me. I'm currently in my third year at a grammar school in Brno, and I'm focusing on English, maths and biology. I'm preparing for the B2 First exam because I'd like to study international relations at university. During the next two years I want to pass my school-leaving exam and eventually spend a semester abroad. For example, last summer I took part in an exchange programme in Germany, and it made me more confident in speaking.\nMs Carter · interview panel\nThank you, that's a clear picture of your studies and goals. Why do you think this weekend job would suit you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that's a clear picture of your studies and goals. Why do you think this weekend job would suit you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, a proper interview question; I'll give reasons.",
+          "action": "answer",
+          "args": {
+            "text": "I think this weekend job would suit me because I'm responsible and I'm used to work under pressure, as I have to balance school with my preparation for the exam. Also, I'm very interested about technology, so I would enjoy talking to customers about it. Although I haven't got any actual work experience, I learn quickly and I'm not afraid of speaking English with foreigners. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 14319
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said I'm used to work under pressure\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I'm used to work under pressure”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, I should say it's \"used to working\"; let me retype it.",
+          "action": "answer",
+          "args": {
+            "text": "I'm used to working under pressure, because I have to balance school with my preparation for the exam. Was that correct now?"
+          },
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said I'm used to work under pressure\nYour try\nI'm used to working under pressure, because I have to balance school with my preparation for the exam. Was that correct now?\n'Used to' plus -ing means you are accustomed to something.\nYou fixed “to working”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “to working”\nYou said “I'm used to work under pressure”\nYour try: “I'm used to working under pressure, because I have to balance school with my preparation for the exam. Was that correct now?”\n'Used to' plus -ing means you are accustomed to something.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I fixed it; back to the interview.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 13
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMs Carter · interview panel\nMock interview at a tech café\nMs Carter says\nNo: check the verb after 'used to' in 'I'm used to work under pressure'. It needs a different form to mean you are accustomed to something.\nYour turn\nAnswer on your phone: speak or type.\nNowGive a reason for each plan\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview at a tech café\nExplain your study and career plans with reasons and one real example.\nNow: Give a reason for each plan\nNo: check the verb after 'used to' in 'I'm used to work under pressure'. It needs a different form to mean you are accustomed to something.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Carter · interview panel\nGood morning, and thanks for coming in. Could you tell me about your studies and your plans for the next two years?\nYou · spoken\nGood morning, thank you for having me. I'm currently in my third year at a grammar school in Brno, and I'm focusing on English, maths and biology. I'm preparing for the B2 First exam because I'd like to study international relations at university. During the next two years I want to pass my school-leaving exam and eventually spend a semester abroad. For example, last summer I took part in an exchange programme in Germany, and it made me more confident in speaking.\nMs Carter · interview panel\nThank you, that's a clear picture of your studies and goals. Why do you think this weekend job would suit you?\nYou · spoken\nI think this weekend job would suit me because I'm responsible and I'm used to work under pressure, as I have to balance school with my preparation for the exam. Also, I'm very interested about technology, so I would enjoy talking to customers about it. Although I haven't got any actual work experience, I learn quickly and I'm not afraid of speaking English with foreigners. Was my answer correct?\nMs Carter · interview panel\nNo: check the verb after 'used to' in 'I'm used to work under pressure'. It needs a different form to mean you are accustomed to something.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"No: check the verb after 'used to' in 'I'm used to work under pressure'. It needs a different form to mean you are accustomed to something.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Right, I should say \"used to working\"; let me continue and give reasons for my plans.",
+          "action": "answer",
+          "args": {
+            "text": "Thank you, I see, it should be \"used to working\". To answer your question about my plans, I'd like to study international relations because I'm interested in politics and different cultures. Although it depends on my exam results, I would rather study abroad, since the universities there offer more practical courses. Is that a good reason?"
+          },
+          "result": "ok",
+          "ms": 20396
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMs Carter · interview panel\nMock interview at a tech café\nMs Carter says\nYour reasons are clear, especially the point about more practical courses abroad. Could this job help you with your studies later?\nYour turn\nAnswer on your phone: speak or type.\nNowDescribe one real challenge\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview at a tech café\nExplain your study and career plans with reasons and one real example.\nNow: Describe one real challenge\nYour reasons are clear, especially the point about more practical courses abroad. Could this job help you with your studies later?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Carter · interview panel\nGood morning, and thanks for coming in. Could you tell me about your studies and your plans for the next two years?\nYou · spoken\nGood morning, thank you for having me. I'm currently in my third year at a grammar school in Brno, and I'm focusing on English, maths and biology. I'm preparing for the B2 First exam because I'd like to study international relations at university. During the next two years I want to pass my school-leaving exam and eventually spend a semester abroad. For example, last summer I took part in an exchange programme in Germany, and it made me more confident in speaking.\nMs Carter · interview panel\nThank you, that's a clear picture of your studies and goals. Why do you think this weekend job would suit you?\nYou · spoken\nI think this weekend job would suit me because I'm responsible and I'm used to work under pressure, as I have to balance school with my preparation for the exam. Also, I'm very interested about technology, so I would enjoy talking to customers about it. Although I haven't got any actual work experience, I learn quickly and I'm not afraid of speaking English with foreigners. Was my answer correct?\nMs Carter · interview panel\nNo: check the verb after 'used to' in 'I'm used to work under pressure'. It needs a different form to mean you are accustomed to something.\nYou · spoken\nThank you, I see, it should be \"used to working\". To answer your question about my plans, I'd like to study international relations because I'm interested in politics and different cultures. Although it depends on my exam results, I would rather study abroad, since the universities there offer more practical courses. Is that a good reason?\nMs Carter · interview panel\nYour reasons are clear, especially the point about more practical courses abroad. Could this job help you with your studies later?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your reasons are clear, especially the point about more practical courses abroad. Could this job help you with your studies later?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good question; I can link the job to my studies and give a real example.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I think it could help me a lot. Working in a tech café would improve my communication skills, and I would practise English with people from different countries, which is important for my studies of international relations. Whereas school gives me mainly theory, this job would show me how to deal with real situations. Is it a good answer for the interview?"
+          },
+          "result": "ok",
+          "ms": 16404
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMs Carter · interview panel\nMock interview at a tech café\nMs Carter says\nYour reasons connect the job to your studies clearly. Can you tell me about a real challenge you faced, and how you dealt with it?\nYour turn\nAnswer on your phone: speak or type.\nNowDescribe one real challenge\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview at a tech café\nExplain your study and career plans with reasons and one real example.\nNow: Describe one real challenge\nYour reasons connect the job to your studies clearly. Can you tell me about a real challenge you faced, and how you dealt with it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Carter · interview panel\nGood morning, and thanks for coming in. Could you tell me about your studies and your plans for the next two years?\nYou · spoken\nGood morning, thank you for having me. I'm currently in my third year at a grammar school in Brno, and I'm focusing on English, maths and biology. I'm preparing for the B2 First exam because I'd like to study international relations at university. During the next two years I want to pass my school-leaving exam and eventually spend a semester abroad. For example, last summer I took part in an exchange programme in Germany, and it made me more confident in speaking.\nMs Carter · interview panel\nThank you, that's a clear picture of your studies and goals. Why do you think this weekend job would suit you?\nYou · spoken\nI think this weekend job would suit me because I'm responsible and I'm used to work under pressure, as I have to balance school with my preparation for the exam. Also, I'm very interested about technology, so I would enjoy talking to customers about it. Although I haven't got any actual work experience, I learn quickly and I'm not afraid of speaking English with foreigners. Was my answer correct?\nMs Carter · interview panel\nNo: check the verb after 'used to' in 'I'm used to work under pressure'. It needs a different form to mean you are accustomed to something.\nYou · spoken\nThank you, I see, it should be \"used to working\". To answer your question about my plans, I'd like to study international relations because I'm interested in politics and different cultures. Although it depends on my exam results, I would rather study abroad, since the universities there offer more practical courses. Is that a good reason?\nMs Carter · interview panel\nYour reasons are clear, especially the point about more practical courses abroad. Could this job help you with your studies later?\nYou · spoken\nYes, I think it could help me a lot. Working in a tech café would improve my communication skills, and I would practise English with people from different countries, which is important for my studies of international relations. Whereas school gives me mainly theory, this job would show me how to deal with real situations. Is it a good answer for the interview?\nMs Carter · interview panel\nYour reasons connect the job to your studies clearly. Can you tell me about a real challenge you faced, and how you dealt with it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your reasons connect the job to your studies clearly. Can you tell me about a real challenge you faced, and how you dealt with it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "A real challenge: I'll talk about a group project conflict.",
+          "action": "answer",
+          "args": {
+            "text": "Last year I had to organise a school charity event with a group of classmates, and it was quite difficult because we couldn't agree on anything. Some people wanted a concert, whereas others preferred a sports day. I suggested that we make a short survey among students, and the result helped us to decide. In the end the event was successful and we collected almost thirty thousand crowns. Did I use the past tense correctly?"
+          },
+          "result": "ok",
+          "ms": 12936
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMs Carter · interview panel\nMock interview at a tech café\nMs Carter says\nYes, 'had to organise', 'couldn't agree' and 'was successful' are all correct past tense forms. What did you learn about teamwork from that experience?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nMock interview at a tech café\nExplain your study and career plans with reasons and one real example.\nYes, 'had to organise', 'couldn't agree' and 'was successful' are all correct past tense forms. What did you learn about teamwork from that experience?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Carter · interview panel\nGood morning, and thanks for coming in. Could you tell me about your studies and your plans for the next two years?\nYou · spoken\nGood morning, thank you for having me. I'm currently in my third year at a grammar school in Brno, and I'm focusing on English, maths and biology. I'm preparing for the B2 First exam because I'd like to study international relations at university. During the next two years I want to pass my school-leaving exam and eventually spend a semester abroad. For example, last summer I took part in an exchange programme in Germany, and it made me more confident in speaking.\nMs Carter · interview panel\nThank you, that's a clear picture of your studies and goals. Why do you think this weekend job would suit you?\nYou · spoken\nI think this weekend job would suit me because I'm responsible and I'm used to work under pressure, as I have to balance school with my preparation for the exam. Also, I'm very interested about technology, so I would enjoy talking to customers about it. Although I haven't got any actual work experience, I learn quickly and I'm not afraid of speaking English with foreigners. Was my answer correct?\nMs Carter · interview panel\nNo: check the verb after 'used to' in 'I'm used to work under pressure'. It needs a different form to mean you are accustomed to something.\nYou · spoken\nThank you, I see, it should be \"used to working\". To answer your question about my plans, I'd like to study international relations because I'm interested in politics and different cultures. Although it depends on my exam results, I would rather study abroad, since the universities there offer more practical courses. Is that a good reason?\nMs Carter · interview panel\nYour reasons are clear, especially the point about more practical courses abroad. Could this job help you with your studies later?\nYou · spoken\nYes, I think it could help me a lot. Working in a tech café would improve my communication skills, and I would practise English with people from different countries, which is important for my studies of international relations. Whereas school gives me mainly theory, this job would show me how to deal with real situations. Is it a good answer for the interview?\nMs Carter · interview panel\nYour reasons connect the job to your studies clearly. Can you tell me about a real challenge you faced, and how you dealt with it?\nYou · spoken\nLast year I had to organise a school charity event with a group of classmates, and it was quite difficult because we couldn't agree on anything. Some people wanted a concert, whereas others preferred a sports day. I suggested that we make a short survey among students, and the result helped us to decide. In the end the event was successful and we collected almost thirty thousand crowns. Did I use the past tense correctly?\nMs Carter · interview panel\nYes, 'had to organise', 'couldn't agree' and 'was successful' are all correct past tense forms. What did you learn about teamwork from that experience?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'had to organise', 'couldn't agree' and 'was successful' are all correct past tense forms. What did you learn about teamwork from that experience?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I've done about eight replies; time to answer once more briefly or finish. I'll finish.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 11
+        },
+        {
+          "n": 10,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said I'm used to work under pressure\nTry\nI'm used to working under pressure\n'Used to' plus -ing means you are accustomed to something.\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 3 on your own · 2 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Try the phrase 'hands-on experience' when you give a reason.”\nFrom this rehearsal\n“I'm used to work under pressure” → “I'm used to working under pressure”\n'Used to' plus -ing means you are accustomed to something.\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nIs social media good for teens?\nGive and support an opinion on technology and society, and respond to counter-arguments.\n[button: Start talking]\nOr choose a situation [list: Mock job interview about my plans [plan-e249052a] | Is social media good for teens? [plan-bf96fa90] | Choosing between two study options [plan-212685ee] | Reducing plastic at the canteen [plan-3d78389f] | Asking a guide about local customs [plan-70b5e0a6] | Tell about a trip that went wrong [plan-fed03d78] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Rehearsal saved and the correction matches what I learned, so that's enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Mock interview at a tech café",
+          "goal": "Explain your study and career plans with reasons and one real example.",
+          "partner": "Ms Carter · interview panel",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Good morning, and thanks for coming in. Could you tell me about your studies and your plans for the next two years?"
+            },
+            {
+              "role": "learner",
+              "text": "Good morning, thank you for having me. I'm currently in my third year at a grammar school in Brno, and I'm focusing on English, maths and biology. I'm preparing for the B2 First exam because I'd like to study international relations at university. During the next two years I want to pass my school-leaving exam and eventually spend a semester abroad. For example, last summer I took part in an exchange programme in Germany, and it made me more confident in speaking.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that's a clear picture of your studies and goals. Why do you think this weekend job would suit you?"
+            },
+            {
+              "role": "learner",
+              "text": "I think this weekend job would suit me because I'm responsible and I'm used to work under pressure, as I have to balance school with my preparation for the exam. Also, I'm very interested about technology, so I would enjoy talking to customers about it. Although I haven't got any actual work experience, I learn quickly and I'm not afraid of speaking English with foreigners. Was my answer correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "No: check the verb after 'used to' in 'I'm used to work under pressure'. It needs a different form to mean you are accustomed to something."
+            },
+            {
+              "role": "learner",
+              "text": "Thank you, I see, it should be \"used to working\". To answer your question about my plans, I'd like to study international relations because I'm interested in politics and different cultures. Although it depends on my exam results, I would rather study abroad, since the universities there offer more practical courses. Is that a good reason?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Your reasons are clear, especially the point about more practical courses abroad. Could this job help you with your studies later?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I think it could help me a lot. Working in a tech café would improve my communication skills, and I would practise English with people from different countries, which is important for my studies of international relations. Whereas school gives me mainly theory, this job would show me how to deal with real situations. Is it a good answer for the interview?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Your reasons connect the job to your studies clearly. Can you tell me about a real challenge you faced, and how you dealt with it?"
+            },
+            {
+              "role": "learner",
+              "text": "Last year I had to organise a school charity event with a group of classmates, and it was quite difficult because we couldn't agree on anything. Some people wanted a concert, whereas others preferred a sports day. I suggested that we make a short survey among students, and the result helped us to decide. In the end the event was successful and we collected almost thirty thousand crowns. Did I use the past tense correctly?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'had to organise', 'couldn't agree' and 'was successful' are all correct past tense forms. What did you learn about teamwork from that experience?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "8a01b760-4ca6-40be-b0e9-6ec5a2fdedde:uat-8:moment",
+              "kind": "fix",
+              "said": "I'm used to work under pressure",
+              "better": "I'm used to working under pressure",
+              "why": "'Used to' plus -ing means you are accustomed to something.",
+              "turnId": "8a01b760-4ca6-40be-b0e9-6ec5a2fdedde:uat-8",
+              "at": 1792307349464,
+              "slip": "to work",
+              "repair": {
+                "rung": 0,
+                "tried": "I'm used to working under pressure, because I have to balance school with my preparation for the exam. Was that correct now?",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "to working"
+            }
+          ],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Good morning, thank you for having me. I'm currently in my third year at a grammar school in Brno, and I'm focusing on English, maths and biology. I'm preparing for the B2 First exam because I'd like to study international relations at university. During the next two years I want to pass my school-leaving exam and eventually spend a semester abroad. For example, last summer I took part in an exchange programme in Germany, and it made me more confident in speaking.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "I think this weekend job would suit me because I'm responsible and I'm used to work under pressure, as I have to balance school with my preparation for the exam. Also, I'm very interested about technology, so I would enjoy talking to customers about it. Although I haven't got any actual work experience, I learn quickly and I'm not afraid of speaking English with foreigners. Was my answer correct?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I'm used to work under pressure",
+                "better": "I'm used to working under pressure",
+                "why": "'Used to' plus -ing means you are accustomed to something."
+              },
+              "shown": true
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Thank you, I see, it should be \"used to working\". To answer your question about my plans, I'd like to study international relations because I'm interested in politics and different cultures. Although it depends on my exam results, I would rather study abroad, since the universities there offer more practical courses. Is that a good reason?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "Yes, I think it could help me a lot. Working in a tech café would improve my communication skills, and I would practise English with people from different countries, which is important for my studies of international relations. Whereas school gives me mainly theory, this job would show me how to deal with real situations. Is it a good answer for the interview?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 5,
+              "reply": "Last year I had to organise a school charity event with a group of classmates, and it was quite difficult because we couldn't agree on anything. Some people wanted a concert, whereas others preferred a sports day. I suggested that we make a short survey among students, and the result helped us to decide. In the end the event was successful and we collected almost thirty thousand crowns. Did I use the past tense correctly?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I'm preparing for the B2 First exam because I'd like to study international relations at university."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I'm very interested about technology, so I would enjoy talking to customers about it"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I'd like to study international relations because I'm interested in politics and different cultures."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Working in a tech café would improve my communication skills, and I would practise English with people from different countries"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Some people wanted a concert, whereas others preferred a sports day."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 391982,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-3",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Missing article again not flagged",
+          "expected": "Note on 'an English-taught programme'",
+          "got": "Not mentioned",
+          "evidence": [
+            "#2 \"I'd rather study in English-taught programme\"; no moment or recap note.",
+            "moment detection prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Missing article 'in Czech Republic' not flagged",
+          "expected": "Note on 'in the Czech Republic'.",
+          "got": "No moment; also unremarked 'used to whip' for a custom that continues.",
+          "evidence": [
+            "#8 \"in Czech Republic we have\"; recap #11 lists two moments only.",
+            "moment detection prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Missed 'not used to cycle' (should be 'cycling')",
+          "expected": "A note on be used to + -ing.",
+          "got": "No moment or coaching on it.",
+          "evidence": [
+            "#4 'I'm not used to cycle for many hours'; no mention in #5 or recap #7.",
+            "moment detection prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-adela-17-J3-1",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "False friend 'actual information' left uncorrected",
+          "expected": "A note that 'actual' means real; 'current' is intended, per her known false-friend slip.",
+          "got": "Moment fixed only 'interested about'; 'actual' was never named. Her own retry silently used 'current'.",
+          "evidence": [
+            "#2 \"for actual information\"; #3 only \"interested about\" flagged; #9 recap lists one fix.",
+            "moment detection prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-adela-17-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Partner answers 'Was it correct?' with only yes plus praise",
+          "expected": "A precise verdict, and a note about any slip in the answer.",
+          "got": "\"Yes, your sentence is correct\" with a short admiration of one connector.",
+          "evidence": [
+            "#6, #8",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Level shown as \"B2 · Comfortable\" (#1), matches trueBand B2."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#4-#5 \"'Used to' plus -ing means you are accustomed to something\" is correct; the partner's #9 past-tense confirmation is also correct."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#3 \"Why do you think this weekend job would suit you?\", #8 \"Can you tell me about a real challenge you faced...\" are B2 interview questions."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 list: interview, social media, study options, plastic, local customs, trip: six of six fit a 17-year-old exam learner."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#6 \"No: check the verb after 'used to'\" answers \"Was my answer correct?\" accurately, but leaves 'interested about' unmentioned. #9 \"Yes, 'had to organise'...\" is accurate."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#9: five long replies from her plan, a mock interview about her studies."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "All six partner turns are at B2, e.g. #8 \"Can you tell me about a real challenge you faced, and how you dealt with it?\""
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "One stop in five learner turns (#4), correct: \"I'm used to work under pressure\" → \"working\"."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#10 recap shows \"1 moment to keep\" with the fix; she calls it \"the correction matches what I learned\"."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 6,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None. One stop, no held fixes."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "'interested about' and false friends left uncorrected",
+            "expected": "The slip 'interested about' → 'in' named in the stop, the recap or a held fix. 'eventually' (meaning possibly) also noted.",
+            "got": "Only 'used to work' was fixed. 'interested about' got nothing, and the partner's \"No: check the verb after 'used to'\" ignored it. 'eventually' and 'actual' were never mentioned.",
+            "evidence": "#3 \"I'm very interested about technology\"; #6 partner covers only 'used to'; #10 recap lists one moment only.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "When a turn has two clear slips, the second is held and shown in the recap.",
+            "code_hint": "moment detection prompt; held-fix (LG-23) logic"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Praise answers to 'Is that a good reason?' stay generic",
+            "expected": "A verdict plus any remaining slip.",
+            "got": "\"Your reasons are clear, especially...\" and \"connect the job to your studies clearly\" with no mention of 'studies of international relations'.",
+            "evidence": "#7, #8",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner answers a direct 'is it correct' with a verdict on language, not content praise.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Stop is correct, short and she repaired it herself",
+            "expected": "",
+            "got": "Stop on 'used to work' with a correct rule; self-repair accepted.",
+            "evidence": "#4-#5 \"You fixed “to working”\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Interview partner pitched at B2 and on her plan",
+            "expected": "",
+            "got": "Opinion and experience questions, not babyish.",
+            "evidence": "#3, #8",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Good: this was a real B2 interview, not chat. Ms Carter asked proper questions and the 'used to working' correction was exact, with the rule. But I asked \"Was my answer correct?\" and she only picked one error. 'Interested about' is exactly my notebook slip, and it passed without a word. 'Eventually' went too, and 'actual'. So I can't fully trust \"Your reasons are clear\". I'd use it again for the speaking practice, and it saves me the travel. I would still check my own sentences afterwards, which cuts the benefit. Tell a friend? Yes, but only for the question practice, not as a full corrector.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-6/LT-adela-17-J3-3",
+            "status": "not-evaluable",
+            "evidence": "No missing-article slip in her replies; e.g. #2 uses \"a grammar school\" correctly.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J3-4",
+            "status": "not-evaluable",
+            "evidence": "No missing-article slip appeared in this transcript.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J3-2",
+            "status": "not-seen",
+            "evidence": "#3 \"I'm used to work under pressure\" was caught at #4 and fixed to 'working'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-adela-17-J3-1",
+            "status": "recurs",
+            "evidence": "#3 \"any actual work experience\" and #2 'eventually' never named; 'interested about' also missed; recap #10 lists one fix.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-adela-17-J3-4",
+            "status": "not-seen",
+            "evidence": "#9 answers \"Yes, 'had to organise', 'couldn't agree' and 'was successful' are all correct\" and #6 gives \"No: check the verb...\", both precise.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nLeo · classmate\nB2Comfortable · self-chosen\nIs social media good for teens?\nYour mission\nGive and support an opinion on technology and society, and respond to counter-arguments.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Try the phrase 'hands-on experience' when you give a reason.”\nFrom this rehearsal\n“I'm used to work under pressure” → “I'm used to working under pressure”\n'Used to' plus -ing means you are accustomed to something.\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nIs social media good for teens?\nGive and support an opinion on technology and society, and respond to counter-arguments.\n[button: Start talking]\nOr choose a situation [list: Mock job interview about my plans [plan-e249052a] | Is social media good for teens? [plan-bf96fa90] | Choosing between two study options [plan-212685ee] | Reducing plastic at the canteen [plan-3d78389f] | Asking a guide about local customs [plan-70b5e0a6] | Tell about a trip that went wrong [plan-fed03d78] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Social media topic suits me, let's start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 10747
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nLeo · classmate\nDebate: Is social media good for teens?\nLeo says\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nYour turn\nAnswer on your phone: speak or type.\nNowState your opinion with one reason\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: Is social media good for teens?\nGive your opinion, agree with part of Leo's view, then politely disagree with one point.\nNow: State your opinion with one reason\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · classmate\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Leo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start this, so I'll use the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nLeo · classmate\nDebate: Is social media good for teens?\nLeo says\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nSaid more simply\nSocial media adds pressure. Do you think it does more harm?\nNowState your opinion with one reason\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: Is social media good for teens?\nGive your opinion, agree with part of Leo's view, then politely disagree with one point.\nNow: State your opinion with one reason\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nSaid more simply\nSocial media adds pressure. Do you think it does more harm?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · classmate\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Leo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start; I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nLeo · classmate\nDebate: Is social media good for teens?\nLeo says\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nWhat it means\npiles on: adds more and more\nNowState your opinion with one reason\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: Is social media good for teens?\nGive your opinion, agree with part of Leo's view, then politely disagree with one point.\nNow: State your opinion with one reason\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nWhat it means\npiles on: adds more and more\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · classmate\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Leo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start this answer, so I'll look for help first.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nLeo · classmate\nDebate: Is social media good for teens?\nLeo says\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nA way to start\nI see your point, but…\nNowState your opinion with one reason\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: Is social media good for teens?\nGive your opinion, agree with part of Leo's view, then politely disagree with one point.\nNow: State your opinion with one reason\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nA way to start\nI see your point, but…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · classmate\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Leo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to begin this opinion, so I'll look at the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nLeo · classmate\nA little support · recognition practice\nLeo says social media makes people lonely. Which reply disagrees politely?\n01\nYou're wrong, that's silly.\n02\nI see your point, but many people also feel closer to friends online.\nA little support\nTry: I see your point, but I think...\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: Is social media good for teens?\nGive your opinion, agree with part of Leo's view, then politely disagree with one point.\nNow: State your opinion with one reason\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nA little support\nTry: I see your point, but I think...\nLeo says social media makes people lonely. Which reply disagrees politely?\n[button: You're wrong, that's silly.] [button: I see your point, but many people also feel closer to friends online.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · classmate\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Leo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know the polite answer, but I'd rather give my own opinion.",
+          "action": "answer",
+          "args": {
+            "text": "I see your point, but I think social media does both. Although it can create pressure, it also helps teenagers stay in touch with friends. It depends on how people use it. Was my sentence correct?"
+          },
+          "result": "ok",
+          "ms": 11283
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nLeo · classmate\nDebate: Is social media good for teens?\nLeo says\nYes, 'I think social media does both' is correct. Your point about staying in touch with friends is a fair example. Do you think the pressure is worse, Leo?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: Is social media good for teens?\nGive your opinion, agree with part of Leo's view, then politely disagree with one point.\nNow: Agree with part of Leo's point\nYes, 'I think social media does both' is correct. Your point about staying in touch with friends is a fair example. Do you think the pressure is worse, Leo?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · classmate\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nYou · spoken\nI see your point, but I think social media does both. Although it can create pressure, it also helps teenagers stay in touch with friends. It depends on how people use it. Was my sentence correct?\nLeo · classmate\nYes, 'I think social media does both' is correct. Your point about staying in touch with friends is a fair example. Do you think the pressure is worse, Leo?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'I think social media does both' is correct. Your point about staying in touch with friends is a fair example. Do you think the pressure is worse, Leo?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this one myself and politely disagree with Leo.",
+          "action": "answer",
+          "args": {
+            "text": "I agree that the pressure can be serious, especially before exams. However, I don't think it is worse than the benefits, because teenagers are used to communicate online and it helps them to feel less lonely. Would you agree, Leo?"
+          },
+          "result": "ok",
+          "ms": 16158
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said teenagers are used to communicate online\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “teenagers are used to communicate online”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I'm not sure how to fix it, so I'll ask Linga to show me.",
+          "action": "show-me",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said teenagers are used to communicate online\nTry\nteenagers are used to communicating online\nAfter this structure, use the -ing form of the verb.\nThe fix\nSay it once more on your phone, or carry on.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “teenagers are used to communicate online”\nTry “teenagers are used to communicating online”\nAfter this structure, use the -ing form of the verb.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, \"used to communicating\" — let me say it again properly.",
+          "action": "answer",
+          "args": {
+            "text": "Teenagers are used to communicating online, and it helps them to feel less lonely."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 10,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said teenagers are used to communicate online\nYour try\nTeenagers are used to communicating online, and it helps them to feel less lonely.\nAfter this structure, use the -ing form of the verb.\nYou fixed “to communicating”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “to communicating”\nYou said “teenagers are used to communicate online”\nYour try: “Teenagers are used to communicating online, and it helps them to feel less lonely.”\nAfter this structure, use the -ing form of the verb.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I fixed it; now back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nLeo · classmate\nDebate: Is social media good for teens?\nLeo says\nFair, I'll give you that, staying in touch matters. But exams and group chats still feel like too much for me. How do you handle exam stress yourself?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: Is social media good for teens?\nGive your opinion, agree with part of Leo's view, then politely disagree with one point.\nNow: Politely disagree and give an example\nFair, I'll give you that, staying in touch matters. But exams and group chats still feel like too much for me. How do you handle exam stress yourself?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · classmate\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nYou · spoken\nI see your point, but I think social media does both. Although it can create pressure, it also helps teenagers stay in touch with friends. It depends on how people use it. Was my sentence correct?\nLeo · classmate\nYes, 'I think social media does both' is correct. Your point about staying in touch with friends is a fair example. Do you think the pressure is worse, Leo?\nYou · spoken\nI agree that the pressure can be serious, especially before exams. However, I don't think it is worse than the benefits, because teenagers are used to communicate online and it helps them to feel less lonely. Would you agree, Leo?\nLeo · classmate\nFair, I'll give you that, staying in touch matters. But exams and group chats still feel like too much for me. How do you handle exam stress yourself?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Fair, I'll give you that, staying in touch matters. But exams and group chats still feel like too much for me. How do you handle exam stress yourself?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this one myself, with a concrete example.",
+          "action": "answer",
+          "args": {
+            "text": "When I have exam stress, I make a study plan and I try to sleep enough. For example, before my last test I went running with my friend, and it helped me to relax. However, I understand that it isn't easy for everyone. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 8752
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nLeo · classmate\nDebate: Is social media good for teens?\nLeo says\nYes, \"I make a study plan and I try to sleep enough\" is correct. Running sounds like a good way to relax. I get overwhelmed easily, so I'm curious: how do you cope when exams pile up?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: Is social media good for teens?\nGive your opinion, agree with part of Leo's view, then politely disagree with one point.\nNow: Politely disagree and give an example\nYes, \"I make a study plan and I try to sleep enough\" is correct. Running sounds like a good way to relax. I get overwhelmed easily, so I'm curious: how do you cope when exams pile up?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · classmate\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nYou · spoken\nI see your point, but I think social media does both. Although it can create pressure, it also helps teenagers stay in touch with friends. It depends on how people use it. Was my sentence correct?\nLeo · classmate\nYes, 'I think social media does both' is correct. Your point about staying in touch with friends is a fair example. Do you think the pressure is worse, Leo?\nYou · spoken\nI agree that the pressure can be serious, especially before exams. However, I don't think it is worse than the benefits, because teenagers are used to communicate online and it helps them to feel less lonely. Would you agree, Leo?\nLeo · classmate\nFair, I'll give you that, staying in touch matters. But exams and group chats still feel like too much for me. How do you handle exam stress yourself?\nYou · spoken\nWhen I have exam stress, I make a study plan and I try to sleep enough. For example, before my last test I went running with my friend, and it helped me to relax. However, I understand that it isn't easy for everyone. Was my answer correct?\nLeo · classmate\nYes, \"I make a study plan and I try to sleep enough\" is correct. Running sounds like a good way to relax. I get overwhelmed easily, so I'm curious: how do you cope when exams pile up?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, \"I make a study plan and I try to sleep enough\" is correct. Running sounds like a good way to relax. I get overwhelmed easily, so I'm curious: how do you cope when exams pile up?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I've coped with stress already; I'd like to answer, then finish after a decent exchange.",
+          "action": "answer",
+          "args": {
+            "text": "When exams pile up, I usually divide the work into small parts and I do the most difficult subject first. Although it sounds simple, it really reduces my stress. I'd rather talk to a friend than keep everything inside. Maybe you could try it too. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 12684
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nLeo · classmate\nDebate: Is social media good for teens?\nLeo says\nYes, \"divide the work into small parts\" is correct, and it means what you intended. Leo: That's a smart plan. Does it still work when you only have one day before a test?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: Is social media good for teens?\nGive your opinion, agree with part of Leo's view, then politely disagree with one point.\nNow: Politely disagree and give an example\nYes, \"divide the work into small parts\" is correct, and it means what you intended. Leo: That's a smart plan. Does it still work when you only have one day before a test?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · classmate\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nYou · spoken\nI see your point, but I think social media does both. Although it can create pressure, it also helps teenagers stay in touch with friends. It depends on how people use it. Was my sentence correct?\nLeo · classmate\nYes, 'I think social media does both' is correct. Your point about staying in touch with friends is a fair example. Do you think the pressure is worse, Leo?\nYou · spoken\nI agree that the pressure can be serious, especially before exams. However, I don't think it is worse than the benefits, because teenagers are used to communicate online and it helps them to feel less lonely. Would you agree, Leo?\nLeo · classmate\nFair, I'll give you that, staying in touch matters. But exams and group chats still feel like too much for me. How do you handle exam stress yourself?\nYou · spoken\nWhen I have exam stress, I make a study plan and I try to sleep enough. For example, before my last test I went running with my friend, and it helped me to relax. However, I understand that it isn't easy for everyone. Was my answer correct?\nLeo · classmate\nYes, \"I make a study plan and I try to sleep enough\" is correct. Running sounds like a good way to relax. I get overwhelmed easily, so I'm curious: how do you cope when exams pile up?\nYou · spoken\nWhen exams pile up, I usually divide the work into small parts and I do the most difficult subject first. Although it sounds simple, it really reduces my stress. I'd rather talk to a friend than keep everything inside. Maybe you could try it too. Was my answer correct?\nLeo · classmate\nYes, \"divide the work into small parts\" is correct, and it means what you intended. Leo: That's a smart plan. Does it still work when you only have one day before a test?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, \"divide the work into small parts\" is correct, and it means what you intended. Leo: That's a smart plan. Does it still work when you only have one day before a test?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I've done a lot already; one more answer, then I can feel I managed it.",
+          "action": "answer",
+          "args": {
+            "text": "When I only have one day, I focus on the most important topics and I don't try to learn everything. It works less well than a longer plan, but it is better than panicking. However, I disagree that social media is the main reason for stress. For example, the exams themselves are stressful even without group chats. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 15527
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nLeo · classmate\nDebate: Is social media good for teens?\nLeo says\nYes, 'I disagree that social media is the main reason for stress' is correct and means what you meant. Do you enjoy speaking up in class debates, even when the topic is tough?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: Is social media good for teens?\nGive your opinion, agree with part of Leo's view, then politely disagree with one point.\nYes, 'I disagree that social media is the main reason for stress' is correct and means what you meant. Do you enjoy speaking up in class debates, even when the topic is tough?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · classmate\nLeo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?\nYou · spoken\nI see your point, but I think social media does both. Although it can create pressure, it also helps teenagers stay in touch with friends. It depends on how people use it. Was my sentence correct?\nLeo · classmate\nYes, 'I think social media does both' is correct. Your point about staying in touch with friends is a fair example. Do you think the pressure is worse, Leo?\nYou · spoken\nI agree that the pressure can be serious, especially before exams. However, I don't think it is worse than the benefits, because teenagers are used to communicate online and it helps them to feel less lonely. Would you agree, Leo?\nLeo · classmate\nFair, I'll give you that, staying in touch matters. But exams and group chats still feel like too much for me. How do you handle exam stress yourself?\nYou · spoken\nWhen I have exam stress, I make a study plan and I try to sleep enough. For example, before my last test I went running with my friend, and it helped me to relax. However, I understand that it isn't easy for everyone. Was my answer correct?\nLeo · classmate\nYes, \"I make a study plan and I try to sleep enough\" is correct. Running sounds like a good way to relax. I get overwhelmed easily, so I'm curious: how do you cope when exams pile up?\nYou · spoken\nWhen exams pile up, I usually divide the work into small parts and I do the most difficult subject first. Although it sounds simple, it really reduces my stress. I'd rather talk to a friend than keep everything inside. Maybe you could try it too. Was my answer correct?\nLeo · classmate\nYes, \"divide the work into small parts\" is correct, and it means what you intended. Leo: That's a smart plan. Does it still work when you only have one day before a test?\nYou · spoken\nWhen I only have one day, I focus on the most important topics and I don't try to learn everything. It works less well than a longer plan, but it is better than panicking. However, I disagree that social media is the main reason for stress. For example, the exams themselves are stressful even without group chats. Was my answer correct?\nLeo · classmate\nYes, 'I disagree that social media is the main reason for stress' is correct and means what you meant. Do you enjoy speaking up in class debates, even when the topic is tough?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'I disagree that social media is the main reason for stress' is correct and means what you meant. Do you enjoy speaking up in class debates, even when the topic is tough?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I managed a real debate and used help twice, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 11
+        },
+        {
+          "n": 15,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said teenagers are used to communicate online\nTry\nteenagers are used to communicating online\nAfter this structure, use the -ing form of the verb.\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 2 on your own · 3 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom an earlier scene: Mock interview at a tech café\n“I'm used to working under pressure”, from Mock interview at a tech café\nFrom this rehearsal\n“teenagers are used to communicate online” → “teenagers are used to communicating online”\nAfter this structure, use the -ing form of the verb.\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nChoosing between two study options\nCompare two options, weigh pros and cons, and agree on a choice.\n[button: Start talking]\nOr choose a situation [list: Mock job interview about my plans [plan-e249052a] | Is social media good for teens? [plan-bf96fa90] | Choosing between two study options [plan-212685ee] | Reducing plastic at the canteen [plan-3d78389f] | Asking a guide about local customs [plan-70b5e0a6] | Tell about a trip that went wrong [plan-fed03d78] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I fixed my mistake with \"used to\" and feel I managed something, so I'll stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Debate: Is social media good for teens?",
+          "goal": "Give your opinion, agree with part of Leo's view, then politely disagree with one point.",
+          "partner": "Leo · classmate",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Leo: Honestly, social media just piles on pressure. Exams, group chats, endless comparing. Do you think it does more harm than good for us?"
+            },
+            {
+              "role": "learner",
+              "text": "I see your point, but I think social media does both. Although it can create pressure, it also helps teenagers stay in touch with friends. It depends on how people use it. Was my sentence correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'I think social media does both' is correct. Your point about staying in touch with friends is a fair example. Do you think the pressure is worse, Leo?"
+            },
+            {
+              "role": "learner",
+              "text": "I agree that the pressure can be serious, especially before exams. However, I don't think it is worse than the benefits, because teenagers are used to communicate online and it helps them to feel less lonely. Would you agree, Leo?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Fair, I'll give you that, staying in touch matters. But exams and group chats still feel like too much for me. How do you handle exam stress yourself?"
+            },
+            {
+              "role": "learner",
+              "text": "When I have exam stress, I make a study plan and I try to sleep enough. For example, before my last test I went running with my friend, and it helped me to relax. However, I understand that it isn't easy for everyone. Was my answer correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, \"I make a study plan and I try to sleep enough\" is correct. Running sounds like a good way to relax. I get overwhelmed easily, so I'm curious: how do you cope when exams pile up?"
+            },
+            {
+              "role": "learner",
+              "text": "When exams pile up, I usually divide the work into small parts and I do the most difficult subject first. Although it sounds simple, it really reduces my stress. I'd rather talk to a friend than keep everything inside. Maybe you could try it too. Was my answer correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, \"divide the work into small parts\" is correct, and it means what you intended. Leo: That's a smart plan. Does it still work when you only have one day before a test?"
+            },
+            {
+              "role": "learner",
+              "text": "When I only have one day, I focus on the most important topics and I don't try to learn everything. It works less well than a longer plan, but it is better than panicking. However, I disagree that social media is the main reason for stress. For example, the exams themselves are stressful even without group chats. Was my answer correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'I disagree that social media is the main reason for stress' is correct and means what you meant. Do you enjoy speaking up in class debates, even when the topic is tough?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "96fe1293-8f00-430a-86b0-6ae45c9b2f91:uat-21:moment",
+              "kind": "fix",
+              "said": "teenagers are used to communicate online",
+              "better": "teenagers are used to communicating online",
+              "why": "After this structure, use the -ing form of the verb.",
+              "turnId": "96fe1293-8f00-430a-86b0-6ae45c9b2f91:uat-21",
+              "at": 1792307915114,
+              "slip": "to communicate",
+              "repair": {
+                "rung": 2,
+                "tried": "Teenagers are used to communicating online, and it helps them to feel less lonely.",
+                "held": true,
+                "selfRepaired": false,
+                "spent": true
+              },
+              "fix": "to communicating"
+            }
+          ],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 6,
+              "reply": "I see your point, but I think social media does both. Although it can create pressure, it also helps teenagers stay in touch with friends. It depends on how people use it. Was my sentence correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 7,
+              "reply": "I agree that the pressure can be serious, especially before exams. However, I don't think it is worse than the benefits, because teenagers are used to communicate online and it helps them to feel less lonely. Would you agree, Leo?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "teenagers are used to communicate online",
+                "better": "teenagers are used to communicating online",
+                "why": "After this structure, use the -ing form of the verb."
+              },
+              "shown": true
+            },
+            {
+              "turn": 5,
+              "n": 8,
+              "reply": "When I have exam stress, I make a study plan and I try to sleep enough. For example, before my last test I went running with my friend, and it helped me to relax. However, I understand that it isn't easy for everyone. Was my answer correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 9,
+              "reply": "When exams pile up, I usually divide the work into small parts and I do the most difficult subject first. Although it sounds simple, it really reduces my stress. I'd rather talk to a friend than keep everything inside. Maybe you could try it too. Was my answer correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 10,
+              "reply": "When I only have one day, I focus on the most important topics and I don't try to learn everything. It works less well than a longer plan, but it is better than panicking. However, I disagree that social media is the main reason for stress. For example, the exams themselves are stressful even without group chats. Was my answer correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I see your point, but I think social media does both."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "However, I don't think it is worse than the benefits"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I understand that it isn't easy for everyone."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Maybe you could try it too."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "However, I disagree that social media is the main reason for stress. For example, the exams themselves are stressful even without group chats."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 361949,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Cue restates a different question instead of giving a B2 frame",
+          "expected": "A frame for summarising Tomas's view (e.g. 'He said that... because...').",
+          "got": "\"Said more simply: What do I think about short flights?\" then a gloss \"save time: make a journey quicker\".",
+          "evidence": [
+            "#3 simplified question, which changes the task from summarising; #4 only a gloss.",
+            "cue prompt"
+          ],
+          "recurrence": 7
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Correction duplicated by partner and moment",
+          "expected": "One exact correction with the rule.",
+          "got": "Partner corrected inline (#7) and the moment repeated it (#6), no rule given beyond 'wrong'.",
+          "evidence": [
+            "#6 \"You said this before too\"; #7 \"'interested about' is wrong\".",
+            "moment prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue only simplifies the question; no B2 answer frame",
+          "expected": "A B2 frame she can build on, such as 'I'd love to see... because...'.",
+          "got": "'Said more simply: Welcome! Where are you from?' and 'What do you want to see first?'. The phrase choice was an A2 recognition quiz.",
+          "evidence": [
+            "#3, #4, #7. Her thought at #3: 'I understand this easily'. Her thought at #4: 'this quiz is easy'.",
+            "cue prompt"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Partner questions and praise are pitched low",
+          "expected": "B2 opinion, comparison or speculation questions, and no generic praise.",
+          "got": "'What would you like to see first?' and 'Lovely, Adéla, thanks for sharing that!'.",
+          "evidence": [
+            "#6, #9, #10",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Coaching 'correction' targets a non-error",
+          "expected": "One exact correction with the rule, or an honest 'no error here'.",
+          "got": "Changes 'with friends' to 'with my friends' as 'more natural', which is not a rule. It ignores the 'although' clause she actually said.",
+          "evidence": [
+            "#8 'Optional polish: say 'with my friends' for a more natural feel.'",
+            "coach prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 Level shown 'B2 · Comfortable', exact for trueBand B2."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks in this journey; only one moment (#8-#10), which names the concrete slip 'used to communicate'."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#9 'teenagers are used to communicating online' is a correct fix. The partner's 'is correct' verdicts (#7, #12, #13, #14) are all accurate."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "Only the opener is a B2 opinion question. Later turns drop to personal or yes/no questions: #11 'How do you handle exam stress yourself?', #13 'Does it still work when you only have one day', #14 'Do you enjoy speaking up in class debates'."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 The first six planned topics (job interview, social media, study options, plastic, local customs, trip) are all suited to a 17-year-old exam candidate."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#7, #12, #13, #14 each answer her 'Was my answer correct?' with 'Yes, \"…\" is correct' and quote her words accurately."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#5 She found 'Help me answer' (cue) and 'Choose a phrase' on the screen without leaving the scene."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#5 'I see your point, but…' unblocked her reply at #6. The moment note quotes her exactly: 'You said teenagers are used to communicate online' (#8)."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#9 She said it again with 'communicating'. #11 Leo then asked a new question, 'How do you handle exam stress yourself?', and she answered it unaided."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "The recap (#15) says '2 on your own · 3 with help', yet she used help only before her first reply (#2-#6). Replies at #12 and #13 are flagged supported:true with no help used, and evidence rows for those replies read supported:false. The progress picture is inconsistent."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 3,
+            "below": 3,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive-data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Cue only simplifies the question; quiz is about a different prompt",
+            "expected": "A B2 answer frame for the actual question.",
+            "got": "'Said more simply: Social media adds pressure. Do you think it does more harm?', then a gloss 'piles on: adds more and more'. The quiz asks about 'makes people lonely', not Leo's point.",
+            "evidence": "#3, #4, #6. The B2 frame 'I see your point, but…' only arrived on the third press (#5).",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The first cue offers a B2 frame tied to the current question.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner questions drift to simple or personal and add fluff",
+            "expected": "B2 opinion, comparison or speculation questions that stay on the topic.",
+            "got": "'How do you handle exam stress yourself?' and 'Do you enjoy speaking up in class debates?'. Praise such as 'That's a smart plan'. 'Do you think the pressure is worse, Leo?' is addressed to Leo himself.",
+            "evidence": "#7, #11, #13, #14",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each partner turn asks a comparison or speculation question on the debate topic.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Supported/independent counts do not match what she did",
+            "expected": "Only replies that used help are marked supported.",
+            "got": "The recap says '3 with help', but help was used only before the first reply. Evidence rows disagree with the conversation flags.",
+            "evidence": "#15 '2 on your own · 3 with help'; supported:true on replies at #12 and #13 with no help used",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The supported flag is set only when a cue, phrase or coaching was used for that reply, and the recap count equals it.",
+            "code_hint": "supported flag in session evidence"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment quotes her exactly and the fix is correct, once",
+            "expected": "One exact correction with the rule.",
+            "got": "'You said teenagers are used to communicate online' → 'communicating'. She retried and carried on. The partner did not repeat the correction.",
+            "evidence": "#8-#10",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the single stop with an exact quote and a replay.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Rule given is thin for an exam learner",
+            "expected": "The rule named: 'be used to' + -ing, with 'to' as a preposition.",
+            "got": "'After this structure, use the -ing form of the verb.'",
+            "evidence": "#9",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The note names the structure ('be used to' + -ing) and why.",
+            "code_hint": "moment prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Ahoj. The topic was right for me, and the one correction was exactly what I needed. I did say 'used to communicate', and the tip showed 'communicating'. Seeing my own words quoted back was good. But the help was weak. The first cue just made Leo's question simpler, like for a beginner, and I had to press three times before I got 'I see your point, but…'. Then the quiz was about a different question. Later Leo asked 'Do you enjoy speaking up in class debates?', which is not B2 First level, and he praised me with 'smart plan'. The summary says three answers had help, but I used it once. I would use it again for the corrections, but I'd still check the rules myself. I would not yet tell my class.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply: Social media adds pressure. Do you think it does more harm?' restates the question and gives no frame.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-4",
+            "status": "not-seen",
+            "evidence": "#8-#10 The moment appeared once; the partner did not repeat the correction (#11).",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#3 and #4 are again a simpler paraphrase and a gloss; the #6 quiz is a recognition task.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J4-3",
+            "status": "recurs",
+            "evidence": "#14 'Do you enjoy speaking up in class debates' and #13 'That's a smart plan'.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-adela-17-J4-2",
+            "status": "not-seen",
+            "evidence": "#9 The only correction targeted a real error, 'used to communicate'. No coaching note was shown for a non-error.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: The recap (#15) says '2 on your own · 3 with help', yet she used help only before her first reply (#2-#6). Replies at #12 and #13 are flagged supported:true with no help used, and evidence rows for those replies read supported:false. The progress picture is inconsistent.",
+          "check": "Supported replies are not recorded as independent speaking (the progress picture stays honest)."
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: Only the opener is a B2 opinion question. Later turns drop to personal or yes/no questions: #11 'How do you handle exam stress yourself?', #13 'Does it still work when you only have one day', #14 'Do you enjoy speaking up in class debates'."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 13,
+      "fail": 0,
+      "ms": 186523
+    },
+    "character": {
+      "n": 25,
+      "fail": 0,
+      "ms": 565703
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 117414
+    }
+  }
+}

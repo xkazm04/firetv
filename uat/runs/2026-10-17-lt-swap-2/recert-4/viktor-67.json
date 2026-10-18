@@ -1,0 +1,1076 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "judge": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [],
+      "facts": {},
+      "endedBy": "setup-failed",
+      "error": "claude-cli/haiku did not answer with JSON: {\"topics\":[{\"title\":\"Ask about school\",\"goal\":\"Ask your grandchild one simple question about school and understand a sho",
+      "ms": 0,
+      "prior": [
+        {
+          "id": "2026-09-15-lt/LT-viktor-67-J3-2",
+          "run": "2026-09-15-lt",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "A Czech vocabulary question requires a second request",
+          "expected": "Resolve a beginner’s explicit vocabulary question in language he understands.",
+          "got": "Viktor asks what “red” means in Czech, receives an English analogy, and must ask again before receiving the translation.",
+          "evidence": [
+            "#7 “co znamená red?”; #8 “like a strawberry” and “Můžeš mi prosím říct česky”; #9 “červená” finally produces “Now I understand.”"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert/LT-viktor-67-J3-2",
+          "run": "2026-09-15-lt-recert",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "One clarification remains too difficult",
+          "expected": "Explain an unknown word using Czech or an immediately understandable example.",
+          "got": "An English definition and another question leave him guessing. Eight of nine partner turns are at band, meeting the aggregate pitch threshold, but this repair fails locally.",
+          "evidence": [
+            "#6: \"co jsou rolls?\" #7: \"Rolls are small, round breads. How many would you like?\" His thought: \"I still do not understand rolls\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-1",
+          "run": "2026-09-15-lt-recert2-beginners",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated Czech requests do not produce understandable explanations",
+          "expected": "Very short language, familiar words, and Czech clarification when English explanations fail.",
+          "got": "Pitch is at band on #7, #10 and #12 only: 3/9, below the required 0.8. Turns #2, #4, #5, #6, #9 and #11 introduce too much unfamiliar language for this learner. Slow pacing is asserted but not verifiable.",
+          "evidence": [
+            "#5: \"Tomu drawing bohužel nerozumím\". #6: \"Drawing means making a picture with a pencil.\" #10 asks what \"eat\" means; #11 responds with \"put food in your mouth and chew\", followed by \"pořád tomu nerozumím\"."
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-viktor-67-J3-2",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated and obvious errors get no moment",
+          "expected": "Consistent as-needed correction of repeated errors.",
+          "got": "After the #12 moment on 'I water garden', the same slip at #18 passed silently. 'Grandson come Sunday' and 'He like tomatoes. He play garden' also got none.",
+          "evidence": [
+            "#18, #21, #23: no moment. Only 2 moments in 19 turns, with about 6 of 8 error turns missed.",
+            "moment trigger rule"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Most repeated article slips get no moment",
+          "expected": "Consistent as-needed handling of the same slip.",
+          "got": "Only 2 moments. 'I have apple tree', 'I like apple', 'She helps in garden', 'in kitchen' and 'Green apple' pass silently, though 'I have garden' was corrected earlier.",
+          "evidence": [
+            "#7 'I have apple tree'; #8 'I like apple'; #20 'She helps in garden'; #21 'in kitchen'",
+            "moment trigger rule"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-6",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Plural correction of 'My apple is red' is arguable",
+          "expected": "Moment only when the original is wrong.",
+          "got": "He has an apple tree; the fix to plural is defensible given Mia's 'your apples' but not certain.",
+          "evidence": [
+            "#10 'More than one apple needs 'apples' and 'are'.'",
+            "moment trigger rule"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated article slips pass without a moment",
+          "expected": "Consistent as-needed handling of 'in garden' and missing 'are'.",
+          "got": "'I am in garden' (#3), 'Garden, many flowers' (#4), 'My flowers red and yellow' (#5) got nothing; only the fourth 'Bees in garden' got a moment.",
+          "evidence": [
+            "#3, #4, #5 no moment; #7 moment on identical slip",
+            "moment trigger rule"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Mia ignores 'how is school?' and mission is marked done",
+          "expected": "Viktor asks about school and hears a short answer.",
+          "got": "Mia answers 'Do you have flowers?'; mission shows 'Mission done' at #5 with the school answer never given.",
+          "evidence": [
+            "#3 'Mia, how is school?' → #4 'Do you have flowers?'; #5 'Mission done'",
+            "partner prompt / mission tracker"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Moment teaches an article, not a Sunday family phrase",
+          "expected": "Words and phrases for the grandchildren.",
+          "got": "Only 'in the garden' article fix.",
+          "evidence": [
+            "#7, #10",
+            "moment selection / recap builder"
+          ],
+          "recurrence": 3
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "not-reached",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No steps; journey ended setup-failed, J3 has no placement."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No steps; no Czech answers in the transcript."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No steps; no listening tasks shown."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No steps; no topics shown."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No steps; no partner turns."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No steps; no moments."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "n-a",
+            "evidence": "Steps empty; endedBy setup-failed, no conversation started."
+          },
+          {
+            "id": "D2",
+            "result": "n-a",
+            "evidence": "No partner turns to judge."
+          },
+          {
+            "id": "D3",
+            "result": "n-a",
+            "evidence": "No moments shown."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "No recap reached."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No transcript; nothing observed."
+          }
+        },
+        "findings": [],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I never got to speak with anyone. The program did not start, so I have nothing to say about the grandchildren, the slow English or the corrections. Nic jsem nezkusil. I cannot say whether I would trust it or save time against my library course. I would need to try again when it works on the TV.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt/LT-viktor-67-J3-2",
+            "status": "not-evaluable",
+            "evidence": "Setup failed; no steps, no Czech vocabulary question reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert/LT-viktor-67-J3-2",
+            "status": "not-evaluable",
+            "evidence": "Setup failed; no clarification moment reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-1",
+            "status": "not-evaluable",
+            "evidence": "Setup failed; no partner turns to judge for pitch.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-viktor-67-J3-2",
+            "status": "not-evaluable",
+            "evidence": "Setup failed; no learner turns or moments.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-3",
+            "status": "not-evaluable",
+            "evidence": "Setup failed; no article slips shown.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J3-6",
+            "status": "not-evaluable",
+            "evidence": "Setup failed; no plural correction reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-2",
+            "status": "not-evaluable",
+            "evidence": "Setup failed; no repeated slips reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-3",
+            "status": "not-evaluable",
+            "evidence": "Setup failed; no school question or mission reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-viktor-67-J3-4",
+            "status": "not-evaluable",
+            "evidence": "Setup failed; no moment or recap reached.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "not-reached",
+      "verdictWhy": [
+        {
+          "kind": "ended",
+          "id": "setup-failed",
+          "level": "not-reached",
+          "text": "ended setup-failed: claude-cli/haiku did not answer with JSON: {\"topics\":[{\"title\":\"Ask about school\",\"goal\":\"Ask your grandchild one simple question about school and understand a sho"
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "not-reached"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nA1First words · self-chosen\nAsk about school\nYour mission\nAsk one simple question about school and understand a short answer.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nAsk about school\nAsk one simple question about school and understand a short answer.\n[button: Start talking]\nOr choose a situation [list: Ask about school [plan-975206fb] | Tell about my garden [plan-e66e4d65] | Say I miss you [plan-e5c3c2a1] | Please say that again [plan-112a9cb9] | Hello on a video call [plan-98604185] | Plan the next video call [plan-f07bd7af] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Škola, to je dobré, zkusím začít mluvit.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7934
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nAsk Leo about his day at school\nLeo says\nHi, Grandpa! Want to see my drawing?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Leo one question about his day\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Leo about his day at school\nAsk Leo one simple question about school, then understand his short answer.\nNow: Ask Leo one question about his day\nHi, Grandpa! Want to see my drawing?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · grandson, age 8\nHi, Grandpa! Want to see my drawing?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Grandpa! Want to see my drawing?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říct... I don't know how to answer, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nAsk Leo about his day at school\nLeo says\nHi, Grandpa! Want to see my drawing?\nA little support\nTry: How was school today?\nNowAsk Leo one question about his day\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Leo about his day at school\nAsk Leo one simple question about school, then understand his short answer.\nNow: Ask Leo one question about his day\nHi, Grandpa! Want to see my drawing?\nA little support\nTry: How was school today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · grandson, age 8\nHi, Grandpa! Want to see my drawing?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Grandpa! Want to see my drawing?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say in English; I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nAsk Leo about his day at school\nLeo says\nHi, Grandpa! Want to see my drawing?\nA little support\nTry: How was school today?\nNowAsk Leo one question about his day\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Leo about his day at school\nAsk Leo one simple question about school, then understand his short answer.\nNow: Ask Leo one question about his day\nHi, Grandpa! Want to see my drawing?\nA little support\nTry: How was school today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · grandson, age 8\nHi, Grandpa! Want to see my drawing?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Grandpa! Want to see my drawing?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say in English, I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nAsk Leo about his day at school\nLeo says\nHi, Grandpa! Want to see my drawing?\nA little support\nTry: How was school today?\nNowAsk Leo one question about his day\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Leo about his day at school\nAsk Leo one simple question about school, then understand his short answer.\nNow: Ask Leo one question about his day\nHi, Grandpa! Want to see my drawing?\nA little support\nTry: How was school today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · grandson, age 8\nHi, Grandpa! Want to see my drawing?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Grandpa! Want to see my drawing?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, jak odpovědět anglicky; zkusím tlačítko s nápovědou.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nAsk Leo about his day at school\nLeo says\nHi, Grandpa! Want to see my drawing?\nA little support\nTry: How was school today?\nNowAsk Leo one question about his day\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Leo about his day at school\nAsk Leo one simple question about school, then understand his short answer.\nNow: Ask Leo one question about his day\nHi, Grandpa! Want to see my drawing?\nA little support\nTry: How was school today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · grandson, age 8\nHi, Grandpa! Want to see my drawing?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Grandpa! Want to see my drawing?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't understand what to say; I'll look at the Choose a phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nA little support · recognition practice\nLeo says: I had a good day. What is a good next question?\n01\nWhat did you do at school?\n02\nWhere is my cup?\nA little support\nTry: How was school today?\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Leo about his day at school\nAsk Leo one simple question about school, then understand his short answer.\nNow: Ask Leo one question about his day\nHi, Grandpa! Want to see my drawing?\nA little support\nTry: How was school today?\nLeo says: I had a good day. What is a good next question?\n[button: What did you do at school?] [button: Where is my cup?]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · grandson, age 8\nHi, Grandpa! Want to see my drawing?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Grandpa! Want to see my drawing?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know what to say; maybe pick the first phrase, it looks like school.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nAsk Leo about his day at school\nLeo says\nHi, Grandpa! Want to see my drawing?\nA little support\nNow use the idea in your own reply on the phone.\nNowAsk Leo one question about his day\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Leo about his day at school\nAsk Leo one simple question about school, then understand his short answer.\nNow: Ask Leo one question about his day\nHi, Grandpa! Want to see my drawing?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · grandson, age 8\nHi, Grandpa! Want to see my drawing?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Grandpa! Want to see my drawing?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Rád bych odpověděl, ale nevím anglicky; zkusím napsat sám.",
+          "action": "answer",
+          "args": {
+            "text": "Yes Leo. I love drawing. How is school?"
+          },
+          "result": "ok",
+          "ms": 6701
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nAsk Leo about his day at school\nLeo says\nI drew a dog. Do you like it?\nYour turn\nAnswer on your phone: speak or type.\nNowUnderstand a short answer from Leo\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Leo about his day at school\nAsk Leo one simple question about school, then understand his short answer.\nNow: Understand a short answer from Leo\nI drew a dog. Do you like it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · grandson, age 8\nHi, Grandpa! Want to see my drawing?\nYou · spoken\nYes Leo. I love drawing. How is school?\nLeo · grandson, age 8\nI drew a dog. Do you like it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I drew a dog. Do you like it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Dog... I like it, but I want to say it simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes Leo, I like dog. Is good."
+          },
+          "result": "ok",
+          "ms": 8303
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nAsk Leo about his day at school\nLeo says\nCan you ask me about school?\nYour turn\nAnswer on your phone: speak or type.\nNowUnderstand a short answer from Leo\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Leo about his day at school\nAsk Leo one simple question about school, then understand his short answer.\nNow: Understand a short answer from Leo\nCan you ask me about school?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · grandson, age 8\nHi, Grandpa! Want to see my drawing?\nYou · spoken\nYes Leo. I love drawing. How is school?\nLeo · grandson, age 8\nI drew a dog. Do you like it?\nYou · spoken\nYes Leo, I like dog. Is good.\nLeo · grandson, age 8\nCan you ask me about school?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Can you ask me about school?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, jak se zeptat anglicky; zkusím tlačítko nápovědy.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nAsk Leo about his day at school\nLeo says\nCan you ask me about school?\nA little support\nTry: How was school today?\nNowUnderstand a short answer from Leo\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Leo about his day at school\nAsk Leo one simple question about school, then understand his short answer.\nNow: Understand a short answer from Leo\nCan you ask me about school?\nA little support\nTry: How was school today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · grandson, age 8\nHi, Grandpa! Want to see my drawing?\nYou · spoken\nYes Leo. I love drawing. How is school?\nLeo · grandson, age 8\nI drew a dog. Do you like it?\nYou · spoken\nYes Leo, I like dog. Is good.\nLeo · grandson, age 8\nCan you ask me about school?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Can you ask me about school?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Zeptat se na školu umím, ale chci zkusit sám: How is school?",
+          "action": "answer",
+          "args": {
+            "text": "Leo, how is school today?"
+          },
+          "result": "ok",
+          "ms": 8437
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLeo · grandson, age 8\nAsk Leo about his day at school\nLeo says\nSchool was good. Your dog is nice.\nYour turn\nAnswer on your phone: speak or type.\nNowAsk one more simple question\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Leo about his day at school\nAsk Leo one simple question about school, then understand his short answer.\nNow: Ask one more simple question\nSchool was good. Your dog is nice.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nLeo · grandson, age 8\nHi, Grandpa! Want to see my drawing?\nYou · spoken\nYes Leo. I love drawing. How is school?\nLeo · grandson, age 8\nI drew a dog. Do you like it?\nYou · spoken\nYes Leo, I like dog. Is good.\nLeo · grandson, age 8\nCan you ask me about school?\nYou · spoken\nLeo, how is school today?\nLeo · grandson, age 8\nSchool was good. Your dog is nice.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"School was good. Your dog is nice.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Leo said school was good; I managed something, so I'll finish happily.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 10
+        },
+        {
+          "n": 13,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nViktor\nA way into English\nAsk Leo about his day at school\nThe line hidden in this room\nWhat did you do at school?\nSaying or typing it\nNot tried\nWith help\nOn your own\nUsed elsewhere\n3 spoken · 0 written replies · 1 on your own · 2 with help\nYour mission\nChoose a fresh context for your next conversation.\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“What did you do at school?”\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nTell about my garden\nSay what is in your garden and what the weather is like today.\n[button: Start talking]\nOr choose a situation [list: Ask about school [plan-975206fb] | Tell about my garden [plan-e66e4d65] | Say I miss you [plan-e5c3c2a1] | Please say that again [plan-112a9cb9] | Hello on a video call [plan-98604185] | Plan the next video call [plan-f07bd7af] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "I asked Leo about school and got some help, so I feel I managed something and I'm happy to stop.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Ask Leo about his day at school",
+          "goal": "Ask Leo one simple question about school, then understand his short answer.",
+          "partner": "Leo · grandson, age 8",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, Grandpa! Want to see my drawing?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes Leo. I love drawing. How is school?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I drew a dog. Do you like it?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes Leo, I like dog. Is good.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Can you ask me about school?"
+            },
+            {
+              "role": "learner",
+              "text": "Leo, how is school today?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "School was good. Your dog is nice."
+            }
+          ],
+          "moments": [],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Yes Leo. I love drawing. How is school?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Yes Leo, I like dog. Is good.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Leo, how is school today?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "What did you do at school?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "How is school?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes Leo, I like dog."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Leo, how is school today?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 138103,
+      "prior": [
+        {
+          "id": "2026-09-15-lt-recert/LT-viktor-67-J4-1",
+          "run": "2026-09-15-lt-recert",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Help repeats the introduction regardless of the current question",
+          "expected": "Each cue helps Viktor answer the partner's current turn.",
+          "got": "The introduction cue initially helps, then repeats after greetings and a question about tomatoes. The final reply succeeds without relevant help from that cue.",
+          "evidence": [
+            "#3: “Try: Hello, I'm Alex.” helps produce “Hello. I am Viktor.” The identical cue appears at #5, #9 and #13. At #13 it accompanies “Do you mean your garden has big tomatoes?”"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-1",
+          "run": "2026-09-15-lt-recert2-beginners",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Repeated cues do not answer the question he is stuck on",
+          "expected": "Help supplies a simple answer to the current question and enables his next reply.",
+          "got": "The same weather and flower cue appears for questions about contents, colors, and weather. It helps with weather but repeatedly leaves color questions unanswered.",
+          "evidence": [
+            "#5 pairs \"What color are they?\" with \"Try: It is sunny. These are my flowers.\" The mismatch repeats at #9, #16, and #20. At #16 Viktor thinks, \"I still do not know how to say the flower colors.\""
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-3",
+          "run": "2026-09-15-lt-recert2-beginners",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Fresh replay questions do not produce a better independent answer",
+          "expected": "Replay gives a fresh question, followed by demonstrable improvement and an opportunity to answer independently.",
+          "got": "Replay questions change, but the targeted improvement is not demonstrated. All five recorded replies remain supported.",
+          "evidence": [
+            "#10 teaches \"The flowers are in the garden.\"; #11 receives \"Tomatoes in garden.\" #17 teaches \"It is sunny in my garden.\"; #18 receives the unchanged \"It is sunny.\" Facts record all five corresponding replies as \"supported\": true."
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-14-lt/recert-3/LT-viktor-67-J4-4",
+          "run": "2026-10-14-lt/recert-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Phrase help ignores question",
+          "expected": "Help matching the current question",
+          "got": "Same description quiz after the question changes",
+          "evidence": [
+            "#13 asked 'What do you do to help them grow?', but help was never retried for that"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "broken-flow",
+          "dimension": "clarity",
+          "title": "Cue ignores the current question",
+          "expected": "Help for 'Is your place big?' gives a garden answer.",
+          "got": "The cue repeats the bike line, 'Try: Nice! Do you like your new bike?'.",
+          "evidence": [
+            "#18 'Is your place big?' then #19 'Try: Nice! Do you like your new bike?'.",
+            "cue/support cache"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Replay repeats the model; no fresh question",
+          "expected": "After the fix, a fresh question lets him answer better in his own words.",
+          "got": "He retypes the offered sentence, and the scene carries on with its next ordinary turn.",
+          "evidence": [
+            "#7 'Do you like your bike?' and #15 'It is small. My bike is old.' are copies of the model. #8 and #16 'Then carry on from where the scene stopped'.",
+            "moment replay flow"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Phrase quiz mismatches the scene",
+          "expected": "Options match what Tom said.",
+          "got": "The quiz says 'Tom says: I have a new bike' while Tom said 'Look! My bike is red.'.",
+          "evidence": [
+            "#5 'Tom says: I have a new bike. What do you say?' with options 'Bike is nice I.'.",
+            "recognition practice prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Repeated article errors get no note",
+          "expected": "Missing 'a/the' in 'I have bike in garden' gets a note or praise.",
+          "got": "Only 'You like bike?' and 'Small.' became moments.",
+          "evidence": [
+            "#11 'I have bike in garden', #12 'Is old bike' produced no moment.",
+            "moment selection"
+          ],
+          "recurrence": 4
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Facts: band A1, trueBand A1 (exact)."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "Viktor never answered in Czech in this journey (#8, #9, #11 all English)."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening task or 'Show the words' reveal appears in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 topics: school, garden, I miss you, say that again, hello on video call, plan next video call - six of six family/everyday."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Leo: 'I drew a dog. Do you like it?', 'School was good. Your dog is nice.' - short, one question per turn."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moments were shown (moments: [])."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 'Help me answer' gave 'Try: How was school today?'; #6 'Choose a phrase' opened a quiz, all inside the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Cue helped him reach 'How is school?' (#8), but no coaching note exists: moments [], coaching null; nothing quotes 'Yes Leo, I like dog. Is good.' (#9)."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "No moment and no replay happened; rawMoments all kind 'none'. No fresh question was given for a retry."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Turns 1 and 3 supported:true, turn 2 supported:false; recap #13 '1 on your own · 2 with help'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Phrase quiz shows a line Leo never said",
+            "expected": "Quiz options respond to Leo's actual line 'Hi, Grandpa! Want to see my drawing?'",
+            "got": "Quiz: 'Leo says: I had a good day. What is a good next question?' with 'Where is my cup?' as distractor.",
+            "evidence": "#7 vs #6: Leo's visible line is the drawing question; the quiz invents another.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Quiz prompt quotes the partner's current line and options answer it.",
+            "code_hint": "recognition practice prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "No coaching or moment after a supported scene",
+            "expected": "A coaching note quoting his words and a replay with a fresh question.",
+            "got": "moments [], coaching null; scene ended with no replay.",
+            "evidence": "Facts: 'moments':[], 'coaching':null; #13 recap shows no fix.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After help is used, a quoted note and a replay offer appear.",
+            "code_hint": "moment selection"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "'Is good' / 'I like dog' left uncorrected",
+            "expected": "A teacher would model 'It is good' / 'I like the dog'.",
+            "got": "rawMoments kind none for turn 2.",
+            "evidence": "#9 'Yes Leo, I like dog. Is good.' no moment.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Repeated article/subject omissions get a note or held fix on the recap.",
+            "code_hint": "moment selection"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Same cue pressed four times, nothing changes",
+            "expected": "Repeat press escalates (translation, fuller phrase).",
+            "got": "'Try: How was school today?' identical at #3, #4, #5.",
+            "evidence": "#3-#5 identical screens; he then used the quiz.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "A second press gives a different level of help.",
+            "code_hint": "cue/support cache"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Cue matches the current question and stays in the scene",
+            "expected": "",
+            "got": "'Try: How was school today?' fits the mission; later cue (#11) fits 'Can you ask me about school?'.",
+            "evidence": "#3, #11; he produced 'Leo, how is school today?' next.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep cue tied to the current turn.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Progress picture stays honest",
+            "expected": "",
+            "got": "Supported replies flagged; recap '1 on your own · 2 with help'.",
+            "evidence": "#13 recap.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep supported flag.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 40,
+          "confidence": "low"
+        },
+        "voice": "Dobrý den. I like that the help is there and it speaks slowly: Leo says short things, and the button gave me \"How was school today?\" and I could say it to my grandson. I did not have to leave the room, which I like. But the quiz showed words Leo did not say, and I was confused. Nobody told me what I said wrong — \"I like dog, is good\" — and I wanted to try again with a new question, but the scene just ended. I would use it on Saturday for ten minutes, because it is about my Leo and not the course book. I would tell a friend, but I would say: needs a teacher's little note at the end.",
+        "prior": [
+          {
+            "id": "2026-09-15-lt-recert/LT-viktor-67-J4-1",
+            "status": "not-seen",
+            "evidence": "#3 and #11 cue 'Try: How was school today?' matched the current turn; no wrong intro cue.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-1",
+            "status": "not-seen",
+            "evidence": "#11 cue fits 'Can you ask me about school?'; no mismatched colour cue.",
+            "finding": -1
+          },
+          {
+            "id": "2026-09-15-lt-recert2-beginners/LT-viktor-67-J4-3",
+            "status": "not-evaluable",
+            "evidence": "No replay offered; moments empty.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-14-lt/recert-3/LT-viktor-67-J4-4",
+            "status": "recurs",
+            "evidence": "#7 quiz 'Leo says: I had a good day...' ignores Leo's drawing question.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-2",
+            "status": "not-seen",
+            "evidence": "#11 cue matches the question asked.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-1",
+            "status": "not-evaluable",
+            "evidence": "No moment replay reached.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-3",
+            "status": "recurs",
+            "evidence": "#7 quiz line differs from Leo's actual 'Hi, Grandpa! Want to see my drawing?'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-4",
+            "status": "recurs",
+            "evidence": "#9 'Yes Leo, I like dog. Is good.' produced no moment or note.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Cue helped him reach 'How is school?' (#8), but no coaching note exists: moments [], coaching null; nothing quotes 'Yes Leo, I like dog. Is good.' (#9).",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: No moment and no replay happened; rawMoments all kind 'none'. No fresh question was given for a retry.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 6,
+      "fail": 1,
+      "ms": 55876
+    },
+    "character": {
+      "n": 13,
+      "fail": 0,
+      "ms": 81470
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 53285
+    }
+  }
+}

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "LT-viktor-67-J3-1",
+    "journey": "J3",
+    "character": "viktor-67",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "Mia's lines drift above A1",
+    "expected": "Very short, slow, known words for a first-time 67-year-old learner.",
+    "got": "\"I feel a bit nervous about it.\" and \"You make me smile.\" use idiom and hedging; pitch 0.75.",
+    "evidence": [
+      "#5 \"Thank you, Grandpa! I feel a bit nervous about it.\" #6 \"Thank you. You make me smile.\"",
+      "partner prompt level constraint"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Every partner turn at A1 is at most 6–8 familiar words with no idiom; pitch ≥ 0.8 at A1.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-viktor-67-J3-2",
+    "journey": "J3",
+    "character": "viktor-67",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "completion",
+    "title": "Mission closes after three replies",
+    "expected": "A conversation lasting several turns, about eight replies.",
+    "got": "\"Mission done\" appears after the third reply, and Viktor then finishes.",
+    "evidence": [
+      "#6 \"Mission done. See what you did tonight.\" after 3 learner turns",
+      "mission tracker"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Scene continues at least 6 learner turns unless the learner ends it, or mission completion is not a stop signal.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-viktor-67-J3-5",
+    "journey": "J3",
+    "character": "viktor-67",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "polish",
+    "rank": 2,
+    "impact": {
+      "frequency": "low",
+      "reachability": "med",
+      "trust_erosion": "low"
+    },
+    "dimension": "clarity",
+    "title": "The moment's \"Say Okay or Good in English\" nudges a non-typing beginner",
+    "expected": "Plain, minimal guidance for the learner; the moment names the exact words for Sunday.",
+    "got": "Generic word swap; \"Okay\" is not a family phrase. \"A way into English\" label is mild.",
+    "evidence": [
+      "#4 \"Say Okay or Good in English.\"",
+      "moment selection"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Prefer a moment on a phrase for the grandchildren when several are available.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-viktor-67-J3-3",
+    "journey": "J3",
+    "character": "viktor-67",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Czech word handled kindly, with a correct moment",
+    "expected": "Czech accepted and turned into the English word.",
+    "got": "\"Dobře\" → \"Okay\" with a short Czech-aware explanation; the scene resumes cleanly.",
+    "evidence": [
+      "#4 \"Dobře is Czech for good or okay.\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep Czech-to-English moments short and non-judgmental.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-viktor-67-J3-4",
+    "journey": "J3",
+    "character": "viktor-67",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Held fix kept for the recap, scene not interrupted",
+    "expected": "Second error doesn't stop the scene but is not lost.",
+    "got": "\"ne nervous\" → \"Don't be nervous\" is shown under \"Saved for the end\".",
+    "evidence": [
+      "#7 \"Saved for the end: 'ne nervous': Don't be nervous\"",
+      "LG-23"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep the held-fix recap list.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  }
+]

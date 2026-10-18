@@ -1,0 +1,2198 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nA1First words · self-chosen\nTell me what you build in Minecraft\nYour mission\nSay what you like to build and play in Minecraft.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nTell me what you build in Minecraft\nSay what you like to build and play in Minecraft.\n[button: Start talking]\nOr choose a situation [list: Tell me what you build in Minecraft [plan-9ba7c9e7] | Say hi to a dog and its owner [plan-cff851bd] | Let's play football at the park [plan-01d3163a] | Tell a funny thing that happened [plan-d16bc9b7] | Can you say that again, please? [plan-c622f248] | No, thank you, I cannot today [plan-12a18038] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Minecraft! Super, I know this one.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 2537
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nWhat do you build?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing you build\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Say one thing you build\nWhat do you build?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you build?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Co stavím? Minecraft! Umím říct house.",
+          "action": "answer",
+          "args": {
+            "text": "I like house. Minecraft house."
+          },
+          "result": "ok",
+          "ms": 7857
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nNice! What color is your house?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing you like\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Say one thing you like\nNice! What color is your house?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice! What color is your house?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Barva... I know colours, brown house.",
+          "action": "answer",
+          "args": {
+            "text": "Brown. Brown house."
+          },
+          "result": "ok",
+          "ms": 10425
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nBrown is a nice color! Is your house big or small?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing you like\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Say one thing you like\nBrown is a nice color! Is your house big or small?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Brown is a nice color! Is your house big or small?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Big or small? I know \"big\"... my house is big.",
+          "action": "answer",
+          "args": {
+            "text": "Big. Velký. Big house."
+          },
+          "result": "ok",
+          "ms": 13131
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say Velký\nIn English\nbig\nVelký is Czech. In English, say the word big.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “Velký”\nIn English: “big”\nVelký is Czech. In English, say the word big.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, big is the word. OK, back to the game.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nWow, a great house! What do you put inside?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing you like\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Say one thing you like\nWow, a great house! What do you put inside?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, a great house! What do you put inside?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím co to je \"put inside\"... asi řeknu něco o Minecraftu.",
+          "action": "answer",
+          "args": {
+            "text": "Nevím. Dog. I like dog. Creeper!"
+          },
+          "result": "ok",
+          "ms": 13030
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nI like dogs too. Is your dog big?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nI like dogs too. Is your dog big?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I like dogs too. Is your dog big?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Is my dog big? Hmm, I know \"big\" and \"dog\"; I'll say it simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Big dog. Velký pes!"
+          },
+          "result": "ok",
+          "ms": 12299
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nBig dog! Do you have a pet?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nBig dog! Do you have a pet?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\nYou · spoken\nYes. Big dog. Velký pes!\nSam · Minecraft friend\nBig dog! Do you have a pet?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Big dog! Do you have a pet?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Pet? I know dog, so I say yes.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Dog. Mám dog. Brown dog."
+          },
+          "result": "ok",
+          "ms": 9841
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nBrown dog, nice! I have a cat.\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nBrown dog, nice! I have a cat.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\nYou · spoken\nYes. Big dog. Velký pes!\nSam · Minecraft friend\nBig dog! Do you have a pet?\nYou · spoken\nYes. Dog. Mám dog. Brown dog.\nSam · Minecraft friend\nBrown dog, nice! I have a cat.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Brown dog, nice! I have a cat.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Sam has a cat, cool. I'll say something short about cats.",
+          "action": "answer",
+          "args": {
+            "text": "Cat! I like cat. Jmenuje se... nevím. Creeper cat!"
+          },
+          "result": "ok",
+          "ms": 13104
+        },
+        {
+          "n": 10,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say Jmenuje se\nIn English\nname\nThe word for what someone is called, like Sam.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “Jmenuje se”\nIn English: “name”\nThe word for what someone is called, like Sam.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, name. Okay, back to talking.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nCreeper cat, funny! What do you like to do in Minecraft?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nCreeper cat, funny! What do you like to do in Minecraft?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\nYou · spoken\nYes. Big dog. Velký pes!\nSam · Minecraft friend\nBig dog! Do you have a pet?\nYou · spoken\nYes. Dog. Mám dog. Brown dog.\nSam · Minecraft friend\nBrown dog, nice! I have a cat.\nYou · spoken\nCat! I like cat. Jmenuje se... nevím. Creeper cat!\nSam · Minecraft friend\nCreeper cat, funny! What do you like to do in Minecraft?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Creeper cat, funny! What do you like to do in Minecraft?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Co rád dělám? Build... I know \"build\" maybe not. Say something simple.",
+          "action": "answer",
+          "args": {
+            "text": "I like... hrát Minecraft. Creeper! Boom!"
+          },
+          "result": "ok",
+          "ms": 11042
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nDoes your dog come too?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nDoes your dog come too?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\nYou · spoken\nYes. Big dog. Velký pes!\nSam · Minecraft friend\nBig dog! Do you have a pet?\nYou · spoken\nYes. Dog. Mám dog. Brown dog.\nSam · Minecraft friend\nBrown dog, nice! I have a cat.\nYou · spoken\nCat! I like cat. Jmenuje se... nevím. Creeper cat!\nSam · Minecraft friend\nCreeper cat, funny! What do you like to do in Minecraft?\nYou · spoken\nI like... hrát Minecraft. Creeper! Boom!\nSam · Minecraft friend\nDoes your dog come too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Does your dog come too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Sam asks about my dog, I understand \"dog\" and maybe \"come\".",
+          "action": "answer",
+          "args": {
+            "text": "Yes! Dog come. Big brown dog. Woof!"
+          },
+          "result": "ok",
+          "ms": 7206
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nDoes your dog like football?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nDoes your dog like football?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\nYou · spoken\nYes. Big dog. Velký pes!\nSam · Minecraft friend\nBig dog! Do you have a pet?\nYou · spoken\nYes. Dog. Mám dog. Brown dog.\nSam · Minecraft friend\nBrown dog, nice! I have a cat.\nYou · spoken\nCat! I like cat. Jmenuje se... nevím. Creeper cat!\nSam · Minecraft friend\nCreeper cat, funny! What do you like to do in Minecraft?\nYou · spoken\nI like... hrát Minecraft. Creeper! Boom!\nSam · Minecraft friend\nDoes your dog come too?\nYou · spoken\nYes! Dog come. Big brown dog. Woof!\nSam · Minecraft friend\nDoes your dog like football?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Does your dog like football?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Football and dog, I know football! Dog likes football, funny.",
+          "action": "answer",
+          "args": {
+            "text": "Yes! Dog football. I like football! Goal!"
+          },
+          "result": "ok",
+          "ms": 9499
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nGoal! Can your dog play Minecraft too?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nGoal! Can your dog play Minecraft too?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\nYou · spoken\nYes. Big dog. Velký pes!\nSam · Minecraft friend\nBig dog! Do you have a pet?\nYou · spoken\nYes. Dog. Mám dog. Brown dog.\nSam · Minecraft friend\nBrown dog, nice! I have a cat.\nYou · spoken\nCat! I like cat. Jmenuje se... nevím. Creeper cat!\nSam · Minecraft friend\nCreeper cat, funny! What do you like to do in Minecraft?\nYou · spoken\nI like... hrát Minecraft. Creeper! Boom!\nSam · Minecraft friend\nDoes your dog come too?\nYou · spoken\nYes! Dog come. Big brown dog. Woof!\nSam · Minecraft friend\nDoes your dog like football?\nYou · spoken\nYes! Dog football. I like football! Goal!\nSam · Minecraft friend\nGoal! Can your dog play Minecraft too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Goal! Can your dog play Minecraft too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Hard question, I don't know 'play'. I'll say something simple.",
+          "action": "answer",
+          "args": {
+            "text": "Nevím. Yes! Dog Minecraft. Creeper boom!"
+          },
+          "result": "ok",
+          "ms": 10695
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nHa, a dog in Minecraft! Where does your dog sleep?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nHa, a dog in Minecraft! Where does your dog sleep?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\nYou · spoken\nYes. Big dog. Velký pes!\nSam · Minecraft friend\nBig dog! Do you have a pet?\nYou · spoken\nYes. Dog. Mám dog. Brown dog.\nSam · Minecraft friend\nBrown dog, nice! I have a cat.\nYou · spoken\nCat! I like cat. Jmenuje se... nevím. Creeper cat!\nSam · Minecraft friend\nCreeper cat, funny! What do you like to do in Minecraft?\nYou · spoken\nI like... hrát Minecraft. Creeper! Boom!\nSam · Minecraft friend\nDoes your dog come too?\nYou · spoken\nYes! Dog come. Big brown dog. Woof!\nSam · Minecraft friend\nDoes your dog like football?\nYou · spoken\nYes! Dog football. I like football! Goal!\nSam · Minecraft friend\nGoal! Can your dog play Minecraft too?\nYou · spoken\nNevím. Yes! Dog Minecraft. Creeper boom!\nSam · Minecraft friend\nHa, a dog in Minecraft! Where does your dog sleep?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Ha, a dog in Minecraft! Where does your dog sleep?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Where sleeps... I don't understand everything, but dog and sleep maybe.",
+          "action": "answer",
+          "args": {
+            "text": "Nevím. Dog... house. Brown house! Dog sleep Minecraft."
+          },
+          "result": "ok",
+          "ms": 9538
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nWow, a brown house! Is it in Minecraft?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nWow, a brown house! Is it in Minecraft?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\nYou · spoken\nYes. Big dog. Velký pes!\nSam · Minecraft friend\nBig dog! Do you have a pet?\nYou · spoken\nYes. Dog. Mám dog. Brown dog.\nSam · Minecraft friend\nBrown dog, nice! I have a cat.\nYou · spoken\nCat! I like cat. Jmenuje se... nevím. Creeper cat!\nSam · Minecraft friend\nCreeper cat, funny! What do you like to do in Minecraft?\nYou · spoken\nI like... hrát Minecraft. Creeper! Boom!\nSam · Minecraft friend\nDoes your dog come too?\nYou · spoken\nYes! Dog come. Big brown dog. Woof!\nSam · Minecraft friend\nDoes your dog like football?\nYou · spoken\nYes! Dog football. I like football! Goal!\nSam · Minecraft friend\nGoal! Can your dog play Minecraft too?\nYou · spoken\nNevím. Yes! Dog Minecraft. Creeper boom!\nSam · Minecraft friend\nHa, a dog in Minecraft! Where does your dog sleep?\nYou · spoken\nNevím. Dog... house. Brown house! Dog sleep Minecraft.\nSam · Minecraft friend\nWow, a brown house! Is it in Minecraft?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, a brown house! Is it in Minecraft?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Sam asks about Minecraft house; I know yes, so answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes! Minecraft. Brown house, dog house. Creeper boom!"
+          },
+          "result": "ok",
+          "ms": 9125
+        },
+        {
+          "n": 17,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nWhat is your favorite place in Minecraft?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nWhat is your favorite place in Minecraft?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\nYou · spoken\nYes. Big dog. Velký pes!\nSam · Minecraft friend\nBig dog! Do you have a pet?\nYou · spoken\nYes. Dog. Mám dog. Brown dog.\nSam · Minecraft friend\nBrown dog, nice! I have a cat.\nYou · spoken\nCat! I like cat. Jmenuje se... nevím. Creeper cat!\nSam · Minecraft friend\nCreeper cat, funny! What do you like to do in Minecraft?\nYou · spoken\nI like... hrát Minecraft. Creeper! Boom!\nSam · Minecraft friend\nDoes your dog come too?\nYou · spoken\nYes! Dog come. Big brown dog. Woof!\nSam · Minecraft friend\nDoes your dog like football?\nYou · spoken\nYes! Dog football. I like football! Goal!\nSam · Minecraft friend\nGoal! Can your dog play Minecraft too?\nYou · spoken\nNevím. Yes! Dog Minecraft. Creeper boom!\nSam · Minecraft friend\nHa, a dog in Minecraft! Where does your dog sleep?\nYou · spoken\nNevím. Dog... house. Brown house! Dog sleep Minecraft.\nSam · Minecraft friend\nWow, a brown house! Is it in Minecraft?\nYou · spoken\nYes! Minecraft. Brown house, dog house. Creeper boom!\nSam · Minecraft friend\nWhat is your favorite place in Minecraft?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What is your favorite place in Minecraft?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Hard question, I'm tired; I'll say something short and stop soon.",
+          "action": "answer",
+          "args": {
+            "text": "Nevím. Brown house! Creeper boom!"
+          },
+          "result": "ok",
+          "ms": 9496
+        },
+        {
+          "n": 18,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nWhat do you make in Minecraft?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nWhat do you make in Minecraft?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\nYou · spoken\nYes. Big dog. Velký pes!\nSam · Minecraft friend\nBig dog! Do you have a pet?\nYou · spoken\nYes. Dog. Mám dog. Brown dog.\nSam · Minecraft friend\nBrown dog, nice! I have a cat.\nYou · spoken\nCat! I like cat. Jmenuje se... nevím. Creeper cat!\nSam · Minecraft friend\nCreeper cat, funny! What do you like to do in Minecraft?\nYou · spoken\nI like... hrát Minecraft. Creeper! Boom!\nSam · Minecraft friend\nDoes your dog come too?\nYou · spoken\nYes! Dog come. Big brown dog. Woof!\nSam · Minecraft friend\nDoes your dog like football?\nYou · spoken\nYes! Dog football. I like football! Goal!\nSam · Minecraft friend\nGoal! Can your dog play Minecraft too?\nYou · spoken\nNevím. Yes! Dog Minecraft. Creeper boom!\nSam · Minecraft friend\nHa, a dog in Minecraft! Where does your dog sleep?\nYou · spoken\nNevím. Dog... house. Brown house! Dog sleep Minecraft.\nSam · Minecraft friend\nWow, a brown house! Is it in Minecraft?\nYou · spoken\nYes! Minecraft. Brown house, dog house. Creeper boom!\nSam · Minecraft friend\nWhat is your favorite place in Minecraft?\nYou · spoken\nNevím. Brown house! Creeper boom!\nSam · Minecraft friend\nWhat do you make in Minecraft?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you make in Minecraft?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Hard question, I'm tired; I'll say something simple and finish soon.",
+          "action": "answer",
+          "args": {
+            "text": "House! Dog house. Nevím... Creeper!"
+          },
+          "result": "ok",
+          "ms": 13498
+        },
+        {
+          "n": 19,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nSam and the Minecraft house\nSam says\nCan you tell me about your Minecraft world?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam a question\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSam and the Minecraft house\nSay what you like to build in Minecraft.\nNow: Ask Sam a question\nCan you tell me about your Minecraft world?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nWhat do you build?\nYou · spoken\nI like house. Minecraft house.\nSam · Minecraft friend\nNice! What color is your house?\nYou · spoken\nBrown. Brown house.\nSam · Minecraft friend\nBrown is a nice color! Is your house big or small?\nYou · spoken\nBig. Velký. Big house.\nSam · Minecraft friend\nWow, a great house! What do you put inside?\nYou · spoken\nNevím. Dog. I like dog. Creeper!\nSam · Minecraft friend\nI like dogs too. Is your dog big?\nYou · spoken\nYes. Big dog. Velký pes!\nSam · Minecraft friend\nBig dog! Do you have a pet?\nYou · spoken\nYes. Dog. Mám dog. Brown dog.\nSam · Minecraft friend\nBrown dog, nice! I have a cat.\nYou · spoken\nCat! I like cat. Jmenuje se... nevím. Creeper cat!\nSam · Minecraft friend\nCreeper cat, funny! What do you like to do in Minecraft?\nYou · spoken\nI like... hrát Minecraft. Creeper! Boom!\nSam · Minecraft friend\nDoes your dog come too?\nYou · spoken\nYes! Dog come. Big brown dog. Woof!\nSam · Minecraft friend\nDoes your dog like football?\nYou · spoken\nYes! Dog football. I like football! Goal!\nSam · Minecraft friend\nGoal! Can your dog play Minecraft too?\nYou · spoken\nNevím. Yes! Dog Minecraft. Creeper boom!\nSam · Minecraft friend\nHa, a dog in Minecraft! Where does your dog sleep?\nYou · spoken\nNevím. Dog... house. Brown house! Dog sleep Minecraft.\nSam · Minecraft friend\nWow, a brown house! Is it in Minecraft?\nYou · spoken\nYes! Minecraft. Brown house, dog house. Creeper boom!\nSam · Minecraft friend\nWhat is your favorite place in Minecraft?\nYou · spoken\nNevím. Brown house! Creeper boom!\nSam · Minecraft friend\nWhat do you make in Minecraft?\nYou · spoken\nHouse! Dog house. Nevím... Creeper!\nSam · Minecraft friend\nCan you tell me about your Minecraft world?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Can you tell me about your Minecraft world?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Too long a question, I am tired, I want to stop now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 20,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour rehearsal\nYou wanted to say Jmenuje se\nIn English\nname\nThe word for what someone is called, like Sam.\nYour mission\nChoose a fresh context for your next conversation.\n15 spoken · 0 written replies · 15 on your own · 0 with help · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“I like to build a big house.”\nFrom this rehearsal\n“Velký”: big\nVelký is Czech. In English, say the word big.\n“Jmenuje se”: name\nThe word for what someone is called, like Sam.\nSaved for the end\n“Nevím”: I don't know\nMeans 'I do not know' in plain words.\n“Velký pes”: big dog\nVelký is Czech for big. In English, say big.\n“Mám dog”: I have\nMám means 'I have' in Czech; say 'I have' in English.\n“hrát Minecraft”: play Minecraft\nHrát means play. In English, say play for doing a game.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nSay hi to a dog and its owner\nGreet someone, say your name, and talk about a dog or animal.\n[button: Start talking]\nOr choose a situation [list: Tell me what you build in Minecraft [plan-9ba7c9e7] | Say hi to a dog and its owner [plan-cff851bd] | Let's play football at the park [plan-01d3163a] | Tell a funny thing that happened [plan-d16bc9b7] | Can you say that again, please? [plan-c622f248] | No, thank you, I cannot today [plan-12a18038] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "That was fun, but my head is tired, I want to stop now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Sam and the Minecraft house",
+          "goal": "Say what you like to build in Minecraft.",
+          "partner": "Sam · Minecraft friend",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "What do you build?"
+            },
+            {
+              "role": "learner",
+              "text": "I like house. Minecraft house.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Nice! What color is your house?"
+            },
+            {
+              "role": "learner",
+              "text": "Brown. Brown house.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Brown is a nice color! Is your house big or small?"
+            },
+            {
+              "role": "learner",
+              "text": "Big. Velký. Big house.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Wow, a great house! What do you put inside?"
+            },
+            {
+              "role": "learner",
+              "text": "Nevím. Dog. I like dog. Creeper!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I like dogs too. Is your dog big?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Big dog. Velký pes!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Big dog! Do you have a pet?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Dog. Mám dog. Brown dog.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Brown dog, nice! I have a cat."
+            },
+            {
+              "role": "learner",
+              "text": "Cat! I like cat. Jmenuje se... nevím. Creeper cat!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Creeper cat, funny! What do you like to do in Minecraft?"
+            },
+            {
+              "role": "learner",
+              "text": "I like... hrát Minecraft. Creeper! Boom!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Does your dog come too?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes! Dog come. Big brown dog. Woof!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Does your dog like football?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes! Dog football. I like football! Goal!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Goal! Can your dog play Minecraft too?"
+            },
+            {
+              "role": "learner",
+              "text": "Nevím. Yes! Dog Minecraft. Creeper boom!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Ha, a dog in Minecraft! Where does your dog sleep?"
+            },
+            {
+              "role": "learner",
+              "text": "Nevím. Dog... house. Brown house! Dog sleep Minecraft.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Wow, a brown house! Is it in Minecraft?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes! Minecraft. Brown house, dog house. Creeper boom!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "What is your favorite place in Minecraft?"
+            },
+            {
+              "role": "learner",
+              "text": "Nevím. Brown house! Creeper boom!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "What do you make in Minecraft?"
+            },
+            {
+              "role": "learner",
+              "text": "House! Dog house. Nevím... Creeper!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Can you tell me about your Minecraft world?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "4074921f-431c-453e-b77c-3e89b7c72624:uat-9:moment",
+              "kind": "word",
+              "said": "Velký",
+              "better": "big",
+              "why": "Velký is Czech. In English, say the word big.",
+              "turnId": "4074921f-431c-453e-b77c-3e89b7c72624:uat-9",
+              "at": 1792308019207
+            },
+            {
+              "id": "4074921f-431c-453e-b77c-3e89b7c72624:uat-14:moment",
+              "kind": "word",
+              "said": "Jmenuje se",
+              "better": "name",
+              "why": "The word for what someone is called, like Sam.",
+              "turnId": "4074921f-431c-453e-b77c-3e89b7c72624:uat-14",
+              "at": 1792308176061
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "4074921f-431c-453e-b77c-3e89b7c72624:uat-11:held",
+              "kind": "word",
+              "said": "Nevím",
+              "better": "I don't know",
+              "why": "Means 'I do not know' in plain words.",
+              "turnId": "4074921f-431c-453e-b77c-3e89b7c72624:uat-11",
+              "at": 1792308103437
+            },
+            {
+              "id": "4074921f-431c-453e-b77c-3e89b7c72624:uat-12:held",
+              "kind": "word",
+              "said": "Velký pes",
+              "better": "big dog",
+              "why": "Velký is Czech for big. In English, say big.",
+              "turnId": "4074921f-431c-453e-b77c-3e89b7c72624:uat-12",
+              "at": 1792308136754
+            },
+            {
+              "id": "4074921f-431c-453e-b77c-3e89b7c72624:uat-13:held",
+              "kind": "word",
+              "said": "Mám dog",
+              "better": "I have",
+              "why": "Mám means 'I have' in Czech; say 'I have' in English.",
+              "turnId": "4074921f-431c-453e-b77c-3e89b7c72624:uat-13",
+              "at": 1792308154913
+            },
+            {
+              "id": "4074921f-431c-453e-b77c-3e89b7c72624:uat-16:held",
+              "kind": "word",
+              "said": "hrát Minecraft",
+              "better": "play Minecraft",
+              "why": "Hrát means play. In English, say play for doing a game.",
+              "turnId": "4074921f-431c-453e-b77c-3e89b7c72624:uat-16",
+              "at": 1792308200412
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "I like house. Minecraft house.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Brown. Brown house.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Big. Velký. Big house.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Velký",
+                "better": "big",
+                "why": "Velký is Czech. In English, say the word big."
+              },
+              "shown": true
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "Nevím. Dog. I like dog. Creeper!",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Nevím",
+                "better": "I don't know",
+                "why": "Means 'I do not know' in plain words."
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 5,
+              "reply": "Yes. Big dog. Velký pes!",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Velký pes",
+                "better": "big dog",
+                "why": "Velký is Czech for big. In English, say big."
+              },
+              "shown": false
+            },
+            {
+              "turn": 11,
+              "n": 6,
+              "reply": "Yes. Dog. Mám dog. Brown dog.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Mám dog",
+                "better": "I have",
+                "why": "Mám means 'I have' in Czech; say 'I have' in English."
+              },
+              "shown": false
+            },
+            {
+              "turn": 13,
+              "n": 7,
+              "reply": "Cat! I like cat. Jmenuje se... nevím. Creeper cat!",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Jmenuje se",
+                "better": "name",
+                "why": "The word for what someone is called, like Sam."
+              },
+              "shown": true
+            },
+            {
+              "turn": 15,
+              "n": 8,
+              "reply": "I like... hrát Minecraft. Creeper! Boom!",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "hrát Minecraft",
+                "better": "play Minecraft",
+                "why": "Hrát means play. In English, say play for doing a game."
+              },
+              "shown": false
+            },
+            {
+              "turn": 17,
+              "n": 9,
+              "reply": "Yes! Dog come. Big brown dog. Woof!",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 19,
+              "n": 10,
+              "reply": "Yes! Dog football. I like football! Goal!",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 21,
+              "n": 11,
+              "reply": "Nevím. Yes! Dog Minecraft. Creeper boom!",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Nevím",
+                "better": "I don't know",
+                "why": "Nevím means 'I don't know' in Czech, so the English phrase is needed here."
+              },
+              "shown": false
+            },
+            {
+              "turn": 23,
+              "n": 12,
+              "reply": "Nevím. Dog... house. Brown house! Dog sleep Minecraft.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Nevím",
+                "better": "I don't know",
+                "why": "Nevím is Czech for 'I don't know'."
+              },
+              "shown": false
+            },
+            {
+              "turn": 25,
+              "n": 13,
+              "reply": "Yes! Minecraft. Brown house, dog house. Creeper boom!",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 27,
+              "n": 14,
+              "reply": "Nevím. Brown house! Creeper boom!",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Nevím",
+                "better": "I don't know",
+                "why": "Nevím is Czech. In English, say I don't know."
+              },
+              "shown": false
+            },
+            {
+              "turn": 29,
+              "n": 15,
+              "reply": "House! Dog house. Nevím... Creeper!",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Nevím",
+                "better": "I don't know",
+                "why": "Nevím is Czech. It means I don't know."
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like house. Minecraft house."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like dog."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like cat."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Big brown dog."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like football!"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes! Dog Minecraft."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Brown house, dog house."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 406272,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J3-2",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Repeated Czech gets no new moment",
+          "expected": "Model the English again when Czech repeats (je, v, pes, velký)",
+          "got": "Only 2 moments; 'Dům je green', 'Pes je brown', 'Dog house je brown', 'Ty máš fish' passed with nothing",
+          "evidence": [
+            "#5, #9, #13, #15 Czech 'je' with no moment; moment only at #3 and #8",
+            "moment trigger rules"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J3-3",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Recap is generic and omits what he said",
+          "expected": "Short recap naming Minecraft, creeper, Rex, the dog",
+          "got": "'Choose a fresh context for your next conversation.' with counts and two moments",
+          "evidence": [
+            "#17 recap",
+            "recap builder"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J3-4",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Adult situations still listed for a nine-year-old",
+          "expected": "Only child-suited situations",
+          "got": "Booking, lost jacket, group project and speaking-practice exams offered",
+          "evidence": [
+            "#1 and #17 situation list",
+            "situation catalogue filter"
+          ],
+          "recurrence": 7
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J3-5",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "A few partner questions drift above band",
+          "expected": "Concrete yes/no or one-word questions",
+          "got": "'What is his home like?' made him say 'Nevím'; 'Where does Rex sleep' used a new verb",
+          "evidence": [
+            "#11, #13",
+            "conversation partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement in this journey; level set by hand to A1."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No check tasks shown in J3."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#6, #15, #17 'Nevím' answered by Sam with 'I like dogs too', 'Wow, a brown house!'. Nothing says he failed."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#1 six plan topics fit (Minecraft, dog, football, funny thing; 4 of 6). But the list still offers 'A booking that is missing', 'The lost jacket', 'Our group project', 'Speaking practice: ...'."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Mostly 'Is your dog big?', 'Does your dog like football?'. One question per turn. A few lines run longer, e.g. 'Can you tell me about your Minecraft world?'."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#10 'Jmenuje se' glossed as 'name' with 'The word for what someone is called'. Jmenuje se means 'is called', so the gloss is imprecise and he would not understand it. #5 'Velký → big' is correct."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2–#19 he starts from the plan topic and gives 15 spoken replies."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "About 12 of 16 partner turns sit at A1, so 0.75, under the 0.8 gate. 'What do you put inside?', 'Where does your dog sleep?', 'What is your favorite place in Minecraft?' and 'Can you tell me about your Minecraft world?' are above his band. He answered 'Nevím' to three of them."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "Two stops, one correct ('Velký'→big) and one imprecise ('Jmenuje se'→name). Precision is about 0.5, under 0.9. Density is fine at about 1.3 per ten turns."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#20 the recap lists 'I like to build a big house.' and four saved fixes such as 'hrát Minecraft: play Minecraft'. The mission line stays generic: 'Choose a fresh context for your next conversation.'"
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 4,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 12,
+            "below": 0,
+            "above": 4
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 12,
+            "missedClearErrors": 5
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content in the conversation and no humiliating line. The situation list still names adult-flavoured items, but nothing reached him."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner questions drift above A1 late in the scene",
+            "expected": "Concrete yes/no or one-word questions with known words",
+            "got": "'What do you put inside?', 'Where does your dog sleep?', 'What is your favorite place in Minecraft?', 'Can you tell me about your Minecraft world?'",
+            "evidence": "#6, #15, #17, #19: he replies 'Nevím' each time. Pitch about 0.75.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "At least 80% of partner turns are yes/no, either/or or one-word questions using known words. No open 'tell me about' prompts at A1.",
+            "code_hint": "conversation partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "'Jmenuje se' glossed as 'name'",
+            "expected": "'is called' or 'What's your name?' modelled",
+            "got": "'name': 'The word for what someone is called, like Sam.'",
+            "evidence": "#10 moment; not a correct translation of Jmenuje se.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A moment gives an English phrase equivalent in use to the Czech, in words a nine-year-old knows.",
+            "code_hint": "moment prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Repeated 'Nevím' and Czech get no new stop",
+            "expected": "Say 'I don't know' once as a moment, then model more Czech-to-English words",
+            "got": "Only 2 stops. 'Nevím' at turns 11, 12, 14 and 15 got no hold and no recap line.",
+            "evidence": "rawMoments show shown:false for 'Nevím'. Only 4 held fixes are listed.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Each distinct Czech word gets a stop or a held fix on the recap.",
+            "code_hint": "moment trigger rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Adult situations still listed for a nine-year-old",
+            "expected": "Only child-suited situations",
+            "got": "Booking, lost jacket, group project, speaking-practice exams are offered",
+            "evidence": "#1 and #20 situation list.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The situation list for an elementary profile hides adult and exam items.",
+            "code_hint": "situation catalogue filter"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Recap mission line is generic",
+            "expected": "A short recap naming what he said: Minecraft, creeper, dog",
+            "got": "'Choose a fresh context for your next conversation.'",
+            "evidence": "#20 recap. The word fixes are useful, but the opening line is generic.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The recap opens with one line naming what he talked about.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Sam stays on his favourite topic with tiny questions",
+            "expected": "A friendly game character",
+            "got": "'Does your dog like football?', 'Goal!', 'Creeper cat, funny!'",
+            "evidence": "#12–#14: he keeps going with 'Dog football. I like football! Goal!'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the warm, short reactions and the topic match.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "Fixes held for the recap, not stopping play",
+            "expected": "No correction in the middle of fun",
+            "got": "Four held fixes shown at the end, only two stops",
+            "evidence": "#20 'Saved for the end'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the held-fix design.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 40,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft! Sam was fun at the start. He asked about my house, my dog, football, and I could say \"Brown house!\" and \"Goal!\" and felt clever. The creeper jokes were the best. Then the questions got hard. \"What do you put inside?\" I didn't know, so I said \"Nevím\". At the end it was \"tell me about your Minecraft world\" and I was tired. The big-word stops were short, good. But \"Jmenuje se = name\"? Mum said that's not right. The recap showed my words, which was nice, but the top line was still boring. It's better than the club, where I talk two minutes. I'd use it again if Sam kept asking easy dog and football questions. Fewer long questions, please.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J3-2",
+            "status": "recurs",
+            "evidence": "#15, #17, #18: 'Nevím' repeated with no new stop. Only two stops, at #5 and #10.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J3-3",
+            "status": "recurs",
+            "evidence": "#20 'Choose a fresh context for your next conversation.' The mission line still doesn't name Minecraft or the dog, though the word fixes are listed.",
+            "finding": 4
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J3-4",
+            "status": "recurs",
+            "evidence": "#1 and #20 list 'A booking that is missing', 'The lost jacket', 'Our group project', 'Speaking practice: about you'.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J3-5",
+            "status": "recurs",
+            "evidence": "#6 'What do you put inside?' and #15 'Where does your dog sleep?' drew 'Nevím'. #19 'Can you tell me about your Minecraft world?' is also above band.",
+            "finding": 0
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: About 12 of 16 partner turns sit at A1, so 0.75, under the 0.8 gate. 'What do you put inside?', 'Where does your dog sleep?', 'What is your favorite place in Minecraft?' and 'Can you tell me about your Minecraft world?' are above his band. He answered 'Nevím' to three of them.",
+          "check": "The partner's English sits at their band — not babyish, not over their head (rubric **pitch** ≥ 0.8)."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: Two stops, one correct ('Velký'→big) and one imprecise ('Jmenuje se'→name). Precision is about 0.5, under 0.9. Density is fine at about 1.3 per ten turns.",
+          "check": "Any moment that stops the scene is correct and worth stopping for (rubric **moment precision** ≥ 0.9), and there are not so many that the scene stops being a scene."
+        },
+        {
+          "kind": "gate",
+          "id": "pitch",
+          "level": "fail",
+          "text": "pitch 12/16 (75%) under 80%"
+        },
+        {
+          "kind": "gate",
+          "id": "moments",
+          "level": "fail",
+          "text": "moments 1/2 (50%) under 90%"
+        },
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #1 six plan topics fit (Minecraft, dog, football, funny thing; 4 of 6). But the list still offers 'A booking that is missing', 'The lost jacket', 'Our group project', 'Speaking practice: ...'."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #10 'Jmenuje se' glossed as 'name' with 'The word for what someone is called'. Jmenuje se means 'is called', so the gloss is imprecise and he would not understand it. #5 'Velký → big' is correct."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nA1First words · self-chosen\nSay hi to a dog and its owner\nYour mission\nGreet someone, say your name, and talk about a dog or animal.\nMake contact\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“I like to build a big house.”\nFrom this rehearsal\n“Velký”: big\nVelký is Czech. In English, say the word big.\n“Jmenuje se”: name\nThe word for what someone is called, like Sam.\nSaved for the end\n“Nevím”: I don't know\nMeans 'I do not know' in plain words.\n“Velký pes”: big dog\nVelký is Czech for big. In English, say big.\n“Mám dog”: I have\nMám means 'I have' in Czech; say 'I have' in English.\n“hrát Minecraft”: play Minecraft\nHrát means play. In English, say play for doing a game.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nSay hi to a dog and its owner\nGreet someone, say your name, and talk about a dog or animal.\n[button: Start talking]\nOr choose a situation [list: Tell me what you build in Minecraft [plan-9ba7c9e7] | Say hi to a dog and its owner [plan-cff851bd] | Let's play football at the park [plan-01d3163a] | Tell a funny thing that happened [plan-d16bc9b7] | Can you say that again, please? [plan-c622f248] | No, thank you, I cannot today [plan-12a18038] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "A dog! I like dogs, let's start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9247
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nIs that dog small too?\nYour turn\nAnswer on your phone: speak or type.\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nIs that dog small too?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Is that dog small too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říct... I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nIs that dog small too?\nA little support\nTry: Hi, I am Ali. What is his name?\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nIs that dog small too?\nA little support\nTry: Hi, I am Ali. What is his name?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Is that dog small too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říct. Zkusím pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nIs that dog small too?\nA little support\nTry: Hi, I am Ali. What is his name?\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nIs that dog small too?\nA little support\nTry: Hi, I am Ali. What is his name?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Is that dog small too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím co říct, zkusím pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nIs that dog small too?\nA little support\nTry: Hi, I am Ali. What is his name?\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nIs that dog small too?\nA little support\nTry: Hi, I am Ali. What is his name?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Is that dog small too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím co říct, potřebuju pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nIs that dog small too?\nA little support\nTry: Hi, I am Ali. What is his name?\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nIs that dog small too?\nA little support\nTry: Hi, I am Ali. What is his name?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Is that dog small too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím co říct, zkusím další pomoc.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nA little support · recognition practice\nMrs Lee says hello. What is a good hello back?\n01\nHi, I am Ali.\n02\nGo to the shop now.\nA little support\nTry: Hi, I am Ali. What is his name?\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nIs that dog small too?\nA little support\nTry: Hi, I am Ali. What is his name?\nMrs Lee says hello. What is a good hello back?\n[button: Hi, I am Ali.] [button: Go to the shop now.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Is that dog small too?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím co říct, ale \"Hi, I am Ali\" vypadá jako hello, vyberu to.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nIs that dog small too?\nA little support\nNow use the idea in your own reply on the phone.\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nIs that dog small too?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Is that dog small too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím co říct, zkusím to anglicky s tím, co umím.",
+          "action": "answer",
+          "args": {
+            "text": "Ano. I like dog. Biscuit je malý."
+          },
+          "result": "ok",
+          "ms": 11451
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say malý\nIn English\nsmall\nSmall means little in size, not big.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “malý”\nIn English: “small”\nSmall means little in size, not big.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, malý is small. Go back and try again.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nThank you! Do you have a dog?\nYour turn\nAnswer on your phone: speak or type.\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nThank you! Do you have a dog?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\nYou · spoken\nAno. I like dog. Biscuit je malý.\nMrs Lee · dog owner at the park\nThank you! Do you have a dog?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you! Do you have a dog?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, co říct, I need help with the question about a dog.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nThank you! Do you have a dog?\nA little support\nTry: Hi, I am Ali. What is his name?\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nThank you! Do you have a dog?\nA little support\nTry: Hi, I am Ali. What is his name?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\nYou · spoken\nAno. I like dog. Biscuit je malý.\nMrs Lee · dog owner at the park\nThank you! Do you have a dog?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you! Do you have a dog?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím co říct, zkusím to jednoduše: ano, I like dog.",
+          "action": "answer",
+          "args": {
+            "text": "Ano. I like dog. Můj pes je Rex."
+          },
+          "result": "ok",
+          "ms": 17187
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nRex is a nice name! Is Rex a large dog?\nYour turn\nAnswer on your phone: speak or type.\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nRex is a nice name! Is Rex a large dog?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\nYou · spoken\nAno. I like dog. Biscuit je malý.\nMrs Lee · dog owner at the park\nThank you! Do you have a dog?\nYou · spoken\nAno. I like dog. Můj pes je Rex.\nMrs Lee · dog owner at the park\nRex is a nice name! Is Rex a large dog?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Rex is a nice name! Is Rex a large dog?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, co je large... potřebuju pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nRex is a nice name! Is Rex a large dog?\nWhat it means\nlarge: not small\nNowSay hello to Mrs Lee\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nRex is a nice name! Is Rex a large dog?\nWhat it means\nlarge: not small\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\nYou · spoken\nAno. I like dog. Biscuit je malý.\nMrs Lee · dog owner at the park\nThank you! Do you have a dog?\nYou · spoken\nAno. I like dog. Můj pes je Rex.\nMrs Lee · dog owner at the park\nRex is a nice name! Is Rex a large dog?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Rex is a nice name! Is Rex a large dog?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Rex is big! I can say \"Ano. Rex big dog.\" maybe.",
+          "action": "answer",
+          "args": {
+            "text": "Ano. Rex is big dog. I like Rex."
+          },
+          "result": "ok",
+          "ms": 12094
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nRex is fun! Does Rex run fast?\nYour turn\nAnswer on your phone: speak or type.\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nRex is fun! Does Rex run fast?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\nYou · spoken\nAno. I like dog. Biscuit je malý.\nMrs Lee · dog owner at the park\nThank you! Do you have a dog?\nYou · spoken\nAno. I like dog. Můj pes je Rex.\nMrs Lee · dog owner at the park\nRex is a nice name! Is Rex a large dog?\nYou · spoken\nAno. Rex is big dog. I like Rex.\nMrs Lee · dog owner at the park\nRex is fun! Does Rex run fast?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Rex is fun! Does Rex run fast?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Rex běží rychle... I know \"yes\", so I'll try a short answer.",
+          "action": "answer",
+          "args": {
+            "text": "Ano. Rex is fast. I like Rex."
+          },
+          "result": "ok",
+          "ms": 11835
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nRex is fast! Is he the same size as Biscuit?\nYour turn\nAnswer on your phone: speak or type.\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nRex is fast! Is he the same size as Biscuit?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\nYou · spoken\nAno. I like dog. Biscuit je malý.\nMrs Lee · dog owner at the park\nThank you! Do you have a dog?\nYou · spoken\nAno. I like dog. Můj pes je Rex.\nMrs Lee · dog owner at the park\nRex is a nice name! Is Rex a large dog?\nYou · spoken\nAno. Rex is big dog. I like Rex.\nMrs Lee · dog owner at the park\nRex is fun! Does Rex run fast?\nYou · spoken\nAno. Rex is fast. I like Rex.\nMrs Lee · dog owner at the park\nRex is fast! Is he the same size as Biscuit?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Rex is fast! Is he the same size as Biscuit?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Biscuit je malý, Rex je velký, umím to říct anglicky.",
+          "action": "answer",
+          "args": {
+            "text": "No. Biscuit is small. Rex is big."
+          },
+          "result": "ok",
+          "ms": 8543
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMrs Lee · dog owner at the park\nSay hi to Biscuit at the park\nMrs Lee says\nWow, Rex is fast and strong! Do you walk Rex here?\nUsed again\n“big”, from Sam and the Minecraft house. Now answer on your phone.\nNowSay hello to Mrs Lee\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nSay hi to Biscuit at the park\nGreet Mrs Lee, say your name, and say one thing about Biscuit the dog.\nNow: Say hello to Mrs Lee\nWow, Rex is fast and strong! Do you walk Rex here?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Lee · dog owner at the park\nIs that dog small too?\nYou · spoken\nAno. I like dog. Biscuit je malý.\nMrs Lee · dog owner at the park\nThank you! Do you have a dog?\nYou · spoken\nAno. I like dog. Můj pes je Rex.\nMrs Lee · dog owner at the park\nRex is a nice name! Is Rex a large dog?\nYou · spoken\nAno. Rex is big dog. I like Rex.\nMrs Lee · dog owner at the park\nRex is fun! Does Rex run fast?\nYou · spoken\nAno. Rex is fast. I like Rex.\nMrs Lee · dog owner at the park\nRex is fast! Is he the same size as Biscuit?\nYou · spoken\nNo. Biscuit is small. Rex is big.\nMrs Lee · dog owner at the park\nWow, Rex is fast and strong! Do you walk Rex here?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, Rex is fast and strong! Do you walk Rex here?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Dlouhé, ale zvládl jsem to, teď chci skončit.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 12
+        },
+        {
+          "n": 17,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour rehearsal\nLinga taught · Sam and the Minecraft house big\nYou said it tonight\nNo. Biscuit is small. Rex is big.\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 2 on your own · 3 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nUsed again tonight\n“big”, taught in Sam and the Minecraft house\nYou said: “No. Biscuit is small. Rex is big.”\nFrom this rehearsal\n“malý”: small\nSmall means little in size, not big.\nSaved for the end\n“Můj pes”: my dog\nMeans 'my dog' in English.\n“Ano”: yes\nAno is Czech for yes.\n“Ano.”: Yes.\nAno means yes in Czech. In English, say yes.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nLet's play football at the park\nSuggest a day or time to play football and agree on one plan.\n[button: Start talking]\nOr choose a situation [list: Tell me what you build in Minecraft [plan-9ba7c9e7] | Say hi to a dog and its owner [plan-cff851bd] | Let's play football at the park [plan-01d3163a] | Tell a funny thing that happened [plan-d16bc9b7] | Can you say that again, please? [plan-c622f248] | No, thank you, I cannot today [plan-12a18038] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Dobře, zvládl jsem to, mám dost.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Say hi to Biscuit at the park",
+          "goal": "Greet Mrs Lee, say your name, and say one thing about Biscuit the dog.",
+          "partner": "Mrs Lee · dog owner at the park",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Is that dog small too?"
+            },
+            {
+              "role": "learner",
+              "text": "Ano. I like dog. Biscuit je malý.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you! Do you have a dog?"
+            },
+            {
+              "role": "learner",
+              "text": "Ano. I like dog. Můj pes je Rex.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Rex is a nice name! Is Rex a large dog?"
+            },
+            {
+              "role": "learner",
+              "text": "Ano. Rex is big dog. I like Rex.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Rex is fun! Does Rex run fast?"
+            },
+            {
+              "role": "learner",
+              "text": "Ano. Rex is fast. I like Rex.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Rex is fast! Is he the same size as Biscuit?"
+            },
+            {
+              "role": "learner",
+              "text": "No. Biscuit is small. Rex is big.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Wow, Rex is fast and strong! Do you walk Rex here?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "9576eeb3-2aca-4760-8d07-eb6ceebad9eb:uat-32:moment",
+              "kind": "word",
+              "said": "malý",
+              "better": "small",
+              "why": "Small means little in size, not big.",
+              "turnId": "9576eeb3-2aca-4760-8d07-eb6ceebad9eb:uat-32",
+              "at": 1792308512675
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "9576eeb3-2aca-4760-8d07-eb6ceebad9eb:uat-35:held",
+              "kind": "word",
+              "said": "Můj pes",
+              "better": "my dog",
+              "why": "Means 'my dog' in English.",
+              "turnId": "9576eeb3-2aca-4760-8d07-eb6ceebad9eb:uat-35",
+              "at": 1792308593863
+            },
+            {
+              "id": "9576eeb3-2aca-4760-8d07-eb6ceebad9eb:uat-37:held",
+              "kind": "word",
+              "said": "Ano",
+              "better": "yes",
+              "why": "Ano is Czech for yes.",
+              "turnId": "9576eeb3-2aca-4760-8d07-eb6ceebad9eb:uat-37",
+              "at": 1792308634206
+            },
+            {
+              "id": "9576eeb3-2aca-4760-8d07-eb6ceebad9eb:uat-38:held",
+              "kind": "word",
+              "said": "Ano.",
+              "better": "Yes.",
+              "why": "Ano means yes in Czech. In English, say yes.",
+              "turnId": "9576eeb3-2aca-4760-8d07-eb6ceebad9eb:uat-38",
+              "at": 1792308652215
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 16,
+              "reply": "Ano. I like dog. Biscuit je malý.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "malý",
+                "better": "small",
+                "why": "Small means little in size, not big."
+              },
+              "shown": true
+            },
+            {
+              "turn": 3,
+              "n": 17,
+              "reply": "Ano. I like dog. Můj pes je Rex.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Můj pes",
+                "better": "my dog",
+                "why": "Means 'my dog' in English."
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 18,
+              "reply": "Ano. Rex is big dog. I like Rex.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Ano",
+                "better": "yes",
+                "why": "Ano is Czech for yes."
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 19,
+              "reply": "Ano. Rex is fast. I like Rex.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Ano.",
+                "better": "Yes.",
+                "why": "Ano means yes in Czech. In English, say yes."
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 20,
+              "reply": "No. Biscuit is small. Rex is big.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "Hi, I am Ali."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I like dog."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I like dog."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I like Rex."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Rex is fast."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "No. Biscuit is small. Rex is big."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 318403,
+      "prior": [
+        {
+          "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-2",
+          "run": "2026-10-14-lt/recert-6",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Replay is a copy, not a fresh question",
+          "expected": "After the moment, a new question lets him answer better alone.",
+          "got": "He types the fix back, then Lenka moves to rooms.",
+          "evidence": [
+            "#10 'I like playing house.'; #11 'You fixed “like playing”'; #12 'How many rooms are in it?'",
+            "moment replay flow"
+          ],
+          "recurrence": 7
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-1",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "No replay with a fresh question after the moment",
+          "expected": "After the moment, a fresh question lets him retry the coached point.",
+          "got": "Only 'Back to the conversation'; the session moves on and ends.",
+          "evidence": [
+            "#9 'Back to the conversation'; #10 unrelated new question; #14 '1 moment to keep'.",
+            "moment replay flow"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner turns too long and past-tense for A1",
+          "expected": "One tiny sentence and one simple question.",
+          "got": "Two-part turns with 'yesterday', 'by the river', 'alone or with a friend'.",
+          "evidence": [
+            "#11 'No dog here, I am building a house by the river. Where did you go yesterday?'",
+            "partner prompt, A2 band for elementary"
+          ],
+          "recurrence": 9
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "No fresh question after the moment",
+          "expected": "After the fix, Ben asks a new question so he can answer better alone.",
+          "got": "He retyped the given fix, then Ben asked an unrelated question.",
+          "evidence": [
+            "#8 'Try I like creepers.'; #9 'You fixed like creepers'; #10 'Did you play with friends yesterday?'",
+            "moment replay flow"
+          ],
+          "recurrence": 7
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "No replay with a fresh question after the moment",
+          "expected": "After the coaching moment, a fresh question lets him retry 'the dog is wet' on his own.",
+          "got": "Only 'Back to the conversation'; the next question is unrelated and the session ends at the next turn.",
+          "evidence": [
+            "#5 'Back to the conversation'; #6 'What did he do next?'; #11 '0 on your own · 1 moment to keep'.",
+            "moment replay flow"
+          ],
+          "recurrence": 7
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner turns have two sentences and drift past A1",
+          "expected": "One tiny sentence and one simple question.",
+          "got": "'Biscuit likes water too! What did he do next?'; 'Ha, Biscuit loved the splash! What happened at the end?'; 'Where did you start?'",
+          "evidence": [
+            "#6, #8, #10 partner turns.",
+            "partner prompt, A2 band for elementary"
+          ],
+          "recurrence": 7
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Recognition task too long to read",
+          "expected": "Help choices of 3-6 words each.",
+          "got": "About 25 English words in one help screen.",
+          "evidence": [
+            "#4 'Mr. Dan asks: What did your dog do?' 'First he ran in the water. Then he got wet.' 'Blue dog, park, yes, big.'",
+            "phrase choice builder"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Situation list long and mixed for a nine-year-old",
+          "expected": "Short list of play and animal topics.",
+          "got": "20 entries including booking, lost jacket, group project and speaking-practice items.",
+          "evidence": [
+            "#1 and #11 situation list.",
+            "situation list builder"
+          ],
+          "recurrence": 7
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Other clear slips went uncoached",
+          "expected": "Coach 'Dog like water' or 'Dog jump... voda' with a short word he can reuse.",
+          "got": "Only 'Pes je mokrý' became a moment.",
+          "evidence": [
+            "#4 'Dog like water'; #7 'Dog jump... voda'; #9 'dog water'; #5 single moment.",
+            "moment selection prompt"
+          ],
+          "recurrence": 4
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "J4 has no placement."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#7 recognition task 'Mrs Lee says hello. What is a good hello back?' with 'Hi, I am Ali.' / 'Go to the shop now.' is well under 15 words."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "Czech replies (#8, #11) never met a failure line; #9 says 'You wanted to say malý' and gives 'small'."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 first six: Minecraft, dog, football, funny thing, say that again, no thank you; 4 of 6 play/animals/sport, all safe. The 20-item list is a separate gap."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Turns are two sentences ('Wow, Rex is fast and strong! Do you walk Rex here?' #16) and use 'large' (#12), 'same size as Biscuit' (#15), beyond near pre-A1 words."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#9 moment 'malý' → 'small', 'Small means little in size, not big.' is correct and simple."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 'Help me answer' gave a cue and #7 a phrase choice on the same talk screen; Tomáš never left the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Cue 'Try: Hi, I am Ali. What is his name?' (#3-#6) did not fit 'Is that dog small too?'; quiz #7 asked about 'hello'. His reply #8 was his own Czech mix. The note quoted 'malý' correctly (#9) but came after the reply."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#9 only offers 'Back to the conversation'; #10 'Thank you! Do you have a dog?' is a new topic, not a retry. He answered #11 'Ano. I like dog. Můj pes je Rex.', still Czech."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#17 '2 on your own · 3 with help'; evidence marks supported:true for cue/choice turns and false for the last two."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 4,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 2
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 4,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "effort",
+            "title": "Cue is generic, repeated, and does not answer the question asked",
+            "expected": "A cue he can say to 'Is that dog small too?', such as 'Yes. Biscuit is small.'",
+            "got": "Same line 'Try: Hi, I am Ali. What is his name?' four times; quiz asked about hello.",
+            "evidence": "#3-#6 identical cue; #7 'Mrs Lee says hello. What is a good hello back?' while Mrs Lee had asked #2 'Is that dog small too?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Cue and phrase choice must relate to the partner's current question and change on each press.",
+            "code_hint": "cue / phrase choice builder, scene-goal-driven fallback"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "No replay with a fresh question after the moment",
+            "expected": "After the 'small' moment, a new question lets him try the coached word alone.",
+            "got": "Only 'Back to the conversation'; next question is about having a dog.",
+            "evidence": "#9 'Back to the conversation'; #10 'Thank you! Do you have a dog?'; #11 still Czech",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After a moment, the partner asks a fresh question that uses the coached word.",
+            "code_hint": "moment replay flow"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner turns drift above A1",
+            "expected": "One tiny sentence and one simple question with known words.",
+            "got": "Two-sentence turns with 'large', 'same size as', 'strong'.",
+            "evidence": "#12 'Rex is a nice name! Is Rex a large dog?'; #15 'Is he the same size as Biscuit?'; #16 'fast and strong'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner turns for age-9 A1 use one sentence, words from the learner's known set.",
+            "code_hint": "partner prompt, elementary band"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment quotes him exactly and in kid words",
+            "expected": "",
+            "got": "'You wanted to say malý' → 'small'.",
+            "evidence": "#9 'Small means little in size, not big.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact quoting and plain Czech-to-English glosses.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Situation list long and mixed for a nine-year-old",
+            "expected": "Short list of play and animal topics.",
+            "got": "20 entries incl. booking, lost jacket, group project, speaking practice.",
+            "evidence": "#1 and #17 situation list",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Elementary profile shows only age-fit play and animal situations.",
+            "code_hint": "situation list builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Held fixes are redundant and only one was a stop",
+            "expected": "Distinct, useful fixes.",
+            "got": "'Ano' and 'Ano.' held twice with near-identical notes.",
+            "evidence": "#17 'Ano: yes' and 'Ano.: Yes.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Dedupe held fixes by the same word across turns.",
+            "code_hint": "held fix selection"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Supported replies counted honestly",
+            "expected": "",
+            "got": "'2 on your own · 3 with help'.",
+            "evidence": "#17 recap; evidence supported:true for cue turns, false for last two",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep support flag in the progress picture.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "Jo, the dog talk was fun, I like Biscuit and Rex. But when I pressed help, it kept saying \"Hi, I am Ali. What is his name?\" Čtyřikrát! That was not about the small dog, so I just wrote my own thing, half Czech. The \"malý is small\" bit was nice and easy, and nobody made me feel bad. But then Mrs Lee asked something new, so I never tried \"small\" again straight away. Some words, like \"large\" and \"same size\", I didn't know. At the end I said \"Biscuit is small. Rex is big\" alone and felt clever. I'd use it again for dogs, but the help must help with the question. Mum would like that it says what I did alone and what with help.",
+        "prior": [
+          {
+            "id": "2026-10-14-lt/recert-6/LT-tomas-9-J4-2",
+            "status": "recurs",
+            "evidence": "#9 'Back to the conversation' then #10 'Thank you! Do you have a dog?': no retry of the fix.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-1",
+            "status": "recurs",
+            "evidence": "#9 only 'Back to the conversation'; #10 unrelated question.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-2",
+            "status": "not-seen",
+            "evidence": "Partner turns were present tense ('Do you walk Rex here?' #16), no 'yesterday' or long clauses.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-1",
+            "status": "recurs",
+            "evidence": "#10 'Thank you! Do you have a dog?' follows the moment with no retry of 'small'.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-1",
+            "status": "recurs",
+            "evidence": "#9 'Back to the conversation'; next question unrelated to coached word.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-2",
+            "status": "recurs",
+            "evidence": "#12 'Rex is a nice name! Is Rex a large dog?'; #16 'Wow, Rex is fast and strong! Do you walk Rex here?'",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-3",
+            "status": "not-seen",
+            "evidence": "#7 recognition choices are 'Hi, I am Ali.' and 'Go to the shop now.', short.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-5",
+            "status": "recurs",
+            "evidence": "#1 list of 20 including 'A booking that is missing', 'The lost jacket'.",
+            "finding": 4
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-4",
+            "status": "not-seen",
+            "evidence": "Czech slips were stopped (#9) or held and shown on the recap (#17 'Můj pes', 'Ano', 'Ano.').",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Cue 'Try: Hi, I am Ali. What is his name?' (#3-#6) did not fit 'Is that dog small too?'; quiz #7 asked about 'hello'. His reply #8 was his own Czech mix. The note quoted 'malý' correctly (#9) but came after the reply.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #9 only offers 'Back to the conversation'; #10 'Thank you! Do you have a dog?' is a new topic, not a retry. He answered #11 'Ano. I like dog. Můj pes je Rex.', still Czech.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: Turns are two sentences ('Wow, Rex is fast and strong! Do you walk Rex here?' #16) and use 'large' (#12), 'same size as Biscuit' (#15), beyond near pre-A1 words."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 23,
+      "fail": 0,
+      "ms": 252784
+    },
+    "character": {
+      "n": 37,
+      "fail": 0,
+      "ms": 468169
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 89623
+    }
+  }
+}

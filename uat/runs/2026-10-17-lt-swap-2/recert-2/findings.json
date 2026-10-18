@@ -23,14 +23,14 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 9,
     "recurs": "2026-10-14-lt/recert-6/LT-tomas-9-J4-1",
     "suggested_acceptance": "Partner turns for age 9 stay at most 8 words, present tense, one question.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#6 'Biscuit likes water too! What did he do next?'; #8 'Where did you start?' is past tense above A1."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Partner turns were present tense ('Do you walk Rex here?' #16), no 'yesterday' or long clauses."
   },
   {
     "id": "LT-adela-17-J2-1",
@@ -240,10 +240,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "recurs": "2026-10-14-lt/recert-6/LT-adela-17-J4-1",
     "suggested_acceptance": "The cue gives a B2 sentence frame or starter for her reply, not a simpler restatement of the question.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#3 and #4 are again a simpler paraphrase and a gloss; the #6 quiz is a recognition task."
   },
   {
     "id": "LT-tomas-9-J1-1",
@@ -360,13 +363,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "recurs": "2026-10-14-lt/recert-4/LT-tomas-9-J4-1",
     "suggested_acceptance": "After a moment, the partner asks a new question using the same point, and the next reply is judged unaided.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "#5 then #6: the next question is unrelated to the moment."
+    "recertify_evidence": "#10 'Thank you! Do you have a dog?' follows the moment with no retry of 'small'."
   },
   {
     "id": "LT-jana-29-J3-1",
@@ -392,14 +395,14 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 6,
     "recurs": "2026-10-17-lt-swap-2/recert-1/LT-jana-29-J3-4",
     "suggested_acceptance": "Mission completion waits for a natural close or a minimum reply count, and never leaves an open partner question.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#9 \"Mission done\" after four replies with \"if you fancy it?\" still open.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "The mission closed after 10 replies at #12, not four, with Priya's place question still open but the scene having run its length.",
     "recurred_as": "LT-jana-29-J3-3"
   },
   {
@@ -427,13 +430,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "recurs": "2026-10-14-lt/recert-1/LT-petra-38-J3-2",
     "suggested_acceptance": "Recurring dropped-subject errors appear in the recap even when no moment fires.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "#9 '1 moment to keep' while #2 'I have problem' and #4 'because is too hot' got none."
+    "recertify_evidence": "#2 'the heating is not work' and #3 'because is very cold' got no moment; recap #6 shows no fix.",
+    "recurred_as": "LT-petra-38-J3-1"
   },
   {
     "id": "LT-adela-17-J3-1",
@@ -555,14 +559,14 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 4,
     "recurs": "2026-09-15-lt-recert/LT-jana-29-J3-1",
     "suggested_acceptance": "At C1 the moment offers a register or idiom upgrade, e.g. softer pushback phrasing, alongside any slip fix.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#6 \"I'd rather\" to \"I'd prefer\" is a thin word swap with a short explanation."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "No moment shown this run (#2-#12), so no B1 word swap. The gap is now that nothing is shown at all."
   },
   {
     "id": "LT-petra-38-J1-2",
@@ -649,10 +653,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "2026-10-17-lt-swap-2/recert-1/LT-petra-38-J4-2",
     "suggested_acceptance": "Moment screen offers 'Try again' that asks a new question eliciting the coached pattern, and records the retry as independent.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#8 only 'Back to the conversation', and the scene moves to #9 'Do you have the booking number?' with no retry of the coached structure."
   },
   {
     "id": "LT-tomas-9-J2-2",
@@ -741,9 +748,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Partner questions at B2 stretch, and no empty praise.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#14 'Do you enjoy speaking up in class debates' and #13 'That's a smart plan'.",
+    "recurred_as": "LT-adela-17-J4-2"
   },
   {
     "id": "LT-tomas-9-J4-4",
@@ -832,13 +843,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "recurs": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J3-2",
     "suggested_acceptance": "Elementary profiles see only play, animal, game and sport situations.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "#1 list still includes 'A booking that is missing', 'The lost jacket', 'Speaking practice: about you'.",
+    "recertify_evidence": "#1 and #20 list 'A booking that is missing', 'The lost jacket', 'Our group project', 'Speaking practice: about you'.",
     "recurred_as": "LT-tomas-9-J3-4"
   },
   {
@@ -984,13 +995,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Flag be used to + -ing slips.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "No 'be used to + -ing' error in her turns this run."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#3 \"I'm used to work under pressure\" was caught at #4 and fixed to 'working'."
   },
   {
     "id": "LT-adela-17-J4-2",
@@ -1016,10 +1027,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Coaching names a real error with its rule, or says there was none.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#9 The only correction targeted a real error, 'used to communicate'. No coaching note was shown for a non-error."
   },
   {
     "id": "LT-jana-29-J3-4",
@@ -1107,9 +1121,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 1,
+    "recurrence": 2,
     "suggested_acceptance": "Third help level shows a sentence frame like 'There is a fee of [amount]'.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#10 and #12 cue 'Try: I have a booking number' does not give a usable phrase for the questions asked.",
+    "recurred_as": "LT-petra-38-J4-1"
   },
   {
     "id": "LT-tomas-9-J1-5",
@@ -1165,13 +1183,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "recurs": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-5",
     "suggested_acceptance": "An elementary profile sees only age-fit situations.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "#1 list includes 'A booking that is missing', 'The lost jacket', 'Our group project'.",
+    "recertify_evidence": "#1 list of 20 including 'A booking that is missing', 'The lost jacket'.",
     "recurred_as": "LT-tomas-9-J4-5"
   },
   {
@@ -1289,14 +1307,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "recurs": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J3-3",
     "suggested_acceptance": "Repeated Czech phrases get a short model, or the recap names them.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "#9 'Pes je brown.' and #13 'Dog house je brown' got no moment after 'Je to' was already shown at #8.",
-    "recurred_as": "LT-tomas-9-J3-2"
+    "recertify_evidence": "#15, #17, #18: 'Nevím' repeated with no new stop. Only two stops, at #5 and #10.",
+    "recurred_as": "LT-tomas-9-J3-3"
   },
   {
     "id": "LT-jana-29-J2-2",
@@ -1382,14 +1400,14 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 4,
     "recurs": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J4-3",
     "suggested_acceptance": "Most useful slips are picked per ten turns, with a question-form fix.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#4 'Dog like water' and #7 'Dog jump... voda' got no moment; only 'Pes je mokrý' was coached.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Czech slips were stopped (#9) or held and shown on the recap (#17 'Můj pes', 'Ano', 'Ano.').",
     "recurred_as": "LT-tomas-9-J4-4"
   },
   {
@@ -1417,14 +1435,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "2026-10-17-lt-swap-2/recert-1/LT-tomas-9-J3-4",
     "suggested_acceptance": "Recap names one thing he did say and one new word.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-3",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
     "recertify_status": "recurs",
-    "recertify_evidence": "#17 'Choose a fresh context for your next conversation.' with no named content.",
-    "recurred_as": "LT-tomas-9-J3-3"
+    "recertify_evidence": "#20 'Choose a fresh context for your next conversation.' The mission line still doesn't name Minecraft or the dog, though the word fixes are listed.",
+    "recurred_as": "LT-tomas-9-J3-5"
   },
   {
     "id": "LT-adela-17-J1-3",
@@ -1511,10 +1529,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Mission wording matches spoken reply mode.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-4",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#1 mission 'Find a lost hotel booking and confirm the new details.' matches the spoken scene."
   },
   {
     "id": "LT-jana-29-J2-4",
