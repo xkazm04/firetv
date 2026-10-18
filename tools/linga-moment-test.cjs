@@ -323,6 +323,23 @@ test('LG-4 (d): the reply to the replay question is kept on the moment with whet
   }
 });
 
+test('LG-4 recert-7: the TV recap draws the phone\'s "Tried again" line under the moment it shows, in the same words (replayLine)',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts')),fs=require('node:fs');
+  for(const [reply,used] of [['Every morning I work at the front desk.',true],['Every morning I check in the guests.',false]]){
+    const r=await lg4(asked(REPLAY_Q));
+    try{
+      await r.cmd('moment-done');await r.say(reply);await r.cmd('finish');
+      const v=V.lingaView(r.getSession(),{});
+      assert.equal(v.hero.kind,'comparison');assert.equal(v.hero.before.quote,'I am work');
+      assert.equal(v.hero.tried,V.replayLine(reply,used),'one wording, the phone\'s');
+      assert.ok(V.viewText(v).includes(`"I work"\nWork is the verb here.\n${V.replayLine(reply,used)}\n`),'the driver reads it under the moment on the TV');
+    }finally{r.done();}
+  }
+  const none=await lg4(asked(REPLAY_Q));
+  try{await none.cmd('finish');assert.equal(V.lingaView(none.getSession(),{}).hero.tried,undefined,'no replay, no line');}finally{none.done();}
+  assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/h\.tried&&<DataLine>\{h\.tried\}<\/DataLine>/,'the TV draws it');
+});
+
 test('LG-4 (e): "Mission done" does not end the scene while the replay question is open (LT-tomas-9-J4-1)',async()=>{
   const V=require(path.join(root,'src/lib/english/view.ts'));
   const r=await lg4(asked(REPLAY_Q));

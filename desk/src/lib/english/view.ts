@@ -143,6 +143,8 @@ export type Hero =
       art?: ArtKey; data?: string;
       /** a fix still withheld (K2): the after slot is an empty frame, waiting for the learner's line */
       open?: boolean
+      /** LG-4: on the recap, the shown moment's replay reply in the phone's words (replayLine), under the moment */
+      tried?: string
       /** the overline when it is not the screen's tag: "Yours now" (L1) */
       kicker?: string }
   | { kind: "menu"; kicker: string; title: string; entries: string[]; selected: number }
@@ -562,10 +564,10 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     } else if (c.coaching || moments.length || held.length) {
       // One thing learned tonight, as the picture. A coaching change carries no time, so when the order is unknown it wins.
       // A stop's moment comes before a fix held for the end (LG-23); a held fix is on screen only now, the scene over.
-      const m = moments.at(-1) ?? held.at(-1), co = c.coaching;
+      const m = moments.at(-1) ?? held.at(-1), co = c.coaching, rp = moments.at(-1)?.replay;
       hero = co
         ? { kind: "comparison", before: { kicker: "You said", quote: co.before }, after: { kicker: "One way to try it", quote: co.after }, note: co.note, art: "done", data: counts }
-        : { kind: "comparison", before: { kicker: m!.kind === "fix" ? "You said" : "You wanted to say", quote: m!.said }, after: { kicker: m!.kind === "fix" ? "Try" : "In English", quote: m!.better }, note: m!.why, art: "done", data: counts };
+        : { kind: "comparison", before: { kicker: m!.kind === "fix" ? "You said" : "You wanted to say", quote: m!.said }, after: { kicker: m!.kind === "fix" ? "Try" : "In English", quote: m!.better }, note: m!.why, art: "done", data: counts, ...(rp?.reply !== undefined ? { tried: replayLine(rp.reply, !!rp.used) } : {}) };
     } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better, from: rv.fromTitle.slice(0, 40), label: originLabel({ review: rv }) } : ln && !ln.found ? { sentence: ln.text!, label: originLabel({ line: ln }), ...(ln.source === "check" ? { from: CHECK_TITLE.toLowerCase() } : {}) } : {}) };
     // a line the hero does not carry is still the learner's to take, on the phone
     if (ln && hero.kind !== "track" && !(hero.kind === "comparison" && hero.before.quote === ln.text)) details.push(ln.found ? `On the phone, the line in this room: "${ln.text}". You said: "${ln.found}"` : `On the phone, a sentence to take with you: "${ln.text}"`);
@@ -781,7 +783,7 @@ export function viewText(v: LingaView): string {
     case "topics": out.push(h.kicker, ...h.topics.map(t => `  [${t.id}] ${t.title} — ${t.skill}\n      why: ${t.why}`)); break;
     case "scene": out.push(...(h.own ? ["Your own scene"] : []), h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : []), ...(h.lost ? [lostLine(h.lost)] : [])); break;
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`${h.label ?? "A sentence for you"}: "${h.sentence}"`] : [])); break;
-    case "comparison": out.push(...(h.kicker ? [h.kicker] : []), `${h.before.kicker}: "${h.before.quote}"${h.before.struck ? `, "${h.before.struck}" struck through` : ""}`, h.open ? `${h.after.kicker}: an empty frame, waiting for your line` : `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
+    case "comparison": out.push(...(h.kicker ? [h.kicker] : []), `${h.before.kicker}: "${h.before.quote}"${h.before.struck ? `, "${h.before.struck}" struck through` : ""}`, h.open ? `${h.after.kicker}: an empty frame, waiting for your line` : `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.tried ? [h.tried] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
     case "tape": out.push(h.kicker, h.title, ...h.pins.map((x, i) => `  pin ${i + 1} · ${x.label}: "${x.quote}"${x.better ? ` → "${x.better}"` : ""}\n      note: ${x.note}${x.mark ? `\n      Take Two: ${TAKE_MARK_WORDS[x.mark]}` : ""}`),
       ...(h.branch ? [`  Take Two of pin ${h.branch.pin + 1}, a branch from it: ${h.branch.partner} says "${h.branch.from}"${h.branch.again ? `; you again: "${h.branch.again}"` : ""}`] : []), h.data); break;
