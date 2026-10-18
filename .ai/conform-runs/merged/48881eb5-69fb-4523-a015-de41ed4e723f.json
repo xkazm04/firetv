@@ -1,0 +1,17 @@
+{
+ "schema": "conform-run/1",
+ "worker": "48881eb5-69fb-4523-a015-de41ed4e723f",
+ "subject": "judge-contract-design",
+ "evaluatedAt": "2026-10-18T22:29:26.103158+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [],
+ "declined": [
+  {
+   "subject": "judge-contract-design",
+   "context": "uat",
+   "reason": "evidence leans on 0/0.5/1.0, which is not a tracked file"
+  }
+ ],
+ "consults": []
+}
