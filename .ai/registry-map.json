@@ -2248,7 +2248,11 @@
           "revision": 22,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:28 The inspected module processes human pen and playback input, and searches found no approval, consent, handoff, or unattended constructs anywhere in core, so the subject's autonomous-action approval precondition does not hold.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:52d7f3cfb87a79d9",
+          "evaluatedRevision": 22
         },
         {
           "subject": "engine-host-contract",

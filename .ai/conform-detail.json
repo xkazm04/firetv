@@ -2086,6 +2086,97 @@
         }
       ],
       "registryProposal": "The golden path applies only to a language engine that evaluates source, but the subject name engine-host-contract does not say so, so a host-driven library can look in scope until use_when is read."
+    },
+    "telestrator/pen-core/hitl-approval": {
+      "context": "pen-core",
+      "subject": "hitl-approval",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-18",
+      "evaluatedTs": "2026-10-18T21:42:09.375Z",
+      "worker": "bc6998cf-0214-4594-9707-062cf71cc821",
+      "techniques": [
+        {
+          "technique": "author-advisories-yield-to-the-users-mode",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:23 This parses an annotation hold duration; the inspected context does not load agent definitions or merge author and user approval rules."
+        },
+        {
+          "technique": "consent-gates",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:64 These edits originate in the person's own controls, rather than an autonomous actor requesting a capability grant."
+        },
+        {
+          "technique": "cosmetic-vs-enforced-threshold-invariant",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Timeline.kt:12 The visual clock controls annotation fading; there is no approval urgency ladder or corresponding enforcement deadline."
+        },
+        {
+          "technique": "decision-records",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:37 History records reversible annotation operations, rather than approval verdicts requiring decider and disclosure records."
+        },
+        {
+          "technique": "fail-closed-profile-for-headless",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:186 This timeout refuses an unpaired connection; no headless agent approval policy is selected."
+        },
+        {
+          "technique": "fail-loud-classification-default",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:156 Malformed pen frames are reported and dropped, rather than classified into severity buckets feeding an approval queue."
+        },
+        {
+          "technique": "fixed-policy-amendable-plan",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:15 TransportPlan translates playback commands deterministically; it is not an executor's amendable task plan."
+        },
+        {
+          "technique": "gate-state-machines",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:163 The connection checkpoint verifies a pairing credential, rather than a human verdict on staged autonomous work."
+        },
+        {
+          "technique": "handoff-is-a-declared-door",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:18 Delivery routes controller input to the session; no model requests human escalation or selects an answerer."
+        },
+        {
+          "technique": "human-performed-steps",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Smoothing.kt:14 The human supplies drawing input directly; there is no agent-dispatched task containing steps reserved for human execution."
+        },
+        {
+          "technique": "oracle-before-gate",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:67 This lets the viewer inspect their own undo target; it does not arm a review gate over machine-produced work."
+        },
+        {
+          "technique": "resume-after-decision",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:91 Playback repositioning precedes a later user edit; no staged action waits for an approval verdict."
+        },
+        {
+          "technique": "review-queues",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/Timeline.kt:19 Review mode lists annotated video moments, rather than pending human decisions."
+        },
+        {
+          "technique": "severity-sla-ladder",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:103 The deadline is a pairing brute-force cooldown, rather than a severity-dependent policy for pending approvals."
+        },
+        {
+          "technique": "truncated-verdict-space",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:73 Admission follows exact credential comparison, not an automated assessor's judgment requiring a human-only verdict."
+        },
+        {
+          "technique": "unattended-mode",
+          "verdict": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:41 Playback toggling implements a controller command; no standing grant auto-answers approval gates."
+        }
+      ]
     }
   }
 }
