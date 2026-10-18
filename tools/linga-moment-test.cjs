@@ -323,6 +323,36 @@ test('LG-4 (d): the reply to the replay question is kept on the moment with whet
   }
 });
 
+test('LG-4 recert-7: Back answers at once with the partner thinking of a new question, on the TV and the phone, gone when the replay lands or fails',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts')),fs=require('node:fs');
+  const {getSession}=require(path.join(root,'src/lib/session/store.ts'));
+  /** the TV caption and the phone's line while the call runs, then the replay's own outcome */
+  const during=[],watch=outcome=>p=>{const s=getSession(),v=V.lingaView(s,{});during.push({screen:s.screen,caption:v.baseCaption,tag:v.captionTag,phone:V.replayThinking(s.conversation),waiting:v.waiting});return outcome(p);};
+  for(const [name,outcome] of Object.entries({landed:asked(REPLAY_Q),failed:()=>{throw new Error('timed out');}})){
+    during.length=0;
+    const r=await lg4(watch(outcome));
+    try{
+      const who=r.getSession().conversation.partner.split(' · ')[0],line=`${who} is thinking of a new question.`;
+      await r.cmd('moment-done');
+      assert.deepEqual(during,[{screen:'linga-talk',caption:line,tag:'Thinking',phone:line,waiting:true}],`${name}: the same scene screen, waiting, with the line`);
+      const s=r.getSession(),v=V.lingaView(s,{});
+      assert.equal(s.conversation.pending,null,name);assert.equal(s.conversation.replayFor,undefined,`${name}: no marker left behind`);
+      assert.equal(V.replayThinking(s.conversation),null,`${name}: the line is gone`);
+      assert.notEqual(v.baseCaption,line,name);assert.equal(v.waiting,false,`${name}: not stuck waiting`);
+      assert.equal(v.answer?.action,'turn',`${name}: the scene takes a reply`);
+    }finally{r.done();}
+  }
+  // a marker from an earlier command never shows: only the call in flight owns the line
+  const r=await lg4(asked(REPLAY_Q));
+  try{
+    const c=r.getSession().conversation;
+    assert.equal(V.replayThinking({...c,pending:'other',replayFor:'old'}),null);
+    assert.equal(V.replayThinking({...c,pending:null,replayFor:'old'}),null);
+    assert.match(V.replayThinking({...c,pending:'x',replayFor:'x'}),/ is thinking of a new question\.$/);
+  }finally{r.done();}
+  assert.match(fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8'),/replayThinking\(c\)\?\?"Your partner is preparing a reply…"/,'the phone shows the same line');
+});
+
 test('LG-4 recert-7: the TV recap draws the phone\'s "Tried again" line under the moment it shows, in the same words (replayLine)',async()=>{
   const V=require(path.join(root,'src/lib/english/view.ts')),fs=require('node:fs');
   for(const [reply,used] of [['Every morning I work at the front desk.',true],['Every morning I check in the guests.',false]]){

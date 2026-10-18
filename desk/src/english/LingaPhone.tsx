@@ -14,7 +14,7 @@ import { runningTake } from "@/lib/english/take";
 import { beatOf, COSTAR_MAX } from "@/lib/english/duet";
 import { originLabel } from "@/lib/english/line";
 import { LOST_SCENE } from "@/lib/english/lostfound";
-import { activeCheck, fixedClaim, helpOf, lingaHome, lingaView, offeredActions, phonePanel, replayLine, type ViewAction } from "@/lib/english/view";
+import { activeCheck, fixedClaim, helpOf, lingaHome, lingaView, offeredActions, phonePanel, replayLine, replayThinking, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
 import { LostPicture } from "./LostPicture";
 import { useEnglish } from "./useEnglish";
@@ -77,7 +77,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
       :<>
         <p><b>{c.title}</b><br/>{c.goal}{c.mission&&currentStep(c.mission)&&<><br/>Now: {currentStep(c.mission)}</>}</p>
         {c.lost&&<LostPicture learnerId={s.learner?.id} episodeId={c.id} partner={c.partner}/>}
-        <div className="linga-status" aria-live="polite">{inFlight?"Your partner is preparing a reply…":c.paused?"Paused. Resume when you are ready.":st==="coaching"?c.coaching?.note:currentQuestion||"Preparing your scene…"}</div>
+        <div className="linga-status" aria-live="polite">{inFlight?replayThinking(c)??"Your partner is preparing a reply…":c.paused?"Paused. Resume when you are ready.":st==="coaching"?c.coaching?.note:currentQuestion||"Preparing your scene…"}</div>
         {c.duet&&<p className="linga-status" data-role="linga-beat"><b>{c.duet.beat==="costar"?`${c.duet.coStar}'s turn`:`${s.learner?.name??"Your"}'s turn`}</b>{c.duet.held&&<><br/><small>{s.learner?.name} said: “{c.duet.held.text}”</small></>}</p>}
         {c.error&&<p className="linga-error" role="alert">{c.error}</p>}
         {c.paused?<button className="pbtn" data-signal="true" disabled={refused("resume")} onClick={()=>run("resume")}>Resume conversation</button>:st==="coaching"?<>

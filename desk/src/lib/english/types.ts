@@ -265,6 +265,8 @@ export interface Conversation {
   heldFixes?: HeldFix[];
   phase: "conversation" | "coaching" | "replay" | "finished";
   pending: string | null; error: string; paused: boolean;
+  /** LG-4 recert-7: the command of Back's replay call; while it is the pending one the scene shows the partner thinking of a new question */
+  replayFor?: string;
   capture: boolean; captureAt: number; audioNonce: number;
   supported: boolean; cue: string; quizOpen: boolean;
   /** absent on a conversation saved before the ladder, and null when the partner's line came without one */

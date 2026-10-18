@@ -207,6 +207,12 @@ const act = (id: ActionId, label: string, help: string, run: ViewRun, more: Part
  * scene continues with a question to try it. A fix a restart lost, or a duet holding half a pair, goes back as before.
  */
 const backHelp = (c: Conversation) => c.moment?.repair?.lost || duetRefuses(c, "replay") ? "Carry on from where the scene stopped." : "Back to the scene: your partner asks a new question to try this.";
+/**
+ * LG-4 recert-7: while Back's replay call runs (8.5-9.4 s), the scene says who is thinking: the scene's partner, by name.
+ * Only the call in flight owns the line (its command is the pending one), so a marker left behind never shows.
+ */
+export const replayThinking = (c: Conversation | null | undefined): string | null =>
+  c?.pending && c.replayFor === c.pending ? `${c.partner.split(" · ")[0]} is thinking of a new question.` : null;
 /** LG-4: a moment's replay on the recap, one short line: the learner's reply, and whether it said the form (never a count). */
 export const replayLine = (reply: string, used: boolean) => `Tried again: “${reply}”${used ? " · you used it" : ""}`;
 
@@ -578,9 +584,10 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     tag = c.phase === "replay" ? "Try it again" : "Conversation";
     const scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId)!;
     const said = last?.role === "partner" ? last.text : "", hasReply = c.turns.some(t => t.role === "learner");
-    caption = inFlight ? "Take a moment. Your partner is preparing the next turn." : st === "paused" ? "The scene is paused. Resume when you are ready." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : c.cue || (said ? "Answer on your phone: speak or type." : "Preparing a situation that fits your goal.");
+    const thinking = replayThinking(c);
+    caption = thinking ?? (inFlight ? "Take a moment. Your partner is preparing the next turn." : st === "paused" ? "The scene is paused. Resume when you are ready." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : c.cue || (said ? "Answer on your phone: speak or type." : "Preparing a situation that fits your goal."));
     const help = helpOf(c);
-    captionTag = c.cue ? help.tag : inFlight ? "Preparing" : c.capture || said ? "Your turn" : "Preparing";
+    captionTag = thinking ? "Thinking" : c.cue ? help.tag : inFlight ? "Preparing" : c.capture || said ? "Your turn" : "Preparing";
     // The reply that used a taught phrase again: the next line says so, once. Before that the phrase is on no screen.
     const lastLearner = [...c.turns].reverse().find(t => t.role === "learner");
     if (c.review?.used && c.review.usedTurn === lastLearner?.id && st === "your-turn" && !c.cue && !c.capture) {

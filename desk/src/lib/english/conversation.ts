@@ -440,7 +440,8 @@ export async function englishCommand(raw:unknown){
   if(action==="moment-done"){
     const closed=closeMoment(c,allowed);back=backReplay(closed,c);
     if(!back){commit({...closed,commands:[...c.commands,commandId].slice(-100)},"linga-talk");return getSession();}
-    c=closed;action="replay";commit(c,"linga-talk");
+    // the scene answers Back at once (recert-7: the replay call is 8.5-9.4 s): pending from here, its command marked as the replay's
+    c={...closed,pending:commandId,replayFor:commandId};action="replay";commit(c,"linga-talk");
   }
   if(action==="moment-try"){
     // K2 (repair.ts): the learner's line again on a fix moment, judged by code with no model call. Never a turn, never evidence.
@@ -602,11 +603,11 @@ export async function englishCommand(raw:unknown){
       const {partner,patch}=replayed(c,result.json);
       // after Back (LG-4): a gate's redirect line or a question asked before is no replay; the catch returns to the conversation
       if(back&&(partner.text===REDIRECT_LINE||askedBefore(c).some(x=>wordsOf(x).join(" ")===wordsOf(partner.text).join(" "))))throw new Error("The replay asked nothing new.");
-      next={...next,...patch,...(back?{moments:current.moments.map(x=>x.id===back!.moment.id?{...x,replay:{question:partner.text,turnId:partner.id}}:x)}:{})};
+      next={...next,...patch,...(back?{replayFor:undefined,moments:current.moments.map(x=>x.id===back!.moment.id?{...x,replay:{question:partner.text,turnId:partner.id}}:x)}:{})};
     }
     commit(next,screenFor(next));return getSession();
   }catch(e){
     // Back never strands the scene (LG-4): a failed replay after a moment is the conversation, with no error
-    if(back){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100)},"linga-talk");}catch{/* newer episode owns the UI */}return getSession();}
+    if(back){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,replayFor:undefined,error:"",commands:[...c.commands,commandId].slice(-100)},"linga-talk");}catch{/* newer episode owns the UI */}return getSession();}
     try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:lingaLine(e,"The tutor could not complete that turn. Your reply is still on the phone; please retry.")});}catch{/* newer episode owns the UI */}throw e;}
 }
