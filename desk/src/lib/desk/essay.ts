@@ -78,7 +78,11 @@ type Voice = ReturnType<typeof voiceOf>;
  * (an Adult-mode reading names an adult writer, never a student) and the task the paragraph answers, when one was given.
  * Both are optional: a reading that passes neither is read as it always was.
  */
-export interface ReadingFor { mode?: Mode; task?: string }
+export interface ReadingFor {
+  mode?: Mode; task?: string;
+  /** A kept piece read again from the TV's Workroom (recert-6/L1-helena-46-EM5-3) writes nothing: no history line, no writing step, no digest. Only analysePiece reads it. */
+  noSave?: boolean;
+}
 /** What an Adult-mode reading calls the person it reads: never "student". */
 const personOf = (mode?: Mode) => (mode === "adult" ? "writer" : "student");
 const lensOf = (type: string): Lens => ANALYSIS_TYPES.find((t) => t.id === type) ?? ANALYSIS_TYPES[0];
@@ -201,7 +205,7 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
     onProgress(now());
   }
   if (!piece.read.length) throw lastError ?? new Error(notEnglish.length ? NOT_ENGLISH_LINE : "no paragraph of the piece came back");
-  record(learnerId, lens, ruledSentences(sentences, pieceNow()).length, verdicts.filter((v) => v.verdict === "faulty").length, of);
+  if (!reader.noSave) record(learnerId, lens, ruledSentences(sentences, pieceNow()).length, verdicts.filter((v) => v.verdict === "faulty").length, of);
   return now();
 }
 

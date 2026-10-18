@@ -922,3 +922,24 @@ test('workroom 1 (recert-6/L1-helena-46-EM5-2): in Adult mode a reading on the d
  assert.deepEqual(fam.calls,[]);
  assert.equal(fam.events.at(-1).screen,'landing');
 });
+
+test('workroom 2 (recert-6/L1-helena-46-EM5-3): OK on a piece row reads that piece on the TV (the id only, never its text); OK on the lenses, Back and Menu are as before',()=>{
+ const {tvKey}=keys();
+ const ADULT={id:'hel',name:'Helena',type:'adult',age:34,system:'uk',modules:['essay'],mode:'adult'};
+ const piece=(id,title)=>({id,title,format:'email',versions:2,paragraphs:3});
+ const room=(patch={})=>session({subject:'essay',screen:'workroom',profiles:[ADULT],learner:{id:'hel',name:'Helena'},
+  workroom:{owner:'hel',pieces:[piece('t-a','First'),piece('t-b','Second')],channels:[],born:false,need:3},...patch});
+ // the second piece row: one call, its id, no event (the desk opens the reading when a paragraph comes back)
+ const ok=tvKey(room({focus:1}),'select',LOCAL);
+ assert.deepEqual(ok.events,[]);
+ assert.deepEqual(ok.calls,[{url:'/api/analyse',body:{kind:'shelf-piece',pieceId:'t-b'}}]);
+ // a reading already running sends nothing more
+ const busy=tvKey(room({focus:0,jobs:{analyse:{phase:'running',key:'essay',by:'hel'}}}),'select',LOCAL);
+ assert.deepEqual(busy.calls,[]);
+ // the lenses stop: as today, the lens home, no call
+ const lenses=tvKey(room({focus:2}),'select',LOCAL);
+ assert.deepEqual(lenses.calls,[]); assert.deepEqual(lenses.events.at(-1),{type:'nav',screen:'essaytype',focus:0});
+ // Menu and Back are unchanged
+ assert.equal(tvKey(room({focus:0}),'menu',LOCAL).events.at(-1).screen,'essaytype');
+ const back=tvKey(room({focus:0}),'back',LOCAL); assert.deepEqual(back.calls,[]); assert.equal(back.events.at(-1).screen,'landing');
+});

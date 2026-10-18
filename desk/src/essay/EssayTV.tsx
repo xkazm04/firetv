@@ -18,6 +18,7 @@ import { CIT, BONE, EssayBrand as Brand, EssayArrow as Arrow } from "@/tv/marks"
 import { ESSAY_FONTS } from "./fonts";
 import { EssayCabinet } from "./EssayCabinet";
 import { WorkroomScreen } from "./Workroom";
+import { NOT_READ_LABEL, READING_LABEL, READING_PIECE } from "./captions";
 import { afterFonts } from "@/lib/afterFonts";
 
 const MUTE = "rgba(238,233,224,.5)";
@@ -143,8 +144,8 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const chosen = lens && s.essayType === lens.id;
   const reading = pieceBeingRead(a?.piece);
   const refused = refusalCaption(s);
-  const cap = job?.phase === "running" ? { label: "Reading", text: reading ? "The desk is reading your piece, a paragraph at a time. Each one lands here." : "The desk is reading your paragraph. It lands here." }
-    : job?.phase === "failed" && (chosen || !a) ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
+  const cap = job?.phase === "running" ? { label: READING_LABEL, text: reading ? READING_PIECE : "The desk is reading your paragraph. It lands here." }
+    : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
     : refused ? refused
     : at === "plan" ? { label: "Start from the pattern", text: "Write the paragraph yourself: one sentence for each slot, on the phone." }
     : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: summaryLine(a) }

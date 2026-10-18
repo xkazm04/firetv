@@ -1,10 +1,13 @@
 /**
  * The Workroom on the TV (v2 T2, Adult mode): the learner's kept pieces and their twin, in Specimen's language. The TV
  * shows titles, counts, marks and level words, never a sentence of the text (the curtain, adult plan A6): the words
- * live on the PC page (/drop) and the phone. Up/Down walk the pieces; the one action goes to the lenses.
+ * live on the PC page (/drop) and the phone. Up/Down walk the pieces; OK on one reads it on the TV (recert-6/L1-helena-46-EM5-3),
+ * captioned as the lens home captions a piece being read; the one action goes to the lenses.
  */
 import type { Session } from "@/lib/session/store";
+import { refusalCaption } from "@/lib/rules/essay";
 import { stopAt, workroomStops } from "@/tv/keys";
+import { NOT_READ_LABEL, READING_LABEL, READING_PIECE } from "./captions";
 import { CIT, EssayBrand as Brand } from "@/tv/marks";
 
 const CHANNEL_WORD = { chat: "Messages", email: "Emails", generic: "Essays" } as const;
@@ -21,6 +24,10 @@ export function WorkroomScreen({ s, focus }: { s: Session; focus: number }) {
   const w = s.workroom;
   const stops = workroomStops(s), at = stopAt(stops, focus);
   const drop = s.phoneUrl ? s.phoneUrl.replace(/\/phone.*$/, "/drop") : "/drop";
+  // a piece read from here: the reading opens on the TV when its first paragraph is back; until then, or if it is not read, the Workroom says so
+  const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
+  const cap = job?.phase === "running" ? { label: READING_LABEL, text: READING_PIECE }
+    : job?.phase === "failed" && job.error ? { label: NOT_READ_LABEL, text: job.error } : refusalCaption(s);
   return (<>
     <Brand />
     <div className="em-top"><div className="em-pill" data-role="essay-chip"><span className="em-key">MENU</span><span>Lenses</span></div>
@@ -48,5 +55,6 @@ export function WorkroomScreen({ s, focus }: { s: Session; focus: number }) {
       {w?.born && <p className="em-wr-note">Download its card on the PC page: Twin Card 1.0, for any tool that writes in your voice.</p>}
     </aside>
     <div className="em-wr-acts"><div className="em-act" data-focused={at === "lenses"}>The lenses</div></div>
+    {cap && <div className="em-caption"><div className="em-cap" key={cap.label + "|" + cap.text}><div className="em-lbl">{cap.label}</div><p>{cap.text}</p></div></div>}
   </>);
 }

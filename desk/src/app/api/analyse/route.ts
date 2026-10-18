@@ -5,17 +5,18 @@
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { analyseSentence } from "@/lib/desk/english";
-import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence } from "@/lib/desk/essay";
+import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence, type ReadingFor } from "@/lib/desk/essay";
 import { BUSY, blocksRun, refused, runJob, type JobRun } from "@/lib/desk/job";
-import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, type AnalysisType } from "@/lib/rules/essay";
+import { ANALYSIS_TYPES, essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, type AnalysisType } from "@/lib/rules/essay";
 import { addPiece, addVersion, FORMAT_NEEDED_LINE, getPiece, hasFormat, matchPiece, noticed, TEXT_NOTICE } from "@/lib/session/texts";
+import { roleFrom } from "@/lib/session/pairing";
 import { learnerAge } from "@/lib/rules/voice";
 import { modeOf } from "@/lib/rules/mode";
 import { sentenceProblem } from "@/lib/rules/english";
 
 export const dynamic = "force-dynamic";
 type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: string; type: AnalysisType; task?: string } | { kind: "rewrite"; n: number; text: string }
-  | { kind: "piece-again" }
+  | { kind: "piece-again" } | { kind: "shelf-piece"; pieceId: string }
   | { kind: "piece"; text: string; type: AnalysisType; keep?: boolean; pieceId?: string; source?: string; format?: string; title?: string; task?: string };
 
 /** E3-b: a reading refused before any run with a line for the learner says the line on the TV's status line too, whichever door sent it. */
@@ -26,8 +27,12 @@ function refusedWithLine(error: string, essay = true) {
 }
 
 /** The kinds of reading this route answers; a body naming none of them is not a reading. */
-const KINDS: ReadonlyArray<Body["kind"]> = ["english", "essay", "rewrite", "piece-again", "piece"];
+const KINDS: ReadonlyArray<Body["kind"]> = ["english", "essay", "rewrite", "piece-again", "piece", "shelf-piece"];
 const NOT_A_READING = "The desk did not get anything to read. Send it again from the phone.";
+/** A kept piece is read again from the TV's Workroom only (recert-6/L1-helena-46-EM5-3): the phone and the PC read through kind 'piece'. */
+const SHELF_PIECE_TV_ONLY = "A kept piece is read again from the TV's Workroom.";
+/** The Workroom named a piece that is not on the seated learner's shelf (deleted since, or never theirs): nothing is read. */
+const SHELF_PIECE_GONE = "That piece is not on your shelf.";
 const blank = (t: unknown) => typeof t !== "string" || !t.trim();
 
 /**
@@ -47,10 +52,39 @@ const TASK_MAX = 400;
 /** The task the paragraph answers, when the send names one: a plain trimmed string, or nothing. */
 const taskOf = (t: unknown): string | undefined => (typeof t === "string" && t.trim() ? t.trim().slice(0, TASK_MAX) : undefined);
 
+/**
+ * A whole piece read paragraph by paragraph while the TV fills in: the one run the phone's piece and the Workroom's kept
+ * piece share. The first paragraph back opens the reading (essay.set), the rest grow it (essay.progress).
+ */
+function readPiece(who: { id: string }, text: string, type: AnalysisType, age: number | undefined, o: { pieceId?: string; format?: string; reader: ReadingFor; untilRead?: boolean }) {
+  const paragraphs = paragraphsOf(text).length;
+  let first = true;
+  return runJob("analyse", async (run) => {
+    // LP-R2: a switch ends the job (store.ts switchedFrom) but not the reading: it keeps going into the leaving learner's
+    // away slot (every event here carries owner), and on to the owner's desk if they sit back down. A reading the learner replaced, or a reset desk, still drops.
+    const goes = () => readingStands(run, who.id);
+    dispatch({ type: "essay.type", essayType: type, owner: who.id });
+    const done = await analysePiece(text, type, who.id, age, (a) => {
+      if (!goes()) return;
+      // `untilRead` (the Workroom's read): a report with no paragraph read yet does not open it, so a piece that fails leaves the TV on the Workroom
+      if (first && o.untilRead && !a.piece?.read.length) return;
+      // the first paragraph back opens the reading; the rest grow it where the learner is
+      dispatch(first ? { type: "essay.set", analysis: a, owner: who.id } : { type: "essay.progress", analysis: a, owner: who.id });
+      first = false;
+    }, o.pieceId, o.format, o.reader);
+    // the piece is recorded once it is all read, after the last paragraph's progress: say so, so the session's history
+    // and the Sunday page are read again (store.ts REHYDRATE)
+    if (goes()) dispatch({ type: "essay.progress", analysis: done, owner: who.id });
+    return done;
+  }, { key: "essay", start: `reading your piece, ${paragraphs} paragraphs — ${type} lens…`, done: (a) => a.summary.slice(0, 120) });
+}
+
 export async function POST(req: Request) {
   // a body that is not one of the readings is refused in desk words before any run: never a 500, never a failed job
   const body = (await req.json().catch(() => null)) as Body | null;
   if (!body || typeof body !== "object" || !KINDS.includes(body.kind)) return NextResponse.json({ error: NOT_A_READING }, { status: 400 });
+  // the TV's read of a kept piece is the TV's alone: any other role, or none, is refused before anything is looked up
+  if (body.kind === "shelf-piece" && roleFrom(req) !== "tv") return NextResponse.json({ error: SHELF_PIECE_TV_ONLY }, { status: 403 });
   if ((body.kind === "english" && blank(body.sentence)) || (body.kind === "essay" && blank(body.text))) return NextResponse.json({ error: NOT_A_READING }, { status: 400 });
   const sentenceLong = body.kind === "english" ? sentenceProblem(body.sentence) : null;
   if (sentenceLong) return refusedWithLine(sentenceLong, false);
@@ -109,6 +143,18 @@ export async function POST(req: Request) {
     }, { key: "essay", start: "reading the paragraphs that did not come back…", done: (x) => notSaved ?? x.summary.slice(0, 120) });
     return r.ok ? NextResponse.json(r.value) : refused(r);
   }
+  if (body.kind === "shelf-piece") {
+    // a kept piece read again from the TV's Workroom (recert-6/L1-helena-46-EM5-3): its latest version, looked up here for
+    // the seated learner only, read as the phone's piece is. It writes nothing: no piece, no version, no notice, no record.
+    const piece = typeof body.pieceId === "string" ? getPiece(who.id, body.pieceId) : null;
+    if (!piece) return refusedWithLine(SHELF_PIECE_GONE);
+    // a shelf without the notice (cleared since) is not read: only the phone accepts it
+    if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });
+    const type = (ANALYSIS_TYPES.find((t) => t.id === getSession().essayType) ?? ANALYSIS_TYPES[0]).id;
+    const r = await readPiece(who, piece.versions.at(-1)!.text, type, age, { pieceId: piece.id, reader: { mode, noSave: true }, untilRead: true });
+    // the answer names the piece and the summary the TV already shows, never its text
+    return r.ok ? NextResponse.json({ pieceId: piece.id, summary: r.value.summary }) : refused(r);
+  }
   if (body.kind === "piece") {
     // a whole piece (v2 E1): checked in code before any run, kept on the learner's shelf when asked (after the
     // one-time notice), then read paragraph by paragraph while the TV fills in
@@ -135,24 +181,7 @@ export async function POST(req: Request) {
       if (kept.ok) pieceId = kept.value.id;
       else return NextResponse.json({ error: kept.error }, { status: kept.status });
     }
-    const paragraphs = paragraphsOf(body.text).length;
-    let first = true;
-    const r = await runJob("analyse", async (run) => {
-      // LP-R2: a switch ends the job (store.ts switchedFrom) but not the reading: it keeps going into the leaving learner's
-      // away slot (every event here carries owner), and on to the owner's desk if they sit back down. A reading the learner replaced, or a reset desk, still drops.
-      const goes = () => readingStands(run, who.id);
-      dispatch({ type: "essay.type", essayType: body.type, owner: who.id });
-      const done = await analysePiece(body.text, body.type, who.id, age, (a) => {
-        if (!goes()) return;
-        // the first paragraph back opens the reading; the rest grow it where the learner is
-        dispatch(first ? { type: "essay.set", analysis: a, owner: who.id } : { type: "essay.progress", analysis: a, owner: who.id });
-        first = false;
-      }, pieceId, body.format, { mode, task: taskOf(body.task) });
-      // the piece is recorded once it is all read, after the last paragraph's progress: say so, so the session's history
-      // and the Sunday page are read again (store.ts REHYDRATE)
-      if (goes()) dispatch({ type: "essay.progress", analysis: done, owner: who.id });
-      return done;
-    }, { key: "essay", start: `reading your piece, ${paragraphs} paragraphs — ${body.type} lens…`, done: (a) => a.summary.slice(0, 120) });
+    const r = await readPiece(who, body.text, body.type, age, { pieceId, format: body.format, reader: { mode, task: taskOf(body.task) } });
     return r.ok ? NextResponse.json(r.value) : refused(r);
   }
   // one paragraph per reading: a longer text is refused with a sentence, never cut down (the cap is in rules/essay,

@@ -446,12 +446,14 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (open >= 0) o.focus(open); else o.calls.push({ url: "/api/analyse", body: { kind: "essay", text: planText(plan), type: plan.lens } });
     }
   },
-  // the Workroom (v2 T2, Adult mode): Up/Down the pieces, Right to the actions (the lenses), Back to the desk
+  // the Workroom (v2 T2, Adult mode): Up/Down the pieces, OK on one reads it, Right to the actions (the lenses), Back to the desk
   workroom: (s, k, _, o) => {
     const stops = workroomStops(s), at = stopAt(stops, s.focus);
     if (k === "down") o.move(stops.length, 1); if (k === "up") o.move(stops.length, -1);
     if (k === "right" || k === "left") o.focus(at === "lenses" ? 0 : stops.indexOf("lenses"));
     if ((k === "select" && at === "lenses") || k === "menu") o.nav("essaytype", 0);
+    // OK on a piece reads its latest version on the TV (recert-6/L1-helena-46-EM5-3); the desk looks the text up, the TV sends only the id
+    if (k === "select" && at && at !== "lenses" && !running(s, "analyse")) o.calls.push({ url: "/api/analyse", body: { kind: "shelf-piece", pieceId: at } });
     if (k === "back") o.nav("landing", landingFocus(s, "essay"));
   },
   // one sentence at a time: Up/Down walk the paragraph, Left/Right the actions; Menu is the table, where Up/Down still walk

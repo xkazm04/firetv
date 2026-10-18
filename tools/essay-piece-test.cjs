@@ -624,3 +624,48 @@ test('EM3-6 (recert-5): a keep that names a deleted pieceId makes a new piece, n
   assert.match(shelf, /onGone\?\.\(gone\)/); assert.match(phone, /onGone=\{\(id\) => setPieceId\(\(cur\) => \(id === "all" \|\| cur === id \? undefined : cur\)\)\}/);
   texts.deleteAll('ema');
 });
+
+// ---- recert-6 L1-helena-46-EM5-3: the TV's Workroom reads a kept piece; read-only, TV role only ----
+test('EM5-3 (recert-6): the TV reads a kept piece by id (kind shelf-piece): the reading lands through essay.set/essay.progress; phone or no role is 403, an unknown id 400 with no run; the shelf, the notice and learners.json are byte-identical', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = []; texts.deleteAll('ema'); texts.markNoticed('ema');
+  answer = perParagraph(faultyAt([4]));
+  const kept = await quietly(() => post({ kind: 'piece', text: PIECE, type: 'structure', keep: true, source: 'paste', format: 'email' }));
+  assert.equal(kept.status, 200);
+  const id = texts.listPieces('ema')[0].id;
+  dispatch({ type: 'nav', screen: 'workroom', focus: 0 });
+  const files = (dir) => fs.existsSync(dir) ? fs.readdirSync(dir, { recursive: true }).sort().map((f) => [f, fs.statSync(path.join(dir, f)).isFile() ? fs.readFileSync(path.join(dir, f), 'utf8') : '']) : [];
+  const stores = () => JSON.stringify({ texts: files(path.join(data, 'texts')), learners: fs.readFileSync(path.join(data, 'learners.json'), 'utf8') });
+  const before = stores();
+  const as = (role, body) => analyse.POST(new Request('http://desk/api/analyse', { method: 'POST', headers: role ? { 'x-desk-role': role } : {}, body: JSON.stringify(body) }));
+  // (b) the phone, a guest and no role at all are refused before anything is looked up or run
+  seen = [];
+  for (const role of ['phone', 'guest', null]) assert.equal((await as(role, { kind: 'shelf-piece', pieceId: id })).status, 403, `role ${role}`);
+  assert.equal(seen.length, 0, 'no run for a refused role');
+  // (c) an id that is not on the seated learner's shelf: refused with the line, no run, the TV stays on the Workroom
+  const gone = await as('tv', { kind: 'shelf-piece', pieceId: 't-nothere' });
+  assert.equal(gone.status, 400); assert.equal((await gone.json()).error, 'That piece is not on your shelf.');
+  assert.equal((await as('tv', { kind: 'shelf-piece' })).status, 400, 'no id at all');
+  assert.equal(seen.length, 0); assert.equal(getSession().screen, 'workroom');
+  // (a) the TV reads it: one call per paragraph of the latest version, the reading opens on the TV and is grown by essay.progress
+  const events = [];
+  answer = async (req) => { const r = await perParagraph(faultyAt([4]))(req); events.push(getSession().screen); return r; };
+  const r = await as('tv', { kind: 'shelf-piece', pieceId: id });
+  assert.equal(r.status, 200);
+  const got = await r.json();
+  assert.deepEqual(Object.keys(got).sort(), ['pieceId', 'summary'], 'the answer carries the id and the summary, never the text');
+  assert.equal(got.pieceId, id); assert.ok(!JSON.stringify(got).includes('Teenagers'), 'no sentence of the piece in the answer');
+  assert.equal(seen.length, 3, 'three paragraphs, three calls'); assert.match(seen[0].prompt, /email/, 'read as its kept format');
+  assert.equal(getSession().screen, 'forensic', 'the reading is on the TV');
+  assert.equal(getSession().essay.piece.pieceId, id); assert.deepEqual(getSession().essay.piece.read, [0, 1, 2]);
+  assert.deepEqual(getSession().essay.verdicts.filter((v) => v.verdict === 'faulty').map((v) => v.n), [4], 'the progress carried the ruling');
+  // (d) it wrote nothing: no version, no new piece, no notice change, no history line
+  assert.equal(stores(), before, 'shelf, notice and learners.json are byte-identical');
+  assert.equal(texts.getPiece('ema', id).versions.length, 1);
+  // a piece whose every paragraph fails: no reading opens, the TV stays on the Workroom, still nothing written
+  dispatch({ type: 'nav', screen: 'workroom', focus: 0 }); seen = [];
+  answer = perParagraph(faultyAt([]), new Set([0, 1, 2]));
+  const failed = await quietly(() => as('tv', { kind: 'shelf-piece', pieceId: id }));
+  assert.notEqual(failed.status, 200); assert.equal(getSession().screen, 'workroom'); assert.equal(getSession().jobs.analyse.phase, 'failed');
+  assert.equal(stores(), before);
+  texts.deleteAll('ema');
+});
