@@ -2263,7 +2263,11 @@
           "revision": 2,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:28 This core turns pen messages into an annotation document a TV shell feeds and reads; a search of core/ for JobExecutor, ModuleLoader, HostHooks, microtask and macrotask found none, so there is no language engine evaluating source through host hooks, job queues or a module loader.",
+          "evaluatedAt": "2026-10-18",
+          "evaluatedAgainst": "sha256-b2:08d3fea13f40733a",
+          "evaluatedRevision": 2
         },
         {
           "subject": "multi-provider-gateway-plane",
