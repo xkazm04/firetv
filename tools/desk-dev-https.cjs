@@ -30,6 +30,7 @@ function make(){
 
 if(!fs.existsSync(cert)||!fs.existsSync(key))make();
 console.log('desk-dev-https: certificate for '+names.join(', ')+' in '+dir);
+console.log('desk-dev-https: how a phone trusts it once: docs/DESK-HTTPS-ON-THE-LAN.md');
 if(process.argv.includes('--cert-only'))process.exit(0);
 const next=require.resolve('next/dist/bin/next',{paths:[process.cwd()]});
 const child=spawn(process.execPath,[next,'dev','--experimental-https','--experimental-https-key',key,'--experimental-https-cert',cert],{stdio:'inherit',env:{...process.env,DESK_HTTPS:'1'}});
