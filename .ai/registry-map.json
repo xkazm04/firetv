@@ -2393,7 +2393,11 @@
           "revision": 7,
           "changedAt": "2026-09-03",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "tv-app/build.gradle.kts:23 The release build configuration defines minification settings without configuring code signing credentials, signature verification, or installed-tree acceptance testing for the packaged application.",
+          "evaluatedAt": "2026-10-19",
+          "evaluatedAgainst": "sha256-b2:e3584aae3c68e668",
+          "evaluatedRevision": 7
         },
         {
           "subject": "build-economics",

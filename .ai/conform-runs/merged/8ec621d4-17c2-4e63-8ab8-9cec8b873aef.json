@@ -1,0 +1,72 @@
+{
+ "schema": "conform-run/1",
+ "worker": "8ec621d4-17c2-4e63-8ab8-9cec8b873aef",
+ "subject": "packaging",
+ "evaluatedAt": "2026-10-19T09:33:19.621795+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "tv-app",
+   "subject": "packaging",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "tv-app/build.gradle.kts:23 The release build configuration defines minification settings without configuring code signing credentials, signature verification, or installed-tree acceptance testing for the packaged application.",
+   "techniques": [
+    {
+     "technique": "signing-and-trust",
+     "verdict": "deviation",
+     "evidence": "tv-app/build.gradle.kts:23 The release build configuration defines minification settings without configuring signing credentials or an automated post-packaging signature verification gate."
+    },
+    {
+     "technique": "installed-tree-acceptance",
+     "verdict": "deviation",
+     "evidence": "tv-app/build.gradle.kts:43 Testing executes solely as JVM unit tests without an automated clean-environment ladder to install the APK on a target device, verify the installed tree, test launch smoke, and verify removal."
+    },
+    {
+     "technique": "os-arch-matrix",
+     "verdict": "deviation",
+     "evidence": "tv-app/build.gradle.kts:14 Specifies minSdk without an enumerated machine-readable OS and architecture matrix, per-cell automated acceptance jobs, or native binary architecture sniffing."
+    },
+    {
+     "technique": "variant-config-parity",
+     "verdict": "deviation",
+     "evidence": "tv-app/build.gradle.kts:66 The debug variant introduces debug tooling dependencies not present in release without an automated drift gate or allowed-divergence specification to ensure variant parity."
+    },
+    {
+     "technique": "native-payload-verification",
+     "verdict": "deviation",
+     "evidence": "tv-app/build.gradle.kts:104 Companion web assets are dynamically injected into the package assets directory without a versioned payload manifest declaring required payloads or verifying presence and absence."
+    },
+    {
+     "technique": "installer-authoring",
+     "verdict": "deviation",
+     "evidence": "tv-app/build.gradle.kts:12 Application identity is pinned in versioned configuration, but the five installer lifecycle transitions (upgrade, repair, downgrade refusal, uninstall) are unscripted and untested."
+    }
+   ],
+   "registryProposal": "The standard title and introduction frame the subject jurisdiction as desktop applications, but the same lifecycle obligations (signing, installed-tree acceptance, payload verification, OS/architecture matrices) govern client and embedded applications such as Fire TV / Android TV APK packaging; the scope statement should be generalized to client/device application packaging."
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-19T09:33:19.621795+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "packaging"
+   ],
+   "techniques": [
+    "installed-tree-acceptance",
+    "installer-authoring",
+    "native-payload-verification",
+    "os-arch-matrix",
+    "signing-and-trust",
+    "variant-config-parity"
+   ],
+   "deviations": 1,
+   "context": "tv-app",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}
