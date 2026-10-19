@@ -1804,7 +1804,11 @@
           "revision": 3,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/lib/engines/text.ts:67 Context and repository searches found no formatVersion, documentVersion or saveDocument identifiers; inspection found transient provider exchanges, temporary files, a rebuildable cache and telemetry rather than an application-owned saved-document contract.",
+          "evaluatedAt": "2026-10-19",
+          "evaluatedAgainst": "sha256-b2:1104f28404244275",
+          "evaluatedRevision": 3
         },
         {
           "subject": "agent-memory",

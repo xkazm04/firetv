@@ -2365,6 +2365,47 @@
           "evidence": "desk/src/tv/keys.ts:601 The landing runs indefinite decorative loops without a visible stop control, and its Play/Pause key is explicitly ignored."
         }
       ]
+    },
+    "desk-platform/engines/native-document-format": {
+      "context": "engines",
+      "subject": "native-document-format",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-19",
+      "evaluatedTs": "2026-10-19T08:38:20.588Z",
+      "worker": "ee9ad7bb-958e-41d7-8847-97e367ab9f96",
+      "techniques": [
+        {
+          "technique": "format-generations-are-declared",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/text.ts:67 The CLI call explicitly disables session persistence; it does not save user documents requiring generation compatibility."
+        },
+        {
+          "technique": "format-is-the-engines-input",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/codex.ts:48 This file supplies a temporary response schema to a CLI, rather than persisting an editor document for downstream consumption."
+        },
+        {
+          "technique": "ignorable-extensions-must-be-declared",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/shape.ts:63 This validates provider response properties; it does not add application-specific extensions to saved documents."
+        },
+        {
+          "technique": "one-writer-per-fact",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/shape.ts:135 The shared seam parses and validates a provider answer, rather than saving parallel editor and consumer representations."
+        },
+        {
+          "technique": "reference-or-embed",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/listen.ts:47 Audio is attached to a transcription request; there is no saved-document asset reference or embedding policy here."
+        },
+        {
+          "technique": "serialization-is-locale-free",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/voice.ts:84 This serializes an HTTP request, not the native saved-document format governed by this subject."
+        }
+      ]
     }
   }
 }
