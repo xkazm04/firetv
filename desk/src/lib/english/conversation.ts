@@ -13,7 +13,7 @@ import { modeOf } from "../rules/mode";
 import { audienceAllowed, defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, oldestDue, taughtAllowed } from "./curriculum";
 import { adultContent, isAdult } from "../rules/mode";
 import { ConversationError, lingaLine } from "./errors";
-import { EngineError, type EngineResult, type TextRequest } from "../engines/types";
+import { EngineError, type EngineResult } from "../engines/types";
 import { EASE_INSTRUCTION, learnerLost } from "./ease";
 import { climb, keepLadder, MEANING_MAX, sceneCueFor, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
@@ -604,12 +604,12 @@ export async function englishCommand(raw:unknown){
     const stepTask=c.mission&&!missionDone(c.mission)?" step: currentStep is the one goal this learner is working on. Set reached true only when submittedReply itself, in the learner's own words, does it, and quote the exact words of submittedReply that did it (at least two words); otherwise reached false with an empty quote.":"";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
     const task=action==="turn"?{task:`${pair?DUET_PAIR:"Respond in character to submittedReply, then assess it against the allowed skills."} Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}${pair&&c.duet?.coStarLearnerId?COSTAR_TASK:""}`,submittedReply:reply,...(pair?{coStarReply:pair.coStar.text}:{}),...(askedAbout?{askedAbout}:{}),...(fossil?{slipAgain:{said:fossil.said,better:fossil.better,task:FOSSIL_TASK}}:again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:REPLAY_TASK,coaching,afterForm:coaching!.after,...(frame?{frameWords:frame.anchors}:{}),askedBefore:askedBefore(c)};
-    const request:TextRequest={system:tutorSystem(c),prompt:JSON.stringify({...context(lost!==undefined?{...c,lost}:c,action!=="coach",action==="turn"?{text:reply,supported:c.supported}:undefined),...task}),schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:formSchema,accept:action==="turn"?(pair?pairAccept:turnAccept):action==="replay"?formAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"};
+    const prompt=JSON.stringify({...context(lost!==undefined?{...c,lost}:c,action!=="coach",action==="turn"?{text:reply,supported:c.supported}:undefined),...task});
     // LG-4 recert-8: a Back replay whose question does not invite the frame (backRefusal) is asked for once more, with the
     // refused question and the reason; the replay branch below refuses a second one
     let result!:EngineResult<Record<string,unknown>>;
     for(let refused:{question:string;why:string}|null=null,tries=0;tries<2;tries++){
-      result=await text<Record<string,unknown>>(refused?{...request,prompt:JSON.stringify({...JSON.parse(request.prompt),refused})}:request);
+      result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:refused?JSON.stringify({...JSON.parse(prompt),refused}):prompt,schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:formSchema,accept:action==="turn"?(pair?pairAccept:turnAccept):action==="replay"?formAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"});
       refused=back?backRefusal(c,result.json,back.coaching.after,frame!):null;
       if(!refused)break;
     }
