@@ -24,7 +24,7 @@ import { markCounts } from "@/lib/rules/marks";
 import { itemName, partPlace } from "@/lib/rules/calc-word";
 import { PaperPanel } from "./PaperPanel";
 import { ExplainTalk } from "./ExplainTalk";
-import { recogniserLang } from "./recogniserLang";
+import { recogniserLangFor } from "./recogniserLang";
 import { blankRow, type DraftRow } from "@/lib/rules/paperEntry";
 import { draftKey, parseDraft, serialiseDraft } from "@/lib/rules/paperDraft";
 import { WEEK_EMPTY, type WeekLine } from "@/lib/rules/week";
@@ -404,13 +404,13 @@ export default function Phone() {
   };
   /** A Mic press is listening: the phone does not move away from the field it is filling. */
   const hearing = useRef(false);
-  const listen = (into: (t: string) => void) => {
+  const listen = (into: (t: string) => void, tab = "") => {
     // Web Speech is not in TypeScript's DOM lib; the shape we use is small enough to declare here.
     type Rec = { lang: string; onresult: (ev: { results: Array<Array<{ transcript: string }>> }) => void; onerror: () => void; onend: () => void; start: () => void; stop: () => void };
     const w = window as unknown as { SpeechRecognition?: new () => Rec; webkitSpeechRecognition?: new () => Rec };
     const SR = w.SpeechRecognition ?? w.webkitSpeechRecognition;
     if (!SR) { setMsg("No speech recognition in this browser — type instead."); return null; }
-    const r = new SR(); r.lang = recogniserLang(s); r.onresult = (ev) => into(ev.results[0][0].transcript); r.onerror = () => { hearing.current = false; setMsg("did not catch that"); }; r.onend = () => { hearing.current = false; };
+    const r = new SR(); r.lang = recogniserLangFor(tab, s); r.onresult = (ev) => into(ev.results[0][0].transcript); r.onerror = () => { hearing.current = false; setMsg("did not catch that"); }; r.onend = () => { hearing.current = false; };
     r.start(); hearing.current = true; setMsg("listening…");
     return r; // the caller may hold the button and stop it on release
   };
@@ -822,7 +822,7 @@ export default function Phone() {
         {screen === "paste" && onSentence && <div className="pscreen" data-role="essay-rewrite"><h3>Sentence {onSentence.n}</h3><p>Rewrite it in your own words. The desk reads this one sentence again, in its paragraph.</p>
           {rewriting && <p role="alert" data-role="essay-rewrite-wait">{REWRITE_WHILE_READING}</p>}
           <div className="field"><textarea value={rewrite} onChange={(e) => setRewrite(e.target.value)} /></div>
-          <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setRewrite(t))}>Dictate</button>
+          <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setRewrite(t), "essay")}>Dictate</button>
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || rewriting} onClick={sendRewrite}>Send</button></div>
           {againBtn}
           {pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}</div>}
@@ -830,7 +830,7 @@ export default function Phone() {
         {screen === "paste" && onPlan && <div className="pscreen" data-role="essay-plan"><h3>Slot {onPlan.i + 1} · {onPlan.slots[onPlan.i]?.label}</h3><p>One sentence, in your own words. It inks on the TV. When all three are written, press OK on Read it.</p>
           <div className="field"><textarea aria-label="Your sentence for this slot" value={slotText} onChange={(e) => setSlotText(e.target.value)} /></div>
           {onPlan.plan.slots[onPlan.i] && planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i]) && <p data-role="essay-plan-fit">{planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i])}</p>}
-          <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setSlotText(t))}>Dictate</button>
+          <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setSlotText(t), "essay")}>Dictate</button>
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !slotText.trim()} onClick={sendSlot}>Send</button></div></div>}
 
         {screen === "paste" && !onSentence && !onPlan && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
@@ -852,7 +852,7 @@ export default function Phone() {
             {keep && !pieceId && <input className="pkeep" type="text" value={pieceTitle} maxLength={80} onChange={(e) => setPieceTitle(e.target.value)} placeholder="Name this piece (optional)" aria-label="Name this piece (optional)" data-role="essay-title" />}
             {stranded > 0 && <p className="pnote" data-role="essay-rewrites-stay" aria-live="polite">{rewriteStaysLine(stranded)}</p>}
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
-          <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()))}>Dictate</button>
+          <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()), "essay")}>Dictate</button>
             {!pieceCovers(pix) && <button className="pbtn" data-role="essay-analyse-one" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || notice !== null || !essay.trim()} onClick={paras.length === 1 && pieceId ? () => void readPiece(true) : analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button>}</div>
           <EssayShelf learnerId={s?.learner?.id} refresh={shelfTick} onOpen={openKept} onGone={(id) => setPieceId((cur) => (id === "all" || cur === id ? undefined : cur))} /></div>}
 

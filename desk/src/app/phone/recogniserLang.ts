@@ -4,5 +4,10 @@
  */
 import type { Session } from "@/lib/session/store";
 
-export const recogniserLang = (s: Pick<Session, "learner" | "profiles"> | null | undefined): "cs-CZ" | "en-US" =>
+const learnerLang = (s: Pick<Session, "learner" | "profiles"> | null | undefined): "cs-CZ" | "en-US" =>
   s?.learner && s.profiles?.find((p) => p.id === s.learner?.id)?.system === "cz" ? "cs-CZ" : "en-US";
+
+/** Essay Master is written and read in English: its panels listen in English whatever the school system. Math and Linga follow the learner. */
+export const recogniserLangFor = (tab: string, s: Pick<Session, "learner" | "profiles"> | null | undefined): "cs-CZ" | "en-US" =>
+  tab === "essay" ? "en-US" : learnerLang(s);
+export const recogniserLang = learnerLang;

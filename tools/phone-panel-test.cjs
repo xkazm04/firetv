@@ -556,7 +556,18 @@ test('MB-B33 mic: the recogniser language follows the seated learner\'s school s
  assert.equal(recogniserLang({learner:{id:'a',name:'A'},profiles}),'cs-CZ');
  for(const id of ['b','c','nobody'])assert.equal(recogniserLang({learner:{id,name:'x'},profiles}),'en-US',id);
  assert.equal(recogniserLang({learner:null,profiles}),'en-US');assert.equal(recogniserLang(null),'en-US');assert.equal(recogniserLang(undefined),'en-US');
- const page=code(PAGE);assert.match(page,/r\.lang = recogniserLang\(s\)/);assert.doesNotMatch(page,/r\.lang = "en-US"/);
+ const page=code(PAGE);assert.match(page,/r\.lang = recogniserLangFor\(tab, s\)/);assert.doesNotMatch(page,/r\.lang = "en-US"/);
+});
+
+test('L1-daniel-15-EM2-1: Essay dictation listens in English for a cz learner; Math and Linga keep the learner language',()=>{
+ const {recogniserLangFor}=require(path.join(SRC,'app/phone/recogniserLang.ts'));
+ const profiles=[{id:'a',name:'A',type:'high-school',system:'cz',modules:[]}],cz={learner:{id:'a',name:'A'},profiles};
+ assert.equal(recogniserLangFor('essay',cz),'en-US');
+ for(const tab of ['','maths','english'])assert.equal(recogniserLangFor(tab,cz),'cs-CZ',tab);
+ assert.equal(recogniserLangFor('essay',null),'en-US');
+ const page=code(PAGE);
+ assert.equal((page.match(/, "essay"\)\}>Dictate</g)||[]).length,3,'the rewrite, plan-slot and paragraph Dictate buttons name the Essay tab');
+ assert.match(page,/listen\(setQ\)\}>Mic</);assert.match(page,/listen\(setSentence\)\}>Mic</,'the Math and Linga Mic buttons name no tab');
 });
 
 // ---- X2 Type it (MB-B18, delivery 5b): a typed way to explain beside the hold button while a recogniser exists
