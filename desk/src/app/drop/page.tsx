@@ -93,7 +93,7 @@ export default function DropPage() {
           <div key={c.channel} className="twin-ch">
             <h3>{CH[c.channel] ?? c.channel} · {c.born ? "born" : `${twin.need - c.pieces} more to keep`}</h3>
             {c.born && <dl>{c.words.map((w) => <div key={w.dim}><dt>{w.dim}</dt><dd>{w.word}</dd></div>)}</dl>}
-            {c.exemplars.length > 0 && <><p>What it learns from (in your own words; leave out anything you would not share):</p>
+            {c.exemplars.length > 0 && <><p>What it learns from (in your own words). A piece you leave out is not used as a sample, but it still counts toward the style words:</p>
               <ul>{c.exemplars.map((e) => <li key={e.pieceId}><label><input type="checkbox" checked={e.included} onChange={(ev) => void toggle(e.pieceId, !ev.target.checked)} /> {e.text}</label></li>)}</ul></>}
           </div>
         )) : <p>Keep three messages (or three emails) to bring your twin to life.</p>}

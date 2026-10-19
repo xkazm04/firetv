@@ -570,6 +570,7 @@ test('EM5-2: /drop starts with no format chosen, the shelf shows each format, th
 });
 test('L1-helena-46-EM5-2: /drop notice and empty shelf describe the PC page', () => {
   const drop = fs.readFileSync(path.join(root, 'src/app/drop/page.tsx'), 'utf8'), shelf = fs.readFileSync(path.join(root, 'src/app/phone/EssayShelf.tsx'), 'utf8');
+  assert.match(drop, /A piece you leave out is not used as a sample, but it still counts toward the style words/);
   assert.match(drop, /<TextNotice where="pc"/); assert.match(drop, /<EssayShelf where="pc"/);
   assert.match(shelf, /reading || where === "pc" ? "Not now" : "Read without keeping"/, 'the phone keeps its own words');
   assert.match(shelf, /Pieces you keep with \\"Keep it\\" on this page land here/); assert.match(shelf, /Pieces you read on the TV with \\"Keep it on my shelf\\" land here/);
