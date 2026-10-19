@@ -214,8 +214,11 @@ const backHelp = (c: Conversation) => c.moment?.repair?.lost || duetRefuses(c, "
  */
 export const replayThinking = (c: Conversation | null | undefined): string | null =>
   c?.pending && c.replayFor === c.pending ? `${c.partner.split(" · ")[0]} is thinking of a new question.` : null;
-/** LG-4: a moment's replay on the recap, one short line: the learner's reply, and whether it said the form (never a count). */
-export const replayLine = (reply: string, used: boolean) => `Tried again: “${recapQuote(reply)}”${used ? " · you used it" : ""}`;
+/**
+ * LG-4: a moment's replay on the recap, one short line: the learner's reply, and whether it said the form (never a count).
+ * recert-11 (LT-adela-17-J4-1): a retry that did not use the form says so plainly, never a bare "Tried again" over the slip.
+ */
+export const replayLine = (reply: string, used: boolean) => used ? `Tried again: “${recapQuote(reply)}” · you used it` : `Tried again, not with the new form yet: “${recapQuote(reply)}”`;
 
 /** The caption tag over each rung of the rescue ladder (lib/english/help.ts): the rung names itself. */
 export const RUNG_TAG = { 1: "Said more simply", 2: "What it means", 3: "A way to start" } as const;

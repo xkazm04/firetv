@@ -357,7 +357,7 @@ test('LG-4 (d): the reply to the replay question is kept on the moment with whet
       await r.cmd('finish');
       const v=V.lingaView(r.getSession(),{});
       assert.deepEqual(v.recap.moments,[{kind:'fix',said:'I am work',better:'I work',why:'Work is the verb here.',tried:reply,used}]);
-      assert.ok(V.viewText(v).includes(`  "I am work" → "I work" (Work is the verb here.)\n      Tried again: “${reply}”${used?' · you used it':''}\n`),'one short line on the recap moment');
+      assert.ok(V.viewText(v).includes(`  "I am work" → "I work" (Work is the verb here.)\n      ${used?`Tried again: “${reply}” · you used it`:`Tried again, not with the new form yet: “${reply}”`}\n`),'one short line on the recap moment');
     }finally{r.done();}
   }
 });
@@ -581,7 +581,7 @@ test('LG-4 recert-8 rules: a long reply is cut at a sentence or clause end, neve
   const stored=ADELA.slice(0,R.USED_MAX);
   assert.match(stored,/depends on whether $/,'the recert-8 quote as stored');
   assert.equal(R.recapQuote(stored),ADELA_TWO,'cut back to its last sentence end');
-  assert.equal(V.replayLine(stored,false),`Tried again: “${ADELA_TWO}”`,'the one wording, TV and phone');
+  assert.equal(V.replayLine(stored,false),`Tried again, not with the new form yet: “${ADELA_TWO}”`,'the one wording, TV and phone');
   assert.equal(R.recapQuote('I have tomato and flowers'),'I have tomato and flowers','a short quote is left alone');
   const long='Well, when my friends message me late at night about homework or games or anything else that happens to come up, I usually wait, because sleep matters more to me than any chat that could easily wait until morning';
   assert.equal(R.clauseCut(long),'Well, when my friends message me late at night about homework or games or anything else that happens to come up, I usually wait…','no sentence end: the last clause end');
@@ -596,10 +596,29 @@ test('LG-4 recert-8 wired: Adela\'s long replay reply reaches the recap as whole
     await r.cmd('moment-done');await r.say(ADELA);await r.cmd('finish');
     const c=r.getSession().conversation,v=V.lingaView(r.getSession(),{});
     assert.equal(c.moments[0].replay.reply,ADELA_TWO);
-    assert.equal(v.hero.tried,`Tried again: “${ADELA_TWO}”`,'the TV');
+    assert.equal(v.hero.tried,`Tried again, not with the new form yet: “${ADELA_TWO}”`,'the TV');
     assert.equal(v.recap.moments[0].tried,ADELA_TWO,'the phone');
     assert.doesNotMatch(V.viewText(v),/whether/);
   }finally{r.done();}
+});
+
+// ---- recert-11 (LT-adela-17-J4-1): Adéla's, Petra's and Viktor's recaps said "Tried again: …" over a retry with used false that
+// still carried the slip. An unused retry now says the new form was not used yet, on the TV recap, the phone recap and viewText.
+test('recert-11 (1): a retry with used false never reads as a bare "Tried again"; a used one keeps "· you used it"',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts')),fs=require('node:fs');
+  const unused=V.replayLine('I read it in spare minutes.',false);
+  assert.equal(unused,'Tried again, not with the new form yet: “I read it in spare minutes.”');
+  assert.doesNotMatch(unused,/^Tried again:/,'never the bare wording');assert.doesNotMatch(unused,/you used it/);
+  assert.equal(V.replayLine('I work at the front desk.',true),'Tried again: “I work at the front desk.” · you used it');
+  const r=await lg4(asked(REPLAY_Q));
+  try{
+    await r.cmd('moment-done');await r.say('Every morning I check in the guests.');await r.cmd('finish');
+    const v=V.lingaView(r.getSession(),{});
+    assert.equal(v.recap.moments[0].used,false);
+    assert.equal(v.hero.tried,'Tried again, not with the new form yet: “Every morning I check in the guests.”','the TV recap');
+    assert.doesNotMatch(V.viewText(v),/Tried again:/,'nowhere on the recap the bare wording');
+  }finally{r.done();}
+  assert.match(fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8'),/replayLine\(m\.replay\.reply,!!m\.replay\.used\)/,'the phone recap uses the same line');
 });
 
 // ---- LG-5 recert-9 (3): Back's replay stacked a second partner turn on the one pending under the moment, 2 of 2 replays:
