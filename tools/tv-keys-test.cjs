@@ -963,3 +963,39 @@ test('workroom 2 (recert-6/L1-helena-46-EM5-3): OK on a piece row reads that pie
  assert.equal(tvKey(room({focus:0}),'menu',LOCAL).events.at(-1).screen,'essaytype');
  const back=tvKey(room({focus:0}),'back',LOCAL); assert.deepEqual(back.calls,[]); assert.equal(back.events.at(-1).screen,'landing');
 });
+
+test('profile setup (L1-radka-41-MB5-1, TV half): the rows start on the likely value - a 12-year-old elementary cz maths-only child takes 13 presses, not 21',()=>{
+ const {tvKey}=keys();const {AGE_RANGE}=require(path.join(root,'src/tv/profileRows.ts'));
+ let s=session({screen:'profile',focus:0,profiles:[],learner:null,draft:{id:'n',name:'',type:'high-school',modules:['maths','english','essay']}});
+ let presses=0;
+ const press=(k)=>{presses++;for(const e of tvKey(s,k,LOCAL).events){
+  if(e.type==='focus')s={...s,focus:e.focus};
+  else if(e.type==='profile.draft'){const d={...s.draft,...e.patch};const r=AGE_RANGE[d.type];if(r&&d.age!==undefined&&(d.age<r[0]||d.age>r[1]))delete d.age;s={...s,draft:d};}}};
+ const here=()=>{const rows=profileRows(s.draft),at=locate(rows,s.focus);return {title:rows[at.r].title,cell:rows[at.r].cells[at.c]};};
+ const pick=(pred)=>{for(let g=0;g<60;g++){const rows=profileRows(s.draft),at=locate(rows,s.focus);let tr=-1,tc=-1;
+   rows.forEach((r,i)=>r.cells.forEach((c,j)=>{if(tr<0&&pred(c)){tr=i;tc=j;}}));assert.ok(tr>=0,'target exists');
+   if(at.r!==tr)press(at.r<tr?'down':'up');else if(at.c!==tc)press(at.c<tc?'right':'left');else return press('select');}
+  assert.fail('lost on the profile screen');};
+ pick(c=>c.kind==='type'&&c.type==='elementary');
+ assert.equal(presses,1);
+ assert.deepEqual([here().title,here().cell.age],['Age',10],'after a type, the lamp is on the middle of the age range, one press to the row');
+ pick(c=>c.kind==='age'&&c.age===12);
+ assert.equal(presses,4);
+ assert.deepEqual([here().title,here().cell.system],['School system','uk'],'after an age, the system row on its default');
+ pick(c=>c.kind==='system'&&c.system==='cz');
+ assert.equal(presses,6);
+ assert.equal(here().title,'Interested in');
+ pick(c=>c.kind==='interest'&&c.sub==='english');pick(c=>c.kind==='interest'&&c.sub==='essay');
+ assert.deepEqual(s.draft.modules,['maths']);
+ assert.ok(!profileRows(s.draft).some(r=>r.title==='Maths course'),'no university course row for an elementary child');
+ pick(c=>c.kind==='save');
+ assert.equal(presses,13,'was 21 before the rows started on the likely value');
+ // the middles named by the finding; the high-school landing is 17; the Maths course is kept for a learner who can use it
+ for(const [type,mid] of [['elementary',10],['high-school',17]]){
+  const d={id:'n',name:'',type:'other',modules:['maths']};const t=session({screen:'profile',focus:0,draft:d});
+  const rows=profileRows({...d,type});const ix=rows[0].cells.findIndex(c=>c.type===type);
+  const ev=tvKey({...t,focus:ix},'select',LOCAL).events;
+  assert.equal(rows[1].cells[locate(rows,focusAfter(t,{events:ev})).c].age,mid,`${type} lands on ${mid}`);}
+ assert.ok(profileRows({id:'n',name:'',type:'high-school',modules:['maths']}).some(r=>r.title==='Maths course'));
+ assert.ok(profileRows({id:'n',name:'',type:'elementary',modules:['maths'],mathPath:'calc1'}).some(r=>r.title==='Maths course'),'a draft already on a course keeps its row');
+});

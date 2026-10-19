@@ -83,9 +83,24 @@ export function profileRows(d: Profile | null): Row[] {
   if (adultAllowed(d ?? { type: t })) rows.push({ title: "Mode", cells: modeCells(d ?? { type: t }) });
   rows.push({ title: "School system", cells: SYSTEMS.map((x) => ({ kind: "system", label: SYSTEM_WORDS[x], blurb: SYSTEM_BLURB[x], system: x })) });
   rows.push({ title: "Interested in", cells: (["maths", "english", "essay"] as Subject[]).map((m) => ({ kind: "interest", label: BRAND[m], blurb: MODULE_BLURB[m], sub: m })) });
-  if ((d?.modules ?? ALL).includes("maths")) rows.push({ title: "Maths course", cells: COURSES.map((p) => ({ kind: "path", label: PATHS[p].name, blurb: PATHS[p].blurb, path: p })) });
+  // an elementary child is on the school path: a university course is not offered there unless the draft already holds one
+  if ((d?.modules ?? ALL).includes("maths") && (t !== "elementary" || (d?.mathPath !== undefined && d.mathPath !== "school"))) rows.push({ title: "Maths course", cells: COURSES.map((p) => ({ kind: "path", label: PATHS[p].name, blurb: PATHS[p].blurb, path: p })) });
   rows.push({ title: "", cells: [{ kind: "save", label: "Save", blurb: saveBlurb(d) }, { kind: "back", label: "Back", blurb: "Throw the draft away and go back." }] });
   return rows;
+}
+/** The cell of a row the lamp lands on when a pick moves on to it: the draft's own value, else the likely one (the middle of the age range, Family, the first course), else the first cell. */
+export function likelyIx(row: Row, d: Profile | null): number {
+  const first = row.cells[0];
+  if (!first) return 0;
+  const at = (hit: (c: Cell) => boolean) => Math.max(0, row.cells.findIndex(hit));
+  switch (first.kind) {
+    case "age": { if (d?.age !== undefined) return at((c) => c.age === d.age); const r = AGE_RANGE[d?.type ?? "high-school"]; return r ? Math.round((r[1] - r[0]) / 2) : 0; }
+    case "mode": return at((c) => c.mode === (d?.mode ?? "family"));
+    case "system": return at((c) => c.system === systemOf(d));
+    case "path": return at((c) => c.path === (d?.mathPath ?? "school"));
+    case "type": return at((c) => c.type === (d?.type ?? "high-school"));
+    default: return 0;
+  }
 }
 export function locate(rows: Row[], f: number): { r: number; c: number } {
   let i = f; for (let r = 0; r < rows.length; r++) { if (i < rows[r].cells.length) return { r, c: i }; i -= rows[r].cells.length; }

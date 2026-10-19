@@ -15,7 +15,7 @@ import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/libr
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { PATHS, frontierOn, learnerPath, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { lessonStates } from "@/lib/library/watched";
-import { profileRows, locate, flat } from "@/tv/profileRows";
+import { profileRows, locate, flat, likelyIx, AGE_RANGE } from "@/tv/profileRows";
 import { continueCard, likeUnit, tonightsSheet } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
 import { LANDING_REST, essayWaiting, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
@@ -371,11 +371,19 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     const rows = profileRows(s.draft), at = locate(rows, s.focus), cell = rows[at.r].cells[at.c];
     if (k === "right") o.focus(flat(rows, at.r, at.c + 1)); if (k === "left") o.focus(flat(rows, at.r, at.c - 1));
     if (k === "down" && at.r < rows.length - 1) o.focus(flat(rows, at.r + 1, at.c)); if (k === "up" && at.r > 0) o.focus(flat(rows, at.r - 1, at.c));
+    // a pick in a one-answer row moves the lamp to the next row's current or likely cell, so one press per row is the norm
+    const pick = (patch: Partial<Profile>) => {
+      o.ev({ type: "profile.draft", patch });
+      const d: Profile = { id: "", name: "", type: "high-school", modules: [], ...s.draft, ...patch };
+      const r = AGE_RANGE[d.type]; if (r && d.age !== undefined && (d.age < r[0] || d.age > r[1])) delete d.age;
+      const next = profileRows(d), nr = Math.min(at.r + 1, next.length - 1);
+      o.focus(flat(next, nr, likelyIx(next[nr], d)));
+    };
     if (k === "select") {
-      if (cell.kind === "type" && cell.type) o.ev({ type: "profile.draft", patch: { type: cell.type } });
-      else if (cell.kind === "age") o.ev({ type: "profile.draft", patch: { age: cell.age } });
-      else if (cell.kind === "mode" && cell.mode) o.ev({ type: "profile.draft", patch: { mode: cell.mode } });
-      else if (cell.kind === "system" && cell.system) o.ev({ type: "profile.draft", patch: { system: cell.system } });
+      if (cell.kind === "type" && cell.type) pick({ type: cell.type });
+      else if (cell.kind === "age") pick({ age: cell.age });
+      else if (cell.kind === "mode" && cell.mode) pick({ mode: cell.mode });
+      else if (cell.kind === "system" && cell.system) pick({ system: cell.system });
       else if (cell.kind === "path" && cell.path) o.ev({ type: "profile.draft", patch: { mathPath: cell.path } });
       else if (cell.kind === "interest" && cell.sub) { const m = cell.sub, on = s.draft?.modules ?? []; o.ev({ type: "profile.draft", patch: { modules: on.includes(m) ? on.filter((x) => x !== m) : [...on, m] } }); }
       else if (cell.kind === "save") o.ev({ type: "profile.save" }); else o.ev({ type: "profile.discard" });
