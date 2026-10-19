@@ -2489,6 +2489,52 @@
         }
       ],
       "registryProposal": "The standard title and introduction frame the subject jurisdiction as desktop applications, but the same lifecycle obligations (signing, installed-tree acceptance, payload verification, OS/architecture matrices) govern client and embedded applications such as Fire TV / Android TV APK packaging; the scope statement should be generalized to client/device application packaging."
+    },
+    "tooling/uat/production-trace-scoring": {
+      "context": "uat",
+      "subject": "production-trace-scoring",
+      "bundle": "llm-observability",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-19",
+      "evaluatedTs": "2026-10-19T09:49:12.385Z",
+      "worker": "dc815dc6-6c27-4e95-a1a8-c32ba8a9a80a",
+      "techniques": [
+        {
+          "technique": "drift-classified-rescoring",
+          "verdict": "not-applicable",
+          "evidence": "uat/driver/recertify.cjs:223 Recertification creates a separate synthetic run; late-arriving production spans are not the rescoring trigger."
+        },
+        {
+          "technique": "error-analysis-first-taxonomy",
+          "verdict": "not-applicable",
+          "evidence": "uat/rubric.md:3 This simulated acceptance harness already has a defined rubric; production-traffic taxonomy bootstrapping is outside this context."
+        },
+        {
+          "technique": "errors-always-oversampling",
+          "verdict": "not-applicable",
+          "evidence": "uat/driver/linga-text.cjs:594 Every selected simulated journey reaches the judge call without a traffic-sampling gate requiring an error override."
+        },
+        {
+          "technique": "settle-window-completion",
+          "verdict": "not-applicable",
+          "evidence": "uat/driver/linga-text.cjs:589 The harness awaits its controlled journey before judging, so completion does not require inference over arriving spans."
+        },
+        {
+          "technique": "stable-hash-sampling",
+          "verdict": "not-applicable",
+          "evidence": "uat/driver/linga-text.cjs:583 Candidates come from a finite Character journey list, matching the standard's bounded-harness exclusion."
+        },
+        {
+          "technique": "unscored-work-queue",
+          "verdict": "not-applicable",
+          "evidence": "uat/driver/recertify.cjs:58 Selection identifies synthetic pairs to rerun from open findings; it does not poll production traces for unscored work."
+        },
+        {
+          "technique": "verdict-coverage-receipt",
+          "verdict": "not-applicable",
+          "evidence": "uat/driver/linga-text.cjs:79 The judge receives the completed local journey record, with no late-span ingestion that would change its judged aggregate."
+        }
+      ]
     }
   }
 }

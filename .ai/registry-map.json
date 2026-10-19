@@ -2809,7 +2809,11 @@
           "revision": 7,
           "changedAt": "2026-09-01",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "uat/README.md:3 Context and repository searches found no traceId, unscored, settleWindow or coverageReceipt references, and the inspected code judges bounded simulated journeys rather than production traffic.",
+          "evaluatedAt": "2026-10-19",
+          "evaluatedAgainst": "sha256-b2:65f1d14beed83924",
+          "evaluatedRevision": 7
         },
         {
           "subject": "prompt-assembly",
