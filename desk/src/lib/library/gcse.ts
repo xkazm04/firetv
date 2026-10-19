@@ -79,6 +79,12 @@ export const STATEMENTS: Statement[] = [
   a("A23", "Generate a sequence from a term-to-term or a position-to-term rule"),
   a("A24", "Recognise square, cube, triangular, arithmetic, Fibonacci-type and simple geometric sequences"),
   a("A25", "Find the nth term of a linear sequence"),
+  // A26-A28 are not DfE subject-content codes: the host's own additions (L1-vojtech-18-MB4-3) so a learner whose paper tests a
+  // quadratic inequality, a logarithm or a domain has a statement to pick. Beyond Foundation, and no school unit teaches them
+  // (the only domain pages are Calculus 1's, which is not GCSE), so none touches a topic and each is Not on the desk yet.
+  a("A26", "Solve a quadratic inequality and write the solution as an interval", [], false),
+  a("A27", "Simplify and evaluate a logarithmic expression using the laws of logarithms", [], false),
+  a("A28", "Find the domain of a function, including where a denominator, root or logarithm limits it", [], false),
   r("R1", "Change between related standard units"),
   r("R2", "Use scale factors, scale diagrams and maps"),
   r("R3", "Write one quantity as a fraction of another"),

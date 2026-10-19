@@ -12,15 +12,27 @@ const G = require(src('lib/library/gcse.ts'));
 const { topicsOf } = require(src('lib/library/paths.ts'));
 
 test('the subject content is complete: N1-16, A1-25, R1-16, G1-25, P1-9, S1-6, in order, each with a source', () => {
-  const want = { N: 16, A: 25, R: 16, G: 25, P: 9, S: 6 };
+  const want = { N: 16, A: 28, R: 16, G: 25, P: 9, S: 6 };
   for (const [prefix, count] of Object.entries(want)) {
     const area = Object.entries(G.AREAS).find(([, v]) => v.prefix === prefix)[0];
     assert.deepEqual(G.STATEMENTS.filter((x) => x.area === area).map((x) => x.code), Array.from({ length: count }, (_, i) => `${prefix}${i + 1}`), prefix);
   }
   for (const st of G.STATEMENTS) { assert(st.can.length > 10 && st.can.length < 140, st.code); assert.match(st.source, /1MA1/); }
-  assert.deepEqual(G.STATEMENTS.filter((x) => !x.foundation).map((x) => x.code), ['A13', 'A15', 'A16', 'A20', 'R15', 'G8', 'G10', 'G22', 'G23', 'P9', 'S3'], 'the wholly higher-tier statements');
+  assert.deepEqual(G.STATEMENTS.filter((x) => !x.foundation).map((x) => x.code), ['A13', 'A15', 'A16', 'A20', 'A26', 'A27', 'A28', 'R15', 'G8', 'G10', 'G22', 'G23', 'P9', 'S3'], 'the wholly higher-tier statements');
   assert(G.STATEMENTS.filter((x) => !x.foundation).every((x) => !x.touches.length), 'nothing maps onto a higher-only statement');
   assert.equal(G.FOUNDATION.length, 86);
+});
+test('L1-vojtech-18-MB4-3: a quadratic inequality, a logarithm and a domain each have a statement, in English and in Czech, and no school unit', () => {
+  const { CAN_CZ } = require(src('lib/library/gcse-cz.ts'));
+  const want = { A26: [/quadratic inequality/, /kvadratická nerovnice/i], A27: [/logarithm/, /logaritm/], A28: [/domain/, /definiční obor/i] };
+  const cov = G.gcseCoverage();
+  for (const [code, [en, cz]] of Object.entries(want)) {
+    const st = G.STATEMENTS.find((x) => x.code === code);
+    assert(st, code); assert.equal(st.area, 'algebra'); assert.match(st.can, en); assert.match(CAN_CZ[code], cz);
+    assert.notEqual(CAN_CZ[code], st.can); assert.deepEqual(st.touches, [], code + ': no unit teaches it, so none is invented');
+    assert(!G.FOUNDATION.includes(st) && !cov.gaps.includes(code), code + ' is not a new Foundation gap');
+  }
+  assert.match(G.STATEMENTS.find((x) => x.code === 'A22').can, /linear inequalities/, 'A22 stays the linear one');
 });
 test('every mapped topic is a school-path topic, and every school topic touches something', () => {
   const school = new Set(topicsOf('school').map((t) => t.id)), used = new Set(G.STATEMENTS.flatMap((x) => x.touches));
