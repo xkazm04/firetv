@@ -626,3 +626,38 @@ test('LG-5 recert-9 wired (3): Back\'s replay question replaces the partner line
     }finally{r.done();}
   }
 });
+
+// ---- recert-10 (docs/uat-insights/2026-10-19-lt-recert-10.md): moment recall. Petra's clear error "I am tired and I want
+// sleep" (A2) came back from the tutor as kind none and nothing held it (recert-10/LT-petra-38-J4-2). Code now finds a clear
+// slip itself (slip.ts clearSlip) and holds it for the end of the scene; it never stops the scene for it.
+const PETRA_TIRED='I am tired and I want sleep';
+const NONE={kind:'none',said:'',better:'',why:''};
+const petra=()=>run('A2','Good evening. How can I help you?',[['Hello. My room is very cold.','I am sorry. What is the problem with the heating?']],[]);
+test('recert-10 rules: clearSlip finds "want sleep" and the known slips, and never a valid alternative',()=>{
+  const {clearSlip}=require(path.join(root,'src/lib/english/slip.ts'));
+  assert.deepEqual(clearSlip(PETRA_TIRED),{said:PETRA_TIRED,better:'I am tired and I want to sleep',why:'After "want", say "to" before the verb: "want to sleep".'});
+  assert.deepEqual(clearSlip('Hello. He don\'t like it. Bye!'),{said:'He don\'t like it.',better:'He doesn\'t like it.',why:'Say "he doesn\'t", not "he don\'t".'},'said is the slip\'s sentence, an exact excerpt');
+  for(const ok of ['I am tired and I want to sleep.','I want help, please.','I want work.','Does he have a dog?','Can he come today?','I want a drink.','Thank you, goodbye!'])assert.equal(clearSlip(ok),null,ok);
+});
+test('recert-10: "I am tired and I want sleep" at A2, passed by the tutor as kind none, is a held fix wherever the turn stands, never a stop',()=>{
+  const c=petra();
+  for(const mayStop of [true,false]){
+    const out=C.momentOutcome(c,{raw:NONE,reply:PETRA_TIRED,turnId:'t2',mayStop,fossil:null,safe:minorSafe});
+    assert.equal(out.moment,null,`mayStop ${mayStop}: no stop`);
+    assert.deepEqual(out.held,{id:'t2:held',kind:'fix',said:PETRA_TIRED,better:'I am tired and I want to sleep',why:'After "want", say "to" before the verb: "want to sleep".',turnId:'t2',at:out.held.at},`mayStop ${mayStop}: held`);
+    assert.ok(PETRA_TIRED.includes(out.held.said),'said is an exact excerpt of the reply');
+  }
+  assert.deepEqual(C.momentOutcome(c,{raw:undefined,reply:PETRA_TIRED,turnId:'t2',mayStop:false,fossil:null,safe:minorSafe}).held.better,'I am tired and I want to sleep','no moment field at all: held too');
+  // a correct reply, a style choice: nothing held
+  assert.deepEqual(C.momentOutcome(c,{raw:NONE,reply:'I am tired and I want to sleep.',turnId:'t2',mayStop:true,fossil:null,safe:minorSafe}),{moment:null,held:null});
+  // the model's own fix still wins, and a fix it gave that the checks dropped stays dropped (no code fix in its place)
+  const own=C.momentOutcome(c,{raw:{kind:'fix',said:'want sleep',better:'want to sleep',why:'want to + verb.',hold:true},reply:PETRA_TIRED,turnId:'t2',mayStop:true,fossil:null,safe:minorSafe});
+  assert.equal(own.held.said,'want sleep');
+  assert.equal(C.momentOutcome(c,{raw:{kind:'fix',said:'want sleeping',better:'want to sleep',why:'x'},reply:PETRA_TIRED,turnId:'t2',mayStop:false,fossil:null,safe:minorSafe}).held,null);
+  // correction off: nothing is held
+  const off={...c,preferences:{...c.preferences,correction:'pauses'}};
+  assert.deepEqual(C.momentOutcome(off,{raw:NONE,reply:PETRA_TIRED,turnId:'t2',mayStop:false,fossil:null,safe:minorSafe}),{moment:null,held:null});
+  // the stop rules are untouched; the open-hold text names the case
+  assert.match(C.momentTaskFor(true),/never on a goodbye, a thanks or a closing line/);assert.match(C.momentTaskFor(true),/Never stop for a valid alternative, a style or register choice/);
+  assert.match(C.OPEN_HOLD,/kind none is only for a reply with no clear error/);assert.match(C.OPEN_HOLD,/I want sleep/);
+});

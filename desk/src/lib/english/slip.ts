@@ -179,3 +179,45 @@ export function keysOf(item: { kind: "fix" | "word"; said: string; better: strin
   if (item.kind !== "fix") return null;
   return item.slip && item.fix ? { slip: item.slip, fix: item.fix } : slipOf(item.said, item.better);
 }
+
+/**
+ * Verbs a beginner says straight after "want" with no "to" ("I want sleep" for "I want to sleep"). Only verbs that are no
+ * bare noun after "want" in a learner's line: "work", "help", "rest" and "drink" are left out ("I want help" is English).
+ */
+export const WANT_VERBS: readonly string[] = [
+  "go", "eat", "sleep", "play", "see", "buy", "make", "come", "watch", "read", "speak", "live", "know", "get", "take", "swim",
+  "cook", "visit", "stay", "try", "learn", "sit", "find", "ask", "say", "tell", "call", "write", "sing", "run", "walk", "drive",
+  "fly", "travel", "meet", "open", "close", "pay", "leave", "show", "be", "have", "do", "use", "send", "change", "book",
+];
+/** What a clear slip found by code becomes: said, an exact excerpt of the reply (its sentence); better, the same with the fix; why. */
+export interface ClearSlip { said: string; better: string; why: string }
+const WANTS = new Set(["want", "wants"]), WANT_VERB = new Set(WANT_VERBS);
+/**
+ * A clear grammar slip in a reply that code finds with no model call (LG-23 recert-10, LT-petra-38-J4-2: "I am tired and I
+ * want sleep" came back from the tutor as kind none): one of the KNOWN_SLIPS a teacher vouches for, standing as a slip
+ * (slipStands), or "want" straight before a bare verb of WANT_VERBS. The first found, or null. Held for the end of the
+ * scene by the caller, never a stop, so a slip made once is enough; never a valid alternative or a style choice, since
+ * both lists are only forms that are wrong in every sentence.
+ */
+export function clearSlip(reply: string): ClearSlip | null {
+  const t = toks(reply), words = t.map(x => x.key);
+  // the reply's sentence around the slip, as said and as fixed
+  const whole = (at: number, end: number, fix: string, why: string): ClearSlip | null => {
+    const from = Math.max(...[".", "!", "?"].map(p => reply.lastIndexOf(p, at - 1))) + 1, next = reply.slice(end).search(/[.!?]/);
+    const to = next < 0 ? reply.length : end + next + 1, said = reply.slice(from, to).trim();
+    return said && said.length <= 180 ? { said, better: (reply.slice(from, at) + fix + reply.slice(end, to)).trim(), why } : null;
+  };
+  const upper = (w: string) => w.replace(/^i\b/, "I");
+  for (let i = 0; i < t.length; i++) {
+    if (i > 0 && LICENSORS.has(t[i - 1].word)) continue;
+    const k = KNOWN_SLIPS.find(k => runAt(words, keyWords(k), i));
+    if (k) {
+      const fix = KNOWN_SLIP_FIXES[k], end = t[i + keyWords(k).length - 1].end;
+      const cased = /^\p{Lu}/u.test(reply[t[i].at]) ? fix[0].toUpperCase() + fix.slice(1) : upper(fix);
+      return whole(t[i].at, end, cased, `Say "${upper(fix)}", not "${upper(k)}".`);
+    }
+    if (WANTS.has(t[i].word) && WANT_VERB.has(t[i + 1]?.word ?? ""))
+      return whole(t[i].at, t[i + 1].end, `${reply.slice(t[i].at, t[i].end)} to ${reply.slice(t[i + 1].at, t[i + 1].end)}`, `After "want", say "to" before the verb: "want to ${t[i + 1].word}".`);
+  }
+  return null;
+}

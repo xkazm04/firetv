@@ -19,7 +19,7 @@ import { climb, keepLadder, MEANING_MAX, QUIZ_MAX, quizFor, SAY_MAX, sceneCueFor
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, ownLines, partnerLines, reuseOf, reviewOf, shownLines, askedAboutFor, slipsAgain, SLIP_AGAIN_TASK, usedLine, usesForm, fossilOf, fossilMoment, FOSSIL_TASK, type SlipAgain } from "./review";
-import { findKey, KNOWN_FALSE_FRIENDS, slipOf } from "./slip";
+import { clearSlip, findKey, KNOWN_FALSE_FRIENDS, slipOf } from "./slip";
 import { checkLine, forgetLine, heldLine, holdLine, keepLine, LINE_MAX, lineBack, lineFound, lineTaught, OFFER_BANDS, offerLine, quizLine, showsLine, type HiddenLine } from "./line";
 import { afterTry, forget, heldFor, judgeTry, remember, revealed, triedLine, withhold } from "./repair";
 import { copiesShown, wordsOf } from "./credit";
@@ -262,7 +262,7 @@ export function heldTaskFor(isBeginner:boolean):string{
  * declined as stops by the beginner limit, and nothing held them): a clear error the stop rules do not stop for may come
  * back with hold true, and code holds it (momentOutcome). The stop rules themselves are unchanged.
  */
-export const OPEN_HOLD=" A clear error in submittedReply that the rules above do not stop for (for a beginner, a grammar slip made only once) may still be the moment with hold true: it is held for the end of the scene and the scene goes on. hold is false for a stop and for kind none; never hold what the rules above say to stop for.";
+export const OPEN_HOLD=" A clear error in submittedReply that the rules above do not stop for (for a beginner, a grammar slip made only once) may still be the moment with hold true: it is held for the end of the scene and the scene goes on. hold is false for a stop and for kind none; never hold what the rules above say to stop for. kind none is only for a reply with no clear error: a beginner's grammar slip made once (\"I want sleep\" for \"I want to sleep\") is held, never none.";
 /** What a held fix may be: any clear error, a slip made once included, since it never stops the scene. */
 const HOLD_ANY=" Because nothing stops here, the limits on a stop above do not apply: hold the one clear error in submittedReply that matters most, a grammar slip made only once included (a verb form, an article, a plural, a basic tense, a wrong word); never a valid alternative or a style or register choice.";
 /** Correction as needed holds a fix where it may not stop; with correction off nothing is held either. */
@@ -277,6 +277,13 @@ export function momentOutcome(c:Conversation,o:{raw:unknown;reply:string;turnId:
   const kept=parsed&&[parsed.said,parsed.better,parsed.why].every(o.safe)?parsed:null;
   // where a stop may happen, a fix the model marks hold (OPEN_HOLD) is held, not a stop; a fossil always stops
   const hold=o.mayStop&&holdsFixes(c)&&object(o.raw).hold===true;
+  // recert-10 (LT-petra-38-J4-2): a clear slip code finds (slip.ts clearSlip) that the model passed as none is held, never a
+  // stop; a fix or word the model did return and the checks above dropped stays dropped
+  const none=!["fix","word"].includes(String(object(o.raw).kind));
+  if(none&&!o.fossil&&holdsFixes(c)){
+    const k=clearSlip(o.reply);
+    return {moment:null,held:k&&[k.said,k.better,k.why].every(o.safe)?{id:`${o.turnId}:held`,kind:"fix",...k,turnId:o.turnId,at:Date.now()}:null};
+  }
   if(!kept||o.fossil||(o.mayStop&&!hold))return {moment:kept,held:null};
   const {id,kind,said,better,why,turnId,at}=kept;
   return {moment:null,held:{id:`${turnId}:held`,kind,said,better,why,turnId,at}};
