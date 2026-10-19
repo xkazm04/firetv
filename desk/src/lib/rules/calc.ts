@@ -893,8 +893,8 @@ type Approach = { at: Num | "inf" | "-inf"; side?: "+" | "-" };
 function approachOf(t: string, words?: string): Approach | null {
   let s = tidy(t).replace(/\s+/g, "").replace(/⁺/g, "+").replace(/⁻/g, "-").replace(/^(negative|minus)/i, "-").replace(/^(positive|plus)/i, "+");
   let side: "+" | "-" | undefined = words ? (/right|above/i.test(words) ? "+" : "-") : undefined;
-  if (/^\+?(infinity|inf)$/i.test(s)) return side ? null : { at: "inf" };
-  if (/^-(infinity|inf)$/i.test(s)) return side ? null : { at: "-inf" };
+  const inf = infinityOf(s);
+  if (inf !== null) return side ? null : { at: inf === 1 ? "inf" : "-inf" };
   const m = /^(.+?)\^?([+-])$/.exec(s);
   if (m && !side) { side = m[2] as "+" | "-"; s = m[1]; }
   const at = paramOf(s);

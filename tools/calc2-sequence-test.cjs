@@ -256,3 +256,13 @@ test('MB-B28: a decimal for a sequence limit is right only as the limit correctl
  assert.equal(verdict(EN,'2.718'),'right');assert.equal(verdict(EN,'2.717'),'unsure');assert.equal(verdict(EN,'2.71'),'unsure');
  assert.equal(verdict(HALF,'0.5'),'right');assert.equal(verdict(HALF,'0.4996'),'unsure');assert.equal(verdict(EN,'2.7'),'right','OLD wrong -> NEW right (D2 R1a)');assert.equal(verdict(EN,'2.8'),'wrong');
 });
+
+test('L1-matyas-19-MB1-2: lim_(n->inf), n->+inf, ∞ and "approaches inf" read like infinity; n to -infinity and a stray target do not',()=>{
+ for(const where of ['inf','infinity','∞','+inf','+infinity','+∞','Infinity']){
+  for(const text of [`Find lim_(n->${where}) (1+1/n)^n`,`Find lim_n->${where} (1+1/n)^n`,`Find lim_(n->${where}) a_n, where a_n = n/(n+1)`,`Find the limit as n approaches ${where} of (n^2+1)/(2n^2).`,`Find the limit of a_n = n/(n+1) as n approaches ${where}`]){
+   assert.equal(C.specFromQuestion(text)?.shape,'sequence-limit',text);
+  }
+ }
+ for(const text of ['Find lim_(n->-inf) (1+1/n)^n','Find lim_(n->0) (1+1/n)^n','Find the limit as n approaches infinit of (n^2+1)/(2n^2).'])
+  assert.equal(C.specFromQuestion(text),null,text);
+});

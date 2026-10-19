@@ -593,8 +593,9 @@ function sequenceLeaks(spec: SequenceSpec, line: unknown): boolean {
 
 const SEQ_VERB = String.raw`(?:find|evaluate|compute|calculate|determine|what\s+is)`;
 const A_N = String.raw`\{?a_n\}?`;
-const AS_N_GOES = String.raw`n\s*(?:approaches|tends\s+to|goes\s+to|->)\s*infinity`;
-const TO_INFINITY = /^n\s*->\s*\+?infinity$/i;
+const N_GOES = String.raw`n\s*(?:approaches|tends\s+to|goes\s+to|->)\s*`;
+/** Where n goes, as a learner writes it (inf, infinity, ∞, an optional +): read by calc-read's infinityOf, a sequence never goes to -infinity. */
+const toInfinity = (where: string) => infinityOf(where) === 1;
 const reSeq = (x: string) => new RegExp(`^${x}$`, "i");
 
 /** The term as a function in x, or null: only an n that stands between non-letters is renamed (ln(n), sin(n) read; 'pin' keeps its n and fails to read), and a term that already has an x is not in n alone. */
@@ -622,18 +623,18 @@ const SEQ_READERS: [RegExp, (m: RegExpExecArray) => string | null][] = [
   // Determine whether the sequence a_n = ln(n)/n converges or diverges. If it converges, find the limit
   [reSeq(`determine\\s+whether\\s+the\\s+sequence\\s+${A_N}\\s*=\\s*(.+?)\\s+(?:converges|is\\s+convergent)\\s+or\\s+(?:diverges|is\\s+divergent)(?:\\.\\s*if\\s+it\\s+(?:converges|is\\s+convergent),?\\s+find\\s+(?:its|the)\\s+limit)?`), (m) => m[1]],
   // Find the limit as n approaches infinity of (n^2+1)/(2n^2)
-  [reSeq(`${SEQ_VERB}\\s+the\\s+limit\\s+as\\s+${AS_N_GOES}\\s+of\\s+(.+)`), (m) => afterA(tidy(m[1]))],
+  [reSeq(`${SEQ_VERB}\\s+the\\s+limit\\s+as\\s+${N_GOES}(\\S+)\\s+of\\s+(.+)`), (m) => (toInfinity(m[1]) ? afterA(tidy(m[2])) : null)],
   // Find the limit of a_n = n/(n+1) as n approaches infinity
-  [reSeq(`${SEQ_VERB}\\s+the\\s+limit\\s+of\\s+(.+?)\\s+as\\s+${AS_N_GOES}`), (m) => afterA(tidy(m[1]))],
+  [reSeq(`${SEQ_VERB}\\s+the\\s+limit\\s+of\\s+(.+?)\\s+as\\s+${N_GOES}(\\S+)`), (m) => (toInfinity(m[2]) ? afterA(tidy(m[1])) : null)],
   // Find lim_(n->infinity) a_n, where a_n = ...   /   Find lim_(n->infinity) (1+1/n)^n
   [reSeq(`(?:${SEQ_VERB}\\s+)?lim\\s*_?\\s*(.+)`), (m) => {
     const rest = tidy(m[1]);
     if (CLOSING[rest[0]]) {
       const end = closeAt(rest, 0);
-      return end >= 0 && TO_INFINITY.test(tidy(rest.slice(1, end))) ? afterA(tidy(rest.slice(end + 1))) : null;
+      return end >= 0 && toInfinity(tidy(rest.slice(1, end)).replace(/^n\s*->\s*/i, "")) ? afterA(tidy(rest.slice(end + 1))) : null;
     }
-    const b = /^(n\s*->\s*\+?infinity)\s+(.+)$/i.exec(rest);
-    return b ? afterA(tidy(b[2])) : null;
+    const b = /^n\s*->\s*(\S+)\s+(.+)$/i.exec(rest);
+    return b && toInfinity(b[1]) ? afterA(tidy(b[2])) : null;
   }],
 ];
 
