@@ -1,0 +1,767 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA2Everyday basics · self-chosen\nMy hotel room is not clean\nYour mission\nTell the hotel what is wrong and ask for a fix or a new room.\nGet something done\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nMy hotel room is not clean\nTell the hotel what is wrong and ask for a fix or a new room.\n[button: Start talking]\nOr choose a situation [list: My hotel room is not clean [plan-81a617a9] | I cannot find my hotel booking [plan-ce08a4cc] | Where is the station? Say it again [plan-20878c92] | A good restaurant near the hotel [plan-b17ffc6e] | Phone call from the travel agency [plan-c4aacfe1] | Talk with my child's teacher [plan-2616453f] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The hotel room topic fits my work, so I'll start talking.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9417
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA Noisy Bed at Hotel Sun\nMia says\nGood morning, welcome to Hotel Sun. What can I do for you?\nYour turn\nAnswer on your phone: speak or type.\nNowName the problem in short sentences\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Name the problem in short sentences\nGood morning, welcome to Hotel Sun. What can I do for you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to Hotel Sun. What can I do for you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say this, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA Noisy Bed at Hotel Sun\nMia says\nGood morning, welcome to Hotel Sun. What can I do for you?\nYou could say\nHi Mia! The bed is very noisy.\nNowName the problem in short sentences\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Name the problem in short sentences\nGood morning, welcome to Hotel Sun. What can I do for you?\nYou could say\nHi Mia! The bed is very noisy.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to Hotel Sun. What can I do for you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, I will try the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA little support · recognition practice\nMia asks: Good morning, welcome to Hotel Sun. What can I do for you?\n01\nYes, breakfast is at eight o'clock.\n02\nMy bed is very noisy, please.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Name the problem in short sentences\nGood morning, welcome to Hotel Sun. What can I do for you?\nMia asks: Good morning, welcome to Hotel Sun. What can I do for you?\n[button: Yes, breakfast is at eight o'clock.] [button: My bed is very noisy, please.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to Hotel Sun. What can I do for you?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to answer, so I'll try the sentence help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA Noisy Bed at Hotel Sun\nMia says\nGood morning, welcome to Hotel Sun. What can I do for you?\nWhat it means\nreceptionist: the person at the front desk of a hotel\nNowName the problem in short sentences\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Name the problem in short sentences\nGood morning, welcome to Hotel Sun. What can I do for you?\nWhat it means\nreceptionist: the person at the front desk of a hotel\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to Hotel Sun. What can I do for you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, maybe a phrase will help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA little support · recognition practice\nMia asks: Good morning, welcome to Hotel Sun. What can I do for you?\n01\nYes, breakfast is at eight o'clock.\n02\nMy bed is very noisy, please.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Name the problem in short sentences\nGood morning, welcome to Hotel Sun. What can I do for you?\nMia asks: Good morning, welcome to Hotel Sun. What can I do for you?\n[button: Yes, breakfast is at eight o'clock.] [button: My bed is very noisy, please.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to Hotel Sun. What can I do for you?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know what to say, so I'll try the Help with a sentence button... More help is available.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA Noisy Bed at Hotel Sun\nMia says\nGood morning, welcome to Hotel Sun. What can I do for you?\nA way to start\nI have a problem with…\nNowName the problem in short sentences\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Name the problem in short sentences\nGood morning, welcome to Hotel Sun. What can I do for you?\nA way to start\nI have a problem with…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to Hotel Sun. What can I do for you?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to answer, I'll look at the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA little support · recognition practice\nMia asks: Good morning, welcome to Hotel Sun. What can I do for you?\n01\nYes, breakfast is at eight o'clock.\n02\nMy bed is very noisy, please.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Name the problem in short sentences\nGood morning, welcome to Hotel Sun. What can I do for you?\nMia asks: Good morning, welcome to Hotel Sun. What can I do for you?\n[button: Yes, breakfast is at eight o'clock.] [button: My bed is very noisy, please.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to Hotel Sun. What can I do for you?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I saw the help, now I try my own words, sorry, slowly.",
+          "action": "answer",
+          "args": {
+            "text": "Good morning. My bed is dirty and noisy, please you can fix it?"
+          },
+          "result": "ok",
+          "ms": 15419
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA Noisy Bed at Hotel Sun\nMia says\nOh, I am sorry to hear that. What do you need from me now?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk clearly for a fix or a new one\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Ask clearly for a fix or a new one\nOh, I am sorry to hear that. What do you need from me now?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\nYou · spoken\nGood morning. My bed is dirty and noisy, please you can fix it?\nMia · hotel receptionist\nOh, I am sorry to hear that. What do you need from me now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, I am sorry to hear that. What do you need from me now?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know what to say now, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA Noisy Bed at Hotel Sun\nMia says\nOh, I am sorry to hear that. What do you need from me now?\nYou could say\nI need a new bed, please.\nNowAsk clearly for a fix or a new one\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Ask clearly for a fix or a new one\nOh, I am sorry to hear that. What do you need from me now?\nYou could say\nI need a new bed, please.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\nYou · spoken\nGood morning. My bed is dirty and noisy, please you can fix it?\nMia · hotel receptionist\nOh, I am sorry to hear that. What do you need from me now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, I am sorry to hear that. What do you need from me now?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can use the suggested phrase and add my own words about the noise.",
+          "action": "answer",
+          "args": {
+            "text": "I need a new bed please. The bed is noisy and I can not sleep."
+          },
+          "result": "ok",
+          "ms": 9614
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA Noisy Bed at Hotel Sun\nMia says\nWhich room is yours?\nYour turn\nAnswer on your phone: speak or type.\nNowConfirm when the fix will be done\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Confirm when the fix will be done\nWhich room is yours?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\nYou · spoken\nGood morning. My bed is dirty and noisy, please you can fix it?\nMia · hotel receptionist\nOh, I am sorry to hear that. What do you need from me now?\nYou · spoken\nI need a new bed please. The bed is noisy and I can not sleep.\nMia · hotel receptionist\nWhich room is yours?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Which room is yours?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know the room number in English, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA Noisy Bed at Hotel Sun\nMia says\nWhich room is yours?\nYou could say\nMy room is number twelve, please.\nNowConfirm when the fix will be done\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Confirm when the fix will be done\nWhich room is yours?\nYou could say\nMy room is number twelve, please.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\nYou · spoken\nGood morning. My bed is dirty and noisy, please you can fix it?\nMia · hotel receptionist\nOh, I am sorry to hear that. What do you need from me now?\nYou · spoken\nI need a new bed please. The bed is noisy and I can not sleep.\nMia · hotel receptionist\nWhich room is yours?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Which room is yours?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know this one, room number twelve.",
+          "action": "answer",
+          "args": {
+            "text": "My room is number twelve, please."
+          },
+          "result": "ok",
+          "ms": 10596
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA Noisy Bed at Hotel Sun\nMia says\nThank you, room twelve. A cleaner comes in ten minutes, is that OK?\nYour turn\nAnswer on your phone: speak or type.\nNowConfirm when the fix will be done\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nNow: Confirm when the fix will be done\nThank you, room twelve. A cleaner comes in ten minutes, is that OK?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\nYou · spoken\nGood morning. My bed is dirty and noisy, please you can fix it?\nMia · hotel receptionist\nOh, I am sorry to hear that. What do you need from me now?\nYou · spoken\nI need a new bed please. The bed is noisy and I can not sleep.\nMia · hotel receptionist\nWhich room is yours?\nYou · spoken\nMy room is number twelve, please.\nMia · hotel receptionist\nThank you, room twelve. A cleaner comes in ten minutes, is that OK?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, room twelve. A cleaner comes in ten minutes, is that OK?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Ten minutes is okay, I managed this, so I answer and then finish.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, ten minutes is OK. Thank you very much."
+          },
+          "result": "ok",
+          "ms": 9758
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMia · hotel receptionist\nA Noisy Bed at Hotel Sun\nMia says\nDo you need anything else?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nDo you need anything else?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\nYou · spoken\nGood morning. My bed is dirty and noisy, please you can fix it?\nMia · hotel receptionist\nOh, I am sorry to hear that. What do you need from me now?\nYou · spoken\nI need a new bed please. The bed is noisy and I can not sleep.\nMia · hotel receptionist\nWhich room is yours?\nYou · spoken\nMy room is number twelve, please.\nMia · hotel receptionist\nThank you, room twelve. A cleaner comes in ten minutes, is that OK?\nYou · spoken\nYes, ten minutes is OK. Thank you very much.\nMia · hotel receptionist\nDo you need anything else?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Do you need anything else?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I think I managed it, the mission is done, so I look at what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 15,
+          "screen": "linga-coach",
+          "shown": "TV\nLinga\nPetra\nA way into English\nOne useful change\nYou said please you can fix it?\nOne way to try it\ncan you fix it, please?\nA question needs 'can you' before the verb.\nCoach\nReplay the moment with a new question, or finish for today.\n[button: Replay the moment] [button: Finish for today]\nOne useful change\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nA Noisy Bed at Hotel Sun\nTell the hotel desk about the dirty and noisy bed, and ask for a fix.\nA question needs 'can you' before the verb.\nOne way to try it: “can you fix it, please?”\n[button: Replay with a new question]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · hotel receptionist\nGood morning, welcome to Hotel Sun. What can I do for you?\nYou · spoken\nGood morning. My bed is dirty and noisy, please you can fix it?\nMia · hotel receptionist\nOh, I am sorry to hear that. What do you need from me now?\nYou · spoken\nI need a new bed please. The bed is noisy and I can not sleep.\nMia · hotel receptionist\nWhich room is yours?\nYou · spoken\nMy room is number twelve, please.\nMia · hotel receptionist\nThank you, room twelve. A cleaner comes in ten minutes, is that OK?\nYou · spoken\nYes, ten minutes is OK. Thank you very much.\nMia · hotel receptionist\nDo you need anything else?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A question needs 'can you' before the verb.\"",
+          "offered": [
+            "replay",
+            "finish",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I managed the conversation and learned a new phrase, so I'm happy to finish.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 16,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said please you can fix it?\nOne way to try it\ncan you fix it, please?\nA question needs 'can you' before the verb.\nYour mission\nChoose a fresh context for your next conversation.\n4 spoken · 0 written replies · 1 on your own · 3 with help\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Excuse me, can you help with my room?”\nSaved for the end\n“please you can fix it?” → “can you fix it, please?”\nA question needs 'can you' before the verb.\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nI cannot find my hotel booking\nExplain what happened in order and ask the hotel to check the booking.\n[button: Start talking]\nOr choose a situation [list: My hotel room is not clean [plan-81a617a9] | I cannot find my hotel booking [plan-ce08a4cc] | Where is the station? Say it again [plan-20878c92] | A good restaurant near the hotel [plan-b17ffc6e] | Phone call from the travel agency [plan-c4aacfe1] | Talk with my child's teacher [plan-2616453f] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed to ask for help with my room, I feel good, enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "A Noisy Bed at Hotel Sun",
+          "goal": "Tell the hotel desk about the dirty and noisy bed, and ask for a fix.",
+          "partner": "Mia · hotel receptionist",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Good morning, welcome to Hotel Sun. What can I do for you?"
+            },
+            {
+              "role": "learner",
+              "text": "Good morning. My bed is dirty and noisy, please you can fix it?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Oh, I am sorry to hear that. What do you need from me now?"
+            },
+            {
+              "role": "learner",
+              "text": "I need a new bed please. The bed is noisy and I can not sleep.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Which room is yours?"
+            },
+            {
+              "role": "learner",
+              "text": "My room is number twelve, please.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, room twelve. A cleaner comes in ten minutes, is that OK?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, ten minutes is OK. Thank you very much.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Do you need anything else?"
+            }
+          ],
+          "moments": [],
+          "heldFixes": [
+            {
+              "id": "2932c3b4-d415-45f2-84ea-caeef35ec306:uat-13:held",
+              "kind": "fix",
+              "said": "please you can fix it?",
+              "better": "can you fix it, please?",
+              "why": "A question needs 'can you' before the verb.",
+              "turnId": "2932c3b4-d415-45f2-84ea-caeef35ec306:uat-13",
+              "at": 1792415672052
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Good morning. My bed is dirty and noisy, please you can fix it?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "please you can fix it?",
+                "better": "can you fix it, please?",
+                "why": "A question needs 'can you' before the verb."
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "I need a new bed please. The bed is noisy and I can not sleep.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "My room is number twelve, please.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "Yes, ten minutes is OK. Thank you very much.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": {
+            "before": "please you can fix it?",
+            "after": "can you fix it, please?",
+            "note": "A question needs 'can you' before the verb.",
+            "atFinish": true
+          },
+          "evidence": [
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "please you can fix it?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I need a new bed please."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 242927,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-10/LT-petra-38-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-10",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Clear error 'I want sleep' got no coaching",
+          "expected": "A fix such as 'I want to sleep' or 'I'd like to sleep'.",
+          "got": "rawMoment for turn 3 is kind 'none' for 'I am tired and I want sleep'.",
+          "evidence": [
+            "#8 'But I am tired and I want sleep.'; rawMoments n:2 raw.kind none.",
+            "moment detector prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-petra-38-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Replay of the coached moment never happens",
+          "expected": "After coaching, a fresh question is asked and she tries 'move to room fourteen' again.",
+          "got": "Coach screen offered 'Replay the moment' but Finish was taken; no replay, no retry.",
+          "evidence": [
+            "#11 '[Replay the moment] [Finish for today]'; action finish; #12 recap has no retry.",
+            "replay prompt / coach screen"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-petra-38-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Phrase choice has an off-topic distractor and a bare follow-up",
+          "expected": "Choices both on topic; the pick gives a sentence to reuse.",
+          "got": "Options 'Yes, I like this hotel very much.' vs 'It is room twelve. The lamp is broken.'; after pick only 'Now use the idea in your own reply'.",
+          "evidence": [
+            "#6, #7.",
+            "phrase choice generator"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-petra-38-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "No in-scene moment; both fixes held to the recap",
+          "expected": "A stop on a clear error, or at least coaching she sees.",
+          "got": "moments empty, two held fixes; coach screen shows only the last one, the 'wants another room' fix only on the phone recap.",
+          "evidence": [
+            "#11 shows one change; #12 'Saved for the end' lists two.",
+            "LG-23 held fix / coach builder"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement in J4; level set by hand to A2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'Name the problem in short sentences'; Mia's lines are short A2 English."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "She never asked to repeat or said 'I don't understand'; only used help buttons."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No topic proposal is judged in J4; the one scene was a hotel complaint (#1). The list at #1 also holds interview and conflict topics."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#4 distractor 'Yes, breakfast is at eight o'clock.' is off-topic. The held fix #15 'can you fix it, please?' is useful, but 'please you can fix it?' got no in-scene stop. 'I can not sleep' was left uncorrected."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "All content is hotel-related and child-safe; no adult or humiliating content in #1–#16."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2–#12: 'Help me answer' gave 'Hi Mia! The bed is very noisy.' and 'Choose a phrase' gave two options, all inside the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Help unblocked replies (#10 'I need a new bed please...'). But the coaching quotes her 'please you can fix it?' only on the final screen (#15), not mid-scene. Pause & coach was never used. #8 shows the phrase choice stayed as a weak distractor pair."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#15 offered 'Replay the moment' but she took 'Finish for today'. No fresh question and no retry."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#16 '4 spoken · 0 written replies · 1 on your own · 3 with help'. Turns 1, 3 and 5 are flagged supported:true. The recap is honest."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None. One held fix, no stops."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Replay of the coached moment skipped again",
+            "expected": "She replays the moment with a fresh question and retries 'can you fix it, please?'.",
+            "got": "The coach screen offered Replay; the walker pressed Finish and no retry happened.",
+            "evidence": "#15 '[Replay the moment] [Finish for today]'; action finish; #16 recap with no retry.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After coaching, Replay is clear enough that a stuck learner takes it, and a fresh question is asked.",
+            "code_hint": "coach screen / replay prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Phrase-choice distractor is off-topic",
+            "expected": "Both options fit the scene, so the choice teaches something.",
+            "got": "'Yes, breakfast is at eight o'clock.' sits beside 'My bed is very noisy, please.' The same pair repeats each time.",
+            "evidence": "#4, #6, #8 options 01 and 02. After the pick, no reusable sentence.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Both phrase choices answer Mia's question on topic.",
+            "code_hint": "phrase choice generator"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "No in-scene stop; fix held to the coach screen and recap",
+            "expected": "A visible stop or coaching during the scene on 'please you can fix it?'.",
+            "got": "moments is empty; one held fix is shown only at the end. 'I can not sleep' was not flagged.",
+            "evidence": "#8 learner turn; facts heldFixes; #15 'You said please you can fix it?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A clear question error gets a stop or a visible held fix before the scene ends.",
+            "code_hint": "LG-23 held fix / moment detector"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Help ladder is easy to find and stays in the scene",
+            "expected": "Help is reachable while stuck.",
+            "got": "The cue gave a suitable line ('I need a new bed, please.'). The 'What it means' gloss and 'A way to start' were also on screen.",
+            "evidence": "#3, #5, #7, #10, #12.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the cue, gloss and starter help.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Progress picture honest about help",
+            "expected": "Supported replies not counted as independent.",
+            "got": "'1 on your own · 3 with help', matching the supported flags.",
+            "evidence": "#16 recap.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep it.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "I liked that I could press Help and get a sentence, and nothing was frightening. Mia speaks slowly and the hotel situation is just my job. I used 'I need a new bed, please' and it worked. But the phrase choices looked silly: breakfast at eight o'clock when I complain about a bed? At the end it told me 'can you fix it, please?' — useful, I will say it at the desk — but only after the talk was over, and I did not try again. I pressed Finish too fast; maybe the Replay button is not clear enough for a nervous person. Also, I said 'I can not sleep' and nobody said if it's right. For my children it seems safe. I would use it fifteen minutes in the evening, yes, cheaper than the course.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-10/LT-petra-38-J4-2",
+            "status": "not-evaluable",
+            "evidence": "No 'I want sleep' error was made; her turns at #8–#13 had other errors ('I can not sleep' is acceptable).",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-petra-38-J4-1",
+            "status": "recurs",
+            "evidence": "#15 Replay offered, #15 action finish; #16 shows no retry.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-petra-38-J4-2",
+            "status": "recurs",
+            "evidence": "#4 'Yes, breakfast is at eight o'clock.' versus 'My bed is very noisy, please.'",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-petra-38-J4-3",
+            "status": "recurs",
+            "evidence": "moments empty with one held fix; #15 shows it only on the coach screen and #16 under 'Saved for the end'.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Help unblocked replies (#10 'I need a new bed please...'). But the coaching quotes her 'please you can fix it?' only on the final screen (#15), not mid-scene. Pause & coach was never used. #8 shows the phrase choice stayed as a weak distractor pair.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #15 offered 'Replay the moment' but she took 'Finish for today'. No fresh question and no retry.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #4 distractor 'Yes, breakfast is at eight o'clock.' is off-topic. The held fix #15 'can you fix it, please?' is useful, but 'please you can fix it?' got no in-scene stop. 'I can not sleep' was left uncorrected."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 6,
+      "fail": 0,
+      "ms": 74384
+    },
+    "character": {
+      "n": 16,
+      "fail": 0,
+      "ms": 168070
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 25853
+    }
+  }
+}

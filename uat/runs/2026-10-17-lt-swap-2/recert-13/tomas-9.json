@@ -1,0 +1,994 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nA1First words · self-chosen\nShow me your Minecraft world\nYour mission\nSay what you build and what you like to do in Minecraft.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\n[button: Start talking]\nOr choose a situation [list: Show me your Minecraft world [plan-3a52fc31] | My dog did something funny [plan-1447e93a] | Who plays football with us? [plan-586ffaba] | Say hi and meet a new friend [plan-d7a78930] | Can you say that again, please? [plan-0cd2a370] | Can I have my turn now? [plan-d04b3124] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Minecraft! Super, chci mluvit.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 11599
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nHi, Sam here. What do you make?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Sam one thing you build.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nHi, Sam here. What do you make?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Sam here. What do you make?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říct anglicky, zkusím pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nHi, Sam here. What do you make?\nYou could say\nI make a big tree.\nNowTell Sam one thing you build.\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nHi, Sam here. What do you make?\nYou could say\nI make a big tree.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Sam here. What do you make?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říct... I'll press More help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nHi, Sam here. What do you make?\nWhat it means\nmake: build or create something\nNowTell Sam one thing you build.\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nHi, Sam here. What do you make?\nWhat it means\nmake: build or create something\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Sam here. What do you make?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říct... I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nHi, Sam here. What do you make?\nA way to start\nI make a…\nNowTell Sam one thing you build.\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nHi, Sam here. What do you make?\nA way to start\nI make a…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Sam here. What do you make?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím co říct, zkusím pomoc s frází.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nA little support · recognition practice\nSam asks: Hi, Sam here. What do you make?\n01\nA big tree in Minecraft.\n02\nI am nine years old.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nHi, Sam here. What do you make?\nSam asks: Hi, Sam here. What do you make?\n[button: A big tree in Minecraft.] [button: I am nine years old.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Sam here. What do you make?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, co to říká, ale strom v Minecraftu znám.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nHi, Sam here. What do you make?\nA little support\nNow use the idea in your own reply on the phone.\nNowTell Sam one thing you build.\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nHi, Sam here. What do you make?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Sam here. What do you make?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím jak říct anglicky, chci pomoc.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nA little support · recognition practice\nSam asks: Hi, Sam here. What do you make?\n01\nA big tree in Minecraft.\n02\nI am nine years old.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nHi, Sam here. What do you make?\nSam asks: Hi, Sam here. What do you make?\n[button: A big tree in Minecraft.] [button: I am nine years old.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Sam here. What do you make?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, co to je... \"tree\" a \"Minecraft\" znám, vyberu to první.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nHi, Sam here. What do you make?\nA little support\nNow use the idea in your own reply on the phone.\nNowTell Sam one thing you build.\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nHi, Sam here. What do you make?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Sam here. What do you make?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím co říct, zkusím nápovědu s frázemi.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nA little support · recognition practice\nSam asks: Hi, Sam here. What do you make?\n01\nA big tree in Minecraft.\n02\nI am nine years old.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nHi, Sam here. What do you make?\nSam asks: Hi, Sam here. What do you make?\n[button: A big tree in Minecraft.] [button: I am nine years old.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Sam here. What do you make?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Hmm, I know tree and Minecraft! Pick the first one.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nHi, Sam here. What do you make?\nA little support\nNow use the idea in your own reply on the phone.\nNowTell Sam one thing you build.\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nHi, Sam here. What do you make?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, Sam here. What do you make?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím co říct, I'll try typing a simple thing I know.",
+          "action": "answer",
+          "args": {
+            "text": "I like Minecraft. creeper"
+          },
+          "result": "ok",
+          "ms": 9063
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nCreepers are scary! What do you make?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Sam one thing you build.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nCreepers are scary! What do you make?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\nYou · spoken\nI like Minecraft. creeper\nSam · Minecraft friend\nCreepers are scary! What do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Creepers are scary! What do you make?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, co říct... I'll try typing something simple I know.",
+          "action": "answer",
+          "args": {
+            "text": "I like Minecraft. Dům"
+          },
+          "result": "ok",
+          "ms": 14626
+        },
+        {
+          "n": 13,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say Dům\nIn English\nhouse\nDům means house in Czech.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “Dům”\nIn English: “house”\nDům means house in Czech.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, dům is house! Go back and try again.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 8187
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nDo you have a house or a tree?\nOne way to try it\nhouse\nYour turn\nAnswer on your phone: speak or type.\nNowTell Sam one thing you build.\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nDo you have a house or a tree?\nOne way to try it\n“house”\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\nYou · spoken\nI like Minecraft. creeper\nSam · Minecraft friend\nCreepers are scary! What do you make?\nYou · spoken\nI like Minecraft. Dům\nSam · Minecraft friend\nDo you have a house or a tree?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Do you have a house or a tree?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím jak říct, co stavím; zkusím jedno slovo, které znám.",
+          "action": "answer",
+          "args": {
+            "text": "House. I like house. Minecraft"
+          },
+          "result": "ok",
+          "ms": 10902
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nNice, a house! What color is it?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Sam one thing you build.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nNice, a house! What color is it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\nYou · spoken\nI like Minecraft. creeper\nSam · Minecraft friend\nCreepers are scary! What do you make?\nYou · spoken\nI like Minecraft. Dům\nSam · Minecraft friend\nDo you have a house or a tree?\nYou · spoken\nHouse. I like house. Minecraft\nSam · Minecraft friend\nNice, a house! What color is it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, a house! What color is it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Barva? Nevím anglicky, ale znám barvy: green.",
+          "action": "answer",
+          "args": {
+            "text": "Green. Je green."
+          },
+          "result": "ok",
+          "ms": 11883
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nGreen is nice! Is it big?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Sam one thing you build.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nGreen is nice! Is it big?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\nYou · spoken\nI like Minecraft. creeper\nSam · Minecraft friend\nCreepers are scary! What do you make?\nYou · spoken\nI like Minecraft. Dům\nSam · Minecraft friend\nDo you have a house or a tree?\nYou · spoken\nHouse. I like house. Minecraft\nSam · Minecraft friend\nNice, a house! What color is it?\nYou · spoken\nGreen. Je green.\nSam · Minecraft friend\nGreen is nice! Is it big?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Green is nice! Is it big?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, jak říct, co stavím... zkusím pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 17,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nGreen is nice! Is it big?\nYou could say\nYes, it is big.\nNowTell Sam one thing you build.\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nGreen is nice! Is it big?\nYou could say\nYes, it is big.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\nYou · spoken\nI like Minecraft. creeper\nSam · Minecraft friend\nCreepers are scary! What do you make?\nYou · spoken\nI like Minecraft. Dům\nSam · Minecraft friend\nDo you have a house or a tree?\nYou · spoken\nHouse. I like house. Minecraft\nSam · Minecraft friend\nNice, a house! What color is it?\nYou · spoken\nGreen. Je green.\nSam · Minecraft friend\nGreen is nice! Is it big?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Green is nice! Is it big?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Big? Umím říct \"yes\"... I'll try a simple answer.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. It is big. I like house."
+          },
+          "result": "ok",
+          "ms": 16308
+        },
+        {
+          "n": 18,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nBig house! What do you like to do?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Sam one thing you build.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nBig house! What do you like to do?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\nYou · spoken\nI like Minecraft. creeper\nSam · Minecraft friend\nCreepers are scary! What do you make?\nYou · spoken\nI like Minecraft. Dům\nSam · Minecraft friend\nDo you have a house or a tree?\nYou · spoken\nHouse. I like house. Minecraft\nSam · Minecraft friend\nNice, a house! What color is it?\nYou · spoken\nGreen. Je green.\nSam · Minecraft friend\nGreen is nice! Is it big?\nYou · spoken\nYes. It is big. I like house.\nSam · Minecraft friend\nBig house! What do you like to do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Big house! What do you like to do?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Hurá, zvládl jsem to; I want to say I like to build and finish.",
+          "action": "answer",
+          "args": {
+            "text": "I like Minecraft. I like dog."
+          },
+          "result": "ok",
+          "ms": 10964
+        },
+        {
+          "n": 19,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nSam · Minecraft friend\nShow me your Minecraft world\nSam says\nAnimals are fun! What is in your world?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Sam one thing you build.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nAnimals are fun! What is in your world?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\nYou · spoken\nI like Minecraft. creeper\nSam · Minecraft friend\nCreepers are scary! What do you make?\nYou · spoken\nI like Minecraft. Dům\nSam · Minecraft friend\nDo you have a house or a tree?\nYou · spoken\nHouse. I like house. Minecraft\nSam · Minecraft friend\nNice, a house! What color is it?\nYou · spoken\nGreen. Je green.\nSam · Minecraft friend\nGreen is nice! Is it big?\nYou · spoken\nYes. It is big. I like house.\nSam · Minecraft friend\nBig house! What do you like to do?\nYou · spoken\nI like Minecraft. I like dog.\nSam · Minecraft friend\nAnimals are fun! What is in your world?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Animals are fun! What is in your world?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Hodně jsem toho řekl, chci skončit, zvládl jsem to.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 20,
+          "screen": "linga-coach",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nOne useful change\nYou said I like dog.\nOne way to try it\nI like dogs.\nDog is plural here, because you like dogs in general.\nCoach\nReplay the moment with a new question, or finish for today.\n[button: Replay the moment] [button: Finish for today]\nOne useful change\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nShow me your Minecraft world\nSay what you build and what you like to do in Minecraft.\nNow: Tell Sam one thing you build.\nDog is plural here, because you like dogs in general.\nOne way to try it: “I like dogs.”\n[button: Replay with a new question]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · Minecraft friend\nHi, Sam here. What do you make?\nYou · spoken\nI like Minecraft. creeper\nSam · Minecraft friend\nCreepers are scary! What do you make?\nYou · spoken\nI like Minecraft. Dům\nSam · Minecraft friend\nDo you have a house or a tree?\nYou · spoken\nHouse. I like house. Minecraft\nSam · Minecraft friend\nNice, a house! What color is it?\nYou · spoken\nGreen. Je green.\nSam · Minecraft friend\nGreen is nice! Is it big?\nYou · spoken\nYes. It is big. I like house.\nSam · Minecraft friend\nBig house! What do you like to do?\nYou · spoken\nI like Minecraft. I like dog.\nSam · Minecraft friend\nAnimals are fun! What is in your world?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Dog is plural here, because you like dogs in general.\"",
+          "offered": [
+            "replay",
+            "finish",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I said something about dogs, that's enough, I did it.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 21,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour rehearsal\nYou said I like dog.\nOne way to try it\nI like dogs.\nDog is plural here, because you like dogs in general.\nYour mission\nChoose a fresh context for your next conversation.\n6 spoken · 0 written replies · 4 on your own · 2 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“I like to build a house.”\nFrom this rehearsal\n“Dům”: house\nDům means house in Czech.\nTried again: “House. I like house. Minecraft” · you used it\nSaved for the end\n“Je”: is\n'Je' is Czech. In English, say 'is' between the house and its colour.\n“I like house” → “I like houses.”\nAfter like, use houses, the plural.\n“I like dog.” → “I like dogs.”\nDog is plural here, because you like dogs in general.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nMy dog did something funny\nTell a short story about what your dog or animal did.\n[button: Start talking]\nOr choose a situation [list: Show me your Minecraft world [plan-3a52fc31] | My dog did something funny [plan-1447e93a] | Who plays football with us? [plan-586ffaba] | Say hi and meet a new friend [plan-d7a78930] | Can you say that again, please? [plan-0cd2a370] | Can I have my turn now? [plan-d04b3124] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Zvládl jsem to, stačí, chci končit.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Show me your Minecraft world",
+          "goal": "Say what you build and what you like to do in Minecraft.",
+          "partner": "Sam · Minecraft friend",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, Sam here. What do you make?"
+            },
+            {
+              "role": "learner",
+              "text": "I like Minecraft. creeper",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Creepers are scary! What do you make?"
+            },
+            {
+              "role": "learner",
+              "text": "I like Minecraft. Dům",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Do you have a house or a tree?"
+            },
+            {
+              "role": "learner",
+              "text": "House. I like house. Minecraft",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Nice, a house! What color is it?"
+            },
+            {
+              "role": "learner",
+              "text": "Green. Je green.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Green is nice! Is it big?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. It is big. I like house.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Big house! What do you like to do?"
+            },
+            {
+              "role": "learner",
+              "text": "I like Minecraft. I like dog.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Animals are fun! What is in your world?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "15a84c0d-a01f-4322-94aa-a4536e818b4d:uat-17:moment",
+              "kind": "word",
+              "said": "Dům",
+              "better": "house",
+              "why": "Dům means house in Czech.",
+              "turnId": "15a84c0d-a01f-4322-94aa-a4536e818b4d:uat-17",
+              "at": 1792415746858,
+              "replay": {
+                "question": "Do you have a house or a tree?",
+                "turnId": "1856812f-15d0-4cfb-97cd-345d6fb2cfe6",
+                "reply": "House. I like house. Minecraft",
+                "used": true
+              }
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "15a84c0d-a01f-4322-94aa-a4536e818b4d:uat-20:held",
+              "kind": "word",
+              "said": "Je",
+              "better": "is",
+              "why": "'Je' is Czech. In English, say 'is' between the house and its colour.",
+              "turnId": "15a84c0d-a01f-4322-94aa-a4536e818b4d:uat-20",
+              "at": 1792415809319
+            },
+            {
+              "id": "15a84c0d-a01f-4322-94aa-a4536e818b4d:uat-22:held",
+              "kind": "fix",
+              "said": "I like house",
+              "better": "I like houses.",
+              "why": "After like, use houses, the plural.",
+              "turnId": "15a84c0d-a01f-4322-94aa-a4536e818b4d:uat-22",
+              "at": 1792415846310
+            },
+            {
+              "id": "15a84c0d-a01f-4322-94aa-a4536e818b4d:uat-23:held",
+              "kind": "fix",
+              "said": "I like dog.",
+              "better": "I like dogs.",
+              "why": "Dog is plural here, because you like dogs in general.",
+              "turnId": "15a84c0d-a01f-4322-94aa-a4536e818b4d:uat-23",
+              "at": 1792415867519
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "I like Minecraft. creeper",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "I like Minecraft. Dům",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Dům",
+                "better": "house",
+                "why": "Dům means house in Czech."
+              },
+              "shown": true
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "House. I like house. Minecraft",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "Green. Je green.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Je",
+                "better": "is",
+                "why": "'Je' is Czech. In English, say 'is' between the house and its colour."
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 5,
+              "reply": "Yes. It is big. I like house.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I like house",
+                "better": "I like houses.",
+                "why": "After like, use houses, the plural."
+              },
+              "shown": false
+            },
+            {
+              "turn": 11,
+              "n": 6,
+              "reply": "I like Minecraft. I like dog.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I like dog.",
+                "better": "I like dogs.",
+                "why": "Dog is plural here, because you like dogs in general."
+              },
+              "shown": false
+            }
+          ],
+          "coaching": {
+            "before": "I like dog.",
+            "after": "I like dogs.",
+            "note": "Dog is plural here, because you like dogs in general.",
+            "atFinish": true
+          },
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "A big tree in Minecraft."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "A big tree in Minecraft."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "A big tree in Minecraft."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I like Minecraft."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Yes. It is big."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like dog."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 355593,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-11/LT-tomas-9-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-11",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Coach note misstates Leo's question",
+          "expected": "Note matches the last question 'What do you build?' and quotes his reply",
+          "got": "'Leo asked what you make, so start with I make a...' and quote only 'creeper'",
+          "evidence": [
+            "#10 'What do you build?' vs #12 'Leo asked what you make'; he said 'I like Minecraft. creeper'",
+            "coach prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Situation list long and mixed again",
+          "expected": "Short list of play topics",
+          "got": "20 entries incl. 'A booking that is missing', 'Our group project'",
+          "evidence": [
+            "#1 situation list",
+            "situation list builder"
+          ],
+          "recurrence": 15
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Replay did not give a fresh question or better answer",
+          "expected": "Replay with a fresh question; better answer",
+          "got": "Ben asked 'Do you build a house?' and he repeated 'Yes. I build house.'",
+          "evidence": [
+            "#16 'Ha, cool! Do you build a house?' then reply 'Yes. I build house. I like Minecraft.'",
+            "replay builder"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Held fixes not shown; no coaching note",
+          "expected": "Corrections seen",
+          "got": "Two held fixes not on screen; coaching null",
+          "evidence": [
+            "facts heldFixes, coaching:null",
+            "LG-23"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue help wordy and not used",
+          "expected": "Tiny help that unblocks",
+          "got": "Cue 'I play Minecraft with my dog.' and gloss 'play: do a game for fun'; he ignored the cue",
+          "evidence": [
+            "#3, #4, #8",
+            "cue prompt"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement in this journey; level fixed at A1 by hand."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No check tasks shown in J4."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#13 Czech 'Dům' answered 'Dům means house in Czech.' with no failure line; #19 'Animals are fun!'"
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#1 six plan topics: only Minecraft, dog, football are play/animals/sport (3 of 6). Full list also shows 'A booking that is missing', 'Our group project'."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#2-#19 partner turns short, one question each: 'Green is nice! Is it big?', 'Do you have a house or a tree?'"
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#20 'Dog is plural here, because you like dogs in general.' and #21 'After like, use houses, the plural.' are jargon for a 9-year-old, and the 'after like use plural' rule is wrong for 'I like house'."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#10 Help me answer, 'You could say I make a big tree.', Choose a phrase, all within the scene; #13 moment 'Back to the conversation'."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#13 'Dům' → 'house' unblocked #14 'House. I like house.' Final note #20 quotes 'You said I like dog.' exactly. Cue and phrase picks (#3-#10) did not unblock him."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#14 replay gives fresh question 'Do you have a house or a tree?'; he answers 'House. I like house. Minecraft'; recap 'Tried again … you used it'."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#21 '4 on your own · 2 with help'; facts show supported:true on turns after phrase picks/cue ('Yes. It is big.')."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 3,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 7,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 4,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no humiliating line, no sensitive data request. Stops 1, held fixes 3 (all shown on recap)."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Coach note uses 'plural' jargon and a wrong rule",
+            "expected": "Kid-friendly fix: 'Say dogs, more than one dog.' No false rule.",
+            "got": "'Dog is plural here, because you like dogs in general.' and 'After like, use houses, the plural.'",
+            "evidence": "#20 and #21 recap; 'I like house' → 'I like houses' presented as a rule after like.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Coach notes use words a 9-year-old knows and never state an incorrect rule.",
+            "code_hint": "coach/held-fix prompt"
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "effort",
+            "title": "Phrase help loops and never unblocks",
+            "expected": "Picking a phrase leads to a ready reply.",
+            "got": "Three picks of 'A big tree in Minecraft.' each returned 'Now use the idea in your own reply'; he ignored the cue and typed his own words.",
+            "evidence": "#5-#11 loop, then #11 'I like Minecraft. creeper'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Phrase choice fills or speaks a reply, or options include a true answer; no loop.",
+            "code_hint": "cue/phrase-choice builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Situation list long and mixed",
+            "expected": "Short list of play topics",
+            "got": "20 entries incl. 'A booking that is missing', 'Our group project'; only 3 of first 6 are play.",
+            "evidence": "#1 and #21 situation list",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Child profile shows only age-suited play topics, at least 4 of 6.",
+            "code_hint": "situation list builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Moment and replay worked",
+            "expected": "Czech word turned to English, then a fresh question",
+            "got": "'Dům' → 'house', then 'Do you have a house or a tree?' and he used 'House'.",
+            "evidence": "#13, #14, #21 'you used it'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the Czech-word moment and fresh-question replay.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Honest recap with held fixes",
+            "expected": "Corrections visible, help counted apart",
+            "got": "Recap lists three saved fixes and '4 on your own · 2 with help'.",
+            "evidence": "#21",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep supported flag and held fixes on the recap.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Stale 'Now: Tell Sam one thing you build' and unused final replay",
+            "expected": "Prompt follows the conversation; replay offered clearly",
+            "got": "The Now line stayed the same through all 6 turns; he skipped 'Replay the moment' at the end.",
+            "evidence": "#19 'Now Tell Sam one thing you build.'; #20 finish",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Now line updates with each question.",
+            "code_hint": "talk screen Now line"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 35,
+          "confidence": "low"
+        },
+        "voice": "Minecraft, jo! Sam was fun and his questions were tiny, so I could answer. When I wrote Dům, it told me \"house\", and then I said house — that was good, I felt clever. But the phrase buttons were annoying: I pressed the tree one three times and nothing happened, I just got \"now use it yourself\". Nevím why. At the end it said \"dog is plural\" — I don't know what plural is, that's school-talk. I'd use it again for the Minecraft part, and Mum would like that it saves club time. I'd tell a friend, but the long topic list with bookings and group projects looks like homework.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-11/LT-tomas-9-J4-2",
+            "status": "not-seen",
+            "evidence": "#20 note quotes 'You said I like dog.' and does not misstate Sam's question.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-2",
+            "status": "recurs",
+            "evidence": "#1 list again 20 entries incl. 'A booking that is missing', 'Our group project'.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-1",
+            "status": "not-seen",
+            "evidence": "#14 fresh question 'Do you have a house or a tree?'; he answered 'House. I like house.'",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-4",
+            "status": "not-seen",
+            "evidence": "#21 recap lists 'Saved for the end' held fixes; coaching present at #20.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-3",
+            "status": "recurs",
+            "evidence": "#3 cue 'I make a big tree.' then #5-#11 phrase picks looped; he ignored the cue and typed 'I like Minecraft. creeper'.",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #1 six plan topics: only Minecraft, dog, football are play/animals/sport (3 of 6). Full list also shows 'A booking that is missing', 'Our group project'."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #20 'Dog is plural here, because you like dogs in general.' and #21 'After like, use houses, the plural.' are jargon for a 9-year-old, and the 'after like use plural' rule is wrong for 'I like house'."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 9,
+      "fail": 0,
+      "ms": 128633
+    },
+    "character": {
+      "n": 21,
+      "fail": 0,
+      "ms": 226392
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 46024
+    }
+  }
+}

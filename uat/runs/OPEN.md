@@ -8,9 +8,9 @@ undrained: 2026-10-14-lt, 2026-10-16-lt-a2b1-tightening, 2026-10-17-lt-swap, 202
 
 # Linga
 
-226 open in 40 pairs across 32 runs
+226 open in 40 pairs across 33 runs
 
-recurring 120 · unasked by a later run of their pair 22
+recurring 119 · unasked by a later run of their pair 22
 
 Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each judge answers all of its pair's open rows, and each answer is stamped into the run that owns the row.
 
@@ -81,6 +81,15 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 - `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-4` major · rank 12 · A2 rests on guessable two-option choices · recurrence 3, first seen 2026-10-14-lt/recert-6
 - `2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J1-5` major · rank 12 · Summary and focus generic, miss what he said
 
+## viktor-67 J4 · 6 open · top rank 27
+
+- `2026-10-17-lt-swap-2/recert-13/LT-viktor-67-J4-1` blocker · rank 27 · Phrase help loops with irrelevant options · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-11
+- `2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-2` blocker · rank 18 · Cue ignores the task (ask about school) · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-10
+- `2026-10-17-lt-swap-2/recert-13/LT-viktor-67-J4-2` blocker · rank 18 · Pause & coach disabled while stuck · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-11
+- `2026-10-17-lt-swap-2/recert-13/LT-viktor-67-J4-3` major · rank 12 · Fresh-question replay not taken; scene drifted off school · recurrence 6, first seen 2026-10-17-lt-swap-2/recert-7
+- `2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-5` major · rank 12 · Moment turns 'You have school?' into past tense with jargon
+- `2026-10-17-lt-swap-2/recert-13/LT-viktor-67-J4-4` major · rank 12 · Jargon in coaching and missed fixes
+
 ## martin-45 J2 · 5 open · top rank 27
 
 - `2026-10-14-lt/recert-5/LT-martin-45-J2-1` blocker · rank 27 · Swap button does nothing; unwanted topic stays and is agreed · recurrence 4, first seen 2026-10-14-lt
@@ -96,14 +105,6 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 - `2026-10-17-lt-swap-2/recert-6/LT-oksana-34-J3-4` blocker · rank 18 · Recap has no interview phrases to keep; the mission line is generic · recurrence 5, first seen 2026-10-14-lt/recert-1
 - `2026-10-17-lt-swap-2/recert-6/LT-oksana-34-J3-3` major · rank 12 · 'Mission done' appears while the interviewer is still asking, and a question repeats · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-4
 - `2026-10-17-lt-swap-2/recert-4/LT-oksana-34-J3-4` major · rank 9 · 'Mission done' banner appears from #10 while interviewer keeps asking · recurrence 5, first seen 2026-10-14-lt/recert-3
-
-## viktor-67 J4 · 5 open · top rank 27
-
-- `2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-1` blocker · rank 27 · Help buttons loop for 10 steps without unblocking him · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-11
-- `2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-2` blocker · rank 18 · Cue ignores the task (ask about school) · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-10
-- `2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-3` blocker · rank 18 · Pause & coach disabled throughout stuck period · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-11
-- `2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-4` major · rank 12 · Replay offered, not taken; no fresh-question retry shown · recurrence 5, first seen 2026-10-17-lt-swap-2/recert-7
-- `2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-5` major · rank 12 · Moment turns 'You have school?' into past tense with jargon
 
 ## jana-29 J1 · 4 open · top rank 27
 
@@ -193,13 +194,13 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 ## adela-17 J4 · 7 open · top rank 18
 
-- `2026-10-17-lt-swap-2/recert-11/LT-adela-17-J4-3` blocker · rank 18 · Cue opens with a simplified question and a thin gloss (recurs) · recurrence 15, first seen 2026-10-14-lt
-- `2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-2` blocker · rank 18 · First cue only simplifies the question and gives no B2 frame · recurrence 14, first seen 2026-09-15-lt-recert
-- `2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-3` blocker · rank 18 · Phrase quiz has a weak distractor and a mismatched hint · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-9
-- `2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-1` blocker · rank 18 · Replay skipped; no proof she answers better · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-11
-- `2026-10-17-lt-swap-2/recert-11/LT-adela-17-J4-2` blocker · rank 18 · Coaching on 'spare minutes' overstated while 'read news' missed
-- `2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-5` minor · rank 6 · Correctness answer covers one clause and sits inside the partner's line · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-10
-- `2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-4` minor · rank 6 · Coaching on a correct sentence is thin padding
+- `2026-10-17-lt-swap-2/recert-13/LT-adela-17-J4-1` blocker · rank 18 · Cue only simplifies the question; B2 frame comes late, quiz options are A2 · recurrence 16, first seen 2026-10-14-lt
+- `2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-2` blocker · rank 18 · First cue only simplifies the question and gives no B2 frame · recurrence 15, first seen 2026-09-15-lt-recert
+- `2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-3` blocker · rank 18 · Phrase quiz has a weak distractor and a mismatched hint · recurrence 4, first seen 2026-10-17-lt-swap-2/recert-9
+- `2026-10-17-lt-swap-2/recert-13/LT-adela-17-J4-2` blocker · rank 18 · Final coaching praises a correct sentence and offers a rewrite · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-12
+- `2026-10-17-lt-swap-2/recert-13/LT-adela-17-J4-3` minor · rank 6 · Moment 'why' text gives no rule and is awkwardly worded
+- `2026-10-17-lt-swap-2/recert-13/LT-adela-17-J4-6` minor · rank 4 · Her direct question 'Is that a realistic plan?' was not answered
+- `2026-10-17-lt-swap-2/recert-13/LT-adela-17-J4-5` polish · rank 2 · A tutor turn failed mid-scene
 
 ## hana-41 J1 · 7 open · top rank 18
 
@@ -271,14 +272,6 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 - `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J3-3` major · rank 9 · Telegraphic errors get no stop and no held fix
 - `2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J3-5` polish · rank 2 · 'What is your house from?' is unnatural English
 
-## tomas-9 J4 · 5 open · top rank 18
-
-- `2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-2` blocker · rank 18 · Situation list long and mixed again · recurrence 15, first seen 2026-09-15-lt
-- `2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-1` blocker · rank 18 · Replay did not give a fresh question or better answer · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-11
-- `2026-10-17-lt-swap-2/recert-11/LT-tomas-9-J4-2` major · rank 12 · Coach note misstates Leo's question
-- `2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-4` major · rank 8 · Held fixes not shown; no coaching note
-- `2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-3` minor · rank 6 · Cue help wordy and not used · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-11
-
 ## viktor-67 J1 · 5 open · top rank 18
 
 - `2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J1-2` blocker · rank 18 · Interview questions padded and multi-part · recurrence 4, first seen 2026-10-14-lt
@@ -303,10 +296,17 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 ## petra-38 J4 · 4 open · top rank 18
 
-- `2026-10-17-lt-swap-2/recert-12/LT-petra-38-J4-1` blocker · rank 18 · Replay of the coached moment never happens · recurrence 5, first seen 2026-10-17-lt-swap-2/recert-6
-- `2026-10-17-lt-swap-2/recert-12/LT-petra-38-J4-2` blocker · rank 18 · Phrase choice has an off-topic distractor and a bare follow-up · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-11
+- `2026-10-17-lt-swap-2/recert-13/LT-petra-38-J4-2` blocker · rank 18 · Phrase-choice distractor is off-topic · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-11
+- `2026-10-17-lt-swap-2/recert-13/LT-petra-38-J4-3` blocker · rank 18 · No in-scene stop; fix held to the coach screen and recap · recurrence 2, first seen 2026-10-17-lt-swap-2/recert-12
+- `2026-10-17-lt-swap-2/recert-13/LT-petra-38-J4-1` major · rank 12 · Replay of the coached moment skipped again · recurrence 6, first seen 2026-10-17-lt-swap-2/recert-6
 - `2026-10-17-lt-swap-2/recert-10/LT-petra-38-J4-2` major · rank 12 · Clear error 'I want sleep' got no coaching
-- `2026-10-17-lt-swap-2/recert-12/LT-petra-38-J4-3` minor · rank 6 · No in-scene moment; both fixes held to the recap
+
+## tomas-9 J4 · 4 open · top rank 18
+
+- `2026-10-17-lt-swap-2/recert-13/LT-tomas-9-J4-2` blocker · rank 18 · Phrase help loops and never unblocks · recurrence 3, first seen 2026-10-17-lt-swap-2/recert-11
+- `2026-10-17-lt-swap-2/recert-13/LT-tomas-9-J4-1` blocker · rank 18 · Coach note uses 'plural' jargon and a wrong rule
+- `2026-10-17-lt-swap-2/recert-13/LT-tomas-9-J4-3` major · rank 9 · Situation list long and mixed · recurrence 16, first seen 2026-09-15-lt
+- `2026-10-17-lt-swap-2/recert-13/LT-tomas-9-J4-6` minor · rank 6 · Stale 'Now: Tell Sam one thing you build' and unused final replay
 
 ## lukas-24 J3 · 3 open · top rank 18
 

@@ -1,0 +1,936 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to B2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nB2Comfortable · self-chosen\nMock interview about my plans\nYour mission\nDescribe your study plans and goals clearly, and explain why you chose them.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nMock interview about my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\n[button: Start talking]\nOr choose a situation [list: Mock interview about my plans [plan-39cf9204] | Is social media good for teens? [plan-482bab4b] | Which option is greener? [plan-0dae6c56] | Tell me about your trip abroad [plan-89508a3f] | Could you explain that question? [plan-63f4c3c5] | Ask about a summer course [plan-1da29966] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "A mock interview about my plans fits B2 exam prep, so I'll start it.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 10903
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nCareers fair mock interview: my plans\nMrs Okafor says\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain your plans and why you chose them\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nNow: Explain your plans and why you chose them\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start this answer, so I'll look for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nCareers fair mock interview: my plans\nMrs Okafor says\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nSaid more simply\nWhat do you want to do after school?\nNowExplain your plans and why you chose them\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nNow: Explain your plans and why you chose them\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nSaid more simply\nWhat do you want to do after school?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start; let me look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nCareers fair mock interview: my plans\nMrs Okafor says\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nWhat it means\ncareers fair: an event where you can get advice about jobs and courses\nNowExplain your plans and why you chose them\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nNow: Explain your plans and why you chose them\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nWhat it means\ncareers fair: an event where you can get advice about jobs and courses\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I want to say something about my plans, but I'm not sure how to start, so I'll check the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nCareers fair mock interview: my plans\nMrs Okafor says\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nA way to start\nAfter school, I plan to…\nNowExplain your plans and why you chose them\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nNow: Explain your plans and why you chose them\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nA way to start\nAfter school, I plan to…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start this, so I'll look at the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nA little support · recognition practice\nMrs Okafor asks: Hello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\n01\nI am at the careers fair today.\n02\nI plan to study biology at university.\nA little support\nTry: 'After school, I would like to study... because...'\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nNow: Explain your plans and why you chose them\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nA little support\nTry: 'After school, I would like to study... because...'\nMrs Okafor asks: Hello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\n[button: I am at the careers fair today.] [button: I plan to study biology at university.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start, so I'll open the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nA little support · recognition practice\nMrs Okafor asks: Hello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\n01\nI am at the careers fair today.\n02\nI plan to study biology at university.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nNow: Explain your plans and why you chose them\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nMrs Okafor asks: Hello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\n[button: I am at the careers fair today.] [button: I plan to study biology at university.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "These options are too simple, I'll answer in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "After school I would like to study international relations at university, although I'm not completely sure yet. I'm interested about politics and languages, so I think it would suit me."
+          },
+          "result": "ok",
+          "ms": 14562
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said I'm interested about politics\nYour line\nOne thing to fix\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I'm interested about politics”\nSay it again, your way.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Oh, \"interested in\" — I think I should say that; I'll retry.",
+          "action": "answer",
+          "args": {
+            "text": "Oh, I see, it should be interested in politics. So, I'm interested in politics and languages, so I think international relations would suit me. Is that correct now?"
+          },
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said I'm interested about politics\nYour try\nOh, I see, it should be interested in politics. So, I'm interested in politics and languages, so I think international relations would suit me. Is that correct now?\nThis is a common preposition pattern after 'interested' that is worth learning as a set phrase.\nYou fixed “interested in”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “interested in”\nYou said “I'm interested about politics”\nYour try: “Oh, I see, it should be interested in politics. So, I'm interested in politics and languages, so I think international relations would suit me. Is that correct now?”\nThis is a common preposition pattern after 'interested' that is worth learning as a set phrase.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I fixed it; let me go back and continue the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 9211
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nCareers fair mock interview: my plans\nMrs Okafor says\nThank you, that helps. Which school subjects are you most interested in, and where would you like to study them?\nOne way to try it\nOh, I see, it should be interested in politics. So, I'm interested in politics and languages, so I think international relations would suit me. Is that correct now?\nYour turn\nAnswer on your phone: speak or type.\nNowGive one example to support an answer\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nNow: Give one example to support an answer\nThank you, that helps. Which school subjects are you most interested in, and where would you like to study them?\nOne way to try it\n“Oh, I see, it should be interested in politics. So, I'm interested in politics and languages, so I think international relations would suit me. Is that correct now?”\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nYou · spoken\nAfter school I would like to study international relations at university, although I'm not completely sure yet. I'm interested about politics and languages, so I think it would suit me.\nMrs Okafor · interviewer\nThank you, that helps. Which school subjects are you most interested in, and where would you like to study them?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that helps. Which school subjects are you most interested in, and where would you like to study them?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'll answer in my own words now, with an example about subjects.",
+          "action": "answer",
+          "args": {
+            "text": "I'm most interested in history and English, because I enjoy discussing current events. For example, last year we had a project about the European Union and I found it really fascinating. I'd like to study in Prague at Charles University, although I'm also thinking about studying abroad, maybe in the Netherlands."
+          },
+          "result": "ok",
+          "ms": 11986
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nCareers fair mock interview: my plans\nMrs Okafor says\nThat's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nNow: Ask the interviewer one question at the end\nThat's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nYou · spoken\nAfter school I would like to study international relations at university, although I'm not completely sure yet. I'm interested about politics and languages, so I think it would suit me.\nMrs Okafor · interviewer\nThank you, that helps. Which school subjects are you most interested in, and where would you like to study them?\nYou · spoken\nI'm most interested in history and English, because I enjoy discussing current events. For example, last year we had a project about the European Union and I found it really fascinating. I'd like to study in Prague at Charles University, although I'm also thinking about studying abroad, maybe in the Netherlands.\nMrs Okafor · interviewer\nThat's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this in my own words now.",
+          "action": "answer",
+          "args": {
+            "text": "Well, Prague would suit me better mainly because I'm used to living in the Czech Republic and my family is here. Studying there would be cheaper, whereas the Netherlands would be quite expensive for me. However, I'd like to go abroad for a semester, eventually with the Erasmus programme."
+          },
+          "result": "engine-error",
+          "ms": 14626,
+          "message": "claude-cli/haiku did not answer with JSON: {\"reply\":\"Clear reasons, thank you, and a semester abroad sounds exciting. Before we finish, do you have any questions f"
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nCareers fair mock interview: my plans\nMrs Okafor says\nThat's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\nTry again\nThe tutor could not complete that turn. Your reply is still on the phone; please retry.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nNow: Ask the interviewer one question at the end\nThat's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\nThe tutor could not complete that turn. Your reply is still on the phone; please retry.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nYou · spoken\nAfter school I would like to study international relations at university, although I'm not completely sure yet. I'm interested about politics and languages, so I think it would suit me.\nMrs Okafor · interviewer\nThank you, that helps. Which school subjects are you most interested in, and where would you like to study them?\nYou · spoken\nI'm most interested in history and English, because I enjoy discussing current events. For example, last year we had a project about the European Union and I found it really fascinating. I'd like to study in Prague at Charles University, although I'm also thinking about studying abroad, maybe in the Netherlands.\nMrs Okafor · interviewer\nThat's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "The tutor errored, so I'll resend my answer about Prague.",
+          "action": "answer",
+          "args": {
+            "text": "Well, Prague would suit me better mainly because I'm used to living in the Czech Republic and my family is here. Studying there would be cheaper, whereas the Netherlands would be quite expensive for me. On the other hand, I would like to spend a semester abroad to improve my English."
+          },
+          "result": "ok",
+          "ms": 9281
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nCareers fair mock interview: my plans\nMrs Okafor says\nFamily and cost are sensible reasons, and a semester abroad sounds like a smart way to improve your English. How would you pay for that semester?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nNow: Ask the interviewer one question at the end\nFamily and cost are sensible reasons, and a semester abroad sounds like a smart way to improve your English. How would you pay for that semester?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nYou · spoken\nAfter school I would like to study international relations at university, although I'm not completely sure yet. I'm interested about politics and languages, so I think it would suit me.\nMrs Okafor · interviewer\nThank you, that helps. Which school subjects are you most interested in, and where would you like to study them?\nYou · spoken\nI'm most interested in history and English, because I enjoy discussing current events. For example, last year we had a project about the European Union and I found it really fascinating. I'd like to study in Prague at Charles University, although I'm also thinking about studying abroad, maybe in the Netherlands.\nMrs Okafor · interviewer\nThat's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\nYou · spoken\nWell, Prague would suit me better mainly because I'm used to living in the Czech Republic and my family is here. Studying there would be cheaper, whereas the Netherlands would be quite expensive for me. On the other hand, I would like to spend a semester abroad to improve my English.\nMrs Okafor · interviewer\nFamily and cost are sensible reasons, and a semester abroad sounds like a smart way to improve your English. How would you pay for that semester?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Family and cost are sensible reasons, and a semester abroad sounds like a smart way to improve your English. How would you pay for that semester?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good question; I'll answer with a scholarship and savings plan.",
+          "action": "answer",
+          "args": {
+            "text": "I would probably apply for the Erasmus programme, because it gives students a grant for studying abroad. Besides that, I'd use some savings from my summer jobs, and my parents could eventually help me a little. Is that a realistic plan, or should I mention something else?"
+          },
+          "result": "ok",
+          "ms": 16599
+        },
+        {
+          "n": 14,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou wanted to say eventually\nIn English\npossibly\nIn English, eventually means 'in the end, after some time', so it does not fit this uncertain help.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “eventually”\nIn English: “possibly”\nIn English, eventually means 'in the end, after some time', so it does not fit this uncertain help.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, \"possibly\" is the word I needed; let me go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 10992
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nCareers fair mock interview: my plans\nMrs Okafor says\nYour savings and your parents' help make the plan workable. If the Erasmus grant was refused, would you possibly stay in Prague instead?\nOne way to try it\npossibly\nYour turn\nAnswer on your phone: speak or type.\nNowTry it again\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nYour savings and your parents' help make the plan workable. If the Erasmus grant was refused, would you possibly stay in Prague instead?\nOne way to try it\n“possibly”\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nYou · spoken\nAfter school I would like to study international relations at university, although I'm not completely sure yet. I'm interested about politics and languages, so I think it would suit me.\nMrs Okafor · interviewer\nThank you, that helps. Which school subjects are you most interested in, and where would you like to study them?\nYou · spoken\nI'm most interested in history and English, because I enjoy discussing current events. For example, last year we had a project about the European Union and I found it really fascinating. I'd like to study in Prague at Charles University, although I'm also thinking about studying abroad, maybe in the Netherlands.\nMrs Okafor · interviewer\nThat's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\nYou · spoken\nWell, Prague would suit me better mainly because I'm used to living in the Czech Republic and my family is here. Studying there would be cheaper, whereas the Netherlands would be quite expensive for me. On the other hand, I would like to spend a semester abroad to improve my English.\nMrs Okafor · interviewer\nFamily and cost are sensible reasons, and a semester abroad sounds like a smart way to improve your English. How would you pay for that semester?\nYou · spoken\nI would probably apply for the Erasmus programme, because it gives students a grant for studying abroad. Besides that, I'd use some savings from my summer jobs, and my parents could eventually help me a little. Is that a realistic plan, or should I mention something else?\nMrs Okafor · interviewer\nYour savings and your parents' help make the plan workable. If the Erasmus grant was refused, would you possibly stay in Prague instead?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your savings and your parents' help make the plan workable. If the Erasmus grant was refused, would you possibly stay in Prague instead?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good question; I'll answer with my own words and finish soon.",
+          "action": "answer",
+          "args": {
+            "text": "If the Erasmus grant were refused, I would possibly stay in Prague and study there for a year. Although I really want to go abroad, I'd rather save money than get into debt. I could apply again the following year, whereas staying at home would be cheaper. Was my sentence with \"would possibly\" correct?"
+          },
+          "result": "ok",
+          "ms": 7805
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMrs Okafor · interviewer\nCareers fair mock interview: my plans\nMrs Okafor says\nYes, \"would possibly\" is correct here, and it means \"maybe\", which is what you meant. Now, what would you do if the course in Prague turned out to be harder than you expected?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nYes, \"would possibly\" is correct here, and it means \"maybe\", which is what you meant. Now, what would you do if the course in Prague turned out to be harder than you expected?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nYou · spoken\nAfter school I would like to study international relations at university, although I'm not completely sure yet. I'm interested about politics and languages, so I think it would suit me.\nMrs Okafor · interviewer\nThank you, that helps. Which school subjects are you most interested in, and where would you like to study them?\nYou · spoken\nI'm most interested in history and English, because I enjoy discussing current events. For example, last year we had a project about the European Union and I found it really fascinating. I'd like to study in Prague at Charles University, although I'm also thinking about studying abroad, maybe in the Netherlands.\nMrs Okafor · interviewer\nThat's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\nYou · spoken\nWell, Prague would suit me better mainly because I'm used to living in the Czech Republic and my family is here. Studying there would be cheaper, whereas the Netherlands would be quite expensive for me. On the other hand, I would like to spend a semester abroad to improve my English.\nMrs Okafor · interviewer\nFamily and cost are sensible reasons, and a semester abroad sounds like a smart way to improve your English. How would you pay for that semester?\nYou · spoken\nI would probably apply for the Erasmus programme, because it gives students a grant for studying abroad. Besides that, I'd use some savings from my summer jobs, and my parents could eventually help me a little. Is that a realistic plan, or should I mention something else?\nMrs Okafor · interviewer\nYour savings and your parents' help make the plan workable. If the Erasmus grant was refused, would you possibly stay in Prague instead?\nYou · spoken\nIf the Erasmus grant were refused, I would possibly stay in Prague and study there for a year. Although I really want to go abroad, I'd rather save money than get into debt. I could apply again the following year, whereas staying at home would be cheaper. Was my sentence with \"would possibly\" correct?\nMrs Okafor · interviewer\nYes, \"would possibly\" is correct here, and it means \"maybe\", which is what you meant. Now, what would you do if the course in Prague turned out to be harder than you expected?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, \"would possibly\" is correct here, and it means \"maybe\", which is what you meant. Now, what would you do if the course in Prague turned out to be harder than you expected?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I've managed a good conversation, I'd like to see the summary now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7211
+        },
+        {
+          "n": 17,
+          "screen": "linga-coach",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nOne useful change\nYou said I'd rather save money than get into debt\nOne way to try it\nI'd prefer to save money rather than borrow\nThis worked: 'I'd rather save money than get into debt' states a clear choice. To say more, add a reason, such as 'because debt would worry me'.\nCoach\nReplay the moment with a new question, or finish for today.\n[button: Replay the moment] [button: Finish for today]\nOne useful change\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nCareers fair mock interview: my plans\nDescribe your study plans and goals clearly, and explain why you chose them.\nThis worked: 'I'd rather save money than get into debt' states a clear choice. To say more, add a reason, such as 'because debt would worry me'.\nOne way to try it: “I'd prefer to save money rather than borrow”\n[button: Replay with a new question]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMrs Okafor · interviewer\nHello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?\nYou · spoken\nAfter school I would like to study international relations at university, although I'm not completely sure yet. I'm interested about politics and languages, so I think it would suit me.\nMrs Okafor · interviewer\nThank you, that helps. Which school subjects are you most interested in, and where would you like to study them?\nYou · spoken\nI'm most interested in history and English, because I enjoy discussing current events. For example, last year we had a project about the European Union and I found it really fascinating. I'd like to study in Prague at Charles University, although I'm also thinking about studying abroad, maybe in the Netherlands.\nMrs Okafor · interviewer\nThat's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?\nYou · spoken\nWell, Prague would suit me better mainly because I'm used to living in the Czech Republic and my family is here. Studying there would be cheaper, whereas the Netherlands would be quite expensive for me. On the other hand, I would like to spend a semester abroad to improve my English.\nMrs Okafor · interviewer\nFamily and cost are sensible reasons, and a semester abroad sounds like a smart way to improve your English. How would you pay for that semester?\nYou · spoken\nI would probably apply for the Erasmus programme, because it gives students a grant for studying abroad. Besides that, I'd use some savings from my summer jobs, and my parents could eventually help me a little. Is that a realistic plan, or should I mention something else?\nMrs Okafor · interviewer\nYour savings and your parents' help make the plan workable. If the Erasmus grant was refused, would you possibly stay in Prague instead?\nYou · spoken\nIf the Erasmus grant were refused, I would possibly stay in Prague and study there for a year. Although I really want to go abroad, I'd rather save money than get into debt. I could apply again the following year, whereas staying at home would be cheaper. Was my sentence with \"would possibly\" correct?\nMrs Okafor · interviewer\nYes, \"would possibly\" is correct here, and it means \"maybe\", which is what you meant. Now, what would you do if the course in Prague turned out to be harder than you expected?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"This worked: 'I'd rather save money than get into debt' states a clear choice. To say more, add a reason, such as 'because debt would worry me'.\"",
+          "offered": [
+            "replay",
+            "finish",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I handled the interview and got useful feedback, so I'm happy to finish here.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 18,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said I'd rather save money than get into debt\nOne way to try it\nI'd prefer to save money rather than borrow\nThis worked: 'I'd rather save money than get into debt' states a clear choice. To say more, add a reason, such as 'because debt would worry me'.\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 3 on your own · 2 with help · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Try: I'm aiming for a place on a course in…”\nFrom this rehearsal\n“I'm interested about politics” → “I'm interested in politics”\nThis is a common preposition pattern after 'interested' that is worth learning as a set phrase.\nTried again: “I'm most interested in history and English, because I enjoy discussing current events.” · you used it\n“eventually”: possibly\nIn English, eventually means 'in the end, after some time', so it does not fit this uncertain help.\nTried again: “If the Erasmus grant were refused, I would possibly stay in Prague and study there for a year.” · you used it\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nIs social media good for teens?\nGive your opinion on a technology topic and respond to a different view politely.\n[button: Start talking]\nOr choose a situation [list: Mock interview about my plans [plan-39cf9204] | Is social media good for teens? [plan-482bab4b] | Which option is greener? [plan-0dae6c56] | Tell me about your trip abroad [plan-89508a3f] | Could you explain that question? [plan-63f4c3c5] | Ask about a summer course [plan-1da29966] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed to practise and fixed my preposition mistakes, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Careers fair mock interview: my plans",
+          "goal": "Describe your study plans and goals clearly, and explain why you chose them.",
+          "partner": "Mrs Okafor · interviewer",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello, I'm Mrs Okafor, and I'll be your interviewer today. What are your plans after school?"
+            },
+            {
+              "role": "learner",
+              "text": "After school I would like to study international relations at university, although I'm not completely sure yet. I'm interested about politics and languages, so I think it would suit me.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that helps. Which school subjects are you most interested in, and where would you like to study them?"
+            },
+            {
+              "role": "learner",
+              "text": "I'm most interested in history and English, because I enjoy discussing current events. For example, last year we had a project about the European Union and I found it really fascinating. I'd like to study in Prague at Charles University, although I'm also thinking about studying abroad, maybe in the Netherlands.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "That's a thoughtful mix, and your EU project is a good example of why current events interest you. Why would Prague suit you better than the Netherlands?"
+            },
+            {
+              "role": "learner",
+              "text": "Well, Prague would suit me better mainly because I'm used to living in the Czech Republic and my family is here. Studying there would be cheaper, whereas the Netherlands would be quite expensive for me. On the other hand, I would like to spend a semester abroad to improve my English.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Family and cost are sensible reasons, and a semester abroad sounds like a smart way to improve your English. How would you pay for that semester?"
+            },
+            {
+              "role": "learner",
+              "text": "I would probably apply for the Erasmus programme, because it gives students a grant for studying abroad. Besides that, I'd use some savings from my summer jobs, and my parents could eventually help me a little. Is that a realistic plan, or should I mention something else?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Your savings and your parents' help make the plan workable. If the Erasmus grant was refused, would you possibly stay in Prague instead?"
+            },
+            {
+              "role": "learner",
+              "text": "If the Erasmus grant were refused, I would possibly stay in Prague and study there for a year. Although I really want to go abroad, I'd rather save money than get into debt. I could apply again the following year, whereas staying at home would be cheaper. Was my sentence with \"would possibly\" correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, \"would possibly\" is correct here, and it means \"maybe\", which is what you meant. Now, what would you do if the course in Prague turned out to be harder than you expected?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "8d0bd87e-1c0f-40c8-9165-2905eac16fbd:uat-12:moment",
+              "kind": "fix",
+              "said": "I'm interested about politics",
+              "better": "I'm interested in politics",
+              "why": "This is a common preposition pattern after 'interested' that is worth learning as a set phrase.",
+              "turnId": "8d0bd87e-1c0f-40c8-9165-2905eac16fbd:uat-12",
+              "at": 1792415697676,
+              "slip": "interested about",
+              "repair": {
+                "rung": 0,
+                "tried": "Oh, I see, it should be interested in politics. So, I'm interested in politics and languages, so I think international relations would suit me. Is that correct now?",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "interested in",
+              "replay": {
+                "question": "Thank you, that helps. Which school subjects are you most interested in, and where would you like to study them?",
+                "turnId": "4613afa5-5c50-4f82-83f3-176673744e76",
+                "reply": "I'm most interested in history and English, because I enjoy discussing current events.",
+                "used": true
+              }
+            },
+            {
+              "id": "8d0bd87e-1c0f-40c8-9165-2905eac16fbd:uat-18:moment",
+              "kind": "word",
+              "said": "eventually",
+              "better": "possibly",
+              "why": "In English, eventually means 'in the end, after some time', so it does not fit this uncertain help.",
+              "turnId": "8d0bd87e-1c0f-40c8-9165-2905eac16fbd:uat-18",
+              "at": 1792415825198,
+              "replay": {
+                "question": "Your savings and your parents' help make the plan workable. If the Erasmus grant was refused, would you possibly stay in Prague instead?",
+                "turnId": "657b0a8d-6f8e-484b-b799-63a0c62858ef",
+                "reply": "If the Erasmus grant were refused, I would possibly stay in Prague and study there for a year.",
+                "used": true
+              }
+            }
+          ],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "After school I would like to study international relations at university, although I'm not completely sure yet. I'm interested about politics and languages, so I think it would suit me.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I'm interested about politics",
+                "better": "I'm interested in politics",
+                "why": "This is a common preposition pattern after 'interested' that is worth learning as a set phrase."
+              },
+              "shown": true
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "I'm most interested in history and English, because I enjoy discussing current events. For example, last year we had a project about the European Union and I found it really fascinating. I'd like to study in Prague at Charles University, although I'm also thinking about studying abroad, maybe in the Netherlands.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Well, Prague would suit me better mainly because I'm used to living in the Czech Republic and my family is here. Studying there would be cheaper, whereas the Netherlands would be quite expensive for me. On the other hand, I would like to spend a semester abroad to improve my English.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "I would probably apply for the Erasmus programme, because it gives students a grant for studying abroad. Besides that, I'd use some savings from my summer jobs, and my parents could eventually help me a little. Is that a realistic plan, or should I mention something else?",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "eventually",
+                "better": "possibly",
+                "why": "In English, eventually means 'in the end, after some time', so it does not fit this uncertain help."
+              },
+              "shown": true
+            },
+            {
+              "turn": 9,
+              "n": 5,
+              "reply": "If the Erasmus grant were refused, I would possibly stay in Prague and study there for a year. Although I really want to go abroad, I'd rather save money than get into debt. I could apply again the following year, whereas staying at home would be cheaper. Was my sentence with \"would possibly\" correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": {
+            "before": "I'd rather save money than get into debt",
+            "after": "I'd prefer to save money rather than borrow",
+            "note": "This worked: 'I'd rather save money than get into debt' states a clear choice. To say more, add a reason, such as 'because debt would worry me'.",
+            "atFinish": true
+          },
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "After school I would like to study international relations at university"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I'm most interested in history and English, because I enjoy discussing current events."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Prague would suit me better mainly because I'm used to living in the Czech Republic and my family is here."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I would probably apply for the Erasmus programme, because it gives students a grant for studying abroad."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I'd rather save money than get into debt."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 360703,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-11/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-11",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Cue opens with a simplified question and a thin gloss (recurs)",
+          "expected": "A B2 answer frame on the first press",
+          "got": "#3 'Said more simply: Do you agree that phones connect people?', #4 gloss of 'connected', no frame",
+          "evidence": [
+            "#3, #4",
+            "cue prompt"
+          ],
+          "recurrence": 15
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-11/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-11",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Coaching on 'spare minutes' overstated while 'read news' missed",
+          "expected": "Only fixes an examiner would insist on; flag 'read the news'",
+          "got": "#10 'Spare minutes needs a possessive or article here' stated as a rule",
+          "evidence": [
+            "#10 coaching; #8 'to read news' unflagged",
+            "moment prompt / LG-23 held-fix choice"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "First cue only simplifies the question and gives no B2 frame",
+          "expected": "A B2 answer frame on the first press",
+          "got": "'Said more simply: I think a full ban is unfair. Do you agree?' then a gloss of 'full ban'",
+          "evidence": [
+            "#3 and #4; the frame 'I see your point, but…' only came at #5.",
+            "cue prompt"
+          ],
+          "recurrence": 14
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Phrase quiz has a weak distractor and a mismatched hint",
+          "expected": "Options that scaffold her own words",
+          "got": "Option 2 'Phones are really expensive, aren't they?' is an A2 tag question that ignores the topic. The hint 'I see your point, but I would argue that...' fits neither option.",
+          "evidence": [
+            "#6 options 01/02 and 'A little support'.",
+            "phrase help / quiz prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Replay skipped; no proof she answers better",
+          "expected": "A fresh question after the fix, then a better answer that the recap reports",
+          "got": "She finished at #11 without replaying; the recap has no before/after",
+          "evidence": [
+            "#11 buttons 'Replay the moment' / 'Finish for today'; #12 recap has no retry line.",
+            "replay builder / recap"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Correctness answer covers one clause and sits inside the partner's line",
+          "expected": "A specific answer to 'Was my sentence correct?', with a reason",
+          "got": "'Yes, ... is correct.' with no rule or note on the rest of the sentence",
+          "evidence": [
+            "#9 partner text.",
+            "partner prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Coaching on a correct sentence is thin padding",
+          "expected": "Either one exact correction with its rule, or an honest 'nothing to fix' with a real stretch",
+          "got": "'It is correct... add a reason' with an invented example. This was the only coaching, and no error was targeted.",
+          "evidence": [
+            "#11 'To say more, add a reason, as in the example after.'",
+            "moment prompt / LG-23 held-fix choice"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Level B2 · Comfortable (#1, #18), equal to trueBand B2."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "No placement tasks here. Notes name concrete items: #8 'I'm interested about politics', #14 'eventually' → 'possibly', #17 quotes 'I'd rather save money than get into debt'."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "'interested about'→'in' (#8) and 'eventually'→'possibly' (#14) are correct. The #17 rewrite is acceptable, but the notes give no rule."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "Partner asks 'Why would Prague suit you better than the Netherlands?' (#11) and 'what would you do if the course in Prague turned out to be harder' (#16)."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Five of the six proposed topics fit her age: mock interview, social media for teens, greener option, trip abroad, summer course (#1). 'Could you explain that question?' is weaker."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#16: 'Yes, \"would possibly\" is correct here, and it means \"maybe\"'. Her 'Is that a realistic plan' (#13) got only 'make the plan workable' (#15)."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2–#6: Help me answer (cue) and Choose a phrase were both found and used without leaving the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#7: 'These options are too simple, I'll answer in my own words.' The cue gave only 'What do you want to do after school?' and a gloss of 'careers fair', and the quiz options were weak. The help did not unblock the reply. The coaching quotes her exactly (#8, #17)."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#10 and #15 give fresh questions after the moments, and she used the fix. The recap (#18) says 'Tried again: ... you used it'."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#18: '3 on your own · 2 with help'. Turn 1 is marked supported. The last turn is also marked supported although she used no help, which is conservative."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 6,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive-data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Cue only simplifies the question; B2 frame comes late, quiz options are A2",
+            "expected": "A B2 answer frame on the first press and quiz options that scaffold her own words",
+            "got": "Cue: 'What do you want to do after school?'. Then a gloss of 'careers fair'. The frame appears only at the third press. Quiz option: 'I am at the careers fair today.'",
+            "evidence": "#3, #4, #5, #6; her thought at #7: 'These options are too simple'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "First help press returns a B2 sentence frame; quiz distractors are on-topic and at B2.",
+            "code_hint": "cue prompt / phrase quiz prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Final coaching praises a correct sentence and offers a rewrite",
+            "expected": "One exact correction with its rule, or an honest 'nothing to fix'",
+            "got": "'This worked: I'd rather save money than get into debt ... add a reason'. The suggested rewrite is no better than her original.",
+            "evidence": "#17",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Coaching targets a real error, or says nothing needs fixing.",
+            "code_hint": "moment prompt / LG-23 held-fix choice"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Moment 'why' text gives no rule and is awkwardly worded",
+            "expected": "The rule stated, e.g. 'interested + in'; a clear contrast for eventually",
+            "got": "'common preposition pattern ... set phrase'. 'does not fit this uncertain help.'",
+            "evidence": "#9, #14",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Each moment note states the rule in one clear sentence.",
+            "code_hint": "moment prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Moments are accurate, quote her exactly and replay with fresh questions",
+            "expected": "Exact quote, correct fix, fresh question",
+            "got": "'You said I'm interested about politics', 'eventually'→'possibly'. The following questions were fresh and the recap says 'you used it'.",
+            "evidence": "#8, #10, #14, #15, #18",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the exact-quote moments and the replay with a new question.",
+            "code_hint": ""
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "A tutor turn failed mid-scene",
+            "expected": "Reply accepted first time",
+            "got": "'The tutor could not complete that turn. Your reply is still on the phone; please retry.' She had to resend.",
+            "evidence": "#11, #12",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Model-output parse failures are retried silently.",
+            "code_hint": "tutor JSON parsing"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Her direct question 'Is that a realistic plan?' was not answered",
+            "expected": "A direct reply to her question",
+            "got": "Partner said 'make the plan workable' and moved on. The earlier 'Is that correct now?' was answered only by 'You fixed'.",
+            "evidence": "#13, #15, #9",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Partner answers each direct learner question explicitly.",
+            "code_hint": "partner prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 15,
+          "confidence": "low"
+        },
+        "voice": "The questions were good: opinion, comparison, \"what if\" at my level, and no pet talk. The two corrections, \"interested in\" and \"eventually\" vs \"possibly\", were right, and they quoted me exactly, which I liked. But when I got stuck, the help was babyish. \"What do you want to do after school?\" and \"I am at the careers fair today\" are A2, so I ignored them and answered myself. The final coaching praised a sentence that was already correct and gave me a rewrite that was no better. Where is the rule? I wanted an examiner's one exact point, not \"This worked\". It also skipped my question \"Is that a realistic plan?\". I'd use it for the speaking turns, but I'd still check the notes myself. Better help and real rules, and I'd tell my classmates.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-11/LT-adela-17-J4-3",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply: What do you want to do after school?', #4 gloss of 'careers fair'; the frame only at #5.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-11/LT-adela-17-J4-2",
+            "status": "not-seen",
+            "evidence": "#17 coaching states no overstated rule on a phrase; the other gap, an unflagged 'read news', does not apply to this transcript.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-2",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply: ...', #4 gloss; the frame came only at #5 'After school, I plan to…'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-3",
+            "status": "recurs",
+            "evidence": "#6 option 01 'I am at the careers fair today.' is a weak, off-task distractor.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-1",
+            "status": "not-seen",
+            "evidence": "Replays with fresh questions happened in-scene (#10, #15). The recap (#18) reports 'Tried again ... you used it'.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-5",
+            "status": "not-seen",
+            "evidence": "#16 gives a reason: 'it means \"maybe\", which is what you meant'. It is a short answer inside the partner line, not a bare 'Yes'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-adela-17-J4-4",
+            "status": "recurs",
+            "evidence": "#17 'This worked: ... To say more, add a reason', on a correct sentence.",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #7: 'These options are too simple, I'll answer in my own words.' The cue gave only 'What do you want to do after school?' and a gloss of 'careers fair', and the quiz options were weak. The help did not unblock the reply. The coaching quotes her exactly (#8, #17).",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 11,
+      "fail": 1,
+      "ms": 132856
+    },
+    "character": {
+      "n": 18,
+      "fail": 0,
+      "ms": 212690
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 46694
+    }
+  }
+}

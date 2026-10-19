@@ -1,0 +1,1047 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nA1First words · self-chosen\nAsk about school\nYour mission\nAsk one simple question about school and listen to the answer.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nAsk about school\nAsk one simple question about school and listen to the answer.\n[button: Start talking]\nOr choose a situation [list: Ask about school [plan-99e62c60] | Tell them about my garden [plan-45622a92] | Tell what I did this week [plan-603bfc0f] | Can you say that again? [plan-c69681ed] | Ask them to show me [plan-d92d8ca8] | Say hello and I miss you [plan-05e96233] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Ask about school, for Sam, my grandson - good.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 11831
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nHi Grandpa! I am home from school now.\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Sam one question about his school day\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Ask Sam one question about his school day\nHi Grandpa! I am home from school now.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school now.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říct anglicky... I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nHi Grandpa! I am home from school now.\nYou could say\nHi Sam! How is school today?\nNowAsk Sam one question about his school day\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Ask Sam one question about his school day\nHi Grandpa! I am home from school now.\nYou could say\nHi Sam! How is school today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school now.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say this in English, I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nHi Grandpa! I am home from school now.\nWhat it means\nfrom school: back at home after school\nNowAsk Sam one question about his school day\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Ask Sam one question about his school day\nHi Grandpa! I am home from school now.\nWhat it means\nfrom school: back at home after school\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school now.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say in English, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nHi Grandpa! I am home from school now.\nA way to start\nHow was…\nNowAsk Sam one question about his school day\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Ask Sam one question about his school day\nHi Grandpa! I am home from school now.\nA way to start\nHow was…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school now.\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to ask this in English, I'll look at the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nA little support · recognition practice\nSam says: Hi Grandpa! I am home from school now.\n01\nHi Sam! Good to see you.\n02\nThe weather is cold today.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Ask Sam one question about his school day\nHi Grandpa! I am home from school now.\nSam says: Hi Grandpa! I am home from school now.\n[button: Hi Sam! Good to see you.] [button: The weather is cold today.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school now.\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to answer in English, I'll look at the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nA little support · recognition practice\nSam says: Hi Grandpa! I am home from school now.\n01\nHi Sam! Good to see you.\n02\nThe weather is cold today.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Ask Sam one question about his school day\nHi Grandpa! I am home from school now.\nSam says: Hi Grandpa! I am home from school now.\n[button: Hi Sam! Good to see you.] [button: The weather is cold today.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school now.\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to ask about school; I'll use the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nA little support · recognition practice\nSam says: Hi Grandpa! I am home from school now.\n01\nHi Sam! Good to see you.\n02\nThe weather is cold today.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Ask Sam one question about his school day\nHi Grandpa! I am home from school now.\nSam says: Hi Grandpa! I am home from school now.\n[button: Hi Sam! Good to see you.] [button: The weather is cold today.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school now.\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to ask about school in English; I'll look at the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nA little support · recognition practice\nSam says: Hi Grandpa! I am home from school now.\n01\nHi Sam! Good to see you.\n02\nThe weather is cold today.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Ask Sam one question about his school day\nHi Grandpa! I am home from school now.\nSam says: Hi Grandpa! I am home from school now.\n[button: Hi Sam! Good to see you.] [button: The weather is cold today.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school now.\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know what to say; maybe the phrase help will show me.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nHi Grandpa! I am home from school now.\nA little support\nNow use the idea in your own reply on the phone.\nNowAsk Sam one question about his school day\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Ask Sam one question about his school day\nHi Grandpa! I am home from school now.\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school now.\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, jak se zeptat anglicky; zkusím nápovědu s frázemi.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nA little support · recognition practice\nSam says: Hi Grandpa! I am home from school now.\n01\nHi Sam! Good to see you.\n02\nThe weather is cold today.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Ask Sam one question about his school day\nHi Grandpa! I am home from school now.\nSam says: Hi Grandpa! I am home from school now.\n[button: Hi Sam! Good to see you.] [button: The weather is cold today.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school now.\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Chci se zeptat na školu, ale umím jen málo anglicky; zkusím jednoduchou větu.",
+          "action": "answer",
+          "args": {
+            "text": "Hi Sam. School good?"
+          },
+          "result": "ok",
+          "ms": 11124
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nYes, fun today! Do you like art?\nYour turn\nAnswer on your phone: speak or type.\nNowListen to his short answer\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Listen to his short answer\nYes, fun today! Do you like art?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\nYou · spoken\nHi Sam. School good?\nSam · grandson, age 10\nYes, fun today! Do you like art?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, fun today! Do you like art?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Art... I don't know this question well; I'll try to say something simple about art.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. I like garden. Art, ne... I like flowers."
+          },
+          "result": "ok",
+          "ms": 12814
+        },
+        {
+          "n": 13,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou wanted to say ne\nIn English\nno\n'ne' is Czech for 'no'. In English, say 'no'.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “ne”\nIn English: “no”\n'ne' is Czech for 'no'. In English, say 'no'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, ne is no. Good, back to the talk.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 8821
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nNice garden! Is it cold, yes or no?\nOne way to try it\nno\nYour turn\nAnswer on your phone: speak or type.\nNowListen to his short answer\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Listen to his short answer\nNice garden! Is it cold, yes or no?\nOne way to try it\n“no”\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\nYou · spoken\nHi Sam. School good?\nSam · grandson, age 10\nYes, fun today! Do you like art?\nYou · spoken\nYes. I like garden. Art, ne... I like flowers.\nSam · grandson, age 10\nNice garden! Is it cold, yes or no?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice garden! Is it cold, yes or no?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Cold? I understand \"cold\" and \"garden\"; answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "No. Not cold. Sun."
+          },
+          "result": "ok",
+          "ms": 9583
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nSunny today! Do you like it?\nYour turn\nAnswer on your phone: speak or type.\nNowListen to his short answer\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Listen to his short answer\nSunny today! Do you like it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\nYou · spoken\nHi Sam. School good?\nSam · grandson, age 10\nYes, fun today! Do you like art?\nYou · spoken\nYes. I like garden. Art, ne... I like flowers.\nSam · grandson, age 10\nNice garden! Is it cold, yes or no?\nYou · spoken\nNo. Not cold. Sun.\nSam · grandson, age 10\nSunny today! Do you like it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Sunny today! Do you like it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I like sun, can answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. I like sun. Garden, tomatoes good."
+          },
+          "result": "ok",
+          "ms": 13265
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nNice! Do you grow tomatoes?\nYour turn\nAnswer on your phone: speak or type.\nNowListen to his short answer\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Listen to his short answer\nNice! Do you grow tomatoes?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\nYou · spoken\nHi Sam. School good?\nSam · grandson, age 10\nYes, fun today! Do you like art?\nYou · spoken\nYes. I like garden. Art, ne... I like flowers.\nSam · grandson, age 10\nNice garden! Is it cold, yes or no?\nYou · spoken\nNo. Not cold. Sun.\nSam · grandson, age 10\nSunny today! Do you like it?\nYou · spoken\nYes. I like sun. Garden, tomatoes good.\nSam · grandson, age 10\nNice! Do you grow tomatoes?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice! Do you grow tomatoes?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Tomatoes, yes! I grow them, I can say this.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. I have tomatoes. Garden big."
+          },
+          "result": "ok",
+          "ms": 11170
+        },
+        {
+          "n": 17,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nWow, nice! What color are they?\nYour turn\nAnswer on your phone: speak or type.\nNowListen to his short answer\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Listen to his short answer\nWow, nice! What color are they?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\nYou · spoken\nHi Sam. School good?\nSam · grandson, age 10\nYes, fun today! Do you like art?\nYou · spoken\nYes. I like garden. Art, ne... I like flowers.\nSam · grandson, age 10\nNice garden! Is it cold, yes or no?\nYou · spoken\nNo. Not cold. Sun.\nSam · grandson, age 10\nSunny today! Do you like it?\nYou · spoken\nYes. I like sun. Garden, tomatoes good.\nSam · grandson, age 10\nNice! Do you grow tomatoes?\nYou · spoken\nYes. I have tomatoes. Garden big.\nSam · grandson, age 10\nWow, nice! What color are they?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Wow, nice! What color are they?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Color of tomatoes: I know this, red is easy.",
+          "action": "answer",
+          "args": {
+            "text": "Red. Tomatoes red."
+          },
+          "result": "ok",
+          "ms": 10566
+        },
+        {
+          "n": 18,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nDo you eat them?\nYour turn\nAnswer on your phone: speak or type.\nNowListen to his short answer\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Listen to his short answer\nDo you eat them?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\nYou · spoken\nHi Sam. School good?\nSam · grandson, age 10\nYes, fun today! Do you like art?\nYou · spoken\nYes. I like garden. Art, ne... I like flowers.\nSam · grandson, age 10\nNice garden! Is it cold, yes or no?\nYou · spoken\nNo. Not cold. Sun.\nSam · grandson, age 10\nSunny today! Do you like it?\nYou · spoken\nYes. I like sun. Garden, tomatoes good.\nSam · grandson, age 10\nNice! Do you grow tomatoes?\nYou · spoken\nYes. I have tomatoes. Garden big.\nSam · grandson, age 10\nWow, nice! What color are they?\nYou · spoken\nRed. Tomatoes red.\nSam · grandson, age 10\nDo you eat them?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Do you eat them?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Yes, I eat tomatoes, easy words.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. I eat tomatoes. Good."
+          },
+          "result": "ok",
+          "ms": 9448
+        },
+        {
+          "n": 19,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nYum! Do you eat them every day?\nYour turn\nAnswer on your phone: speak or type.\nNowListen to his short answer\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Listen to his short answer\nYum! Do you eat them every day?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\nYou · spoken\nHi Sam. School good?\nSam · grandson, age 10\nYes, fun today! Do you like art?\nYou · spoken\nYes. I like garden. Art, ne... I like flowers.\nSam · grandson, age 10\nNice garden! Is it cold, yes or no?\nYou · spoken\nNo. Not cold. Sun.\nSam · grandson, age 10\nSunny today! Do you like it?\nYou · spoken\nYes. I like sun. Garden, tomatoes good.\nSam · grandson, age 10\nNice! Do you grow tomatoes?\nYou · spoken\nYes. I have tomatoes. Garden big.\nSam · grandson, age 10\nWow, nice! What color are they?\nYou · spoken\nRed. Tomatoes red.\nSam · grandson, age 10\nDo you eat them?\nYou · spoken\nYes. I eat tomatoes. Good.\nSam · grandson, age 10\nYum! Do you eat them every day?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yum! Do you eat them every day?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand \"every day\"; I can answer simply and then finish, I managed something.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Every day tomatoes. I love tomatoes."
+          },
+          "result": "ok",
+          "ms": 13515
+        },
+        {
+          "n": 20,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said Every day tomatoes\nYour line\nAdd the subject and verb so the sentence is clear.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “Every day tomatoes”\nSay it again, your way.\nAdd the subject and verb so the sentence is clear.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I managed some tomatoes talk; let me try once more with a simple sentence.",
+          "action": "answer",
+          "args": {
+            "text": "I eat tomatoes every day."
+          },
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 21,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said Every day tomatoes\nYour try\nI eat tomatoes every day.\nAdd the subject and verb so the sentence is clear.\nYou fixed “day”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “day”\nYou said “Every day tomatoes”\nYour try: “I eat tomatoes every day.”\nAdd the subject and verb so the sentence is clear.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I fixed a sentence; I managed something, so I can go back and finish.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 10485
+        },
+        {
+          "n": 22,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nSam · grandson, age 10\nAsk about school\nSam says\nWhat do you eat for breakfast every day?\nOne way to try it\nI eat tomatoes every day.\nYour turn\nAnswer on your phone: speak or type.\nNowListen to his short answer\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Sam one question about school and listen to his answer.\nNow: Listen to his short answer\nWhat do you eat for breakfast every day?\nOne way to try it\n“I eat tomatoes every day.”\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nSam · grandson, age 10\nHi Grandpa! I am home from school now.\nYou · spoken\nHi Sam. School good?\nSam · grandson, age 10\nYes, fun today! Do you like art?\nYou · spoken\nYes. I like garden. Art, ne... I like flowers.\nSam · grandson, age 10\nNice garden! Is it cold, yes or no?\nYou · spoken\nNo. Not cold. Sun.\nSam · grandson, age 10\nSunny today! Do you like it?\nYou · spoken\nYes. I like sun. Garden, tomatoes good.\nSam · grandson, age 10\nNice! Do you grow tomatoes?\nYou · spoken\nYes. I have tomatoes. Garden big.\nSam · grandson, age 10\nWow, nice! What color are they?\nYou · spoken\nRed. Tomatoes red.\nSam · grandson, age 10\nDo you eat them?\nYou · spoken\nYes. I eat tomatoes. Good.\nSam · grandson, age 10\nYum! Do you eat them every day?\nYou · spoken\nYes. Every day tomatoes. I love tomatoes.\nSam · grandson, age 10\nWhat do you eat for breakfast every day?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you eat for breakfast every day?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed to talk about my tomatoes, that is enough, I finish.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Ask about school",
+          "goal": "Ask Sam one question about school and listen to his answer.",
+          "partner": "Sam · grandson, age 10",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "coaching",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi Grandpa! I am home from school now."
+            },
+            {
+              "role": "learner",
+              "text": "Hi Sam. School good?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, fun today! Do you like art?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. I like garden. Art, ne... I like flowers.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Nice garden! Is it cold, yes or no?"
+            },
+            {
+              "role": "learner",
+              "text": "No. Not cold. Sun.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Sunny today! Do you like it?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. I like sun. Garden, tomatoes good.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Nice! Do you grow tomatoes?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. I have tomatoes. Garden big.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Wow, nice! What color are they?"
+            },
+            {
+              "role": "learner",
+              "text": "Red. Tomatoes red.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Do you eat them?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. I eat tomatoes. Good.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yum! Do you eat them every day?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Every day tomatoes. I love tomatoes.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "What do you eat for breakfast every day?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "60a231d7-041e-4db5-b50c-acd3ba18fe21:uat-17:moment",
+              "kind": "word",
+              "said": "ne",
+              "better": "no",
+              "why": "'ne' is Czech for 'no'. In English, say 'no'.",
+              "turnId": "60a231d7-041e-4db5-b50c-acd3ba18fe21:uat-17",
+              "at": 1792415746574,
+              "replay": {
+                "question": "Nice garden! Is it cold, yes or no?",
+                "turnId": "39e65abe-e3f4-480d-a4b4-dba29da934d2",
+                "reply": "No. Not cold. Sun.",
+                "used": true
+              }
+            },
+            {
+              "id": "60a231d7-041e-4db5-b50c-acd3ba18fe21:uat-24:moment",
+              "kind": "fix",
+              "said": "Every day tomatoes",
+              "better": "I eat tomatoes every day",
+              "why": "Add the subject and verb so the sentence is clear.",
+              "turnId": "60a231d7-041e-4db5-b50c-acd3ba18fe21:uat-24",
+              "at": 1792415898894,
+              "slip": "day tomatoes",
+              "repair": {
+                "rung": 1,
+                "tried": "I eat tomatoes every day.",
+                "held": true,
+                "selfRepaired": true,
+                "spent": true
+              },
+              "fix": "day",
+              "replay": {
+                "question": "What do you eat for breakfast every day?",
+                "turnId": "87d8608c-22b1-4052-80bb-2b111903b18e"
+              }
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "60a231d7-041e-4db5-b50c-acd3ba18fe21:uat-16:held",
+              "kind": "fix",
+              "said": "School good?",
+              "better": "Is school good?",
+              "why": "A question needs a verb like 'is' at the start.",
+              "turnId": "60a231d7-041e-4db5-b50c-acd3ba18fe21:uat-16",
+              "at": 1792415721343
+            },
+            {
+              "id": "60a231d7-041e-4db5-b50c-acd3ba18fe21:uat-20:held",
+              "kind": "fix",
+              "said": "tomatoes good",
+              "better": "tomatoes are good",
+              "why": "'are' links 'tomatoes' and 'good' in a full sentence.",
+              "turnId": "60a231d7-041e-4db5-b50c-acd3ba18fe21:uat-20",
+              "at": 1792415811130
+            },
+            {
+              "id": "60a231d7-041e-4db5-b50c-acd3ba18fe21:uat-21:held",
+              "kind": "fix",
+              "said": "Garden big.",
+              "better": "The garden is big.",
+              "why": "An English sentence needs a verb, such as 'is'.",
+              "turnId": "60a231d7-041e-4db5-b50c-acd3ba18fe21:uat-21",
+              "at": 1792415832196
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Hi Sam. School good?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "School good?",
+                "better": "Is school good?",
+                "why": "A question needs a verb like 'is' at the start."
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Yes. I like garden. Art, ne... I like flowers.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "ne",
+                "better": "no",
+                "why": "'ne' is Czech for 'no'. In English, say 'no'."
+              },
+              "shown": true
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "No. Not cold. Sun.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "Yes. I like sun. Garden, tomatoes good.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "tomatoes good",
+                "better": "tomatoes are good",
+                "why": "'are' links 'tomatoes' and 'good' in a full sentence."
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 5,
+              "reply": "Yes. I have tomatoes. Garden big.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "Garden big.",
+                "better": "The garden is big.",
+                "why": "An English sentence needs a verb, such as 'is'."
+              },
+              "shown": false
+            },
+            {
+              "turn": 11,
+              "n": 6,
+              "reply": "Red. Tomatoes red.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 13,
+              "n": 7,
+              "reply": "Yes. I eat tomatoes. Good.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 15,
+              "n": 8,
+              "reply": "Yes. Every day tomatoes. I love tomatoes.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "Every day tomatoes",
+                "better": "I eat tomatoes every day",
+                "why": "Add the subject and verb so the sentence is clear."
+              },
+              "shown": true
+            }
+          ],
+          "coaching": {
+            "before": "Garden big.",
+            "after": "The garden is big.",
+            "note": "An English sentence needs a verb, such as 'is'.",
+            "atFinish": true
+          },
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "Hi Sam! Good to see you."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I love tomatoes."
+            }
+          ]
+        }
+      },
+      "endedBy": "budget",
+      "ms": 401154,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "broken-flow",
+          "dimension": "effort",
+          "title": "Help buttons loop for 10 steps without unblocking him",
+          "expected": "Help gives a usable school question quickly",
+          "got": "Cue and phrase screens alternated; phrase options 'Hi Mia! What is it?' / 'I have a big garden.'; picking the garden one was rejected",
+          "evidence": [
+            "#2–#13; #12 'That one does not answer Mia. Try the other option.'",
+            "phrase choice generation / cue prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue ignores the task (ask about school)",
+          "expected": "A school question to say",
+          "got": "'Hi Mia! Show me your drawing.'",
+          "evidence": [
+            "#3 task 'Ask Mia one short question about school'",
+            "cue prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "Pause & coach disabled throughout stuck period",
+          "expected": "Coach available when stuck",
+          "got": "Pause & coach (disabled) #2–#13",
+          "evidence": [
+            "#2 '[button: Pause & coach (disabled)]'",
+            "coach gating"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Replay offered, not taken; no fresh-question retry shown",
+          "expected": "Replay gives fresh question he answers better",
+          "got": "Finished; replay.used false; recap says 'Tried again, not with the new form yet'",
+          "evidence": [
+            "#22 Replay vs Finish; #23",
+            "moment replay flow"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-12",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Moment turns 'You have school?' into past tense with jargon",
+          "expected": "Simple, meaning-preserving phrase like 'How is school?'",
+          "got": "'Did you have school today?' — 'Use did for school today'",
+          "evidence": [
+            "#14–#15",
+            "moment prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement in this journey; level fixed to A1 by hand."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#13 'ne' is treated kindly: 'ne' is Czech for 'no'. Nothing pushes him into English he cannot produce."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening task or 'Show the words' reveal appears in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 six plans: school, garden, this week, say again, show me, hello/miss you. All are family or everyday."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Sam: 'Yum! Do you eat them every day?' Short, one question per turn. The last one, 'What do you eat for breakfast every day?', is longer."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#13 teaches 'no' for 'ne'. #20 teaches 'I eat tomatoes every day' with jargon 'Add the subject and verb'. Neither is a Sunday family phrase. The 'Is school good?' fix was held."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#3 cue 'Hi Sam! How is school today?' appears on the scene screen without leaving it."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#11 he asked 'Hi Sam. School good?' after the cue, and #20 quotes him exactly: 'You said Every day tomatoes'. The phrase help looped #5–#10 and did not help."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#14 replay gave 'Is it cold, yes or no?' and he answered 'No. Not cold. Sun.' (better than 'ne'). The #22 replay was not tried."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Facts: turn 1 supported:true, later replies supported:false. The #14 reply followed a shown hint 'no' but is not marked supported, which is a small doubt."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 9,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 5,
+            "missedClearErrors": 3
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "effort",
+            "title": "Phrase help loops with irrelevant options",
+            "expected": "A usable school-question phrase after one tap",
+            "got": "Options 'Hi Sam! Good to see you.' / 'The weather is cold today.' repeated #6–#11",
+            "evidence": "#5–#10: quiz pressed 5 times, 'The weather is cold today.' offered, then 'Now use the idea in your own reply'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Phrase choice offers at least one option that answers the task, and it changes on repeat.",
+            "code_hint": "phrase choice generation"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Pause & coach disabled while stuck",
+            "expected": "Coach available when stuck",
+            "got": "Pause & coach (disabled) at #2–#11",
+            "evidence": "#2 '[button: Pause & coach (disabled)]' through #11",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Pause & coach is enabled before the first reply.",
+            "code_hint": "coach gating"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Fresh-question replay not taken; scene drifted off school",
+            "expected": "Replay of the moment gives a fresh question he answers",
+            "got": "Finished at #22 with the breakfast question unanswered. Sam moved to tomatoes and the school goal was not revisited.",
+            "evidence": "#22 'What do you eat for breakfast every day?' then finish",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After a repair, the recap invites answering the fresh question.",
+            "code_hint": "moment replay flow"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Jargon in coaching and missed fixes",
+            "expected": "Plain words for a 67-year-old beginner; the 'Is school good?' fix is shown",
+            "got": "'Add the subject and verb' and 'An English sentence needs a verb'. Three fixes were held.",
+            "evidence": "#20 'Add the subject and verb so the sentence is clear.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Notes use plain words, for example 'Say: I eat tomatoes'.",
+            "code_hint": "moment prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Cue is on task, and the moment quotes him exactly",
+            "expected": "Task-relevant cue; exact quote",
+            "got": "'Hi Sam! How is school today?'; 'You said Every day tomatoes'; 'You fixed \"day\"'",
+            "evidence": "#3, #20–#21",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the cue tied to the task and quote the learner verbatim.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "low"
+        },
+        "voice": "Víte, the cue was good: \"How is school today?\" That is exactly what I want to ask Sam. But then I pressed the phrase help again and again and got \"The weather is cold today\", which has nothing to do with school. Pause & coach was grey. I felt rushed and a bit foolish. In the end I wrote my own words, \"School good?\", and Sam answered kindly. The partner spoke slowly and simply, and I liked that. The correction \"Every day tomatoes\" showed my real words, which I trust. But \"subject and verb\" is jargon, and I do not want it. I would try again on Saturday if the help were quicker and gave me one good phrase for Sunday. Now it is half useful. I would tell my friends at the library to wait a little.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-1",
+            "status": "recurs",
+            "evidence": "#5–#10 the phrase screen repeated with 'The weather is cold today.' and no school question.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-2",
+            "status": "not-seen",
+            "evidence": "#3 the cue is on task: 'Hi Sam! How is school today?'",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-3",
+            "status": "recurs",
+            "evidence": "#2–#11 '[button: Pause & coach (disabled)]'.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-4",
+            "status": "recurs",
+            "evidence": "#22 he finished with the replay question 'What do you eat for breakfast every day?' unanswered. The recap says 'Tried again, not with the new form yet'.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-5",
+            "status": "not-seen",
+            "evidence": "#20 the moment 'Every day tomatoes' -> 'I eat tomatoes every day' keeps the meaning and has no tense error. Only the jargon remains.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "ended",
+          "id": "budget",
+          "level": "fail",
+          "text": "ended budget before done"
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #13 teaches 'no' for 'ne'. #20 teaches 'I eat tomatoes every day' with jargon 'Add the subject and verb'. Neither is a Sunday family phrase. The 'Is school good?' fix was held."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 12,
+      "fail": 0,
+      "ms": 142853
+    },
+    "character": {
+      "n": 22,
+      "fail": 0,
+      "ms": 257730
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 44431
+    }
+  }
+}
