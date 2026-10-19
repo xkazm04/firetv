@@ -143,9 +143,11 @@ the paragraph built from the pattern. Whether Writing should be its own landing 
     is "spent, not replayed" (`panelFor.ts:71`), and the TV waits for nothing.
   - A phone in the Parent role is never moved. It shows a banner instead: "The TV is asking for a photo. Take it". One
     tap moves it. Today the Parent phone is skipped silently (`panelFor.ts:85`).
-- **The phone answers.** It sends the answer to its route with `askId`. If the id does not match, the route answers 409
-  "The TV is not asking for that now." and changes nothing (TL-11). An accepted answer sets `ask.phase = "sent"`, and the
-  phone shows "Sent. Look at the TV." The result event closes the ask, and the phone shows the idle card again.
+- **The phone answers.** It sends the answer to its route with `askId`. If the id does not match, or the open ask is of a
+  kind that route does not answer (a Linga `reply` is no page), the route answers 409 "The TV is not asking for that now."
+  and changes nothing (TL-11, lite r3). An accepted answer sets `ask.phase = "sent"` once the work begins, and the
+  phone shows "Sent. Look at the TV." A real result or a failure of the work closes the ask, and the phone shows the idle
+  card again. A request the route refuses before any work (bad input, busy) leaves the ask open for the phone to try again.
 - **The TV while it waits.** The screen that asked stays up. It shows an "On your phone" chip (LingaTV already has one,
   `OnYourPhone`, `LingaTV.tsx:15`) and one caption: "Waiting for the phone: <the job>. Back cancels." With no phone live
   (`phonesLive === 0`, TL-3) the caption is: "No phone is connected. Up: pair a phone. Back: cancel."
@@ -157,7 +159,8 @@ the paragraph built from the pattern. Whether Writing should be its own landing 
   - `session.end` or `reset`;
   - the TV leaving the asking screen (a `nav` to a screen other than `ask.screen`);
   - a desk restart (`load()`, `store.ts:876-891`, sets `ask: null`);
-  - 120 s with no phone live. The TV then says "The phone went away. Select to ask again."
+  - 120 s with no phone live. The TV then says "The phone went away. Select to ask again." NOT BUILT: no slice made this
+    closer; an ask stays open while no phone is live until one of the closers above ends it.
 - **Two phones.** Any listed phone may answer. The first accepted answer wins, and the other phone's panel closes when
   the ask does.
 
@@ -172,7 +175,7 @@ the paragraph built from the pattern. Whether Writing should be its own landing 
 | `question` | A new "Ask in words" stop on `page` and `hint` | One field, Mic, three presets, Ask (`page.tsx:698-702`, without the photo) | `/api/hint` with `askedQ` → `hint.set` | "Asked from the phone" once it lands (`screens.tsx:174`) | Back |
 | `explain` | A new "Tell the desk how" stop on a walk item that is wrong or unsure | ExplainTalk: hold to speak, or type (`desk/src/app/phone/ExplainTalk.tsx`) | `/api/explain` → the item settles | "The desk is thinking over what you said…" | Back, or Left/Right to another item (`walkIx` changes) |
 | `second` | A new "Type my second go" stop on the same items | One input and Send (`page.tsx:675-683`) | `/api/second` | The walk card | As `explain` |
-| `paper` | "Type a paper" on the `paper` screen (reached by Down on Tonight, TL-13) | PaperPanel's rows (`desk/src/app/phone/PaperPanel.tsx`), Send. "Show the last paper on the TV" goes | `paper.enter` → the `paper` screen redraws | "Type the marks on the phone" | Back |
+| `paper` | "Type a paper" on the `paper` screen (reached by Down on Tonight, TL-13) | PaperPanel's rows (`desk/src/app/phone/PaperPanel.tsx`), Send. "Show the last paper on the TV" goes | `paper.enter` with `askId` (lite r3) → the `paper` screen redraws | "Type the marks on the phone" | Back |
 | `paragraph` | Select on a lens (`keys.ts:455`) | File, text box, paragraph arrows, Dictate, keep/format/name, the shelf, "Read all" and "This paragraph" (`page.tsx:724-745`). The lens is a read-only line | `/api/analyse` kind `piece` or `essay` → `essay.set` → `forensic` (`store.ts:781-782`) | The lens home, "Send the text from the phone" | Back |
 | `rewrite` | Rewrite on my phone (`keys.ts:497`) | The sentence, prefilled; Dictate; Send (`page.tsx:710-716`, without "Next paragraph") | `/api/analyse` kind `rewrite` → `essay.revised` | The forensic page inks the move while it waits (as today) | Back, or walking to another sentence (`essayAt` changes) |
 | `slot` | Select on a plan slot (`keys.ts:469`) | One sentence, Dictate, Send, the plan-fit line (`page.tsx:718-722`) | `essay.slot` → the slot inks | The plan; the slot under the lamp says "On the phone" | Back; Up/Down alone keeps the ask on its slot, and Select on another slot opens a new one |
@@ -292,6 +295,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: `keyOf` maps the new names; `break` Back emits `timer.skipbreak`; `LingaTV.tsx` imports `keyOf` and holds no `"ArrowLeft"` literal.
 - Tests: `tools/tv-keys-test.cjs`: cases for each new name, `break` Back, and a source pin on `LingaTV.tsx`.
 - Stick check: open `/tv?key=…` on the stick. On the landing, Linga home, a lesson and the break, press Back, Menu and Play/Pause. Record which key value each sends and what it does. Back must not leave the page.
+- Landed: ba1899bb (the new key names, LingaTV calls keyOf, Back on break skips it).
 
 ### TL-2. Pairing holds: one join in flight, no stale QR code, the TV lifts the lock
 - Files: `desk/src/app/phone/page.tsx`, `desk/src/lib/session/pairing.ts`, `desk/src/app/api/session/route.ts`, `tools/desk-pairing-test.cjs`, `tools/phone-panel-test.cjs`.
@@ -299,6 +303,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: two right-code posts from one phone give one join and no wrong-code count; ten opens with the same stale `?pin=` post once; after the cooldown trips, a TV reset lets a new phone join at once; `phones.forget` from a phone or a guest is 403.
 - Tests: `tools/desk-pairing-test.cjs` (route: reset clears the cooldown, `phones.forget` roles and effect); `tools/phone-panel-test.cjs` (source pins on the single-flight join and the remembered refused code).
 - Stick check: pair a phone by QR, tap Join during the auto-join, and check that the phone shows no "That code is not on the TV."; reset on the TV and pair again.
+- Landed: d585d9fe (one join in flight, the refused QR code remembered, joinClear on a TV reset and on phones.forget).
 
 ### TL-3. The TV knows a phone is here: presence, and a phone stop always
 - Files: `desk/src/app/api/session/stream/route.ts`, `desk/src/lib/session/store.ts`, `desk/src/lib/session/pairing.ts`, `desk/src/app/api/session/route.ts`, `desk/src/tv/landingRows.ts`, `desk/src/tv/keys.ts`, `desk/src/tv/screens.tsx`, `desk/src/landing/model.ts`, `tools/desk-pairing-test.cjs`, `tools/tv-landing-test.cjs`, `tools/tv-keys-test.cjs`.
@@ -306,6 +311,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: one phone stream opened → `phonesLive` 1; closed → 0; a guest stream changes nothing; `phone.presence` posted by any role is 403; the landing has a phone stop with `joined` true; `Joined` holds no "on the phone".
 - Tests: `tools/desk-pairing-test.cjs` (presence counts, SERVER_ONLY), `tools/tv-landing-test.cjs` (the stop list, paired and unpaired), `tools/tv-keys-test.cjs` (Select on the paired phone stop).
 - Stick check: pair, then close the phone's browser tab. Within about 20 s (the 15 s ping) the TV's phone object reads "No phone here", and Select on it shows the code.
+- Landed: f9e9593f (phone.presence and phonesLive, the phone stop always on the landing, panelFor asks nothing of the phone on joined).
 
 ### TL-4. A dropped link is seen on both screens
 - Files: `desk/src/tv/useSession.ts`, `desk/src/app/tv/page.tsx`, `desk/src/app/phone/page.tsx`, `tools/session-link-test.cjs` (new), `desk/package.json`.
@@ -313,6 +319,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: `reopenDelay` gives 1500, 3000, 6000, …, 30000; the TV page renders the band inside `.stage`, not the bench bar; the phone header source tests `connected` before `s.joined`.
 - Tests: `tools/session-link-test.cjs` (the delay table; source pins on both pages), added to `rulesSuites`.
 - Stick check: with the TV on Tonight, stop the desk server for 10 s and start it again. The band shows within 2 s and leaves once the stream is back; the remote works again with no reload.
+- Landed: afa4a488 (reopenDelay backoff, the TV stage band, the phone header tests the link first, Sends disabled while it is down).
 
 ### TL-5. The hand-off lives in the session
 - Files: `desk/src/lib/session/store.ts`, `desk/src/lib/session/pairing.ts`, `desk/src/app/api/session/route.ts`, `tools/handoff-test.cjs` (new), `desk/package.json`, `tools/desk-pairing-test.cjs`.
@@ -320,6 +327,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: open, replace, cancel (a stale id changes nothing); each closer closes; a restored session.json holding an ask loads with `ask: null`; roles: `ask.open` from a phone or a guest is 403, `ask.sent` from anyone is 403.
 - Tests: `tools/handoff-test.cjs` (the reducer, over plain sessions), added to `rulesSuites`; `tools/desk-pairing-test.cjs` (the route's role rows and the guest view).
 - Stick check: none. Nothing on screen changes in this slice.
+- Landed: 1ce95935 (Ask, ask.open, ask.cancel and ask.sent, the closers, load() clears the ask and a status naming the phone, the phone and guest views).
 
 ### TL-6. Math Buddy opens its hand-offs from the TV
 - Files: `desk/src/tv/keys.ts`, `desk/src/tv/mathsRows.ts`, `desk/src/maths/MathsTV.tsx`, `tools/tv-keys-test.cjs`, `tools/maths-tv-test.cjs`.
@@ -327,6 +335,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: each key emits the `ask.open` with its kind and detail; Back with an ask open emits `ask.cancel` and does not leave the screen; the screens draw the "On your phone" chip while `ask.kind` matches.
 - Tests: `tools/tv-keys-test.cjs` (each trigger and the two-step Back), `tools/maths-tv-test.cjs` (the stops and the chip).
 - Stick check: Tonight → I have homework, and the TV shows "Waiting for the photo" with the chip; Back cancels it. Practice: both stops can be reached with the D-pad.
+- Landed: a9ef8747 (ask.open for page, sheet, answers, question, explain and second; two-step Back; the On your phone chip and caption).
 
 ### TL-7. Essay Master and Writing open their hand-offs from the TV
 - Files: `desk/src/tv/keys.ts`, `desk/src/essay/EssayTV.tsx`, `desk/src/tv/screens.tsx`, `tools/tv-keys-test.cjs`, `tools/essay-piece-test.cjs`.
@@ -350,7 +359,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: a new ask id moves a Student phone on the same TV screen; busy hands move as soon as they are free; a Parent phone does not move and gets the banner; no panel offers a subject select or a lens radio.
 - Tests: `tools/phone-panel-test.cjs`. Its derivation changes from "screens whose copy asks for the phone" to "every `AskKind` has exactly one panel, and no TV copy says 'on the phone' on a screen that opens no ask". The two old rows this replaces are named in the commit.
 - Stick check: on the forensic page, open the phone's More, then press Rewrite on the TV. The phone goes to the rewrite panel. Press Rewrite again after Back, and the phone goes there again.
-- Landed: TL-9 commit on branch autopilot/accepted-idea-delivery-788c905d (panelFor reads s.ask first and keys on ask.id, one panel per AskKind; busy hands defer the move unspent; the Parent role gets the banner; a reopened stream goes to the open ask; answers carry askId; the capture subject and the essay lens are lines, not controls; the camera and voice panels state the http limit). The Linga, failed-read and paper cues stay screen-keyed until TL-12 and TL-13. Stick check not run.
+- Landed: 955f0f58 (panelFor reads s.ask first and keys on ask.id, one panel per AskKind; busy hands defer the move unspent; the Parent role gets the banner; a reopened stream goes to the open ask; answers carry askId; the capture subject and the essay lens are lines, not controls; the camera and voice panels state the http limit). The Linga, failed-read and paper cues stay screen-keyed until TL-12 and TL-13. Stick check not run.
 
 ### TL-10. The phone shell fits 360-414 px
 - Files: `desk/src/app/phone/page.tsx`, `desk/src/app/globals.css`, `tools/phone-shell-test.cjs` (new), `desk/package.json`.
@@ -358,6 +367,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: in every state the bar renders 3 items or fewer; every bar label is 12 characters or fewer; `.pnav button` has `min-width: 0`, `white-space: nowrap`, `text-overflow: ellipsis` and a 48 px minimum height; More holds Forget this desk.
 - Tests: `tools/phone-shell-test.cjs` (source and CSS pins over page.tsx and globals.css), added to `rulesSuites`.
 - Stick check: on the operator's phone (and a 360 px browser window), joined with no ask, then with ask `paragraph` open: no label wraps, nothing scrolls sideways, and Cancel and Read all are each a thumb wide.
+- Landed: b09c86fb (a 48 px strip, one body, a bar of at most three items, More as a sheet).
 
 ### TL-11. The phone stops moving the TV
 - Files: `desk/src/app/api/session/route.ts`, `desk/src/app/api/read/route.ts`, `desk/src/app/api/mark/route.ts`, `desk/src/app/api/analyse/route.ts`, `desk/src/app/api/hint/route.ts`, `desk/src/app/api/explain/route.ts`, `desk/src/app/api/second/route.ts`, `desk/src/app/phone/page.tsx`, `desk/src/app/phone/PaperPanel.tsx`, `tools/desk-pairing-test.cjs`, `tools/handoff-test.cjs`.
@@ -365,7 +375,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: each refused event from a phone is 403 and leaves the session byte-identical; a phone `/api/read` with no ask is 409 and the TV's screen does not change; with the right `askId` it reads as today and closes the ask.
 - Tests: `tools/desk-pairing-test.cjs` (the role table), `tools/handoff-test.cjs` (409 and close-on-result, one case per result route, in-process with a stub engine, no model).
 - Stick check: on Linga's home, send a paragraph from the phone by any means left. The TV must stay on Linga. Then do it properly from Essay Master and watch the TV open the reading.
-Landed: 7ea64626, cb0acb71, 618819b7 (the session route refuses a phone's nav, focus, subject, item, page.select, walk, essay.at, timer.* and session.end with 403 and leaves the session byte-identical; read, mark, analyse, hint, explain and second answer a phone only with the open ask's id (409 otherwise, nothing changes), mark the ask sent as the work begins and close it on the result, through one shared door in lib/session/phoneAsk.ts; the phone page drops its item and nav posts, Next paragraph's essay.at and nav, the End session button and PaperPanel's Show on the TV). OD4 was decided (b): Tonight's list stays under More, so task.add and task.done stay allowed for the phone while timer.* and session.end are refused. Step 0 found the lite r2 leftovers (a listed phone's duplicate right code, revocation reaching streams, the TV lifting the cooldown) already carried by 429e815a, so none was rebuilt. Stick check not run.
+Landed: 7ea64626, cb0acb71, 618819b7 (the session route refuses a phone's nav, focus, subject, item, page.select, walk, essay.at, timer.* and session.end with 403 and leaves the session byte-identical; read, mark, analyse, hint, explain and second answer a phone only with the open ask's id (409 otherwise, nothing changes), through one shared door in lib/session/phoneAsk.ts; after the lite r3 rework below, the door also checks the open ask's kind, marks the ask sent only once the work begins, and closes it on a real result or a failure of the work, while a request the route refuses before any work leaves it open; the phone page drops its item and nav posts, Next paragraph's essay.at and nav, the End session button and PaperPanel's Show on the TV). OD4 was decided (b): Tonight's list stays under More, so task.add and task.done stay allowed for the phone while timer.* and session.end are refused. Step 0 found the lite r2 leftovers (a listed phone's duplicate right code, revocation reaching streams, the TV lifting the cooldown) already carried by 429e815a, so none was rebuilt. Stick check not run.
 
 ### TL-12. Linga: the TV drives, the phone speaks
 - Files: `desk/src/english/LingaPhone.tsx`, `desk/src/lib/english/view.ts`, `desk/src/english/LingaTV.tsx`, `desk/src/app/phone/panelFor.ts`, `tools/linga-rules-test.cjs`, `tools/phone-panel-test.cjs`.
@@ -382,6 +392,16 @@ Landed: 0b8a9a68 (LingaPhone draws only the reply, words and prefs panels, by th
 - Tests: `tools/tv-keys-test.cjs`, `tools/maths-tv-test.cjs`, `tools/paper-probe-test.cjs`.
 - Stick check: Tonight → Down shows the last paper; "Type a paper" moves the phone to the rows; a forced failed read is asked again with Select.
 Landed: 1ce6815f, 5752d598 (Select retries a failed read, Down on Tonight opens paper, the paper screen's Type a paper stop with ask.open paper and a two-step Back). PaperPanel's Show on TV moved to TL-11. Stick check not run.
+
+### Lite r3 rework (council-lite c126c54e at 4620a696, LITE READY, robustness 0.50 at its floor)
+- H1 (robustness): the ask door checked the ask's id, never its kind, so a Linga `reply` ask answered on `/api/read` moved the TV to Math Buddy. `withPhoneAsk` now takes the kinds each result route answers: read `page`; mark `sheet`, or `answers` for typed answers; analyse `sentence` (english), `paragraph` (essay, piece, piece-again) or `rewrite`; hint `question`; explain `explain`; second `second`. Any other kind is 409 and nothing changes.
+- H2 (robustness): a phone could still seat another learner and move the TV through session events outside PHONE_NEVER. A phone's `learner.set`, `profile.discard`, `topic.open` and `practice.clear` are 403 "Only the TV moves the desk." with the session byte-identical (no phone flow posted them). A phone's `paper.enter` is taken only with the askId of the open `paper` ask (409 otherwise); it is marked sent as the desk goes to write the paper and closed by what that came to, and a paper with no row left keeps the ask open. `task.*` (OD4 b), `profile.draft` and `profile.save` (OD1 b) stay the phone's.
+- Medium: `/api/session/retry` dropped `x-desk-role`, so a phone's retry bypassed the door. It now forwards the role and the body's askId; the TV and an in-process retry are as before.
+- Medium: a refused answer spent the ask. The ask is marked sent only once the work begins (the first run started inside the answer, `answerAsk` in store.ts) and closes on a real result or a failure of the work; a 4xx before any work leaves it open. `ask.sent` stays server only for every role.
+- Medium: the paper answer carried no askId. PaperPanel sends the open paper ask's id with `paper.enter`.
+- Not in this run: `/api/english`'s door (TL-12's english route still takes a phone post with no askId) is closed by a sibling run, whose Landed line follows on its merge.
+- Tests: `tools/handoff-test.cjs`, 12 new cases red on ff681a01 and green after.
+- Landed: 59126717 (repro cases), ce266f4e (H1), 5523a321 (a refusal does not spend the ask), ff14e40e (H2), 388063f2 (paper.enter's askId shape), 3c054089 (retry), 771e5686 (PaperPanel askId), on branch autopilot/accepted-idea-delivery-8cf8ece7. Stick check not run.
 
 ### After the slices: the council
 
