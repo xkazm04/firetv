@@ -923,7 +923,7 @@ const SAMPLES={
  'walk':{type:'walk',ix:1},'practice.clear':{type:'practice.clear'},'practice.second':{type:'practice.second',n:1,verdict:'right'},
  'practice.settle':{type:'practice.settle',n:1,reply:'2',verdict:'right'},
  'job.start':{type:'job.start',kind:'read',id:'j1'},'job.done':{type:'job.done',kind:'read',id:'j1'},'job.failed':{type:'job.failed',kind:'read',id:'j1',error:'x'},
- 'essay.clear':{type:'essay.clear'},'status':{type:'status',text:'hi'},'session.end':{type:'session.end'},'reset':{type:'reset'},'pin.turn':{type:'pin.turn'},'phone.presence':{type:'phone.presence',live:1},'phones.forget':{type:'phones.forget'},
+ 'essay.clear':{type:'essay.clear'},'status':{type:'status',text:'hi'},'session.end':{type:'session.end'},'reset':{type:'reset'},'pin.turn':{type:'pin.turn'},'phone.presence':{type:'phone.presence',live:1},'phones.forget':{type:'phones.forget'},'ask.open':{type:'ask.open',kind:'page'},'ask.cancel':{type:'ask.cancel',id:'x'},'ask.sent':{type:'ask.sent',id:'x'},
 };
 // seats a learner, or changes nothing a slot holds: these are not owed a place in NEEDS_LEARNER
 const SEATS_OR_CLEARS=new Set(['learner.set','reset']);
@@ -1017,4 +1017,36 @@ test('TL-2: phones.forget is the TV\'s: it forgets every phone, keeps the sessio
  assert.equal(pairing().roleOf({get:(n)=>n==='desk-phone'?{value:cookie.slice('desk-phone='.length)}:undefined}),'guest','the phone is forgotten');
  assert.equal(store.getSession().screen,screen,'the session is kept');
  assert.equal((await post({type:'join',code:store.getSession().pin},'guest')).status,200,'the cooldown is lifted');
+});
+
+// ---- TL-5: the hand-off lives in the session ----
+test('TL-5: ask.open is the TV\'s: a phone and a guest get 403 and no ask opens; the TV opens one, and a phone cancels it, a stale id is 409',async()=>{
+ const cookie=await phoneCookie();evening('practice');
+ for(const [role,c] of [['phone',cookie],['guest']]){const r=await post({type:'ask.open',kind:'answers'},role,c);assert.equal(r.status,403,String(role));}
+ assert.equal(store.getSession().ask,null);
+ assert.equal((await post({type:'ask.open',kind:'nope'},'tv')).status,400,'an unknown kind never reaches the reducer');
+ const r=await post({type:'ask.open',kind:'answers'},'tv');assert.equal(r.status,200);
+ const a=store.getSession().ask;assert.equal(a.kind,'answers');assert.equal(a.screen,'practice');
+ assert.equal((await post({type:'ask.cancel',id:'stale'},'phone',cookie)).status,409);assert.equal(store.getSession().ask.id,a.id,'a stale id changes nothing');
+ assert.equal((await post({type:'ask.cancel',id:a.id},'guest')).status,403,'a guest cancels nothing');assert.equal(store.getSession().ask.id,a.id);
+ assert.equal((await post({type:'ask.cancel',id:a.id},'phone',cookie)).status,200);assert.equal(store.getSession().ask,null);
+ const b=await post({type:'ask.open',kind:'page'},'tv');assert.equal(b.status,200);
+ assert.equal((await post({type:'ask.cancel',id:store.getSession().ask.id},'tv')).status,200,'the TV cancels too');
+});
+test('TL-5: ask.sent is the desk\'s alone: a TV, a phone and a guest posting it get 403 and the phase stays open',async()=>{
+ const cookie=await phoneCookie();evening('practice');
+ await post({type:'ask.open',kind:'page'},'tv');const id=store.getSession().ask.id;
+ for(const [role,c] of [['tv'],['phone',cookie],['guest']]){const r=await post({type:'ask.sent',id},role,c);assert.equal(r.status,403,String(role));}
+ assert.equal(store.getSession().ask.phase,'open');
+});
+test('TL-5: the TV and a phone see the ask; a guest sees it only when its kind is name',async()=>{
+ const cookie=await phoneCookie();evening('profile');
+ await post({type:'ask.open',kind:'page'},'tv');const id=store.getSession().ask.id;
+ assert.equal((await (await get('tv')).json()).ask.id,id);assert.equal((await (await get('phone')).json()).ask.id,id);
+ assert.equal((await (await get('guest')).json()).ask,null,'a page ask is not the lobby\'s');
+ assert.equal((await firstMessage('guest')).ask,null);
+ await post({type:'ask.open',kind:'name'},'tv');const n=store.getSession().ask;
+ const g=await (await get('guest')).json();assert.equal(g.ask.id,n.id);assert.equal(g.ask.kind,'name');
+ assert.equal((await firstMessage('guest')).ask.kind,'name');
+ assert.ok(pairing().LOBBY.includes('ask'));
 });

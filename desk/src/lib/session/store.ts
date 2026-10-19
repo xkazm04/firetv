@@ -7,7 +7,7 @@
  */
 import { RETRYABLE, type JobFailure } from "../desk/failure";
 import type { Workroom } from "../twin/workroom";
-import { randomInt } from "node:crypto";
+import { randomInt, randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { lanHost } from "./lan";
 import { dataDir } from "../dataDir";
@@ -290,6 +290,25 @@ export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; 
  */
 export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; piece?: { paragraphs: number; read: number[]; failed: number[]; notEnglish?: number[]; observed?: Record<string, unknown>[]; pieceId?: string }; }
 
+/** What the TV can ask the phone for (TV-led design, section 0): one job at a time, named in the session. */
+export type AskKind = "name" | "page" | "sheet" | "answers" | "question" | "explain" | "second" | "paper"
+  | "paragraph" | "rewrite" | "slot" | "sentence" | "reply" | "words" | "prefs" | "private";
+const ASK_KINDS: ReadonlySet<string> = new Set<AskKind>(["name", "page", "sheet", "answers", "question", "explain", "second", "paper", "paragraph", "rewrite", "slot", "sentence", "reply", "words", "prefs", "private"]);
+/** The hand-off the TV has open: the phone shows that panel and nothing else (TL-5). */
+export interface Ask {
+  /** Minted by the desk on ask.open; the phone answers this id. */
+  id: string;
+  kind: AskKind;
+  /** Who it is for; a different learner seated closes it. */
+  learner: string | null;
+  /** The TV screen that opened it; the TV leaving that screen closes it. */
+  screen: Screen;
+  at: number;
+  /** sent: the phone has answered and the desk is working on it. */
+  phase: "open" | "sent";
+  detail?: { subject?: Subject; n?: number; i?: number; walkIx?: number; turnId?: string };
+}
+
 /** The learner sitting at the desk: a profile's id and name. */
 export interface AtDesk { id: string; name: string }
 
@@ -297,6 +316,8 @@ export interface Session {
   pin: string; joined: boolean; phoneUrl: string;
   /** How many listed phones have a stream open now (TL-3); sent to the TV only. */
   phonesLive: number;
+  /** The hand-off the TV has open, or null (TL-5). */
+  ask: Ask | null;
   /** Who is at the desk; null on a fresh desk until someone sits down (the place card asks "Whose desk?"). */
   learner: AtDesk | null;
   profiles: Profile[]; draft: Profile | null;
@@ -394,7 +415,9 @@ export type Event =
   | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string; by?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string; failure?: JobFailure }
   | { type: "status"; text: string; essayRefused?: boolean } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" }
   // TL-3: how many phones have a stream open (the stream route raises it), and the TV's forget of every phone (the session route answers it; no reducer change)
-  | { type: "phone.presence"; live: number } | { type: "phones.forget" };
+  | { type: "phone.presence"; live: number } | { type: "phones.forget" }
+  // TL-5: the TV opens a hand-off (ask.open, TV only), the TV or a phone cancels it, the desk marks it answered (ask.sent, server only)
+  | { type: "ask.open"; kind: AskKind; detail?: Ask["detail"] } | { type: "ask.cancel"; id: string } | { type: "ask.sent"; id: string };
 
 /**
  * The one door for what a screen or phone posts (api/session POST, after the server-only refusals): for each client-postable
@@ -416,6 +439,11 @@ const f = {
 };
 const maybe = (c: Field): Field => (v) => v === undefined || c(v);
 const lessonPick: Field = (v) => v === null || (f.object(v) && ["id", "title", "text", "why"].every((k) => f.str((v as Record<string, unknown>)[k])) && f.num((v as Record<string, unknown>).t) && maybe(f.str)((v as Record<string, unknown>).youtube));
+const askDetailOk: Field = (v) => {
+  if (!f.object(v)) return false;
+  const d = v as Record<string, unknown>;
+  return maybe(f.subject)(d.subject) && maybe(f.int)(d.n) && maybe(f.int)(d.i) && maybe(f.int)(d.walkIx) && maybe(f.str)(d.turnId);
+};
 const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { type: K }>, "type">]-?: Field } } = {
   join: { code: maybe(f.str) }, leave: {}, nav: { screen: f.screen, focus: maybe(f.int), from: maybe(f.screen), aim: maybe(f.str) }, focus: { focus: f.int }, subject: { subject: f.subject },
   "learner.set": { id: f.name }, "profile.draft": { patch: f.object }, "profile.save": {}, "profile.discard": {},
@@ -427,6 +455,7 @@ const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { ty
   "timer.start": {}, "timer.pause": {}, "timer.tick": { seconds: f.num }, "timer.skipbreak": {},
   "topic.open": { topic: f.str, stay: maybe(f.bool) }, walk: { ix: f.int }, "practice.clear": {},
   status: { text: f.str, essayRefused: maybe(f.bool) }, "session.end": {}, reset: {},
+  "ask.open": { kind: (v) => typeof v === "string" && ASK_KINDS.has(v), detail: maybe(askDetailOk) }, "ask.cancel": { id: f.name }, "ask.sent": { id: f.name },
 };
 /** Why a posted event is refused, or null when it may go to the reducer. */
 export function badPost(e: unknown): string | null {
@@ -556,7 +585,7 @@ export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry
 const drawPin = () => String(randomInt(1000, 10000));
 export function fresh(): Session {
   return {
-    pin: drawPin(), joined: false, phonesLive: 0, phoneUrl: phoneUrl(), learner: null,
+    pin: drawPin(), joined: false, phonesLive: 0, ask: null, phoneUrl: phoneUrl(), learner: null,
     // the demo profiles are on the switcher, but a fresh desk seats no one: the place card asks whose desk it is
     profiles: [
       { id: "ema", name: "Ema", type: "high-school", age: 16, modules: ["maths", "english", "essay"] },
@@ -641,8 +670,22 @@ function newProfileId(s: Session): string {
   for (let k = 2; s.profiles.some((p) => p.id === id); k++) id = `${base}-${k}`;
   return id;
 }
+/** Whether a status sentence tells someone to do something on the phone: it is the last learner's (or a lost session's) instruction once the hand-off is gone (D2, D3). */
+export const namesPhone = (status: string): boolean => /\bphone\b/i.test(status);
+/** The detail of an ask.open, cut to the keys an ask carries. */
+function askDetail(d: Ask["detail"] | undefined): Ask["detail"] | undefined {
+  if (!d) return undefined;
+  const out: NonNullable<Ask["detail"]> = {};
+  if (d.subject !== undefined) out.subject = d.subject;
+  if (d.n !== undefined) out.n = d.n;
+  if (d.i !== undefined) out.i = d.i;
+  if (d.walkIx !== undefined) out.walkIx = d.walkIx;
+  if (d.turnId !== undefined) out.turnId = d.turnId;
+  return out;
+}
 /** The learner at the desk changed: what belonged to the one who left is cleared, and so are the failed runs and the analyse run in flight (a failed read is not the next learner's to retry; a late reading is dropped by its id). */
 function switchedFrom(s: Session, n: Session): void {
+  n.ask = null; if (namesPhone(n.status)) n.status = "";
   n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null; if (s.paperAim) n.paperAim = null;
   const jobs = { ...(s.jobs ?? {}) } as Jobs;
   for (const k of Object.keys(jobs) as JobKind[]) {
@@ -699,7 +742,12 @@ function step(s: Session, e: Event): Session {
     // the code on the TV turns over once a phone has joined with it (the session route raises this): a new pin, never the one just used
     case "pin.turn": { let pin = drawPin(); while (pin === s.pin) pin = drawPin(); n.pin = pin; break; }
     // the landing with no stop named: the lamp rests on what was left (tv/landingRows.ts LANDING_REST)
-    case "nav": if (!s.learner && !UNSEATED_SCREENS.has(e.screen)) { n.screen = "learner"; n.focus = 0; n.back = "landing"; break; }
+    case "ask.open": n.ask = { id: randomUUID(), kind: e.kind, learner: s.learner?.id ?? null, screen: s.screen, at: Date.now(), phase: "open", ...(e.detail ? { detail: askDetail(e.detail) } : {}) }; break;
+    // a stale id changes nothing (the route answers it 409)
+    case "ask.cancel": if (s.ask?.id !== e.id) return s; n.ask = null; break;
+    case "ask.sent": if (s.ask?.id !== e.id) return s; n.ask = { ...s.ask, phase: "sent" }; break;
+    case "nav": if (s.ask && e.screen !== s.ask.screen) n.ask = null;
+      if (!s.learner && !UNSEATED_SCREENS.has(e.screen)) { n.screen = "learner"; n.focus = 0; n.back = "landing"; break; }
       n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from;
       // the paper's aim (MB-B40): set by the recovery row's Select, kept between Get ready for school and its lesson, else gone
       { const aim = e.aim && e.screen === "prepare" ? e.aim : AIM_KEEPS.has(s.screen) && AIM_KEEPS.has(e.screen) ? s.paperAim ?? null : null;
@@ -841,7 +889,7 @@ function step(s: Session, e: Event): Session {
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; n.essayRefused = e.essayRefused ? e.text : undefined; break;
-    case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.log = { ...s.log, endedAt: Date.now() }; break;
+    case "session.end": n.ask = null; n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.log = { ...s.log, endedAt: Date.now() }; break;
     case "reset": return { ...fresh(), phonesLive: s.phonesLive };
   }
   // a set being written is for the learner who asked: another learner at the desk supersedes it, and its late result is dropped by id
@@ -892,7 +940,7 @@ function load(): Session {
   if (bad) return setAside(bad);
   try {
     const log = "log" in j ? keptLog(j.log) : undefined;
-    return settleOwners({ ...fresh(), ...j, ...(log === undefined ? {} : { log }), profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phonesLive: 0, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
+    return settleOwners({ ...fresh(), ...j, ...(log === undefined ? {} : { log }), profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phonesLive: 0, ask: null, status: namesPhone(String(j.status ?? "")) ? "" : j.status ?? "", phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
   } catch (e) { return setAside(`its repair failed (${e instanceof Error ? e.message : e})`); }
 }
 /** The name an unusable session.json still has to be put aside as, when load() could not rename it; the store takes it over at startup. */

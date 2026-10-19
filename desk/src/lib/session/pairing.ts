@@ -229,7 +229,7 @@ export function liveRole(req?: Request | null): Role | null {
  * (page.tsx:377, :382), `learner` and `draft` the Profile panel (:390, :403), `phoneUrl` and `updatedAt` are the
  * lobby's own. `viewer`, `pin` and `joined` are set by view() itself.
  */
-export const LOBBY = ["viewer", "pin", "joined", "phoneUrl", "learner", "subject", "screen", "updatedAt", "draft"] as const satisfies readonly (keyof Session)[];
+export const LOBBY = ["viewer", "pin", "joined", "phoneUrl", "learner", "subject", "screen", "updatedAt", "draft", "ask"] as const satisfies readonly (keyof Session)[];
 export type LobbyKey = (typeof LOBBY)[number];
 
 /**
@@ -265,6 +265,8 @@ export function view(s: Session, role: Role | null): Session {
       viewer: "guest", pin: "", joined: false,
       phoneUrl: s.phoneUrl, learner: s.learner, subject: s.subject, screen: s.screen, updatedAt: s.updatedAt,
       draft: s.screen === "profile" ? s.draft : null,
+      // only the name hand-off is the lobby's: the phone names a learner before it joins (TL-5)
+      ask: s.ask?.kind === "name" ? s.ask : null,
     };
     // an absent key is absent (away, week, back, essayPlan, worked, workroom), not sent as undefined
     for (const k of Object.keys(guest) as (keyof Session)[]) if (guest[k] === undefined) delete guest[k];

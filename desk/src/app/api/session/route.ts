@@ -23,6 +23,7 @@ const SERVER_ONLY: Partial<Record<Event["type"], string>> = {
   "lesson.watched": "A lesson is marked watched by the desk, as it plays.",
   "pin.turn": "The code turns over when a phone joins with it.",
   "phone.presence": "The desk counts the phones that are here.",
+  "ask.sent": "The desk marks a hand-off answered when the answer arrives.",
 };
 
 /** One line for a pairing write that failed, in the shape of pairing.ts's last-seen line; the caller answers 500 and changes nothing. */
@@ -55,12 +56,15 @@ export async function POST(req: Request) {
   // a lesson picked for a hint is the desk's pick; a lesson chosen on the TV (no key) is the screen's own
   if (e?.type === "lesson.set" && e.key !== undefined) return NextResponse.json({ error: "Ask for a hint on /api/hint." }, { status: 403 });
   // the TV's own acts: wiping the desk, and starting an edit of a profile that is already made (a patch that names an id)
+  if (role === "phone" && e?.type === "ask.open") return NextResponse.json({ error: "Only the TV can ask the phone for something." }, { status: 403 });
   if (role === "phone" && e?.type === "reset") return NextResponse.json({ error: "Only the TV can reset the desk." }, { status: 403 });
   if (role === "phone" && e?.type === "profile.draft" && e.patch && typeof e.patch === "object" && Object.hasOwn(e.patch, "id")) return NextResponse.json({ error: "Only the TV can start editing a profile." }, { status: 403 });
   if (role === "guest" && !guestMay(getSession(), e)) return NextResponse.json({ error: JOIN_FIRST }, { status: 403 });
   // one door for every field a screen or phone posts: a request the reducer was not built for never reaches it
   const bad = badPost(e);
   if (bad) return NextResponse.json({ error: bad }, { status: 400 });
+  // a cancel of a hand-off that is not open now changes nothing
+  if (e?.type === "ask.cancel" && getSession().ask?.id !== e.id) return NextResponse.json({ error: "The TV is not asking for that now." }, { status: 409 });
   // forgetting the desk: this device's phone cookie goes; the desk is untouched
   if (e?.type === "leave") {
     try { forgetPhone(cookiesOf(req).get(PHONE_COOKIE)?.value); }
