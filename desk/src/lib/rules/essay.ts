@@ -279,6 +279,7 @@ export function essayFileProblem(f: { name?: unknown; type?: unknown; size?: unk
   const size = typeof f?.size === "number" && Number.isFinite(f.size) ? f.size : -1;
   // a phone often cannot name the type of a .md file (empty, or a generic binary type), so those pass on the name
   const typeOk = type === "" || type.startsWith("text/") || type === "application/octet-stream";
+  if (/\.docx$/.test(name) || type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") return "The phone reads .txt and .md files. The PC page (/drop) reads .docx, or save the document as .txt and pick it again.";
   if (!/\.(txt|md)$/.test(name) || !typeOk) return "The desk reads .txt and .md files. Pick one of those, or type the paragraph here.";
   if (size === 0) return "That file is empty. Pick one with some writing in it.";
   if (size < 0 || size > ESSAY_FILE_MAX_BYTES) return `That file is too big. Keep it under ${ESSAY_FILE_MAX_BYTES / 1024} KB, or send a few paragraphs at a time.`;

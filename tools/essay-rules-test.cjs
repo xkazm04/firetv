@@ -811,6 +811,11 @@ test('essayFileProblem: .txt and .md are fine; a .docx, a .jpg and other types a
   {name:'essay.txt',type:'image/jpeg',size:900},{name:'essay.md',type:'application/pdf',size:900},{name:'',type:'',size:900}];
  for(const f of refused){const m=essayFileProblem(f);assert.equal(typeof m,'string',JSON.stringify(f));assert.match(m,/\.txt and \.md/);assert.doesNotMatch(m,/—|–/,'no dashes in copy');}
 });
+test('essayFileProblem: a .docx, by name or by MIME type, is pointed to the PC page; a .jpg is not',()=>{
+ const W='application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+ for(const f of [{name:'essay.docx',type:W,size:900},{name:'Essay.DOCX',type:'',size:900},{name:'essay',type:W,size:900}]){const m=essayFileProblem(f);assert.match(m,/PC page/,JSON.stringify(f));assert.match(m,/\/drop/);assert.match(m,/\.txt and \.md/);assert.doesNotMatch(m,/—|–/);}
+ assert.doesNotMatch(essayFileProblem({name:'page.jpg',type:'image/jpeg',size:900}),/PC page|\/drop/);
+});
 test('essayFileProblem: a file over the limit, an empty file and a size that is not a number are refused',()=>{
  assert.equal(ESSAY_FILE_MAX_BYTES,100*1024);
  assert.equal(essayFileProblem({name:'a.txt',type:'text/plain',size:ESSAY_FILE_MAX_BYTES}),null,'exactly at the limit is fine');

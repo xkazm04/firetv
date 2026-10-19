@@ -834,7 +834,7 @@ export default function Phone() {
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !slotText.trim()} onClick={sendSlot}>Send</button></div></div>}
 
         {screen === "paste" && !onSentence && !onPlan && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
-          <p>Send a .txt or .md file, or type, paste or dictate a message. The desk reads a whole piece, or one paragraph at a time.</p>
+          <p>Send a .txt or .md file (a .docx goes through the PC page), or type, paste or dictate a message. The desk reads a whole piece, or one paragraph at a time.</p>
           <p data-role="essay-lens">The TV chose the lens: <b>{ESSAY_TYPES.find((t) => t.id === etype)?.name ?? etype}</b>. {ESSAY_TYPES.find((t) => t.id === etype)?.promise}</p>
           {insecure && <p data-role="http-limit" role="note">{HTTP_LIMIT.voice}</p>}
           <label className="pbtn pfile" data-secondary="true">Choose a file (.txt or .md)<input type="file" accept=".txt,.md,text/plain,text/markdown" data-role="essay-file" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void pickFile(f); }} /></label>
