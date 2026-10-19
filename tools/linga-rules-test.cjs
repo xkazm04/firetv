@@ -3389,3 +3389,53 @@ test('LG-4: the coach replay asks a question that needs the coached form, with t
  assert.match(p.task,/only by using the after form/);assert.match(p.task,/must not be any line in askedBefore, nor a rephrase of one/);assert.match(p.task,/Do not supply the learner's answer/);
  assert.equal(getSession().conversation.phase,'replay');assert.equal(getSession().conversation.turns.at(-1).text,'What have you done about the noise so far?');
 });
+
+// ---- LG-5 recert-8 (docs/uat-insights/2026-10-19-lt-recert-8.md): the help cue loop in all four J4 pairs. A line the band hold
+// cut lost its ladder whole, so every press fell back to the scene's cue: Viktor (A1) was offered "Try: What did you do at
+// school today?" at #5, #10 and #12, after Mia had said "I drew a cat. Do you draw?" (LT-viktor-67-J4-1), and Tomas got
+// "Try: I like to build. My favourite block is..." three times on one line (#2-#4). Fixtures from recert-8.
+const VIKTOR_CUE='Try: What did you do at school today?',TOMAS_CUE='Try: I like to build. My favourite block is...';
+test('LG-5 recert-8 rules: rungs and the scene cue are held to the band (no past-tense question, 8 words at A1); the scene cue is offered once',()=>{
+ const H=require(path.join(root,'src/lib/english/help.ts'));
+ assert.equal(H.sceneCueFor(VIKTOR_CUE,'A1',false),null,'viktor-67 #5: a past-tense question at A1');
+ assert.equal(H.sceneCueFor(VIKTOR_CUE,'A2',false),VIKTOR_CUE,'A2 may read the past');
+ assert.equal(H.sceneCueFor(VIKTOR_CUE,undefined,false),VIKTOR_CUE,'no band known, no hold');
+ assert.equal(H.sceneCueFor(TOMAS_CUE,'A1',false),TOMAS_CUE,'tomas-9: two short sentences, 8 words, fit A1');
+ assert.equal(H.sceneCueFor(TOMAS_CUE,'A1',true),null,'tomas-9 #3-#4: shown once, never again word for word');
+ assert.equal(H.sceneCueFor('Try: Can you tell me what you usually like to build with your friends?','A1',false),null,'over 8 words at A1');
+ const raw={simpler:'What did you do at school today?',meaning:'school: where children learn',starter:'Today I …'};
+ assert.deepEqual(H.validLadder(raw,'How was your day at school, Grandpa asks?',{band:'A1'}),{2:raw.meaning,3:raw.starter},'A1: the past-tense simpler goes');
+ assert.deepEqual(Object.keys(H.validLadder(raw,'How was your day at school, Grandpa asks?',{band:'A2'})),['1','2','3'],'A2 keeps them');
+ // a line the hold cut keeps the rungs that still fit it: a meaning must name a word still in the line
+ const mia={simpler:'',meaning:'draw: make a picture with a pencil',starter:'Yes, I draw …'};
+ assert.deepEqual(H.validLadder(mia,'Do you draw?',{band:'A1',held:true}),{2:mia.meaning,3:mia.starter});
+ assert.deepEqual(H.validLadder({...mia,meaning:'pencil: a thing you draw with'},'Do you draw?',{band:'A1',held:true}),{3:mia.starter},'a meaning for a word the cut took away goes');
+});
+test('LG-5 recert-8 wired (viktor-67 J4 #9-#12): a line the A1 hold cut keeps its fitting rungs; the past-tense scene cue is never shown, the help gives the quiz instead',async()=>{
+ const said='I drew a cat at school today with my friend Anna. Do you draw?';
+ await bandStart('ema','A1','Hi Grandpa! Can you see me?',()=>({reply:said,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'',meaning:'draw: make a picture with a pencil',starter:'Yes, I draw …'}}));
+ let c=getSession().conversation;dispatch({type:'linga.changed',conversation:{...c,scene:{...c.scene,cue:VIKTOR_CUE}}});
+ await command('quiz');
+ assert.equal(getSession().conversation.cue,'','viktor-67 #5: the quiz shows no past-tense cue at A1');
+ await reply('Hello Mia. Yes, I see you. You school today?');
+ c=getSession().conversation;assert.equal(c.turns.at(-1).text,'Do you draw?','the hold cut the line to its question');
+ const cues=[];for(let i=0;i<3;i++){await command('cue');cues.push(getSession().conversation.cue);}
+ assert.deepEqual(cues,['draw: make a picture with a pencil','Yes, I draw …','Yes, I draw …'],'the cut line\'s own rungs, never the scene cue');
+ // a cut line with no rung left: the help gives the quiz, never the past-tense cue
+ answer=async req=>{const p=JSON.parse(req.prompt);return {json:{reply:said,observations:[],moment:{kind:'none',said:'',better:'',why:''}},provider:'test',ms:1};};
+ await reply('Yes, I draw. I draw garden.');await command('cue');
+ c=getSession().conversation;
+ assert.notEqual(c.cue,VIKTOR_CUE);assert.equal(c.quizOpen,true,'the recognition fallback');assert.equal(c.supported,true);
+});
+test('LG-5 recert-8 wired (tomas-9 J4 #2-#4): the scene cue is shown once a scene; pressed again, or for a later line with no ladder, the help gives the quiz and the button goes',async()=>{
+ const V=view();
+ await bandStart('ema','A1','What do you make?',()=>({reply:'Nice! What do you build?',observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
+ let c=getSession().conversation;dispatch({type:'linga.changed',conversation:{...c,scene:{...c.scene,cue:TOMAS_CUE}}});
+ await command('cue');c=getSession().conversation;
+ assert.equal(c.cue,TOMAS_CUE,'the first press: the scene cue, it fits A1');assert.equal(c.quizOpen,false);
+ assert.equal(V.helpOf(c).offered,false,'shown once: no second Help button');
+ await command('cue');c=getSession().conversation;
+ assert.equal(c.quizOpen,true,'pressed again: the quiz, not the same cue');assert.equal(c.cue,'','the quiz does not repeat it either');
+ await reply('I like sword.');await command('cue');c=getSession().conversation;
+ assert.notEqual(c.cue,TOMAS_CUE,'a later line with no ladder: never the same cue again');assert.equal(c.quizOpen,true);
+});

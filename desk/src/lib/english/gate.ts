@@ -158,6 +158,14 @@ function overBand(text: string, hold: BandHold, answer = false): number {
     + (hold.present ? s.filter(pastQuestion).length : 0) + (hold.turn && !answer ? Math.max(0, wordsIn(text) - hold.turn) : 0);
 }
 /**
+ * Whether a line fits `band` as it stands (LG-5 recert-8): what bandLine leaves unchanged. help.ts holds the rescue ladder's
+ * rungs and the scene's cue to it, so a cue offered as a reply is never above the band its partner line is held to.
+ */
+export function fitsBand(text: string, band: Band | undefined): boolean {
+  const hold = band && BAND_HOLD[band];
+  return !hold || overBand(text, hold) === 0;
+}
+/**
  * A partner line as a learner at `band` may hear it. B1 and up, or a line that fits: unchanged. Over the band: the line's
  * simpler rung (help.ts) when that fits; else the line cut to its first statement and its last question, in their
  * order, which keeps the reaction and the one question the scene needs, or the question alone when the pair is over the

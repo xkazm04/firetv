@@ -226,7 +226,8 @@ const RUNG_NEXT = {
 /**
  * The help button as every screen shows it, from the ladder's shape on the session (never its words): its label,
  * what it gives next, the tag over a revealed rung, and whether it is offered at all. At the top of a ladder it is
- * not: "Choose a phrase" stays the recognition fallback. A line with no ladder gets the scene's cue, as before.
+ * not: "Choose a phrase" stays the recognition fallback. A line with no ladder gets the scene's cue, once a scene (LG-5
+ * recert-8): once it was shown, a line with no ladder offers no help button, only "Choose a phrase".
  */
 export function helpOf(c: Conversation): { label: string; help: string; tag: string; offered: boolean } {
   const h = c.help, next = h?.rungs.find(r => r > h.rung);
@@ -234,7 +235,7 @@ export function helpOf(c: Conversation): { label: string; help: string; tag: str
     label: h?.rung ? "More help" : "Help me answer",
     help: next ? RUNG_NEXT[next] : "Get a phrase starter, then try your own reply on the phone.",
     tag: h?.shown && h.rung ? RUNG_TAG[h.rung] : "A little support",
-    offered: !h?.rung || !!next,
+    offered: h ? !h.rung || !!next : !c.sceneCued,
   };
 }
 

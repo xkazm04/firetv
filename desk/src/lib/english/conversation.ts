@@ -15,7 +15,7 @@ import { adultContent, isAdult } from "../rules/mode";
 import { ConversationError, lingaLine } from "./errors";
 import { EngineError, type TextRequest } from "../engines/types";
 import { EASE_INSTRUCTION, learnerLost } from "./ease";
-import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
+import { climb, keepLadder, MEANING_MAX, sceneCueFor, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, ownLines, partnerLines, reuseOf, reviewOf, shownLines, askedAboutFor, slipsAgain, SLIP_AGAIN_TASK, usedLine, usesForm, fossilOf, fossilMoment, FOSSIL_TASK, type SlipAgain } from "./review";
@@ -92,6 +92,15 @@ function partnerSays(c:Conversation,value:unknown,max?:number,help?:unknown,answ
   const band=heldBand(c);
   return partnerLine(line(value,max),adultFor(c),band?{band,...(typeof simpler==="string"?{simpler}:{}),...(answer?{answer}:{})}:undefined);
 }
+/**
+ * The rescue ladder a partner line keeps (help.ts validLadder). A redirect line keeps none. A line the band hold cut keeps
+ * the rungs that still fit it (LG-5 recert-8: before, it lost its ladder whole, and every help press fell back to the
+ * scene's cue: LT-viktor-67-J4-1, the Tomas cue loop); every rung is held to the line's band. `asWritten`: the line is the
+ * model's own, uncut.
+ */
+function ladderFor(c:Conversation,help:unknown,text:string,asWritten:boolean){
+  return validLadder(text===REDIRECT_LINE?undefined:help,text,{band:heldBand(c),held:!asWritten});
+}
 /** The band a partner line is held to (LG-56): the scene's level, or the level check's playing band when that is lower. */
 function heldBand(c:Conversation):Band|undefined{
   const {placement,preferences}=readLearner(c.learnerId).english;
@@ -165,7 +174,7 @@ function askedBefore(c:Conversation):string[]{
 /** The replay's answer on the scene: the partner's new question, phase replay, its own help ladder; no help carried over. */
 function replayed(c:Conversation,json:Record<string,unknown>){
   const partner={id:randomUUID(),role:"partner" as const,text:partnerSays(c,json.reply,undefined,json.help)},held=partner.text===line(json.reply);
-  return {partner,patch:{phase:"replay" as const,supported:false,turns:[...c.turns,partner],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(held?json.help:undefined,partner.text),c.help?.forTurn)}};
+  return {partner,patch:{phase:"replay" as const,supported:false,turns:[...c.turns,partner],cue:"",quizOpen:false,help:keepLadder(partner.id,ladderFor(c,json.help,partner.text,held),c.help?.forTurn)}};
 }
 /**
  * The scene's moments after a reply (LG-4): the moment whose replay question is the line this reply answers keeps the reply
@@ -427,7 +436,7 @@ export async function englishCommand(raw:unknown){
       const steps=Array.isArray(result.json.steps)?result.json.steps.filter(x=>typeof x!=="string"||audienceSafe(c,x)!==null):result.json.steps;
       // the offer, kept only when line.ts and the audience gate pass it; else the quiz answer is the room's line
       const offered=askOffer?safe(offerLine(result.json.offer,scene,profile.name))??safe(quizLine(scene)):null;
-      commit({...c,...(offered?{line:holdLine(c.id,offered)}:{}),title:safeTitle??scene.name,goal:safeGoal??scene.goal,turns:[opening],...(()=>{const m=missionOf(scene,steps);return m?{mission:m}:{};})(),supported:false,help:keepLadder(opening.id,validLadder(openingHeld?result.json.help:undefined,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
+      commit({...c,...(offered?{line:holdLine(c.id,offered)}:{}),title:safeTitle??scene.name,goal:safeGoal??scene.goal,turns:[opening],...(()=>{const m=missionOf(scene,steps);return m?{mission:m}:{};})(),supported:false,help:keepLadder(opening.id,ladderFor(c,result.json.help,opening.text,openingHeld)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
       return getSession();
     }catch(e){try{const now=checkCurrent(c,commandId);commit({...now,pending:null,error:lingaLine(e,"The scene could not be prepared. Try again or choose another situation.")});}catch{/* superseded */}throw e;}
   }
@@ -485,15 +494,22 @@ export async function englishCommand(raw:unknown){
     // The next rung of the line on screen, or the scene's cue when that line has no ladder. No model call. The
     // command id is kept, so a retried request cannot climb a second rung.
     const step=climb(c.help,c.turns.at(-1)?.id),commands=[...c.commands,commandId].slice(-100);
+    // LG-5 recert-8: the scene's cue is held to the band and offered once a scene (help.ts sceneCueFor); without it the
+    // help gives the quiz, the recognition fallback, never the same cue again
+    const fallback=step?null:sceneCueFor(scene.cue,heldBand(c),c.sceneCued);
     // a cue that shows the hidden line's key words spends the line's find (K4)
-    const spent=c.line&&showsLine(c,step?.cue??scene.cue)?{line:{...c.line,shown:true}}:{};
-    commit(step?{...c,help:step.help,cue:step.cue,supported:c.supported||supportedBy(step.help),quizOpen:false,commands,...spent}:{...c,help:null,supported:true,cue:scene.cue,quizOpen:false,commands,...spent},"linga-talk");return getSession();
+    const spent=c.line&&showsLine(c,step?.cue??fallback??"")?{line:{...c.line,shown:true}}:{};
+    if(!step&&!fallback)return quiz(c,commands);
+    commit(step?{...c,help:step.help,cue:step.cue,supported:c.supported||supportedBy(step.help),quizOpen:false,commands,...spent}:{...c,help:null,supported:true,cue:fallback!,sceneCued:true,quizOpen:false,commands,...spent},"linga-talk");return getSession();
   }
-  if(action==="quiz"){
+  /** The quiz on screen with the scene's cue under it when that may be shown (LG-5 recert-8: held to the band, once a scene). */
+  function quiz(c:Conversation,commands=c.commands){
+    const cue=sceneCueFor(scene!.cue,heldBand(c),c.sceneCued)??"";
     // the quiz puts its options and the cue on screen: one that shows the hidden line's key words spends the find (K4)
-    const shown=c.line&&[scene.cue,...scene.quiz.options].some(x=>showsLine(c,x))?{line:{...c.line,shown:true}}:{};
-    commit({...c,supported:true,cue:scene.cue,quizOpen:true,help:c.help&&{...c.help,shown:false},...shown},"linga-talk");return getSession();
+    const shown=c.line&&[cue,...scene!.quiz.options].some(x=>!!x&&showsLine(c,x))?{line:{...c.line,shown:true}}:{};
+    commit({...c,supported:true,cue,...(cue?{sceneCued:true}:{}),quizOpen:true,help:c.help&&{...c.help,shown:false},commands,...shown},"linga-talk");return getSession();
   }
+  if(action==="quiz")return quiz(c);
   if(action==="choice"){
     const quiz=scene.quiz;
     if(![0,1].includes(input.option as number))throw new ConversationError("Choose one of the displayed phrases.");
@@ -615,7 +631,7 @@ export async function englishCommand(raw:unknown){
       // help rung) or a read-back of a shown line. Once it is recorded the next reply starts unhelped: a moment does not make a
       // reply the learner then says on their own a helped one.
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
-      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,...(pair?[pair.learner,pair.coStar]:[{id:turnId,role:"learner" as const,text:reply,mode,supported:c.supported||copied}]),partner],...(pair&&c.duet?{duet:afterPair(c.duet)}:{}),supported:false,moment:onScreen,moments:repliedTo(c,reply),...(()=>{const h=keepHeld(current.heldFixes,held);return h.length?{heldFixes:h}:{};})(),cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{}),...(found&&hidden&&c.line?{line:{...c.line,found:usedLine(reply,found),foundTurn:turnId,text:hidden.text}}:{})};
+      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,...(pair?[pair.learner,pair.coStar]:[{id:turnId,role:"learner" as const,text:reply,mode,supported:c.supported||copied}]),partner],...(pair&&c.duet?{duet:afterPair(c.duet)}:{}),supported:false,moment:onScreen,moments:repliedTo(c,reply),...(()=>{const h=keepHeld(current.heldFixes,held);return h.length?{heldFixes:h}:{};})(),cue:"",quizOpen:false,help:keepLadder(partner.id,ladderFor(c,result.json.help,partner.text,replyHeld),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(lost!==undefined?{lost}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{}),...(found&&hidden&&c.line?{line:{...c.line,found:usedLine(reply,found),foundTurn:turnId,text:hidden.text}}:{})};
     }else if(action==="coach"){
       const before=line(result.json.before,180);
       if(audienceSafe(c,line(result.json.after,180))===null||audienceSafe(c,line(result.json.note,220))===null)throw new Error("The coach note did not fit this learner.");if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");

@@ -11,7 +11,8 @@
  * screen reads; they stay here, in server memory, like check.ts's answer keys. A ladder lost to a restart gives
  * way to the scene's own cue, as before the ladder.
  */
-import type { ConversationHelp, HelpRung } from "./types";
+import { fitsBand } from "./gate";
+import type { Band, ConversationHelp, HelpRung } from "./types";
 
 /** Any revealed rung is help: a reply after the simpler line, the meaning or the starter is supported practice. */
 export const SUPPORTING_RUNG: HelpRung = 1;
@@ -33,11 +34,23 @@ function unfinished(s: string): string {
   return body === s ? `${body} …` : s;
 }
 
+/** A rung or cue as a learner at `band` may read it (gate.ts fitsBand): a starter without its ellipsis, a cue without its "Try:". */
+const inBand = (text: string, band?: Band) => fitsBand(text.replace(/^Try(?: [a-z]+)?:\s*/, "").replace(/\s*(\.\.\.|…)$/, ""), band);
+/**
+ * How a ladder is held (LG-5 recert-8): `band`, the band the partner line was held to, which every rung must fit too (no
+ * past-tense question at A1, at most 8 words); `held`, the line on screen is the band hold's cut of the model's line, so a
+ * meaning rung must name a word that is still in it.
+ */
+export interface LadderHold { band?: Band; held?: boolean }
+/** A meaning rung names its word first ("see: look with your eyes"); that word must be in the line (`same`, its words). */
+const namesLineWord = (meaning: string, same: string) => !meaning.includes(":") || words(meaning.slice(0, meaning.indexOf(":"))).split(" ").every(w => ` ${same} `.includes(` ${w} `));
 /** The rungs of a model's ladder that do their job, for this partner line. Anything else is dropped, never the line. */
-export function validLadder(raw: unknown, partnerLine: string): Ladder {
+export function validLadder(raw: unknown, partnerLine: string, hold: LadderHold = {}): Ladder {
   const o = raw && typeof raw === "object" && !Array.isArray(raw) ? raw as Record<string, unknown> : {};
   const line = partnerLine.trim(), same = words(line), out: Ladder = {};
-  const simpler = plain(o, "simpler"), meaning = plain(o, "meaning"), starter = unfinished(plain(o, "starter"));
+  const fits = (s: string) => s && inBand(s, hold.band) ? s : "";
+  const simpler = fits(plain(o, "simpler")), starter = fits(unfinished(plain(o, "starter")));
+  const named = fits(plain(o, "meaning")), meaning = !hold.held || namesLineWord(named, same) ? named : "";
   // Said more simply: shorter than the line and not the line again; a question stays a question.
   if (simpler && simpler.length <= SIMPLER_MAX && simpler.length < line.length && words(simpler) !== same && (!line.includes("?") || simpler.endsWith("?"))) out[1] = simpler;
   if (meaning && meaning.length <= MEANING_MAX && words(meaning) !== same && words(meaning) !== words(simpler)) out[2] = meaning;
@@ -65,6 +78,16 @@ export function climb(help: ConversationHelp | null | undefined, lastTurnId: str
   const ladder = ladders.get(help.forTurn), next = help.rungs.find(r => r > help.rung) ?? help.rung;
   const cue = next ? ladder?.[next] : undefined;
   return cue ? { cue, help: { ...help, rung: next, shown: true } } : null;
+}
+
+/**
+ * The scene's cue for a line with no ladder (none came, or a restart lost it), or null (LG-5 recert-8, LT-viktor-67-J4-1:
+ * "Try: What did you do at school today?" four times, at A1, after Mia had moved on). It is offered once a scene: shown
+ * once (`spent`), by help or under the quiz, it no longer answers the line on screen, and it is never offered again
+ * word for word. It is held to the band like a rung. Null: the help gives the quiz, the recognition fallback.
+ */
+export function sceneCueFor(cue: string, band: Band | undefined, spent: boolean | undefined): string | null {
+  return !spent && cue.trim() && inBand(cue, band) ? cue : null;
 }
 
 /** Whether a reply after this much help is supported practice. */

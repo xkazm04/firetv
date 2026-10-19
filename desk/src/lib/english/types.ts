@@ -269,6 +269,8 @@ export interface Conversation {
   replayFor?: string;
   capture: boolean; captureAt: number; audioNonce: number;
   supported: boolean; cue: string; quizOpen: boolean;
+  /** LG-5 recert-8: the scene's cue was shown (by help or under the quiz); it is offered once a scene, never again word for word */
+  sceneCued?: boolean;
   /** absent on a conversation saved before the ladder, and null when the partner's line came without one */
   help?: ConversationHelp | null;
   /** absent on a conversation saved before review, null when nothing taught was due */
