@@ -43,20 +43,22 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     if(r.nav){patch({menu:false});post({type:"nav",screen:r.nav.screen,...(r.nav.from?{from:r.nav.from}:{focus:r.nav.screen==="linga-talk"?-1:0})});}
     if(r.ask)post({type:"ask.open",kind:r.ask.kind});
     // a phrase chosen with the remote answers the turn from the TV: the phone's reply ask closes with it, and is not asked again for this turn
-    if(a.id==="pick-phrase"&&s.ask?.kind==="reply"){answered.current=want;post({type:"ask.cancel",id:s.ask.id});}
+    if(a.id==="pick-phrase"&&s.ask?.kind==="reply"&&!sentAndWorking){answered.current=want;post({type:"ask.cancel",id:s.ask.id});}
     if(r.command)void run(r.command.action,r.command.extra).then(ok=>{if(ok&&r.after)patch(r.after);});
   };
   // TL-12: the reply hand-off opens by itself as the learner's turn begins, and closes when the turn stops being theirs
+  // an ask the desk marked sent is the phone's answer in work: no client cancels it before the result lands (the TV closes a reply once the work is done)
+  const sentAndWorking=s.ask?.phase==="sent"&&!!(c?.pending||lc?.pending);
   const want=replyKey(v),answered=useRef<string|null>(null),openedAt=useRef({key:"",at:0});
   useEffect(()=>{
     if(!want)answered.current=null;
     const a=s.ask;
     if(want&&want!==answered.current&&!a){if(openedAt.current.key!==want||Date.now()-openedAt.current.at>2000){openedAt.current={key:want,at:Date.now()};post({type:"ask.open",kind:"reply"});}}
-    else if(a?.kind==="reply"&&(!want||want===answered.current))post({type:"ask.cancel",id:a.id});
+    else if(a?.kind==="reply"&&!sentAndWorking&&(a.phase==="sent"||!want||want===answered.current))post({type:"ask.cancel",id:a.id});
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[want,s.ask?.id,s.ask?.kind]);
+  },[want,s.ask?.id,s.ask?.kind,s.ask?.phase,sentAndWorking]);
   // the preferences hand-off belongs to the menu: closing the menu takes it back
-  useEffect(()=>{if(!menu&&s.ask?.kind==="prefs")post({type:"ask.cancel",id:s.ask.id});
+  useEffect(()=>{if(!menu&&s.ask?.kind==="prefs"&&!sentAndWorking)post({type:"ask.cancel",id:s.ask.id});
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[menu,s.ask?.id,s.ask?.kind]);
   const {actions,waiting}=v,focus=s.focus,menuKey=v.footer.find(a=>a.id==="menu")!,repeat=v.footer.find(a=>a.id==="repeat");
@@ -70,6 +72,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       if(k==="back"){
         // Back first takes the hand-off back: the words and the preferences stop there; a reply is also left with Back, as the turn itself is
         const open=s.ask&&LINGA_ASKS.has(s.ask.kind)?s.ask:null;
+        if(open&&sentAndWorking)return;
         if(open){if(open.kind==="reply")answered.current=want;post({type:"ask.cancel",id:open.id});if(open.kind!=="reply")return;}
         if(menu){patch({menu:false});post({type:"focus",focus:-1});}
         else if(picking){patch({picking:null});post({type:"focus",focus:0});}

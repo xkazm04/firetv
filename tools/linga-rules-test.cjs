@@ -3681,7 +3681,7 @@ test('TL-12 case 4: every learner turn offers Choose a phrase on the TV, and cho
  assert(open.actions.every(a=>a.id==='pick-phrase'),'under the quiz the row is the phrases');
  // the TV closes the reply ask with the pick (LingaTV source), and does not ask again for that turn
  const src=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
- assert.match(src,/a\.id==="pick-phrase"&&s\.ask\?\.kind==="reply"\)\{answered\.current=want;post\(\{type:"ask\.cancel",id:s\.ask\.id\}\)/);
+ assert.match(src,/a\.id==="pick-phrase"&&s\.ask\?\.kind==="reply"&&!sentAndWorking\)\{answered\.current=want;post\(\{type:"ask\.cancel",id:s\.ask\.id\}\)/);
 });
 test('TL-12 case 5: the footer line reads Answer on your phone while a reply is open, and the old wording is gone',()=>{
  const V=view(),s=handoff(sessionOf(SWEEP.paused),'reply');
@@ -3708,7 +3708,7 @@ test('TL-12 case 6: the reply ask is for the learner turn on the screen the TV i
  assert.equal(key(fixture('linga-plan',{placement:placed(),check:checkOf({stage:'plan',turns:[],askGoal:true})})),null,'the goal is typed in the words panel, not a reply');
  const src=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
  assert.match(src,/post\(\{type:"ask\.open",kind:"reply"\}\)/,'LingaTV opens it with no key press');
- assert.match(src,/a\?\.kind==="reply"&&\(!want\|\|want===answered\.current\)\)post\(\{type:"ask\.cancel",id:a\.id\}\)/,'and closes it when the turn stops being the learner one');
+ assert.match(src,/a\?\.kind==="reply"&&!sentAndWorking&&\(a\.phase==="sent"\|\|!want\|\|want===answered\.current\)\)post\(\{type:"ask\.cancel",id:a\.id\}\)/,'and closes it when the turn stops being the learner one');
  assert.match(src,/if\(open\.kind==="reply"\)answered\.current=want;post\(\{type:"ask\.cancel",id:open\.id\}\)/,'and on Linga Back');
 });
 test('TL-12 case 7: LingaPhone draws the reply, words and prefs panels by ask kind, and posts nothing outside its asks',()=>{
@@ -3724,4 +3724,53 @@ test('TL-12 case 7: LingaPhone draws the reply, words and prefs panels by ask ki
  assert.doesNotMatch(phone,/linga-buttons|StartPanel|CheckPanel|VerdictPanel|MomentPanel|TakePanel|PitchBox/,'no tabs, no home, check, moment or take panels');
  const page=strip('src/app/phone/page.tsx');
  assert.match(page,/<LingaPhone\b[^>]*\bask=\{s\.ask\}/,'the page passes the open ask in');
+});
+
+// TL-12 H3: /api/english takes a phone's command only with the askId of an open hand-off of the kind that answers it
+const route=()=>require(path.join(root,'src/app/api/english/route.ts'));
+const asPhone=(body,role='phone')=>route().POST(new Request('http://desk.test/api/english',{method:'POST',headers:{'content-type':'application/json',...(role?{'x-desk-role':role}:{})},body:JSON.stringify(body)}));
+const phoneTurn=(extra={})=>{const s=getSession();return asPhone({action:'turn',learnerId:s.learner.id,episodeId:s.conversation.id,commandId:`ph-${++counter}`,text:'I need a room.',mode:'text',lastTurnId:s.conversation.turns.at(-1).id,...extra});};
+const snap=()=>{const s=getSession();return JSON.stringify([s.conversation,s.ask]);};
+test('H3 case 1: a phone turn with no askId, a wrong askId, or the id of a non-Linga ask is 409 and changes nothing',async()=>{
+ await booked(said('Which date do you need?'));
+ dispatch({type:'ask.open',kind:'reply'});const good=getSession().ask;
+ for(const [name,extra] of [['no askId',{}],['wrong askId',{askId:'not-the-ask'}]]){
+  const before=snap(),r=await phoneTurn(extra);
+  assert.equal(r.status,409,name);assert.equal((await r.json()).error,'The TV is not asking for that now.',name);assert.equal(snap(),before,name+': nothing changed');
+ }
+ dispatch({type:'ask.cancel',id:good.id});dispatch({type:'ask.open',kind:'page'});
+ const page=getSession().ask,before=snap(),r=await phoneTurn({askId:page.id});
+ assert.equal(r.status,409,'an open ask of another kind');assert.equal(snap(),before);assert.equal(getSession().ask.phase,'open');
+ dispatch({type:'ask.cancel',id:page.id});
+ const none=await phoneTurn({askId:page.id});assert.equal(none.status,409,'no ask open at all');
+ assert.equal((await phoneTurn({askId:good.id,}) ).status,409,'a closed ask id');
+ const other=await asPhone({action:'cue',learnerId:'ema',episodeId:getSession().conversation.id,commandId:'x-1'});assert.equal(other.status,409,'a TV-row command from a phone');
+ assert.equal((await asPhone({action:'capture',active:false,learnerId:'ema',episodeId:getSession().conversation.id,commandId:'x-2'})).status,200,'stopping the microphone stays open');
+});
+test('H3 case 2: a Linga ask goes open -> sent -> closed; a refused answer does not mark it sent; the TV and in-process callers pass as before',async()=>{
+ await booked(said('Which date do you need?'));
+ dispatch({type:'ask.open',kind:'reply'});const ask=getSession().ask;
+ const stale=await phoneTurn({askId:ask.id,lastTurnId:'old'});assert.equal(stale.status,409);
+ const kept=getSession().ask;assert.equal(kept.kind,'reply');assert.equal(kept.phase,'open','a refused answer leaves an open ask');
+ let seen=null;const was=answer;answer=async req=>{seen=getSession().ask?.phase;return was(req);};
+ const ok=await phoneTurn({askId:kept.id});assert.equal(ok.status,200);assert.equal(seen,'sent','marked sent as the work began');
+ const after=getSession().ask;assert.equal(after.id,kept.id);assert.equal(after.phase,'sent','sent until a client closes it');
+ assert.equal((await phoneTurn({askId:kept.id})).status,409,'a sent ask takes no second answer');
+ dispatch({type:'ask.cancel',id:kept.id});assert.equal(getSession().ask,null,'closed');
+ const tv=await asPhone({action:'turn',learnerId:'ema',episodeId:getSession().conversation.id,commandId:'tv-1',text:'Friday please.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id},'tv');assert.equal(tv.status,200,'the TV needs no askId');
+ const proc=await asPhone({action:'turn',learnerId:'ema',episodeId:getSession().conversation.id,commandId:'tv-2',text:'Nine am.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id},null);assert.equal(proc.status,200,'no role (in-process) needs no askId');
+});
+test('H3 case 3: the words and prefs hand-offs gate their own commands and LingaPhone posts the askId on every answer',async()=>{
+ fresh();saveEnglish('ema',emptyEnglish());
+ dispatch({type:'ask.open',kind:'words'});const w=getSession().ask;
+ const base={learnerId:'ema',commandId:'w-1'};
+ assert.equal((await asPhone({action:'preferences',...base,preferences:{},notes:[],askId:w.id})).status,409,'prefs answer on a words ask');
+ assert.equal((await asPhone({action:'plan-goal',...base})).status,409,'words answer with no askId');
+ assert.equal(getSession().ask.phase,'open');
+ dispatch({type:'ask.cancel',id:w.id});dispatch({type:'ask.open',kind:'prefs'});const p=getSession().ask;
+ assert.equal((await asPhone({action:'preferences',...base,preferences:defaultPreferences(),notes:[],askId:p.id})).status,200,'prefs with its own ask');
+ assert.equal(getSession().ask.phase,'sent');
+ const phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8');
+ assert.match(phone,/run\(action, \{ \.\.\.extra, askId: a\?\.id \}\)/);
+ assert.doesNotMatch(phone,/useEnglish\(s\);[\s\S]*\brun\(\s*"(?!capture|preferences)/,'only the gated commands are posted by literal');
 });
