@@ -1827,3 +1827,88 @@ test('EM3-3: a run that starts "reading your piece" is a piece from the first se
  const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
  assert.match(tv,/readingAPiece\(a\?\.piece, job\.start\)/);
 });
+
+// ---- E3-d, recert-8 rows kristyna-17 EM1-5 / EM1-1 and helena-46 EM1-4: a probe set the language check is measured on ----
+const LANG_PROBES={
+ cz:[
+  'Podle mého názoru by školní den měl začínat později, protože studenti jsou ráno unavení a nemohou se soustředit na výuku.',
+  'Mobilní telefony ve škole způsobují, že se žáci méně věnují učitelům a více času tráví na sociálních sítích.',
+  'Domácí úkoly jsou pro děti důležité, ale nesmí jich být příliš mnoho, jinak nemají čas na koníčky a rodinu.',
+  'Myslím si, že každý člověk by se měl učit cizí jazyky, protože je to užitečné při cestování i v práci.',
+  'Velkým problémem dnešní doby je nedostatek spánku u teenagerů, který vede ke špatným výsledkům ve škole.',
+  'Když jsem byla malá, chodila jsem se svou babičkou na procházky do lesa a sbírala jsme houby.',
+  'Přestože si mnoho lidí myslí opak, čtení knih není ztráta času, ale jedna z nejlepších investic do vlastního vzdělání.',
+  'Škola by měla žáky učit nejen fakta, ale také to, jak samostatně přemýšlet a řešit problémy.',
+  'Sport je důležitou součástí života, protože nás udržuje zdravé a učí nás pracovat v týmu.',
+  'V dnešní společnosti hraje internet velkou roli a těžko si dovedeme představit, jak bychom bez něj žili.',
+  'Podle meho nazoru by skolni den mel zacinat pozdeji, protoze studenti jsou rano unaveni a nemohou se soustredit na vyuku.',
+  'Mobilni telefony ve skole zpusobuji, ze se zaci mene venuji ucitelum a vice casu traveji na socialnich sitich.',
+  'Domaci ukoly jsou pro deti dulezite, ale nesmi jich byt prilis mnoho, jinak nemaji cas na konicky a rodinu.',
+  'Myslim si, ze kazdy clovek by se mel ucit cizi jazyky, protoze je to uzitecne pri cestovani i v praci.',
+  'Velkym problemem dnesni doby je nedostatek spanku u teenageru, ktery vede ke spatnym vysledkum ve skole.',
+  'Kdyz jsem byla mala, chodila jsem se svou babickou na prochazky do lesa a sbirala jsme houby.',
+  'Prestoze si mnoho lidi mysli opak, cteni knih neni ztrata casu, ale jedna z nejlepsich investic do vlastniho vzdelani.',
+  'Skola by mela zaky ucit nejen fakta, ale take to, jak samostatne premyslet a resit problemy.',
+  'Sport je dulezitou soucasti zivota, protoze nas udrzuje zdrave a uci nas pracovat v tymu.',
+  'V dnesni spolecnosti hraje internet velkou roli a tezko si dovedeme predstavit, jak bychom bez nej zili.',
+  'Nektere deti travi u pocitace cely den a pak se divi, ze jsou unavene a nemaji dobre znamky.',
+  'Uciteli by meli zaky chvalit casteji, protoze pochvala je motivuje k lepsim vykonum.',
+  'Myslim, ze uniforma ve skole by byla dobry napad, ale mnoho zaku s tim nesouhlasi.',
+  'Telefony by mely byt zakazany',
+  'Skola je dulezita',
+  'Ucitele a zaci maji pravidla',
+  'Je to tak, jak rikam',
+  'Škola začíná příliš brzy',
+  'Děti mají rády hry',
+  'Podle me je to spatne',
+  'Moje škola má novou knihovnu, kde se můžeme učit i po vyučování, a to je podle mě skvělé.',
+  'Můj názor je, že social media jsou pro teenagery nebezpečná, protože tam často vidí fake news a cyberbullying.',
+  'Podle mě je dnes důležité umět dobře anglicky, protože většina internetu, například YouTube a Wikipedia, je v angličtině.',
+  'Myslim si, ze online learning ma sve vyhody, ale zaci potrebuji take osobni kontakt s ucitelem a spoluzaky.',
+  'Moc se mi libi, jak nas ucitel vysvetluje grammar, ale testy jsou vzdycky moc tezke a nemam na ne cas.',
+  'Za me je smartphone uzitecny, ale mel by se pouzivat jen o prestavkach, ne behem hodiny.',
+ ],
+ other:[
+  'Die Schule sollte später beginnen, weil die Kinder morgens müde sind und nicht richtig lernen können.',
+  'Ich finde, dass Handys im Unterricht nichts zu suchen haben, weil sie die Schüler ablenken.',
+  'Hausaufgaben sind wichtig, aber es sollten nicht zu viele sein.',
+  'Szkoła powinna zaczynać się później, ponieważ uczniowie są rano zmęczeni i nie mogą się skupić na lekcjach.',
+  'Uważam, że telefony komórkowe w szkole są potrzebne, ale nie powinny przeszkadzać w nauce.',
+  'Moim zdaniem czytanie książek jest bardzo ważne dla rozwoju każdego człowieka.',
+  "L'école devrait commencer plus tard, parce que les élèves sont fatigués le matin et ne peuvent pas se concentrer.",
+  'Je pense que les téléphones portables ne sont pas utiles en classe, mais ils sont très pratiques pour les élèves.',
+  'La escuela debería empezar más tarde porque los estudiantes están cansados por la mañana y no pueden concentrarse.',
+  'Creo que los teléfonos móviles en clase son un problema para los alumnos y también para los profesores.',
+  'Je pense que le sport est important pour la santé',
+  'Los deberes son muy importantes para los niños',
+ ],
+ en:[
+  'I think school should start later, because students are tired in the morning and cannot concentrate on the lesson.',
+  'Mobile phones in class are a problem, but they can also help students look up facts and work together.',
+  'Homework is important for children, but there must not be too much of it, or they have no time for hobbies.',
+  'Reading books is not a waste of time; it is one of the best investments a person can make in their own education.',
+  'Sport is an important part of life because it keeps us healthy and teaches us to work in a team.',
+  'When I was little, I went for walks in the forest with my grandmother and we picked mushrooms.',
+  'The internet plays a big role in our society, and it is hard to imagine how we would live without it.',
+  'Many critics praise the novel, but Émile Zola disagreed with them and wrote that it was a failure.',
+  'Slavoj Žižek would call that ideology, and most of my classmates would not agree with him.',
+  'School is important',
+  'Phones should be banned',
+  'I like the library in Brno, which my sister visits on Saturdays, and then we go to Praha by train.',
+  'In his book Die Verwandlung, Kafka writes that Gregor woke up as a bug, and the family did not know what to do.',
+  'My teacher said that to do the work is a duty, but he also said that we should not do it in a hurry.',
+  'The author says "Ich weiß nicht" in the third chapter, and this shows that the hero is lost in the city.',
+  'If a student has a problem, he or she can ask a teacher, who will be glad to help and to explain it again.',
+ ],
+};
+test('E3-d: over the probe set the language check refuses non-English at >= 0.95 and refuses no English',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ assert(LANG_PROBES.cz.length>=30&&LANG_PROBES.other.length>=10&&LANG_PROBES.en.length>=16);
+ const refused=(a)=>a.filter(t=>!R.paragraphIsEnglish(t));
+ const nonEn=[...LANG_PROBES.cz,...LANG_PROBES.other];
+ const miss=nonEn.filter(t=>R.paragraphIsEnglish(t));
+ const cz=refused(LANG_PROBES.cz).length,ot=refused(LANG_PROBES.other).length,en=refused(LANG_PROBES.en);
+ console.log(`# E3-d probes: Czech refused ${cz}/${LANG_PROBES.cz.length}, other ${ot}/${LANG_PROBES.other.length}, English refused ${en.length}/${LANG_PROBES.en.length}`);
+ assert(1-miss.length/nonEn.length>=0.95,'non-English refusal under 0.95; leaked: '+JSON.stringify(miss));
+ assert.deepEqual(en,[],'English refused');
+});
