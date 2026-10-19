@@ -13,6 +13,7 @@ import { BRAND } from "@/tv/profileRows";
 import { MARKS, type Mark } from "@/lib/rules/marks";
 import { slip as slipById } from "@/lib/rules/maths";
 import { topicIn } from "@/lib/library/paths";
+import { PIECE_SENTENCES } from "@/lib/rules/week";
 
 /** An app with nothing tonight says so in two words. */
 export const RECAP_EMPTY = "Not tonight";
@@ -36,7 +37,7 @@ export interface Hinted { name: string | null; page?: number; second: boolean }
  */
 export interface Slipped { name: string; slip: string }
 export interface LingaTile { app: "english"; empty: string | null; talks: number[] }
-export interface EssayTile { app: "essay"; empty: string | null; readings: Array<{ lens: string; against: number; of: number; fixed?: number }> }
+export interface EssayTile { app: "essay"; empty: string | null; readings: Array<{ lens: string; against: number; of: number; fixed?: number; paragraphs?: number }> }
 export type RecapTile = MathsTile | LingaTile | EssayTile;
 
 /**
@@ -45,7 +46,7 @@ export type RecapTile = MathsTile | LingaTile | EssayTile;
  * items and ", s skipped" when s were left empty; a line without them (every line written before they existed) gives
  * no such count and draws as it always did - a blank on a line older than skipped stays in its "not sure".
  */
-export interface Detail { right?: number; of?: number; unsure?: number; skipped?: number; pages?: number; problems?: number; against?: number; fixed?: number }
+export interface Detail { right?: number; of?: number; unsure?: number; skipped?: number; pages?: number; problems?: number; against?: number; fixed?: number; paragraphs?: number }
 export function parseDetail(kind: string, detail: string): Detail {
   const d = (detail ?? "").trim();
   if (kind === "practice") {
@@ -54,8 +55,8 @@ export function parseDetail(kind: string, detail: string): Detail {
   }
   if (kind === "homework") { const m = /^(\d+) problems? read$/.exec(d); if (m) return { pages: 1, problems: +m[1] }; }
   if (kind === "writing") {
-    const m = /^(\d+) of (\d+) sentences? to fix(?:, \d+ paragraphs)?(?:, (\d+) fixed)?$/.exec(d);
-    if (m && +m[1] <= +m[2]) return m[3] ? { against: +m[1], of: +m[2], fixed: +m[3] } : { against: +m[1], of: +m[2] };
+    const m = /^(\d+) of (\d+) sentences? to fix(?:, (\d+) paragraphs)?(?:, (\d+) fixed)?$/.exec(d);
+    if (m && +m[1] <= +m[2]) return { against: +m[1], of: +m[2], ...(m[4] ? { fixed: +m[4] } : {}), ...(m[3] ? { paragraphs: +m[3] } : {}) };
   }
   return {};
 }
@@ -97,7 +98,7 @@ export function recapRows(session: Session, now: number): RecapTile[] {
     }
     const mine = lines.filter((h) => h.kind === "writing");
     const readings: EssayTile["readings"] = [];
-    for (const h of mine) { const c = parseDetail(h.kind, h.detail); if (c.against !== undefined && c.of !== undefined) readings.push({ lens: h.label, against: c.against, of: c.of, ...(c.fixed ? { fixed: c.fixed } : {}) }); }
+    for (const h of mine) { const c = parseDetail(h.kind, h.detail); if (c.against !== undefined && c.of !== undefined) readings.push({ lens: h.label, against: c.against, of: c.of, ...(c.fixed ? { fixed: c.fixed } : {}), ...(c.paragraphs ? { paragraphs: c.paragraphs } : {}) }); }
     return { app, empty: mine.length ? null : RECAP_EMPTY, readings };
   });
 }
@@ -289,7 +290,11 @@ export function recapLine(t: RecapTile): string {
   const last = t.readings.slice(-RECAP_READINGS), more = t.readings.length > last.length;
   const counts = last.map((x) => `${one ? "" : `${x.lens} `}${x.against} of ${x.of}`).join(", then ");
   const fixed = t.readings.reduce((a, x) => a + (x.fixed ?? 0), 0);
-  const head = `${times(t.readings.length, "reading")}${one ? ` (${lenses[0]})` : ""}${more ? `, the last ${NUMBER[last.length]}` : ""}`;
+  // A piece is called a piece as the Sunday page does (rules/week): over one paragraph, or with no paragraph count, twelve sentences or more.
+  // Tonight with no piece in it the plain "readings" stands; with one, the head names paragraph readings and pieces as week.ts does.
+  const pieces = t.readings.filter((x) => (x.paragraphs !== undefined ? x.paragraphs > 1 : x.of >= PIECE_SENTENCES)).length, paras = t.readings.length - pieces;
+  const said = pieces ? [paras ? times(paras, "paragraph reading") : "", times(pieces, "piece")].filter(Boolean).join(" and ") : times(t.readings.length, "reading");
+  const head = `${said}${one ? ` (${lenses[0]})` : ""}${more ? `, the last ${NUMBER[last.length]}` : ""}`;
   return `${name} - ${head}: ${counts} ${last.length === 1 && last[0].of === 1 ? "sentence" : "sentences"} to fix${fixed ? `, ${fixed} fixed tonight` : ""}`;
 }
 

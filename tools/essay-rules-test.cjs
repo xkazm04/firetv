@@ -667,7 +667,24 @@ test('recap M1: a rewrite restates the reading\'s own history line - one reading
  dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
 });
 
-test('rewrite case 7: rewriteState reads the verdict, and the TV inks the move from it, not from the status line',()=>{
+test('recap M2 (L1-barbora-43-EM4-2): the recap names a piece a piece, as the Sunday line does, never "one reading"',()=>{
+ const {recapRows,recapLine}=require(path.join(root,'src/tv/recapRows.ts'));
+ const line=(...details)=>{
+  dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+  const s=getSession();s.history=details.map((detail,i)=>({at:Date.now()-1000*(10-i),kind:'writing',label:'Argument',detail}));
+  return recapLine(recapRows(s,Date.now()).find(t=>t.app==='essay'));
+ };
+ const both=line('2 of 5 sentences to fix','3 of 14 sentences to fix, 3 paragraphs');
+ assert.match(both,/one paragraph reading and one piece/);
+ assert.doesNotMatch(both,/two readings/);
+ const lone=line('3 of 14 sentences to fix, 3 paragraphs');
+ assert.match(lone,/^Essay Master - one piece/);
+ assert.doesNotMatch(lone,/one reading/);
+ assert.match(line('2 of 5 sentences to fix'),/one reading/,'a lone paragraph keeps its plain line');
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+});
+
+test('rewrite case 7:rewriteState reads the verdict, and the TV inks the move from it, not from the status line',()=>{
  const {rewriteState}=rules();
  assert.equal(typeof rewriteState,'function');
  assert.equal(rewriteState(undefined),'none');

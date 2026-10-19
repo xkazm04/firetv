@@ -163,7 +163,7 @@ test('7: an Essay Master reading writes one essay entry - the lens and the two c
  assert.ok(!JSON.stringify(d).includes('Homework')&&!JSON.stringify(d).includes('One to fix'),'no text of the paragraph or the reading');
 });
 
-test('M8 (EM-B20): a piece evening - the history is read again once the piece is recorded, the recap row reads the ", N paragraphs" line, the Sunday line says piece',async()=>{
+test('M8 (EM-B20): a piece evening - the history is read again once the piece is recorded, the recap row keeps the ", N paragraphs" count, the Sunday line says piece',async()=>{
  seat();
  answer=async(req)=>{const m=/Judge only paragraph \d+ of \d+: sentences (\d+) to (\d+)/.exec(req.prompt);const observations=[];for(let n=Number(m[1]);n<=Number(m[2]);n++)observations.push({n,support:'context',note:'ok'});return {json:{observations,summary:'Read.'},provider:'test',ms:1};};
  const para=(k)=>Array.from({length:5},(_,i)=>`Teenagers sleep better with a later start number ${k}${i}.`).join(' ');
@@ -173,8 +173,8 @@ test('M8 (EM-B20): a piece evening - the history is read again once the piece is
  const s=store.getSession(),line=s.history.filter((h)=>h.kind==='writing').at(-1);
  assert.ok(line&&/^\d+ of 15 sentences to fix, 3 paragraphs$/.test(line.detail),`the session's history holds the piece's line: ${JSON.stringify(line)}`);
  const {recapRows,parseDetail}=require(src('tv/recapRows.ts'));
- assert.deepEqual(parseDetail('writing','2 of 15 sentences to fix, 3 paragraphs'),{against:2,of:15});
- assert.deepEqual(parseDetail('writing','1 of 15 sentences to fix, 3 paragraphs, 1 fixed'),{against:1,of:15,fixed:1});
+ assert.deepEqual(parseDetail('writing','2 of 15 sentences to fix, 3 paragraphs'),{against:2,of:15,paragraphs:3});
+ assert.deepEqual(parseDetail('writing','1 of 15 sentences to fix, 3 paragraphs, 1 fixed'),{against:1,of:15,fixed:1,paragraphs:3});
  const tile=recapRows(s,Date.now()).find((t)=>t.app==='essay');
  assert.equal(tile.empty,null,'the essay tile is lit by the piece');assert.equal(tile.readings.at(-1).of,15);
  const text=(s.week??[]).map((l)=>l.text).join(' ');
