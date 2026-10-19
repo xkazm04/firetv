@@ -425,6 +425,7 @@ The tv-phone-pairing feature stands at full fail. Full r3 had robustness at 0.40
   certificate the family phones are told to trust once. (b) A local certificate authority (mkcert) installed on each
   phone. (c) Stay on http: the phone types only, and the photo and voice jobs are off on real phones. This is a scope
   and a data-path question, so it is the operator's.
+  Status of (a): code path landed in d371f78a (MH-1), trust doc in 40aa9441 (`docs/DESK-HTTPS-ON-THE-LAN.md`), real-phone camera and microphone check not run.
 - **OD7. How the pairing reaches its decision (ask 276c835a).** (a) A council lite r2 after TL-2, TL-3 and TL-4 (the App
   Master's earlier lean). (b) One full round 4, as an exception to "there is no round 4". (c) A decision on the record,
   with the known limits above.
