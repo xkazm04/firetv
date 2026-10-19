@@ -108,3 +108,102 @@ for(const [name,spec] of Object.entries(ROUTES)){
   assert.notEqual((await call(name,spec.body,'tv')).status,409);
  });
 }
+
+// ---- Lite r3 rework (council c126c54e): the door checks the ask's kind, the session route holds the TV's acts, a retry meets
+// the door, and a refused answer does not spend the ask
+const sess=(e,role='phone')=>require(path.join(root,'src/app/api/session/route.ts')).POST(new Request('http://desk/api/session',{method:'POST',headers:role?{'x-desk-role':role}:{},body:JSON.stringify(e)}));
+const retry=(body,role='phone')=>require(path.join(root,'src/app/api/session/retry/route.ts')).POST(new Request('http://desk/api/session/retry',{method:'POST',headers:role?{'x-desk-role':role}:{},body:JSON.stringify(body)}));
+/** Seats a scratch learner on `screen` with a second profile on the switcher, and opens an ask of `kind` (none with null). */
+const seatOpen=(screen,kind,extra={})=>{store.dispatch({type:'reset'});
+ for(const [id,name] of [['ho-other','Other'],['ho-scratch','Scratch']]){store.dispatch({type:'profile.draft',patch:{id,name,type:'other'}});store.dispatch({type:'profile.save'});}
+ globalThis.__desk.session={...store.getSession(),screen,subject:'maths',...extra};if(kind)store.dispatch({type:'ask.open',kind});return store.getSession();};
+const READ_BODY={image:'data:image/jpeg;base64,AAAA',subject:'maths',w:100,h:100};
+const readStub=()=>stubVision(()=>({items:[{number:1,text:'2x+3=11',x:0.5,y:0.2}]}));
+const PAPER_ROWS=[{q:'1',marks:1,outOf:3,codes:['N2']}];
+
+test('H1: a Linga reply ask answered on /api/read from a phone is 409, and the TV screen and the ask are unchanged',async()=>{
+ readStub();
+ const open=seatOpen('linga-talk','reply');const frozen=JSON.stringify(store.getSession());
+ const r=await call('read',{...READ_BODY,askId:open.ask.id});
+ assert.equal(r.status,409);assert.equal((await r.json()).error,'The TV is not asking for that now.');
+ assert.equal(store.getSession().screen,'linga-talk');assert.equal(store.getSession().ask?.id,open.ask.id);assert.equal(store.getSession().ask?.phase,'open');
+ assert.equal(JSON.stringify(store.getSession()),frozen,'the session is untouched');
+});
+test('H1: each result route refuses the id of an open ask of a kind it does not answer (409, nothing changes)',async()=>{
+ for(const [name,spec] of Object.entries(ROUTES)){
+  spec.setup?.();
+  const open=seatOpen(spec.screen,'reply',spec.extra?.());const frozen=JSON.stringify(store.getSession());
+  const r=await call(name,{...spec.body,askId:open.ask.id});
+  assert.equal(r.status,409,`${name} took a reply ask`);
+  assert.equal(JSON.stringify(store.getSession()),frozen,`${name}: the session is untouched`);
+ }
+});
+for(const [type,e,want] of [['learner.set',{type:'learner.set',id:'ho-other'},403],['profile.discard',{type:'profile.discard'},403],['topic.open',{type:'topic.open',topic:'linear-one-step'},403],['practice.clear',{type:'practice.clear'},403],
+ ['paper.enter (no askId)',{type:'paper.enter',rows:PAPER_ROWS},409],['paper.enter (wrong askId)',{type:'paper.enter',rows:PAPER_ROWS,askId:'not-the-ask'},409]]){
+ test(`H2: a phone's ${type} on /api/session is ${want} and the session is byte-identical`,async()=>{
+  for(const kind of [null,'paper']){
+   seatOpen('paper',kind,{practice:PRACTICE()});const frozen=JSON.stringify(store.getSession());
+   const r=await sess(e);assert.equal(r.status,want,`with ask ${kind}`);
+   assert.equal((await r.json()).error,want===403?'Only the TV moves the desk.':'The TV is not asking for that now.');
+   assert.equal(JSON.stringify(store.getSession()),frozen,`with ask ${kind}: the session is untouched`);
+  }
+ });
+}
+test('H2: a phone\'s paper.enter with the id of an open ask of another kind is 409 and changes nothing',async()=>{
+ const open=seatOpen('paper','page');const frozen=JSON.stringify(store.getSession());
+ assert.equal((await sess({type:'paper.enter',rows:PAPER_ROWS,askId:open.ask.id})).status,409);
+ assert.equal(JSON.stringify(store.getSession()),frozen);
+});
+test('H2: a phone\'s paper.enter with the open paper ask\'s id is kept and closes the ask; the TV posts as before',async()=>{
+ let open=seatOpen('paper','paper');
+ let r=await sess({type:'paper.enter',rows:PAPER_ROWS,askId:open.ask.id});assert.equal(r.status,200);
+ assert.equal(store.getSession().ask,null,'the result closes the ask');assert.ok(store.getSession().paper,'the paper is kept');
+ seatOpen('paper',null);assert.equal((await sess({type:'paper.enter',rows:PAPER_ROWS},'tv')).status,200);assert.ok(store.getSession().paper);
+ // a paper the desk keeps no row of is the phone's to fix: the ask stays open
+ open=seatOpen('paper','paper');
+ r=await sess({type:'paper.enter',rows:[],askId:open.ask.id});assert.equal(r.status,200);
+ assert.equal(store.getSession().ask?.id,open.ask.id);assert.equal(store.getSession().ask?.phase,'open','an unkept paper does not spend the ask');
+});
+test('H2: the phone\'s own posts stay allowed: task.add, task.done, profile.draft and profile.save',async()=>{
+ seatOpen('tonight',null);
+ assert.equal((await sess({type:'task.add',name:'Read',sub:'english',min:10})).status,200,'task.add');
+ const t=store.getSession().tasks.at(-1);assert.equal((await sess({type:'task.done',id:t.id,done:true})).status,200,'task.done');
+ for(const e of [{type:'profile.draft',patch:{name:'Zed'}},{type:'profile.save'}])assert.equal((await sess(e)).status,200,e.type);
+});
+
+test('retry: a phone retry of a failed read meets the door (409 with no open page ask); with the ask it runs; the TV retries as before',async()=>{
+ readStub();
+ const failed=()=>{const s=store.getSession();globalThis.__desk.session={...s,jobs:{...s.jobs,read:{id:'r-old',phase:'failed',startedAt:1,endedAt:2,input:READ_BODY,retry:true,by:s.learner.id}}};};
+ seatOpen('tonight',null);failed();let frozen=JSON.stringify(store.getSession());
+ let r=await retry({kind:'read'});assert.equal(r.status,409,'no ask open');assert.equal(JSON.stringify(store.getSession()),frozen,'the session is untouched');
+ const open=seatOpen('tonight','reply');failed();frozen=JSON.stringify(store.getSession());
+ r=await retry({kind:'read',askId:open.ask.id});assert.equal(r.status,409,'an ask of another kind');assert.equal(JSON.stringify(store.getSession()),frozen);
+ const page=seatOpen('tonight','page');failed();
+ r=await retry({kind:'read',askId:page.ask.id});assert.ok(r.status<300,`accepted: ${r.status}`);assert.equal(store.getSession().ask,null,'the result closes the ask');
+ seatOpen('tonight',null);failed();assert.ok((await retry({kind:'read'},'tv')).status<300,'the TV retries');
+ seatOpen('tonight',null);failed();assert.ok((await retry({kind:'read'},null)).status<300,'an in-process retry');
+});
+
+test('(d) a refused answer does not spend the ask; the ask is sent while the work runs and closed by a result or a work failure',async()=>{
+ // a bad request: the route refuses it before any work, and the ask stays open for the phone to try again
+ let open=seatOpen('practice','answers',{practice:PRACTICE()});
+ let r=await call('mark',{askId:open.ask.id});assert.equal(r.status,400);
+ assert.equal(store.getSession().ask?.id,open.ask.id);assert.equal(store.getSession().ask?.phase,'open','a refused mark leaves the ask open');
+ open=seatOpen('walk','second',ROUTES.second.extra());
+ r=await call('second',{n:1,answer:'   ',askId:open.ask.id});assert.equal(r.status,400);
+ assert.equal(store.getSession().ask?.phase,'open','a blank second go leaves the ask open');
+ // the work: sent while it runs, closed when it fails
+ let during=null;stubVision(()=>{during=store.getSession().ask?.phase;throw new Error('vision down');});
+ open=seatOpen('tonight','page');
+ r=await call('read',{...READ_BODY,askId:open.ask.id});assert.equal(r.status,502);
+ assert.equal(during,'sent','the ask is sent once the work begins');assert.equal(store.getSession().ask,null,'a work failure closes the ask');
+ // a refused answer then a good one: the same ask answers it
+ open=seatOpen('practice','answers',{practice:PRACTICE()});
+ assert.equal((await call('mark',{answers:'x',askId:open.ask.id})).status,400);
+ r=await call('mark',{answers:['4','7'],askId:open.ask.id});assert.ok(r.status<300,`${r.status}`);assert.equal(store.getSession().ask,null);
+});
+test('(d) ask.sent stays refused on /api/session for every role',async()=>{
+ const open=seatOpen('practice','answers');
+ for(const role of ['tv','phone','guest',null])assert.equal((await sess({type:'ask.sent',id:open.ask.id},role)).status,403,String(role));
+ assert.equal(store.getSession().ask.phase,'open');
+});
