@@ -6,7 +6,7 @@
  *
  * The rule is DERIVED from the sources, not listed: every AskKind of the store has exactly one panel, and a TV screen
  * whose (comment-stripped) copy asks for the phone opens an ask (its KEYMAP entry in tv/keys.ts holds an ask.open)
- * unless it is on the named legacy ledger below, where a later slice (TL-12, TL-13) still owes it.
+ * unless it is on the named legacy ledger below, where a later slice (TL-13) still owes it.
  *
  * Pure: panelFor/follow from desk/src/app/phone/panelFor.ts over plain session objects. Run with npm test in
  * desk/ (directly: node tools/phone-panel-test.cjs). No store, no route, no model.
@@ -78,12 +78,13 @@ const ASK_KINDS=(()=>{const m=code(path.join(SRC,'lib/session/store.ts')).match(
 /** The screens whose KEYMAP entry in the TV's keys opens an ask: an entry is `    name: ` at four spaces (the printer's indent), up to the next one. */
 const OPENS_ASK=(()=>{const src=code(path.join(SRC,'tv/keys.ts')),at=src.indexOf('const KEYMAP');const body=src.slice(at,src.indexOf('\n};',at));
  const heads=[...body.matchAll(/^    ([a-z-]+): /gm)];return heads.filter((h,i)=>body.slice(h.index,i+1<heads.length?heads[i+1].index:body.length).includes('"ask.open"')).map(h=>h[1]);})();
+// Linga's keys are LingaTV's own (keys.ts returns an empty step under it): its screens open asks when LingaTV posts an ask.open (TL-12)
+if(/type:\s*"ask\.open"/.test(code(path.join(SRC,'english/LingaTV.tsx'))))OPENS_ASK.push(...SCREENS.filter(sc=>lingaOwns({screen:sc,subject:'maths'})));
 /**
  * The screens whose copy says "on the phone" and that still open no ask, each with the slice that owes it. An entry
  * leaves this ledger in that slice; one that opens an ask by then must not stay.
  */
 const LEGACY={landing:'pairing: the code is typed on the phone, no ask',pair:'pairing: the code is typed on the phone, no ask',sheet:'the sheet card points at the walk, whose Tell the desk how and Type my second go stops open explain and second (TL-6); the copy is MathsTV, not this slice'};
-for(const sc of SCREENS)if(sc.startsWith('linga'))LEGACY[sc]='TL-12: Linga opens reply and words';
 
 // ---------------------------------------------------------------- sessions
 
@@ -103,7 +104,7 @@ const at=(panel='tonight',patch={})=>({panel,role:'student',busy:false,...patch}
  * `from` is the session the TV comes from and the panel the learner had picked there.
  */
 const JOINED_FROM={s:session({screen:'units'}),panel:'tonight'};
-const LINGA={s:session({screen:'linga-talk'}),panel:'linga'};
+const LINGA={s:session({screen:'linga-talk',subject:'english',ask:askOf('reply')}),panel:'linga'};
 const FIXTURES={
  landing:{s:session({joined:false,screen:'landing'}),panel:'join',from:JOINED_FROM,why:'Open the address on your phone (the session ended: back to the code)'},
  pair:{s:session({joined:false,screen:'pair'}),panel:'join',from:JOINED_FROM,why:'Scan, or open ... on your phone and type the code'},
@@ -119,7 +120,10 @@ const FIXTURES={
  paper:{s:session({screen:'paper',ask:askOf('paper')}),panel:'paper',why:'Type the marks of a paper you sat on the phone'},
  essayplan:{s:session({screen:'essayplan',subject:'essay',ask:askOf('slot',{i:0})}),panel:'paste',why:'Say it on the phone: the plan slot is sent from the Essay tab'},
 };
-for(const sc of SCREENS)if(sc.startsWith('linga'))FIXTURES[sc]={s:session({screen:sc,subject:'english'}),panel:'linga',why:'Linga: answer on your phone',linga:true};
+// Linga follows its three asks (TL-12): the learner's line, the words, the preferences; the screen alone asks nothing
+FIXTURES['linga-talk']={s:session({screen:'linga-talk',subject:'english',ask:askOf('reply')}),panel:'linga',why:'Linga: answer on your phone (ask reply)'};
+FIXTURES['linga-plan']={s:session({screen:'linga-plan',subject:'english',ask:askOf('words')}),panel:'linga',why:'Linga: type the words on your phone (ask words)'};
+FIXTURES['linga']={s:session({screen:'linga',subject:'english',ask:askOf('prefs')}),panel:'linga',why:'Linga: set up on your phone (ask prefs)'};
 /** Hand-offs the TV makes that no phone panel does: the phone stays, and the gap is named. */
 const NO_PANEL={};// the lesson's "circle on the phone" ask left both TVs (shell 79ed1a38, Math Buddy 2026-10-13): lesson asks nothing of the phone and is covered by case 3
 
@@ -129,8 +133,7 @@ function walk(from,to){
  const a=follow(undefined,from.s,at(from.panel));const p1=a.to??from.panel;
  const b=follow(a.key,to,at(p1));return b.to??p1;
 }
-/** Linga's ten screens are one hand-off (one owner, one panel): counted once. */
-const ROWS=()=>{const r=Object.entries(FIXTURES).filter(([,f])=>!f.linga);const l=Object.entries(FIXTURES).find(([,f])=>f.linga);return l?[...r,['linga-*',l[1]]]:r;};
+const ROWS=()=>Object.entries(FIXTURES);
 
 // ---------------------------------------------------------------- cases
 
@@ -150,7 +153,7 @@ test('case 2: every hand-off screen maps to the panel that does what it asks',()
  const {panelFor}=P();
  for(const [sc,f] of Object.entries(FIXTURES))assert.equal(panelFor(f.s),f.panel,`${sc}: ${f.why}`);
  for(const sc of Object.keys(NO_PANEL))assert.equal(panelFor(session({screen:sc,lessonPaused:true})),'stay',`${sc}: ${NO_PANEL[sc]}`);
- assert.equal(panelFor(session({screen:'tonight',subject:'english'})),'linga','Linga\'s Tonight is Linga\'s (lingaOwns)');
+ assert.equal(panelFor(session({screen:'tonight',subject:'english'})),'stay','Linga\'s Tonight asks nothing of the phone without an ask (TL-12)');
 });
 
 test('case 3 (TL-9, replaces the old case 3 "a screen that asks nothing of the phone maps to stay"): no TV copy says "on the phone" on a screen that opens no ask, but the named legacy ones',()=>{
@@ -1129,4 +1132,34 @@ test('TL-9 (D15): the camera and voice panels say the http limit; the words are 
  assert.match(src,/setInsecure\(!window\.isSecureContext\)/,'the page asks the browser, once');
  const cam=(src.match(/\{HTTP_LIMIT\.camera\}/g)||[]).length,voice=(src.match(/\{HTTP_LIMIT\.voice\}/g)||[]).length;
  assert.ok(cam>=2,`the capture panel and the sheet snap say it (${cam})`);assert.ok(voice>=2,`the explain talk and the essay panel say it (${voice})`);
+});
+
+// ---------------------------------------------------------------- TL-12: Linga follows its asks
+
+test('case 11 (TL-12): Linga\'s panel follows its reply, words and prefs asks by ask id; a Linga screen alone asks nothing',()=>{
+ const {panelFor,follow,ASK_PANEL}=P();
+ for(const k of ['reply','words','prefs']){
+  assert.equal(ASK_PANEL[k],'linga',`${k} is Linga's panel`);
+  assert.equal(panelFor(session({screen:'linga-talk',subject:'english',ask:askOf(k)})),'linga',`${k}: whichever Linga screen the TV is on`);
+  assert.equal(panelFor(session({screen:'units',ask:askOf(k)})),'linga',`${k}: whatever the TV screen, the ask picks the panel`);
+ }
+ for(const sc of SCREENS.filter(x=>x.startsWith('linga')))assert.equal(panelFor(session({screen:sc,subject:'english'})),'stay',`${sc}: no ask, no move`);
+ assert.equal(panelFor(session({screen:'tonight',subject:'english'})),'stay','Linga\'s home asks nothing');
+ // a new ask id on the same screen moves a phone that went to another tab; the same ask ticking on does not
+ const first=session({screen:'linga-talk',subject:'english',ask:askOf('reply',undefined,'r1')});
+ const a=follow(undefined,first,at('tonight'));assert.equal(a.to,'linga');
+ assert.equal(follow(a.key,{...first,timer:{running:true,left:1,phase:'work'}},at('point')).to,null,'the same ask ticking on leaves the tab alone');
+ assert.equal(follow(a.key,{...first,ask:askOf('reply',undefined,'r2')},at('point')).to,'linga','the next turn is a new ask: the phone goes there again');
+ assert.equal(follow(a.key,{...first,ask:askOf('words',undefined,'w1')},at('point')).to,'linga','and so is the words panel');
+ // closed, the phone is moved nowhere
+ assert.equal(follow(a.key,session({screen:'linga-talk',subject:'english'}),at('linga')).to,null);
+ // busy hands defer the move and a Parent phone is told, as for every other ask
+ assert.equal(follow(undefined,first,at('point',{busy:true})).to,null,'busy hands wait');
+ assert.equal(follow(undefined,first,at('tonight',{role:'parent'})).banner,'linga','a Parent phone gets the banner');
+});
+
+test('case 12 (TL-12): panelFor holds no Linga cue of its own: it does not import lingaOwns',()=>{
+ const src=code(PANEL);
+ assert.doesNotMatch(src,/lingaOwns/,'the screen-keyed Linga cue is gone');
+ assert.doesNotMatch(src,/key:\s*"linga"/);
 });

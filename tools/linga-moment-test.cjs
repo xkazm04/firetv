@@ -438,7 +438,8 @@ test('LG-4 recert-7: Back answers at once with the partner thinking of a new que
     assert.equal(V.replayThinking({...c,pending:null,replayFor:'old'}),null);
     assert.match(V.replayThinking({...c,pending:'x',replayFor:'x'}),/ is thinking of a new question\.$/);
   }finally{r.done();}
-  assert.match(fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8'),/replayThinking\(c\)\?\?"Your partner is preparing a reply…"/,'the phone shows the same line');
+  assert.match(fs.readFileSync(path.join(root,'src/lib/english/view.ts'),'utf8'),/const thinking = replayThinking\(c\);/,'the TV caption shows the same line');
+  assert.doesNotMatch(fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8'),/replayThinking/,'the phone draws no thinking line (TL-12)');
 });
 
 test('LG-4 recert-7: the TV recap draws the phone\'s "Tried again" line under the moment it shows, in the same words (replayLine)',async()=>{
@@ -618,7 +619,8 @@ test('recert-11 (1): a retry with used false never reads as a bare "Tried again"
     assert.equal(v.hero.tried,'Tried again, not with the new form yet: “Every morning I check in the guests.”','the TV recap');
     assert.doesNotMatch(V.viewText(v),/Tried again:/,'nowhere on the recap the bare wording');
   }finally{r.done();}
-  assert.match(fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8'),/replayLine\(m\.replay\.reply,!!m\.replay\.used\)/,'the phone recap uses the same line');
+  assert.match(fs.readFileSync(path.join(root,'src/lib/english/view.ts'),'utf8'),/replayLine\(co\.replay\.reply, !!co\.replay\.used\)/,'the TV recap uses the same line');
+  assert.doesNotMatch(fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8'),/replayLine/,'the phone draws no recap (TL-12)');
 });
 
 // ---- LG-5 recert-9 (3): Back's replay stacked a second partner turn on the one pending under the moment, 2 of 2 replays:
@@ -829,7 +831,7 @@ test('recert-11 (2): the replay screen carries the moment\'s after form while it
     assert.equal(v.hero.tryForm,ROOM_COACH.after,'a finish note\'s replay shows the note\'s after form, as the coach screen did');
   }finally{f.done();}
   assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/h\.tryForm&&<SentenceCard className="lo-compact" label=\{TRY_TAG\} text=\{h\.tryForm\}/,'the TV draws it');
-  assert.match(fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8'),/replayForm\(c\)&&<p data-role="linga-try"><b>\{TRY_TAG\}<\/b>/,'the phone shows the same quote');
+  assert.doesNotMatch(fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8'),/linga-try/,'the phone draws no replay quote (TL-12): the TV does, above');
   assert.equal(V.TRY_TAG,'One way to try it','the coach screen\'s words');
 });
 test('recert-11 (2) rules: replayForm reads the open replay\'s moment, a self-repaired fix keeps the learner\'s own try, else the coaching',()=>{

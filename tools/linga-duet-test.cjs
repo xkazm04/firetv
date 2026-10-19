@@ -235,14 +235,14 @@ test('the TV and phone say whose turn it is; the reply box sends the beat\'s spe
   assert.equal(v.captionTag,"Mum's turn");assert.equal(v.answer.speaker,'costar');assert.match(v.answer.label,/^Mum replies to/);
   assert.match(viewText(v),/Mum's turn: Mum answers on the phone/);
   assert.equal(v.spoken.line,HOST,'the host line stays on the speaker through both beats');
-  assert(v.phone.find(a=>a.id==='coach')?.disabled,'coach waits for the pair');
+  assert(!v.actions.some(a=>a.id==='coach'&&!a.disabled),'coach waits for the pair: the TV row offers none enabled');
   // the rendered TV and phone draw exactly what the view offers, in both beats
   const S=require(path.resolve(__dirname,'../uat/driver/surface.cjs'));
   for(const beat of ['costar','learner']){
     if(beat==='learner')await said('Novak.',{speaker:'costar'});
-    const sf=S.surfaceOf({...getSession(),screen:'linga-talk'});
+    const sf=S.surfaceOf({...getSession(),screen:'linga-talk',ask:{id:'ask-1',kind:'reply',learner:'ema',screen:'linga-talk',at:0,phase:'open'}});
     assert.deepEqual(sf.strays,[],`${beat}: no stray control`);assert.deepEqual(sf.unrendered,[],`${beat}: nothing unrendered`);
     assert.match(sf.phone,beat==='costar'?/Mum's turn/:/Ema's turn/);
-    if(beat==='learner')assert.match(sf.phone,/Co-star helper/);
+    if(beat==='learner')assert.doesNotMatch(sf.phone,/Co-star helper/,'the phone holds no helper (TL-12)');
   }
 });

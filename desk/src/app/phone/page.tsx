@@ -635,7 +635,7 @@ export default function Phone() {
       <div className="pbody">
         {banner && <button className="pbtn" data-secondary="true" data-role="phone-banner" onClick={() => setScreen(banner)}>{BANNER[banner]}</button>}
         {showPanels && <>
-        {screen === "linga" && s && <LingaPhone key={`${s.learner?.id ?? ""}:${s.conversation?.id??"setup"}:${s.check?.id??""}`} s={s} post={postOnly} onSentence={()=>setScreen("say")}/>}
+        {screen === "linga" && s && <LingaPhone key={`${s.learner?.id ?? ""}:${s.ask?.id ?? ""}`} s={s} ask={s.ask} post={postOnly}/>}
         {!s?.joined && screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
           <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
           {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}

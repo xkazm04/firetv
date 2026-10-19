@@ -1,13 +1,12 @@
 /**
  * Where the phone should be. The TV opens a hand-off (the session's `ask`); the phone shows that hand-off's panel and
  * goes there by itself when a NEW ask id arrives - on the same TV screen too, and again after a reopened stream. A tab
- * the learner picked stays picked while the same ask stays open. The few screens that still ask the phone without
- * opening an ask (Linga's, a failed read's Try again) keep the old screen-keyed cue until their slices
- * (TL-12, TL-13) open asks. Pure; the phone page calls follow() on every session change. Tested by
+ * the learner picked stays picked while the same ask stays open. Linga follows its reply, words and prefs asks like every
+ * other module (TL-12). The one screen that still asks the phone without opening an ask (a failed read's Try again)
+ * keeps the old screen-keyed cue until TL-13 opens an ask for it. Pure; the phone page calls follow() on every session change. Tested by
  * tools/phone-panel-test.cjs.
  */
 import type { AskKind, Session } from "@/lib/session/store";
-import { lingaOwns } from "@/tv/keys";
 
 /** The phone's panels. */
 export type PScreen = "join" | "joined" | "capture" | "practice" | "point" | "say" | "paste" | "tonight" | "parent" | "profile" | "linga" | "paper";
@@ -30,8 +29,6 @@ function cueFor(s: Seen): Cue | null {
   if (a) return a.phase === "open" ? { panel: ASK_PANEL[a.kind], key: `ask:${a.id}` } : null;
   // an unjoined phone with nothing else asked is asked for the code
   if (!s.joined) return { panel: "join", key: "join" };
-  // Linga is one panel that reads its own screens (TL-12 moves it onto asks)
-  if (lingaOwns(s as Session)) return { panel: "linga", key: "linga" };
   const sc = s.screen;
   // "The desk could not read this page. Press Try again on the phone" (TL-13 moves the retry to the TV)
   if (sc === "page") {

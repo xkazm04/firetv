@@ -6,7 +6,7 @@ import { AUTHORED_SCENES } from "@/lib/english/curriculum";
 import { ownerOf } from "@/lib/english/activity";
 import { accepts } from "@/lib/english/turn";
 import { runningTake } from "@/lib/english/take";
-import { activeCheck, artOf, lingaView, NO_UI, progressDots, TRY_TAG, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
+import { activeCheck, artOf, lingaView, NO_UI, progressDots, replyKey, TRY_TAG, tvStatus, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
 import { landingFocus } from "@/tv/landingRows";
 import { keyOf } from "@/tv/keys";
 import { useEnglish } from "./useEnglish";
@@ -16,8 +16,10 @@ import { Corridor } from "./art/Corridor";
 import { Arch, Arrow, BandSteps, Caption, DataLine, Dots, Kicker, Learner, Mark, OnYourPhone, Plate, SentenceCard, Stones, Yours } from "./OpenDoor";
 
 const CHECK_SCREENS:Screen[]=["linga-check","linga-verdict","linga-plan"];
-/** Actions whose next step is speaking on the phone: they carry the phone badge. */
-const PHONE_ACTIONS=new Set(["start-talking","start-situation","carry-on"]);
+/** Actions whose next step is speaking or typing on the phone: they carry the phone badge. */
+const PHONE_ACTIONS=new Set(["start-talking","start-situation","carry-on","phone-setup","ask-topic","ask-goal","ask-pitch"]);
+/** The hand-offs Linga makes: the reply opens by itself with the learner's turn, the words and the preferences from an action (TL-12). */
+const LINGA_ASKS=new Set(["reply","words","prefs"]);
 /** Actions that page to a neighbour: their help is the neighbour's goal, so the caption names the action, not "Your mission". */
 const PAGING_ACTIONS=new Set(["next-situation","previous-chapter","next-chapter","earlier-certificates","open-certificate"]);
 /** The Open Door composition a screen takes: the arch beside the words, the wide ladder, the row of doors, the menu (also the list of certificates). */
@@ -39,8 +41,24 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     if(r.ui)patch(r.ui);
     if(r.focus!==undefined)post({type:"focus",focus:r.focus});
     if(r.nav){patch({menu:false});post({type:"nav",screen:r.nav.screen,...(r.nav.from?{from:r.nav.from}:{focus:r.nav.screen==="linga-talk"?-1:0})});}
+    if(r.ask)post({type:"ask.open",kind:r.ask.kind});
+    // a phrase chosen with the remote answers the turn from the TV: the phone's reply ask closes with it, and is not asked again for this turn
+    if(a.id==="pick-phrase"&&s.ask?.kind==="reply"){answered.current=want;post({type:"ask.cancel",id:s.ask.id});}
     if(r.command)void run(r.command.action,r.command.extra).then(ok=>{if(ok&&r.after)patch(r.after);});
   };
+  // TL-12: the reply hand-off opens by itself as the learner's turn begins, and closes when the turn stops being theirs
+  const want=replyKey(v),answered=useRef<string|null>(null),openedAt=useRef({key:"",at:0});
+  useEffect(()=>{
+    if(!want)answered.current=null;
+    const a=s.ask;
+    if(want&&want!==answered.current&&!a){if(openedAt.current.key!==want||Date.now()-openedAt.current.at>2000){openedAt.current={key:want,at:Date.now()};post({type:"ask.open",kind:"reply"});}}
+    else if(a?.kind==="reply"&&(!want||want===answered.current))post({type:"ask.cancel",id:a.id});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[want,s.ask?.id,s.ask?.kind]);
+  // the preferences hand-off belongs to the menu: closing the menu takes it back
+  useEffect(()=>{if(!menu&&s.ask?.kind==="prefs")post({type:"ask.cancel",id:s.ask.id});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[menu,s.ask?.id,s.ask?.kind]);
   const {actions,waiting}=v,focus=s.focus,menuKey=v.footer.find(a=>a.id==="menu")!,repeat=v.footer.find(a=>a.id==="repeat");
   const cancel=(a:ViewAction)=>a.id==="cancel";
   useEffect(()=>{
@@ -50,6 +68,9 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       e.preventDefault();
       if(k==="menu"){go(menuKey);return;}
       if(k==="back"){
+        // Back first takes the hand-off back: the words and the preferences stop there; a reply is also left with Back, as the turn itself is
+        const open=s.ask&&LINGA_ASKS.has(s.ask.kind)?s.ask:null;
+        if(open){if(open.kind==="reply")answered.current=want;post({type:"ask.cancel",id:open.id});if(open.kind!=="reply")return;}
         if(menu){patch({menu:false});post({type:"focus",focus:-1});}
         else if(picking){patch({picking:null});post({type:"focus",focus:0});}
         else if(home)post({type:"nav",screen:"landing",focus:landingFocus(s,"english")});
@@ -84,7 +105,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
   useLayoutEffect(()=>{const p=panel.current,root=p?.offsetParent as HTMLElement|null,lift=root?root.clientHeight-1080:0;if(p&&p.offsetTop-lift<FIT_CEILING&&fit<FIT_STEPS)setFitted({key:fitKey,step:fit+1});});
   const tag=h.kind==="intro"?h.nameTag:h.kind==="cert"?h.issued:h.kind==="scene"?h.partner:h.kind==="choices"&&s.screen==="linga-talk"?c?.partner:undefined;
   const dots=progressDots(s);
-  const status=waiting?(onCheck?"Linga is thinking…":"Preparing a reply…"):c?.capture&&!onCheck?"Phone microphone active":audioStatus||"TV shows · Phone speaks";
+  const status=tvStatus(s,{waiting,onCheck,audio:audioStatus});
   const paging=actions[focus];
   const caption=<Caption tag={!v.error&&paging&&PAGING_ACTIONS.has(paging.id)&&v.caption===paging.help?paging.label:v.captionTag} text={v.caption}/>;
   const nav=<nav className={`lo-actions${single?" lo-single":""}${menu?" linga-menu-list":""}${choice?" lo-choice-row":""}`} data-count={actions.length} aria-label="Linga actions">{actions.map((a,i)=>{

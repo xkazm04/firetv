@@ -420,6 +420,8 @@ const chooseTask={id:'t1',band:'A2',kind:'choose',prompt:'A friend says hi. What
 /** A fixture as a session the view reads; install() puts the same state in the store so a command can run on it. */
 const fixture=(screen,{conversation=null,check=null,...learning}={})=>({screen,conversation,check,learning:{...emptyEnglish(),...learning}});
 function sessionOf(fx){fresh();return {...getSession(),screen:fx.screen,conversation:fx.conversation,check:fx.check,englishLearning:fx.learning};}
+/** TL-12: the session as the TV leaves it while the phone is asked for the learner's line: the reply hand-off is open, so the phone draws its reply box. */
+function withReply(s){return {...s,ask:{id:'ask-1',kind:'reply',learner:s.learner?.id??null,screen:s.screen,at:0,phase:'open'}};}
 function install(fx){fresh();saveEnglish('ema',fx.learning);dispatch({type:'linga.changed',conversation:fx.conversation,check:fx.check,screen:fx.screen});return getSession();}
 const CERT_OLD={id:'cert-A2-old',at:new Date(2026,5,12).getTime(),band:'A2',topics:['Topic p-a'],skills:[{skill:'contact',mode:'spoken',quote:'Hi, I am Ema.',at:1}],checkAt:1};
 const CERT_NEW={id:'cert-B1-new',at:new Date(2026,8,20).getTime(),band:'B1',topics:['Topic p-a','Topic p-b'],skills:[{skill:'contact',mode:'written',quote:'Nice to meet you.',at:2}],checkAt:2};
@@ -670,9 +672,10 @@ test('view case 1: home decides six named states, the TV actions follow them, an
   assert.equal(V.lingaHome(s),state);
   assert.deepEqual(V.lingaView(s,{}).actions.map(a=>a.id),want[state],state);
  }
- const phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8'),start=phone.slice(phone.indexOf('function StartPanel'));
- assert.match(start,/lingaHome\(/,'the phone StartPanel asks the view which home it is');
- for(const state of V.HOME_STATES)assert.match(start,new RegExp(`case "${state}"`),`the phone renders ${state}`);
+ // TL-12: the six states are the TV's alone; the phone holds no home panel
+ const phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8');
+ assert.doesNotMatch(phone,/function StartPanel|lingaHome\(/,'the phone has no home panel');
+ for(const state of V.HOME_STATES)assert(want[state].length>0,`the TV row names ${state}`);
 });
 test('view case 2: Resume on a paused scene runs the resume command, which clears the error',async()=>{
  const V=view(),s=install(SWEEP.paused),resume=V.lingaView(s,{}).actions.find(a=>a.id==='resume');
@@ -701,7 +704,7 @@ test('view case 5: every offered action is a real command, a nav to a real scree
   const all=[...offeredBy(v),...(v.answer?[{id:'answer',run:{command:{action:v.answer.action,extra:{lastTurnId:v.answer.lastTurnId,taskId:v.answer.taskId}}},needs:'text'}]:[])];
   for(const a of all){
    const where=`${name}${ui.menu?' (menu)':ui.picking?' (picker)':''} · ${a.id}`;
-   assert.equal(typeof a.run,'object',where);assert(a.run.command||a.run.nav||a.run.ui||a.run.focus!==undefined,`${where} does something`);
+   assert.equal(typeof a.run,'object',where);assert(a.run.command||a.run.nav||a.run.ui||a.run.ask||a.run.focus!==undefined,`${where} does something`);
    if(a.run.nav)assert(screens.includes(a.run.nav.screen),`${where} goes to a real screen`);
    if(a.run.ui)assert(Object.keys(a.run.ui).every(k=>uiKeys.includes(k)),`${where} is a declared local step`);
    if(a.run.command){
@@ -900,13 +903,13 @@ test('turn case 5: the server refuses 409 exactly what the table refuses, in eve
  }
  assert.deepEqual(wrong,[]);
 });
-test('turn case 6: a paused scene with a reply pending draws Resume disabled, and no enabled phone control sends pause, resume or finish',()=>{
+test('turn case 6: a paused scene with a reply pending offers Cancel alone on the TV, and the phone draws no control (TL-12)',()=>{
  const S=require(path.resolve(__dirname,'../uat/driver/surface.cjs'));
- const sf=S.surfaceOf(sessionOf(fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED,paused:true,pending:'held'})})));
- const resume=sf.controls.find(c=>c.side==='phone'&&c.label==='Resume conversation');
- assert(resume,'the phone draws Resume');assert.equal(resume.disabled,true,'Resume is disabled while the reply is pending');
- const sends=sf.controls.filter(c=>c.side==='phone'&&!c.disabled&&['pause','resume','finish'].includes(c.effect?.run?.action)).map(c=>c.label);
- assert.deepEqual(sends,[]);
+ const s=sessionOf(fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED,paused:true,pending:'held'})}));
+ const row=view().lingaView(s).actions;
+ assert.deepEqual(row.filter(a=>!a.disabled).map(a=>a.id),['cancel'],'the TV row is Cancel alone while the reply is pending: no Resume to press');assert.ok(!row.find(a=>a.id==='cancel').disabled,'and Cancel works');
+ const sf=S.surfaceOf(s);
+ assert.deepEqual(sf.controls.filter(c=>c.side==='phone'),[],'the phone draws no control');
 });
 test('turn case 7 GUARD: leave during a turn in flight cancels it, and the late reply is dropped by its id',async()=>{
  fresh();await command('start',{sceneId:'booking',replace:true});
@@ -1373,7 +1376,7 @@ test('K4 case 8: a fix moment keeps the recap\'s moment slot over a found line; 
  assert.equal(v.hero.kind,'comparison');assert.equal(v.hero.before.quote,fix.said);assert(v.details.some(d=>d.includes(BRIDGE)),'the line is still the learner\'s, on the phone');
  v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',turns,moments:[{...fix,kind:'word',said:'most',better:'bridge'}],line:found})})),{});
  assert.equal(v.title,'You found it');assert.equal(v.hero.before.quote,BRIDGE);
- const phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8');assert.match(phone,/data-role="linga-line"/);
+ const phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8');assert.doesNotMatch(phone,/data-role="linga-line"/,'the phone draws no recap (TL-12)');
 });
 
 // ---- T10: the tutor's calls run with thinking off, and only they do ----
@@ -1549,7 +1552,7 @@ test('the map and the print name spoken practice, not only written and choice',(
  const strip=file=>fs.readFileSync(file,'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
  const phoneSrc=strip(path.join(root,'src/english/LingaPhone.tsx'));
  const printSrc=strip(path.join(root,'src/app/english/print/page.tsx'));
- assert.match(phoneSrc,/practiceLine\(/);
+ assert.doesNotMatch(phoneSrc,/practiceLine\(/,"the map is the TV's (TL-12)");
  assert.match(printSrc,/practiceLine\(/);
  assert.equal(/mode==="text"/.test(phoneSrc),false,'the phone still counts written by hand');
  assert.equal(/mode==="text"/.test(printSrc),false,'the print still counts written by hand');
@@ -1698,7 +1701,8 @@ test('owner case 6: in every check state and in the menu, an enabled check actio
 test('owner case 7 GUARD: with the TV on Linga home and a check left part-way, the phone still holds the check',()=>{
  const V=view(),s=sessionOf(fixture('linga',{check:checkOf()}));
  assert.equal(V.lingaHome(s),'check-part-way');assert.equal(V.phonePanel(s),'check');
- const a=V.lingaView(s).answer;assert.equal(a.action,'check-answer');assert.equal(a.lastTurnId,'q1');
+ assert.equal(V.lingaView(s).answer,null,'TL-12: the TV leads, so on home the phone is not asked; Carry on on the TV resumes the check');
+ const a=V.lingaView(sessionOf(fixture('linga-check',{check:checkOf()}))).answer;assert.equal(a.action,'check-answer');assert.equal(a.lastTurnId,'q1');
 });
 test('owner case 8 GUARD: leaving the check keeps it, and carrying on resumes the same question',async()=>{
  fresh();stubAll();await command('check-start');await answerAbout(1);
@@ -1859,16 +1863,20 @@ test('pitch case 4 GUARD: a pitch on the record is offered only in Adult mode; a
   assert(!eligibleScenes(p,defaultPreferences(p),l).some(x=>x.id==='pitch-a1'),`${p.type} ${p.mode??''}`);
  assert.deepEqual(eligibleScenes(adult,defaultPreferences(adult),emptyEnglish()).map(x=>x.id),eligibleScenes(adult,defaultPreferences(adult)).map(x=>x.id),'no pitch, no change');
 });
-test('pitch case 5: the phone offers Pitch a scene on its start panel in Adult mode only, and the TV marks a pitched card as the learner\'s own',()=>{
+test('pitch case 5 (TL-12): the TV offers Pitch a scene in Adult mode only, as a words hand-off; the phone takes the text; the TV marks a pitched card as the learner own',()=>{
  const V=view(),adultPrefs={...defaultPreferences({type:'other'}),adultConfirmed:true};
  const asJakub=(fx)=>{const s=sessionOf(fx);return {...s,learner:{...s.learner,id:'jakub',name:'Jakub'}};};
- const home=fixture('linga',{placement:placed(),preferences:adultPrefs,pitches:[pitchTopic()]});
- const offered=V.lingaView(asJakub(home)).phone.find(a=>a.id==='pitch-scene');
- assert(offered,'Adult mode: the start panel takes a pitch');assert.equal(offered.run.command.action,'pitch');assert.equal(offered.needs,'text');
- assert(V.VIEW_ACTION_IDS.includes('pitch-scene'));
- for(const [name,fx] of Object.entries(HOMES))assert(!V.lingaView(sessionOf(fx)).phone.some(a=>a.id==='pitch-scene'),`Family (${name}): no pitch`);
- assert(!V.lingaView(asJakub(fixture('linga',{placement:placed(),preferences:{...adultPrefs,adultConfirmed:false}}))).phone.some(a=>a.id==='pitch-scene'),'"other" unconfirmed is Family');
- assert(!V.lingaView(asJakub(fixture('linga-talk',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub'})}))).phone.some(a=>a.id==='pitch-scene'),'not over a live scene: the phone holds the conversation');
+ const askOf=(s,kind,screen)=>({...s,ask:{id:'a1',kind,learner:'jakub',screen,at:0,phase:'open'}});
+ const home=asJakub(fixture('linga-scenes',{placement:placed(),preferences:adultPrefs,pitches:[pitchTopic()]}));
+ const pitch=V.lingaView(home).actions.find(a=>a.id==='ask-pitch');
+ assert(pitch,'Adult mode: the TV offers a pitch');assert.deepEqual(pitch.run,{ask:{kind:'words'}},'it opens the words hand-off and runs no command');assert(!pitch.run.nav&&!pitch.run.command);
+ assert(V.VIEW_ACTION_IDS.includes('ask-pitch')&&V.VIEW_ACTION_IDS.includes('pitch-scene'));
+ const offered=V.lingaView(askOf(home,'words','linga-scenes')).phone.find(a=>a.id==='pitch-scene');
+ assert(offered,'with the words hand-off open the phone takes the pitch');assert.equal(offered.run.command.action,'pitch');assert.equal(offered.needs,'text');
+ assert(!V.lingaView(home).phone.some(a=>a.id==='pitch-scene'),'no hand-off open: the phone offers nothing');
+ assert(!V.lingaView(sessionOf(fixture('linga-scenes',{placement:placed()}))).actions.some(a=>a.id==='ask-pitch'),'Family: no pitch');
+ assert(!V.lingaView(asJakub(fixture('linga-scenes',{placement:placed(),preferences:{...adultPrefs,adultConfirmed:false}}))).actions.some(a=>a.id==='ask-pitch'),'"other" unconfirmed is Family');
+ assert(!V.lingaView(askOf(asJakub(fixture('linga-talk',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub'})})),'words','linga-talk')).phone.some(a=>a.id==='pitch-scene'),'not over a live scene');
  const scenes=asJakub(fixture('linga-scenes',{placement:placed(),preferences:adultPrefs,pitches:[pitchTopic()]}));
  const first=V.lingaView(scenes,{sceneIndex:0});
  assert.equal(first.title,'The dragon at the bank','no plan: the pitched scene leads the list');assert.equal(first.hero.own,true);
@@ -2025,7 +2033,7 @@ test('cut case 6: the view offers Cut in Adult mode only, and the Cut recap is a
  assert.equal(v.hero.kind,'tape');assert.equal(v.hero.pins.length,3);
  assert.deepEqual(v.hero.pins.map(x=>x.label),['Form','Word','A reading']);
  assert.equal(v.baseCaption,'Say I work, with no am.','the caption slot holds one note: the first, at rest');assert.equal(v.captionTag,'Form');
- assert.deepEqual(v.actions.map(a=>a.id),['note','note','note','choose-situation','learning-map']);
+ assert.deepEqual(v.actions.map(a=>a.id),['note','note','note','take-two','take-two','take-two','choose-situation','learning-map']);
  const second=V.lingaView({...recap,focus:1});assert.equal(second.caption,'Say in a hotel.');assert.equal(second.captionTag,'Word');assert.equal(second.hero.selected,1);
  for(const n of notes)assert(!/[.!?]\s+\S/.test(n.note),'one sentence per caption');
  assert.match(V.viewText(v),/pin 1 · Form: "I am work" → "I work"\n      note: Say I work, with no am\./);
@@ -2273,7 +2281,7 @@ test('take case 6: the recap marks each note that had its take - struck when hel
  assert.deepEqual(v.hero.pins.map(x=>x.mark),['held','undecided','open']);
  assert.deepEqual(v.hero.branch,{pin:0,partner:'Robin · Receptionist',from:'Hello. How can I help?',again:'I work in a hotel.'},'at rest the first pin: its take, from the line it forked at');
  assert.deepEqual(V.lingaView({...s,focus:2}).hero.branch,{pin:2,partner:'Robin · Receptionist',from:'Hello. How can I help?',again:'I work in hotel.'},'the focused pin\'s take');
- assert.deepEqual(v.actions.map(a=>a.id),['note','note','note','choose-situation','learning-map'],'the TV row is the tape\'s, as before');
+ assert.deepEqual(v.actions.map(a=>a.id),['note','note','note','take-two','take-two','take-two','choose-situation','learning-map'],'the TV row is the tape\'s, as before');
  const text=V.viewText(v);
  assert.match(text,/pin 1 · Form: "I am work" → "I work"\n      note: Say I work, with no am\.\n      Take Two: held, the quote struck through/);
  assert.match(text,/Take Two: not decided/);assert.match(text,/Take Two: still open/);
@@ -2283,23 +2291,23 @@ test('take case 6: the recap marks each note that had its take - struck when hel
  const one=V.lingaView(takeView('linga-recap',{takes:[ENDED(1,true,'I work in a hotel.')]}));
  assert.deepEqual(one.hero.pins.map(x=>x.mark),[undefined,'held',undefined]);assert.equal(one.hero.branch.pin,1,'the latest take, when the focused pin has none');
  assert.equal(V.lingaView(takeView('linga-recap',{})).hero.branch,undefined);
- // the TV draws the mark and the branch; the phone strikes the held quote and says Not decided
+ // the TV draws the mark and the branch; the phone draws no recap (TL-12)
  const S=require(path.resolve(__dirname,'../uat/driver/surface.cjs')),sf=S.surfaceOf(s);
- assert.match(sf.tv,/Not decided/);assert.match(sf.tv,/You again/);assert.match(sf.tv,/Take Two · Form/);assert.match(sf.phone,/Not decided/);assert.match(sf.phone,/Take Two, you said: “I work in a hotel\.”/);
+ assert.match(sf.tv,/Not decided/);assert.match(sf.tv,/You again/);assert.match(sf.tv,/Take Two · Form/);assert.doesNotMatch(sf.phone,/Not decided/);
  assert.doesNotMatch(sf.shown,/\d+ (of|out of) \d+ (notes|held)/,'no count on either device');
- const tv=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8');
- assert.match(tv,/<s data-role="linga-struck">/);assert.match(tv,/data-role="linga-branch"/);assert.match(phone,/t\?\.held===true\?<s>/);
+ const tv=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.match(tv,/<s data-role="linga-struck">/);assert.match(tv,/data-role="linga-branch"/);
 });
-test('take case 7: the phone\'s recap offers Take Two per note in Adult mode, disabled with the refusal where refused; Family is offered none',()=>{
+test('take case 7 (TL-12): the TV row offers Take Two per note in Adult mode, disabled with the refusal where refused, and the phone offers none; Family is offered none',()=>{
  const V=view(),S=require(path.resolve(__dirname,'../uat/driver/surface.cjs'));
  const s=takeView('linga-recap',{takes:[ENDED(0,true,'I work in a hotel.')]});
- const offers=V.lingaView(s).phone.filter(a=>a.id==='take-two');
+ const offers=V.lingaView(s).actions.filter(a=>a.id==='take-two');
  assert.deepEqual(offers.map(a=>[a.label,a.disabled,a.run.command]),[['Take Two · note 1',true,{action:'take-two',extra:{note:0}}],['Take Two · note 2',false,{action:'take-two',extra:{note:1}}],['Take Two · note 3',false,{action:'take-two',extra:{note:2}}]]);
  assert.equal(offers[0].help,'This note has had its Take Two.','the refusal, as the server says it');
+ assert.equal(V.lingaView(s).phone.some(a=>a.id==='take-two'),false,'the phone offers no Take Two');
  const sf=S.surfaceOf(s);
  assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
- assert.match(sf.phone,/This note has had its Take Two\./,'the phone shows the refusal');
- assert.deepEqual(sf.controls.filter(c=>c.side==='phone'&&c.label.startsWith('Take Two')).map(c=>[c.label,c.disabled]),[['Take Two · note 1',true],['Take Two · note 2',false],['Take Two · note 3',false]]);
+ assert.deepEqual(sf.controls.filter(c=>c.side==='tv'&&c.label.includes('Take Two')).map(c=>[c.label.trim(),c.disabled]),[['Take Two · note 1',true],['Take Two · note 2',false],['Take Two · note 3',false]]);
  assert.deepEqual(sf.offered.filter(o=>o.id==='take-two').map(o=>o.run.command.extra.note),[1,2],'the enabled ones are offered to pick');
  // a take running elsewhere would make every note wait; Family mode is offered none
  assert(!V.offeredActions(V.lingaView(takeView('linga-recap',{},{},'family'))).some(a=>a.id==='take-two'),'Family: no Take Two');
@@ -2317,8 +2325,8 @@ test('take case 8: inside a take the TV shows the line again and Back to the not
  assert.equal(v.answer.action,'turn');assert.equal(v.answer.lastTurnId,'p1:take','the reply box answers the take\'s line');
  const ids=V.offeredActions(v).map(a=>a.id);
  for(const id of ['cut','coach','quiz','cue','replay','finish','resume','pick-phrase'])assert(!ids.includes(id),`no ${id} inside a take`);
- const sf=S.surfaceOf(s);assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
- assert.match(sf.phone,/Take Two · A booking/);assert.match(sf.phone,/Your note: “in hotel” → “in a hotel”/);
+ const sf=S.surfaceOf(withReply(s));assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
+ assert.match(sf.tv,/Take Two · A booking/);assert.match(sf.phone,/Hello. How can I help/,'the phone holds the line beside its reply box');
  // the cast answering: Cancel on the TV row, the take stays
  const wait=V.lingaView(takeView('linga-talk',{takes:[{...running,turns:[...running.turns,{id:'c1:x',role:'learner',text:'I work in a hotel.',mode:'text'}]}],pending:'held'}));
  assert.deepEqual(wait.actions.map(a=>[a.id,a.run.command?.action]),[['cancel','leave']]);assert.equal(wait.answer,null);
@@ -2533,9 +2541,9 @@ test('K2 case 5: a fix the partner\'s line or an observation note already said i
  // while withheld: not in shownLines, and neither device draws it
  c=await k2Moment();
  assert(!review().shownLines(c).some(x=>/tomatoes are/i.test(x)));
- const sf=require(path.resolve(__dirname,'../uat/driver/surface.cjs')).surfaceOf(getSession());
+ const sf=require(path.resolve(__dirname,'../uat/driver/surface.cjs')).surfaceOf(withReply(getSession()));
  assert.doesNotMatch(sf.shown,/tomatoes are/i,'neither device draws it');assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
- assert.match(sf.phone,/Say it again, your way/);assert.match(sf.phone,/Show me/);
+ assert.match(sf.tv,/Say it again on your phone, your way/);assert.match(sf.tv,/Show me/);
 });
 test('K2 case 6: a self-repaired fix is not a shown line; Finish over an open moment keeps it; a restart that lost the fix says so and keeps nothing',async()=>{
  let c=await k2Moment();await momentTry('My tomatoes are one metre.');await command('moment-done');c=getSession().conversation;
@@ -2901,9 +2909,9 @@ test('recert-4 / LT-sofie-11-J1-2: the shared TV never headlines a learner\'s ow
  const v=run(without,'You said "we build spaceship" and kept going.');
  assert(!v.hero.note.includes('we build spaceship'),v.hero.note);assert.equal(v.hero.note,P.BAND_CAN.A2);
  assert.equal(run(without,'You talk about your work well.').hero.note,'You talk about your work well.','a summary quoting nothing stays');
- // the phone verdict carries the quote next to the better form
+ // TL-12: the phone draws no verdict; the TV keeps the better form, and the learner's error stays off it
  const phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8');
- assert(/Next to practise:<\/b> \{placement\.focus\}/.test(phone)&&/“\{s\.said\}” → try “\{s\.better\}”/.test(phone),'the phone verdict shows the quote and the better form');
+ assert.doesNotMatch(phone,/placement.focus|Next to practise/,'the phone no longer draws the verdict');
 });
 test('LG-50/LG-34: an unfound room line and a brought-back review sentence name their origin, never the bare "A sentence to take with you"',()=>{
  const V=view(),L=lineMod(),BARE='A sentence to take with you',turns=convo().turns;
@@ -3622,4 +3630,98 @@ test('Linga rework 7 wired (viktor-67 J4 #2-#13): within two presses an on-task 
  const task=c.lineQuiz.options.indexOf(SCHOOL_TASK);
  await command('choice',{option:task});c=getSession().conversation;
  assert(!/does not answer/.test(c.cue),'an on-task pick is not rejected');assert.equal(c.quizOpen,false);assert.equal(c.evidence.at(-1).success,true);
+});
+
+// ---- TL-12: Linga, the TV drives and the phone speaks ----
+/** The TV's Linga hand-offs (ask.kind reply, words, prefs) as the session holds one. */
+const handoff=(s,kind)=>({...s,ask:{id:'ask-1',kind,learner:s.learner?.id??null,screen:s.screen,at:0,phase:'open'}});
+test('TL-12 case 1: no Linga action navigates to the pairing screen, on any screen, in the menu or the level picker',()=>{
+ const V=view();let seen=0;
+ for(const fx of Object.values(SWEEP))for(const ui of [{},{menu:true},{picking:'B1'}])for(const a of V.offeredActions(V.lingaView(sessionOf(fx),ui))){
+  seen++;assert.notEqual(a.run.nav?.screen,'pair',`${a.id} goes to the pairing screen`);}
+ assert(seen>100,`swept ${seen} actions`);
+});
+test('TL-12 case 2: Set up on the phone opens the prefs hand-off and navigates nowhere',()=>{
+ const V=view(),v=V.lingaView(sessionOf(SWEEP.paused),{menu:true}),a=v.actions.find(x=>x.id==='phone-setup');
+ assert(a,'the menu offers it');assert.equal(a.label,'Set up on the phone');
+ assert.deepEqual(a.run,{ask:{kind:'prefs'}},'it opens ask prefs: no nav, no command');
+ assert(!v.actions.some(x=>x.label==='Phone setup'),'the old label is gone');
+ const src=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.match(src,/if\(r\.ask\)post\(\{type:"ask\.open",kind:r\.ask\.kind\}\)/,'the TV posts the ask the action names');
+});
+test('TL-12 case 3: Add a topic, the goal and Pitch a scene open the words hand-off from the TV',()=>{
+ const V=view(),adultPrefs={...defaultPreferences({type:'other'}),adultConfirmed:true};
+ const goal=V.lingaView(sessionOf(fixture('linga-plan',{placement:placed(),check:checkOf({stage:'plan',turns:[],askGoal:true})})));
+ assert.deepEqual(goal.actions.map(a=>a.id),['ask-goal','skip-goal','not-now'],'the goal: Type my goal first, Let Linga pick stays on the TV');
+ assert.deepEqual(goal.actions[0].run,{ask:{kind:'words'}});
+ const topics=V.lingaView(sessionOf(SWEEP.topics)),add=topics.actions.find(a=>a.id==='ask-topic');
+ assert(add,'with topics under the cap the TV offers Add a topic');assert.equal(add.label,'Add a topic');assert.deepEqual(add.run,{ask:{kind:'words'}});
+ assert.equal(topics.actions[0].id,'agree','Agree stays first');
+ const many=planned('a','b','c','d','e','f','g','h','i','j','k','l').topics.slice(0,require(path.join(root,'src/lib/english/placement.ts')).PLAN_MAX);
+ const full=V.lingaView(sessionOf(fixture('linga-plan',{placement:placed(),check:checkOf({stage:'plan',turns:[],topics:many})})));
+ assert(!full.actions.some(a=>a.id==='ask-topic'),'at the cap there is no Add a topic');
+ const s=sessionOf(fixture('linga-scenes',{placement:placed(),preferences:adultPrefs}));
+ assert.deepEqual(V.lingaView({...s,learner:{...s.learner,id:'jakub',name:'Jakub'}}).actions.find(a=>a.id==='ask-pitch')?.run,{ask:{kind:'words'}},'Pitch a scene (Adult)');
+ const asked=(fx,screen)=>{const w=handoff(sessionOf(fx),'words');return {...w,ask:{...w.ask,screen}};};
+ assert.equal(V.wordsJob(asked(SWEEP.topics,'linga-plan')),'plan-add','the job is read from the screen that asked');
+ assert.equal(V.wordsJob(asked(fixture('linga-plan',{placement:placed(),check:checkOf({stage:'plan',turns:[],askGoal:true})}),'linga-plan')),'plan-goal');
+ assert.equal(V.wordsJob(asked(SWEEP.topics,'linga-talk')),null);
+});
+test('TL-12 case 4: every learner turn offers Choose a phrase on the TV, and choosing one answers the turn and closes the reply ask',()=>{
+ const V=view();
+ const talk=conv=>V.lingaView(sessionOf(fixture('linga-talk',{placement:placed(),conversation:conv})));
+ const quizOf=v=>v.actions.find(a=>a.id==='quiz');
+ for(const [name,conv] of [['the first line',convo()],['after a reply',convo({turns:REPLIED})],['after a reply, no help left',convo({turns:REPLIED,sceneCued:true})]]){
+  const q=quizOf(talk(conv));assert(q,`${name}: Choose a phrase is on the row`);assert.equal(q.label,'Choose a phrase');assert.equal(q.run.command.action,'quiz');assert(!q.disabled,name);
+ }
+ assert.equal(quizOf(talk(convo({turns:REPLIED,help:{forTurn:'p2',rungs:[],rung:0,shown:false}}))),undefined,'a line with no quiz of its own has none to offer (LG-5 recert-9)');
+ assert.deepEqual(talk(convo({turns:REPLIED})).actions.map(a=>a.id),['cue','coach','quiz'],'the order: help, coach, the phrase quiz');
+ // the quiz open: its options are the phrases; picking one is the TV answering
+ const open=talk(convo({turns:REPLIED,quizOpen:true,cue:'Try: Could you check?'}));
+ assert(open.actions.every(a=>a.id==='pick-phrase'),'under the quiz the row is the phrases');
+ // the TV closes the reply ask with the pick (LingaTV source), and does not ask again for that turn
+ const src=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.match(src,/a\.id==="pick-phrase"&&s\.ask\?\.kind==="reply"\)\{answered\.current=want;post\(\{type:"ask\.cancel",id:s\.ask\.id\}\)/);
+});
+test('TL-12 case 5: the footer line reads Answer on your phone while a reply is open, and the old wording is gone',()=>{
+ const V=view(),s=handoff(sessionOf(SWEEP.paused),'reply');
+ assert.equal(V.askLine(s),'Answer on your phone');assert.equal(V.tvStatus(s,{waiting:false,onCheck:false}),'Answer on your phone');
+ assert.equal(V.tvStatus(handoff(s,'prefs'),{waiting:false,onCheck:false}),'Setting up on the phone');
+ assert.equal(V.tvStatus(handoff(s,'words'),{waiting:false,onCheck:false}),'Typing on the phone');
+ const none=V.tvStatus(sessionOf(SWEEP.paused),{waiting:false,onCheck:false});
+ assert.equal(none,V.LEADS_LINE);assert.doesNotMatch(none,/Phone speaks/);
+ assert.equal(V.tvStatus(s,{waiting:true,onCheck:false}),'Preparing a reply…','a reply in flight is said first');
+ assert.equal(V.tvStatus({...s,ask:{...s.ask,kind:'sheet'}},{waiting:false,onCheck:false,audio:'Audio is unavailable. Follow the captions.'}),'Audio is unavailable. Follow the captions.','another module ask is not Linga line');
+ const src=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.doesNotMatch(src,/TV shows · Phone speaks/);assert.match(src,/tvStatus\(s,/);
+});
+test('TL-12 case 6: the reply ask is for the learner turn on the screen the TV is on, and for nothing else',()=>{
+ const V=view(),key=fx=>V.replyKey(V.lingaView(sessionOf(fx)));
+ assert.match(key(fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED})})),/^turn:p2/,'the learner line in linga-talk');
+ assert.match(key(SWEEP.about),/^check-answer:q1/,'a level-check question');
+ assert.match(key(fixture('linga-check',{check:checkOf({stage:'tasks',turns:[],task:{id:'t9',band:'A2',kind:'say',prompt:'Say hello.',line:'',options:[],revealed:false}})})),/^check-task:t9/,'a say task');
+ assert.equal(key(SWEEP.choose),null,'a choice task is the remote');
+ assert.equal(key(fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED,pending:'held'})})),null,'a reply in flight: not the learner turn');
+ assert.equal(key(fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED,paused:true})})),null,'paused');
+ assert.equal(key(fixture('linga-recap',{placement:placed(),conversation:convo({turns:REPLIED,phase:'finished'})})),null,'finished');
+ assert.equal(key(fixture('linga',{placement:placed(),conversation:convo({turns:REPLIED})})),null,'on home the TV has not asked');
+ assert.equal(key(fixture('linga-plan',{placement:placed(),check:checkOf({stage:'plan',turns:[],askGoal:true})})),null,'the goal is typed in the words panel, not a reply');
+ const src=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.match(src,/post\(\{type:"ask\.open",kind:"reply"\}\)/,'LingaTV opens it with no key press');
+ assert.match(src,/a\?\.kind==="reply"&&\(!want\|\|want===answered\.current\)\)post\(\{type:"ask\.cancel",id:a\.id\}\)/,'and closes it when the turn stops being the learner one');
+ assert.match(src,/if\(open\.kind==="reply"\)answered\.current=want;post\(\{type:"ask\.cancel",id:open\.id\}\)/,'and on Linga Back');
+});
+test('TL-12 case 7: LingaPhone draws the reply, words and prefs panels by ask kind, and posts nothing outside its asks',()=>{
+ const strip=f=>fs.readFileSync(path.join(root,f),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
+ const phone=strip('src/english/LingaPhone.tsx');
+ assert.doesNotMatch(phone,/type:\s*"nav"/);assert.doesNotMatch(phone,/type:\s*"subject"/);
+ for(const k of ['reply','words','prefs'])assert.match(phone,new RegExp(`a\\?\\.kind === "${k}"`),`the ${k} panel is drawn by the ask`);
+ const calls=new Set([...phone.matchAll(/\brun\(\s*"([a-z-]+)"/g)].map(m=>m[1]));
+ assert.deepEqual([...calls].sort(),['capture','preferences'],'the only literal commands are the mic and the preferences');
+ assert.match(phone,/\{ \.\.\.extra, askId: a\?\.id \}/,'every post answers the open hand-off');
+ for(const word of ['Pause & coach','Finish rehearsal','Repeat audio','Linga on the TV','Help with a sentence','Cancel pending turn','Find my level','Agree to these topics','All new topics','Let Linga pick','Swap','Take Two','I don&apos;t know','Try again','Resume','Replay','My map','Talk</button>'])
+  assert(!phone.includes(word),`the phone no longer draws ${word}`);
+ assert.doesNotMatch(phone,/linga-buttons|StartPanel|CheckPanel|VerdictPanel|MomentPanel|TakePanel|PitchBox/,'no tabs, no home, check, moment or take panels');
+ const page=strip('src/app/phone/page.tsx');
+ assert.match(page,/<LingaPhone\b[^>]*\bask=\{s\.ask\}/,'the page passes the open ask in');
 });

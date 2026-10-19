@@ -43,6 +43,10 @@ const TASKS = [
 const fixture = (screen, { conversation = null, check = null, ...learning } = {}) => ({ screen, conversation, check, learning: { ...emptyEnglish(), ...learning } });
 function sessionOf(fx) { dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); dispatch({ type: 'subject', subject: 'english' }); return { ...getSession(), screen: fx.screen, conversation: fx.conversation, check: fx.check, englishLearning: fx.learning }; }
 
+/** TL-12: the session as the TV leaves it when it has asked the phone: the reply hand-off for the learner's line, the words hand-off for the goal, none otherwise. */
+const askOf = (s, kind) => ({ ...s, ask: { id: 'ask-1', kind, learner: s.learner?.id ?? null, screen: s.screen, at: 0, phase: 'open' } });
+const asked = s => { const v = V.lingaView(s, {}); return V.replyKey(v) ? askOf(s, 'reply') : v.answer ? askOf(s, 'words') : s; };
+
 /** The fifteen states of case 4, from a first visit to the recap. */
 const STATES = {
   'first visit': fixture('linga'),
@@ -62,36 +66,34 @@ const STATES = {
   'scenes': fixture('linga-scenes', { placement: placed() }),
 };
 
-test('case 1: the recap shows each moment\'s words, as the phone lists them, not a count', () => {
-  const sf = surface().surfaceOf(sessionOf(STATES.recap));
-  for (const m of MOMENTS) { assert(sf.shown.includes(m.said), `said: ${m.said}`); assert(sf.shown.includes(m.better), `better: ${m.better}`); }
-  assert(sf.phone.includes('From this rehearsal'), 'read from the phone\'s own list');
+test('case 1 (TL-12): the recap shows the latest words of the latest moment on the TV, not a count, and the phone lists none', () => {
+  const sf = surface().surfaceOf(sessionOf(STATES.recap)), m = MOMENTS.at(-1);
+  assert(sf.tv.includes(m.said), `said: ${m.said}`); assert(sf.tv.includes(m.better), `better: ${m.better}`);
+  assert(!sf.phone.includes('From this rehearsal'), 'the phone draws no recap');
+  assert.doesNotMatch(sf.shown, /\d+ (of|out of) \d+ (moments|held)/, 'no count');
 });
 
-test('case 2: a first visit offers the level check, the level picker and the phone\'s situation list; the TV names no situation', () => {
+test('case 2 (TL-12): a first visit offers the level check and the level picker on the TV; the phone lists no situation and the TV names none', () => {
   const s = sessionOf(STATES['first visit']), sf = surface().surfaceOf(s);
   const ids = sf.offered.map(a => a.id);
-  for (const id of ['find-level', 'pick-level', 'pick-situation']) assert(ids.includes(id), `${id} offered (got ${ids.join(', ')})`);
+  for (const id of ['find-level', 'pick-level']) assert(ids.includes(id), `${id} offered (got ${ids.join(', ')})`);
+  assert(!ids.includes('pick-situation'), 'the phone has no situation list');
   const p = s.profiles.find(x => x.id === s.learner.id), scenes = eligibleScenes(p, defaultPreferences(p), s.englishLearning);
   assert(scenes.length > 2);
-  for (const x of scenes) { assert(sf.phone.includes(x.name), `the phone names ${x.name}`); assert(!sf.tv.includes(x.name), `the TV does not name ${x.name}`); }
-  const pick = sf.offered.find(a => a.id === 'pick-situation');
-  assert.equal(pick.needs, 'sceneId'); assert.equal(pick.run.command.action, 'start');
-  // the view offers it as a phone-side action; it is no longer borrowed from another screen as phone-only
-  assert.equal(pick.on, 'phone'); assert(sf.view.phone.some(a => a.id === 'pick-situation'), 'the view\'s phone list holds it');
-  assert(!('phoneOnly' in pick), 'not marked phoneOnly');
+  for (const x of scenes) { assert(!sf.phone.includes(x.name), `the phone does not name ${x.name}`); assert(!sf.tv.includes(x.name), `the TV does not name ${x.name}`); }
+  assert.deepEqual(sf.view.phone, [], 'no phone-side action while no hand-off is open');
 });
 
-test('case 3: the verdict shows what Linga saw in each task: its response and its note', () => {
+test('case 3 (TL-12): the verdict shows the level on the TV and no task of the learner: the phone draws no What Linga saw', () => {
   const sf = surface().surfaceOf(sessionOf(STATES.verdict));
-  for (const t of TASKS) { assert(sf.shown.includes(t.response), `response: ${t.response}`); assert(sf.shown.includes(t.note), `note: ${t.note}`); }
-  assert.match(sf.phone, /What Linga saw \(collapsed; tap to open\)/);
+  for (const t of TASKS) { assert(!sf.shown.includes(t.response), `response stays off both screens: ${t.response}`); assert(!sf.shown.includes(t.note), `note stays off both screens: ${t.note}`); }
+  assert.doesNotMatch(sf.phone, /What Linga saw/);
 });
 
 test('case 4: in fifteen states every rendered control is a Linga view action and every view action has a control; strays 0', () => {
   const S = surface(), tally = [];
   for (const [name, fx] of Object.entries(STATES)) {
-    const sf = S.surfaceOf(sessionOf(fx));
+    const sf = S.surfaceOf(asked(sessionOf(fx)));
     assert.deepEqual(sf.strays, [], `${name}: rendered controls with no view action`);
     assert.deepEqual(sf.unrendered, [], `${name}: view actions with no rendered control`);
     for (const a of sf.offered) assert(V.VIEW_ACTION_IDS.includes(a.id), `${name}: ${a.id} is a view id`);
@@ -106,7 +108,7 @@ test('case 4: in fifteen states every rendered control is a Linga view action an
   assert(menu.tv.includes('Select · My level'));
   const picker = S.surfaceOf(sessionOf(STATES['first visit']), { picking: 'B2' });
   assert.deepEqual(picker.unrendered, []); assert(picker.offered.some(a => a.id === 'this-is-my-level' && a.run.command.extra.band === 'B2'));
-  assert(tally.reduce((a, b) => a + b) > 100, `controls read: ${tally.reduce((a, b) => a + b)}`);
+  assert(tally.reduce((a, b) => a + b) > 50, `controls read: ${tally.reduce((a, b) => a + b)}`);
 });
 
 test('case 5: a listening line is heard, not shown, until the learner asks for the words', () => {
@@ -123,40 +125,27 @@ test('case 5: a listening line is heard, not shown, until the learner asks for t
 test('case 7: in fifteen states every control the phone draws is a view action on that screen: phone-only 0', () => {
   const S = surface(), found = [];
   for (const [name, fx] of Object.entries(STATES)) {
-    const sf = S.surfaceOf(sessionOf(fx));
+    const sf = S.surfaceOf(asked(sessionOf(fx)));
     for (const c of sf.controls.filter(c => c.phoneOnly)) found.push(`${name}: ${c.label || c.tag} -> ${c.action.id}`);
     for (const a of sf.offered.filter(a => a.phoneOnly)) assert(found.some(f => f.startsWith(`${name}:`)), `${name}: offered ${a.id} as phone-only`);
   }
   assert.equal(found.length, 0, `phone-only controls ${found.length}:\n  ${found.join('\n  ')}`);
 });
 
-/** The phone-side actions the owner asked the view to offer (2026-09-25), and the only states of the fifteen they are on. */
-const PHONE_SIDE = {
-  'pick-situation': ['first visit', 'recap', 'scenes'],
-  'stop': ['choose task', 'listen unrevealed', 'listen revealed'],
-  'not-now': ['plan topics'],
-  'quiz': ['talk', 'talk quiz open'],
-  'cue': ['talk quiz open'],
-};
-test('case 8: the situation list, Stop / Not now and the reply helpers are phone-side view actions on exactly their screens', () => {
-  const S = surface();
-  const on = Object.fromEntries(Object.keys(PHONE_SIDE).map(id => [id, []]));
+test('case 8 (TL-12): a phone-side view action exists only while its words hand-off is open, and then on exactly its screen', () => {
+  const S = surface(), on = { 'add-topic': [], 'pitch-scene': [] };
   for (const [name, fx] of Object.entries(STATES)) {
-    const s = sessionOf(fx), v = V.lingaView(s, {}), sf = S.surfaceOf(s);
-    for (const a of v.phone) if (a.id in on) on[a.id].push(name);
-    for (const id of Object.keys(PHONE_SIDE)) if (v.phone.some(a => a.id === id)) {
-      const o = sf.offered.find(a => a.id === id && a.on === 'phone');
-      assert(o, `${name}: ${id} is drawn on the phone and offered there (got ${sf.offered.map(a => `${a.id}@${a.on}`).join(', ')})`);
+    const s = sessionOf(fx);
+    assert.deepEqual(V.lingaView(s, {}).phone, [], `${name}: no hand-off open, the phone offers nothing`);
+    const w = askOf(s, 'words'), v = V.lingaView(w, {}), sf = S.surfaceOf(w);
+    for (const a of v.phone) {
+      on[a.id].push(name);
+      const o = sf.offered.find(x => x.id === a.id && x.on === 'phone');
+      assert(o, `${name}: ${a.id} is drawn on the phone and offered there (got ${sf.offered.map(x => `${x.id}@${x.on}`).join(', ')})`);
     }
-    // withholding: a phone-side action names no answer the view keeps back
-    const words = JSON.stringify(v.phone.map(a => [a.label, a.help]));
-    if (fx.check?.task?.kind === 'listen' && !fx.check.task.revealed) assert(!words.includes(LINE), `${name}: the listening line stays unheard`);
-    if (fx.conversation && !fx.conversation.quizOpen) {
-      const scene = require(path.join(root, 'src/lib/english/curriculum.ts')).ENGLISH_SCENES.find(x => x.id === fx.conversation.sceneId);
-      for (const x of scene.quiz.options) assert(!words.includes(x), `${name}: no quiz option before the quiz is opened`);
-    }
+    assert.deepEqual(sf.strays, [], `${name}: the words box is a view action`);
   }
-  assert.deepEqual(on, PHONE_SIDE);
+  assert.deepEqual(on, { 'add-topic': ['plan topics'], 'pitch-scene': [] });
 });
 
 test('case 9 GUARD: the TV draws no phone-side action, and its components never read the view\'s phone list', () => {
@@ -171,14 +160,13 @@ test('case 9 GUARD: the TV draws no phone-side action, and its components never 
 
 test('case 10 GUARD: a phone control the view stops offering is still caught as phone-only', () => {
   const S = surface(), lingaView = V.lingaView;
-  // seed a stray: the talk screen's view forgets "Pause & coach", which the phone still draws by its own condition
-  V.lingaView = (s, ui) => { const v = lingaView(s, ui); return s.screen === 'linga-talk' ? { ...v, actions: v.actions.filter(a => a.id !== 'coach'), phone: v.phone.filter(a => a.id !== 'coach') } : v; };
+  // seed a stray: the plan screen's view forgets Add a topic, which the words box on the phone still sends
+  V.lingaView = (s, ui) => { const v = lingaView(s, ui); return s.screen === 'linga-plan' ? { ...v, phone: v.phone.filter(a => a.id !== 'add-topic') } : v; };
   let sf;
-  try { sf = S.surfaceOf(sessionOf(STATES.talk)); } finally { V.lingaView = lingaView; }
-  const seeded = sf.controls.find(c => c.side === 'phone' && c.label === 'Pause & coach');
-  assert(seeded && seeded.phoneOnly === true && seeded.action.id === 'coach', `the seeded control is phone-only (got ${JSON.stringify(seeded && { phoneOnly: seeded.phoneOnly, action: seeded.action?.id })})`);
-  assert(sf.offered.some(a => a.id === 'coach' && a.phoneOnly === true));
-  assert(!sf.controls.some(c => c.side === 'tv' && c.label === 'Pause & coach'), 'the TV follows the seeded view');
+  try { sf = S.surfaceOf(askOf(sessionOf(STATES['plan topics']), 'words')); } finally { V.lingaView = lingaView; }
+  const seeded = sf.controls.find(c => c.side === 'phone' && c.tag === 'textarea');
+  assert(seeded && seeded.phoneOnly === true && seeded.action.id === 'add-topic', `the seeded control is phone-only (got ${JSON.stringify(seeded && { phoneOnly: seeded.phoneOnly, action: seeded.action?.id })})`);
+  assert(sf.offered.some(a => a.id === 'add-topic' && a.phoneOnly === true));
 });
 
 /**
@@ -203,12 +191,15 @@ const BUSY = {
   'map, check question': fixture('linga-map', { check: checkOf() }),
 };
 const T = require(path.join(root, 'src/lib/english/turn.ts')), same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
-test('case 11: TV on Linga home, phone mid-conversation or mid-check: phone-only 0, strays 0, unrendered 0, and the TV row stays home', () => {
+test('case 11 (TL-12): TV on Linga home with a conversation or a check under way: the phone is idle and asked nothing; phone-only 0, strays 0, unrendered 0, and the TV row stays home', () => {
   const S = surface(), found = [], wrong = [];
   const HOME_ROW = { resume: ['carry-on', 'choose-situation'], 'check-part-way': ['carry-on-check', 'restart-check'], 'no-plan': ['see-topics', 'choose-situation'] };
   for (const [name, fx] of Object.entries(BUSY)) for (const ui of [{}, { menu: true }]) {
     const at = `${name}${ui.menu ? ' (menu)' : ''}`, s = sessionOf(fx), sf = S.surfaceOf(s, ui);
     for (const c of sf.controls.filter(c => c.phoneOnly)) found.push(`${at}: ${c.label || c.tag} -> ${c.action.id}`);
+    // TL-12: the TV on home has asked nothing, so the phone shows its one idle line, no control, and the view takes no answer
+    assert.deepEqual(sf.controls.filter(c => c.side === 'phone'), [], `${at}: the phone draws no control`);
+    assert(sf.phone.includes('Look at the TV'), `${at}: the phone says so`); assert.equal(sf.view.answer, null, `${at}: nothing is asked of it`);
     for (const x of sf.strays) wrong.push(`${at}: stray ${x}`);
     for (const x of sf.unrendered) wrong.push(`${at}: unrendered ${x}`);
     for (const a of sf.offered) if (!V.VIEW_ACTION_IDS.includes(a.id)) wrong.push(`${at}: ${a.id} is no view id`);
@@ -230,8 +221,7 @@ test('case 11: TV on Linga home, phone mid-conversation or mid-check: phone-only
 test('case 12: a disabled view action with a disabled control is a match, not unrendered, and it is not offered to pick', () => {
   const S = surface();
   const waiting = fixture('linga-talk', { placement: placed(), conversation: convo({ turns: replied, pending: 'held' }) });
-  const unprepared = fixture('linga-talk', { placement: placed(), conversation: convo({ turns: [] }) });
-  for (const [name, fx] of [['waiting', waiting], ['unprepared', unprepared], ['home, talk waiting', BUSY['home, talk waiting']]]) {
+  for (const [name, fx] of [['waiting', waiting], ['home, talk waiting', BUSY['home, talk waiting']]]) {
     const sf = S.surfaceOf(sessionOf(fx)), off = V.offeredActions(sf.view).filter(a => a.disabled);
     assert(off.length > 0, `${name}: the view holds a disabled action`);
     assert.deepEqual(sf.unrendered, [], `${name}: view actions with no rendered control`);
@@ -241,28 +231,27 @@ test('case 12: a disabled view action with a disabled control is a match, not un
     }
   }
   const sf = S.surfaceOf(sessionOf(waiting)), coach = sf.controls.find(c => c.side === 'tv' && c.label === 'Pause & coach');
-  assert(coach && coach.disabled && coach.action?.id === 'coach', 'the TV\'s disabled Pause & coach is the view\'s disabled coach');
+  assert(coach && coach.disabled && coach.action?.id === 'coach', 'the TV disabled Pause & coach is the view disabled coach');
 });
 
 test('case 13 GUARD: a disabled control never stands in for an enabled view action', () => {
   const S = surface(), lingaView = V.lingaView;
-  // seed: the view offers the phone's Finish enabled while a reply is pending; the phone still draws it disabled by the turn table
-  V.lingaView = (s, ui) => { const v = lingaView(s, ui); return { ...v, phone: v.phone.map(a => a.id === 'finish' ? { ...a, disabled: false } : a) }; };
+  // seed: the view offers the TV's Pause & coach enabled while a reply is pending; the TV still draws it disabled
+  V.lingaView = (s, ui) => { const v = lingaView(s, ui); return { ...v, actions: v.actions.map(a => a.id === 'coach' ? { ...a, disabled: false } : a) }; };
   let sf;
   try { sf = S.surfaceOf(sessionOf(fixture('linga-talk', { placement: placed(), conversation: convo({ turns: replied, pending: 'held' }) }))); } finally { V.lingaView = lingaView; }
-  assert(sf.controls.some(c => c.side === 'phone' && c.label === 'Finish rehearsal' && c.disabled && !c.action), 'the disabled control stays untied');
-  assert(sf.unrendered.includes('finish'), `the enabled finish has no control (got ${sf.unrendered.join(', ')})`);
+  assert(sf.controls.some(c => c.side === 'tv' && c.label === 'Pause & coach' && c.disabled && !c.action), 'the disabled control stays untied');
+  assert(sf.unrendered.includes('coach'), `the enabled coach has no control (got ${sf.unrendered.join(', ')})`);
 });
 
-test('case 14 GUARD: a seeded stray is still caught with the TV on home and the phone mid-conversation', () => {
+test('case 14 GUARD: a seeded stray is still caught with the phone asked for words', () => {
   const S = surface(), lingaView = V.lingaView;
-  // seed: no Linga view anywhere offers "repeat", which the phone's live panel still draws
-  const drop = v => ({ ...v, actions: v.actions.filter(a => a.id !== 'repeat'), footer: v.footer.filter(a => a.id !== 'repeat'), phone: v.phone.filter(a => a.id !== 'repeat') });
-  V.lingaView = (s, ui) => drop(lingaView(s, ui));
+  // seed: no Linga view anywhere offers add-topic, which the words box on the phone still sends
+  V.lingaView = (s, ui) => { const v = lingaView(s, ui); return { ...v, phone: v.phone.filter(a => a.id !== 'add-topic') }; };
   let sf;
-  try { sf = S.surfaceOf(sessionOf(BUSY['home, talk your turn'])); } finally { V.lingaView = lingaView; }
-  assert(sf.strays.includes('phone: Repeat audio'), `caught (got ${sf.strays.join(', ')})`);
-  assert(!sf.controls.some(c => c.label === 'Repeat audio' && c.action), 'tied to nothing');
+  try { sf = S.surfaceOf(askOf(sessionOf(STATES['plan topics']), 'words')); } finally { V.lingaView = lingaView; }
+  assert(sf.strays.some(x => x.startsWith('phone:')), `caught (got ${sf.strays.join(', ')})`);
+  assert(!sf.controls.some(c => c.side === 'phone' && c.tag === 'textarea' && c.action), 'tied to nothing');
 });
 
 test('case 6: the judge reads a long screen whole, or with the cut named, never silently cut', () => {

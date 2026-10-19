@@ -411,7 +411,7 @@ test('cert 14: the list names each certificate by band and date in words, one do
  assert(outline&&outline.run.nav&&outline.run.nav.screen==='linga-cert'&&!outline.run.command,'a record of checks and no certificate: the door goes to the outline');
  assert.equal(V.lingaView({...base,screen:'linga-cert'},{cert:'older'}).title,'A1 First words','an earlier one opens by id');
 });
-test('cert 15: the phone\'s My map says the certificate in words (band, topics, skills with spoken or written, one quote) with no count',()=>{
+test('cert 15: the certificate in words (band, topics, skills with spoken or written, one quote) with no count',()=>{
  const got=C.withCertificate(earned({plan:['describe','narrate']}),Date.UTC(2026,8,30,12));
  const words=C.certWords(got.cert);
  assert.equal(words[0],'Certificate · A2 Everyday basics');
@@ -421,9 +421,8 @@ test('cert 15: the phone\'s My map says the certificate in words (band, topics, 
  const all=words.join('\n');
  assert.doesNotMatch(withoutBand(all,'A2'),/\d/,'no digit, no count');assert.doesNotMatch(all,FORBIDDEN);assert.doesNotMatch(all,/—/);
  const phone=fs.readFileSync(src('english/LingaPhone.tsx'),'utf8');
- assert.match(phone,/certWords\(latest\)/,'the phone reads the same words');
- const part=phone.slice(phone.indexOf('function CertificateWords'),phone.indexOf('/** Finding the level'));
- assert.doesNotMatch(part,/\.length\}|\{held\.length|of \{/,'the phone prints no count of certificates');
+ assert.doesNotMatch(phone,/certWords|CertificateWords/,'the phone draws no certificate (TL-12): the plate on the TV is the certificate');
+ assert.match(fs.readFileSync(src('lib/english/view.ts'),'utf8'),/plateOf\(/,'the TV plate reads the same issued certificate');
 });
 
 
