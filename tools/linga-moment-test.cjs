@@ -146,6 +146,22 @@ test('LG-23: the held-fix task asks for the one fix and says the scene does not 
   assert.doesNotMatch(C.momentTaskFor(false),/held for the end/);
 });
 
+test('LG-23 / council-lite r3 must-address 2: the held-fix task holds a clear error made once, a beginner\'s grammar slip included; a petra-38 recert-7 t11 slip is held, not a stop',()=>{
+  for(const b of [true,false]){const h=C.heldTaskFor(b);assert.match(h,/the limits on a stop above do not apply/);assert.match(h,/a grammar slip made only once included/);}
+  assert.doesNotMatch(C.momentTaskFor(true),/made only once included/,'the stop task is unchanged');
+  // petra-38 recert-7: the t4 moment, then t7 and t9; at t11 the A2 gap (4) shuts the stop and the held task is asked
+  const c=run('A2','How can I help you?',[
+    ['Hello, I have a problem. The room is not clean and I want other room, please.','I am sorry. Is the room cold?'],
+    ['I want leave the room today, please. I want other room.','Good. What kind of room do you want, small or big?'],
+    ['A big room, please. Sorry, my English is not good.','No problem. Is the heater broken?'],
+    ['No, the heater is not broken. The room is just not clean. Sorry.','I see. What do you want?'],
+  ],[fix('t2','I want other room.','I want another room.')]);
+  const reply='I want a new room, please. I can not sleep because the room is dirty and smell bad.',g=gate(c,reply);
+  assert.equal(g.mayStop,false,'the gap shuts the stop, as in the run');
+  const out=C.momentOutcome(c,{c,raw:{kind:'fix',said:'the room is dirty and smell bad',better:'the room is dirty and smells bad',why:'The room smells: add s.'},reply,turnId:'t5',safe:minorSafe,...g});
+  assert.equal(out.moment,null);assert.equal(out.held.said,'the room is dirty and smell bad');
+});
+
 test('LG-23: the same words held twice are listed once, oldest first',()=>{
   const a={id:'t1:held',kind:'fix',said:'more long',better:'longer',why:'x',turnId:'t1',at:1},b={...a,id:'t3:held',turnId:'t3'};
   assert.deepEqual(C.keepHeld(undefined,null),[]);assert.deepEqual(C.keepHeld(undefined,a),[a]);

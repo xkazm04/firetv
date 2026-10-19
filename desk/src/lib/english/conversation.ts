@@ -213,10 +213,14 @@ export function momentTaskFor(isBeginner:boolean):string{
 /**
  * LG-23 Option 1, save fixes for the end (delegate ruling 2026-10-17, reversible by the owner): on a turn where the gap or the
  * cap shuts the stop, the tutor is still asked for its one fix, and code holds it for the recap. The stop rules are not touched.
+ * A held fix stops nothing, so the limits on a stop do not limit it (recert-7: Petra's 'smell bad', a beginner's grammar slip
+ * made once, was neither stopped nor held; council-lite r3 value must-address 2).
  */
 export function heldTaskFor(isBeginner:boolean):string{
-  return momentTaskFor(isBeginner)+" This turn does not stop the scene: a moment you return is held for the end of the scene, so carry the scene on as usual.";
+  return momentTaskFor(isBeginner)+" This turn does not stop the scene: a moment you return is held for the end of the scene, so carry the scene on as usual."+HOLD_ANY;
 }
+/** What a held fix may be: any clear error, a slip made once included, since it never stops the scene. */
+const HOLD_ANY=" Because nothing stops here, the limits on a stop above do not apply: hold the one clear error in submittedReply that matters most, a grammar slip made only once included (a verb form, an article, a plural, a basic tense, a wrong word); never a valid alternative or a style or register choice.";
 /** Correction as needed holds a fix where it may not stop; with correction off nothing is held either. */
 export const holdsFixes=(c:Conversation)=>c.preferences.correction==="as-needed";
 /**
