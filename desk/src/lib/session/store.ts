@@ -404,7 +404,8 @@ export type Event =
   | { type: "essay.clear"; owner?: string } | { type: "essay.plan"; lens: string } | { type: "essay.slot"; i: number; text: string }
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
   // a paper typed on the phone (v2 M5b): the rows are as typed - the desk's own cleanPaper decides what stands (dispatch keeps it)
-  | { type: "paper.enter"; rows: unknown }
+  // askId: the open paper ask a phone answers (lite r3); the TV and an in-process caller send none
+  | { type: "paper.enter"; rows: unknown; askId?: string }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
   // `stay`: the set is asked for from Get ready for school (Family W8), whose screen stays put while it is written
