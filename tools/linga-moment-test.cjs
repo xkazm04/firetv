@@ -910,3 +910,17 @@ test('recert-11 (4) wired: a Pause & coach note and a held-fix finish note quote
   const co=C.finishCoachOf({partner:R11_TOMAS.partner,turns,coaching:null,supported:false,moments:[],heldFixes:[held],preferences:{correction:'as-needed',level:'A1'}}).coaching;
   assert.equal(co.note,'Leo asked “What do you make in Minecraft?”, so start with I make a...','the held fix\'s why, quoted the same way');
 });
+
+// ---- recert-12 (2): the coached form is a question the learner asks (Viktor, LT-viktor-67-J4); the replay put it in Mia's
+// mouth, addressed to him. replay.ts refuses a replay question that asks the coached question back, as "said the coached
+// form itself" is refused for statements.
+const R12_VIKTOR={moment:{kind:'fix',said:'You have school today?',better:'Did you have school today?',why:'A question about the past starts with Did.'},inverted:'Grandpa, did you have school every day?',inBand:'Do you like your school, Grandpa?'};
+test('recert-12 (2) rules: a replay question that asks the coached question back is refused; a question in the scene is not',()=>{
+  const {replayRefused,asksCoachedQuestion,frameOf}=require(path.join(root,'src/lib/english/replay.ts'));
+  const x=R12_VIKTOR,frame={...frameOf(x.moment),anchors:[]};
+  assert.match(replayRefused(x.inverted,'Did you have school',x.moment.better,frame),/asked the learner the coached question itself/,'the recert-12 line, verbatim');
+  assert.equal(asksCoachedQuestion(x.inverted,x.moment.better),true);
+  assert.equal(asksCoachedQuestion(x.inBand,x.moment.better),false,'a question in the scene');
+  assert.equal(asksCoachedQuestion('Grandpa, did you have school every day?','I had school today.'),false,'a statement form is the statement rule');
+  assert.equal(replayRefused(x.inBand,'Did you have school',x.moment.better,frame),null,'in the scene, still a replay');
+});

@@ -74,17 +74,31 @@ export function usesFrame(reply: string, frame: Frame): string | null {
 const META = /\b(?:can|could|will|would)\s+you\s+ask\b|\bask\s+me\b|\bask\s+(?:a|an|one|another|some|any)\b[^.!?]*\bquestions?\b/i;
 export const asksForAQuestion = (question: string) => META.test(question.replace(/’/g, "'"));
 /**
+ * recert-12 (LT-viktor-67-J4): a coached form that is a question the learner asks ("Did you have school today?") is never
+ * the partner's line to the learner ("Grandpa, did you have school every day?"): the roles are inverted. Read on the
+ * words as written: the form ends in "?", the replay question is a question, and it holds the form's opening words
+ * (up to three: auxiliary, subject, verb) in a row.
+ */
+export function asksCoachedQuestion(question: string, after: string): boolean {
+  if (!after.trim().endsWith("?") || !question.includes("?")) return false;
+  const open = tokens(after).slice(0, 3).map(t => t.word), have = tokens(question).map(t => t.word);
+  for (let i = 0; i + open.length <= have.length; i++) if (open.every((w, k) => have[i + k] === w)) return true;
+  return false;
+}
+/**
  * Why a Back replay is no replay, or null when it holds: its `form` must name some content word of the after form, case
  * apart; its question must not say the after form itself (the partner never supplies the learner's answer), unless that
  * form is one word, which a question can only invite by naming ("Do you often…?" for "often"); it must ask the learner
  * something in the scene, never ask them to ask a question (recert-11); and, given the moment's frame (recert-8), the
- * question must invite it.
+ * question must invite it. Given a question form (recert-12), the question must not ask the learner the coached
+ * question when the coached form is one the learner asks.
  */
 export function replayRefused(question: string, form: unknown, after: string, frame?: Frame): string | null {
   const want = new Set(contentWords(after));
   if (typeof form !== "string" || !wordsOf(form).some(w => want.has(w))) return "The replay question did not call for the coached form.";
   if (wordsOf(after).length > 1 && findPhrase(question, after) !== null) return "The replay question said the coached form itself.";
   if (asksForAQuestion(question)) return "The replay question asked the learner to ask a question instead of asking them something in the scene.";
+  if (asksCoachedQuestion(question, after)) return "The replay question asked the learner the coached question itself.";
   if (frame && !invitesFrame(question, frame)) return "The replay question did not invite the coached frame.";
   return null;
 }
