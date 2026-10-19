@@ -49,7 +49,7 @@ const openingWithSteps=schema({...openingProps,steps:stepsSchema,help:helpSchema
 type Shape=ReturnType<typeof schema>;
 const withOffer=(s:Shape):Shape=>({...s,properties:{...s.properties,offer:str(LINE_MAX,0)},required:[...s.required,"offer"]});
 const OFFER_TASK=` offer: one line, at most ${LINE_MAX} characters, the learner could say in this scene to meet its goal more sharply than a plain answer would: a precise word, a natural phrase or an idiom at their level. Never a sentence about the learner, never words from the scene's cue. Empty when nothing fits.`;
-const momentSchema=schema({kind:{type:"string",enum:["none","fix","word"]},said:{type:"string",maxLength:180},better:{type:"string",maxLength:180},why:{type:"string",maxLength:140}});
+const momentSchema=schema({kind:{type:"string",enum:["none","fix","word"]},said:{type:"string",maxLength:180},better:{type:"string",maxLength:180},why:{type:"string",maxLength:140},hold:{type:"boolean"}});
 // The turn is held to its reply; an over-long observation or moment is optional, and validateObservations and
 // parseMoment drop it rather than failing the turn.
 const turnAccept=(()=>{const a=loose({reply:str(230),observations:{type:"array"},moment:{type:"object"}});return {...a,properties:{...a.properties,step:{}}};})();
@@ -219,19 +219,27 @@ export function momentTaskFor(isBeginner:boolean):string{
 export function heldTaskFor(isBeginner:boolean):string{
   return momentTaskFor(isBeginner)+" This turn does not stop the scene: a moment you return is held for the end of the scene, so carry the scene on as usual."+HOLD_ANY;
 }
+/**
+ * LG-23 on a turn where a stop may happen (recert-7: Petra's 'I want other room', Tomáš's 'I like creeper' on turn 1,
+ * declined as stops by the beginner limit, and nothing held them): a clear error the stop rules do not stop for may come
+ * back with hold true, and code holds it (momentOutcome). The stop rules themselves are unchanged.
+ */
+export const OPEN_HOLD=" A clear error in submittedReply that the rules above do not stop for (for a beginner, a grammar slip made only once) may still be the moment with hold true: it is held for the end of the scene and the scene goes on. hold is false for a stop and for kind none; never hold what the rules above say to stop for.";
 /** What a held fix may be: any clear error, a slip made once included, since it never stops the scene. */
 const HOLD_ANY=" Because nothing stops here, the limits on a stop above do not apply: hold the one clear error in submittedReply that matters most, a grammar slip made only once included (a verb form, an article, a plural, a basic tense, a wrong word); never a valid alternative or a style or register choice.";
 /** Correction as needed holds a fix where it may not stop; with correction off nothing is held either. */
 export const holdsFixes=(c:Conversation)=>c.preferences.correction==="as-needed";
 /**
  * What the turn's moment field becomes (LG-23). Where a stop may happen it is a moment, exactly as before: a fossil's from
- * code, else the model's. Where it may not, the model's fix is a held fix, through the same parseMoment and the same audience
- * gate (`safe`), and never a moment. A held fix is null wherever the moment would have been dropped.
+ * code, else the model's, unless the model marked its fix hold (OPEN_HOLD). Where it may not, or for that hold, the model's
+ * fix is a held fix, through the same parseMoment and the same audience gate (`safe`), and never a moment. A held fix is null wherever the moment would have been dropped.
  */
 export function momentOutcome(c:Conversation,o:{raw:unknown;reply:string;turnId:string;mayStop:boolean;fossil:SlipAgain|null;safe:(x:string)=>boolean}):{moment:Moment|null;held:HeldFix|null}{
   const parsed=o.fossil?fossilMoment(o.fossil,o.turnId):o.mayStop||holdsFixes(c)?parseMoment(o.raw,o.reply,o.turnId):null;
   const kept=parsed&&[parsed.said,parsed.better,parsed.why].every(o.safe)?parsed:null;
-  if(!kept||o.fossil||o.mayStop)return {moment:kept,held:null};
+  // where a stop may happen, a fix the model marks hold (OPEN_HOLD) is held, not a stop; a fossil always stops
+  const hold=o.mayStop&&holdsFixes(c)&&object(o.raw).hold===true;
+  if(!kept||o.fossil||(o.mayStop&&!hold))return {moment:kept,held:null};
   const {id,kind,said,better,why,turnId,at}=kept;
   return {moment:null,held:{id:`${turnId}:held`,kind,said,better,why,turnId,at}};
 }
@@ -560,7 +568,7 @@ export async function englishCommand(raw:unknown){
     // The first LT run: 3 moments in 16 conversations, with clear errors in most learner turns. "Most turns are none"
     // read as "almost never"; the gap and cap in momentAllowed already keep a scene a scene.
     // LG-23: where the gap or cap shuts the stop, the turn still asks for its one fix, held for the recap (momentOutcome)
-    const momentTask=mayStop?momentTaskFor(beginner(c)):action==="turn"&&holdsFixes(c)?heldTaskFor(beginner(c)):" moment: kind none with empty fields.";
+    const momentTask=mayStop?momentTaskFor(beginner(c))+(holdsFixes(c)?OPEN_HOLD:""):action==="turn"&&holdsFixes(c)?heldTaskFor(beginner(c)):" moment: kind none with empty fields.";
     const stepTask=c.mission&&!missionDone(c.mission)?" step: currentStep is the one goal this learner is working on. Set reached true only when submittedReply itself, in the learner's own words, does it, and quote the exact words of submittedReply that did it (at least two words); otherwise reached false with an empty quote.":"";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
     const task=action==="turn"?{task:`${pair?DUET_PAIR:"Respond in character to submittedReply, then assess it against the allowed skills."} Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}${pair&&c.duet?.coStarLearnerId?COSTAR_TASK:""}`,submittedReply:reply,...(pair?{coStarReply:pair.coStar.text}:{}),...(askedAbout?{askedAbout}:{}),...(fossil?{slipAgain:{said:fossil.said,better:fossil.better,task:FOSSIL_TASK}}:again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:REPLAY_TASK,coaching,afterForm:coaching!.after,askedBefore:askedBefore(c)};

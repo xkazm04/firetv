@@ -162,6 +162,20 @@ test('LG-23 / council-lite r3 must-address 2: the held-fix task holds a clear er
   assert.equal(out.moment,null);assert.equal(out.held.said,'the room is dirty and smell bad');
 });
 
+test('LG-23 / council-lite r3 must-address 2: where a stop may happen, a fix the model marks hold is held, not a stop; unmarked it stops as before (recert-7 petra-38 t1)',()=>{
+  // petra-38 recert-7 t1: no moment yet, the gate open; the beginner limit declined the one-off slip as a stop
+  const c=run('A2','How can I help you?',[],[]),reply='Hello, I have a problem. The room is not clean and I want other room, please.',g=gate(c,reply);
+  assert.equal(g.mayStop,true);
+  const raw={kind:'fix',said:'I want other room',better:'I want another room',why:'One more room: another.'},o={c,reply,turnId:'t1',safe:minorSafe,...g};
+  const held=C.momentOutcome(c,{...o,raw:{...raw,hold:true}});
+  assert.equal(held.moment,null,'no stop: the gap and the cap are not spent');assert.equal(held.held.said,'I want other room');
+  const stop=C.momentOutcome(c,{...o,raw:{...raw,hold:false}});assert.equal(stop.held,null);assert.equal(stop.moment.said,'I want other room');
+  assert.equal(C.momentOutcome(c,{...o,raw}).moment.said,'I want other room','no hold field: a stop, as before');
+  const off={...c,preferences:{...c.preferences,correction:'pauses'}};
+  assert.deepEqual(C.momentOutcome(off,{...o,c:off,mayStop:false,raw:{...raw,hold:true}}),{moment:null,held:null},'correction off holds nothing');
+  assert.match(C.OPEN_HOLD,/hold true/);assert.match(C.OPEN_HOLD,/never hold what the rules above say to stop for/);
+});
+
 test('LG-23: the same words held twice are listed once, oldest first',()=>{
   const a={id:'t1:held',kind:'fix',said:'more long',better:'longer',why:'x',turnId:'t1',at:1},b={...a,id:'t3:held',turnId:'t3'};
   assert.deepEqual(C.keepHeld(undefined,null),[]);assert.deepEqual(C.keepHeld(undefined,a),[a]);
@@ -214,6 +228,7 @@ test('LG-23 wired (ondrej-16 J3, rows 6 and 7): one stop as before, the two gap-
   assert.deepEqual(screens,['linga-talk','linga-moment','linga-talk','linga-talk'],'the stop is on L2 only, as in the run');
   assert.match(prompts[3].task,/does not stop the scene/,'L3: the gate shut, the fix is still asked for');assert.match(prompts[4].task,/does not stop the scene/);
   assert.doesNotMatch(prompts[2].task,/does not stop the scene/,'L2: the stop task as before');
+  assert.ok(prompts[2].task.includes(C.OPEN_HOLD),'L2: a fix the stop rules decline may be held');
   assert.equal(live.moments.length,1,'one stop, as in the run');assert.equal(live.moment,null);
   assert.deepEqual(live.heldFixes.map(h=>[h.said,h.better,h.turnId]),[['we can play more long','we can play longer',live.turns[5].id],['is ok for you?','is that ok for you?',live.turns[7].id]]);
   // (5) the recap view-model: the held fixes, apart from the moments
@@ -239,7 +254,7 @@ test('LG-23 wired: during the scene no view lists a held fix; with correction of
   assert.equal(V.lingaView(talking,{}).recap,null);
   const off=await replayOndrej('pauses');
   assert.equal(off.live.heldFixes,undefined);assert.equal(off.live.moments.length,0);
-  assert.ok(off.prompts.slice(1).every(p=>/moment: kind none with empty fields/.test(p.task)),'no fix is asked for');
+  assert.ok(off.prompts.slice(1).every(p=>/moment: kind none with empty fields/.test(p.task)&&!/hold true/.test(p.task)),'no fix is asked for');
   assert.equal(off.learning.sessions.at(-1).held,undefined);
   assert.deepEqual(V.lingaView(off.done,{}).recap.held,[]);
 });
