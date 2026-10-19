@@ -3,6 +3,7 @@
  * sentence of the paragraph on the desk, rewritten on the phone and re-judged alone (desk/essay reviseSentence).
  */
 import { NextResponse } from "next/server";
+import { withPhoneAsk } from "@/lib/session/phoneAsk";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence, type ReadingFor } from "@/lib/desk/essay";
@@ -79,7 +80,8 @@ function readPiece(who: { id: string }, text: string, type: AnalysisType, age: n
   }, { key: "essay", start: `reading your piece, ${paragraphs} paragraphs — ${type} lens…`, done: (a) => a.summary.slice(0, 120) });
 }
 
-export async function POST(req: Request) {
+export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+async function post(req: Request) {
   // a body that is not one of the readings is refused in desk words before any run: never a 500, never a failed job
   const body = (await req.json().catch(() => null)) as Body | null;
   if (!body || typeof body !== "object" || !KINDS.includes(body.kind)) return NextResponse.json({ error: NOT_A_READING }, { status: 400 });

@@ -4,6 +4,7 @@
  * the same page id, its image from the session, so a retry never adds a second page.
  */
 import { NextResponse } from "next/server";
+import { withPhoneAsk } from "@/lib/session/phoneAsk";
 import { dispatch, getSession, NOBODY_AT_DESK, READ_NOT_KEPT, READ_NOT_SAVED, sessionSaved } from "@/lib/session/store";
 import { missingNumbers, readPage, type ReadWho } from "@/lib/desk/read";
 import { learnerPath } from "@/lib/library/paths";
@@ -16,7 +17,8 @@ import { DeskSaid, EMPTY_READ, refused, runJob } from "@/lib/desk/job";
 import type { Subject } from "@/lib/session/store";
 
 export const dynamic = "force-dynamic";
-export async function POST(req: Request) {
+export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+async function post(req: Request) {
   const body = ((await req.json().catch(() => null)) ?? {}) as { id?: string; image?: string; subject?: Subject; title?: unknown; w?: number; h?: number };
   const held = body.id ? getSession().pages.find((p) => p.id === body.id) : undefined;
   if (body.id && !held) return NextResponse.json({ error: "That page is no longer on the desk." }, { status: 409 });

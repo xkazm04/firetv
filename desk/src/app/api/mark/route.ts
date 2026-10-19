@@ -14,6 +14,7 @@
  * sure. It lands as `page.marked` on the page (the owner's away slot after a switch), with the same guards as a desk set.
  */
 import { NextResponse } from "next/server";
+import { withPhoneAsk } from "@/lib/session/phoneAsk";
 import { dispatch, getSession, NOBODY_AT_DESK, type Page, type Practice } from "@/lib/session/store";
 import { markPage, markSet, markTyped, pageSpecs } from "@/lib/desk/mark";
 import { MOVED_ON, refused, runJob } from "@/lib/desk/job";
@@ -44,7 +45,8 @@ const sameSet = (now: Practice | null | undefined, was: Practice) =>
   !!now && !now.marked && now.topic === was.topic && now.items.length === was.items.length &&
   now.items.every((it, i) => it.n === was.items[i].n && it.question === was.items[i].question);
 
-export async function POST(req: Request) {
+export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+async function post(req: Request) {
   // a body that is not the phone's snap or answers is refused in desk words, never an unhandled throw (a 500)
   const body = (await req.json().catch(() => null)) as { image?: unknown; answers?: unknown; page?: unknown; w?: number; h?: number } | null;
   if (!body || typeof body !== "object") return NextResponse.json({ error: NO_PHOTO }, { status: 400 });

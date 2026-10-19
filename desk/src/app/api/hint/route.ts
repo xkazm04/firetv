@@ -7,6 +7,7 @@
  * the hint screen says "No lesson for this" instead of offering a linear-equations video.
  */
 import { NextResponse } from "next/server";
+import { withPhoneAsk } from "@/lib/session/phoneAsk";
 import { dispatch, getSession, NOBODY_AT_DESK, HINT_NOT_COUNTED, hintCounted } from "@/lib/session/store";
 import { groundFor, hint } from "@/lib/desk/hint";
 import { pickLesson } from "@/lib/desk/pick";
@@ -19,7 +20,8 @@ import { learnerSystem } from "@/lib/rules/school";
 import { hintQuestionProblem } from "@/lib/rules/maths";
 
 export const dynamic = "force-dynamic";
-export async function POST(req: Request) {
+export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+async function post(req: Request) {
   const body = ((await req.json().catch(() => null)) ?? {}) as { askedQ?: string; stage?: 1 | 2; itemIx?: number };
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });

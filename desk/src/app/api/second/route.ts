@@ -11,6 +11,7 @@
  * draws what the go came to, the phone says nothing about it.
  */
 import { NextResponse } from "next/server";
+import { withPhoneAsk } from "@/lib/session/phoneAsk";
 import { SETTLE_NOT_SAVED, dispatch, getSession, NOBODY_AT_DESK, settleSaved } from "@/lib/session/store";
 import { enteredGo, secondGo } from "@/lib/desk/mark";
 import { TYPED_ANSWER_MAX, secondProblem } from "@/lib/rules/maths";
@@ -23,7 +24,8 @@ const BLANK = "Type your answer first, then send it.";
 const UNREADABLE = "The desk could not read that as an answer. Type just what you got and send it again.";
 const NOT_MARKED = "There is no marked set on the desk to go back to.";
 
-export async function POST(req: Request) {
+export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+async function post(req: Request) {
   const body = (await req.json().catch(() => null)) as { n?: unknown; answer?: unknown } | null;
   if (!body || typeof body !== "object" || typeof body.n !== "number") return NextResponse.json({ error: NO_BODY }, { status: 400 });
   const s = getSession(), who = s.learner;

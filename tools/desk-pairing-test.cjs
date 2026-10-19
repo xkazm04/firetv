@@ -1097,3 +1097,32 @@ test('lite r2 (g): phones.forget from a phone or a guest is still 403',async()=>
  assert.equal((await post({type:'phones.forget'},'guest')).status,403);
  assert.equal(pairing().isPhone(cookie.slice('desk-phone='.length)),true,'the phone is still listed');
 });
+// ---- TL-11: the phone answers asks and does not move the TV
+const PHONE_REFUSED=[{type:'nav',screen:'page'},{type:'focus',focus:1},{type:'subject',subject:'english'},{type:'item',itemIx:0},{type:'page.select',pageIx:0},{type:'walk',ix:1},
+ {type:'essay.at',n:1},{type:'timer.start'},{type:'timer.pause'},{type:'timer.tick',seconds:1},{type:'timer.skipbreak'},{type:'session.end'}];
+test('TL-11: a phone posting nav, focus, subject, item, page.select, walk, essay.at, timer.* or session.end is 403 and the session is byte-identical (one row each)',async()=>{
+ const cookie=await phoneCookie();
+ for(const e of PHONE_REFUSED){
+  evening('landing');const before=JSON.stringify(store.getSession());
+  const r=await post(e,'phone',cookie);
+  assert.equal(r.status,403,e.type);assert.equal(JSON.stringify(store.getSession()),before,`${e.type} changed the session`);
+ }
+});
+test('TL-11: the same events from the TV and from an in-process caller are unchanged (200)',async()=>{
+ for(const e of [{type:'nav',screen:'tonight'},{type:'focus',focus:1},{type:'timer.pause'}]){
+  evening('landing');assert.equal((await post(e,'tv')).status,200,`tv ${e.type}`);
+  evening('landing');assert.equal((await post(e)).status,200,`in-process ${e.type}`);
+ }
+});
+test('TL-11: a guest\'s nav pair is still allowed, and a guest\'s other nav is the join door\'s 403',async()=>{
+ evening('landing');
+ assert.equal((await post({type:'nav',screen:'pair',from:'landing'},'guest')).status,200);assert.equal(store.getSession().screen,'pair');
+ evening('landing');assert.equal((await post({type:'nav',screen:'page'},'guest')).status,403);assert.equal(store.getSession().screen,'landing');
+});
+test('TL-11 (OD4 b): a phone\'s task.add and task.done stay allowed',async()=>{
+ const cookie=await phoneCookie();evening('tonight');
+ assert.equal((await post({type:'task.add',name:'Reading',sub:'english',min:15},'phone',cookie)).status,200);
+ const t=store.getSession().tasks.find((x)=>x.name==='Reading');assert.ok(t,'the task is on the list');
+ assert.equal((await post({type:'task.done',id:t.id,done:true},'phone',cookie)).status,200);
+ assert.equal(store.getSession().tasks.find((x)=>x.id===t.id).done,true);
+});

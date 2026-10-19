@@ -4,6 +4,7 @@
  * On an item already wrong, a slip the explanation names from the topic's vocabulary becomes the item's shown slip.
  */
 import { NextResponse } from "next/server";
+import { withPhoneAsk } from "@/lib/session/phoneAsk";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { explainItem } from "@/lib/desk/explain";
 import { refused, runJob } from "@/lib/desk/job";
@@ -13,7 +14,8 @@ import { itemName } from "@/lib/rules/calc-word";
 import { EXPLAIN_TRANSCRIPT_MAX } from "@/lib/rules/saidValue";
 
 export const dynamic = "force-dynamic";
-export async function POST(req: Request) {
+export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+async function post(req: Request) {
   const { transcript, n } = ((await req.json().catch(() => null)) ?? {}) as { transcript?: unknown; n?: number };
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });

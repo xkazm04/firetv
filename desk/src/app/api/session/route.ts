@@ -27,6 +27,9 @@ const SERVER_ONLY: Partial<Record<Event["type"], string>> = {
   "ask.sent": "The desk marks a hand-off answered when the answer arrives.",
 };
 
+/** The events a phone may not post (TL-11); every other refusal and allowance is as it was. */
+const PHONE_NEVER = new Set<string>(["nav", "focus", "subject", "item", "page.select", "walk", "essay.at", "timer.start", "timer.pause", "timer.tick", "timer.skipbreak", "session.end"]);
+
 /** One line for a pairing write that failed, in the shape of pairing.ts's last-seen line; the caller answers 500 and changes nothing. */
 const notSaved = (what: string, e: unknown) => console.error(`desk pairing: ${what} could not be written to pairing.json (${e instanceof Error ? e.message : e}); nothing was changed`);
 
@@ -59,6 +62,8 @@ export async function POST(req: Request) {
   if (e?.type === "lesson.set" && e.key !== undefined) return NextResponse.json({ error: "Ask for a hint on /api/hint." }, { status: 403 });
   // the TV's own acts: wiping the desk, and starting an edit of a profile that is already made (a patch that names an id)
   if (role === "phone" && e?.type === "ask.open") return NextResponse.json({ error: "Only the TV can ask the phone for something." }, { status: 403 });
+  // the phone answers the TV's asks and does not move it (TL-11): navigation, focus, picks, the walk, the clock and the end of the session are the TV's. Tonight's list (task.*) stays the phone's (OD4)
+  if (role === "phone" && typeof e?.type === "string" && PHONE_NEVER.has(e.type)) return NextResponse.json({ error: "Only the TV moves the desk." }, { status: 403 });
   if (role === "phone" && e?.type === "reset") return NextResponse.json({ error: "Only the TV can reset the desk." }, { status: 403 });
   if (role === "phone" && e?.type === "profile.draft" && e.patch && typeof e.patch === "object" && Object.hasOwn(e.patch, "id")) return NextResponse.json({ error: "Only the TV can start editing a profile." }, { status: 403 });
   if (role === "guest" && !guestMay(getSession(), e)) return NextResponse.json({ error: JOIN_FIRST }, { status: 403 });
