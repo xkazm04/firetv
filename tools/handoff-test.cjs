@@ -83,7 +83,7 @@ const PRACTICE=()=>({topic:'linear-one-step',marked:false,items:[{n:1,question:'
 const ROUTES={
  read:{body:{image:'data:image/jpeg;base64,AAAA',subject:'maths',w:100,h:100},setup:()=>stubVision(()=>({items:[{number:1,text:'2x+3=11',x:0.5,y:0.2}]})),screen:'landing',kind:'page'},
  mark:{body:{answers:['4','7']},screen:'practice',extra:()=>({practice:PRACTICE()}),kind:'answers'},
- analyse:{body:{kind:'essay',text:'Homework is pointless. Nobody checked it.',type:'evidence'},screen:'landing',expect:null,kind:'paragraph'},
+ analyse:{body:{kind:'essay',text:'Homework is pointless. Nobody checked it.',type:'evidence'},screen:'landing',expect:null,kind:'paragraph',refusedBeforeWork:428},
  hint:{body:{askedQ:'where first?'},setup:()=>stubText({hint:()=>({hint:'Look at the +3.',what_to_try_next:'Undo it.'}),lesson:()=>({lesson:'none',why:'x'})}),screen:'page',extra:()=>({pages:[PG],pageIx:0,itemIx:0}),kind:'question'},
  explain:{body:{transcript:'I took away three',n:1},setup:()=>stubText({other:()=>({reply:'You took the three away first. Good.',slip:'',value:''})}),screen:'practice',extra:()=>({practice:PRACTICE()}),kind:'explain'},
  second:{body:{n:1,answer:'4'},screen:'walk',extra:()=>({practice:{...PRACTICE(),marked:true,items:[{n:1,question:'x+3=7',studentAnswer:'5',verdict:'wrong',said:'Number 1.'},{n:2,question:'x-5=2',studentAnswer:'7',verdict:'right',said:'Number 2.'}]}}),kind:'second'},
@@ -102,7 +102,9 @@ for(const [name,spec] of Object.entries(ROUTES)){
   const again=seatAt(spec.screen,spec.extra?.(),spec.kind);
   const r=await call(name,{...spec.body,askId:again.ask.id});
   assert.notEqual(r.status,409,`${name}: accepted`);assert.ok(r.status<500,`${name}: ${r.status}`);
-  assert.equal(store.getSession().ask,null,'the result closes the ask');
+  // analyse's stub answer is the text notice (428): a refusal before any work, so the ask is not spent (lite r3); every other route answers and closes it
+  if(spec.refusedBeforeWork){assert.equal(r.status,spec.refusedBeforeWork);assert.equal(store.getSession().ask?.phase,'open','a refusal before the work leaves the ask open');}
+  else assert.equal(store.getSession().ask,null,'the result closes the ask');
   // the TV and an in-process caller need no ask
   seatAt(spec.screen,spec.extra?.(),spec.kind);
   assert.notEqual((await call(name,spec.body,'tv')).status,409);
@@ -187,7 +189,7 @@ test('retry: a phone retry of a failed read meets the door (409 with no open pag
 test('(d) a refused answer does not spend the ask; the ask is sent while the work runs and closed by a result or a work failure',async()=>{
  // a bad request: the route refuses it before any work, and the ask stays open for the phone to try again
  let open=seatOpen('practice','answers',{practice:PRACTICE()});
- let r=await call('mark',{askId:open.ask.id});assert.equal(r.status,400);
+ let r=await call('mark',{answers:'x',askId:open.ask.id});assert.equal(r.status,400);
  assert.equal(store.getSession().ask?.id,open.ask.id);assert.equal(store.getSession().ask?.phase,'open','a refused mark leaves the ask open');
  open=seatOpen('walk','second',ROUTES.second.extra());
  r=await call('second',{n:1,answer:'   ',askId:open.ask.id});assert.equal(r.status,400);
@@ -200,6 +202,8 @@ test('(d) a refused answer does not spend the ask; the ask is sent while the wor
  // a refused answer then a good one: the same ask answers it
  open=seatOpen('practice','answers',{practice:PRACTICE()});
  assert.equal((await call('mark',{answers:'x',askId:open.ask.id})).status,400);
+ assert.equal((await call('mark',{answers:['4','7'],image:'data:image/jpeg;base64,AAAA',askId:open.ask.id})).status,400,'both ways in');
+ assert.equal(store.getSession().ask?.phase,'open');
  r=await call('mark',{answers:['4','7'],askId:open.ask.id});assert.ok(r.status<300,`${r.status}`);assert.equal(store.getSession().ask,null);
 });
 test('(d) ask.sent stays refused on /api/session for every role',async()=>{

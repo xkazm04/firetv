@@ -8,6 +8,7 @@
 import { RETRYABLE, type JobFailure } from "../desk/failure";
 import type { Workroom } from "../twin/workroom";
 import { randomInt, randomUUID } from "node:crypto";
+import { AsyncLocalStorage } from "node:async_hooks";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { lanHost } from "./lan";
 import { dataDir } from "../dataDir";
@@ -1114,6 +1115,25 @@ function tellRehydrate(why: string): void {
   rehydrateTold = why;
 }
 
+/**
+ * The phone answer a route is running now (lib/session/phoneAsk.ts, council lite r3): its ask is marked sent the moment
+ * the work begins - the first run started inside it, or a paper the desk goes to write - so a request the route refuses
+ * before any work leaves the ask open for the phone to answer again. `begun` tells the door whether the work began.
+ */
+const answering = new AsyncLocalStorage<{ id: string; begun: boolean; done: boolean }>();
+export async function answerAsk<T>(id: string, run: () => Promise<T>): Promise<{ value: T; begun: boolean }> {
+  const scope = { id, begun: false, done: false };
+  try { const value = await answering.run(scope, run); return { value, begun: scope.begun }; }
+  finally { scope.done = true; }
+}
+/** The work of the answer running now begins: its ask, still open, is marked sent (once; a run started after the answer is done is no answer's). */
+function workBegins(): void {
+  const a = answering.getStore();
+  if (!a || a.begun || a.done) return;
+  a.begun = true;
+  if (store.session.ask?.id === a.id && store.session.ask.phase === "open") dispatch({ type: "ask.sent", id: a.id });
+}
+
 export function dispatch(e: Event): Session {
   if (e.type === "paper.enter") {
     // the one validation (rules/recovery cleanPaper) decides what is kept; a paper with no row left is not kept, and the TV stays put.
@@ -1121,6 +1141,8 @@ export function dispatch(e: Event): Session {
     const id = store.session.learner?.id;
     let kept: StoredPaper | null = null, failed = false;
     if (id) try { kept = addPaper(id, e.rows); } catch (err) { failed = true; console.error("A paper could not be saved:", err instanceof Error ? err.message : err); }
+    // a paper the desk kept, or went to write and could not, is work done for the phone that sent it; no row left is the phone's to fix
+    if (kept || failed) workBegins();
     if (!kept) {
       store.session = { ...store.session, status: !id ? NOBODY_AT_DESK : failed ? PAPER_NOT_SAVED : PAPER_NO_ROW, updatedAt: Date.now() };
       notify();
@@ -1160,6 +1182,7 @@ export function dispatch(e: Event): Session {
   if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) store.session = { ...store.session, week: weekRead(store.session) };
   writeSession();
   notify();
+  if (e.type === "job.start") workBegins();
   return store.session;
 }
 /**
