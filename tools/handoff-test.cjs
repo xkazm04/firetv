@@ -211,3 +211,8 @@ test('(d) ask.sent stays refused on /api/session for every role',async()=>{
  for(const role of ['tv','phone','guest',null])assert.equal((await sess({type:'ask.sent',id:open.ask.id},role)).status,403,String(role));
  assert.equal(store.getSession().ask.phase,'open');
 });
+test('(e) the phone\'s paper post names the open paper ask: PaperPanel sends askId with paper.enter, and the page hands it the paper ask\'s id',()=>{
+ const panel=fs.readFileSync(path.join(root,'src/app/phone/PaperPanel.tsx'),'utf8'),page=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ assert.match(panel,/type: "paper\.enter", rows: rawOf\(rows\), \.\.\.\(askId \? \{ askId \} : \{\}\)/);
+ assert.match(page,/<PaperPanel .*askId=\{s\?\.ask\?\.kind === "paper" \? askId : undefined\}/);
+});

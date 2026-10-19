@@ -4,7 +4,8 @@
  * the paper prints it, the marks scored, what it was out of, and the statements it tests, picked from a list that shows
  * each statement's `can` text. The rows go through the desk's own validation (rules/paperEntry -> rules/recovery
  * cleanPaper) as they are typed, so every row the desk would leave out is shown here with its reason, and are then sent
- * through the session door (POST /api/session, `paper.enter`), where the same validation decides what is kept.
+ * through the session door (POST /api/session, `paper.enter`), where the same validation decides what is kept. The post
+ * names the TV's open paper ask (`askId`): a phone's paper with no matching ask is refused (lite r3).
  */
 import { useState } from "react";
 import { blankRow, canOf, choicesMatching, entryOf, isBlank, rawOf, statementChoices, MOST_PICKS, type DraftRow } from "@/lib/rules/paperEntry";
@@ -40,8 +41,8 @@ function RowPicker({ codes, pick, system }: { codes: string[]; pick: (code: stri
   </details>;
 }
 
-export function PaperPanel({ rows, setRows, post, seated, status, name, system }: {
-  rows: DraftRow[]; setRows: (r: DraftRow[]) => void; post: (e: Event) => Promise<Response>; seated: boolean; status: string; kept?: boolean; name?: string; system?: SchoolSystem;
+export function PaperPanel({ rows, setRows, post, seated, status, name, system, askId }: {
+  rows: DraftRow[]; setRows: (r: DraftRow[]) => void; post: (e: Event) => Promise<Response>; seated: boolean; status: string; kept?: boolean; name?: string; system?: SchoolSystem; askId?: string;
 }) {
   const e = entryOf(rows);
   const set = (i: number, patch: Partial<DraftRow>) => setRows(rows.map((r, k) => (k === i ? { ...r, ...patch } : r)));
@@ -66,7 +67,7 @@ export function PaperPanel({ rows, setRows, post, seated, status, name, system }
       <ul>{e.drops.map((d) => <li key={d}>{d}</li>)}</ul></div>}
     {e.notes.length > 0 && <div className="ppaper-notes" data-role="paper-notes"><ul>{e.notes.map((n) => <li key={n}>{n}</li>)}</ul></div>}
     {seated
-      ? <button className="pbtn" data-signal="true" disabled={e.kept === 0} onClick={() => void post({ type: "paper.enter", rows: rawOf(rows) })} data-role="paper-send">
+      ? <button className="pbtn" data-signal="true" disabled={e.kept === 0} onClick={() => void post({ type: "paper.enter", rows: rawOf(rows), ...(askId ? { askId } : {}) })} data-role="paper-send">
         {paperSend(e.kept, name)}</button>
       : <p>No one is at the desk yet: choose who on the TV first.</p>}
     {status && <p style={{ fontSize: 12 }}>{status}</p>}

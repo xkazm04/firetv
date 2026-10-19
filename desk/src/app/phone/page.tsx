@@ -670,7 +670,7 @@ export default function Phone() {
             <p style={{ fontSize: 12 }}>Save and Back are on the TV.</p>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 
-        {screen === "paper" && <PaperPanel rows={paperRows} setRows={editPaperRows} post={post} seated={!!s?.learner} status={s?.status ?? ""} kept={!!s?.paper} name={s?.learner?.name} system={s?.learner ? s.profiles?.find((p) => p.id === s.learner?.id)?.system : undefined} />}
+        {screen === "paper" && <PaperPanel rows={paperRows} setRows={editPaperRows} post={post} seated={!!s?.learner} status={s?.status ?? ""} kept={!!s?.paper} name={s?.learner?.name} system={s?.learner ? s.profiles?.find((p) => p.id === s.learner?.id)?.system : undefined} askId={s?.ask?.kind === "paper" ? askId : undefined} />}
 
         {screen === "capture" && (() => {
           const reading = phase === "sending" || (phase === "sent" && !!s?.reading);
