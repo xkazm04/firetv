@@ -14,7 +14,7 @@ import { itemName } from "@/lib/rules/calc-word";
 import { EXPLAIN_TRANSCRIPT_MAX } from "@/lib/rules/saidValue";
 
 export const dynamic = "force-dynamic";
-export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+export function POST(req: Request) { return withPhoneAsk(req, ["explain"], () => post(req)); }
 async function post(req: Request) {
   const { transcript, n } = ((await req.json().catch(() => null)) ?? {}) as { transcript?: unknown; n?: number };
   const s = getSession(), who = s.learner;

@@ -45,7 +45,7 @@ const sameSet = (now: Practice | null | undefined, was: Practice) =>
   !!now && !now.marked && now.topic === was.topic && now.items.length === was.items.length &&
   now.items.every((it, i) => it.n === was.items[i].n && it.question === was.items[i].question);
 
-export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+export function POST(req: Request) { return withPhoneAsk(req, (b) => (b.answers !== undefined ? ["answers"] : ["sheet"]), () => post(req)); }
 async function post(req: Request) {
   // a body that is not the phone's snap or answers is refused in desk words, never an unhandled throw (a 500)
   const body = (await req.json().catch(() => null)) as { image?: unknown; answers?: unknown; page?: unknown; w?: number; h?: number } | null;

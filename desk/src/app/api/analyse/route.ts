@@ -4,7 +4,7 @@
  */
 import { NextResponse } from "next/server";
 import { withPhoneAsk } from "@/lib/session/phoneAsk";
-import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
+import { dispatch, getSession, NOBODY_AT_DESK, type AskKind } from "@/lib/session/store";
 import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence, type ReadingFor } from "@/lib/desk/essay";
 import { BUSY, blocksRun, refused, runJob, type JobRun } from "@/lib/desk/job";
@@ -80,7 +80,9 @@ function readPiece(who: { id: string }, text: string, type: AnalysisType, age: n
   }, { key: "essay", start: `reading your piece, ${paragraphs} paragraphs — ${type} lens…`, done: (a) => a.summary.slice(0, 120) });
 }
 
-export function POST(req: Request) { return withPhoneAsk(req, () => post(req), (b) => b.kind === "shelf-piece"); }
+/** The ask a phone's reading answers, by its kind (TV-led design, section 2.2): a sentence, a paragraph or piece, a rewrite. */
+const ASKS: Record<string, readonly AskKind[]> = { english: ["sentence"], essay: ["paragraph"], piece: ["paragraph"], "piece-again": ["paragraph"], rewrite: ["rewrite"] };
+export function POST(req: Request) { return withPhoneAsk(req, (b) => (typeof b.kind === "string" && Object.hasOwn(ASKS, b.kind) ? ASKS[b.kind] : []), () => post(req), (b) => b.kind === "shelf-piece"); }
 async function post(req: Request) {
   // a body that is not one of the readings is refused in desk words before any run: never a 500, never a failed job
   const body = (await req.json().catch(() => null)) as Body | null;

@@ -24,7 +24,7 @@ const BLANK = "Type your answer first, then send it.";
 const UNREADABLE = "The desk could not read that as an answer. Type just what you got and send it again.";
 const NOT_MARKED = "There is no marked set on the desk to go back to.";
 
-export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+export function POST(req: Request) { return withPhoneAsk(req, ["second"], () => post(req)); }
 async function post(req: Request) {
   const body = (await req.json().catch(() => null)) as { n?: unknown; answer?: unknown } | null;
   if (!body || typeof body !== "object" || typeof body.n !== "number") return NextResponse.json({ error: NO_BODY }, { status: 400 });

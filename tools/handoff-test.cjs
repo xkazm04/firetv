@@ -75,23 +75,23 @@ const stubText=(on)=>reg.useProvider('text',{name:'stub',run:async(req)=>{const 
  const which=p.includes('lesson')?'lesson':p.includes('hint')?'hint':'other';const f=on[which];if(!f)throw new Error(`no stub for ${which}`);return {raw:await f(req)};}});
 const stubVision=(f)=>reg.useProvider('vision',{name:'stub',run:async(req)=>({raw:await f(req)})});
 const call=(name,body,role='phone')=>require(path.join(root,`src/app/api/${name}/route.ts`)).POST(new Request(`http://desk/api/${name}`,{method:'POST',headers:{'x-desk-role':role},body:JSON.stringify(body)}));
-const seatAt=(screen,extra={})=>{store.dispatch({type:'reset'});store.dispatch({type:'profile.draft',patch:{id:'ho-scratch',name:'Scratch',type:'other'}});store.dispatch({type:'profile.save'});
- globalThis.__desk.session={...store.getSession(),screen,subject:'maths',...extra};store.dispatch({type:'ask.open',kind:'page'});return store.getSession();};
+const seatAt=(screen,extra={},kind='page')=>{store.dispatch({type:'reset'});store.dispatch({type:'profile.draft',patch:{id:'ho-scratch',name:'Scratch',type:'other'}});store.dispatch({type:'profile.save'});
+ globalThis.__desk.session={...store.getSession(),screen,subject:'maths',...extra};store.dispatch({type:'ask.open',kind});return store.getSession();};
 const PG={id:'maths-1',subject:'maths',title:'Sheet',img:'data:image/jpeg;base64,AAAA',w:100,h:100,items:[{n:1,text:'2x+3=11',cx:0,cy:0,band:[0,10],key:'k1'}]};
 const PRACTICE=()=>({topic:'linear-one-step',marked:false,items:[{n:1,question:'x+3=7',answer:'4'},{n:2,question:'x-5=2',answer:'7'}]});
-/** For each route: the request that works with a model-free (stubbed) engine, and the state that route needs. */
+/** For each route: the request that works with a model-free (stubbed) engine, the state that route needs, and the ask it answers. */
 const ROUTES={
- read:{body:{image:'data:image/jpeg;base64,AAAA',subject:'maths',w:100,h:100},setup:()=>stubVision(()=>({items:[{number:1,text:'2x+3=11',x:0.5,y:0.2}]})),screen:'landing'},
- mark:{body:{answers:['4','7']},screen:'practice',extra:()=>({practice:PRACTICE()})},
- analyse:{body:{kind:'essay',text:'Homework is pointless. Nobody checked it.',type:'evidence'},screen:'landing',expect:null},
- hint:{body:{askedQ:'where first?'},setup:()=>stubText({hint:()=>({hint:'Look at the +3.',what_to_try_next:'Undo it.'}),lesson:()=>({lesson:'none',why:'x'})}),screen:'page',extra:()=>({pages:[PG],pageIx:0,itemIx:0})},
- explain:{body:{transcript:'I took away three',n:1},setup:()=>stubText({other:()=>({reply:'You took the three away first. Good.',slip:'',value:''})}),screen:'practice',extra:()=>({practice:PRACTICE()})},
- second:{body:{n:1,answer:'4'},screen:'walk',extra:()=>({practice:{...PRACTICE(),marked:true,items:[{n:1,question:'x+3=7',studentAnswer:'5',verdict:'wrong',said:'Number 1.'},{n:2,question:'x-5=2',studentAnswer:'7',verdict:'right',said:'Number 2.'}]}})},
+ read:{body:{image:'data:image/jpeg;base64,AAAA',subject:'maths',w:100,h:100},setup:()=>stubVision(()=>({items:[{number:1,text:'2x+3=11',x:0.5,y:0.2}]})),screen:'landing',kind:'page'},
+ mark:{body:{answers:['4','7']},screen:'practice',extra:()=>({practice:PRACTICE()}),kind:'answers'},
+ analyse:{body:{kind:'essay',text:'Homework is pointless. Nobody checked it.',type:'evidence'},screen:'landing',expect:null,kind:'paragraph'},
+ hint:{body:{askedQ:'where first?'},setup:()=>stubText({hint:()=>({hint:'Look at the +3.',what_to_try_next:'Undo it.'}),lesson:()=>({lesson:'none',why:'x'})}),screen:'page',extra:()=>({pages:[PG],pageIx:0,itemIx:0}),kind:'question'},
+ explain:{body:{transcript:'I took away three',n:1},setup:()=>stubText({other:()=>({reply:'You took the three away first. Good.',slip:'',value:''})}),screen:'practice',extra:()=>({practice:PRACTICE()}),kind:'explain'},
+ second:{body:{n:1,answer:'4'},screen:'walk',extra:()=>({practice:{...PRACTICE(),marked:true,items:[{n:1,question:'x+3=7',studentAnswer:'5',verdict:'wrong',said:'Number 1.'},{n:2,question:'x-5=2',studentAnswer:'7',verdict:'right',said:'Number 2.'}]}}),kind:'second'},
 };
 for(const [name,spec] of Object.entries(ROUTES)){
  test(`TL-11: /api/${name} from a phone with no ask or the wrong askId is 409 and changes nothing; the right askId is answered and the ask closed`,async()=>{
   spec.setup?.();
-  const open=seatAt(spec.screen,spec.extra?.());assert.equal(open.ask.phase,'open');
+  const open=seatAt(spec.screen,spec.extra?.(),spec.kind);assert.equal(open.ask.phase,'open');
   const frozen=JSON.stringify(store.getSession());
   for(const body of [spec.body,{...spec.body,askId:'not-the-ask'},{...spec.body,askId:undefined}]){
    const r=await call(name,body);assert.equal(r.status,409,JSON.stringify(Object.keys(body)));assert.equal((await r.json()).error,'The TV is not asking for that now.');
@@ -99,12 +99,12 @@ for(const [name,spec] of Object.entries(ROUTES)){
   }
   store.dispatch({type:'ask.cancel',id:open.ask.id});
   assert.equal((await call(name,{...spec.body,askId:open.ask.id})).status,409,'a closed ask answers nothing');
-  const again=seatAt(spec.screen,spec.extra?.());
+  const again=seatAt(spec.screen,spec.extra?.(),spec.kind);
   const r=await call(name,{...spec.body,askId:again.ask.id});
   assert.notEqual(r.status,409,`${name}: accepted`);assert.ok(r.status<500,`${name}: ${r.status}`);
   assert.equal(store.getSession().ask,null,'the result closes the ask');
   // the TV and an in-process caller need no ask
-  seatAt(spec.screen,spec.extra?.());
+  seatAt(spec.screen,spec.extra?.(),spec.kind);
   assert.notEqual((await call(name,spec.body,'tv')).status,409);
  });
 }

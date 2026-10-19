@@ -17,7 +17,7 @@ import { DeskSaid, EMPTY_READ, refused, runJob } from "@/lib/desk/job";
 import type { Subject } from "@/lib/session/store";
 
 export const dynamic = "force-dynamic";
-export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+export function POST(req: Request) { return withPhoneAsk(req, ["page"], () => post(req)); }
 async function post(req: Request) {
   const body = ((await req.json().catch(() => null)) ?? {}) as { id?: string; image?: string; subject?: Subject; title?: unknown; w?: number; h?: number };
   const held = body.id ? getSession().pages.find((p) => p.id === body.id) : undefined;

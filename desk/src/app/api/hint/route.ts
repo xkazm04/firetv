@@ -20,7 +20,7 @@ import { learnerSystem } from "@/lib/rules/school";
 import { hintQuestionProblem } from "@/lib/rules/maths";
 
 export const dynamic = "force-dynamic";
-export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+export function POST(req: Request) { return withPhoneAsk(req, ["question"], () => post(req)); }
 async function post(req: Request) {
   const body = ((await req.json().catch(() => null)) ?? {}) as { askedQ?: string; stage?: 1 | 2; itemIx?: number };
   const s = getSession(), who = s.learner;
