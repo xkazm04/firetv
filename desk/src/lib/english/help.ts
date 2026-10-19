@@ -2,24 +2,27 @@
  * The rescue ladder: help that answers the question on screen.
  *
  * Every partner line comes with its own ladder, written in the same model call as the line: said more simply,
- * what it means, a way to start. Code decides the rest. It drops a rung that does not do its job, reveals the
- * rungs one at a time and in order, and decides that any rung revealed for the line on screen makes the next reply
- * supported: certification credits only fully unaided replies (the delegate's ruling (a) on lt-swap-2/recert-1).
+ * what it means, a way to start. At A1-A2 the first rung is words to say back instead (LG-5 recert-9): the band hold
+ * already keeps the partner's line short, so "said more simply" only handed the line back. Code decides the rest. It
+ * drops a rung that does not do its job, reveals the rungs one at a time and in order, and decides that any rung
+ * revealed for the line on screen makes the next reply supported: certification credits only fully unaided replies
+ * (the delegate's ruling (a) on lt-swap-2/recert-1).
  *
  * Withholding: a rung may say the question again or explain a word, and the starter opens a reply without finishing
- * it. None of them is the learner's answer. The words of an unrevealed rung never reach the session, which every
- * screen reads; they stay here, in server memory, like check.ts's answer keys. A ladder lost to a restart gives
- * way to the scene's own cue, as before the ladder.
+ * it. The say-back rung is one possible reply, which is why any rung makes the next reply supported. The words of an
+ * unrevealed rung never reach the session, which every screen reads; they stay here, in server memory, like check.ts's
+ * answer keys. A ladder lost to a restart gives way to the scene's own cue, as before the ladder.
  */
-import { fitsBand } from "./gate";
+import { fitsBand, pastQuestion } from "./gate";
 import type { Band, ConversationHelp, HelpRung } from "./types";
 
 /** Any revealed rung is help: a reply after the simpler line, the meaning or the starter is supported practice. */
 export const SUPPORTING_RUNG: HelpRung = 1;
-export const SIMPLER_MAX = 160, MEANING_MAX = 160, STARTER_MAX = 80, STARTER_WORDS = 8;
+export const SIMPLER_MAX = 160, MEANING_MAX = 160, STARTER_MAX = 80, STARTER_WORDS = 8, SAY_MAX = 80;
 const LADDER_CAP = 200;
 
-type Ladder = Partial<Record<HelpRung, string>>;
+/** `say`: rung 1 is words to say back (sayBack), not the line said more simply. */
+type Ladder = Partial<Record<HelpRung, string>> & { say?: true };
 // Server memory only: the session reaches every screen.
 const g = globalThis as unknown as { __lingaHelp?: Map<string, Ladder> };
 const ladders = g.__lingaHelp ??= new Map<string, Ladder>();
@@ -44,17 +47,37 @@ const inBand = (text: string, band?: Band) => fitsBand(text.replace(/^Try(?: [a-
 export interface LadderHold { band?: Band; held?: boolean }
 /** A meaning rung names its word first ("see: look with your eyes"); that word must be in the line (`same`, its words). */
 const namesLineWord = (meaning: string, same: string) => !meaning.includes(":") || words(meaning.slice(0, meaning.indexOf(":"))).split(" ").every(w => ` ${same} `.includes(` ${w} `));
+/** The bands whose first rung is words to say back (LG-5 recert-9). */
+const SAYS_BACK: readonly Band[] = ["A1", "A2"];
+const sentencesOf = (text: string) => text.trim().split(/(?<=[.!?])\s+/).map(x => words(x)).filter(Boolean);
+/**
+ * Words the learner could say back to the partner's line (LG-5 recert-9, LT-viktor-67-J4-3, LT-tomas-9-J4-3): "Said more
+ * simply: Hi Grandpa! I am home now." gave Viktor Mia's line, not his. A say-back rung is held to the band, has no
+ * past-tense question at either band, says none of the line's sentences again, and answers a question line with at least
+ * one sentence that is not a question ("Hi Mia! Is school good?" for "Hi Grandpa! I am home now."). Else "".
+ */
+export function sayBackFor(raw: string, partnerLine: string, band: Band | undefined): string {
+  const say = raw.replace(/\s+/g, " ").trim();
+  if (!say || say.length > SAY_MAX || !inBand(say, band)) return "";
+  const parts = say.split(/(?<=[.!?])\s+/), theirs = new Set(sentencesOf(partnerLine));
+  if (parts.some(pastQuestion) || sentencesOf(say).some(x => theirs.has(x)) || words(say) === words(partnerLine)) return "";
+  return partnerLine.trim().endsWith("?") && parts.every(x => x.trim().endsWith("?")) ? "" : say;
+}
 /** The rungs of a model's ladder that do their job, for this partner line. Anything else is dropped, never the line. */
 export function validLadder(raw: unknown, partnerLine: string, hold: LadderHold = {}): Ladder {
   const o = raw && typeof raw === "object" && !Array.isArray(raw) ? raw as Record<string, unknown> : {};
   const line = partnerLine.trim(), same = words(line), out: Ladder = {};
   const fits = (s: string) => s && inBand(s, hold.band) ? s : "";
-  const simpler = fits(plain(o, "simpler")), starter = fits(unfinished(plain(o, "starter")));
+  const says = !!hold.band && SAYS_BACK.includes(hold.band);
+  // at A1-A2 the line said more simply is never a rung (it gave the partner's line back): the say-back takes its place
+  const simpler = says ? "" : fits(plain(o, "simpler")), starter = fits(unfinished(plain(o, "starter")));
   const named = fits(plain(o, "meaning")), meaning = !hold.held || namesLineWord(named, same) ? named : "";
+  const say = says ? sayBackFor(plain(o, "sayBack"), line, hold.band) : "";
+  if (say) { out[1] = say; out.say = true; }
   // Said more simply: shorter than the line and not the line again; a question stays a question.
   if (simpler && simpler.length <= SIMPLER_MAX && simpler.length < line.length && words(simpler) !== same && (!line.includes("?") || simpler.endsWith("?"))) out[1] = simpler;
-  if (meaning && meaning.length <= MEANING_MAX && words(meaning) !== same && words(meaning) !== words(simpler)) out[2] = meaning;
-  if (starter && words(starter) !== same) out[3] = starter;
+  if (meaning && meaning.length <= MEANING_MAX && words(meaning) !== same && words(meaning) !== words(simpler) && words(meaning) !== words(say)) out[2] = meaning;
+  if (starter && words(starter) !== same && words(starter) !== words(say)) out[3] = starter;
   return out;
 }
 
@@ -65,7 +88,7 @@ export function keepLadder(turnId: string, ladder: Ladder, previous?: string | n
   if (!rungs.length) return null;
   ladders.set(turnId, ladder);
   while (ladders.size > LADDER_CAP) ladders.delete(ladders.keys().next().value!);
-  return { forTurn: turnId, rungs, rung: 0, shown: false };
+  return { forTurn: turnId, rungs, rung: 0, shown: false, ...(ladder.say && ladder[1] ? { say: true } : {}) };
 }
 
 /**

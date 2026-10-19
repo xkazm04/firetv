@@ -208,7 +208,7 @@ export interface ConversationTurn { id: string; role: "partner" | "learner" | "c
  */
 export interface Duet { coStar: string; coStarLearnerId?: string; beat: "learner" | "costar"; held?: ConversationTurn }
 export interface Coaching { before: string; after: string; note: string; }
-/** A rung of the rescue ladder: 1 said more simply, 2 what it means, 3 a way to start. */
+/** A rung of the rescue ladder: 1 said more simply (at A1-A2, words to say back), 2 what it means, 3 a way to start. */
 export type HelpRung = 1 | 2 | 3;
 /**
  * The rescue ladder of the partner's current line, as the session may know it: which rungs exist and how far the
@@ -222,6 +222,8 @@ export interface ConversationHelp {
   rung: 0 | HelpRung;
   /** the cue on screen is that rung (not the quiz's or a choice's line) */
   shown: boolean;
+  /** LG-5 recert-9: rung 1 is words to say back to the line (A1-A2), not the line said more simply */
+  say?: true;
 }
 export type NoteKind = "meaning" | "form" | "word" | "register";
 /**

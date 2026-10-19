@@ -745,7 +745,9 @@ let calls=0;
 function ladderEngine(turn,opening={title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'}){
  calls=0;answer=async req=>{calls++;const p=JSON.parse(req.prompt);return {json:p.submittedReply?turn(p):opening,provider:'test',ms:1};};
 }
-async function booked(turn,opening){fresh();ladderEngine(turn,opening);await command('start',{sceneId:'booking',replace:true});}
+// LG-5 recert-9: the learner starts with no band known, so no hold applies: at A1-A2 rung 1 is a say-back, not the simpler line, and
+// an earlier test's level left on the shared learner would decide which ladder these cases walk
+async function booked(turn,opening){fresh();saveEnglish('ema',emptyEnglish());ladderEngine(turn,opening);await command('start',{sceneId:'booking',replace:true});}
 const reply=(text='I need a room.')=>command('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
 const said=(text,patch={})=>()=>({reply:text,observations:[],...patch});
 const observed=q=>[{skill:'request',quote:q,success:true,confidence:'clear',note:'Asked clearly.'}];
@@ -3405,7 +3407,9 @@ test('LG-5 recert-8 rules: rungs and the scene cue are held to the band (no past
  assert.equal(H.sceneCueFor('Try: Can you tell me what you usually like to build with your friends?','A1',false),null,'over 8 words at A1');
  const raw={simpler:'What did you do at school today?',meaning:'school: where children learn',starter:'Today I …'};
  assert.deepEqual(H.validLadder(raw,'How was your day at school, Grandpa asks?',{band:'A1'}),{2:raw.meaning,3:raw.starter},'A1: the past-tense simpler goes');
- assert.deepEqual(Object.keys(H.validLadder(raw,'How was your day at school, Grandpa asks?',{band:'A2'})),['1','2','3'],'A2 keeps them');
+ // LG-5 recert-9 revised this row on purpose: at A2 rung 1 is words to say back (help.ts sayBackFor), so the simpler line is no rung
+ assert.deepEqual(Object.keys(H.validLadder(raw,'How was your day at school, Grandpa asks?',{band:'A2'})),['2','3'],'A2 keeps the rest');
+ assert.deepEqual(Object.keys(H.validLadder(raw,'How was your day at school, Grandpa asks?',{band:'B1'})),['1','2','3'],'B1 keeps them');
  // a line the hold cut keeps the rungs that still fit it: a meaning must name a word still in the line
  const mia={simpler:'',meaning:'draw: make a picture with a pencil',starter:'Yes, I draw …'};
  assert.deepEqual(H.validLadder(mia,'Do you draw?',{band:'A1',held:true}),{2:mia.meaning,3:mia.starter});
@@ -3438,4 +3442,41 @@ test('LG-5 recert-8 wired (tomas-9 J4 #2-#4): the scene cue is shown once a scen
  assert.equal(c.quizOpen,true,'pressed again: the quiz, not the same cue');assert.equal(c.cue,'','the quiz does not repeat it either');
  await reply('I like sword.');await command('cue');c=getSession().conversation;
  assert.notEqual(c.cue,TOMAS_CUE,'a later line with no ladder: never the same cue again');assert.equal(c.quizOpen,true);
+});
+
+// ---- LG-5 recert-9 (docs/uat-insights/2026-10-19-lt-recert-9.md): the "above band" complaint came from the help around the
+// partner. (1) The first rung at A1-A2 is words to say back, never the partner's line said more simply: "Said more simply: Hi
+// Grandpa! I am home now." (recert-9/LT-viktor-67-J4-3) and "Said more simply: Do you know where creepers live?"
+// (recert-9/LT-tomas-9-J4-3) handed the learner the partner's line. Fixtures from the recert-9 transcripts.
+const MIA_LINE='Hi Grandpa! I am home now.',SAM_LINE='Do you know where creepers live?';
+test('LG-5 recert-9 rules (1): at A1-A2 the first rung is a reply-shaped say-back, held to fitsBand and pastQuestion; the line said more simply is never a rung there',()=>{
+ const H=require(path.join(root,'src/lib/english/help.ts'));
+ assert.equal(H.sayBackFor('Hi Mia! Is school good?',MIA_LINE,'A1'),'Hi Mia! Is school good?','viktor-67: words for Viktor to say back to Mia');
+ assert.equal(H.sayBackFor(MIA_LINE,MIA_LINE,'A1'),'','viktor-67 #3: the line again is no say-back');
+ assert.equal(H.sayBackFor('Hi Mia. I am home now.',MIA_LINE,'A1'),'','one of the line\'s sentences again is not a reply');
+ assert.equal(H.sayBackFor(SAM_LINE,SAM_LINE,'A1'),'','tomas-9 #3: the question again');
+ assert.equal(H.sayBackFor('Where do creepers live?',SAM_LINE,'A1'),'','a question answered only with a question is not a reply');
+ assert.equal(H.sayBackFor("No, I don't know. Do you?",SAM_LINE,'A1'),"No, I don't know. Do you?",'tomas-9: an answer to Sam');
+ assert.equal(H.sayBackFor('Hi Mia! What did you do at school?',MIA_LINE,'A1'),'','a past-tense question at A1');
+ assert.equal(H.sayBackFor('Hi Mia! What did you do at school?',MIA_LINE,'A2'),'','pastQuestion holds the say-back at A2 too');
+ assert.equal(H.sayBackFor('Hello Mia, it is so very nice to see you here at home today!',MIA_LINE,'A1'),'','over 8 words at A1 (fitsBand)');
+ const mia={simpler:'Hi! I am home.',meaning:'home: the house you live in',starter:'Hi Mia, …',sayBack:'Hi Mia! Is school good?'};
+ assert.deepEqual(H.validLadder(mia,MIA_LINE,{band:'A1'}),{1:mia.sayBack,say:true,2:mia.meaning,3:mia.starter},'A1: the say-back is rung 1');
+ assert.deepEqual(H.validLadder({...mia,sayBack:MIA_LINE},MIA_LINE,{band:'A1'}),{2:mia.meaning,3:mia.starter},'A1: no say-back, and never the simpler line in its place');
+ // LG-5 recert-9 revised the A2 row of recert-8 on purpose: A2 gives words to say back too, so its rung 1 is the say-back
+ assert.deepEqual(Object.keys(H.validLadder({...mia,sayBack:''},MIA_LINE,{band:'A2'})),['2','3'],'A2: no simpler rung');
+ assert.deepEqual(H.validLadder(mia,MIA_LINE,{band:'B1'})[1],mia.simpler,'B1 and up keep said more simply');
+ assert.equal(H.validLadder(mia,MIA_LINE,{band:'B1'}).say,undefined);
+ assert.deepEqual(H.keepLadder('t-mia',H.validLadder(mia,MIA_LINE,{band:'A1'})),{forTurn:'t-mia',rungs:[1,2,3],rung:0,shown:false,say:true});
+});
+test('LG-5 recert-9 wired (1) (viktor-67 J4 #3): the first Help press at A1 shows words to say back to Mia, tagged as such; the reply after it is supported',async()=>{
+ const V=view();
+ await bandStart('ema','A1','Hi! Can you see me?',()=>({reply:MIA_LINE,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'Hi! I am home.',meaning:'home: the house you live in',starter:'Hi Mia, …',sayBack:'Hi Mia! Is school good?'}}));
+ await reply('Yes. I see you.');
+ let c=getSession().conversation;assert.equal(c.turns.at(-1).text,MIA_LINE);
+ assert.equal(V.helpOf(c).help,'Get words you could say back, then answer on your phone.');
+ await command('cue');c=getSession().conversation;
+ assert.equal(c.cue,'Hi Mia! Is school good?','a reply-shaped rung');assert.notEqual(c.cue,MIA_LINE);assert.notEqual(c.cue,'Hi! I am home.');
+ assert.equal(V.helpOf(c).tag,'You could say','never "Said more simply"');assert.equal(c.supported,true);
+ await command('cue');assert.equal(getSession().conversation.cue,'home: the house you live in','then the ladder goes on');
 });

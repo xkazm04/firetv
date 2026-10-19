@@ -219,6 +219,9 @@ export const replayLine = (reply: string, used: boolean) => `Tried again: “${r
 
 /** The caption tag over each rung of the rescue ladder (lib/english/help.ts): the rung names itself. */
 export const RUNG_TAG = { 1: "Said more simply", 2: "What it means", 3: "A way to start" } as const;
+/** LG-5 recert-9: rung 1 at A1-A2 is words the learner could say back (help.ts sayBackFor), and names itself so. */
+export const SAY_TAG = "You could say";
+const SAY_NEXT = "Get words you could say back, then answer on your phone.";
 const RUNG_NEXT = {
   1: "Hear the question said more simply, then answer on your phone.",
   2: "Hear what the question means, then answer on your phone.",
@@ -234,8 +237,8 @@ export function helpOf(c: Conversation): { label: string; help: string; tag: str
   const h = c.help, next = h?.rungs.find(r => r > h.rung);
   return {
     label: h?.rung ? "More help" : "Help me answer",
-    help: next ? RUNG_NEXT[next] : "Get a phrase starter, then try your own reply on the phone.",
-    tag: h?.shown && h.rung ? RUNG_TAG[h.rung] : "A little support",
+    help: next ? (next === 1 && h?.say ? SAY_NEXT : RUNG_NEXT[next]) : "Get a phrase starter, then try your own reply on the phone.",
+    tag: h?.shown && h.rung ? (h.rung === 1 && h.say ? SAY_TAG : RUNG_TAG[h.rung]) : "A little support",
     offered: h ? !h.rung || !!next : !c.sceneCued,
   };
 }
