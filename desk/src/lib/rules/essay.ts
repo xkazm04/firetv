@@ -550,7 +550,8 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
   };
   // a sentence after the paragraph's last marked evidence that explains it or links back is its Explain or Link (PEEL), not a bare claim
   const closesAfterEvidence = (s: Sentence) => {
-    if (!LINK.test(s.text) && !s.connectors.some((c) => EXPLAINS.has(c))) return false;
+    // structure reads a claim after evidence by its connector; evidence reads any opinion after marked evidence as its Explain or Link
+    if (lens !== "evidence" && !LINK.test(s.text) && !s.connectors.some((c) => EXPLAINS.has(c))) return false;
     const mine = sentences.filter((t) => paraOf(t) === paraOf(s));
     const proofs = mine.filter((t) => marked(t) && (lens === "evidence" ? ok(t.n)?.support === "checkable" : ok(t.n)?.job === "evidence"));
     return proofs.length > 0 && s.n > proofs[proofs.length - 1].n;

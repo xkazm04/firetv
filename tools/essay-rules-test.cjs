@@ -1510,15 +1510,15 @@ test('E5-6: a rewrite of the backed opinion stays backed through the kept link, 
  assert.match(src,/For a checkable sentence that backs an opinion in the same paragraph, add backs: the number of that opinion\./);
 });
 test('UD-12: a rewrite that is still only an opinion is not ruled neutral by a context that lost its opinions',()=>{
- const t='Schools start too early. Research found that 34 minutes more sleep helps. A survey found 80% of pupils walk to school.';
- const ss=RE.splitSentences(t),first=RE.decideVerdicts('evidence',ss,new Set([1,2,3]),[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'checkable'}]);
+ const t='Schools start too early. A survey found 80% of pupils walk to school. Research found that 34 minutes more sleep helps.';
+ const ss=RE.splitSentences(t),first=RE.decideVerdicts('evidence',ss,new Set([1,2,3]),[{n:1,support:'opinion'},{n:2,support:'checkable'},{n:3,support:'checkable',backs:1}]);
  assert.deepEqual(first.map(v=>v.verdict),['neutral','strong','strong']);
- const next=ss.map(s=>s.n===3?{...s,text:'Walking is just much nicer for everybody.'}:s);
- const ctx=RE.contextObservations('evidence',next,3,first);
+ const next=ss.map(s=>s.n===2?{...s,text:'Walking is just much nicer for everybody.'}:s);
+ const ctx=RE.contextObservations('evidence',next,2,first);
  assert.deepEqual(ctx.find(o=>o.n===1),{n:1,support:'opinion'},'the opinion the reading ruled comes back as an opinion');
- const ruled=RE.decideVerdicts('evidence',next,new Set([3]),[{n:3,support:'opinion'},...ctx]).find(v=>v.n===3);
+ const ruled=RE.decideVerdicts('evidence',next,new Set([2]),[{n:2,support:'opinion'},...ctx]).find(v=>v.n===2);
  assert.notEqual(ruled.verdict,'neutral','an opinion with no checkable sentence behind it does not hold');
- assert.equal(RE.rewriteState({...ruled,was:{text:ss[2].text,verdict:'strong'}}),'still');
+ assert.equal(RE.rewriteState({...ruled,was:{text:ss[1].text,verdict:'strong'}}),'still');
 });
 const BODY='Schools should start later in the morning.';
 const noteOf=(lens,text,o)=>{const ss=RE.splitSentences(text);return RE.decideVerdicts(lens,ss,new Set(ss.map(s=>s.n)),o.map(x=>({note:'Great use of evidence.',...x})));};
@@ -1740,10 +1740,10 @@ test('EM1-1: a PEEL Explain sentence that explains or links back is not a fault;
  assert.ok(!st.some(x=>x.verdict==='faulty'),JSON.stringify(st));
  const ev=RE.decideVerdicts('evidence',ss,all,[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'opinion'}]);
  assert.ok(!ev.some(x=>x.verdict==='faulty'),JSON.stringify(ev));
- const bare=RE.splitSentences('Schools should start later. Research found that teenagers gain 34 minutes of sleep. Mornings are awful.');
- const f=RE.decideVerdicts('evidence',bare,new Set([1,2,3]),[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'opinion'}]);
- assert.equal(f.find(x=>x.n===3).verdict,'faulty','a closing opinion that neither explains nor links back is still unbacked');
- assert.ok(f.every(x=>x.verdict!=='faulty'||x.note===RE.decideVerdicts('evidence',bare,new Set([1,2,3]),[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'opinion',note:'Write: Mornings hurt.'}]).find(y=>y.n===x.n).note),'a faulty note is code\'s line whatever the model said');
+ const bare=RE.splitSentences('Mornings are awful. Schools should start later. Research found that teenagers gain 34 minutes of sleep.');
+ const f=RE.decideVerdicts('evidence',bare,new Set([1,2,3]),[{n:1,support:'opinion'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:2}]);
+ assert.equal(f.find(x=>x.n===1).verdict,'faulty','an opinion with no marked evidence before it is still unbacked (L1-eliska-12-EM1-5: after evidence, any opinion is its Explain)');
+ assert.ok(f.every(x=>x.verdict!=='faulty'||x.note===RE.decideVerdicts('evidence',bare,new Set([1,2,3]),[{n:1,support:'opinion',note:'Write: Mornings hurt.'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:2}]).find(y=>y.n===x.n).note),'a faulty note is code\'s line whatever the model said');
 });
 test('EM1-1: a clean four-sentence PEEL has no fault under Evidence or Structure; an Explain with no evidence before it is still faulted',()=>{
  const peel='Children should walk to school. A 2020 survey found that walkers scored higher on focus tests. This shows that walking helps them focus. That is why more children should walk.';
@@ -2018,4 +2018,13 @@ test('L1-eliska-12-EM1-1: planFit keeps its article, and a young faulty note hol
  assert.equal(young[0].note,'This says what you think, but gives nothing a reader could check.');
  const kept=[{n:1,note:young[0].note}];
  assert.deepEqual(RE.contextObservations('evidence',RE.splitSentences('Teenagers sleep late. Ok.'),2,kept),[{n:1,support:'opinion'}],'a young opinion note still reads as a ruled opinion');
+});
+test('L1-eliska-12-EM1-5: an Explain with no connector after marked evidence is not faulty; an opinion with no evidence before it still is',()=>{
+ const P='Cars should be banned near schools. A 2021 study found that 40% of pupils live within one mile. Cleaner air helps pupils concentrate in lessons. The council should act now.';
+ const obs=[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'opinion'},{n:4,support:'opinion'}];
+ const v=evRule(P,obs);
+ assert.notEqual(v.find(x=>x.n===3).verdict,'faulty','the connector-less Explain is neutral');
+ assert.equal(v.some(x=>x.verdict==='faulty'),false,'a well-formed PEEL paragraph has no faulty mark');
+ const bare=evRule('Cars should be banned near schools. Cleaner air helps pupils concentrate in lessons.',[{n:1,support:'opinion'},{n:2,support:'opinion'}]);
+ assert.equal(bare.find(x=>x.n===2).verdict,'faulty','an opinion with no evidence before it stays faulty');
 });
