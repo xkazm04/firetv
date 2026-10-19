@@ -72,7 +72,9 @@ test('case 2: Select on the lens screen posts ESSAY_TYPES[f], and the keymap hol
 
 // v2 M1 (2026-10-07) moved this case to a topic with no worked lesson: a generated school unit is now taught first
 // (tools/worked-rules-test.cjs pins that), and a linear topic still asks for its set at once, as this case always pinned.
-test('case 3: Select on a topic asks for a set once, and a failed set gives Select back',async()=>{
+test('case 3: Select on a topic asks for a set once, and a failed set gives Select back',async(t)=>{
+ // every school unit has a worked lesson now (L1-owen-17-MB2-1): leave 'linear-one-step' without one for this test, to reach the no-lesson branch
+ const WM=require(path.join(root,'src/lib/library/worked.ts')).WORKED_METHODS,WMsaved=WM['linear-one-step'];delete WM['linear-one-step'];t.after(()=>{WM['linear-one-step']=WMsaved;});
  const {tvKey,runStep}=keys();
  const L=SYLLABUS.findIndex(t=>t.id==='linear-one-step');assert(L>=0);
  const s=session({screen:'topics',focus:L});
@@ -600,7 +602,9 @@ test('W8 1: a school learner\'s Tonight has three doors, Left/Right walk them cl
  assert.deepEqual(tonightStops(session({screen:'tonight',profiles:[],learner:null})),['homework','teach','prepare']);
 });
 
-test('W8 2: Get ready for school - Left/Right walk the units (clamped), Select asks "The usual" or "A step up", Back closes the question on the same unit, and Up/Back/Menu go home to this door',()=>{
+test('W8 2: Get ready for school - Left/Right walk the units (clamped), Select asks "The usual" or "A step up", Back closes the question on the same unit, and Up/Back/Menu go home to this door',(t)=>{
+ // every school unit has a worked lesson now (L1-owen-17-MB2-1): leave 'linear-one-step' without one for this test, to reach the no-lesson branch
+ const WM=require(path.join(root,'src/lib/library/worked.ts')).WORKED_METHODS,WMsaved=WM['linear-one-step'];delete WM['linear-one-step'];t.after(()=>{WM['linear-one-step']=WMsaved;});
  const {tvKey}=keys();
  const {prepareStops}=require(path.join(root,'src/tv/prepareRows.ts'));
  const s=uk12({screen:'prepare',focus:0}),stops=prepareStops(s),N=stops.length;
@@ -648,7 +652,9 @@ test('W8 2: Get ready for school - Left/Right walk the units (clamped), Select a
   for(const e of tvKey({...s,focus:f},k,l).events)assert.ok(['focus','nav','topic.open'].includes(e.type),`${k}: ${e.type}`);
 });
 
-test('GR1: Get ready for school offers the worked lesson first (MB-B39)',()=>{
+test('GR1: Get ready for school offers the worked lesson first (MB-B39)',(t)=>{
+ // every school unit has a worked lesson now (L1-owen-17-MB2-1): leave 'linear-one-step' without one for this test, to reach the no-lesson branch
+ const WM=require(path.join(root,'src/lib/library/worked.ts')).WORKED_METHODS,WMsaved=WM['linear-one-step'];delete WM['linear-one-step'];t.after(()=>{WM['linear-one-step']=WMsaved;});
  const K=keys(),{tvKey,topicStops}=K;
  const {prepareStops,choicesFor,choiceLine}=require(path.join(root,'src/tv/prepareRows.ts'));
  const {hasWorked}=require(path.join(root,'src/lib/library/worked.ts'));

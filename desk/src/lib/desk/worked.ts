@@ -8,7 +8,7 @@
  */
 import { text } from "../engines/text";
 import { makeSchoolItems } from "./items";
-import { workedAnswer } from "../rules/school";
+import { linearWorked, workedAnswer } from "../rules/school";
 import { voiceOf, withManner } from "../rules/voice";
 import { topicIn } from "../library/paths";
 import { WORKED_METHODS } from "../library/worked";
@@ -26,6 +26,9 @@ export function cleanIdea(raw: unknown): string | null {
 
 /** The examples, by code only. `seed` is fixed by the tests; a fresh one otherwise (items.ts). */
 export function workedExamples(topic: string, system: SchoolSystem, seed?: number): Worked["examples"] {
+  // a linear-equation unit has no generated spec (its sets are model-written): its examples are built from a root, by code
+  const linear = linearWorked(topic, seed ?? Math.floor(Math.random() * 0x100000000));
+  if (linear.length) return linear.map((l) => ({ ...l, tier: 1 as const }));
   const made = makeSchoolItems(topic, 3, seed, "standard", false, [], system);
   return made.items.flatMap((it) => {
     const answer = workedAnswer(it.spec, system);

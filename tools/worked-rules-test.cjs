@@ -4,7 +4,7 @@
  *     units, tiers 1 and 2, and all four school systems (the plan's kill criterion: no example code does not confirm);
  *   - answers read as a school writes them: a decimal comma in cz/de, money to the cent, no "128.0", units kept;
  *   - the idea's words may be the model's only when they carry no digit and fit; else the authored idea stands;
- *   - the route, the store and the keys: a school unit is taught first, a linear or Calculus topic goes to its set.
+ *   - the route, the store and the keys: a school unit is taught first, a Calculus topic goes to its set.
  * Run with npm test in desk/ (directly: node tools/worked-rules-test.cjs). No model is called (engine stubbed).
  */
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), assert = require('node:assert/strict'), Module = require('node:module');
@@ -48,7 +48,7 @@ test('answers read as the school writes them', () => {
 });
 test('the authored methods cover every generated unit, in words only', () => {
   for (const topic of Object.keys(S.SCHOOL_GENERATORS)) { assert(hasWorked(topic), topic); const m = WORKED_METHODS[topic]; assert.doesNotMatch(m.idea, /\d/); m.steps.forEach((st) => assert.doesNotMatch(st, /\d/, `${topic}: ${st}`)); assert.equal(m.steps.length, 3); }
-  for (const t of ['linear-one-step', 'linear-two-step', 'calc1-derivative', 'constructor', 7]) assert.equal(hasWorked(t), false, String(t));
+  for (const t of ['calc1-derivative', 'constructor', 7]) assert.equal(hasWorked(t), false, String(t));
 });
 test('cleanIdea: words only, three sentences, the caption\'s length', () => {
   assert.equal(W.cleanIdea('A percent is a share out of a hundred.'), 'A percent is a share out of a hundred.');
@@ -72,20 +72,21 @@ test('teachTopic: the model\'s idea when it passes; the authored idea when it fa
 test('route and store: a lesson lands on "worked" for the learner who asked; a topic with no lesson is refused', async () => {
   store.dispatch({ type: 'reset' }); store.dispatch({ type: 'learner.set', id: 'ema' });
   const post = (body) => route.POST(new Request('http://desk/api/worked', { method: 'POST', body: JSON.stringify(body) }));
-  assert.equal((await post({ topic: 'linear-one-step' })).status, 400);
+  assert.equal((await post({ topic: 'calc1-derivative' })).status, 400);
+  assert.equal((await post({ topic: 'linear-one-step' })).status, 200, 'a linear unit has a lesson (L1-owen-17-MB2-1)');
   assert.equal((await post({})).status, 400);
   const r = await post({ topic: 'area' }); assert.equal(r.status, 200);
   const s = store.getSession(); assert.equal(s.screen, 'worked'); assert.equal(s.worked.topic, 'area'); assert.equal(s.worked.owner, 'ema');
   store.dispatch({ type: 'learner.set', id: 'jakub' }); assert.equal(store.getSession().worked, null, 'cleared when another learner sits down');
   store.dispatch({ type: 'worked.set', worked: { ...s.worked }, owner: 'ema' }); assert.equal(store.getSession().worked, null, 'a late lesson for another learner never lands');
 });
-test('keys: Select on a school unit asks for its lesson; on a linear topic, its set; Try six on the lesson writes the set', () => {
+test('keys: Select on a school unit asks for its lesson; on a linear topic, its lesson too (L1-owen-17-MB2-1); Try six on the lesson writes the set', () => {
   const s0 = { ...store.fresh(), learner: { id: 'ema', name: 'Ema' }, profiles: [{ id: 'ema', name: 'Ema', type: 'elementary', age: 12, modules: ['maths'] }], screen: 'topics' };
   const { topicStops } = require(src('tv/keys.ts'));
   const stops = topicStops(s0), area = stops.findIndex(t => t.id === 'area'), lin = stops.findIndex(t => t.id === 'linear-one-step');
   assert(area >= 0 && lin >= 0);
   assert.deepEqual(tvKey({ ...s0, focus: area }, 'select').calls.map(c => c.url), ['/api/worked']);
-  assert.deepEqual(tvKey({ ...s0, focus: lin }, 'select').calls.map(c => c.url), ['/api/practice']);
+  assert.deepEqual(tvKey({ ...s0, focus: lin }, 'select').calls.map(c => c.url), ['/api/worked']);
   const lesson = { ...s0, screen: 'worked', focus: 0, worked: { topic: 'area', title: 'Area', idea: 'x', own: false, steps: [], examples: [] } };
   assert.deepEqual(tvKey(lesson, 'select').calls, [{ url: '/api/practice', body: { topic: 'area' }, onFail: { busy: false } }]);
   assert.equal(tvKey({ ...lesson, focus: 1 }, 'select').events.find(e => e.type === 'nav')?.screen, 'topics', 'Back to the topics');
@@ -101,4 +102,24 @@ test('MB-B4: a cz lesson prints its examples in Kč with the decimal comma, and 
     if (/Kč/.test(ex.question)) { money++; assert.match(ex.answer, /^\d+,\d\d\u00a0Kč$/); }
   }
   assert.ok(money > 0, 'a money example in Kč');
+});
+
+test('L1-owen-17-MB2-1: the three linear units have a worked lesson in words only, with three code-answered examples in every school system', () => {
+  const { verify } = require(src('lib/desk/verify.ts'));
+  for (const topic of ['linear-one-step', 'linear-two-step', 'linear-both-sides']) {
+    assert.equal(hasWorked(topic), true, topic);
+    const m = WORKED_METHODS[topic];
+    assert.doesNotMatch(m.idea, /\d/, `${topic}: idea`); assert.equal(m.steps.length, 3);
+    m.steps.forEach((st) => assert.doesNotMatch(st, /\d/, `${topic}: ${st}`));
+    for (const sys of ['uk', 'us', 'cz', 'de']) for (const seed of [1, 7, 42, 1000]) {
+      const ex = W.workedExamples(topic, sys, seed);
+      assert.equal(ex.length, 3, `${topic} ${sys} ${seed}`);
+      assert.equal(new Set(ex.map((e) => e.question)).size, 3, 'three different questions');
+      assert.deepEqual(W.workedExamples(topic, sys, seed), ex, 'same seed, same examples');
+      for (const e of ex) {
+        assert(e.question && e.answer, topic);
+        assert(verify(e.question.replace(/^Solve /, '').replace(/\.$/, ''), e.answer.replace(/^x = /, '')), `${topic}: ${e.question} -> ${e.answer} does not satisfy the equation`);
+      }
+    }
+  }
 });

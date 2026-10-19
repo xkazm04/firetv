@@ -160,7 +160,9 @@ test('GUARD case 8: a practice set still answers only its four keys, and no answ
  for(const s of [store.getSession(),saved])assert(!keysIn(s).includes('answer'));
 });
 
-test('the TV reads the jobs: Select waits while a set or a hint is being made, and a failed set is named on its topic',()=>{
+test('the TV reads the jobs: Select waits while a set or a hint is being made, and a failed set is named on its topic',(t)=>{
+ // every school unit has a worked lesson now (L1-owen-17-MB2-1): leave 'linear-two-step' without one for this test, to reach the no-lesson branch
+ const WM=require(path.join(root,'src/lib/library/worked.ts')).WORKED_METHODS,WMsaved=WM['linear-two-step'];delete WM['linear-two-step'];t.after(()=>{WM['linear-two-step']=WMsaved;});
  const {tvKey,practiceFailed,LOCAL}=require(src('tv/keys.ts'));
  onPage();const s=store.getSession();
  assert.deepEqual(tvKey({...s,jobs:{hint:{id:'h',phase:'running',startedAt:0}}},'select',LOCAL).calls,[],'no second hint from the TV while one runs');

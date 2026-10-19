@@ -266,7 +266,9 @@ test('W8 1: Tonight draws three doors for a school learner (beside the continue 
  assert.match(draw({...calc,focus:2,practice:withSet.practice}),/class="mb-doors"/);
 });
 
-test('W8 2: Get ready for school lists the units by strand with the learner\'s own year word and nothing else of the path - one thing lit - in every school system',()=>{
+test('W8 2: Get ready for school lists the units by strand with the learner\'s own year word and nothing else of the path - one thing lit - in every school system',(t)=>{
+ // every school unit has a worked lesson now (L1-owen-17-MB2-1): leave 'linear-one-step' without one for this test, to reach the no-lesson branch
+ const WM=require(path.join(root,'src/lib/library/worked.ts')).WORKED_METHODS,WMsaved=WM['linear-one-step'];delete WM['linear-one-step'];t.after(()=>{WM['linear-one-step']=WMsaved;});
  const W={us:'Grade',uk:'Year',cz:'ročník',de:'Klasse'};
  for(const system of ['us','uk','cz','de']){
   const s={...seated({system}),screen:'prepare',focus:4,skills:skillsOf([ONE,F])};

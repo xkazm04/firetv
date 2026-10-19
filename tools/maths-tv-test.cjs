@@ -966,7 +966,9 @@ test('paper 8: the D-pad - Down on Get ready for school opens the list, Right wa
  assert.match(fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8'),/mathsOwns\(s\) \|\| paperOwns\(s\)\) \? <MathsTV/,'the TV page hands it to Math Buddy');
 });
 
-test('RP1: Select on a recovery row opens Get ready for school on its unit with the question open; Back and Menu land on that unit (MB-B9)',()=>{
+test('RP1: Select on a recovery row opens Get ready for school on its unit with the question open; Back and Menu land on that unit (MB-B9)',(t)=>{
+ // every school unit has a worked lesson now (L1-owen-17-MB2-1): leave 'linear-one-step' without one for this test, to reach the no-lesson branch
+ const WM=require(path.join(root,'src/lib/library/worked.ts')).WORKED_METHODS,WMsaved=WM['linear-one-step'];delete WM['linear-one-step'];t.after(()=>{WM['linear-one-step']=WMsaved;});
  const K=require(path.join(root,'src/tv/keys.ts'));
  const {prepareStops}=require(path.join(root,'src/tv/prepareRows.ts')),{hasWorked}=require(path.join(root,'src/lib/library/worked.ts'));
  const {STATEMENTS}=STM(),{paperView}=PAPER();

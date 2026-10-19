@@ -35,6 +35,12 @@ export const WORKED_METHODS: Readonly<Record<string, WorkedMethod>> = {
     steps: ["Square the two sides you know", "Longest side: add them. A shorter side: take the smaller from the bigger", "Take the square root"] },
   "probability": { idea: "A probability says how likely something is: the ways it can happen over all the equally likely outcomes, from nothing up to a whole.",
     steps: ["Count the outcomes you want", "Count all the outcomes", "Write the first over the second. Not happening: take it from a whole"] },
+  "linear-one-step": { idea: "An equation is a balance: whatever you do to one side you do to the other. One operation stands between x and its value, so undo that one.",
+    steps: ["Spot what has been done to x: added, taken away, multiplied or divided", "Do the opposite to both sides", "Check: put the answer back in place of x"] },
+  "linear-two-step": { idea: "Two things have been done to x, so undo them one at a time, in the opposite order, keeping both sides balanced.",
+    steps: ["Undo the add or take away first, on both sides", "Then undo the multiply or divide, on both sides", "Check: put the answer back in place of x"] },
+  "linear-both-sides": { idea: "When x sits on both sides, first gather the x terms on one side so you are left with a two-step equation, always doing the same to both sides.",
+    steps: ["Take the smaller x term away from both sides", "Undo the add or take away, then the multiply or divide, on both sides", "Check: put the answer back into both sides"] },
 };
 
 /** Is this a unit with a worked lesson (a code-generated school unit)? */

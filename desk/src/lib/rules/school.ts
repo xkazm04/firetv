@@ -3643,6 +3643,38 @@ export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 |
   // v2 M2b: the units that passed the sweep (tools/gcse-units-test.cjs); a unit that fails stays out of GCSE_GENERATORS' spread here
   ...GCSE_GENERATORS,
 };
+/**
+ * The worked examples of the three linear-equation units (IDs below). Their practice sets are model-written, so there is
+ * no spec to check; an example is built backwards from a whole-number root, so the answer is code's by construction
+ * (tools/worked-rules-test.cjs substitutes it back). Whole numbers only: the same text reads in every school system.
+ */
+export const LINEAR_WORKED_UNITS = ["linear-one-step", "linear-two-step", "linear-both-sides"] as const;
+export function linearWorked(topicId: string, seed: number, n = 3): { question: string; answer: string }[] {
+  if (!(LINEAR_WORKED_UNITS as readonly string[]).includes(topicId)) return [];
+  let s = (Math.floor(Math.abs(Number(seed))) || 1) >>> 0;
+  const next = (m: number) => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return (s >>> 8) % m; };
+  /** each form is an equation and its whole-number root */
+  const forms: (() => [string, number])[] = topicId === "linear-one-step" ? [
+    () => { const x = 2 + next(11), a = 2 + next(9); return [`x + ${a} = ${x + a}`, x]; },
+    () => { const x = 2 + next(11), a = 2 + next(9); return [`x - ${a} = ${x - a}`, x]; },
+    () => { const x = 2 + next(11), a = 2 + next(7); return [`${a}x = ${a * x}`, x]; },
+    () => { const b = 2 + next(11), a = 2 + next(7); return [`x / ${a} = ${b}`, a * b]; },
+  ] : topicId === "linear-two-step" ? [
+    () => { const x = 2 + next(11), a = 2 + next(5), b = 1 + next(9); return [`${a}x + ${b} = ${a * x + b}`, x]; },
+    () => { const x = 2 + next(11), a = 2 + next(5), b = 1 + next(9); return [`${a}x - ${b} = ${a * x - b}`, x]; },
+    () => { const x = 2 + next(8), a = 2 + next(4), b = 1 + next(9); return [`x / ${a} + ${b} = ${x + b}`, a * x]; },
+  ] : [
+    () => { const x = 2 + next(11), c = 1 + next(4), a = c + 1 + next(4), b = 1 + next(9); return [`${a}x + ${b} = ${c}x + ${(a - c) * x + b}`, x]; },
+    () => { const x = 2 + next(11), c = 1 + next(4), a = c + 1 + next(4), b = 1 + next(9); return [`${a}x - ${b} = ${c}x + ${(a - c) * x - b}`, x]; },
+  ];
+  const out: { question: string; answer: string }[] = [], seen = new Set<string>();
+  for (let k = 0; k < 60 && out.length < n; k++) {
+    const [eq, root] = forms[(next(forms.length) + k) % forms.length](), question = `Solve ${eq}.`;
+    if (!seen.has(question)) { seen.add(question); out.push({ question, answer: `x = ${root}` }); }
+  }
+  return out;
+}
+
 /** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
 export const generatorFor = (topicId: unknown) =>
   typeof topicId === "string" && Object.prototype.hasOwnProperty.call(SCHOOL_GENERATORS, topicId) ? SCHOOL_GENERATORS[topicId] : null;
