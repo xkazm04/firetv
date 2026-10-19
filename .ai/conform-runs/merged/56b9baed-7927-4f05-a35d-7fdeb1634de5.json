@@ -1,0 +1,37 @@
+{
+  "schema": "conform-run/1",
+  "worker": "56b9baed-7927-4f05-a35d-7fdeb1634de5",
+  "subject": "session-resume",
+  "evaluatedAt": "2026-10-19T10:24:14.421645+00:00",
+  "provider": "agy",
+  "model": "gemini-3.8-flash-high",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "session-resume",
+      "context": "landing",
+      "reason": "withdrawn after review: reviewer (sonnet): Line 167 is only a priority/recency sort and cannot show an absent expiry or dismissal; the candidates come from continueCard in mathsRows.ts, outside this context's files. That code does park a marked set 'until it is put away', which is a dismissal path, and I did not trace it. Two supporting anch"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-19T10:24:14.421645+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "session-resume"
+      ],
+      "techniques": [
+        "content-freshness-states",
+        "delta-briefings",
+        "first-run-and-quiet-silence",
+        "last-seen-anchors",
+        "layered-place-restoration",
+        "resume-affordances"
+      ],
+      "deviations": 1,
+      "context": "landing",
+      "via": "curator-multi:agy",
+      "model": "gemini-3.8-flash-high"
+    }
+  ]
+}

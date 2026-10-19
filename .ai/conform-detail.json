@@ -2535,6 +2535,52 @@
           "evidence": "uat/driver/linga-text.cjs:79 The judge receives the completed local journey record, with no late-span ingestion that would change its judged aggregate."
         }
       ]
+    },
+    "desk-surfaces/landing/session-resume": {
+      "context": "landing",
+      "subject": "session-resume",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-19",
+      "evaluatedTs": "2026-10-19T10:24:14.421Z",
+      "techniques": [
+        {
+          "technique": "resume-affordances",
+          "verdict": "deviation",
+          "evidence": "desk/src/tv/landingRows.ts:167 continueStop selects the CONTINUE target without enforcing an expiry window or providing a dismissal mechanism, perpetually re-offering uncompleted work."
+        },
+        {
+          "technique": "layered-place-restoration",
+          "verdict": "deviation",
+          "evidence": "desk/src/landing/LandingTV.tsx:25 Active entity is tracked only transiently in a local useRef during the mount, leaving route, scroll, active entity, and draft layers undeclared across session returns."
+        },
+        {
+          "technique": "last-seen-anchors",
+          "verdict": "deviation",
+          "evidence": "desk/src/landing/LandingTV.tsx:19 Arrival continuity is checked solely against an unpersisted module variable litFor tracking the learner ID, with no durable last-seen presence anchor or visibility-gated heartbeat."
+        },
+        {
+          "technique": "first-run-and-quiet-silence",
+          "verdict": "deviation",
+          "evidence": "desk/src/tv/landingRows.ts:114 When no work is waiting on the desk, the waiting model returns placeholder text (\"Not started\") and marketing blurbs instead of designing a quiet silence state."
+        },
+        {
+          "technique": "delta-briefings",
+          "verdict": "deviation",
+          "evidence": "desk/src/tv/landingRows.ts:113 Instead of deriving changes since a last-seen anchor, the landing falls back to past inventory items (Last time: ...) from raw history."
+        },
+        {
+          "technique": "content-freshness-states",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/landingRows.ts:3 The landing relies exclusively on in-memory store types without consuming remote fetched content, so network freshness states do not apply."
+        }
+      ],
+      "withdrawn": {
+        "worker": "56b9baed-7927-4f05-a35d-7fdeb1634de5",
+        "state": "deviation",
+        "at": "2026-10-19T10:24:44.340123+00:00",
+        "reason": "reviewer (sonnet): Line 167 is only a priority/recency sort and cannot show an absent expiry or dismissal; the candidates come from continueCard in mathsRows.ts, outside this context's files. That code does park a marked set 'until it is put away', which is a dismissal path, and I did not trace it. Two supporting anch"
+      }
     }
   }
 }
