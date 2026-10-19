@@ -1348,6 +1348,20 @@ test('E4-c: the rail draws a paragraph that was not ruled from the stylesheet (d
  assert.equal((tv.match(/data-state=\{/g)||[]).length,2,'the data-state count stays 2');
 });
 
+// ---- E3-a, recert-7 rows kristyna-17 EM1-1 / EM1-5 and helena-46 EM1-4: shared function words, short Czech without diacritics, German ----
+test('E3-a: Czech made of words shared with English (my, a, to, do) is not English; short plain Czech and German are refused too',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const czShared=['My a to, co do toho dáváme, je pro nás důležité, ale my to na světě neumíme říct, a proto to děláme tak, jak to umíme.',
+  'My to do toho dáme a to je pro nás ten největší cíl, ale my to na to nemáme.',
+  'My to do školy nosíme a to by mělo být dobré, protože my to chceme.'];
+ const czShort=['Telefony by mely byt zakazany','Skola je dulezita','Ucitele a zaci maji pravidla','Je to tak'];
+ const de=['Die Schule sollte später beginnen, weil die Kinder müde sind und nicht lernen können.','Handys sind in der Schule nicht erlaubt und das ist auch gut so.','Das ist nicht gut'];
+ for(const t of [...czShared,...czShort,...de])assert.equal(R.paragraphIsEnglish(t),false,t);
+ for(const t of czShared)assert(R.englishReading(t).english<R.ENGLISH_FLOOR,'shared words do not count as English: '+t);
+ assert.equal(R.englishReading('Das ist nicht gut und der Hund').german>0.5,true);
+ for(const t of ['My teacher said that to do the work is a duty.','Tell me what you think. It is a good plan to do.','The die is cast.','Hello there','Phones and school do not mix.'])assert.equal(R.paragraphIsEnglish(t),true,t);
+});
+
 // ---- E3-c: the stage says a refusal line the desk gave before any run, labelled 'Not read'
 const ER=require(path.join(root,'src/lib/rules/essay.ts'));
 const KEYS=require(path.join(root,'src/tv/keys.ts'));

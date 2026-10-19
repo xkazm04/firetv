@@ -146,21 +146,28 @@ export function refusalCaption(s: { status?: unknown; essayRefused?: unknown }):
   return typeof s.status === "string" && s.status && s.essayRefused === s.status ? { label: "Not read", text: s.status } : null;
 }
 
+/** Words that are function words in both English and Czech (my, a, to, do, by, so, on...): a Czech paragraph made of them must not read as English, so they do not count toward the English share. */
+const SHARED_WITH_CZECH = new Set("a to do by so on my ten pro ale i o u s v k z na no as at".split(" "));
 const ENGLISH_WORDS = new Set(("the of and to a in is that it was for on are as with they be at this have from or by not but we you their would should can more than which also because " +
-  "so if there them these most many my who will an his her its our your has had were been do does did about into when what one all some other only just very how why then too").split(" "));
+  "so if there them these most many my who will an his her its our your has had were been do does did about into when what one all some other only just very how why then too").split(" ").filter((w) => !SHARED_WITH_CZECH.has(w)));
 /** Common Czech function words, written without diacritics (a text is folded before it is compared, so a piece typed without them reads the same). Words that are also English (to, a, by, do, so, on, ten, pro, ale) are left out. */
 const CZECH_WORDS = new Set(("je se ze na jsou ve si byl byla bylo jako ktery ktera ktere aby nebo take vsak avsak proto podle nez tak uz jen jak mezi pri bez byt ho jeho jeji jejich ma neni nejsou " +
-  "nich nim tim jsem jsme jste bude budou muze musi kdyz kde kdo ani tedy tudiz nicmene protoze pokud vsichni velmi").split(" "));
+  "nich nim tim jsem jsme jste bude budou muze musi kdyz kde kdo ani tedy tudiz nicmene protoze pokud vsichni velmi " +
+  "mely mel mela melo byly byt maji mit mam mame muzou musime chci chceme tohle toto tento tato tyto jsi nas vas nam vam tebe vsechno vsechny vice mene pouze stale vzdy nikdy proc jak kdy kolik cim cemu cem co nikdo nic neco nekdo skola skole skolu deti zaci ucitele").split(" "));
+/** Common German function words (E3: the desk reads English, so German is refused too). Words that are also English (in, an, so, man, will, was, war, die, hat) are left out. */
+const GERMAN_WORDS = new Set(("der das und ist nicht ein eine einen zu mit auf fur von den dem des sich auch es wir sie ich aber wie oder wenn dass im aus bei nach nur noch werden wird sind haben kann uber " +
+  "einem einer eines diese dieser dieses wurde wurden sein ihre ihr unser nicht kein keine mehr sehr schon dann denn weil doch ja nein hier dort").split(" "));
 const CZECH_LETTERS = /[ěščřžýáíéúůďťňó]/i;
 const fold = (w: string) => w.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 /** The shares behind the English rule: words, English function words over words, Czech signal over words. */
-export function englishReading(text: unknown): { words: number; english: number; czech: number } {
+export function englishReading(text: unknown): { words: number; english: number; czech: number; german: number } {
   const ws = (typeof text === "string" ? text.toLowerCase().match(/[\p{L}']+/gu) : null) ?? [];
-  if (!ws.length) return { words: 0, english: 0, czech: 0 };
+  if (!ws.length) return { words: 0, english: 0, czech: 0, german: 0 };
   const en = ws.filter((w) => ENGLISH_WORDS.has(w)).length;
   const cz = ws.filter((w) => CZECH_LETTERS.test(w) || CZECH_WORDS.has(fold(w))).length;
-  return { words: ws.length, english: en / ws.length, czech: cz / ws.length };
+  const de = ws.filter((w) => GERMAN_WORDS.has(fold(w))).length;
+  return { words: ws.length, english: en / ws.length, czech: cz / ws.length, german: de / ws.length };
 }
 /** The floors, set on the corpus in tools/essay-rules-test.cjs (E3-a): below the English floor AND at or over the Czech floor, in a paragraph of at least ENGLISH_MIN_WORDS words. */
 export const ENGLISH_MIN_WORDS = 6;
@@ -170,9 +177,10 @@ export const CZECH_FLOOR = 0.25;
 /** Whether a paragraph reads as English. It says no only when it can tell; anything else, a short paragraph included, is English. */
 export function paragraphIsEnglish(text: unknown): boolean {
   const r = englishReading(text);
-  // UD-19: a paragraph under ENGLISH_MIN_WORDS is English unless it is mostly Czech
-  if (r.words < ENGLISH_MIN_WORDS) return !(r.words > 0 && r.english < ENGLISH_FLOOR && r.czech > 0.5);
-  return !(r.english < ENGLISH_FLOOR && r.czech >= CZECH_FLOOR);
+  // UD-19: a paragraph under ENGLISH_MIN_WORDS is English unless two or more of its words, 40% or more, read as Czech or German
+  const other = Math.max(r.czech, r.german);
+  if (r.words < ENGLISH_MIN_WORDS) return !(r.words > 0 && r.english < ENGLISH_FLOOR && other >= 0.4 && other * r.words >= 2);
+  return !(r.english < ENGLISH_FLOOR && other >= CZECH_FLOOR);
 }
 
 /**
