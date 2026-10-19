@@ -447,7 +447,7 @@ export default function Phone() {
   useEffect(() => {
     const id = s?.learner?.id;
     if (!id) return;
-    if (lastSeated.current && lastSeated.current !== id) { keepDraft(lastSeated.current, [blankRow()]); clearLastLearnersWork(); }
+    if (lastSeated.current && lastSeated.current !== id) clearLastLearnersWork();
     lastSeated.current = id;
   }, [s?.learner?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   // P17 (i) end
