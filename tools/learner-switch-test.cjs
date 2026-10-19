@@ -543,6 +543,18 @@ test('P1 save: a draft with a bad type is refused and the profiles, draft and se
  assert.equal(n.status,'The desk did not save that profile. That school type is not one the desk knows.');
 });
 
+test('TL-8: Save with no name leaves the draft, the seat and the profiles, and says why; a name saves as before; save and discard close the name ask',()=>{
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
+ const s={...store.getSession(),draft:{id:'zz',name:'  ',type:'high-school',modules:[]}};
+ const n=store.reduce(s,{type:'profile.save'});
+ assert.deepEqual(n.profiles,s.profiles);assert.deepEqual(n.draft,s.draft,'the draft stays as it is');assert.equal(n.learner.id,'ema');
+ assert.equal(n.status,'Type the name on the phone first');
+ const named=store.reduce({...s,draft:{...s.draft,name:'Zed'},ask:{id:'a',kind:'name',learner:null,screen:'profile',at:0,phase:'open'}},{type:'profile.save'});
+ assert.equal(named.learner.name,'Zed');assert.equal(named.ask,null,'Save closes the name ask');
+ const gone=store.reduce({...s,ask:{id:'a',kind:'name',learner:null,screen:'profile',at:0,phase:'open'}},{type:'profile.discard'});
+ assert.equal(gone.ask,null,'discard closes the name ask');
+});
+
 // ---- P6: what a phone may post ----
 test('P6: a reset from a phone is refused and the desk is unchanged; the TV can reset',async()=>{
  store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});

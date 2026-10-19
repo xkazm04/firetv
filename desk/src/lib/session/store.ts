@@ -11,7 +11,7 @@ import { randomInt, randomUUID } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { lanHost } from "./lan";
 import { dataDir } from "../dataDir";
-import { AGE_RANGE, SYSTEMS } from "@/tv/profileRows";
+import { AGE_RANGE, NAME_FIRST, SYSTEMS } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
 import { dayOf } from "@/tv/mathsRows";
@@ -770,10 +770,10 @@ function step(s: Session, e: Event): Session {
       n.draft = adultGated(d, s.draft, d.age === undefined && saved?.age !== undefined && saved.age < 18); break; }
     case "profile.save": { const d = s.draft; if (!d) break;
       const bad = profileProblem(d); if (bad) { n.status = SAVE_REFUSED + bad; break; }
-      if (!d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
+      if (!d.name.trim()) { n.status = NAME_FIRST; break; } const has = s.profiles.some((p) => p.id === d.id);
       n.profiles = has ? s.profiles.map((p) => (p.id === d.id ? d : p)) : [...s.profiles, d];
-      if (d.id !== s.learner?.id) switchedFrom(s, n); seat(s, n, d.id); n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "landing"; n.focus = LANDING_REST; break; }
-    case "profile.discard": n.draft = null; n.screen = "learner"; n.focus = 0; break;
+      if (d.id !== s.learner?.id) switchedFrom(s, n); seat(s, n, d.id); n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "landing"; n.focus = LANDING_REST; if (s.ask?.screen === "profile") n.ask = null; break; }
+    case "profile.discard": n.draft = null; n.screen = "learner"; n.focus = 0; if (s.ask?.screen === "profile") n.ask = null; break;
     case "subject": n.subject = e.subject; break;
     case "page.reading": { const ix = s.pages.findIndex((p) => p.id === e.page.id);
       // `day` is the local day it was snapped, kept when the same page is read again in place (an older page without one stays without)

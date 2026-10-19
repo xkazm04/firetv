@@ -334,6 +334,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: each trigger emits its ask; Up/Down to another sentence emits `ask.cancel` beside its `essay.at` when a `rewrite` ask names a different `n`; with the curtain off, no `private` action is drawn or reachable.
 - Tests: `tools/tv-keys-test.cjs` (the triggers, the walk-away close), `tools/essay-piece-test.cjs` (`private` only under the curtain, and the TV still receives no sentence text).
 - Stick check: Essay Master → a lens → Select; the TV shows "Send the text from the phone". The plan: Select on slot 2, and the slot reads "On the phone".
+- Landed: 562811ec (ask.open paragraph, rewrite {n}, slot {i}, sentence, private under the curtain only; two-step Back; ask.cancel beside essay.at; the On your phone chip and caption).
 
 ### TL-8. The profile's name is a hand-off, and Save says why it waits
 - Files: `desk/src/tv/profileRows.ts`, `desk/src/tv/keys.ts`, `desk/src/tv/screens.tsx`, `desk/src/lib/session/store.ts`, `desk/src/app/phone/page.tsx`, `tools/tv-keys-test.cjs`, `tools/learner-switch-test.cjs`.
@@ -341,6 +342,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: Add a learner emits `profile.draft` then `ask.open name`; Save with no name leaves the draft and sets the line; the phone source has no `profile.save` and no `profile.discard` post.
 - Tests: `tools/tv-keys-test.cjs` (the row, the ask, focus after a pick unchanged below the new row), `tools/learner-switch-test.cjs` (Save with no name).
 - Stick check: Add a learner with the remote and type the name on the phone; the TV's title follows each letter; Save on the TV seats them.
+- Landed: TL-8 commit on branch autopilot/accepted-idea-delivery-2137c3ad (OD1 b: the name stays a phone job; the phone's Done only closes its end of the ask). Stick check not run.
 
 ### TL-9. The phone follows the hand-off, not the screen
 - Files: `desk/src/app/phone/panelFor.ts`, `desk/src/app/phone/page.tsx`, `tools/phone-panel-test.cjs`.

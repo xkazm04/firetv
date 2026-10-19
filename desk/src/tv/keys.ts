@@ -425,7 +425,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     // Back returns to the screen that opened the switcher; a stale back (a profile, the pair screen) is the desk
     if (k === "back") { if (s.back === "tonight") o.nav("tonight"); else o.nav("landing", landingFocus(s, "place")); }
-    if (k === "select") { if (at && at !== "add") o.ev({ type: "learner.set", id: at.id }); else { o.ev({ type: "profile.draft", patch: {} }); o.nav("profile"); } }
+    if (k === "select") { if (at && at !== "add") o.ev({ type: "learner.set", id: at.id }); else { o.ev({ type: "profile.draft", patch: {} }); o.nav("profile"); o.ev({ type: "ask.open", kind: "name" }); } }
     if (k === "menu" && at && at !== "add") { o.ev({ type: "profile.draft", patch: { id: at.id, name: at.name, type: at.type, age: at.age, system: at.system, modules: at.modules, mathPath: at.mathPath, mode: at.mode } }); o.nav("profile"); }
   },
   profile: (s, k, _, o) => {
@@ -442,7 +442,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       o.focus(flat(next, nr, likelyIx(next[nr], d)));
     };
     if (k === "select") {
-      if (cell.kind === "type" && cell.type) pick({ type: cell.type });
+      if (cell.kind === "name") { if (s.ask?.kind !== "name") o.ev({ type: "ask.open", kind: "name" }); }
+      else if (cell.kind === "type" && cell.type) pick({ type: cell.type });
       else if (cell.kind === "age") pick({ age: cell.age });
       else if (cell.kind === "mode" && cell.mode) pick({ mode: cell.mode });
       else if (cell.kind === "system" && cell.system) pick({ system: cell.system });
@@ -451,7 +452,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       else if (cell.kind === "save") o.ev({ type: "profile.save" }); else o.ev({ type: "profile.discard" });
     }
     if (k === "menu" && !s.joined) o.nav("pair", 0, "profile");
-    if (k === "back") o.ev({ type: "profile.discard" });
+    // the first Back puts the name ask down (TL-8); only the next one throws the draft away
+    if (k === "back") { if (s.ask?.kind === "name" && s.ask.screen === "profile") o.ev({ type: "ask.cancel", id: s.ask.id }); else o.ev({ type: "profile.discard" }); }
   },
   units: (s, k, _, o) => {
     const stops = unitStops(s);

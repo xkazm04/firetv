@@ -877,9 +877,10 @@ test('deskLine: a run that failed on the desk (its body says failure) adds no li
  assert.equal(deskLine({error:'Bad gateway from a proxy.'},F),'Bad gateway from a proxy.','a 502 that is not a run says its error');
  for(const b of [null,undefined,{},{error:''},{error:3}])assert.equal(deskLine(b,F),F,JSON.stringify(b));
 });
-test("the profile queue hands each post's failure to its caller: Save that never lands says so, and the queue goes on",async()=>{
+test("the profile queue hands each post's failure to its caller: Done that never lands says so, and the queue goes on (TL-8: Save moved to the TV)",async()=>{
  const raw=fs.readFileSync(PAGE,'utf8');
- assert.match(raw,/post\(\{ type: "profile\.save" \}\)\)\.catch\(\(\) => setMsg\("That did not reach the desk\."\)\)/,'Save says when it did not land');
+ assert.match(raw,/post\(\{ type: "ask\.cancel", id: handoff\.id \}\)\)\.catch\(\(\) => setMsg\("That did not reach the desk\."\)\)/,'Done says when it did not land');
+ assert.doesNotMatch(raw,/type: "profile\.(save|discard)"/,'the phone posts neither profile.save nor profile.discard');
  const at=raw.indexOf('function inOrder()'),body=raw.slice(at,raw.indexOf('\n}\n',at)+2);
  const inOrder=new Function(body.replace(/: Promise<unknown>/g,'').replace(/\(job: \(\) => Promise<unknown>\)/,'(job)')+'\nreturn inOrder;')();
  const q=inOrder(),seen=[];
@@ -946,7 +947,7 @@ test('PH-NAMEORDER: the profile name posts go out one at a time, so a slow early
  assert.equal(await run(true),'Ema Novak','queued: the draft holds the name as typed');
  const page=code(PAGE);
  assert.match(page,/nameQueue\(\(\) => post\(\{ type: "profile\.draft", patch: \{ name: e\.target\.value \} \}\)\)/,'the Profile input posts through the queue');
- assert.match(page,/nameQueue\(\(\) => post\(\{ type: "profile\.save" \}\)\)/,'Save waits behind the name posts');
+ assert.match(page,/nameQueue\(\(\) => post\(\{ type: "ask\.cancel", id: handoff\.id \}\)\)/,'Done waits behind the name posts (TL-8: it closes the ask, never saves)');
 });
 test('PH-ENDTWICE: a second tap on End session before the first returns posts nothing',async()=>{
  const body=pageSlice(/const endSession = async \(\) => \{[\s\S]*?\n    \};/,'endSession');

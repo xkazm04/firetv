@@ -602,9 +602,10 @@ export default function Phone() {
     const none = { run: () => {}, off: true, ctx: {} };
     if (!handoff) return none;
     const snapping = !shot;
-    const saveName = () => void nameQueue(() => post({ type: "profile.save" })).catch(() => setMsg("That did not reach the desk."));
+    // Done only closes the phone's end of the hand-off; Save and Back stay on the TV (TL-8)
+    const done = () => void nameQueue(() => post({ type: "ask.cancel", id: handoff.id })).catch(() => setMsg("That did not reach the desk."));
     switch (handoff.kind) {
-      case "name": case "prefs": return { run: saveName, off: !pname.trim() || !s?.draft, ctx: {} };
+      case "name": case "prefs": return { run: done, off: !pname.trim() || !s?.draft, ctx: {} };
       case "page": return { run: snapping ? snap : () => send(shot!.url, shot!.w, shot!.h, shot!.sub, shot!.title), off: snapping ? !cam || busy : busy, ctx: { snap: snapping } };
       case "sheet": {
         if (route === "type") return { run: sendTyped, off: busy || !typed.some((x) => x.trim()), ctx: {} };
@@ -670,10 +671,10 @@ export default function Phone() {
         {screen === "profile" && <div className="pscreen"><h3>Profile</h3>
           <p>At the desk now: <b>{s?.learner?.name ?? "no one yet"}</b></p>
           {s && (s.draft || s.screen === "profile") ? <>
-            <p>The TV takes the picks; type the name here.</p>
+            <p>The TV takes the picks; type the name here, then press Save on the TV.</p>
             <div className="field"><input placeholder="Name" maxLength={NAME_MAX} value={pname} onChange={(e) => { setPname(e.target.value); nameQueue(() => post({ type: "profile.draft", patch: { name: e.target.value } })).catch(() => { /* a lost keystroke: the next one sends the whole name again */ }); }} /></div>
-            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => nameQueue(() => post({ type: "profile.save" })).catch(() => setMsg("That did not reach the desk."))}>Save</button>
-              <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
+            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => (s.ask?.kind === "name" ? nameQueue(() => post({ type: "ask.cancel", id: s.ask!.id })).catch(() => setMsg("That did not reach the desk.")) : setScreen("joined"))}>Done</button></div>
+            <p style={{ fontSize: 12 }}>Save and Back are on the TV.</p>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 
         {screen === "paper" && <PaperPanel rows={paperRows} setRows={editPaperRows} post={post} seated={!!s?.learner} status={s?.status ?? ""} kept={!!s?.paper} name={s?.learner?.name} system={s?.learner ? s.profiles?.find((p) => p.id === s.learner?.id)?.system : undefined} />}

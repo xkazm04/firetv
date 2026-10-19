@@ -479,13 +479,14 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
   const editing = !!d && s.profiles.some((p) => p.id === d.id);
   const name = d?.name.trim() ?? "";
   const rows = profileRows(d), at = locate(rows, focus), cell = rows[at.r].cells[at.c];
-  const chosen = (c: (typeof cell)) => (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "mode" && modeOf(d ?? undefined) === c.mode) || (c.kind === "system" && d?.system === c.system) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub)) || (c.kind === "path" && pathOf(d) === c.path);
+  const chosen = (c: (typeof cell)) => (c.kind === "name" && !!name) || (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "mode" && modeOf(d ?? undefined) === c.mode) || (c.kind === "system" && d?.system === c.system) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub)) || (c.kind === "path" && pathOf(d) === c.path);
   return (<>
     <div className="band band-right" />
     <main className="content-full">
       <div className="eyebrow">{editing ? `Preferences · ${d!.name}` : "New learner"}</div>
       <div className="title">{name || "Name it on the phone"}</div>
-      <div className="body" style={{ color: "var(--mute)", marginTop: 16 }}>{s.joined ? "Type the name on the phone's Profile tab" : `Phone code ${s.pin} · Menu to pair, or open the phone's Profile tab`}</div>
+      <div className="body" style={{ color: "var(--mute)", marginTop: 16 }}>{s.joined ? (s.ask?.kind === "name" ? "Type the name on the phone" : "Select the Name row to type it on the phone") : `Phone code ${s.pin} · Menu to pair, or open the phone's Profile tab`}</div>
+      {s.ask?.kind === "name" && s.ask.screen === "profile" && <div className="cap-text" data-role="profile-onphone" style={{ position: "absolute", right: 80, top: 60 }}><span className="cap">On your phone</span> The name. Back cancels.</div>}
       {/* the rows take their width from the picks, so their rules stop short of the band */}
       <div className="guide" style={{ marginTop: 16, width: "fit-content" }}>
         {rows.slice(0, -1).map((row, r) => (
@@ -507,6 +508,7 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
       {/* in the flow, under the caption: pinned to the bottom (on-air .actions) a two-line caption ran into them (2026-10-07 capture) */}
       <div className="actions" style={{ position: "static", marginTop: 24 }}>
         <button className="btn" data-focused={cell.kind === "save"} data-disabled={!name}>Save</button>
+        {!name && <span className="cap-text" data-role="profile-save-why">Save waits for a name</span>}
         <button className="btn" data-focused={cell.kind === "back"}>Back</button>
       </div>
     </main>

@@ -218,7 +218,7 @@ test('A5: the profile shows the Mode row only where there is a choice (18+, or "
   assert.deepEqual(mode({ type: 'high-school', age: 18, modules: [] }).map(c => c.mode), ['family', 'adult']);
   assert.deepEqual(mode({ type: 'other', modules: [] }).map(c => c.mode), ['family', 'adult']);
   assert.match(modeCells({ type: 'elementary', age: 12 })[0].blurb, /18 and over/, 'the cells still say why, where they are used');
-  assert.equal(profileRows({ type: 'other', modules: [] }).findIndex(r => r.title === 'Mode'), 1, 'right under the type (no age row for "other")');
+  assert.equal(profileRows({ type: 'other', modules: [] }).findIndex(r => r.title === 'Mode'), 2, 'right under the type, which is under the Name row (no age row for "other")');
   assert.deepEqual(modeCells({ type: 'other' }).map(c => c.label), ['Family', 'Adult (18+)']);
 });
 test('A5: Select on Adult drafts it; the age dropping under 18 takes it away, a saved adult reads as adult', () => {

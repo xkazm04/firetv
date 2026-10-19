@@ -12,7 +12,7 @@ const KEYS=path.join(root,'src/tv/keys.ts'),ROWS=path.join(root,'src/tv/mathsRow
 const keys=()=>require(KEYS);
 const {SYLLABUS}=require(path.join(root,'src/lib/library/syllabus.ts'));
 const {ESSAY_TYPES}=require(path.join(root,'src/lib/library/lessons.data.ts'));
-const {profileRows,locate,flat}=require(path.join(root,'src/tv/profileRows.ts'));
+const {profileRows,locate,flat,likelyIx}=require(path.join(root,'src/tv/profileRows.ts'));
 
 const LOCAL={busy:false,table:false,hintInFlight:false};
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;};
@@ -576,8 +576,8 @@ test('profile system: every blurb names its decimal convention, Save names the s
  assert.match(save({id:'p',name:'P',type:'high-school',age:16,system:'cz',modules:['maths']}),/Czech Republic \(0,5 is a half\)/);
  assert.doesNotMatch(save({id:'p',name:'P',type:'high-school',age:16,system:'cz',modules:['maths']}),/pick a school system/);
  const rows=profileRows({id:'p',name:'P',type:'high-school',age:16,modules:['maths']});
- assert.deepEqual(rows.map((r)=>r.cells.length),[3,5,4,3,rows[4].cells.length,2],'row and cell counts (no Mode row under 18)');
- assert.equal(rows.length,6);
+ assert.deepEqual(rows.map((r)=>r.cells.length),[1,3,5,4,3,rows[5].cells.length,2],'row and cell counts (the Name row first, no Mode row under 18)');
+ assert.equal(rows.length,7);
 });
 
 test('course lessons 3:the landing card for Math Buddy says the same as the profile blurb - no "school maths" on either',()=>{
@@ -979,8 +979,8 @@ test('workroom 2 (recert-6/L1-helena-46-EM5-3): OK on a piece row reads that pie
 
 test('profile setup (L1-radka-41-MB5-1, TV half): the rows start on the likely value - a 12-year-old elementary cz maths-only child takes 13 presses, not 21',()=>{
  const {tvKey}=keys();const {AGE_RANGE}=require(path.join(root,'src/tv/profileRows.ts'));
- let s=session({screen:'profile',focus:0,profiles:[],learner:null,draft:{id:'n',name:'',type:'high-school',modules:['maths','english','essay']}});
- let presses=0;
+ let s=session({screen:'profile',focus:1,profiles:[],learner:null,draft:{id:'n',name:'',type:'high-school',modules:['maths','english','essay']}});
+ let presses=0; // focus 1 is the first type cell: the Name row now holds focus 0
  const press=(k)=>{presses++;for(const e of tvKey(s,k,LOCAL).events){
   if(e.type==='focus')s={...s,focus:e.focus};
   else if(e.type==='profile.draft'){const d={...s.draft,...e.patch};const r=AGE_RANGE[d.type];if(r&&d.age!==undefined&&(d.age<r[0]||d.age>r[1]))delete d.age;s={...s,draft:d};}}};
@@ -1006,9 +1006,9 @@ test('profile setup (L1-radka-41-MB5-1, TV half): the rows start on the likely v
  // the middles named by the finding; the high-school landing is 17; the Maths course is kept for a learner who can use it
  for(const [type,mid] of [['elementary',10],['high-school',17]]){
   const d={id:'n',name:'',type:'other',modules:['maths']};const t=session({screen:'profile',focus:0,draft:d});
-  const rows=profileRows({...d,type});const ix=rows[0].cells.findIndex(c=>c.type===type);
+  const rows=profileRows({...d,type});const ix=1+rows[1].cells.findIndex(c=>c.type===type);
   const ev=tvKey({...t,focus:ix},'select',LOCAL).events;
-  assert.equal(rows[1].cells[locate(rows,focusAfter(t,{events:ev})).c].age,mid,`${type} lands on ${mid}`);}
+  assert.equal(rows[2].cells[locate(rows,focusAfter(t,{events:ev})).c].age,mid,`${type} lands on ${mid}`);}
  assert.ok(profileRows({id:'n',name:'',type:'high-school',modules:['maths']}).some(r=>r.title==='Maths course'));
  assert.ok(profileRows({id:'n',name:'',type:'elementary',modules:['maths'],mathPath:'calc1'}).some(r=>r.title==='Maths course'),'a draft already on a course keeps its row');
 });
@@ -1197,4 +1197,28 @@ test('TL-7: the Essay screens draw the On your phone chip while the ask matches,
  assert.equal(essayHandoffOf({...s,screen:'forensic'}),null,'an ask another screen opened');
  assert.equal(essayHandoffOf({...s,ask:askOf('slot','essaytype')}),null,'a kind this screen does not open');
  assert.match(essayHandoffLine({...s,phonesLive:0}),/No phone is connected/);
+});
+
+test('TL-8: the profile opens with a Name row; Add a learner drafts then asks for the name; Select on Name asks again; Back is two-step; Save waits',()=>{
+ const {tvKey}=keys();
+ const rows=profileRows({id:'n',name:'',type:'high-school',modules:[]});
+ assert.equal(rows[0].title,'Name');assert.equal(rows[0].cells[0].kind,'name');
+ assert.equal(rows[1].title,'Type of student','the picks follow the Name row');
+ const add=tvKey(session({screen:'learner',focus:1}),'select',LOCAL).events;
+ assert.deepEqual(add.map((e)=>e.type),['profile.draft','nav','ask.open'],'draft, then the screen, then the ask (the ask belongs to the profile screen)');
+ assert.deepEqual(add[2],{type:'ask.open',kind:'name'});
+ const draft={id:'n',name:'',type:'high-school',modules:[]};
+ assert.deepEqual(tvKey(session({screen:'profile',focus:0,draft}),'select',LOCAL).events,[{type:'ask.open',kind:'name'}],'Select on the Name row asks');
+ const ask={id:'k1',kind:'name',learner:null,screen:'profile',at:0,phase:'open'};
+ assert.deepEqual(tvKey(session({screen:'profile',focus:0,draft,ask}),'select',LOCAL).events,[],'an open name ask is not asked twice');
+ assert.deepEqual(tvKey(session({screen:'profile',focus:0,draft,ask}),'back',LOCAL).events,[{type:'ask.cancel',id:'k1'}],'the first Back puts the ask down');
+ assert.deepEqual(tvKey(session({screen:'profile',focus:0,draft}),'back',LOCAL).events,[{type:'profile.discard'}],'the next one throws the draft away');
+ // a pick below the new row moves the lamp exactly as before: the type pick lands on the age row's middle
+ const t=tvKey(session({screen:'profile',focus:1,draft}),'select',LOCAL).events;
+ assert.deepEqual(t.map((e)=>e.type),['profile.draft','focus']);
+ const next=profileRows({...draft,type:'elementary'});assert.equal(t[1].focus,flat(next,2,likelyIx(next[2],{...draft,type:'elementary'})),'focus after a pick: the next row, one below the Name row');
+ assert.equal(next[2].title,'Age');
+ // Save with no name is still the reducer's to refuse
+ const sv=profileRows(draft).length-1;
+ assert.deepEqual(tvKey(session({screen:'profile',focus:flat(profileRows(draft),sv,0),draft}),'select',LOCAL).events,[{type:'profile.save'}]);
 });

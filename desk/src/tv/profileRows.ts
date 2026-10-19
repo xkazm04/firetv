@@ -43,7 +43,7 @@ export const TYPE_BLURB: Record<StudentType, string> = {
 };
 
 /** One focusable pick on the profile screen. */
-export interface Cell { kind: "type" | "age" | "mode" | "system" | "interest" | "path" | "save" | "back"; label: string; blurb: string; type?: StudentType; age?: number; mode?: Mode; system?: SchoolSystem; sub?: Subject; path?: MathPath }
+export interface Cell { kind: "name" | "type" | "age" | "mode" | "system" | "interest" | "path" | "save" | "back"; label: string; blurb: string; type?: StudentType; age?: number; mode?: Mode; system?: SchoolSystem; sub?: Subject; path?: MathPath }
 export interface Row { title: string; cells: Cell[] }
 
 /** The Mode row (slice A5; O1 = 18+): shown only where rules/mode adultAllowed holds, with Family and Adult (18+). */
@@ -74,9 +74,15 @@ function saveBlurb(d: Profile | null): string {
     ? `Saves as ${SYSTEM_WORDS[sys]} (${SYSTEM_DECIMAL[sys]}).`
     : `Saves as ${SYSTEM_WORDS[sys]} (${SYSTEM_DECIMAL[sys]}); pick a school system above to change it.`;
 }
+/** What the Name cell says: the TV opens the ask, the phone takes the letters. */
+export const NAME_BLURB = "Select: the phone asks for the name. Type it there; this screen follows each letter.";
+/** The status line Save sets while the draft has no name (TL-8). */
+export const NAME_FIRST = "Type the name on the phone first";
 export function profileRows(d: Profile | null): Row[] {
   const t = d?.type ?? "high-school", r = AGE_RANGE[t];
-  const rows: Row[] = [{ title: "Type of student", cells: TYPES.map((x) => ({ kind: "type", label: TYPE_WORDS[x], blurb: TYPE_BLURB[x], type: x })) }];
+  // the name is typed on the phone (TL-8): Select on this cell opens the hand-off
+  const rows: Row[] = [{ title: "Name", cells: [{ kind: "name", label: (d?.name ?? "").trim() || "Type it on the phone", blurb: NAME_BLURB }] }];
+  rows.push({ title: "Type of student", cells: TYPES.map((x) => ({ kind: "type", label: TYPE_WORDS[x], blurb: TYPE_BLURB[x], type: x })) });
   if (r) rows.push({ title: "Age", cells: Array.from({ length: r[1] - r[0] + 1 }, (_, i) => r[0] + i).map((n) => ({ kind: "age", label: String(n), blurb: "", age: n })) });
   // the Mode row only where there is a choice to make (18+, or "other"): under 18 the mode is Family and the row would
   // only cost the screen its room (the caption ran into Save/Back with it, 2026-10-07 capture)
