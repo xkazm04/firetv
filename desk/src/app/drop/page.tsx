@@ -83,10 +83,10 @@ export default function DropPage() {
         {docx ? <p>Ready: <b>{docx.name}</b> (its text is read on the desk; the file is not kept).</p>
           : <textarea rows={10} placeholder="Or paste a message, an email or an essay you wrote" value={text} onChange={(e) => setText(e.target.value)} data-role="drop-text" />}
         {pieceId && <p>Editing a kept piece: keeping it again adds a new version. <button className="link" onClick={() => setPieceId(undefined)}>Keep as a new piece instead</button></p>}
-        {notice !== null && <TextNotice text={notice} onAccept={() => void accept()} onDecline={() => setNotice(null)} />}
+        {notice !== null && <TextNotice where="pc" text={notice} onAccept={() => void accept()} onDecline={() => setNotice(null)} />}
         <div className="row"><button onClick={() => void keep()} disabled={(!docx && !text.trim()) || (!format && !pieceId)} data-role="drop-keep">Keep it</button>{say && <span aria-live="polite">{say}</span>}</div>
       </section>
-      <section><EssayShelf learnerId={who ?? undefined} refresh={tick} onOpen={(id, t) => { setPieceId(id); setText(t); setDocx(null); }} /></section>
+      <section><EssayShelf where="pc" learnerId={who ?? undefined} refresh={tick} onOpen={(id, t) => { setPieceId(id); setText(t); setDocx(null); }} /></section>
       {twin && <section data-role="drop-twin"><h2>Your twin</h2>
         <p>Your twin learns how you write from the messages and emails you keep, and travels as a <b>Twin Card</b>: a file any tool can load to draft in your voice. The card carries up to five of your own texts as samples, you review which ones, and quoted replies from other people are left out.</p>
         {twin && twin.channels.length ? twin.channels.map((c) => (

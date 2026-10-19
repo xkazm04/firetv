@@ -13,7 +13,7 @@ export interface ShelfCard { id: string; format: string; title: string; versions
 const FORMAT_LABEL: Record<string, string> = { message: "Message", email: "Email", essay: "Essay" };
 const when = (at: number) => new Date(at).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 
-export function EssayShelf({ learnerId, refresh, onOpen, onGone }: { learnerId: string | undefined; refresh: number; onOpen: (id: string, text: string) => void; onGone?: (id: string | "all") => void }) {
+export function EssayShelf({ learnerId, refresh, onOpen, onGone, where }: { where?: "pc"; learnerId: string | undefined; refresh: number; onOpen: (id: string, text: string) => void; onGone?: (id: string | "all") => void }) {
   const [cards, setCards] = useState<ShelfCard[] | null>(null);
   const [line, setLine] = useState("");
   const [sure, setSure] = useState(false);
@@ -45,7 +45,7 @@ export function EssayShelf({ learnerId, refresh, onOpen, onGone }: { learnerId: 
           <span><b>{c.title}</b><small data-role="essay-shelf-format">{FORMAT_LABEL[c.format] ?? c.format} · {c.paragraphs} paragraph{c.paragraphs === 1 ? "" : "s"} · version {c.versions} · {when(c.updated)}</small></span>
           <button className="pbtn" data-secondary="true" onClick={() => void open(c.id)}>Open</button>
           <button className="pbtn" data-secondary="true" aria-label={`Delete ${c.title}`} onClick={() => void remove(`id=${encodeURIComponent(c.id)}`, "Deleted.", c.id)}>Delete</button>
-        </li>))}</ul> : <p>Nothing kept yet. Pieces you read on the TV with "Keep it on my shelf" land here.</p>}
+        </li>))}</ul> : <p>{where === "pc" ? "Nothing kept yet. Pieces you keep with \"Keep it\" on this page land here." : "Nothing kept yet. Pieces you read on the TV with \"Keep it on my shelf\" land here."}</p>}
       {cards.length > 0 && (sure
         ? <button className="pbtn" data-role="essay-delete-all" onClick={() => void remove("all=1", "Everything you kept is deleted.", "all")}>Yes, delete everything I kept</button>
         : <button className="pbtn" data-secondary="true" data-role="essay-delete-all" onClick={() => setSure(true)}>Delete everything I kept</button>)}
@@ -56,14 +56,14 @@ export function EssayShelf({ learnerId, refresh, onOpen, onGone }: { learnerId: 
 }
 
 /** Shown once per learner before their first kept piece; the words come from the server (texts.ts TEXT_NOTICE). */
-export function TextNotice({ text, mode = "piece", onAccept, onDecline }: { text: string; mode?: "paragraph" | "piece"; onAccept: () => void; onDecline: () => void }) {
+export function TextNotice({ text, mode = "piece", where, onAccept, onDecline }: { where?: "pc"; text: string; mode?: "paragraph" | "piece"; onAccept: () => void; onDecline: () => void }) {
   const reading = mode === "paragraph";
   return (
     <div className="pnotice" role="dialog" aria-label={reading ? "Before the desk reads your writing" : "Before you keep a piece"} data-role="essay-notice">
       <p>{text}</p>
       <div className="field">
         <button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={onAccept}>{reading ? "I understand, read it" : "I understand, keep it"}</button>
-        <button className="pbtn" data-secondary="true" onClick={onDecline}>{reading ? "Not now" : "Read without keeping"}</button>
+        <button className="pbtn" data-secondary="true" onClick={onDecline}>{reading || where === "pc" ? "Not now" : "Read without keeping"}</button>
       </div>
     </div>
   );
