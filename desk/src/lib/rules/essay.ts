@@ -222,6 +222,17 @@ const SPANISH_WORDS = new Set(("el la los las de del que y en un una es por con 
 const CZECH_LETTERS = /[ěščřžýáíéúůďťňóąęłńśźż]/i;
 /** Endings no English word has in six letters or more: Czech/Slovak adjective plurals, verbs in -ovat, -uji/-aji, -nost nouns. */
 const SLAVIC_ENDING = /^.{4,}(ych|ymi|ovat|ejsi|ovani|nosti|nost|uji|aji|eji|ely|ili|ila|ali|ovali|ovala|ovaly|ujeme|ujete|ujou|ovym|ovou)$/;
+/**
+ * The shape of a plain-letter Czech word, which needs no list (round 4, L1-kristyna-17-EM1-5): a word of four letters or more that opens with a cluster
+ * no English word opens with (zv-, zm-, zr-, zl-, zd-, zb-, hr-, hl-, kd-, vz-, ct-, krk-, rz-), or ends in an inflection English does not have (-ych, -ymi,
+ * -eho, -emu, -uje, -ejte, -ujte, -ou, -ym, and -ci/-ni/-ti/-ri on five letters or more). A name can trip it; one word cannot turn a paragraph,
+ * the share must still reach CZECH_FLOOR. Read on the folded word.
+ */
+const CZECH_SHAPE_START = /^(?:zv|zm|zr|zl|zd|zb|hr|hl|kd|vz|ct|krk|rz)/;
+const CZECH_SHAPE_END = /(?:ych|ymi|eho|emu|uje|ejte|ujte|ovat|ou|ym)$|.{3}(?:ci|ni|ti|ri)$/;
+/** The one-letter Czech prepositions: an English text has no stand-alone v, z or k. */
+const CZECH_ONE_LETTER = new Set(["v", "z", "k"]);
+const czechShape = (w: string) => CZECH_ONE_LETTER.has(w) || (w.length >= 4 && (CZECH_SHAPE_START.test(w) || CZECH_SHAPE_END.test(w)));
 const fold = (w: string) => w.replace(/ł/g, "l").replace(/Ł/g, "L").normalize("NFD").replace(/[̀-ͯ]/g, "");
 
 /** The shares behind the English rule: words, English function words over words, then each other language's signal over words. */
@@ -232,7 +243,7 @@ export function englishReading(text: unknown): { words: number; english: number;
   const fs = ws.map((w) => fold(w.replace(/^[a-z]{1,2}'(?=.)/, "")));
   const share = (n: number) => n / ws.length;
   const en = ws.filter((w) => ENGLISH_WORDS.has(w)).length;
-  const cz = ws.filter((w, i) => CZECH_LETTERS.test(w) || CZECH_WORDS.has(fs[i]) || SLAVIC_ENDING.test(fs[i])).length;
+  const cz = ws.filter((w, i) => CZECH_LETTERS.test(w) || CZECH_WORDS.has(fs[i]) || SLAVIC_ENDING.test(fs[i]) || czechShape(fs[i])).length;
   const de = fs.filter((w) => GERMAN_WORDS.has(w)).length;
   const pl = fs.filter((w) => POLISH_WORDS.has(w)).length;
   const fr = fs.filter((w) => FRENCH_WORDS.has(w)).length;
