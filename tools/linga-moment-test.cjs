@@ -261,9 +261,9 @@ test('LG-23 wired: during the scene no view lists a held fix; with correction of
 
 // ---- LG-4, path from the moment to Replay (owner ruling 2026-10-18): Back on a moment hands off to the existing Replay with
 // a fresh question built on the moment's form; the recap records the reply to it. A stubbed engine, no live model.
-const SLIP='I am work in a hotel.',REPLAY_Q='And what do you do there every morning?',ON_SCREEN='Which hotel is it?';
+const SLIP='I am work in a hotel.',REPLAY_Q='And where do you work every morning?',ON_SCREEN='Which hotel is it?';
 /** A B1 scene whose first reply stops on a fix; `replay` answers the replay call (or throws), every other turn gets a plain reply. */
-async function lg4(replay){
+async function lg4(replay,{slip=SLIP,moment={kind:'fix',said:'I am work',better:'I work',why:'Work is the verb here.'}}={}){
   const engine=require(path.join(root,'src/lib/engines/text.ts')),real=engine.text,calls=[];
   const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
   const {getLearner,saveEnglish}=require(path.join(root,'src/lib/session/learners.ts'));
@@ -275,14 +275,14 @@ async function lg4(replay){
     const p=JSON.parse(req.prompt);calls.push({req,p});
     if(p.task===C.REPLAY_TASK)return replay(p);
     if(!p.submittedReply)return {json:{title:'Front desk',goal:'Talk about your job.',opening:'Hello! Where do you work?'},provider:'test',ms:1};
-    if(p.submittedReply===SLIP)return {json:{reply:ON_SCREEN,observations:[],moment:{kind:'fix',said:'I am work',better:'I work',why:'Work is the verb here.'}},provider:'test',ms:1};
+    if(p.submittedReply===slip)return {json:{reply:ON_SCREEN,observations:[],moment},provider:'test',ms:1};
     return {json:{reply:'Nice. Tell me more.',observations:[],moment:{kind:'none',said:'',better:'',why:''}},provider:'test',ms:1};
   };
   let n=0;
   const cmd=(action,extra={})=>{const s=getSession();return C.englishCommand({action,learnerId:'ema',episodeId:s.conversation?.id,commandId:`lg4-${Date.now()}-${++n}`,...extra});};
   const say=text=>cmd('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
   await cmd('start',{sceneId:'booking',replace:true});
-  await say(SLIP);
+  await say(slip);
   assert.ok(getSession().conversation.moment,'the reply stops the scene');
   return {calls,cmd,say,getSession,getLearner,done:()=>{engine.text=real;}};
 }
@@ -494,4 +494,71 @@ test('LG-4: the moment\'s Back says the scene continues with a question to try t
     assert.match(back(s.conversation.moment).help,/new question to try this/);
     assert.equal(back({...s.conversation.moment,better:'',repair:{rung:0,lost:true}}).help,'Carry on from where the scene stopped.');
   }finally{r.done();}
+});
+
+// ---- LG-4 recert-8 (docs/uat-insights/2026-10-19-lt-recert-8.md): 0 of 4 replies used the coached form, as in recert-7, with
+// ee6a6fed's prompt in the product. Each replay question was fresh but answerable without the fix. Code now reads the
+// question for the coached frame (replay.ts frameOf), asks once more when it does not invite it, and replay.used reads the
+// frame, not only the exact key. Fixtures: the four moments and replays of uat/runs/2026-10-17-lt-swap-2/recert-8.
+const R8={
+  viktor:{moment:{kind:'fix',said:'I have cat in garden.',better:'I have a cat in the garden.',why:'x',slip:'have cat',fix:'have a cat'},question:'Cool! What do you have in your garden?',reply:'I have tomato and flowers. My garden is big.',good:'Do you have a cat or a dog at home?',uses:'Yes, I have a dog in the garden.'},
+  petra:{moment:{kind:'fix',said:'I think is not repair today',better:'I think it cannot be repaired today',why:'x',slip:'think is not repair',fix:'think it cannot be repaired'},question:'Thank you. Why do you want a new room, not a repair today?',reply:'Because the shower is cold and the water is not hot.',good:'Do you think the shower can be repaired today?',uses:'No, I think it can\'t be repaired tonight.'},
+  tomas:{moment:{kind:'word',said:'Já nevím...',better:'I don\'t know',why:'x'},question:'Nice! Where are the diamonds in the game?',reply:'I like diamond. I can... já, nevím. I like Minecraft.',good:'Do you know where the diamonds are?',uses:'I don\'t know.'},
+  adela:{moment:{kind:'word',said:'eventually',better:'often',why:'x'},question:'Staying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?',reply:'Usually I don\'t answer straight away, because I\'d rather get enough sleep.',good:'Do you often answer friends late at night?',uses:'I often check who wrote, but I answer in the morning.'},
+};
+test('LG-4 recert-8 rules: each recert-8 replay question is refused for not inviting the coached frame, a question that names it passes, and replay.used reads the frame',()=>{
+  const {frameOf,invitesFrame,replayRefused,usesFrame}=require(path.join(root,'src/lib/english/replay.ts'));
+  const {usesForm}=require(path.join(root,'src/lib/english/review.ts'));
+  assert.deepEqual(frameOf(R8.viktor.moment),{words:['have','a',null],anchors:['have','cat'],slip:'have cat'},'the article kept, the thing open');
+  assert.deepEqual(frameOf(R8.petra.moment).anchors,['repaired']);
+  assert.deepEqual(frameOf(R8.tomas.moment).anchors,['know']);
+  assert.deepEqual(frameOf(R8.adela.moment).anchors,['often']);
+  for(const [who,x] of Object.entries(R8)){
+    const frame=frameOf(x.moment);
+    assert.match(replayRefused(x.question,x.moment.better,x.moment.better,frame),/did not invite the coached frame/,`${who}: the recert-8 question`);
+    assert.equal(invitesFrame(x.good,frame),true,`${who}: ${x.good}`);
+    assert.equal(replayRefused(x.good,x.moment.better,x.moment.better,frame),null,`${who}: a question that names the frame is a replay`);
+    assert.equal(usesForm(x.reply,x.moment)??usesFrame(x.reply,frame),null,`${who}: the recert-8 reply did not use it`);
+    assert.ok(usesForm(x.uses,x.moment)??usesFrame(x.uses,frame),`${who}: ${x.uses}`);
+  }
+  assert.equal(usesForm(R8.viktor.uses,R8.viktor.moment),null,'the exact key alone misses "I have a dog"');
+  assert.equal(usesFrame(R8.viktor.uses,frameOf(R8.viktor.moment)),'have a dog');
+  assert.equal(usesFrame('I have cat and a dog.',frameOf(R8.viktor.moment)),null,'the slip said again is no use of the form');
+  assert.equal(usesFrame('I want a dog.',frameOf(R8.viktor.moment)),null,'the words before the change stay whole');
+  assert.deepEqual(frameOf({kind:'fix',said:'I am work',better:'I work',slip:'i am work',fix:'i work'}).words,['i','work'],'a dropped word keeps the key whole');
+  assert.match(replayRefused('So you have a cat? I have a cat in the garden too.','have a cat','I have a cat in the garden.',frameOf(R8.viktor.moment)),/said the coached form itself/,'the whole after form is still never said');
+});
+
+test('LG-4 recert-8 wired: a Back replay that does not invite the frame is asked for once more, frameWords and the refusal named; a second refusal is no replay',async()=>{
+  const x=R8.viktor,slip='Yes, I like cat. I have cat in garden.',opts={slip,moment:{kind:'fix',said:x.moment.said,better:x.moment.better,why:'One cat needs a.'}};
+  let n=0;
+  const r=await lg4(()=>({json:{reply:++n===1?x.question:x.good,form:'I have a cat'},provider:'test',ms:1}),opts);
+  try{
+    await r.cmd('moment-done');
+    const calls=replays(r.calls);
+    assert.equal(calls.length,2,'asked once more');
+    assert.deepEqual(calls[0].p.frameWords,['have','cat'],'the anchors go to the model');
+    assert.equal(calls[0].p.refused,undefined);
+    assert.equal(calls[1].p.refused.question,x.question);assert.match(calls[1].p.refused.why,/did not invite the coached frame/);
+    let c=r.getSession().conversation;
+    assert.equal(c.phase,'replay');assert.equal(c.turns.at(-1).text,x.good);assert.equal(c.moments[0].replay.question,x.good);
+    await r.say(x.uses);
+    c=r.getSession().conversation;
+    assert.equal(c.moments[0].replay.used,true,'"I have a dog" uses "have a ___"');assert.equal(c.moments[0].replay.reply,x.uses);
+  }finally{r.done();}
+  const twice=await lg4(()=>({json:{reply:x.question,form:'I have a cat'},provider:'test',ms:1}),opts);
+  try{
+    const before=twice.getSession().conversation.turns.length;
+    await twice.cmd('moment-done');
+    const c=twice.getSession().conversation;
+    assert.equal(replays(twice.calls).length,2,'once more, never a third time');
+    assert.equal(c.phase,'conversation');assert.equal(c.error,'');assert.equal(c.turns.length,before);assert.equal(c.moments[0].replay,undefined);
+  }finally{twice.done();}
+  const answered=await lg4(()=>({json:{reply:x.good,form:'I have a cat'},provider:'test',ms:1}),opts);
+  try{
+    await answered.cmd('moment-done');await answered.say(x.reply);
+    const c=answered.getSession().conversation;
+    assert.equal(replays(answered.calls).length,1,'a question that invites the frame is asked once');
+    assert.equal(c.moments[0].replay.used,false,'"I have tomato" does not use it');
+  }finally{answered.done();}
 });
