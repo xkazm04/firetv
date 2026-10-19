@@ -57,6 +57,8 @@ function inOrder() {
     return run;
   };
 }
+/** localStorage: the last QR code the desk refused (a refused code is no secret); the phone does not post it again. */
+const REFUSED_QR = "desk.pin.refused";
 /** What a fresh page load holds in the Essay and Say panels: a new learner in the seat starts from these. */
 /** The Essay box starts empty: one empty paragraph (setEssay maps over it), never a sample a paste could fuse into. */
 const FRESH_PARAS = [""];
@@ -156,7 +158,10 @@ export default function Phone() {
     const q = new URLSearchParams(location.search).get("pin");
     if (!q) return;
     history.replaceState(null, "", location.pathname);
-    void join(q, "qr");
+    // a code the desk refused is not posted again: ten opens of a stale address would trip the desk-wide cooldown
+    let refusedBefore = false;
+    try { refusedBefore = localStorage.getItem(REFUSED_QR) === q; } catch { /* storage is blocked, so the code is posted */ }
+    if (!refusedBefore) void join(q, "qr");
   }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the input mirrors the draft; a new draft (or none) resets what is typed here
   useEffect(() => { setPname(s?.draft?.name ?? ""); }, [s?.draft?.id]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -181,19 +186,26 @@ export default function Phone() {
   useEffect(() => { if (cam && video.current && video.current.srcObject !== cam) video.current.srcObject = cam; }, [cam, shot]);
 
   const [bad, setBad] = useState(false);
+  const joining = useRef<Promise<void> | null>(null), [joinBusy, setJoinBusy] = useState(false);
   /**
    * The desk checks the code (api/session): a match sets this phone's cookie and the stream reopens as a joined
    * phone; a refusal says why (joinRefusal). Quiet for a code the phone brought (the QR): no shake for that, but the line
    * is shown. The phone keeps no code (the code on the TV turns over after each join), and a listed phone never needs it.
    */
-  const join = async (code = pin, how: JoinHow = "typed") => {
-    let r: Response | null = null;
-    try { r = await post({ type: "join", code }); } catch { /* r stays null, and joinRefusal says "That did not reach the desk." */ }
-    if (r?.ok) { setMsg(""); reconnect(); return; }
-    const j = r ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
-    const refusal = joinRefusal({ status: r?.status, error: j.error, how });
-    setMsg(refusal.line);
-    if (refusal.shake) { setBad(true); setTimeout(() => setBad(false), 500); }
+  const join = async (code = pin, how: JoinHow = "typed"): Promise<void> => {
+    // one join in flight: a second call (the tap while the four digits auto-join) gets the first one's promise, never a second post
+    if (joining.current) return joining.current;
+    setJoinBusy(true);
+    return await (joining.current = (async () => {
+      let r: Response | null = null;
+      try { r = await post({ type: "join", code }); } catch { /* r stays null, and joinRefusal says "That did not reach the desk." */ }
+      if (r?.ok) { setMsg(""); reconnect(); return; }
+      const j = r ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
+      const refusal = joinRefusal({ status: r?.status, error: j.error, how });
+      setMsg(refusal.line);
+      if (refusal.forget) { try { localStorage.setItem(REFUSED_QR, code); } catch { /* storage is blocked, so the code may be posted again */ } }
+      if (refusal.shake) { setBad(true); setTimeout(() => setBad(false), 500); }
+    })().finally(() => { joining.current = null; setJoinBusy(false); }));
   };
   // four digits join by themselves; Join stays as the fallback tap
   const onPin = (v: string) => { const d = v.replace(/\D/g, "").slice(0, 4); setPin(d); if (d.length === 4 && s && !s.joined) join(d); };
@@ -552,7 +564,7 @@ export default function Phone() {
         {screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
           <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
           {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}
-          <div className="field" data-bad={bad}><input inputMode="numeric" placeholder="4-digit code" value={pin} onChange={(e) => onPin(e.target.value)} /><button className="pbtn" data-signal="true" onClick={() => join()}>Join</button></div>
+          <div className="field" data-bad={bad}><input inputMode="numeric" placeholder="4-digit code" value={pin} disabled={joinBusy} onChange={(e) => onPin(e.target.value)} /><button className="pbtn" data-signal="true" disabled={joinBusy} onClick={() => join()}>Join</button></div>
           <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install. The code works once: it changes when a phone joins with it.</p>
           <button className="pbtn" data-secondary="true" onClick={() => nav("profile")}>Naming a new learner? Open Profile.</button></div>}
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { badPost, dispatch, getSession, type Event } from "@/lib/session/store";
-import { COOKIE, JOIN_FIRST, JOIN_NOT_SAVED, LEAVE_NOT_SAVED, NO_CODE, RESET_NOT_SAVED, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinCooling, joinDelay, joinSucceeded, joinWrongCode, cookiesOf, forgetAllPhones, forgetPhone, mintPhone, roleFrom, view } from "@/lib/session/pairing";
+import { COOKIE, JOIN_FIRST, JOIN_NOT_SAVED, LEAVE_NOT_SAVED, NO_CODE, RESET_NOT_SAVED, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinClear, joinCooling, joinDelay, joinSucceeded, joinWrongCode, cookiesOf, forgetAllPhones, forgetPhone, mintPhone, roleFrom, view } from "@/lib/session/pairing";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +41,14 @@ export async function POST(req: Request) {
   const body: unknown = await req.json().catch(() => null);
   if (!body || typeof body !== "object" || Array.isArray(body)) return NextResponse.json({ error: "The desk could not read that request." }, { status: 400 });
   const e = body as Event;
+  // phones.forget is the TV's own act (TL-2): forget every phone, keep the session. It is no reducer event, so it is answered here, before the door
+  if ((e as { type?: unknown }).type === "phones.forget") {
+    if (role === "phone" || role === "guest") return NextResponse.json({ error: "Only the TV can forget every phone." }, { status: 403 });
+    try { forgetAllPhones(); }
+    catch (err) { notSaved("a forget of every phone", err); return NextResponse.json({ error: RESET_NOT_SAVED }, { status: 500 }); }
+    joinClear();
+    return NextResponse.json(view(getSession(), role));
+  }
   const refused = e?.type ? SERVER_ONLY[e.type] : undefined;
   if (refused) return NextResponse.json({ error: refused }, { status: 403 });
   // a lesson picked for a hint is the desk's pick; a lesson chosen on the TV (no key) is the screen's own
@@ -92,6 +100,7 @@ export async function POST(req: Request) {
   if (e?.type === "reset") {
     try { forgetAllPhones(); }
     catch (err) { notSaved("a reset", err); return NextResponse.json({ error: RESET_NOT_SAVED }, { status: 500 }); }
+    joinClear();
   }
   return NextResponse.json(view(dispatch(e), role));
 }

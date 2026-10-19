@@ -973,3 +973,23 @@ test('EV2: every legitimate post the screens make still passes the door',async()
  for(const e of ok){const r=await post(e,'tv');if(r.status===400)refused.push(JSON.stringify(e));}
  assert.deepEqual(refused,[],'legitimate posts the door refused');
 });
+// ---- TL-2: the TV lifts the lock ----
+test('TL-2: after the cooldown trips, a TV reset lets a new phone join at once',async()=>{
+ evening('pair');DESK_JOIN();
+ for(let i=0;i<10;i++)await post({type:'join',code:wrongOf(store.getSession().pin)},'guest');
+ let r=await post({type:'join',code:store.getSession().pin},'guest');assert.equal(r.status,403);assert.deepEqual(await r.json(),{error:TOO_MANY},'locked');
+ assert.equal((await post({type:'reset'},'tv')).status,200);
+ r=await post({type:'join',code:store.getSession().pin},'guest');assert.equal(r.status,200,'the reset lifted the cooldown');
+});
+test('TL-2: phones.forget is the TV\'s: it forgets every phone, keeps the session and lifts the cooldown; a phone or a guest gets 403',async()=>{
+ evening('pair');DESK_JOIN();
+ const cookie=await joinAs();assert.equal((await post({type:'nav',screen:'units'},'phone',cookie)).status,200);
+ const screen=store.getSession().screen;
+ for(const role of ['phone','guest']){const r=await post({type:'phones.forget'},role,cookie);assert.equal(r.status,403,role);}
+ assert.equal(pairing().roleOf({get:(n)=>n==='desk-phone'?{value:cookie.slice('desk-phone='.length)}:undefined}),'phone','a refused forget left the phone paired');
+ for(let i=0;i<10;i++)await post({type:'join',code:wrongOf(store.getSession().pin)},'guest');
+ assert.equal((await post({type:'phones.forget'},'tv')).status,200);
+ assert.equal(pairing().roleOf({get:(n)=>n==='desk-phone'?{value:cookie.slice('desk-phone='.length)}:undefined}),'guest','the phone is forgotten');
+ assert.equal(store.getSession().screen,screen,'the session is kept');
+ assert.equal((await post({type:'join',code:store.getSession().pin},'guest')).status,200,'the cooldown is lifted');
+});

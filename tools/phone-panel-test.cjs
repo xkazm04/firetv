@@ -1025,3 +1025,13 @@ test('a rewrite the desk accepted is written back into the phone paragraph; one 
  assert.match(src,/stranded \? `\$\{rewriteStaysLine\(stranded\)\}/,'readPiece says it before sending');
  assert.match(src,/data-role="essay-rewrites-stay"/);
 });
+test('TL-2 pins: one join in flight, the field and Join disabled while it runs; a refused QR code is remembered and not posted again',()=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ assert.match(src,/if \(joining\.current\) return joining\.current;/,'a second call gets the first one\'s promise');
+ assert.match(src,/\.finally\(\(\) => \{ joining\.current = null; setJoinBusy\(false\); \}\)/);
+ assert.match(src,/placeholder="4-digit code" value=\{pin\} disabled=\{joinBusy\}/);
+ assert.match(src,/data-signal="true" disabled=\{joinBusy\} onClick=\{\(\) => join\(\)\}/);
+ assert.match(src,/if \(refusal\.forget\) \{ try \{ localStorage\.setItem\(REFUSED_QR, code\)/,'the refused QR code is remembered');
+ assert.match(src,/localStorage\.getItem\(REFUSED_QR\) === q/);
+ assert.match(src,/if \(!refusedBefore\) void join\(q, "qr"\)/,'a remembered code is not posted again');
+});

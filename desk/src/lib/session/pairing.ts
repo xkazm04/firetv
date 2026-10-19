@@ -61,6 +61,8 @@ export function joinWrongCode(): void {
   const g = joinGuard();
   if (++g.wrong >= JOIN_BUDGET) { g.until = Date.now() + JOIN_COOLDOWN_MS; g.wrong = 0; }
 }
+/** The TV lifts the lock: a reset, or Forget every phone, clears the count and the cooldown, so a new phone joins at once. */
+export function joinClear(): void { const g = joinGuard(); g.wrong = 0; g.until = 0; }
 /** A join that succeeded: the count is zero. */
 export function joinSucceeded(): void { joinGuard().wrong = 0; }
 
