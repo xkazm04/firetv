@@ -13,7 +13,7 @@ import { modeOf } from "../rules/mode";
 import { audienceAllowed, defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, oldestDue, taughtAllowed } from "./curriculum";
 import { adultContent, isAdult } from "../rules/mode";
 import { ConversationError, lingaLine } from "./errors";
-import { EngineError, type TextRequest } from "../engines/types";
+import { EngineError, type EngineResult, type TextRequest } from "../engines/types";
 import { EASE_INSTRUCTION, learnerLost } from "./ease";
 import { climb, keepLadder, MEANING_MAX, sceneCueFor, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
@@ -166,6 +166,19 @@ const beginner=(c:Conversation)=>easyBand(isBand(c.preferences.level)?c.preferen
  * asked again or rephrased (LT-petra-38-J4-2). The learner's answer is never supplied.
  */
 export const REPLAY_TASK="Return to the scene with one new short question that the learner can answer well only by using the after form of coaching, given as afterForm (the corrected words, or the word or phrase they needed): its natural answer must need those words. When frameWords is given, the question uses every word in it, so that the natural answer says the after form again. The question must not be any line in askedBefore, nor a rephrase of one: ask about something new in the scene. Do not supply the learner's answer, and never say the whole after form yourself. form: the words of afterForm the learner's answer should use. GOOD, for afterForm \"I work\", frameWords [\"work\"]: reply \"Where do you work every morning?\", form \"I work\" (the answer is \"I work at the front desk\"). BAD: reply \"Which hotel is it?\" (\"The Grand\" answers it without the form). BAD, for afterForm \"I have a cat in the garden\", frameWords [\"have\", \"cat\"]: \"What do you have in your garden?\" (\"I have tomatoes\" answers it without the fix); GOOD: \"Do you have a cat or a dog at home?\".";
+/**
+ * Why a Back replay answer is no replay of the coaching (replay.ts replayRefused, with the moment's frame), as the retry
+ * names it to the model: the question as the learner would see it, and the reason. Null when it holds.
+ */
+function backRefusal(c:Conversation,json:Record<string,unknown>,after:string,frame:Frame):{question:string;why:string}|null{
+  const question=partnerSays(c,json.reply,undefined,json.help);
+  // a redirect line or a question asked before is refused as before, never asked again (LG-4 (b))
+  if(asksNothingNew(c,question))return null;
+  const why=replayRefused(question,json.form,after,frame);
+  return why?{question,why:`${why} Ask again: your question must use every word in frameWords.`}:null;
+}
+/** A Back replay line that asks nothing new: the gate's redirect line, or a question in askedBefore again. */
+const asksNothingNew=(c:Conversation,question:string)=>question===REDIRECT_LINE||askedBefore(c).some(x=>wordsOf(x).join(" ")===wordsOf(question).join(" "));
 function askedBefore(c:Conversation):string[]{
   let at=c.turns.length-1;while(at>=0&&c.turns[at].role!=="learner")at--;
   const before=c.turns.slice(0,Math.max(at,0)).reverse().find(t=>t.role==="partner"),last=[...c.turns].reverse().find(t=>t.role==="partner");
@@ -592,7 +605,14 @@ export async function englishCommand(raw:unknown){
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
     const task=action==="turn"?{task:`${pair?DUET_PAIR:"Respond in character to submittedReply, then assess it against the allowed skills."} Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}${pair&&c.duet?.coStarLearnerId?COSTAR_TASK:""}`,submittedReply:reply,...(pair?{coStarReply:pair.coStar.text}:{}),...(askedAbout?{askedAbout}:{}),...(fossil?{slipAgain:{said:fossil.said,better:fossil.better,task:FOSSIL_TASK}}:again.length?{slipAgain:{said:again[0].said,better:again[0].better,task:SLIP_AGAIN_TASK}}:{})}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:REPLAY_TASK,coaching,afterForm:coaching!.after,...(frame?{frameWords:frame.anchors}:{}),askedBefore:askedBefore(c)};
     const request:TextRequest={system:tutorSystem(c),prompt:JSON.stringify({...context(lost!==undefined?{...c,lost}:c,action!=="coach",action==="turn"?{text:reply,supported:c.supported}:undefined),...task}),schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:formSchema,accept:action==="turn"?(pair?pairAccept:turnAccept):action==="replay"?formAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"};
-    const result=await text<Record<string,unknown>>(request);
+    // LG-4 recert-8: a Back replay whose question does not invite the frame (backRefusal) is asked for once more, with the
+    // refused question and the reason; the replay branch below refuses a second one
+    let result!:EngineResult<Record<string,unknown>>;
+    for(let refused:{question:string;why:string}|null=null,tries=0;tries<2;tries++){
+      result=await text<Record<string,unknown>>(refused?{...request,prompt:JSON.stringify({...JSON.parse(request.prompt),refused})}:request);
+      refused=back?backRefusal(c,result.json,back.coaching.after,frame!):null;
+      if(!refused)break;
+    }
     const current=checkCurrent(c,commandId);
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
     if(action==="turn"){
@@ -637,22 +657,12 @@ export async function englishCommand(raw:unknown){
       if(audienceSafe(c,line(result.json.after,180))===null||audienceSafe(c,line(result.json.note,220))===null)throw new Error("The coach note did not fit this learner.");if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
       next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
     }else{
-      let {partner,patch}=replayed(c,result.json);
+      const {partner,patch}=replayed(c,result.json);
       // after Back (LG-4): a gate's redirect line or a question asked before is no replay; the catch returns to the conversation
-      if(back&&(partner.text===REDIRECT_LINE||askedBefore(c).some(x=>wordsOf(x).join(" ")===wordsOf(partner.text).join(" "))))throw new Error("The replay asked nothing new.");
+      if(back&&asksNothingNew(c,partner.text))throw new Error("The replay asked nothing new.");
       // recert-7 (LT-petra-38-J4-2): a fresh question that does not call for the coached form, or says it, is no replay either;
-      // recert-8 (0 of 4 replies used it, the prompt alone moved nothing): nor one that does not invite the frame. Such a
-      // question is asked for once more, with the refused one and the reason; a second refusal is no replay.
-      let refused=back?replayRefused(partner.text,result.json.form,back.coaching.after,frame!):null;
-      if(refused){
-        const again=await text<Record<string,unknown>>({...request,prompt:JSON.stringify({...JSON.parse(request.prompt),refused:{question:partner.text,why:`${refused} Ask again: your question must use the words in frameWords.`}})});
-        checkCurrent(c,commandId);
-        ({partner,patch}=replayed(c,again.json));
-        if(partner.text===REDIRECT_LINE||askedBefore(c).some(x=>wordsOf(x).join(" ")===wordsOf(partner.text).join(" ")))throw new Error("The replay asked nothing new.");
-        refused=replayRefused(partner.text,again.json.form,back!.coaching.after,frame!);
-        next={...next,provider:again.provider,responseMs:result.ms+again.ms};
-      }
-      if(refused)throw new Error(refused);
+      // recert-8: nor one that does not invite the frame, once asked for again (the call above)
+      const refused=back?backRefusal(c,result.json,back.coaching.after,frame!):null;if(refused)throw new Error(refused.why);
       next={...next,...patch,...(back?{replayFor:undefined,moments:current.moments.map(x=>x.id===back!.moment.id?{...x,replay:{question:partner.text,turnId:partner.id}}:x)}:{})};
     }
     commit(next,screenFor(next));return getSession();
