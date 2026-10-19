@@ -263,7 +263,7 @@ test('LG-23 wired: during the scene no view lists a held fix; with correction of
 // a fresh question built on the moment's form; the recap records the reply to it. A stubbed engine, no live model.
 const SLIP='I am work in a hotel.',REPLAY_Q='And where do you work every morning?',ON_SCREEN='Which hotel is it?';
 /** A B1 scene whose first reply stops on a fix; `replay` answers the replay call (or throws), every other turn gets a plain reply. */
-async function lg4(replay,{slip=SLIP,moment={kind:'fix',said:'I am work',better:'I work',why:'Work is the verb here.'}}={}){
+async function lg4(replay,{slip=SLIP,moment={kind:'fix',said:'I am work',better:'I work',why:'Work is the verb here.'},onScreen=ON_SCREEN}={}){
   const engine=require(path.join(root,'src/lib/engines/text.ts')),real=engine.text,calls=[];
   const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
   const {getLearner,saveEnglish}=require(path.join(root,'src/lib/session/learners.ts'));
@@ -275,7 +275,7 @@ async function lg4(replay,{slip=SLIP,moment={kind:'fix',said:'I am work',better:
     const p=JSON.parse(req.prompt);calls.push({req,p});
     if(p.task===C.REPLAY_TASK)return replay(p);
     if(!p.submittedReply)return {json:{title:'Front desk',goal:'Talk about your job.',opening:'Hello! Where do you work?'},provider:'test',ms:1};
-    if(p.submittedReply===slip)return {json:{reply:ON_SCREEN,observations:[],moment},provider:'test',ms:1};
+    if(p.submittedReply===slip)return {json:{reply:onScreen,observations:[],moment},provider:'test',ms:1};
     return {json:{reply:'Nice. Tell me more.',observations:[],moment:{kind:'none',said:'',better:'',why:''}},provider:'test',ms:1};
   };
   let n=0;
@@ -593,4 +593,36 @@ test('LG-4 recert-8 wired: Adela\'s long replay reply reaches the recap as whole
     assert.equal(v.recap.moments[0].tried,ADELA_TWO,'the phone');
     assert.doesNotMatch(V.viewText(v),/whether/);
   }finally{r.done();}
+});
+
+// ---- LG-5 recert-9 (3): Back's replay stacked a second partner turn on the one pending under the moment, 2 of 2 replays:
+// "Me too! Do you eat them?" then "Nice! Which tomatoes are red, big or small?" (recert-9/LT-viktor-67-J4-5), "Creepers are
+// funny! What are you making?" then "Good! Do you know where creepers live?" (recert-9/LT-tomas-9-J4-4). The replay question
+// now replaces the pending line. Fixtures from the recert-9 transcripts.
+const R9={
+  viktor:{slip:'Yes, tomatoes red.',pending:'Me too! Do you eat them?',question:'Nice! Which tomatoes are red, big or small?',moment:{kind:'fix',said:'Yes, tomatoes red.',better:'Yes, tomatoes are red.',why:'Say are between them.'},form:'tomatoes are red'},
+  tomas:{slip:'Creeper... Minecraft. Nevím.',pending:'Creepers are funny! What are you making?',question:'Good! Do you know where creepers live?',moment:{kind:'word',said:'Nevím',better:"I don't know",why:"Nevím means I don't know."},form:"I don't know"},
+};
+const partnersInARow=turns=>turns.some((t,i)=>i>0&&t.role==='partner'&&turns[i-1].role==='partner');
+test('LG-5 recert-9 wired (3): Back\'s replay question replaces the partner line pending under the moment, never follows it (viktor-67, tomas-9)',async()=>{
+  for(const [who,x] of Object.entries(R9)){
+    const r=await lg4(()=>({json:{reply:x.question,form:x.form},provider:'test',ms:1}),{slip:x.slip,moment:x.moment,onScreen:x.pending});
+    try{
+      let c=r.getSession().conversation;
+      assert.equal(c.turns.at(-1).text,x.pending,`${who}: the pending line is on screen under the moment`);
+      const before=c.turns.length;
+      await r.cmd('moment-done');c=r.getSession().conversation;
+      assert.equal(replays(r.calls).length,1,`${who}: one replay call`);
+      assert.ok(replays(r.calls)[0].p.askedBefore.includes(x.pending),`${who}: the pending line is still one the replay must not ask again`);
+      assert.equal(c.phase,'replay');assert.equal(c.turns.length,before,`${who}: the replay takes the pending line's place`);
+      assert.equal(c.turns.at(-1).text,x.question);assert.equal(c.turns.at(-2).role,'learner',`${who}: the learner's line, then the replay question`);
+      assert.ok(!c.turns.some(t=>t.text===x.pending),`${who}: the pending line is gone from the transcript`);
+      assert.equal(partnersInARow(c.turns),false,`${who}: no two partner turns in a row`);
+      assert.equal(c.moments[0].replay.turnId,c.turns.at(-1).id,`${who}: the moment's replay is the question on screen`);
+      const V=require(path.join(root,'src/lib/english/view.ts')),v=V.lingaView(r.getSession(),{});
+      assert.equal(v.hero.said,x.question);
+      await r.say('I do not know.');c=r.getSession().conversation;
+      assert.equal(partnersInARow(c.turns),false,`${who}: the scene goes on one turn each`);
+    }finally{r.done();}
+  }
 });

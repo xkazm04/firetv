@@ -189,10 +189,18 @@ function askedBefore(c:Conversation):string[]{
   const before=c.turns.slice(0,Math.max(at,0)).reverse().find(t=>t.role==="partner"),last=[...c.turns].reverse().find(t=>t.role==="partner");
   return [...new Set([before?.text,last?.text].filter((x):x is string=>!!x))];
 }
-/** The replay's answer on the scene: the partner's new question, phase replay, its own help ladder; no help carried over. */
-function replayed(c:Conversation,json:Record<string,unknown>){
+/**
+ * The replay's answer on the scene: the partner's new question, phase replay, its own help ladder; no help carried over.
+ * `replacing` (Back on a moment, LG-5 recert-9: LT-tomas-9-J4-4, LT-viktor-67-J4-5): the question takes the place of the
+ * partner line still pending under the moment, so the learner never sees two partner turns in a row ("Me too! Do you eat
+ * them?" then "Nice! Which tomatoes are red, big or small?"). A pending line that showed the hidden line's key still
+ * spends its find (K4).
+ */
+function replayed(c:Conversation,json:Record<string,unknown>,replacing=false){
   const partner={id:randomUUID(),role:"partner" as const,text:partnerSays(c,json.reply,undefined,json.help)},held=partner.text===line(json.reply);
-  return {partner,patch:{phase:"replay" as const,supported:false,turns:[...c.turns,partner],cue:"",quizOpen:false,help:keepLadder(partner.id,ladderFor(c,json.help,partner.text,held),c.help?.forTurn)}};
+  const last=c.turns.at(-1),pending=replacing&&last?.role==="partner"?last:null;
+  const spent=pending&&c.line&&!c.line.found&&showsLine(c,pending.text)?{line:{...c.line,shown:true}}:{};
+  return {partner,patch:{phase:"replay" as const,supported:false,turns:[...(pending?c.turns.slice(0,-1):c.turns),partner],cue:"",quizOpen:false,help:keepLadder(partner.id,ladderFor(c,json.help,partner.text,held),c.help?.forTurn),...spent}};
 }
 /**
  * The scene's moments after a reply (LG-4): the moment whose replay question is the line this reply answers keeps the reply
@@ -670,7 +678,7 @@ export async function englishCommand(raw:unknown){
       if(audienceSafe(c,line(result.json.after,180))===null||audienceSafe(c,line(result.json.note,220))===null)throw new Error("The coach note did not fit this learner.");if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
       next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
     }else{
-      const {partner,patch}=replayed(c,result.json);
+      const {partner,patch}=replayed(c,result.json,!!back);
       // after Back (LG-4): a gate's redirect line or a question asked before is no replay; the catch returns to the conversation
       if(back&&asksNothingNew(c,partner.text))throw new Error("The replay asked nothing new.");
       // recert-7 (LT-petra-38-J4-2): a fresh question that does not call for the coached form, or says it, is no replay either;
