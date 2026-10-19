@@ -90,13 +90,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 14,
+    "recurrence": 15,
     "recurs": "2026-10-17-lt-swap-2/recert-4/LT-adela-17-J4-1",
     "suggested_acceptance": "First help press returns an answer frame suited to the question at B2.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-12",
     "recertify_status": "recurs",
-    "recertify_evidence": "#3 'Said more simply: Do you agree that phones connect people?' then #4 a gloss only.",
+    "recertify_evidence": "#3 'Said more simply' restates the question; #4 gloss of 'full ban' with no answer frame.",
     "recurred_as": "LT-adela-17-J4-3"
   },
   {
@@ -124,13 +124,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "recurs": "2026-10-17-lt-swap-2/recert-6/LT-petra-38-J4-2",
     "suggested_acceptance": "Replay question invites the coached phrase and the recap shows whether it was used.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-12",
     "recertify_status": "recurs",
-    "recertify_evidence": "#13 'I want the side of hotel where is not the street' after the coached 'of the hotel'; both moments carry replay used:false.",
+    "recertify_evidence": "#11 Replay offered, Finish taken; no retry of 'move to room fourteen'.",
     "recurred_as": "LT-petra-38-J4-1"
   },
   {
@@ -291,13 +291,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "Replay checks the fixed form in the new reply, or offers a new target.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-12",
     "recertify_status": "recurs",
-    "recertify_evidence": "#20 'Replay the moment' offered, he finished; replay.used false.",
-    "recurred_as": "LT-viktor-67-J4-1"
+    "recertify_evidence": "#22 'Replay the moment' offered, he pressed Finish; replay used false.",
+    "recurred_as": "LT-viktor-67-J4-4"
   },
   {
     "id": "LT-viktor-67-J4-4",
@@ -523,14 +523,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 14,
+    "recurrence": 15,
     "recurs": "2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J4-5",
     "suggested_acceptance": "Elementary profile shows only play, animal, sport situations.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-12",
     "recertify_status": "recurs",
-    "recertify_evidence": "#1 list has 20 entries incl. 'A booking that is missing | Our group project'.",
-    "recurred_as": "LT-tomas-9-J4-4"
+    "recertify_evidence": "#1 same 20-entry list incl. 'A booking that is missing'.",
+    "recurred_as": "LT-tomas-9-J4-2"
   },
   {
     "id": "LT-adela-17-J4-2",

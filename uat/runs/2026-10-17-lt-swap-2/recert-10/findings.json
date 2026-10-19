@@ -57,14 +57,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 14,
+    "recurrence": 15,
     "recurs": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-6",
     "suggested_acceptance": "For an elementary profile show only child-suited situations.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-12",
     "recertify_status": "recurs",
-    "recertify_evidence": "#1 list has 20 entries incl. 'A booking that is missing | Our group project'.",
-    "recurred_as": "LT-tomas-9-J4-4"
+    "recertify_evidence": "#1 same 20-entry list incl. 'A booking that is missing'.",
+    "recurred_as": "LT-tomas-9-J4-2"
   },
   {
     "id": "LT-adela-17-J4-2",
@@ -91,13 +91,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 13,
+    "recurrence": 14,
     "recurs": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-2",
     "suggested_acceptance": "First help press gives a B2 frame such as 'It depends on… although…' for stretch learners.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-12",
     "recertify_status": "recurs",
-    "recertify_evidence": "#6 'Said more simply: Why do people look at screens so much?' with no answer frame."
+    "recertify_evidence": "#3 'Said more simply: I think a full ban is unfair. Do you agree?', then #4 a gloss of 'full ban', and no frame until #5.",
+    "recurred_as": "LT-adela-17-J4-2"
   },
   {
     "id": "LT-petra-38-J4-1",
@@ -189,13 +190,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "recurs": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-3",
     "suggested_acceptance": "Phrase help offers two or three B2 openers fitted to the question, with no obvious wrong answer.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "She never opened 'Choose a phrase', so the phrase quiz did not appear."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-12",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#6 option 'Phones are really expensive, aren't they?' beside 'Try: I see your point, but I would argue that...', which fits neither option.",
+    "recurred_as": "LT-adela-17-J4-3"
   },
   {
     "id": "LT-petra-38-J4-2",
@@ -225,9 +227,9 @@
     "recurrence": 1,
     "suggested_acceptance": "A clear A2 grammar slip gets a moment or a held fix on the recap.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-12",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "She never said 'I want sleep' in this transcript, so that moment was not reached."
+    "recertify_evidence": "No 'I want sleep' turn; both clear errors in #8-#9 were caught as held fixes."
   },
   {
     "id": "LT-tomas-9-J4-3",
@@ -286,13 +288,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Cue must offer a sayable line serving the Now task.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-12",
     "recertify_status": "recurs",
-    "recertify_evidence": "#16 task 'Ask one more question about her day', cue 'Yes, I can ask you.'",
-    "recurred_as": "LT-viktor-67-J4-4"
+    "recertify_evidence": "#3 cue 'Hi Mia! Show me your drawing.' does not ask about school.",
+    "recurred_as": "LT-viktor-67-J4-2"
   },
   {
     "id": "LT-adela-17-J4-4",
@@ -319,13 +321,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 2,
+    "recurrence": 3,
     "suggested_acceptance": "Answer names what was right and any rule, within the scene.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-12",
     "recertify_status": "recurs",
-    "recertify_evidence": "#9 'Yes, 'I'd rather talk to a friend if somebody is with me' is correct.' It restates one clause with no examiner note.",
-    "recurred_as": "LT-adela-17-J4-4"
+    "recertify_evidence": "#9 'Yes, 'whereas during tests they should be banned' is correct.' quotes one clause with no rule. Her question was answered this time, not skipped.",
+    "recurred_as": "LT-adela-17-J4-5"
   },
   {
     "id": "LT-tomas-9-J4-4",
@@ -512,13 +514,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "Let the scene continue or sign off with the question answered.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#19 'Mia says Are they red?' with 'Mission done'.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-12",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#20–#21 Mia's question 'Are they red?' was answered before the end; no 'Mission done' beside an unanswered question.",
     "recurred_as": "LT-viktor-67-J4-2"
   },
   {

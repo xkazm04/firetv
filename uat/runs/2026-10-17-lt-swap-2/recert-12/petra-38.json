@@ -1,0 +1,689 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel receptionist\nA2Everyday basics · self-chosen\nHotel room problem\nYour mission\nTell the hotel staff about a problem and agree what they will do next.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nHotel room problem\nTell the hotel staff about a problem and agree what they will do next.\n[button: Start talking]\nOr choose a situation [list: Hotel room problem [plan-c5ffe68d] | Lost hotel booking [plan-1d8f6459] | Giving and getting directions [plan-8c1ccac5] | Suggest a good restaurant [plan-d426e573] | Phone call from travel agency [plan-fe8f4e01] | Talk with a teacher about homework [plan-23b9eb4a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The hotel problem looks like my work, so I'll start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 10035
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel receptionist\nHotel room problem at the front desk\nMr Okafor says\nGood morning, welcome to the desk! What is the problem today?\nYour turn\nAnswer on your phone: speak or type.\nNowName the problem in room 12\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel room problem at the front desk\nTell the receptionist about two room problems and agree what happens next.\nNow: Name the problem in room 12\nGood morning, welcome to the desk! What is the problem today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel receptionist\nGood morning, welcome to the desk! What is the problem today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to the desk! What is the problem today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel receptionist\nHotel room problem at the front desk\nMr Okafor says\nGood morning, welcome to the desk! What is the problem today?\nYou could say\nHello! I have a problem in my room.\nNowName the problem in room 12\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel room problem at the front desk\nTell the receptionist about two room problems and agree what happens next.\nNow: Name the problem in room 12\nGood morning, welcome to the desk! What is the problem today?\nYou could say\nHello! I have a problem in my room.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel receptionist\nGood morning, welcome to the desk! What is the problem today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to the desk! What is the problem today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, so I'll try the help button again.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel receptionist\nHotel room problem at the front desk\nMr Okafor says\nGood morning, welcome to the desk! What is the problem today?\nWhat it means\ndesk: the table at the hotel entrance where the staff work\nNowName the problem in room 12\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel room problem at the front desk\nTell the receptionist about two room problems and agree what happens next.\nNow: Name the problem in room 12\nGood morning, welcome to the desk! What is the problem today?\nWhat it means\ndesk: the table at the hotel entrance where the staff work\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel receptionist\nGood morning, welcome to the desk! What is the problem today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to the desk! What is the problem today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, so I'll check the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel receptionist\nHotel room problem at the front desk\nMr Okafor says\nGood morning, welcome to the desk! What is the problem today?\nA way to start\nI have a problem…\nNowName the problem in room 12\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel room problem at the front desk\nTell the receptionist about two room problems and agree what happens next.\nNow: Name the problem in room 12\nGood morning, welcome to the desk! What is the problem today?\nA way to start\nI have a problem…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel receptionist\nGood morning, welcome to the desk! What is the problem today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to the desk! What is the problem today?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, so I'll open the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel receptionist\nA little support · recognition practice\nMr Okafor asks: Good morning, welcome to the desk! What is the problem today?\n01\nYes, I like this hotel very much.\n02\nIt is room twelve. The lamp is broken.\nA little support\nTry: The shower in my room is cold. Can you fix it today?\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel room problem at the front desk\nTell the receptionist about two room problems and agree what happens next.\nNow: Name the problem in room 12\nGood morning, welcome to the desk! What is the problem today?\nA little support\nTry: The shower in my room is cold. Can you fix it today?\nMr Okafor asks: Good morning, welcome to the desk! What is the problem today?\n[button: Yes, I like this hotel very much.] [button: It is room twelve. The lamp is broken.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel receptionist\nGood morning, welcome to the desk! What is the problem today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to the desk! What is the problem today?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, I will try the help phrase option.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel receptionist\nHotel room problem at the front desk\nMr Okafor says\nGood morning, welcome to the desk! What is the problem today?\nA little support\nNow use the idea in your own reply on the phone.\nNowName the problem in room 12\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel room problem at the front desk\nTell the receptionist about two room problems and agree what happens next.\nNow: Name the problem in room 12\nGood morning, welcome to the desk! What is the problem today?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel receptionist\nGood morning, welcome to the desk! What is the problem today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning, welcome to the desk! What is the problem today?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I need to answer; I will try in my own words, slowly.",
+          "action": "answer",
+          "args": {
+            "text": "Good morning. The problem in room twelve is the shower. It is not working and the guest is angry."
+          },
+          "result": "ok",
+          "ms": 8319
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel receptionist\nHotel room problem at the front desk\nMr Okafor says\nI am very sorry about the shower. Is there another problem in your room?\nYour turn\nAnswer on your phone: speak or type.\nNowSay what you need: repair or new room\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel room problem at the front desk\nTell the receptionist about two room problems and agree what happens next.\nNow: Say what you need: repair or new room\nI am very sorry about the shower. Is there another problem in your room?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel receptionist\nGood morning, welcome to the desk! What is the problem today?\nYou · spoken\nGood morning. The problem in room twelve is the shower. It is not working and the guest is angry.\nMr Okafor · hotel receptionist\nI am very sorry about the shower. Is there another problem in your room?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I am very sorry about the shower. Is there another problem in your room?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I think I can try now, slowly, in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, sorry. The guest want other room, because the room is not clean."
+          },
+          "result": "ok",
+          "ms": 11768
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel receptionist\nHotel room problem at the front desk\nMr Okafor says\nRoom 14 is free now. Is that okay?\nYour turn\nAnswer on your phone: speak or type.\nNowAgree what happens next today\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel room problem at the front desk\nTell the receptionist about two room problems and agree what happens next.\nNow: Agree what happens next today\nRoom 14 is free now. Is that okay?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel receptionist\nGood morning, welcome to the desk! What is the problem today?\nYou · spoken\nGood morning. The problem in room twelve is the shower. It is not working and the guest is angry.\nMr Okafor · hotel receptionist\nI am very sorry about the shower. Is there another problem in your room?\nYou · spoken\nYes, sorry. The guest want other room, because the room is not clean.\nMr Okafor · hotel receptionist\nRoom 14 is free now. Is that okay?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Room 14 is free now. Is that okay?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Room 14 is free, I can say yes and thank him.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, room fourteen is okay. Thank you. I will tell the guest to move to the room fourteen."
+          },
+          "result": "ok",
+          "ms": 12068
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel receptionist\nHotel room problem at the front desk\nMr Okafor says\nRoom fourteen is ready. Shall I give you the key?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel room problem at the front desk\nTell the receptionist about two room problems and agree what happens next.\nRoom fourteen is ready. Shall I give you the key?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel receptionist\nGood morning, welcome to the desk! What is the problem today?\nYou · spoken\nGood morning. The problem in room twelve is the shower. It is not working and the guest is angry.\nMr Okafor · hotel receptionist\nI am very sorry about the shower. Is there another problem in your room?\nYou · spoken\nYes, sorry. The guest want other room, because the room is not clean.\nMr Okafor · hotel receptionist\nRoom 14 is free now. Is that okay?\nYou · spoken\nYes, room fourteen is okay. Thank you. I will tell the guest to move to the room fourteen.\nMr Okafor · hotel receptionist\nRoom fourteen is ready. Shall I give you the key?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Room fourteen is ready. Shall I give you the key?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I managed it, so I want to see what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 11,
+          "screen": "linga-coach",
+          "shown": "TV\nLinga\nPetra\nA way into English\nOne useful change\nYou said move to the room fourteen\nOne way to try it\nmove to room fourteen\nRoom numbers do not take 'the' before them.\nCoach\nReplay the moment with a new question, or finish for today.\n[button: Replay the moment] [button: Finish for today]\nOne useful change\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel room problem at the front desk\nTell the receptionist about two room problems and agree what happens next.\nRoom numbers do not take 'the' before them.\nOne way to try it: “move to room fourteen”\n[button: Replay with a new question]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel receptionist\nGood morning, welcome to the desk! What is the problem today?\nYou · spoken\nGood morning. The problem in room twelve is the shower. It is not working and the guest is angry.\nMr Okafor · hotel receptionist\nI am very sorry about the shower. Is there another problem in your room?\nYou · spoken\nYes, sorry. The guest want other room, because the room is not clean.\nMr Okafor · hotel receptionist\nRoom 14 is free now. Is that okay?\nYou · spoken\nYes, room fourteen is okay. Thank you. I will tell the guest to move to the room fourteen.\nMr Okafor · hotel receptionist\nRoom fourteen is ready. Shall I give you the key?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Room numbers do not take 'the' before them.\"",
+          "offered": [
+            "replay",
+            "finish",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I managed the conversation and learned about room numbers, so I'm happy to finish.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 12,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said move to the room fourteen\nOne way to try it\nmove to room fourteen\nRoom numbers do not take 'the' before them.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 2 on your own · 1 with help\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“The shower in my room is cold. Can you help, please?”\nSaved for the end\n“The guest want other room” → “The guest wants another room”\nOne guest takes 'wants', and 'another room' sounds more natural.\n“move to the room fourteen” → “move to room fourteen”\nRoom numbers do not take 'the' before them.\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nLost hotel booking\nFind a missing booking and confirm the dates and the room.\n[button: Start talking]\nOr choose a situation [list: Hotel room problem [plan-c5ffe68d] | Lost hotel booking [plan-1d8f6459] | Giving and getting directions [plan-8c1ccac5] | Suggest a good restaurant [plan-d426e573] | Phone call from travel agency [plan-fe8f4e01] | Talk with a teacher about homework [plan-23b9eb4a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed a conversation and got help with the room number, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Hotel room problem at the front desk",
+          "goal": "Tell the receptionist about two room problems and agree what happens next.",
+          "partner": "Mr Okafor · hotel receptionist",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Good morning, welcome to the desk! What is the problem today?"
+            },
+            {
+              "role": "learner",
+              "text": "Good morning. The problem in room twelve is the shower. It is not working and the guest is angry.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I am very sorry about the shower. Is there another problem in your room?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, sorry. The guest want other room, because the room is not clean.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Room 14 is free now. Is that okay?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, room fourteen is okay. Thank you. I will tell the guest to move to the room fourteen.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Room fourteen is ready. Shall I give you the key?"
+            }
+          ],
+          "moments": [],
+          "heldFixes": [
+            {
+              "id": "5278d932-41b1-49a5-a8a0-19a7132da15c:uat-13:held",
+              "kind": "fix",
+              "said": "The guest want other room",
+              "better": "The guest wants another room",
+              "why": "One guest takes 'wants', and 'another room' sounds more natural.",
+              "turnId": "5278d932-41b1-49a5-a8a0-19a7132da15c:uat-13",
+              "at": 1792412612975
+            },
+            {
+              "id": "5278d932-41b1-49a5-a8a0-19a7132da15c:uat-14:held",
+              "kind": "fix",
+              "said": "move to the room fourteen",
+              "better": "move to room fourteen",
+              "why": "Room numbers do not take 'the' before them.",
+              "turnId": "5278d932-41b1-49a5-a8a0-19a7132da15c:uat-14",
+              "at": 1792412635325
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Good morning. The problem in room twelve is the shower. It is not working and the guest is angry.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Yes, sorry. The guest want other room, because the room is not clean.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "The guest want other room",
+                "better": "The guest wants another room",
+                "why": "One guest takes 'wants', and 'another room' sounds more natural."
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Yes, room fourteen is okay. Thank you. I will tell the guest to move to the room fourteen.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "move to the room fourteen",
+                "better": "move to room fourteen",
+                "why": "Room numbers do not take 'the' before them."
+              },
+              "shown": false
+            }
+          ],
+          "coaching": {
+            "before": "move to the room fourteen",
+            "after": "move to room fourteen",
+            "note": "Room numbers do not take 'the' before them.",
+            "atFinish": true
+          },
+          "evidence": [
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "It is room twelve. The lamp is broken."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "It is not working and the guest is angry."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, room fourteen is okay."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 219534,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-10/LT-petra-38-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-10",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Clear error 'I want sleep' got no coaching",
+          "expected": "A fix such as 'I want to sleep' or 'I'd like to sleep'.",
+          "got": "rawMoment for turn 3 is kind 'none' for 'I am tired and I want sleep'.",
+          "evidence": [
+            "#8 'But I am tired and I want sleep.'; rawMoments n:2 raw.kind none.",
+            "moment detector prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-11/LT-petra-38-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-11",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Replay did not make her practise a coached form",
+          "expected": "After a coached moment, the fresh question is answered with the corrected form and replay.used is set.",
+          "got": "Her answer to the fresh question repeated 'side of hotel'. Both moments have replay.used false. The coach screen's 'Replay the moment' was bypassed at Finish, so 'I do not sleep' was never retried.",
+          "evidence": [
+            "#13 'I want the side of hotel where is not the street'; #18 'Finish for today'; #19 'Tried again' shows an unfixed reply, and the breakfast 'Tried again' line has no link to a coached error.",
+            "replay prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-11/LT-petra-38-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-11",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Scene drifts: guest is asked about 'your hotel' breakfast room",
+          "expected": "Mina stays in role and moves the complaint to a next step.",
+          "got": "After the quiet-side request, Mina asks 'Where is the breakfast room in your hotel?'. Then 'Mission done' fires before any room is agreed.",
+          "evidence": [
+            "#16 and #17: 'I found a quiet room. When do you want to go up?' with 'Mission done'.",
+            "partner turn prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-11/LT-petra-38-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-11",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Phrase choice offers an off-topic distractor and a bare idea",
+          "expected": "Picking a phrase gives a sentence to reuse.",
+          "got": "The choice was 'Yes, I like this hotel very much.' versus 'My room is too noisy at night.'. After the pick she was only told 'Now use the idea in your own reply'.",
+          "evidence": [
+            "#5-#7.",
+            "phrase choice generator"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-11/LT-petra-38-J4-6",
+          "run": "2026-10-17-lt-swap-2/recert-11",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Clear errors beyond the one fix per turn go unmentioned",
+          "expected": "Notice 'other room' and 'where is not the street'.",
+          "got": "Only one fix per turn. 'Can I have other room' and 'where is not the street' got none.",
+          "evidence": [
+            "#8 and #13 replies; rawMoments show one fix per turn.",
+            "moment detector prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Level fixed by hand to A2; no placement in this journey."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'What is the problem today?' and 'Name the problem in room 12' are plain A2."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#2-#5 four help presses (cue, more help, meaning of 'desk', 'A way to start') met with new help each time, no failure language."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 list: five of six plan topics are hotel/travel-agency work (hotel room, lost booking, directions, restaurant, agency)."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#12 held fixes 'The guest wants another room' and 'move to room fourteen' are correct and reusable at the desk. No moment was shown mid-scene."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing adult or unsuitable in #1-#12; hotel scenario only."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#6: cue 'You could say Hello! I have a problem in my room.', meaning, 'A way to start', and phrase choice, all within the scene."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#7 she sent a full reply after help; #11 coach quotes exactly 'You said move to the room fourteen' matching #9 text."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#11 offered 'Replay the moment' but she pressed Finish; #12 recap, no fresh question was asked or answered."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Evidence: first turn supported:true, others false; #12 '2 on your own · 1 with help'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Replay of the coached moment never happens",
+            "expected": "After coaching, a fresh question is asked and she tries 'move to room fourteen' again.",
+            "got": "Coach screen offered 'Replay the moment' but Finish was taken; no replay, no retry.",
+            "evidence": "#11 '[Replay the moment] [Finish for today]'; action finish; #12 recap has no retry.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Finish from the coach screen offers a replay once, or the recap carries a one-tap replay of the fix.",
+            "code_hint": "replay prompt / coach screen"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Phrase choice has an off-topic distractor and a bare follow-up",
+            "expected": "Choices both on topic; the pick gives a sentence to reuse.",
+            "got": "Options 'Yes, I like this hotel very much.' vs 'It is room twelve. The lamp is broken.'; after pick only 'Now use the idea in your own reply'.",
+            "evidence": "#6, #7.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Both options answer the question; after the pick the chosen sentence stays visible.",
+            "code_hint": "phrase choice generator"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "No in-scene moment; both fixes held to the recap",
+            "expected": "A stop on a clear error, or at least coaching she sees.",
+            "got": "moments empty, two held fixes; coach screen shows only the last one, the 'wants another room' fix only on the phone recap.",
+            "evidence": "#11 shows one change; #12 'Saved for the end' lists two.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Coach screen lists every held fix on the TV too.",
+            "code_hint": "LG-23 held fix / coach builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Layered help and exact quoting",
+            "expected": "Help she can step through.",
+            "got": "Cue, meaning, starter, phrase choice, each different; coach quotes her words exactly; correct grammar fixes.",
+            "evidence": "#2-#6, #11 'You said move to the room fourteen'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep patient, escalating help and exact quotes.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Honest supported/independent count and on-level partner",
+            "expected": "Supported replies marked.",
+            "got": "'2 on your own · 1 with help'; partner turns short A2 and mission closes naturally.",
+            "evidence": "#12; #8-#10.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "I like that the help comes in small steps and never makes me feel stupid. I pressed help four times and nobody sighed. The hotel scene is my work, and \"The guest wants another room\" is something I can really say tomorrow. Nothing here worried me as a mother. But the phrase choice was silly: \"Yes, I like this hotel\" does not answer a problem. And I was told \"now use the idea\" with no sentence left on the screen. I wanted to try the correction again, \"room fourteen\", but I pressed Finish and it was gone. The first fix I only saw on the phone at the end. I would use it for fifteen minutes in the evening, and I would let Klára try it. I trust the corrections, less the help.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-10/LT-petra-38-J4-2",
+            "status": "not-evaluable",
+            "evidence": "No 'I want sleep' turn; both clear errors in #8-#9 were caught as held fixes.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-11/LT-petra-38-J4-1",
+            "status": "recurs",
+            "evidence": "#11 Replay offered, Finish taken; no retry of 'move to room fourteen'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-11/LT-petra-38-J4-2",
+            "status": "not-seen",
+            "evidence": "#10 Mr Okafor stays in role: 'Room fourteen is ready. Shall I give you the key?' with Mission done after room agreed.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-11/LT-petra-38-J4-3",
+            "status": "recurs",
+            "evidence": "#6 'Yes, I like this hotel very much.' distractor; #7 'Now use the idea in your own reply on the phone.'",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-11/LT-petra-38-J4-6",
+            "status": "not-seen",
+            "evidence": "#8-#9 replies each had one clear error and it was captured as a held fix; no uncaught error visible.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #11 offered 'Replay the moment' but she pressed Finish; #12 recap, no fresh question was asked or answered.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 5,
+      "fail": 0,
+      "ms": 84967
+    },
+    "character": {
+      "n": 12,
+      "fail": 0,
+      "ms": 134123
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 37125
+    }
+  }
+}
