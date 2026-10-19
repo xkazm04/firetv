@@ -793,7 +793,7 @@ test('SW3: every typed field on the phone is 16 px or more, so a phone does not 
 });
 test('SW4: the phone\'s tap targets are at least 44 px tall - the tab bar, the presets, the samples and the role switch',()=>{
  const css=phoneCss();
- for(const sel of ['.pnav button','.presets button','.samples button','.ptop .who button','.field input, .field textarea, .field select'])
+ for(const sel of ['.pnav button','.presets button','.samples button','.pmore-row','.field input, .field textarea, .field select'])
   assert.ok(pxOf(ruleOf(css,sel),'min-height')>=44,`${sel} is at least 44 px tall`);
 });
 

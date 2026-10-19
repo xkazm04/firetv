@@ -1,10 +1,10 @@
 "use client";
 /**
  * The phone: the instrument. Camera, pen, keyboard, mic. It never renders the big view.
- * Student and Parent are two roles on one page for the prototype.
+ * The TV leads (TV-led design): a strip, one body, a bar of at most three items. Recap and the rest live under More.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useSession, call, fmt } from "@/tv/useSession";
+import { useSession, call } from "@/tv/useSession";
 import { ESSAY_TYPES, PLAYBOOK } from "@/lib/library/lessons.data";
 import { essayFileProblem, essayTooLong, REWRITE_WHILE_READING, paragraphsOf, pieceAgainOffered, pieceBeingRead, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
 import { EssayShelf, TextNotice } from "./EssayShelf";
@@ -13,6 +13,7 @@ import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
+import { barItems, moreRows, type MoreId } from "./phoneBar";
 import { deskLine, follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
 import { forensicAt, planAt, switchEndsLine } from "@/tv/keys";
 import { dayOf } from "@/tv/mathsRows";
@@ -68,7 +69,13 @@ export default function Phone() {
   const { s, connected, post, reconnect } = useSession();
   /** Linga's panel posts and moves on; only the join reads the answer. */
   const postOnly = useCallback(async (e: Event) => { await post(e); }, [post]);
-  const [role, setRole] = useState<"student" | "parent">("student");
+  /** The Parent role is gone from the page (TL-10): Recap and This week are read-only views under More. follow() still takes a role. */
+  const [role] = useState<"student" | "parent">("student");
+  /** A view opened from More that has no panel of its own: This week, and how the TV and phone work together. */
+  const [view, setView] = useState<"week" | "how" | null>(null);
+  /** The panel the phone was on when a view from More opened over it: Back returns there. */
+  const beforeView = useRef<PScreen>("joined");
+  const [more, setMore] = useState(false);
   const [screen, setScreen] = useState<PScreen>("join");
   /** The Paper panel's rows, kept here so a tab picked and left again does not lose what was typed. */
   const [paperRows, setPaperRows] = useState<DraftRow[]>(() => [blankRow()]);
@@ -555,35 +562,111 @@ export default function Phone() {
 
   // The nav waits for a joined phone — except Profile, which a first arrival needs before joining.
   const nav = (n: PScreen) => { if (!s?.joined && n !== "profile") return; setScreen(n); };
+
+  // ---- the shell (TL-10): a strip, one body, a bar of at most three items ----
+  const handoff = s?.ask ?? null;
+  const asking = !!s?.joined && !!handoff;
+  /** Joined, nothing asked: the idle card, or a view the learner opened from More. */
+  /** A view opened from More: Recap and Tonight's list are the panels of those names, This week and How are `view`. It covers the body, whatever the TV asks. */
+  const peek: "parent" | "tonight" | "week" | "how" | null = !s?.joined ? null : view ?? (["parent", "tonight"].includes(screen) ? (screen as "parent" | "tonight") : null);
+  const peeking = !!peek;
+  const idle = !!s?.joined && !handoff && !peek;
+  /** The panels the phone follows to: the join and name panels before a join, the open hand-off's panel after. */
+  const showPanels = (!s?.joined || asking) && !peek;
+  // a hand-off opening closes any view opened from More, and a phone that stops being joined drops it
+  useEffect(() => {
+    if (!handoff && s?.joined) return;
+    setView(null); setMore(false);
+    setScreen((now) => (now === "parent" || now === "tonight" ? beforeView.current : now));
+  }, [handoff?.id, s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
+  // More is a sheet over the page: the system back gesture closes it
+  useEffect(() => {
+    const back = () => setMore(false);
+    window.addEventListener("popstate", back);
+    return () => window.removeEventListener("popstate", back);
+  }, []);
+  const openMore = () => { history.pushState({ pmore: 1 }, ""); setMore(true); };
+  const closeMore = () => { if (history.state?.pmore) history.back(); else setMore(false); };
+  const pickMore = (id: MoreId) => {
+    closeMore();
+    if (id === "forget") { void forget(); return; }
+    if (id === "recap") openPanel("parent");
+    else if (id === "tonight") openPanel("tonight");
+    else openView(id);
+  };
+  const openPanel = (to: "parent" | "tonight") => { if (!peek) beforeView.current = screen; setView(null); setScreen(to); };
+  const openView = (to: "week" | "how") => { if (!peek) beforeView.current = screen; setView(to); };
+  const closeView = () => { setView(null); setScreen((now) => (now === "parent" || now === "tonight" ? beforeView.current : now)); };
+  /** The primary button of an open hand-off: the panel's own submit, and whether there is anything to press yet. */
+  const primary = ((): { run: () => void; off: boolean; ctx: { snap?: boolean; holding?: boolean; paragraphs?: number } } => {
+    const none = { run: () => {}, off: true, ctx: {} };
+    if (!handoff) return none;
+    const snapping = !shot;
+    const saveName = () => void nameQueue(() => post({ type: "profile.save" })).catch(() => setMsg("That did not reach the desk."));
+    switch (handoff.kind) {
+      case "name": case "prefs": return { run: saveName, off: !pname.trim() || !s?.draft, ctx: {} };
+      case "page": return { run: snapping ? snap : () => send(shot!.url, shot!.w, shot!.h, shot!.sub, shot!.title), off: snapping ? !cam || busy : busy, ctx: { snap: snapping } };
+      case "sheet": {
+        if (route === "type") return { run: sendTyped, off: busy || !typed.some((x) => x.trim()), ctx: {} };
+        return { run: snapping ? snap : sendWorking, off: snapping ? !cam || busy : busy, ctx: { snap: snapping } };
+      }
+      case "answers": return { run: sendTyped, off: busy || !typed.some((x) => x.trim()), ctx: {} };
+      case "question": return { run: ask, off: busy || !!s?.reading || !page, ctx: {} };
+      case "explain": {
+        const text = typing ? typedExplain : heard;
+        return { run: () => void explain(text), off: holding || busy || !text.trim(), ctx: { holding } };
+      }
+      case "second": return { run: sendSecond, off: busy || !again.trim(), ctx: {} };
+      case "paragraph": return { run: paras.length > 1 ? () => void readPiece() : analyseParagraph, off: busy || notice !== null || (paras.length === 1 && !essay.trim()), ctx: { paragraphs: paras.length } };
+      case "rewrite": return { run: sendRewrite, off: busy || rewriting || !onSentence, ctx: {} };
+      case "slot": return { run: sendSlot, off: busy || !onPlan || !slotText.trim(), ctx: {} };
+      case "sentence": return { run: checkSentence, off: busy, ctx: {} };
+      case "private": return { run: () => void post({ type: "ask.cancel", id: handoff.id }), off: false, ctx: {} };
+      // paper, reply and words are submitted inside their own panels (PaperPanel, LingaPhone): the bar has no hook into them yet (TL-9)
+      default: return none;
+    }
+  })();
+  const items = barItems({ joined: !!s?.joined, ask: handoff ? { kind: handoff.kind, phase: handoff.phase } : null, primary: primary.ctx, primaryOff: primary.off });
+  const press = (id: (typeof items)[number]["id"]) => {
+    if (id === "more") openMore();
+    else if (id === "recap") openPanel("parent");
+    else if (id === "cancel" && handoff) void post({ type: "ask.cancel", id: handoff.id });
+    else if (id === "primary") primary.run();
+  };
   return (
     <div className="phone">
       <div className="ptop">
-        <div className="who"><button aria-pressed={role === "student"} onClick={() => { setRole("student"); }}>Student</button><button aria-pressed={role === "parent"} onClick={() => { setRole("parent"); setScreen("parent"); }}>Parent</button></div>
-        <div className="link">{!connected ? "Lost the desk link. Reconnecting…" : s?.joined ? <><b>joined</b>{s.learner && <> · {s.learner.name}</>}</> : "not joined"}{s && <small>TV · {TV_WORDS[s.screen] ?? s.screen}</small>}</div>
+        <span className="dot" data-live={connected ? "true" : "false"} aria-hidden="true" />
+        <div className="link">{!connected ? "Lost the desk link. Reconnecting…" : s?.joined ? <>{s.learner ? s.learner.name : "Joined"}{s && <> · TV: {TV_WORDS[s.screen] ?? s.screen}</>}</> : <>Not joined{s && <> · TV: {TV_WORDS[s.screen] ?? s.screen}</>}</>}</div>
       </div>
       <div className="pbody">
+        {showPanels && <>
         {screen === "linga" && s && <LingaPhone key={`${s.learner?.id ?? ""}:${s.conversation?.id??"setup"}:${s.check?.id??""}`} s={s} post={postOnly} onSentence={()=>setScreen("say")}/>}
-        {screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
+        {!s?.joined && screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
           <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
           {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}
           <div className="field" data-bad={bad}><input inputMode="numeric" placeholder="4-digit code" value={pin} disabled={joinBusy} onChange={(e) => onPin(e.target.value)} /><button className="pbtn" data-signal="true" disabled={joinBusy} onClick={() => join()}>Join</button></div>
           <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install. The code works once: it changes when a phone joins with it.</p>
           <button className="pbtn" data-secondary="true" onClick={() => nav("profile")}>Naming a new learner? Open Profile.</button></div>}
 
-        {screen === "joined" && s && <div className="pscreen"><h3>On the desk</h3>
-          {/* a fresh desk has no one at it yet: the phone says so, and offers no snap until someone sits down (the page would be no one's) */}
-          {s.learner
-            ? <p>Joined as <b>{s.learner.name}</b>. {["landing", "pair", "joined"].includes(s.screen) ? "Open an app on the TV and this phone follows it." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}.`}</p>
-            : <p>Joined. No one is at the desk yet: on the TV, press Down to Choose who and Select to choose who is studying.</p>}
-          {s.screen === "profile" || s.draft
-            ? <button className="pbtn" data-signal="true" onClick={() => nav("profile")}>Name the new learner</button>
-            : s.learner && (s.awaiting === "essay"
-              ? <button className="pbtn" data-signal="true" onClick={() => nav("paste")}>Send your paragraph</button>
-              : <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>{s.awaiting ? `Snap the ${MODULE[s.awaiting]} page` : "Snap the page"}</button>)}
-          <button className="pbtn" data-secondary="true" onClick={() => nav("tonight")}>Set up tonight first</button>
-          {s.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Down to Someone else and Select to switch who is at the desk.{switchEndsLine(s, null) && ` ${switchEndsLine(s, null)}`}</p>}
-          {s.viewer === "phone" && <p style={{ fontSize: 12 }}><button className="plink" onClick={forget}>Forget this desk</button></p>}</div>}
+        </>}
 
+        {/* joined with nothing asked: one card and no buttons. The More sheet sits here with it (Forget this desk is one of its rows). */}
+        {idle && <div className="pscreen" data-role="phone-idle" data-screen={screen === "joined" ? "joined" : "idle"}><h3>On the desk</h3>
+          <p>Look at the TV. It will ask this phone when it needs a photo, your words or your voice.</p></div>}
+        {view === "how" && peeking && <div className="pscreen" data-role="phone-how"><h3>The TV and this phone</h3>
+          <p>The TV leads. You choose what to do with its remote, and the TV asks this phone only when it needs a photo, your words or your voice.</p>
+          <p>When it asks, the phone shows just that and nothing else. Press Cancel to say no, or the button on the right to send.</p>
+          <p>Recap, This week and Tonight's list are here under More whenever you want to read them.</p>
+          {s?.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Down to Someone else and Select to switch who is at the desk.{switchEndsLine(s, null) && ` ${switchEndsLine(s, null)}`}</p>}
+          <button className="plink" onClick={closeView}>Back</button></div>}
+        {more && <div className="pmore" role="presentation" onClick={closeMore}>
+          <div className="pmore-sheet" role="dialog" aria-label="More" onClick={(e) => e.stopPropagation()}>
+            {moreRows(s?.viewer === "phone").map((r) => r.id === "forget"
+              ? s?.viewer === "phone" && <button key={r.id} className="pmore-row" data-row="forget" onClick={() => pickMore("forget")}>Forget this desk</button>
+              : <button key={r.id} className="pmore-row" data-row={r.id} onClick={() => pickMore(r.id)}>{r.label}</button>)}
+          </div></div>}
+        {showPanels && <>
         {screen === "profile" && <div className="pscreen"><h3>Profile</h3>
           <p>At the desk now: <b>{s?.learner?.name ?? "no one yet"}</b></p>
           {s && (s.draft || s.screen === "profile") ? <>
@@ -778,17 +861,19 @@ export default function Phone() {
             {!pieceCovers(pix) && <button className="pbtn" data-role="essay-analyse-one" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || notice !== null || !essay.trim()} onClick={paras.length === 1 && pieceId ? () => void readPiece(true) : analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button>}</div>
           <EssayShelf learnerId={s?.learner?.id} refresh={shelfTick} onOpen={openKept} onGone={(id) => setPieceId((cur) => (id === "all" || cur === id ? undefined : cur))} /></div>}
 
-        {screen === "tonight" && s && <div className="pscreen"><h3>Tonight</h3>
+        </>}
+
+        {peeking && !view && screen === "tonight" && s && <div className="pscreen"><h3>Tonight's list</h3>
           <div className="tlist">{s.tasks.map((t) => <label key={t.id}><input type="checkbox" checked={t.done} onChange={(e) => post({ type: "task.done", id: t.id, done: e.target.checked })} /><span>{t.name}</span><small>{t.min}m</small></label>)}</div>
           <AddTask onAdd={(name, sub) => post({ type: "task.add", name, sub, min: 10 })} />
-          <button className="pbtn" onClick={() => post({ type: s.timer.running ? "timer.pause" : "timer.start" })}>{s.timer.running ? `Pause · ${fmt(s.timer.left)}` : `Start · ${fmt(s.timer.left)}`}</button>
           <button className="pbtn" data-secondary="true" onClick={endSession} disabled={busy}>{busy ? "Writing tonight down…" : "End session"}</button>
           {memory && <div className="precap" data-role="phone-memory"><b>What the desk noticed</b>
             <ul>{"error" in memory ? <li>{memory.error}</li>
               : memory.lines.length ? memory.lines.map((l, i) => <li key={i}>{l}</li>)
-              : <li>{memory.already ? "Tonight is already written down." : memory.asked ? "Nothing new to note tonight." : "Nothing worked on tonight."}</li>}</ul></div>}</div>}
+              : <li>{memory.already ? "Tonight is already written down." : memory.asked ? "Nothing new to note tonight." : "Nothing worked on tonight."}</li>}</ul></div>}
+          <button className="plink" onClick={closeView}>Back</button></div>}
 
-        {screen === "parent" && s && <div className="pscreen"><h3>Recap</h3>
+        {peeking && !view && screen === "parent" && s && <div className="pscreen"><h3>Recap</h3>
           {(() => {
             // the TV's recap in words: the same tiles (tv/recapRows.ts), a line each, then the TV's caption sentence
             // ...and, on the phone only, tonight's list (the learner's own tasks): no tasks, no line.
@@ -803,13 +888,17 @@ export default function Phone() {
               {tiles.map((t) => (t.app === "maths" && !t.empty ? <ul key="hinted"><li data-role="phone-hinted">{hintedLine(t)}</li>{slippedLine(t) && <li data-role="phone-slipped">{slippedLine(t)}</li>}</ul> : null))}</div>;
           })()}
           <WeekPage lines={s.learner ? s.week : null} />
-          <p style={{ fontSize: 12 }}>The TV shows {TV_WORDS[s.screen] ?? "the desk"}{s.status && Object.values(s.jobs ?? {}).some((j) => j?.phase === "running") ? <> · {s.status}</> : null}.</p></div>}
+          <p style={{ fontSize: 12 }}>The TV shows {TV_WORDS[s.screen] ?? "the desk"}{s.status && Object.values(s.jobs ?? {}).some((j) => j?.phase === "running") ? <> · {s.status}</> : null}.</p>
+          <button className="plink" onClick={closeView}>Back</button></div>}
+        {view === "week" && peeking && s && <div className="pscreen"><h3>This week</h3>
+          <WeekPage lines={s.learner ? s.week : null} />
+          <button className="plink" onClick={closeView}>Back</button></div>}
 
         <div className="pstatus" role="status" aria-live="polite">{msg}</div>
       </div>
-      <div className="pnav">
-        {([["capture", "Capture"], ["practice", "Practice"], ["point", "Point & ask"], ["linga", "Linga"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["paper", "Paper"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} disabled={!s?.joined && id !== "profile"} onClick={() => nav(id)}>{label}</button>)}
-      </div>
+      {items.length > 0 && <div className="pnav" data-items={items.length}>
+        {items.map((it) => <button key={it.id} data-bar={it.id} data-signal={it.id === "primary" ? "true" : undefined} disabled={it.disabled} onClick={() => press(it.id)}>{it.label}</button>)}
+      </div>}
     </div>
   );
 }
