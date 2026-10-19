@@ -452,7 +452,7 @@ const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { ty
   "page.ask": { subject: f.subject }, "page.unask": {}, "page.select": { pageIx: f.int, itemIx: maybe(f.int) }, item: { itemIx: f.int }, view: { view: (v) => v === "band" || v === "overview" },
   "lesson.set": { lesson: lessonPick, key: maybe(f.str) }, "lesson.pause": { paused: f.bool },
   "essay.type": { essayType: f.str, owner: maybe(f.str) }, "essay.at": { n: (v) => v === null || f.int(v) }, "essay.clear": { owner: maybe(f.str) }, "essay.plan": { lens: f.str }, "essay.slot": { i: f.int, text: f.str },
-  "paper.enter": { rows: () => true },
+  "paper.enter": { rows: () => true, askId: maybe(f.name) },
   "task.add": { name: f.name, sub: f.subject, min: f.num }, "task.done": { id: f.str, done: f.bool },
   "timer.start": {}, "timer.pause": {}, "timer.tick": { seconds: f.num }, "timer.skipbreak": {},
   "topic.open": { topic: f.str, stay: maybe(f.bool) }, walk: { ix: f.int }, "practice.clear": {},
