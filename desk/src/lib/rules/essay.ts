@@ -154,12 +154,30 @@ const ENGLISH_WORDS = new Set(("the of and to a in is that it was for on are as 
 const CZECH_WORDS = new Set(("je se ze na jsou ve si byl byla bylo jako ktery ktera ktere aby nebo take vsak avsak proto podle nez tak uz jen jak mezi pri bez byt ho jeho jeji jejich ma neni nejsou " +
   "nich nim tim jsem jsme jste bude budou muze musi kdyz kde kdo ani tedy tudiz nicmene protoze pokud vsichni velmi " +
   "mely mel mela melo byly byt maji mit mam mame muzou musime chci chceme tohle toto tento tato tyto jsi nas vas nam vam tebe vsechno vsechny vice mene pouze stale vzdy nikdy proc jak kdy kolik cim cemu cem co nikdo nic neco nekdo skola skole skolu deti zaci ucitele " +
-  "jich nesmi jinak nemaji mnoho prilis lidi mysli opak jedna velkou pak divi nektere nekteri uciteli meli casteji bez nej sve svuj svou moje moji kazdy kazda kazde vetsina jine jiny jina dobre spatne dobry spatny hodne moc proti pred po behem podle okolo bych bys bychom byste ktery ktera ktere ktereho kterym nasi vasi jejich ci ani zadny zadna zadne dnes dnesni dneska zde tam tady stejne prece vlastne asi snad treba hlavne spise take uz jeste mozna").split(" "));
+  "jich nesmi jinak nemaji mnoho prilis lidi mysli opak jedna velkou pak divi nektere nekteri uciteli meli casteji bez nej sve svuj svou moje moji kazdy kazda kazde vetsina jine jiny jina dobre spatne dobry spatny hodne moc proti pred po behem podle okolo bych bys bychom byste ktery ktera ktere ktereho kterym nasi vasi jejich ci ani zadny zadna zadne dnes dnesni dneska zde tam tady stejne prece vlastne asi snad treba hlavne spise take uz jeste mozna " +
+  // round 3: plain-letter Czech, the words an eleven-year-old types (no English twin: me, ted, sest, mala stay out where they read as English)
+  "chodi chodim chodil chodili chodila chodime jedu jede jedeme jeli jel jela hraje hraji hrajeme hral hrala hrali dela delam delas delaji delal delala nevim vim vime ja ty ona oni muj moje moji tvuj tva tvoje nase nasi nasich vase " +
+  "rano vecer odpoledne dopoledne lete zime podzim tyden tydne tydnu vikend vikendu zapas zapasy hodin hodiny hodinu hodine roky roce rokem dny dni dlouha dlouhy dlouhe dlouho kratka kratky male velke velkou cely cela cele nejlepsi nejhorsi lepsi horsi dobra dobrou kazde kazdou kazdym ostatni ostatnimi " +
+  "kamarad kamarady kamaradka kamaradi kamaradu sestra sestry bratr bratra maminka tatinek babicka dedecek rodice rodina rodinou rodinu autem autobusem vlakem " +
+  "takze vzdycky nekdy obcas casto driv potom pozdeji nakonec nejdriv hned zase znovu zatim " +
+  "jidelna jidelne obed obedu obeda vecere snidane snidani fronta fronty skolni uniformy uniforma naladu nalada tride trida tridy tridou tridu hodina hodinach predmet predmety ukol ukoly ukolu domaci zkouska pisemka prazdniny prazdnin " +
+  "chalupu chalupa chalupe mesto mestem vesnice vesnici doma domu venku uvnitr " +
+  "chce chtel chtela chteji muzeme muzete muzu muzes mohu mohl mohla mohli nejaky nejaka nejake nejakou zadny prsi prselo snezi snezilo svita hezky hezka hezke pekny pekna pekne " +
+  "pravda pravdu ano dekuji dekuju prosim pomoc pomoci hlad zizen unaveny unavena unavene spokojeny rada rado mas meli " +
+  "osme sedme deveme sedm osm pesky zhorsily zhorsit vstava vstavat vstavam vozi vozit prinesl prinesla tvori tvorit nosi nosit nese davaji davat dava dala dali slibil slibila " +
+  "souhlasim souhlasime tebou mnou naucil naucila naucit naucili ucit uci ucila ucil zdravim ahoj nashledanou " +
+  "umi umim umime umet vedi znam zname znat vidi videl videla videli vidime vidim slysi slysel budu budeme budete").split(" "));
 /** Common German function words (E3: the desk reads English, so German is refused too). Words that are also English (in, an, so, man, will, was, war, die, hat) are left out. */
 const GERMAN_WORDS = new Set(("der das und ist nicht ein eine einen zu mit auf fur von den dem des sich auch es wir sie ich aber wie oder wenn dass im aus bei nach nur noch werden wird sind haben kann uber " +
-  "einem einer eines diese dieser dieses wurde wurden sein ihre ihr unser nicht kein keine mehr sehr schon dann denn weil doch ja nein hier dort").split(" "));
+  "einem einer eines diese dieser dieses wurde wurden sein ihre ihr unser nicht kein keine mehr sehr schon dann denn weil doch ja nein hier dort " +
+  // round 3: the rest of the everyday words; the ones English also has (hat, war, was, man, will, die) stay out
+  "bin bist du mir mich dich dir mein meine meiner meinen meinem deine dein ihm ihn ihnen uns euch geht gehen gehe gern gerne ins ans zum zur beim vom am um jeden jede jeder jedem viele vielen alle alles allen schule schulen schuler schulerin lehrer lehrerin klasse hund katze haus buch bucher kino heute gestern immer gut gute guten danke bitte habe hast habt hatte hatten ohne acht neun sieben sechs zwei drei vier funf zehn mude helfen kannst konnen konnte muss musst mussen soll sollte sollen wo wer wann warum wieso gerade durch gegen wieder viel liest lesen spielt spielen spielst wohnst wohnen wohne lernen lerne lernt heisst arbeit uhr tag tage woche wochen wochenende jahr jahre freunde freund freunden familie mutter vater schwester bruder essen trinken kommen komme kommst kommt gehst fahren fahre fahrt beginnt anfang ende doch mal etwas nichts niemand jemand jetzt spater fruher bald schnell langsam gross klein neue neuen neuer neues alte alten schwer leicht").split(" "));
+/** Common Italian function words, folded. Words that are also English (a, come, per, solo, dove, era, ma, tempo) are left out. */
+const ITALIAN_WORDS = new Set(("il lo gli un una uno dei del della delle dello degli nel nella nei nelle sul sulla alla alle al ai dal dalla che non sono sei siamo siete stato stata anche piu mia mio miei mie suo sua suoi sue molto molti molte ogni mi ti ci vi si ho hai hanno abbiamo essere avere fare fatto cosa cose quando perche credo penso pensa dovrebbero dovrebbe devono deve possono puo studenti studente scuola scuole amici amico amiche casa torna tornare vado vai va andiamo vanno mattina sera giorno giorni settimana anno anni sorella fratello madre padre mamma universita lezione lezioni compiti libro libri bello bella belli belle buono buona grande piccolo piccola questo questa questi queste quello quella voglio vuole vogliamo posso giocare aperto tutti tutto tutte pero quindi invece ancora gia sempre mai oggi ieri domani adoro amo piace piacciono io tu lui lei noi voi loro").split(" "));
+/** Common Dutch function words, folded. Words that are also English (is, van, met, was, over, door, we, dan, mama) are left out. */
+const DUTCH_WORDS = new Set(("de het een en dat niet ik je jij hij zij wij ze maar ook voor op aan er te nog wel als bij naar uit om mijn jouw zijn haar ons onze hun hebben heb hebt heeft had hadden ben bent waren wordt worden werd werden wat dit deze die geen kan kunnen kon konden moeten moet mag mogen wil willen zal zullen zou zouden alle alles andere tussen tijdens na tot zonder tegen sinds elke elk dag dagen week weken jaar jaren zus broer moeder vader vriend vriende vrienden school scholen les lessen toets toetsen huiswerk leraar lerares klas thuis boeken boek lezen lees leest hou houd houdt spelen speelt speel buiten binnen vandaag gisteren altijd nooit soms vaak veel weinig meer minder beste goed goede slecht moeilijk makkelijk belangrijk belangrijke genoeg lange lang korte kort fiets fietsen gaat gaan ga omdat want dus toch al nu hier daar waar wanneer waarom hoe wie welke kinderen kind dieren dier mooi mooie leuk leuke ver samen alleen heel erg zeer echt gewoon").split(" "));
 /** Common Polish function words, folded (ł is folded to l). Words that are also English (to, i, o, a, w) are left out. */
-const POLISH_WORDS = new Set(("nie jest sie ze sa jak ale czy oraz poniewaz ktory ktora ktore ktorzy bardzo tylko moze powinien powinna powinno powinny jestem byc byl byla bylo jego jej ich dla przez od po lub gdy tak mnie moim zdaniem uwazam sa tez juz tego tym tej ten ta te na za przy jako gdzie kiedy wiec dlatego bo mam maja mozna trzeba szkola szkole uczniowie uczniow lekcjach ksiazek czlowieka rozwoju waznie wazne wazna wszystko wszyscy").split(" "));
+const POLISH_WORDS = new Set(("nie jest sie ze sa jak ale czy oraz poniewaz ktory ktora ktore ktorzy bardzo tylko moze powinien powinna powinno powinny jestem byc byl byla bylo jego jej ich dla przez od po lub gdy tak mnie moim zdaniem uwazam sa tez juz tego tym tej ten ta te na za przy jako gdzie kiedy wiec dlatego bo mam maja mozna trzeba szkola szkole uczniowie uczniow lekcjach ksiazek czlowieka rozwoju waznie wazne wazna wszystko wszyscy moja moj moje moi twoja twoj nasza nasz nasze siostra brat chodzi chodze lubi lubie lubimy klasy klasa klasie klase szostej nauczycielka nauczyciel nauczyciele mila mily zawsze pomaga pomagam wczoraj dzisiaj jutro bylismy bylam byly codziennie lekcji lekcje pilke pilka kolegami kolegow koledzy telefony telefon zakazane zakazany rozpraszaja rozpraszac dzieci dzieciom dziecko rodzice domu mieszkam mieszka widzielismy widzialem duzy duza duze maly mala male dobry dobra dobre zle wiele duzo malo teraz potem nigdy czasem czesto razem sam sama jestesmy mamy macie").split(" "));
 /** Common French function words, folded. Words that are also English (on, me, a, as, son, pour...) are left out where they read as English. */
 const FRENCH_WORDS = new Set(("le la les des du un une et est sont dans pour que qui ne pas je nous vous ils elles avec sur plus mais ou ce cette ces au aux se sa ses leur leurs tres tout tous etre avoir fait comme parce pense devrait ecole eleves classe trop aussi sans sous chez entre peut peuvent") .split(" "));
 /** Common Spanish function words, folded. Words that are also English (no, me, a, he, son, era...) are left out. */
@@ -167,13 +185,13 @@ const SPANISH_WORDS = new Set(("el la los las de del que y en un una es por con 
 /** Letters only Czech and Slovak use (or Polish: ą ę ł ń ś ź ż), kept apart from the word lists so a plain-text word list stays small. */
 const CZECH_LETTERS = /[ěščřžýáíéúůďťňóąęłńśźż]/i;
 /** Endings no English word has in six letters or more: Czech/Slovak adjective plurals, verbs in -ovat, -uji/-aji, -nost nouns. */
-const SLAVIC_ENDING = /^.{4,}(ych|ymi|ovat|ejsi|ovani|nosti|nost|uji|aji|eji|ely)$/;
+const SLAVIC_ENDING = /^.{4,}(ych|ymi|ovat|ejsi|ovani|nosti|nost|uji|aji|eji|ely|ili|ila|ali|ovali|ovala|ovaly|ujeme|ujete|ujou|ovym|ovou)$/;
 const fold = (w: string) => w.replace(/ł/g, "l").replace(/Ł/g, "L").normalize("NFD").replace(/[̀-ͯ]/g, "");
 
 /** The shares behind the English rule: words, English function words over words, then each other language's signal over words. */
-export function englishReading(text: unknown): { words: number; english: number; czech: number; german: number; polish: number; french: number; spanish: number } {
+export function englishReading(text: unknown): { words: number; english: number; czech: number; german: number; polish: number; french: number; spanish: number; italian: number; dutch: number } {
   const ws = (typeof text === "string" ? text.toLowerCase().match(/[\p{L}']+/gu) : null) ?? [];
-  if (!ws.length) return { words: 0, english: 0, czech: 0, german: 0, polish: 0, french: 0, spanish: 0 };
+  if (!ws.length) return { words: 0, english: 0, czech: 0, german: 0, polish: 0, french: 0, spanish: 0, italian: 0, dutch: 0 };
   // an apostrophe elision (l'ecole, d'accord) leaves the word after it
   const fs = ws.map((w) => fold(w.replace(/^[a-z]{1,2}'(?=.)/, "")));
   const share = (n: number) => n / ws.length;
@@ -183,7 +201,9 @@ export function englishReading(text: unknown): { words: number; english: number;
   const pl = fs.filter((w) => POLISH_WORDS.has(w)).length;
   const fr = fs.filter((w) => FRENCH_WORDS.has(w)).length;
   const es = fs.filter((w) => SPANISH_WORDS.has(w)).length;
-  return { words: ws.length, english: share(en), czech: share(cz), german: share(de), polish: share(pl), french: share(fr), spanish: share(es) };
+  const it = fs.filter((w) => ITALIAN_WORDS.has(w)).length;
+  const nl = fs.filter((w) => DUTCH_WORDS.has(w)).length;
+  return { words: ws.length, english: share(en), czech: share(cz), german: share(de), polish: share(pl), french: share(fr), spanish: share(es), italian: share(it), dutch: share(nl) };
 }
 /** The floors, set on the corpus in tools/essay-rules-test.cjs (E3-a, E3-d): a paragraph of at least ENGLISH_MIN_WORDS words is not English when another language's signal is at or over the floor and over the English share. */
 export const ENGLISH_MIN_WORDS = 6;
@@ -193,9 +213,9 @@ export const CZECH_FLOOR = 0.25;
 /** Whether a paragraph reads as English. It says no only when it can tell; anything else, a short paragraph included, is English. */
 export function paragraphIsEnglish(text: unknown): boolean {
   const r = englishReading(text);
-  const other = Math.max(r.czech, r.german, r.polish, r.french, r.spanish);
-  // UD-19: a paragraph under ENGLISH_MIN_WORDS is English unless two or more of its words, 40% or more, read as another language
-  if (r.words < ENGLISH_MIN_WORDS) return !(r.words > 0 && r.english < ENGLISH_FLOOR && other >= 0.4 && other * r.words >= 2);
+  const other = Math.max(r.czech, r.german, r.polish, r.french, r.spanish, r.italian, r.dutch);
+  // UD-19: a paragraph under ENGLISH_MIN_WORDS is English unless two or more of its words read as another language and beat the English ones (40% of the words, or a third when no English word is there); never on length alone
+  if (r.words < ENGLISH_MIN_WORDS) return !(r.words > 0 && r.english < ENGLISH_FLOOR && other * r.words >= 2 && other > r.english && (other >= 0.4 || (r.english === 0 && other >= 1 / 3)));
   // E3-d: English words mixed into a foreign paragraph do not make it English: the foreign signal must lose to the English share
   return !(other >= CZECH_FLOOR && other > r.english);
 }
