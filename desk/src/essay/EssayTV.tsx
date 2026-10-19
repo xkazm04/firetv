@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { paragraphCount, paragraphPending, paragraphState, pieceBeingRead, pieceReadingLine, readingAPiece, forensicPlace, forensicLead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
+import { adultSeat, englishOnlyFor, playbookLine, paragraphCount, paragraphPending, paragraphState, pieceBeingRead, pieceReadingLine, readingAPiece, forensicPlace, forensicLead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, forensicStops, rewriteStatus, planStops, essayHandoffOf, essayHandoffLine, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS, curtainOn, type ForensicStop } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -146,14 +146,16 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const chosen = lens && s.essayType === lens.id;
   const refused = refusalCaption(s);
+  const adult = adultSeat(s), english = englishOnlyFor(s);
+  const withEnglish = (text: string) => english ? `${text} ${english}` : text;
   const cap = job?.phase === "running" ? { label: READING_LABEL, text: readingAPiece(a?.piece, job.start) ? PIECE_WAIT(a?.piece) : "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
     : refused ? refused
     : essayHandoffLine(s) ? { label: "On your phone", text: essayHandoffLine(s) as string }
-    : at === "plan" ? { label: "Start from the pattern", text: "Write the paragraph yourself: one sentence for each slot, on the phone." }
+    : at === "plan" ? { label: "Start from the pattern", text: withEnglish(adult ? "Write the message yourself: one sentence for each slot, on the phone." : "Write the paragraph yourself: one sentence for each slot, on the phone.") }
     : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: summaryLine(a) }
-    : lens && chosen ? { label: `${lens.name} · chosen`, text: "Paste, type or dictate one paragraph on the phone." }
-    : lens ? { label: `${lens.name} reads`, text: lens.promise } : { label: "Essay Master", text: "Choose a lens." };
+    : lens && chosen ? { label: `${lens.name} · chosen`, text: withEnglish(adult ? "Paste, type or dictate one message or email on the phone." : "Paste, type or dictate one paragraph on the phone.") }
+    : lens ? { label: `${lens.name} reads`, text: withEnglish(lens.promise) } : { label: "Essay Master", text: "Choose a lens." };
 
   return (<>
     <Brand /><Top s={s} menu="Playbook" />
@@ -335,7 +337,7 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
     <Brand /><Top s={s} menu="Table" />
     <section className="em-main"><div className="em-crumb em-lbl">Your paragraph</div>
       <div className="em-move" style={{ marginTop: 60 }}><div className="em-move-type"><div className="em-g"><span className="em-wd em-hatch">Nothing read</span></div></div></div></section>
-    <div className="em-caption" style={{ left: 414, top: 820, width: 1180 }}><Caption label="Your paragraph" text="Paste, type or dictate one paragraph on the phone, and it is read here." /></div>
+    <div className="em-caption" style={{ left: 414, top: 820, width: 1180 }}><Caption label="Your paragraph" text={adultSeat(s) ? "Paste, type or dictate one message or email on the phone, and it is read here." : "Paste, type or dictate one paragraph on the phone, and it is read here."} /></div>
   </>);
   const i = forensicAt(s), sn = a.sentences[i], N = a.sentences.length;
   const verdicts = new Map(a.verdicts.map((v) => [v.n, v]));
@@ -432,7 +434,7 @@ function Page({ curtain, sn, n, place, lead, v, lens, type, inked, job, wait, un
     : { label: "Neutral", text: note || "Nothing flagged." };
   return (
     <section className="em-main em-rise" ref={main}>
-      <div className="em-crumb em-lbl">{ICON[lens.id]}<span className="em-ln">{lens.name}</span><span>· {place} · {sn.role}</span></div>
+      <div className="em-crumb em-lbl">{ICON[lens.id]}<span className="em-ln">{lens.name}</span><span>· {place} · first guess: {sn.role}</span></div>
       {lead && <div className="em-lbl" data-role="essay-lead">{lead}</div>}
       <div className="em-sent" data-role="essay-sentence">{curtain ? <>Sentence {sn.n} &middot; the words are on the PC page and the phone</> : <><span className="em-q" aria-hidden="true">“</span><SentenceText text={sn.text} faulty={vd === "faulty"} /></>}</div>
       <div className="em-note" data-role="essay-problem" data-verdict={vd}><Caption label={noteCap.label} text={noteCap.text} /></div>
@@ -441,7 +443,7 @@ function Page({ curtain, sn, n, place, lead, v, lens, type, inked, job, wait, un
         <Pattern pattern={t.fix.pattern} label={<span className="em-lbl">{t.from ? `The pattern · ${t.from.title}` : "The pattern"}</span>} />
       </> : (
         <div className={`em-move em-role${vd === "strong" ? "" : " neutral"}`}>
-          <div className="em-lbl">Its job</div>
+          <div className="em-lbl">Its job · first guess</div>
           <div className="em-move-type"><div className="em-g"><span className="em-wd">{sn.role}</span><Arrow className="em-arr" len={150} h={110} color={vd === "strong" ? CIT : "rgba(238,233,224,.4)"} /></div></div>
           {vd === "strong" && <div className="em-none">Nothing to fix</div>}
         </div>
@@ -493,7 +495,7 @@ function Table({ s, a, cur, verdicts, curtain }: { s: Session; a: Reading; cur: 
       <div className="em-lbl">Paragraph · table · {ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? ""} lens</div>
       <div className="em-figs">{figs.map(([n, w]) => <div key={w}><b>{n}</b><span className="em-lbl">{w}</span></div>)}{a.provider && <div data-role="essay-provider"><b>{a.provider}</b><span className="em-lbl">read by</span></div>}</div>
       <div className="em-lbl" data-role="essay-not-checked">{NOT_CHECKED}</div>
-      <div className="em-thead em-lbl"><span /><span>#</span><span>Sentence</span><span>Role</span><span>Length</span><span>Reads</span></div>
+      <div className="em-thead em-lbl"><span /><span>#</span><span>Sentence</span><span>First guess</span><span>Length</span><span>Reads</span></div>
       {rows.map((x) => {
         const j = a.sentences.indexOf(x), vd = verdictOf(verdicts, x.n), on = j === cur;
         return (
@@ -545,7 +547,7 @@ export function Playbook({ s, focus }: { s: Session; focus: number }) {
         <div className="em-door"><span>X-ray</span><span className="em-key">OK</span></div>
       </div>
     </aside>
-    <div className="em-caption"><Caption label={`Unit ${unit(at)} · ${at.title}`} text={at.line} /></div>
+    <div className="em-caption"><Caption label={`Unit ${unit(at)} · ${at.title}`} text={playbookLine(at.id, at.line, adultSeat(s))} /></div>
   </>);
 }
 
@@ -579,6 +581,6 @@ export function Xray({ s }: { s: Session }) {
         </div>
       ))}
     </section>
-    <div className="em-xcap"><Caption label={`Unit ${playLesson(p)?.unit ?? PLAYBOOK_STOPS.indexOf(p) + 1} · ${p.title}`} text={p.line} /></div>
+    <div className="em-xcap"><Caption label={`Unit ${playLesson(p)?.unit ?? PLAYBOOK_STOPS.indexOf(p) + 1} · ${p.title}`} text={playbookLine(p.id, p.line, adultSeat(s))} /></div>
   </>);
 }

@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call as rawCall } from "@/tv/useSession";
 import { ESSAY_TYPES, PLAYBOOK } from "@/lib/library/lessons.data";
-import { essayFileProblem, essayTooLong, REWRITE_WHILE_READING, paragraphsOf, pieceAgainOffered, pieceBeingRead, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
+import { englishOnlyLine, essayFileProblem, essayTooLong, REWRITE_WHILE_READING, paragraphsOf, pieceAgainOffered, pieceBeingRead, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
 import { EssayShelf, TextNotice } from "./EssayShelf";
 import { rewriteStaysLine, writeRewriteBack } from "./rewriteBack";
 import { topicIn } from "@/lib/library/paths";
@@ -108,6 +108,7 @@ export default function Phone() {
   const setEssay = (f: (v: string) => string) => setParas((ps) => ps.map((p, i) => (i === pix ? f(p) : p)));
   /** The lens is the TV's: the phone reads it and sends it back, and offers no choice of its own. */
   const etype = s?.essayType ?? "structure";
+  const englishOnly = englishOnlyLine(s?.profiles?.find((p) => p.id === s.learner?.id)?.system);
   /**
    * A whole piece (v2 E1, P3): where the text came from, the shelf id once kept (a new version then goes to the same
    * piece), whether to keep it, the one-time notice's words while it is showing, and a tick that reloads the shelf.
@@ -837,6 +838,7 @@ export default function Phone() {
 
         {screen === "paste" && !onSentence && !onPlan && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
           <p>Send a .txt or .md file (a .docx goes through the PC page), or type, paste or dictate a message. The desk reads a whole piece, or one paragraph at a time.</p>
+          {englishOnly && <p data-role="essay-english-only">{englishOnly}</p>}
           <p data-role="essay-lens">The TV chose the lens: <b>{ESSAY_TYPES.find((t) => t.id === etype)?.name ?? etype}</b>. {ESSAY_TYPES.find((t) => t.id === etype)?.promise}</p>
           {insecure && <p data-role="http-limit" role="note">{HTTP_LIMIT.voice}</p>}
           <label className="pbtn pfile" data-secondary="true">Choose a file (.txt or .md)<input type="file" accept=".txt,.md,text/plain,text/markdown" data-role="essay-file" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void pickFile(f); }} /></label>

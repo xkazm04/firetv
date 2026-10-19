@@ -894,3 +894,29 @@ export function planFit(slots: PlanSlot[], i: number, text: string): string | nu
 
 /** The learner's sentences, in slot order, joined: never a frame word of the pattern. Splits back into exactly the written slots. */
 export function planText(plan: Plan): string { return plan.slots.map(norm).filter(Boolean).join(" "); }
+
+// ---- who the stage speaks to: the seated profile's system and mode (recert-12 L1-kristyna-17-EM1-6, L1-helena-46-EM1-1) ----
+
+type Seat = { learner?: { id: string } | null; profiles?: Array<{ id: string; system?: string; mode?: string }> };
+const seatedProfile = (s: Seat) => (s.learner ? s.profiles?.find((p) => p.id === s.learner?.id) : undefined);
+
+/** The one line a profile outside the UK and US is told before it writes: the desk reads English writing. Null for uk, us and no profile. */
+export function englishOnlyLine(system: string | undefined): string | null {
+  return system && system !== "uk" && system !== "us" ? "Essay Master reads English writing." : null;
+}
+/** That line for the seated profile of a session. */
+export const englishOnlyFor = (s: Seat) => englishOnlyLine(seatedProfile(s)?.system);
+
+/** Is the seated profile in Adult mode? Every other mode keeps the school words. */
+export const adultSeat = (s: Seat) => seatedProfile(s)?.mode === "adult";
+
+/** The playbook's line for an adult writing messages and emails; the school line for everyone else. */
+export function playbookLine(id: string, school: string, adult: boolean): string {
+  return adult ? ADULT_PLAY_LINE[id] ?? school : school;
+}
+const ADULT_PLAY_LINE: Record<string, string> = {
+  thesis: "The one sentence of a message that takes a side and says why.",
+  para: "In a message or an email: the point, then the proof, then what it means for the reader.",
+  order: "Which point goes first in an email, and why that one.",
+  concl: "What the message opened with, now delivered.",
+};

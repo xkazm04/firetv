@@ -2078,3 +2078,57 @@ test('L1-eliska-12-EM1-6: cleanFix refuses a frame whose literal words state con
  assert.equal(fix('Schools start early in the [time]'),undefined);
  assert.deepEqual(fix('Because [reason], [claim].'),{move:'Name the source',pattern:'Because [reason], [claim].'});
 });
+
+// ---- recert-12 rework: EM1-6 the English-only line, EM1-2 the first guess is named, EM1-1 Adult mode's words ----
+const seatOf=(p)=>{const {getSession}=require(path.join(root,'src/lib/session/store.ts'));return {...getSession(),jobs:{},status:'',essay:null,learner:{id:'p1',name:'Sam'},profiles:[{id:'p1',name:'Sam',type:'other',modules:['essay'],...p}]};};
+const textOf=(html)=>html.replace(/<[^>]*>/g,' ').replace(/&#x27;|&#39;/g,"'").replace(/\s+/g,' ');
+test('EM1-6: englishOnlyLine speaks for a system outside uk and us only',()=>{
+ assert.equal(ER.englishOnlyLine('cz'),'Essay Master reads English writing.');
+ assert.equal(ER.englishOnlyLine('de'),'Essay Master reads English writing.');
+ for(const x of ['uk','us',undefined])assert.equal(ER.englishOnlyLine(x),null,String(x));
+ assert.equal(ER.englishOnlyFor(seatOf({system:'cz'})),'Essay Master reads English writing.');
+ assert.equal(ER.englishOnlyFor(seatOf({system:'uk'})),null);
+ assert.equal(ER.englishOnlyFor({learner:null,profiles:[]}),null);
+});
+test('EM1-6: the lens home and the plan caption say it once for a cz profile, not for a uk one',()=>{
+ const E=require(path.join(root,'src/essay/EssayTV.tsx'));void E;
+ const KEYS2=require(path.join(root,'src/tv/keys.ts'));
+ for(const [sys,want] of [['cz',1],['uk',0]]){
+  const s=seatOf({system:sys});
+  const stops=KEYS2.lensStops(s);
+  const lensAt=stops.findIndex(x=>x&&x!=='last'&&x!=='plan'),planAt=stops.indexOf('plan');
+  assert.ok(lensAt>=0&&planAt>=0,'both stops exist');
+  for(const f of [lensAt,planAt]){
+   const n=(textOf(drawEssay('EssayType',s,{focus:f})).match(/Essay Master reads English writing\./g)||[]).length;
+   assert.equal(n,want,sys+' focus '+f);
+  }
+ }
+});
+test('EM1-2: the crumb, Its job and the table call the regex role a first guess',()=>{
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ assert.match(tv,/first guess: \{sn\.role\}/);assert.match(tv,/Its job · first guess/);assert.match(tv,/<span>First guess<\/span>/);
+ assert.ok(!/<span>Role<\/span>/.test(tv)&&!/· \{sn\.role\}<\/span>/.test(tv));
+});
+test('EM1-1: Adult mode hears messages and emails on the lens home, the plan and the playbook; family keeps the school words',()=>{
+ const KEYS2=require(path.join(root,'src/tv/keys.ts'));
+ const adult=seatOf({mode:'adult'}),fam=seatOf({mode:'family'});
+ const stops=KEYS2.lensStops(adult);
+ const lensAt=stops.findIndex(x=>x&&x!=='last'&&x!=='plan'),planAt=stops.indexOf('plan');
+ const home=(s)=>textOf(drawEssay('EssayType',s,{focus:lensAt})),plan=(s)=>textOf(drawEssay('EssayType',s,{focus:planAt}));
+ assert.match(home({...adult,essayType:stops[lensAt].id}),/one message or email on the phone/);
+ assert.match(plan(adult),/Write the message yourself/);
+ assert.ok(!/paragraph/i.test(capOf(drawEssay('EssayType',adult,{focus:planAt})).text),'no paragraph in the adult plan caption');
+ assert.match(plan(fam),/Write the paragraph yourself: one sentence for each slot, on the phone\./);
+ assert.match(home({...fam,essayType:stops[lensAt].id}),/one paragraph on the phone\./);
+ const L=require(path.join(root,'src/lib/library/lessons.data.ts'));
+ for(const p of L.PLAYBOOK){
+  assert.match(textOf(drawEssay('Playbook',{...adult},{focus:0})),/./);
+  assert.equal(ER.playbookLine(p.id,p.line,false),p.line,p.id+' family line unchanged');
+  assert.notEqual(ER.playbookLine(p.id,p.line,true),p.line,p.id+' adult line differs');
+  assert.ok(!/introduction|student|school/i.test(ER.playbookLine(p.id,p.line,true)),p.id);
+ }
+ const para=KEYS2.PLAYBOOK_STOPS.find(x=>x.id==='para'),pi=KEYS2.PLAYBOOK_STOPS.indexOf(para);
+ assert.match(textOf(drawEssay('Playbook',adult,{focus:pi})),/In a message or an email/);
+ assert.match(textOf(drawEssay('Playbook',fam,{focus:pi})),/Claim, then evidence, then the link back\./);
+ assert.match(textOf(drawEssay('Xray',{...adult,focus:pi})),/In a message or an email/);
+});
