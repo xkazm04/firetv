@@ -1174,3 +1174,11 @@ test('case 12 (TL-12): panelFor holds no Linga cue of its own: it does not impor
  assert.doesNotMatch(src,/lingaOwns/,'the screen-keyed Linga cue is gone');
  assert.doesNotMatch(src,/key:\s*"linga"/);
 });
+
+test('L1-daniel-15-EM3-1 / L1-barbora-43-EM4-1: the shelf (and "Forget tonight\'s paragraph" with it) is rendered under the paragraph, rewrite and plan panels',()=>{
+ const src=code(PAGE);
+ const panel=(role)=>{const i=src.indexOf(`data-role="${role}"`);assert.ok(i>0,role+' panel exists');const j=src.indexOf('screen === "paste"',i);return src.slice(i,j<0?undefined:j);};
+ for(const role of ['essay-rewrite','essay-plan','essay-paragraph'])assert.match(panel(role),/\{shelf\(\)\}/,role+' carries the shelf');
+ assert.equal((src.match(/<EssayShelf /g)||[]).length,1,'one EssayShelf element, shared by the three panels');
+ assert.match(src,/const shelf = \(\) => <EssayShelf learnerId=/);
+});

@@ -270,6 +270,8 @@ export default function Phone() {
   const onPlan = s?.screen === "essayplan" && s.essayPlan ? { i: planAt(s), plan: s.essayPlan, slots: planSlots(PLAYBOOK.find((p) => p.id === "para") ?? PLAYBOOK[0]) } : null;
   const [slotText, setSlotText] = useState("");
   useEffect(() => { if (onPlan) setSlotText(onPlan.plan.slots[onPlan.i] ?? ""); }, [onPlan?.i, onPlan?.plan.slots[onPlan?.i ?? 0]]); // eslint-disable-line react-hooks/exhaustive-deps
+  // the shelf (and "Forget tonight's paragraph" with it) is reachable whatever the TV shows: under the rewrite and plan panels too
+  const shelf = () => <EssayShelf learnerId={s?.learner?.id} refresh={shelfTick} onOpen={openKept} onGone={(id) => setPieceId((cur) => (id === "all" || cur === id ? undefined : cur))} />;
   const sendSlot = async () => { if (!onPlan) return; const r = planFill(onPlan.plan, onPlan.i, slotText); if (!r.ok) { setMsg(r.error); return; }
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setMsg("sending…");
@@ -825,13 +827,13 @@ export default function Phone() {
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setRewrite(t), "essay")}>Dictate</button>
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || rewriting} onClick={sendRewrite}>Send</button></div>
           {againBtn}
-          {pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}</div>}
+          {pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}{shelf()}</div>}
 
         {screen === "paste" && onPlan && <div className="pscreen" data-role="essay-plan"><h3>Slot {onPlan.i + 1} · {onPlan.slots[onPlan.i]?.label}</h3><p>One sentence, in your own words. It inks on the TV. When all three are written, press OK on Read it.</p>
           <div className="field"><textarea aria-label="Your sentence for this slot" value={slotText} onChange={(e) => setSlotText(e.target.value)} /></div>
           {onPlan.plan.slots[onPlan.i] && planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i]) && <p data-role="essay-plan-fit">{planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i])}</p>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setSlotText(t), "essay")}>Dictate</button>
-            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !slotText.trim()} onClick={sendSlot}>Send</button></div></div>}
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !slotText.trim()} onClick={sendSlot}>Send</button></div>{shelf()}</div>}
 
         {screen === "paste" && !onSentence && !onPlan && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
           <p>Send a .txt or .md file (a .docx goes through the PC page), or type, paste or dictate a message. The desk reads a whole piece, or one paragraph at a time.</p>
@@ -854,7 +856,7 @@ export default function Phone() {
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()), "essay")}>Dictate</button>
             {!pieceCovers(pix) && <button className="pbtn" data-role="essay-analyse-one" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || notice !== null || !essay.trim()} onClick={paras.length === 1 && pieceId ? () => void readPiece(true) : analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button>}</div>
-          <EssayShelf learnerId={s?.learner?.id} refresh={shelfTick} onOpen={openKept} onGone={(id) => setPieceId((cur) => (id === "all" || cur === id ? undefined : cur))} /></div>}
+          {shelf()}</div>}
 
         </>}
 
