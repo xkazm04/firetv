@@ -9,14 +9,16 @@ export const NOT_ASKING = "The TV is not asking for that now.";
  * The door of a result route (read, mark, analyse, hint, explain, second) for a phone (TL-11). A phone answers the TV's
  * open ask and nothing else: a request with no askId, or one that is not the open ask's id, is 409 and touches
  * nothing. With the right id the ask is marked sent as the work begins, and the result - whatever it came to - closes it.
- * The TV and an in-process caller (no role) pass straight through, as before.
+ * The TV and an in-process caller (no role) pass straight through, as before. `except` names a request the route
+ * refuses by its own rule for every phone (analyse: a kept piece is the TV's to read), which keeps its own answer.
  */
-export async function withPhoneAsk(req: Request, run: () => Promise<Response>): Promise<Response> {
+export async function withPhoneAsk(req: Request, run: () => Promise<Response>, except?: (body: Record<string, unknown>) => boolean): Promise<Response> {
   if (roleFrom(req) !== "phone") return run();
   const body: unknown = await req.clone().json().catch(() => null);
-  const id = body && typeof body === "object" ? (body as { askId?: unknown }).askId : undefined;
+  const fields = (body && typeof body === "object" ? body : {}) as Record<string, unknown>;
+  if (except?.(fields)) return run();
   const ask = getSession().ask;
-  if (!ask || ask.phase !== "open" || typeof id !== "string" || id !== ask.id) return NextResponse.json({ error: NOT_ASKING }, { status: 409 });
+  if (!ask || ask.phase !== "open" || typeof fields.askId !== "string" || fields.askId !== ask.id) return NextResponse.json({ error: NOT_ASKING }, { status: 409 });
   dispatch({ type: "ask.sent", id: ask.id });
   try { return await run(); }
   finally { if (getSession().ask?.id === ask.id) dispatch({ type: "ask.cancel", id: ask.id }); }

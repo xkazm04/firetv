@@ -80,7 +80,7 @@ function readPiece(who: { id: string }, text: string, type: AnalysisType, age: n
   }, { key: "essay", start: `reading your piece, ${paragraphs} paragraphs — ${type} lens…`, done: (a) => a.summary.slice(0, 120) });
 }
 
-export function POST(req: Request) { return withPhoneAsk(req, () => post(req)); }
+export function POST(req: Request) { return withPhoneAsk(req, () => post(req), (b) => b.kind === "shelf-piece"); }
 async function post(req: Request) {
   // a body that is not one of the readings is refused in desk words before any run: never a 500, never a failed job
   const body = (await req.json().catch(() => null)) as Body | null;
