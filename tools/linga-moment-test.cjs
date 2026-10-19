@@ -880,3 +880,33 @@ test('recert-11 (3) wired: a meta replay question is asked for once more, then a
     assert.ok(!c.turns.some(t=>t.text===META),'the meta question never reaches the screen');assert.equal(c.moments[0].replay,undefined);
   }finally{twice.done();}
 });
+
+// ---- recert-11 (4) (LT-tomas-9-J4-2): Tomáš's Pause & coach note said "Leo asked what you make, so start with I make a...".
+// His coached reply "I like Minecraft. creeper" answered Leo's "Hi! What do you make in Minecraft?" (tomas-9 #9); Leo's
+// "Creepers are scary! What do you build?" came after it. A note that names the partner's question now quotes, from the
+// conversation in code, the partner line the coached reply answered, never the model's paraphrase.
+const R11_TOMAS={partner:'Leo · friend who plays Minecraft',asked:'Hi! What do you make in Minecraft?',note:'Good: you said what you like in Minecraft. Leo asked what you make, so start with I make a...'};
+test('recert-11 (4) rules: quoteAsked puts the partner\'s own question where the note paraphrased it',()=>{
+  const x=R11_TOMAS;
+  assert.equal(C.quoteAsked(x.note,x.partner,x.asked),'Good: you said what you like in Minecraft. Leo asked “What do you make in Minecraft?”, so start with I make a...');
+  assert.equal(C.quoteAsked('Nice try. She asked you where you work. Say I work.','Mia · receptionist','Okay. Where do you work?'),'Nice try. She asked you “Where do you work?”. Say I work.');
+  assert.equal(C.quoteAsked('Your partner asks about your room and you answer well.','Ana','Which room do you want?'),'Your partner asks “Which room do you want?” and you answer well.');
+  assert.equal(C.quoteAsked('Leo asked “What do you make in Minecraft?”, so say I make.',x.partner,x.asked),'Leo asked “What do you make in Minecraft?”, so say I make.','a quote already: kept');
+  assert.equal(C.quoteAsked('Say a room, and nights for more than one.',x.partner,x.asked),'Say a room, and nights for more than one.','names no question: kept');
+  assert.equal(C.quoteAsked(x.note,x.partner,''),x.note,'no partner line: kept');
+  assert.equal(C.quoteAsked('Leo asked about your house so you can say I build.',x.partner,'Tell me about your house.'),'Leo asked “Tell me about your house.” so you can say I build.','a line with no question mark: the whole line');
+});
+test('recert-11 (4) wired: a Pause & coach note and a held-fix finish note quote the partner line the coached reply answered',async()=>{
+  const opening='Hello! What do you need tonight?';
+  const f=await finishing({coach:()=>({json:{...ROOM_COACH,note:'Clear. Your partner asked what you want, so say a room for two nights.'},provider:'test',ms:1})});
+  try{
+    await f.cmd('finish');
+    const c=f.getSession().conversation;
+    assert.equal(c.turns.find(t=>t.role==='partner').text,opening);
+    assert.equal(c.coaching.note,`Clear. Your partner asked “What do you need tonight?”, so say a room for two nights.`,'the opening the reply answered, quoted from the conversation');
+  }finally{f.done();}
+  const turns=[{id:'p0',role:'partner',text:'Hi! What do you make in Minecraft?'},{id:'t1',role:'learner',text:'I like Minecraft. creeper'},{id:'p1',role:'partner',text:'Creepers are scary! What do you build?'}];
+  const held={id:'t1:held',kind:'fix',said:'creeper',better:'I make a creeper house.',why:'Leo asked what you make, so start with I make a...',turnId:'t1',at:1};
+  const co=C.finishCoachOf({partner:R11_TOMAS.partner,turns,coaching:null,supported:false,moments:[],heldFixes:[held],preferences:{correction:'as-needed',level:'A1'}}).coaching;
+  assert.equal(co.note,'Leo asked “What do you make in Minecraft?”, so start with I make a...','the held fix\'s why, quoted the same way');
+});

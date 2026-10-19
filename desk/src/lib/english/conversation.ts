@@ -227,6 +227,22 @@ function coachRepliedTo(c:Conversation,reply:string):Coaching|null{
 /** The frame a coaching note's replay must invite (replay.ts frameOf), its before and after read as a fix. */
 const coachFrame=(co:Coaching)=>frameOf({kind:"fix",said:co.before,better:co.after});
 /**
+ * recert-11 (LT-tomas-9-J4-2): a coaching note that names the partner's question says it in the partner's own words, taken
+ * from the conversation here, never the model's paraphrase ("Leo asked what you make"). `asked` is the partner line the
+ * coached reply answered; its last question (else the whole line) replaces the words after "<partner> asked", up to the
+ * clause's end. "he", "she", "they" and "your partner" count as the partner. A note that quotes already, or names no
+ * question, is kept as it is.
+ */
+export function quoteAsked(note:string,partner:string,asked:string):string{
+  const said=asked.trim();if(!said)return note;
+  const question=(said.match(/[^.!?]*\?/g)??[]).map(x=>x.trim()).filter(Boolean).at(-1)??said;
+  const name=partner.split(" · ")[0].trim().replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  const who=new RegExp(`\\b(${name?`${name}|`:""}your partner|he|she|they)\\s+(asked|asks|was asking)(\\s+you)?\\s+(?![“"‘'])((?:(?!\\s(?:so|and|but|because|then)\\b)[^.,;:!?“”"])+)`,"i");
+  return note.replace(who,(_,w:string,verb:string,you:string|undefined)=>`${w} ${verb}${you??""} “${question}”`);
+}
+/** The partner line a learner turn answered: the last partner line before it. */
+const answeredBy=(c:Conversation,turnId:string)=>{const at=c.turns.findIndex(t=>t.id===turnId);return at>0?[...c.turns.slice(0,at)].reverse().find(t=>t.role==="partner"):undefined;};
+/**
  * The finish path's coaching task (recert-10): the existing coach contract on the one reply chosen by finishCoachOf, with
  * no error invented on a reply that was right.
  */
@@ -246,7 +262,7 @@ export function finishCoachOf(c:Conversation):{turn:ConversationTurn;coaching:Co
   if(!mine.length)return null;
   for(const h of [...held].reverse()){
     const turn=mine.find(t=>t.id===h.turnId);
-    if(turn&&h.said.trim()&&h.better.trim()&&turn.text.includes(h.said))return {turn,coaching:{before:h.said,after:h.better,note:h.why,atFinish:true}};
+    if(turn&&h.said.trim()&&h.better.trim()&&turn.text.includes(h.said))return {turn,coaching:{before:h.said,after:h.better,note:quoteAsked(h.why,c.partner??"",answeredBy(c,turn.id)?.text??""),atFinish:true}};
   }
   const helped=[...mine].reverse().find(t=>t.supported);
   return helped||c.supported||held.length?{turn:helped??mine.at(-1)!,coaching:null}:null;
@@ -729,7 +745,7 @@ export async function englishCommand(raw:unknown){
     }else if(action==="coach"){
       const before=line(result.json.before,180),coached=(finishing??lastLearner)!;
       if(audienceSafe(c,line(result.json.after,180))===null||audienceSafe(c,line(result.json.note,220))===null)throw new Error("The coach note did not fit this learner.");if(!before||!coached.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
-      next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220),...(finishing?{atFinish:true as const}:{})},quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
+      next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:quoteAsked(line(result.json.note,220),c.partner,answeredBy(c,coached.id)?.text??""),...(finishing?{atFinish:true as const}:{})},quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
     }else{
       const {partner,patch}=replayed(c,result.json,framed);
       // after Back (LG-4): a gate's redirect line or a question asked before is no replay; the catch returns to the conversation
