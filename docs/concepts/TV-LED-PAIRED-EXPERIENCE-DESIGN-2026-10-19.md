@@ -379,6 +379,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: the TV retry emits the call only for a failed read that may be retried (`retry !== false`); Down on Tonight navigates to `paper`; PaperPanel posts no `nav`.
 - Tests: `tools/tv-keys-test.cjs`, `tools/maths-tv-test.cjs`, `tools/paper-probe-test.cjs`.
 - Stick check: Tonight → Down shows the last paper; "Type a paper" moves the phone to the rows; a forced failed read is asked again with Select.
+Landed: 1ce6815f, 5752d598 (Select retries a failed read, Down on Tonight opens paper, the paper screen's Type a paper stop with ask.open paper and a two-step Back). PaperPanel's Show on TV moved to TL-11. Stick check not run.
 
 ### After the slices: the council
 
