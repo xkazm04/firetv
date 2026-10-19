@@ -22,6 +22,9 @@ const data=path.resolve(process.env.DESK_DATA_DIR),real=path.resolve(__dirname,'
 if(data===real||data.startsWith(real+path.sep))throw new Error('Refusing to run against desk/data.');
 const base=(process.env.ESSAY_TEST_URL||'http://localhost:3241').replace(/\/$/,'');
 const reread=process.argv.includes('--reread');
+// the forensic table's figures row shows the paragraph's words and links beside the other counts (EM1-3, EM1-4); a source pin, no model needed
+{const tv=fs.readFileSync(path.resolve(__dirname,'../desk/src/essay/EssayTV.tsx'),'utf8');const f=tv.match(/const figs:[^
+]*/)?.[0]||'';assert.ok(/a\.stats\.words[^\]]*"words"/.test(f)&&/a\.stats\.links[^\]]*"links"/.test(f),'the forensic table figures include words and links');}
 const key=JSON.parse(fs.readFileSync(path.join(data,'pairing.json'),'utf8')).key;
 const ADULT=process.env.ADULT==='1';
 const out=path.resolve(__dirname,ADULT?'../artifacts/essay-integration-adult':'../artifacts/essay-integration');fs.mkdirSync(out,{recursive:true});

@@ -474,7 +474,7 @@ function Table({ s, a, cur, verdicts }: { s: Session; a: Reading; cur: number; v
   const WINDOW = 6, start = Math.max(0, Math.min(cur - 2, a.sentences.length - WINDOW));
   const rows = a.sentences.slice(start, start + WINDOW);
   const maxW = Math.max(1, ...a.sentences.map((x) => x.words));
-  const figs: Array<[number, string]> = [[a.stats.sentences ?? a.sentences.length, "sentences"], [a.stats.claims ?? 0, "claims"], [a.stats.evidence ?? 0, "evidence"], [a.stats.connectors ?? 0, "connectors"], [a.stats.avgWords ?? 0, "words avg"]];
+  const figs: Array<[number, string]> = [[a.stats.sentences ?? a.sentences.length, "sentences"], [a.stats.words ?? 0, "words"], [a.stats.claims ?? 0, "claims"], [a.stats.evidence ?? 0, "evidence"], [a.stats.links ?? 0, "links"], [a.stats.connectors ?? 0, "connectors"], [a.stats.avgWords ?? 0, "words avg"]];
   return (<>
     <Brand /><Top s={s} menu="Sentence" />
     <section className="em-table">
