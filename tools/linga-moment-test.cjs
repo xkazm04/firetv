@@ -924,3 +924,17 @@ test('recert-12 (2) rules: a replay question that asks the coached question back
   assert.equal(asksCoachedQuestion('Grandpa, did you have school every day?','I had school today.'),false,'a statement form is the statement rule');
   assert.equal(replayRefused(x.inBand,'Did you have school',x.moment.better,frame),null,'in the scene, still a replay');
 });
+
+// ---- recert-12 (1): Back's replay question was not held to the band; "Grandpa, did you have school every day?" fails
+// fitsBand at A1 and shipped. replayRefused takes the band (conversation.ts passes heldBand): over it, asked once more, then
+// the conversation, as any refusal.
+test('recert-12 (1) rules: a Back replay question over the learner band is refused; an in-band one is not',()=>{
+  const {replayRefused,frameOf}=require(path.join(root,'src/lib/english/replay.ts'));
+  const {fitsBand}=require(path.join(root,'src/lib/english/gate.ts'));
+  const x={form:'I have a cat',moment:{kind:'fix',said:'I have cat',better:'I have a cat',why:'A cat needs a.'}},frame=frameOf(x.moment);
+  const over='Grandpa, did you have school every day?',ok='Do you have a cat, Grandpa?';
+  assert.equal(fitsBand(over,'A1'),false);assert.equal(fitsBand(ok,'A1'),true);
+  assert.match(replayRefused(over,'have a cat',x.moment.better,undefined,'A1'),/above the learner's level/,'the recert-12 line at A1');
+  assert.equal(replayRefused(over,'have a cat',x.moment.better),null,'no band, no hold');
+  assert.equal(replayRefused(ok,'have a cat',x.moment.better,frame,'A1'),null,'in band and in the scene still passes');
+});

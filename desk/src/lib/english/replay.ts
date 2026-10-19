@@ -11,9 +11,10 @@
  * a question that names the anchors makes the frame the easy answer, not the only one.
  */
 import { wordsOf } from "./credit";
+import { fitsBand } from "./gate";
 import { findPhrase } from "./review";
 import { keysOf, slipStands } from "./slip";
-import type { Moment } from "./types";
+import type { Band, Moment } from "./types";
 
 /** Words that carry no form of their own: a `form` that shares only these with the after form names none of it. */
 const LIGHT = new Set(["i", "you", "he", "she", "it", "we", "they", "me", "him", "her", "us", "them", "the", "a", "an", "this", "that", "my", "your", "his", "its", "our", "their", "to", "of", "in", "on", "at", "for", "with", "and", "or", "but", "so", "is", "are", "am", "was", "were", "be", "do", "does", "did"]);
@@ -90,15 +91,17 @@ export function asksCoachedQuestion(question: string, after: string): boolean {
  * apart; its question must not say the after form itself (the partner never supplies the learner's answer), unless that
  * form is one word, which a question can only invite by naming ("Do you often…?" for "often"); it must ask the learner
  * something in the scene, never ask them to ask a question (recert-11); and, given the moment's frame (recert-8), the
- * question must invite it. Given a question form (recert-12), the question must not ask the learner the coached
+ * question must invite it. Given the band (recert-12), the question must fit it, and given a question form, must not ask the learner the coached
  * question when the coached form is one the learner asks.
  */
-export function replayRefused(question: string, form: unknown, after: string, frame?: Frame): string | null {
+export function replayRefused(question: string, form: unknown, after: string, frame?: Frame, band?: Band): string | null {
   const want = new Set(contentWords(after));
   if (typeof form !== "string" || !wordsOf(form).some(w => want.has(w))) return "The replay question did not call for the coached form.";
   if (wordsOf(after).length > 1 && findPhrase(question, after) !== null) return "The replay question said the coached form itself.";
   if (asksForAQuestion(question)) return "The replay question asked the learner to ask a question instead of asking them something in the scene.";
   if (asksCoachedQuestion(question, after)) return "The replay question asked the learner the coached question itself.";
+  // recert-12 (LT-viktor-67-J4): a Back replay is held to the band the way a partner line is; bandLine can only cut it, never fit it
+  if (band && !fitsBand(question, band)) return "The replay question was above the learner's level.";
   if (frame && !invitesFrame(question, frame)) return "The replay question did not invite the coached frame.";
   return null;
 }
