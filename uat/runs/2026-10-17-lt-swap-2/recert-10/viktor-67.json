@@ -1,0 +1,767 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nLena · granddaughter, age 9\nA1First words · self-chosen\nAsk about school\nYour mission\nAsk one simple question about school and listen to the answer.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nAsk about school\nAsk one simple question about school and listen to the answer.\n[button: Start talking]\nOr choose a situation [list: Ask about school [plan-bb8f76c1] | Show them my garden [plan-13cfb8bd] | Tell them I miss them [plan-2336e09e] | Start the video call [plan-ec851dcc] | Say that again, please [plan-c1547b38] | What I did today [plan-53bf933f] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Ask o škole s vnučkou, to chci. Začnu mluvit.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9291
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLena · granddaughter, age 9\nAsk about school\nLena says\nHi Grandpa! Can you see me?\nYour turn\nAnswer on your phone: speak or type.\nNowSay hello on the video call\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Lena one simple question about school and listen to her answer.\nNow: Say hello on the video call\nHi Grandpa! Can you see me?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · granddaughter, age 9\nHi Grandpa! Can you see me?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! Can you see me?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to answer; I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLena · granddaughter, age 9\nAsk about school\nLena says\nHi Grandpa! Can you see me?\nYou could say\nHi Lena! I can see you.\nNowSay hello on the video call\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Lena one simple question about school and listen to her answer.\nNow: Say hello on the video call\nHi Grandpa! Can you see me?\nYou could say\nHi Lena! I can see you.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · granddaughter, age 9\nHi Grandpa! Can you see me?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! Can you see me?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to answer in English, I will look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLena · granddaughter, age 9\nAsk about school\nLena says\nHi Grandpa! Can you see me?\nWhat it means\nsee: look at something with your eyes\nNowSay hello on the video call\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Lena one simple question about school and listen to her answer.\nNow: Say hello on the video call\nHi Grandpa! Can you see me?\nWhat it means\nsee: look at something with your eyes\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · granddaughter, age 9\nHi Grandpa! Can you see me?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! Can you see me?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I understand \"Hi Grandpa\", but I don't know what to say back, so I'll look at the phrases.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLena · granddaughter, age 9\nA little support · recognition practice\nLena asks: Hi Grandpa! Can you see me?\n01\nThe weather is cold today.\n02\nYes, I can see you.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Lena one simple question about school and listen to her answer.\nNow: Say hello on the video call\nHi Grandpa! Can you see me?\nLena asks: Hi Grandpa! Can you see me?\n[button: The weather is cold today.] [button: Yes, I can see you.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · granddaughter, age 9\nHi Grandpa! Can you see me?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! Can you see me?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, co říct... I'll pick the answer that fits: Yes, I can see you.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLena · granddaughter, age 9\nAsk about school\nLena says\nHi Grandpa! Can you see me?\nA little support\nNow use the idea in your own reply on the phone.\nNowSay hello on the video call\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Lena one simple question about school and listen to her answer.\nNow: Say hello on the video call\nHi Grandpa! Can you see me?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · granddaughter, age 9\nHi Grandpa! Can you see me?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! Can you see me?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Ahoj Lena! I want to say hello, but I'm not sure how.",
+          "action": "answer",
+          "args": {
+            "text": "Hello Lena. I see you. I am happy."
+          },
+          "result": "ok",
+          "ms": 10352
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLena · granddaughter, age 9\nAsk about school\nLena says\nHi Grandpa! I am happy too.\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Lena one question about school\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Lena one simple question about school and listen to her answer.\nNow: Ask Lena one question about school\nHi Grandpa! I am happy too.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nLena · granddaughter, age 9\nHi Grandpa! Can you see me?\nYou · spoken\nHello Lena. I see you. I am happy.\nLena · granddaughter, age 9\nHi Grandpa! I am happy too.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am happy too.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, jak se zeptat anglicky na školu; zkusím pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLena · granddaughter, age 9\nAsk about school\nLena says\nHi Grandpa! I am happy too.\nYou could say\nHi Lena! Yes, I see you.\nNowAsk Lena one question about school\n[button: More help] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Lena one simple question about school and listen to her answer.\nNow: Ask Lena one question about school\nHi Grandpa! I am happy too.\nYou could say\nHi Lena! Yes, I see you.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nLena · granddaughter, age 9\nHi Grandpa! Can you see me?\nYou · spoken\nHello Lena. I see you. I am happy.\nLena · granddaughter, age 9\nHi Grandpa! I am happy too.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am happy too.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I want to ask about school, but I don't know how. Let me try a simple sentence.",
+          "action": "answer",
+          "args": {
+            "text": "Lena, you like school?"
+          },
+          "result": "ok",
+          "ms": 13614
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLena · granddaughter, age 9\nAsk about school\nLena says\nYes, school is good! And you?\nYour turn\nAnswer on your phone: speak or type.\nNowWait and listen to her answer\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Lena one simple question about school and listen to her answer.\nNow: Wait and listen to her answer\nYes, school is good! And you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nLena · granddaughter, age 9\nHi Grandpa! Can you see me?\nYou · spoken\nHello Lena. I see you. I am happy.\nLena · granddaughter, age 9\nHi Grandpa! I am happy too.\nYou · spoken\nLena, you like school?\nLena · granddaughter, age 9\nYes, school is good! And you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, school is good! And you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "She asks \"And you?\" — I want to say I like garden, but don't know the words; I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLena · granddaughter, age 9\nAsk about school\nLena says\nYes, school is good! And you?\nYou could say\nGood! My school is nice too.\nNowWait and listen to her answer\n[button: More help] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Lena one simple question about school and listen to her answer.\nNow: Wait and listen to her answer\nYes, school is good! And you?\nYou could say\nGood! My school is nice too.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nLena · granddaughter, age 9\nHi Grandpa! Can you see me?\nYou · spoken\nHello Lena. I see you. I am happy.\nLena · granddaughter, age 9\nHi Grandpa! I am happy too.\nYou · spoken\nLena, you like school?\nLena · granddaughter, age 9\nYes, school is good! And you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, school is good! And you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Lena asks me something, I understand \"school is good\", but \"And you?\" is hard; I'll try the suggested sentence in my own simple way.",
+          "action": "answer",
+          "args": {
+            "text": "Good! My school is nice too."
+          },
+          "result": "ok",
+          "ms": 13860
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nLena · granddaughter, age 9\nAsk about school\nLena says\nI paint in art. Do you paint?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk about school\nAsk Lena one simple question about school and listen to her answer.\nI paint in art. Do you paint?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nLena · granddaughter, age 9\nHi Grandpa! Can you see me?\nYou · spoken\nHello Lena. I see you. I am happy.\nLena · granddaughter, age 9\nHi Grandpa! I am happy too.\nYou · spoken\nLena, you like school?\nLena · granddaughter, age 9\nYes, school is good! And you?\nYou · spoken\nGood! My school is nice too.\nLena · granddaughter, age 9\nI paint in art. Do you paint?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I paint in art. Do you paint?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach",
+            "cut"
+          ],
+          "thought": "I managed to talk a bit with Lena; mission done, I want to see what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 12,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nViktor\nA way into English\nAsk about school\nThe line hidden in this room\nGood. What do you like?\nSaying or typing it\nNot tried\nWith help\nOn your own\nUsed elsewhere\n3 spoken · 0 written replies · 0 on your own · 3 with help\nYour mission\nChoose a fresh context for your next conversation.\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Good. What do you like?”\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nShow them my garden\nDescribe your garden and the weather in a few short sentences.\n[button: Start talking]\nOr choose a situation [list: Ask about school [plan-bb8f76c1] | Show them my garden [plan-13cfb8bd] | Tell them I miss them [plan-2336e09e] | Start the video call [plan-ec851dcc] | Say that again, please [plan-c1547b38] | What I did today [plan-53bf933f] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "I managed to talk about school with Lena, that is enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Ask about school",
+          "goal": "Ask Lena one simple question about school and listen to her answer.",
+          "partner": "Lena · granddaughter, age 9",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi Grandpa! Can you see me?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello Lena. I see you. I am happy.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Hi Grandpa! I am happy too."
+            },
+            {
+              "role": "learner",
+              "text": "Lena, you like school?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, school is good! And you?"
+            },
+            {
+              "role": "learner",
+              "text": "Good! My school is nice too.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I paint in art. Do you paint?"
+            }
+          ],
+          "moments": [],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Hello Lena. I see you. I am happy.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Lena, you like school?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Good! My school is nice too.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "Yes, I can see you."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I see you. I am happy."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Lena, you like school?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "My school is nice too."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 213448,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Phrase quiz is not about the scene",
+          "expected": "Options answer Mia's real line",
+          "got": "Quiz invents 'I had a test today' (past tense) while the scene asks how school was",
+          "evidence": [
+            "#6",
+            "recognition practice prompt"
+          ],
+          "recurrence": 6
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Phrase quiz is not about the current scene",
+          "expected": "Options that match Mia's last line",
+          "got": "'Which question asks about her day at school?' while Mia asks 'Do you draw?'. 'Where is my garden?' is a throwaway distractor.",
+          "evidence": [
+            "#11 quiz after #9 'I drew a cat. Do you draw?'",
+            "recognition practice prompt"
+          ],
+          "recurrence": 9
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Past-tense help above A1",
+          "expected": "Present-tense, known words for a first-time learner",
+          "got": "The cue and quiz offer 'What did you do at school today?'. Mia says 'I drew a cat'.",
+          "evidence": [
+            "#5, #9",
+            "partner and cue prompt level"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-viktor-67-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Phrase quiz quotes a Mia line she never said",
+          "expected": "Quiz options answer Mia's real line (\"Art is fun. What do you like?\")",
+          "got": "Quiz header \"Mia says: School was good. I had maths and art.\" with options \"Nice! What did you draw in art?\" / \"I like the garden very much.\"",
+          "evidence": [
+            "#5, #10: the quiz is the same stale text at both turns, not what Mia said at #8.",
+            "recognition practice prompt / support cache"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-viktor-67-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue gives no sayable reply and a past-tense line",
+          "expected": "A short present-tense cue such as \"Is school good?\"",
+          "got": "\"Said more simply: Hi Grandpa! I am home now.\" and \"What it means\" gloss only; quiz uses \"I had maths and art\"",
+          "evidence": [
+            "#3, #4, #9: help restates Mia instead of giving Viktor words.",
+            "cue prompt level"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-viktor-67-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Replay question never answered",
+          "expected": "Fresh question after the fix, answered better",
+          "got": "#19 shows \"Which tomatoes are red, big or small?\" labelled Try it again; he finished immediately, replay spent",
+          "evidence": [
+            "#19 finish; moments[0].repair spent true, no answer.",
+            "moment replay flow"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-viktor-67-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Correct answer rejected as wrong purpose",
+          "expected": "\"I like the garden very much.\" accepted as a reply to \"What do you like?\"",
+          "got": "\"That phrase has a different purpose. Try the other option.\" and evidence success:false",
+          "evidence": [
+            "#11, #12 after Mia asked \"What do you like?\" (#8).",
+            "recognition practice prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-viktor-67-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Odd partner turns after replay",
+          "expected": "One simple question per turn",
+          "got": "Two consecutive partner turns, \"Me too! Do you eat them?\" then \"Nice! Which tomatoes are red, big or small?\"; Mia ignored his \"you draw garden?\"",
+          "evidence": [
+            "facts.conversation last turns; #19 transcript.",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement in this journey; level set by hand (setup)."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "Viktor never answered in Czech; all replies were English (#6, #8, #10)."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening task or 'Show the words' in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 lists six plan topics, all family/home/everyday: school, garden, miss them, video call, say again, what I did today."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Partner: 'Hi Grandpa! Can you see me?', 'Yes, school is good! And you?', 'I paint in art. Do you paint?' short, one question each."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moment shown; moments [] and coaching null."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 'Help me answer' → #3 'You could say: Hi Lena! I can see you.' and #5 phrase choice, all inside the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Help unblocked replies (#6, #10) but coaching is null and no note quotes what he said; Pause & coach never offered a note ('coaching':null)."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "No moment, so no replay or fresh question; moments [] and mission ended at #11."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#12 '3 spoken · 0 written replies · 0 on your own · 3 with help'; evidence all supported:true."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "No coaching note and no replay in a stuck journey",
+            "expected": "A coaching note quoting his words and a fresh replay question to answer better",
+            "got": "moments [] and coaching null; mission closed after three supported replies",
+            "evidence": "#11 'Mission done'; facts.conversation moments [], coaching null; rawMoments all kind 'none'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After supported replies, offer Pause & coach or a replay with a note quoting his line.",
+            "code_hint": "moment detection / coaching prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Cue does not help with the current task",
+            "expected": "Cue to ask a school question, e.g. 'Do you like school?'",
+            "got": "#8 cue 'Hi Lena! Yes, I see you.' when the task was 'Ask Lena one question about school'",
+            "evidence": "#7 Now: 'Ask Lena one question about school'; #8 'You could say Hi Lena! Yes, I see you.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Cue must offer a sayable line serving the Now task.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Cue gives whole answer to copy",
+            "expected": "A scaffold he adapts (his garden)",
+            "got": "#10 cue 'Good! My school is nice too.' sent verbatim; he wanted to talk about his garden",
+            "evidence": "#9 thought 'I want to say I like garden'; #10 answer is the cue verbatim",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Cue gives a frame with a slot he fills.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Mission ends with partner question unanswered",
+            "expected": "He answers 'Do you paint?' or is told what she asked",
+            "got": "Mission done fires at #11 right after Lena asks 'Do you paint?'",
+            "evidence": "#11 'I paint in art. Do you paint?' with 'Mission done'",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Let the scene continue or sign off with the question answered.",
+            "code_hint": "mission completion rule"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Progress picture stays honest",
+            "expected": "Supported replies not counted as independent",
+            "got": "'3 spoken · 0 written replies · 0 on your own · 3 with help'",
+            "evidence": "#12 recap; evidence supported:true on all four",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep supported replies out of 'on your own'.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Phrase quiz matches the live line",
+            "expected": "Options answer Lena's real line",
+            "got": "'Lena asks: Hi Grandpa! Can you see me?' with options 'Yes, I can see you.'",
+            "evidence": "#5 quiz header and options",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep quiz tied to the last partner line.",
+            "code_hint": "recognition practice prompt"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Víte, it was gentle and Lena spoke slowly, which I liked. When I did not know what to say, the help was easy to find and I did not leave the room. The choice of two phrases was clear. But the help sometimes gave me the wrong sentence, \"I see you\" when I wanted to ask about school, and then I just copied it. I wanted to say something about my garden. Then it finished while Lena asked about painting, and nobody told me what I said well or badly. No note, no second try. I like that it says honestly I had help, not alone. For Saturday before the call I would use it again, but I need the words for my grandchildren, and a real second chance to try.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-5",
+            "status": "not-seen",
+            "evidence": "#5 quiz 'Lena asks: Hi Grandpa! Can you see me?' matches the scene.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-2",
+            "status": "not-seen",
+            "evidence": "#5 options 'Yes, I can see you.' answer Lena's real line; no throwaway distractor beyond 'The weather is cold today.'",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-3",
+            "status": "not-seen",
+            "evidence": "#3 'Hi Lena! I can see you.' is present tense; no past-tense help.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-viktor-67-J4-1",
+            "status": "not-seen",
+            "evidence": "#5 quiz quotes the line Lena actually said, not a stale one.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-viktor-67-J4-3",
+            "status": "not-seen",
+            "evidence": "#3 gives a sayable reply 'Hi Lena! I can see you.' though #8 cue mismatches the task.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-viktor-67-J4-4",
+            "status": "not-evaluable",
+            "evidence": "No replay offered; moments [] (#11 ends mission).",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-viktor-67-J4-2",
+            "status": "not-seen",
+            "evidence": "#5 pick 'Yes, I can see you.' accepted; #6 'A little support', no rejection.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-viktor-67-J4-5",
+            "status": "not-evaluable",
+            "evidence": "No replay; partner turns alternate single turns (#7, #9, #11).",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Help unblocked replies (#6, #10) but coaching is null and no note quotes what he said; Pause & coach never offered a note ('coaching':null).",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: No moment, so no replay or fresh question; moments [] and mission ended at #11.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 5,
+      "fail": 0,
+      "ms": 68337
+    },
+    "character": {
+      "n": 12,
+      "fail": 0,
+      "ms": 144236
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 39670
+    }
+  }
+}

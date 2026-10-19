@@ -1,0 +1,900 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nA1First words · self-chosen\nTalk about my dog\nYour mission\nSay what my dog is like and what it likes to do.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nTalk about my dog\nSay what my dog is like and what it likes to do.\n[button: Start talking]\nOr choose a situation [list: Talk about my dog [plan-cc5515b1] | Play Minecraft together [plan-352c9539] | Watch the football game [plan-ec532bf1] | Ask for help to understand [plan-6996a032] | Make a plan to play [plan-90aab810] | Say hello and tell my name [plan-d00722fd] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Pes! Chci mluvit o mém psovi, to je easy.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7900
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nBiscuit likes what?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Mia what your pet is like\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Tell Mia what your pet is like\nBiscuit likes what?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Biscuit likes what?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říct... I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nBiscuit likes what?\nYou could say\nHe likes to eat.\nNowTell Mia what your pet is like\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Tell Mia what your pet is like\nBiscuit likes what?\nYou could say\nHe likes to eat.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Biscuit likes what?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím co říct, zkusím víc nápovědy.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nBiscuit likes what?\nA way to start\nHe likes to …\nNowTell Mia what your pet is like\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Tell Mia what your pet is like\nBiscuit likes what?\nA way to start\nHe likes to …\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Biscuit likes what?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím co říct, zkusím pomoc s větou.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nA little support · recognition practice\nMia asks: Biscuit likes what?\n01\nHe likes his ball.\n02\nHe is small and brown.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Tell Mia what your pet is like\nBiscuit likes what?\nMia asks: Biscuit likes what?\n[button: He likes his ball.] [button: He is small and brown.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Biscuit likes what?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nerozumím, co Mia říká, nevím.",
+          "action": "answer",
+          "args": {
+            "text": "nevím"
+          },
+          "result": "ok",
+          "ms": 6672
+        },
+        {
+          "n": 6,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say nevím\nIn English\nI don't know\nSay this in English when you do not know the answer.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “nevím”\nIn English: “I don't know”\nSay this in English when you do not know the answer.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, \"I don't know\" — now I can say it. Go back and try.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7192
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nDo you know where Biscuit sleeps?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Mia what your pet is like\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Tell Mia what your pet is like\nDo you know where Biscuit sleeps?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\nYou · spoken\nnevím\nMia · friend at the park\nDo you know where Biscuit sleeps?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Do you know where Biscuit sleeps?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, co to říká... I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nDo you know where Biscuit sleeps?\nYou could say\nI don't know. Does Biscuit like balls?\nNowTell Mia what your pet is like\n[button: More help] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Tell Mia what your pet is like\nDo you know where Biscuit sleeps?\nYou could say\nI don't know. Does Biscuit like balls?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\nYou · spoken\nnevím\nMia · friend at the park\nDo you know where Biscuit sleeps?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Do you know where Biscuit sleeps?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, co říct... maybe the sentence help will show me something.",
+          "action": "sentence-help",
+          "args": {},
+          "result": "not-offered",
+          "ms": 0
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nDo you know where Biscuit sleeps?\nYou could say\nI don't know. Does Biscuit like balls?\nNowTell Mia what your pet is like\n[button: More help] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Tell Mia what your pet is like\nDo you know where Biscuit sleeps?\nYou could say\nI don't know. Does Biscuit like balls?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\nYou · spoken\nnevím\nMia · friend at the park\nDo you know where Biscuit sleeps?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Do you know where Biscuit sleeps?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím kde spí... zkusím říct něco jednoduchého, co umím.",
+          "action": "answer",
+          "args": {
+            "text": "I don't know. Biscuit like ball. Dog yes."
+          },
+          "result": "ok",
+          "ms": 10809
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nThat's OK. Biscuit likes the ball?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Mia what your pet is like\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Tell Mia what your pet is like\nThat's OK. Biscuit likes the ball?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\nYou · spoken\nnevím\nMia · friend at the park\nDo you know where Biscuit sleeps?\nYou · spoken\nI don't know. Biscuit like ball. Dog yes.\nMia · friend at the park\nThat's OK. Biscuit likes the ball?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That's OK. Biscuit likes the ball?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím jak říct, zkusím pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nThat's OK. Biscuit likes the ball?\nYou could say\nYes, Biscuit likes the ball.\nNowTell Mia what your pet is like\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Tell Mia what your pet is like\nThat's OK. Biscuit likes the ball?\nYou could say\nYes, Biscuit likes the ball.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\nYou · spoken\nnevím\nMia · friend at the park\nDo you know where Biscuit sleeps?\nYou · spoken\nI don't know. Biscuit like ball. Dog yes.\nMia · friend at the park\nThat's OK. Biscuit likes the ball?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That's OK. Biscuit likes the ball?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Chci říct ano, ale nevím jak, zkusím to jednoduše.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Biscuit likes ball. I like dog."
+          },
+          "result": "ok",
+          "ms": 11284
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nNice! Is your dog big?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Mia what your pet is like\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Tell Mia what your pet is like\nNice! Is your dog big?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\nYou · spoken\nnevím\nMia · friend at the park\nDo you know where Biscuit sleeps?\nYou · spoken\nI don't know. Biscuit like ball. Dog yes.\nMia · friend at the park\nThat's OK. Biscuit likes the ball?\nYou · spoken\nYes. Biscuit likes ball. I like dog.\nMia · friend at the park\nNice! Is your dog big?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice! Is your dog big?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Big? Umm, I know \"big\" and \"yes\". I'll try.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Big dog. I like dog."
+          },
+          "result": "ok",
+          "ms": 8373
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nOh, nice! What colour is your dog?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Mia one question about Biscuit\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Ask Mia one question about Biscuit\nOh, nice! What colour is your dog?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\nYou · spoken\nnevím\nMia · friend at the park\nDo you know where Biscuit sleeps?\nYou · spoken\nI don't know. Biscuit like ball. Dog yes.\nMia · friend at the park\nThat's OK. Biscuit likes the ball?\nYou · spoken\nYes. Biscuit likes ball. I like dog.\nMia · friend at the park\nNice! Is your dog big?\nYou · spoken\nYes. Big dog. I like dog.\nMia · friend at the park\nOh, nice! What colour is your dog?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, nice! What colour is your dog?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Barva... I know colours! Brown is easy.",
+          "action": "answer",
+          "args": {
+            "text": "Brown. Biscuit is brown. I like Minecraft."
+          },
+          "result": "ok",
+          "ms": 10142
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nNice! Do you like Minecraft too?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Mia one question about Biscuit\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Ask Mia one question about Biscuit\nNice! Do you like Minecraft too?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\nYou · spoken\nnevím\nMia · friend at the park\nDo you know where Biscuit sleeps?\nYou · spoken\nI don't know. Biscuit like ball. Dog yes.\nMia · friend at the park\nThat's OK. Biscuit likes the ball?\nYou · spoken\nYes. Biscuit likes ball. I like dog.\nMia · friend at the park\nNice! Is your dog big?\nYou · spoken\nYes. Big dog. I like dog.\nMia · friend at the park\nOh, nice! What colour is your dog?\nYou · spoken\nBrown. Biscuit is brown. I like Minecraft.\nMia · friend at the park\nNice! Do you like Minecraft too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice! Do you like Minecraft too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Mia se ptá na Minecraft, to znám! Řeknu yes.",
+          "action": "answer",
+          "args": {
+            "text": "Yes! I like Minecraft. Creeper!"
+          },
+          "result": "ok",
+          "ms": 7234
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · friend at the park\nTalk about my dog\nMia says\nOh, nice! What is Creeper like?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Mia one question about Biscuit\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTalk about my dog\nSay what my dog is like and what it likes to do.\nNow: Ask Mia one question about Biscuit\nOh, nice! What is Creeper like?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · friend at the park\nBiscuit likes what?\nYou · spoken\nnevím\nMia · friend at the park\nDo you know where Biscuit sleeps?\nYou · spoken\nI don't know. Biscuit like ball. Dog yes.\nMia · friend at the park\nThat's OK. Biscuit likes the ball?\nYou · spoken\nYes. Biscuit likes ball. I like dog.\nMia · friend at the park\nNice! Is your dog big?\nYou · spoken\nYes. Big dog. I like dog.\nMia · friend at the park\nOh, nice! What colour is your dog?\nYou · spoken\nBrown. Biscuit is brown. I like Minecraft.\nMia · friend at the park\nNice! Do you like Minecraft too?\nYou · spoken\nYes! I like Minecraft. Creeper!\nMia · friend at the park\nOh, nice! What is Creeper like?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, nice! What is Creeper like?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed to talk about Biscuit and Minecraft, I want to stop now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 16,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour rehearsal\nYou wanted to say nevím\nIn English\nI don't know\nSay this in English when you do not know the answer.\nTried again: “I don't know. Biscuit like ball. Dog yes.” · you used it\nYour mission\nChoose a fresh context for your next conversation.\n6 spoken · 0 written replies · 3 on your own · 3 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Biscuit likes to move fast on its legs.”\nFrom this rehearsal\n“nevím”: I don't know\nSay this in English when you do not know the answer.\nTried again: “I don't know. Biscuit like ball. Dog yes.” · you used it\nSaved for the end\n“Biscuit like ball” → “Biscuit likes the ball”\nOne dog needs 'likes' with an s.\n“Biscuit likes ball.” → “Biscuit likes the ball.”\nAdd 'the' before ball, as in 'the ball'.\n“I like dog.” → “I like dogs.”\nUse 'dogs' when you talk about dogs in general.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nPlay Minecraft together\nSay what you build or find in Minecraft and ask a friend what they like to do.\n[button: Start talking]\nOr choose a situation [list: Talk about my dog [plan-cc5515b1] | Play Minecraft together [plan-352c9539] | Watch the football game [plan-ec532bf1] | Ask for help to understand [plan-6996a032] | Make a plan to play [plan-90aab810] | Say hello and tell my name [plan-d00722fd] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Zvládl jsem to, stačilo na dnes, chci skončit.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Talk about my dog",
+          "goal": "Say what my dog is like and what it likes to do.",
+          "partner": "Mia · friend at the park",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Biscuit likes what?"
+            },
+            {
+              "role": "learner",
+              "text": "nevím",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Do you know where Biscuit sleeps?"
+            },
+            {
+              "role": "learner",
+              "text": "I don't know. Biscuit like ball. Dog yes.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "That's OK. Biscuit likes the ball?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Biscuit likes ball. I like dog.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Nice! Is your dog big?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Big dog. I like dog.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Oh, nice! What colour is your dog?"
+            },
+            {
+              "role": "learner",
+              "text": "Brown. Biscuit is brown. I like Minecraft.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Nice! Do you like Minecraft too?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes! I like Minecraft. Creeper!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Oh, nice! What is Creeper like?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "97f78175-74d0-4428-9300-84cb23ac8491:uat-10:moment",
+              "kind": "word",
+              "said": "nevím",
+              "better": "I don't know",
+              "why": "Say this in English when you do not know the answer.",
+              "turnId": "97f78175-74d0-4428-9300-84cb23ac8491:uat-10",
+              "at": 1792405191746,
+              "replay": {
+                "question": "Do you know where Biscuit sleeps?",
+                "turnId": "ae8fa96d-df33-49bb-97ef-5e05321286bf",
+                "reply": "I don't know. Biscuit like ball. Dog yes.",
+                "used": true
+              }
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "97f78175-74d0-4428-9300-84cb23ac8491:uat-13:held",
+              "kind": "fix",
+              "said": "Biscuit like ball",
+              "better": "Biscuit likes the ball",
+              "why": "One dog needs 'likes' with an s.",
+              "turnId": "97f78175-74d0-4428-9300-84cb23ac8491:uat-13",
+              "at": 1792405261637
+            },
+            {
+              "id": "97f78175-74d0-4428-9300-84cb23ac8491:uat-15:held",
+              "kind": "fix",
+              "said": "Biscuit likes ball.",
+              "better": "Biscuit likes the ball.",
+              "why": "Add 'the' before ball, as in 'the ball'.",
+              "turnId": "97f78175-74d0-4428-9300-84cb23ac8491:uat-15",
+              "at": 1792405300659
+            },
+            {
+              "id": "97f78175-74d0-4428-9300-84cb23ac8491:uat-16:held",
+              "kind": "fix",
+              "said": "I like dog.",
+              "better": "I like dogs.",
+              "why": "Use 'dogs' when you talk about dogs in general.",
+              "turnId": "97f78175-74d0-4428-9300-84cb23ac8491:uat-16",
+              "at": 1792405319403
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "nevím",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "nevím",
+                "better": "I don't know",
+                "why": "Say this in English when you do not know the answer."
+              },
+              "shown": true
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "I don't know. Biscuit like ball. Dog yes.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "Biscuit like ball",
+                "better": "Biscuit likes the ball",
+                "why": "One dog needs 'likes' with an s."
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Yes. Biscuit likes ball. I like dog.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "Biscuit likes ball.",
+                "better": "Biscuit likes the ball.",
+                "why": "Add 'the' before ball, as in 'the ball'."
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "Yes. Big dog. I like dog.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I like dog.",
+                "better": "I like dogs.",
+                "why": "Use 'dogs' when you talk about dogs in general."
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 5,
+              "reply": "Brown. Biscuit is brown. I like Minecraft.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 11,
+              "n": 6,
+              "reply": "Yes! I like Minecraft. Creeper!",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Biscuit like ball."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Biscuit likes ball."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Biscuit is brown."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like Minecraft."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 300472,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Phrase choice asks a different question than the scene",
+          "expected": "Phrase options that answer Sam's current question.",
+          "got": "'Sam asks: What do you like to build?' while Sam asked 'Do you know where creepers live?'",
+          "evidence": [
+            "#10 vs #8; same in #5",
+            "phrase-choice builder"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Retry after the moment did not improve",
+          "expected": "A fresh question where the coached 'I don't know' fits and he answers better.",
+          "got": "Next reply again ended 'Nevím'; recap lists it as 'Tried again' though replay.used false.",
+          "evidence": [
+            "#11 'Creeper... Minecraft. I like dog. Nevím.'; #15 'Tried again: “Creeper... Minecraft. I like dog. Nevím.”'",
+            "moment replay flow"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Simplified help repeats the question",
+          "expected": "A simpler rewording.",
+          "got": "'Said more simply: Do you know where creepers live?' identical to the question.",
+          "evidence": [
+            "#9",
+            "cue builder"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner stacks questions and ignores answers",
+          "expected": "One short question per turn that follows his words.",
+          "got": "'Creepers are funny! What are you making?' then 'Good! Do you know where creepers live?' (two partner turns in a row); 'Good!' after Nevím.",
+          "evidence": [
+            "#8 transcript",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "No coaching note quoting what he said; Pause & coach unused",
+          "expected": "A coaching note quoting his words.",
+          "got": "coaching null; only a moment and held fixes at the end.",
+          "evidence": [
+            "facts coaching: null; #15",
+            "coach"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-6",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Situation list long and mixed",
+          "expected": "Short list on play and animals.",
+          "got": "20 entries incl. 'A booking that is missing', 'Our group project'.",
+          "evidence": [
+            "#1, #15",
+            "situation list builder"
+          ],
+          "recurrence": 12
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement in J4; level set by hand to A1."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#5 quiz options 'He likes his ball.' / 'He is small and brown.' are under 15 words."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#6 'nevím' got 'I don't know… Say this in English'; #10 'That's OK. Biscuit likes the ball?' No failure line."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#1 situation list has 20 entries incl. 'A booking that is missing', 'Our group project', 'Speaking practice: then and next'; not all suit a nine-year-old. The six plan topics are fine (4 play/animals/sport)."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Partner turns are short, one question each (#12 'Nice! Is your dog big?'), though #9 'Do you know where Biscuit sleeps?' and #15 'What is Creeper like?' are a stretch."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Only moment: 'nevím' → 'I don't know', correct and simple (#6). Held fix 'Add the before ball' is pedantic but not a moment."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 'Help me answer' gave 'He likes to eat.'; #3 'More help'; #5 quiz options, all inside the scene."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#6 moment quotes 'You wanted to say nevím'; next reply #9 uses 'I don't know. Biscuit like ball.' after the cue #8. Pause & coach was never used, coaching null."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#7 fresh question 'Do you know where Biscuit sleeps?'; he answers 'I don't know. Biscuit like ball. Dog yes.' vs bare 'nevím'; recap 'you used it' (#16)."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#16 '3 on your own · 3 with help'; evidence flags supported:true for the cue turns, false for the unaided ones."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 4,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 3
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 4,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Moment teaches 'I don't know' and the retry uses it",
+            "expected": "Czech reply turned into usable English, then a fresh try",
+            "got": "#6 'nevím' → 'I don't know'; #9 he says it in a full try; recap 'you used it'",
+            "evidence": "#6, #9, #16 'Tried again: “I don't know. Biscuit like ball. Dog yes.” · you used it'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the Czech-to-English moment and the fresh replay question.",
+            "code_hint": "moment replay flow"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Help stays honest in the progress picture",
+            "expected": "Supported replies not counted as independent",
+            "got": "'3 on your own · 3 with help'",
+            "evidence": "#16; evidence supported:true on 'Biscuit like ball.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the supported flag tied to cue and quiz use.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Opening question is confusing and above A1",
+            "expected": "A tiny first question, clear whose dog Biscuit is",
+            "got": "'Biscuit likes what?' before anything is said; later 'Is your dog big?' makes Biscuit's owner unclear; 'Where Biscuit sleeps' and 'What is Creeper like?' are above a beginner",
+            "evidence": "#2, #7, #15",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Mia's first line names the dog as the learner's and uses one known word question.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Held fixes are pedantic for a 9-year-old",
+            "expected": "Fix only what matters, in kid words",
+            "got": "'Biscuit likes ball.' → 'likes the ball.' 'Add the before ball'; 'I like dog' → 'dogs'",
+            "evidence": "#16 Saved for the end",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Skip article-only fixes at A1; correct only errors a teacher would call wrong.",
+            "code_hint": "held fix rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Situation list long and mixed again",
+            "expected": "Short list of play and animal topics",
+            "got": "20 entries incl. 'A booking that is missing', 'Our group project'",
+            "evidence": "#1, #16",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "For an elementary profile show only child-suited situations.",
+            "code_hint": "situation list builder"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "Pause & coach unused; no coaching note",
+            "expected": "A coaching note quoting his words",
+            "got": "coaching null",
+            "evidence": "facts coaching: null; Pause & coach visible #7–#15 but never offered/used",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Surface Pause & coach after repeated cue use and quote the learner's words.",
+            "code_hint": "coach"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 35,
+          "confidence": "medium"
+        },
+        "voice": "Jo, I liked it more than the English club. I said \"nevím\" and it told me how to say \"I don't know\", so next time I said it in English and felt clever. Mia asked about Biscuit, then my dog, then Minecraft and creeper — that was fun. The help buttons were easy to find. But Mia's first question was weird, and \"where Biscuit sleeps\" was too hard. \"What is Creeper like?\" I didn't know how to answer. The end notes about \"the ball\" and \"dogs\" were boring, like school. The topic list was huge, with a \"booking\" and a \"group project\" — nuda. Short and no reading is good, and I spoke nearly the whole time. I'd use it again, and I'd tell kluci about the Minecraft one.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-2",
+            "status": "not-seen",
+            "evidence": "#5 quiz 'Mia asks: Biscuit likes what?' matches the scene question; the phrase choice itself was not opened.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-1",
+            "status": "not-seen",
+            "evidence": "#9 after the moment he answers 'I don't know. Biscuit like ball. Dog yes.' and the recap says 'you used it'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-3",
+            "status": "not-seen",
+            "evidence": "#4 'More help' gave 'A way to start He likes to …', not a repeat of the question.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-4",
+            "status": "not-seen",
+            "evidence": "#10 'That's OK. Biscuit likes the ball?' follows his words; single question per turn, no stacked partner turns.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-5",
+            "status": "recurs",
+            "evidence": "facts coaching: null; Pause & coach never used (#7–#15).",
+            "finding": 5
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-tomas-9-J4-6",
+            "status": "recurs",
+            "evidence": "#1 and #16 list of 20 incl. 'A booking that is missing', 'Our group project'.",
+            "finding": 4
+          }
+        ]
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C4",
+          "level": "conditional",
+          "text": "C4 failed: #1 situation list has 20 entries incl. 'A booking that is missing', 'Our group project', 'Speaking practice: then and next'; not all suit a nine-year-old. The six plan topics are fine (4 play/animals/sport)."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 9,
+      "fail": 0,
+      "ms": 80556
+    },
+    "character": {
+      "n": 16,
+      "fail": 0,
+      "ms": 218993
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 53824
+    }
+  }
+}

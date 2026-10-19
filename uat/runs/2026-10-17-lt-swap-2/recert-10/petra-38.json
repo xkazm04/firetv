@@ -1,0 +1,664 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMr Ortiz · hotel front desk\nA2Everyday basics · self-chosen\nComplain about a room\nYour mission\nExplain the problem and ask for a clear fix.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nComplain about a room\nExplain the problem and ask for a clear fix.\n[button: Start talking]\nOr choose a situation [list: Complain about a room [plan-23a8ef1c] | Lost hotel booking [plan-c9a28572] | Show a guest the way [plan-7543717b] | Suggest a good restaurant [plan-c4a208ac] | Answer a call from a travel agency [plan-36ded576] | Talk with your child's teacher [plan-72a85ad4] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "A hotel complaint, that is my work, let's start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 10779
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Ortiz · hotel front desk\nComplain about a room\nMr Ortiz says\nGood evening, I am Mr Ortiz. What is the problem?\nYour turn\nAnswer on your phone: speak or type.\nNowDescribe the cold and the TV problem\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nComplain about a room\nExplain the problem and ask for a clear fix.\nNow: Describe the cold and the TV problem\nGood evening, I am Mr Ortiz. What is the problem?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Ortiz · hotel front desk\nGood evening, I am Mr Ortiz. What is the problem?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good evening, I am Mr Ortiz. What is the problem?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say this, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Ortiz · hotel front desk\nComplain about a room\nMr Ortiz says\nGood evening, I am Mr Ortiz. What is the problem?\nYou could say\nI have a problem. It is very cold.\nNowDescribe the cold and the TV problem\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nComplain about a room\nExplain the problem and ask for a clear fix.\nNow: Describe the cold and the TV problem\nGood evening, I am Mr Ortiz. What is the problem?\nYou could say\nI have a problem. It is very cold.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Ortiz · hotel front desk\nGood evening, I am Mr Ortiz. What is the problem?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good evening, I am Mr Ortiz. What is the problem?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say the cold and TV problem, so I'll try the phrase suggestion help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Ortiz · hotel front desk\nA little support · recognition practice\nMr Ortiz asks: Good evening, I am Mr Ortiz. What is the problem?\n01\nMy name is Sam.\n02\nIt is very cold, and the TV is broken.\nA little support\nTry: I have a problem. The room is very cold.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nComplain about a room\nExplain the problem and ask for a clear fix.\nNow: Describe the cold and the TV problem\nGood evening, I am Mr Ortiz. What is the problem?\nA little support\nTry: I have a problem. The room is very cold.\nMr Ortiz asks: Good evening, I am Mr Ortiz. What is the problem?\n[button: My name is Sam.] [button: It is very cold, and the TV is broken.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Ortiz · hotel front desk\nGood evening, I am Mr Ortiz. What is the problem?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good evening, I am Mr Ortiz. What is the problem?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to answer, so I'll tap More help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Ortiz · hotel front desk\nComplain about a room\nMr Ortiz says\nGood evening, I am Mr Ortiz. What is the problem?\nWhat it means\nproblem: something that is not right or not good\nNowDescribe the cold and the TV problem\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nComplain about a room\nExplain the problem and ask for a clear fix.\nNow: Describe the cold and the TV problem\nGood evening, I am Mr Ortiz. What is the problem?\nWhat it means\nproblem: something that is not right or not good\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Ortiz · hotel front desk\nGood evening, I am Mr Ortiz. What is the problem?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good evening, I am Mr Ortiz. What is the problem?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say the cold and TV problem, maybe more help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Ortiz · hotel front desk\nComplain about a room\nMr Ortiz says\nGood evening, I am Mr Ortiz. What is the problem?\nA way to start\nThe cold is very…\nNowDescribe the cold and the TV problem\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nComplain about a room\nExplain the problem and ask for a clear fix.\nNow: Describe the cold and the TV problem\nGood evening, I am Mr Ortiz. What is the problem?\nA way to start\nThe cold is very…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Ortiz · hotel front desk\nGood evening, I am Mr Ortiz. What is the problem?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good evening, I am Mr Ortiz. What is the problem?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say this, I'll try my own words slowly.",
+          "action": "answer",
+          "args": {
+            "text": "Good evening. The room is very cold and the TV is not working. Sorry, my English is not good."
+          },
+          "result": "ok",
+          "ms": 7874
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Ortiz · hotel front desk\nComplain about a room\nMr Ortiz says\nCan you wait a little?\nYour turn\nAnswer on your phone: speak or type.\nNowSay how this affects your evening\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nComplain about a room\nExplain the problem and ask for a clear fix.\nNow: Say how this affects your evening\nCan you wait a little?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Ortiz · hotel front desk\nGood evening, I am Mr Ortiz. What is the problem?\nYou · spoken\nGood evening. The room is very cold and the TV is not working. Sorry, my English is not good.\nMr Ortiz · hotel front desk\nCan you wait a little?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Can you wait a little?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to answer this, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Ortiz · hotel front desk\nComplain about a room\nMr Ortiz says\nCan you wait a little?\nYou could say\nYes, I can wait a little.\nNowSay how this affects your evening\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nComplain about a room\nExplain the problem and ask for a clear fix.\nNow: Say how this affects your evening\nCan you wait a little?\nYou could say\nYes, I can wait a little.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Ortiz · hotel front desk\nGood evening, I am Mr Ortiz. What is the problem?\nYou · spoken\nGood evening. The room is very cold and the TV is not working. Sorry, my English is not good.\nMr Ortiz · hotel front desk\nCan you wait a little?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Can you wait a little?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can wait, but I'm not sure how to say how it affects my evening, so I'll try in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I can wait. But I am tired and I want sleep. The room is cold, I cannot sleep. Sorry."
+          },
+          "result": "ok",
+          "ms": 8757
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Ortiz · hotel front desk\nComplain about a room\nMr Ortiz says\nOh, I am sorry. Is eight okay for you?\nYour turn\nAnswer on your phone: speak or type.\nNowAgree on a fix and a time\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nComplain about a room\nExplain the problem and ask for a clear fix.\nNow: Agree on a fix and a time\nOh, I am sorry. Is eight okay for you?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Ortiz · hotel front desk\nGood evening, I am Mr Ortiz. What is the problem?\nYou · spoken\nGood evening. The room is very cold and the TV is not working. Sorry, my English is not good.\nMr Ortiz · hotel front desk\nCan you wait a little?\nYou · spoken\nYes, I can wait. But I am tired and I want sleep. The room is cold, I cannot sleep. Sorry.\nMr Ortiz · hotel front desk\nOh, I am sorry. Is eight okay for you?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, I am sorry. Is eight okay for you?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Eight o'clock is fine, I think, but I want to say it simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, eight is okay. Please can you send somebody to the room at eight? Thank you."
+          },
+          "result": "ok",
+          "ms": 10999
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Ortiz · hotel front desk\nComplain about a room\nMr Ortiz says\nGood, I will send somebody at eight. Do you want to stay in this room?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nComplain about a room\nExplain the problem and ask for a clear fix.\nGood, I will send somebody at eight. Do you want to stay in this room?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Ortiz · hotel front desk\nGood evening, I am Mr Ortiz. What is the problem?\nYou · spoken\nGood evening. The room is very cold and the TV is not working. Sorry, my English is not good.\nMr Ortiz · hotel front desk\nCan you wait a little?\nYou · spoken\nYes, I can wait. But I am tired and I want sleep. The room is cold, I cannot sleep. Sorry.\nMr Ortiz · hotel front desk\nOh, I am sorry. Is eight okay for you?\nYou · spoken\nYes, eight is okay. Please can you send somebody to the room at eight? Thank you.\nMr Ortiz · hotel front desk\nGood, I will send somebody at eight. Do you want to stay in this room?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good, I will send somebody at eight. Do you want to stay in this room?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I managed to get the room fixed, I feel okay now, let me see the result.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 11,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nComplain about a room\nThe line hidden in this room\nSorry, I can move you to room 12.\nSaying or typing it\nNot tried\nWith help\nOn your own\nUsed elsewhere\n3 spoken · 0 written replies · 1 on your own · 2 with help\nYour mission\nChoose a fresh context for your next conversation.\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Sorry, I can move you to room 12.”\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nLost hotel booking\nExplain what happened and get your room sorted.\n[button: Start talking]\nOr choose a situation [list: Complain about a room [plan-23a8ef1c] | Lost hotel booking [plan-c9a28572] | Show a guest the way [plan-7543717b] | Suggest a good restaurant [plan-c4a208ac] | Answer a call from a travel agency [plan-36ded576] | Talk with your child's teacher [plan-72a85ad4] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed to finish a conversation, so I am happy and done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Complain about a room",
+          "goal": "Explain the problem and ask for a clear fix.",
+          "partner": "Mr Ortiz · hotel front desk",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Good evening, I am Mr Ortiz. What is the problem?"
+            },
+            {
+              "role": "learner",
+              "text": "Good evening. The room is very cold and the TV is not working. Sorry, my English is not good.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Can you wait a little?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I can wait. But I am tired and I want sleep. The room is cold, I cannot sleep. Sorry.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Oh, I am sorry. Is eight okay for you?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, eight is okay. Please can you send somebody to the room at eight? Thank you.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Good, I will send somebody at eight. Do you want to stay in this room?"
+            }
+          ],
+          "moments": [],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Good evening. The room is very cold and the TV is not working. Sorry, my English is not good.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Yes, I can wait. But I am tired and I want sleep. The room is cold, I cannot sleep. Sorry.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Yes, eight is okay. Please can you send somebody to the room at eight? Thank you.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "The room is cold, I cannot sleep."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, eight is okay. Please can you send somebody to the room at eight?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 189899,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-petra-38-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Replay does not make her practise the coached phrase",
+          "expected": "Replay gives a fresh question, she uses the coached form, and the replay is marked used.",
+          "got": "Replay question was 'What should we do about it?'. Her reply kept 'I want other room'. replay.used is false.",
+          "evidence": [
+            "#9 'I want other room please'; moment replay used:false; recap shows 'Tried again' with a different reply.",
+            "replay prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-petra-38-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "No replay of the stuck moment offered",
+          "expected": "After help, a replay with a fresh question to try again on her own.",
+          "got": "No moment was shown, so no replay; the session went straight to the recap.",
+          "evidence": [
+            "moments is []; #15 recap has only 'Another situation' and 'Learning map'.",
+            "replay prompt / moment gating"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-petra-38-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Same quiz screen repeated on three presses",
+          "expected": "Help escalates or changes each time she asks.",
+          "got": "#5, #6 and #7 show the identical 'What is the best first step?' quiz.",
+          "evidence": [
+            "#5–#7 'A little support · recognition practice … Name the problem clearly / Stay quiet and leave'.",
+            "cue ladder"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-petra-38-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Help did not give a sentence she could say",
+          "expected": "A usable frame such as 'The room is cold and…' for an A2 speaker.",
+          "got": "Only 'The room is…', a word gloss and a yes/no quiz; at #10 the starter was 'Yes, room twelve is good…' before any room was named.",
+          "evidence": [
+            "#4 'The room is…'; #10 'Yes, room twelve is good…'.",
+            "cue/phrase generator"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-petra-38-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Recap shows an odd 'line hidden in this room'",
+          "expected": "A recap tied to what she said and where she needed help.",
+          "got": "The recap shows 'Name the problem clearly' as the 'line hidden in this room'. That is a quiz option, not a line from the scene.",
+          "evidence": [
+            "#15 'The line hidden in this room “Name the problem clearly”'.",
+            "recap builder"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Level was set to A2 by hand (setup); no placement in this journey."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'What is the problem?' and #7 'Can you wait a little?' are plain A2 English."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3–#6 each press of help gave something new (phrase, quiz, gloss 'problem: something that is not right', start) with no failure tone."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 the six planned topics are five hotel situations plus the teacher chat: 'Complain about a room … Lost hotel booking … Answer a call from a travel agency'."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "moments is [] and heldFixes is []; no moment was shown, so nothing to judge (#11)."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing shown across #1–#11 would worry a parent; the scene is a cold room and a broken TV."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2–#8 'Help me answer', 'More help' and 'Choose a phrase' were all on screen mid-scene: 'You could say: I have a problem. It is very cold.'"
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Help gave a phrase (#3, #8), but she ignored it and typed her own words (#6, #8). No coaching note exists: coaching null, moments [] (#11), so nothing quotes what she said."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "No moment was shown, so there was no replay with a fresh question; #10 goes straight to 'See what you did' and the recap (#11) has no replay."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Evidence marks the cue-helped reply 'supported:true' and the unaided one 'supported:false'. #11 shows '1 on your own · 2 with help'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal-data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "No moment, coaching note or replay after getting stuck",
+            "expected": "A moment quoting what she said, then a replay with a fresh question.",
+            "got": "moments [], coaching null, and no replay. The journey goes from finish straight to the recap.",
+            "evidence": "#10 finish -> #11 recap has only 'Another situation' and 'Learning map'. rawMoments kind 'none' on all three turns.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After a turn where help was used, a coaching note quotes her words and offers a replay with a fresh question.",
+            "code_hint": "moment gating / replay prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Clear error 'I want sleep' got no coaching",
+            "expected": "A fix such as 'I want to sleep' or 'I'd like to sleep'.",
+            "got": "rawMoment for turn 3 is kind 'none' for 'I am tired and I want sleep'.",
+            "evidence": "#8 'But I am tired and I want sleep.'; rawMoments n:2 raw.kind none.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "A clear A2 grammar slip gets a moment or a held fix on the recap.",
+            "code_hint": "moment detector prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Help starter 'The cold is very…' is awkward",
+            "expected": "A usable frame such as 'The room is cold and…'.",
+            "got": "'A way to start: The cold is very…' is unnatural; she then typed her own sentence.",
+            "evidence": "#6 'The cold is very…' versus #4 'Try: I have a problem. The room is very cold.'",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The starter is a natural opening for the required reply.",
+            "code_hint": "cue/phrase generator"
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "Help varies and stays in the scene",
+            "expected": "Help that changes when asked again, without leaving the scene.",
+            "got": "Cue, quiz, gloss and starter were all offered in turn.",
+            "evidence": "#3 phrase, #4 quiz, #5 'problem: something that is not right or not good', #6 starter.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the escalating ladder.",
+            "code_hint": "cue ladder"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Supported replies are kept apart from independent ones",
+            "expected": "The progress picture stays honest.",
+            "got": "'3 spoken · 0 written replies · 1 on your own · 2 with help'.",
+            "evidence": "#11 recap; evidence entries supported true/false.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the supported flag out of independent evidence.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Recap line not tied to what she practised",
+            "expected": "A recap line drawn from her scene or a stuck moment.",
+            "got": "'Sorry, I can move you to room 12.' was never said or offered in the scene, and it is marked 'Not tried'.",
+            "evidence": "#11 'The line hidden in this room'; the scene (#2–#10) never mentions room 12.",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The recap names a line from this conversation or from her help.",
+            "code_hint": "recap builder"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "Hotel complaint is my own work, so I liked it, and Mr Ortiz spoke slowly and kindly. When I did not know what to say, the help was easy to find and did not make me feel stupid. It gave a phrase, a small quiz, a word meaning. But in the end I wrote my own words and nobody told me what was wrong. \"I want sleep\" is not right, I know, and I wanted to hear it. There was no coach note and no second try, so I could not see if I got better. The recap shows a room 12 sentence I never used. The \"with help\" and \"on your own\" counts look honest, and I trust that. For my kids the topic is safe. For my desk job I need the correction and the replay. Not yet to recommend.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-petra-38-J4-1",
+            "status": "not-evaluable",
+            "finding": -1,
+            "evidence": "No replay was offered (#11), so the moment of replaying with the coached form never came."
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-petra-38-J4-1",
+            "status": "recurs",
+            "finding": 0,
+            "evidence": "moments [] and #11 recap has only 'Another situation' and 'Learning map'; no replay."
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-petra-38-J4-2",
+            "status": "not-seen",
+            "finding": -1,
+            "evidence": "#3–#6 changed each press: phrase, quiz, 'What it means', 'A way to start'."
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-petra-38-J4-3",
+            "status": "not-seen",
+            "finding": -1,
+            "evidence": "#3 'I have a problem. It is very cold.' and #8 'Yes, I can wait a little.' are sayable sentences."
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-petra-38-J4-4",
+            "status": "not-seen",
+            "finding": -1,
+            "evidence": "#11 the hidden line is now a real sentence, 'Sorry, I can move you to room 12.', not a quiz option."
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Help gave a phrase (#3, #8), but she ignored it and typed her own words (#6, #8). No coaching note exists: coaching null, moments [] (#11), so nothing quotes what she said.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: No moment was shown, so there was no replay with a fresh question; #10 goes straight to 'See what you did' and the recap (#11) has no replay.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 5,
+      "fail": 0,
+      "ms": 61677
+    },
+    "character": {
+      "n": 11,
+      "fail": 0,
+      "ms": 127386
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 40386
+    }
+  }
+}

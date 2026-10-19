@@ -1510,14 +1510,14 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 9,
     "recurs": "LT-viktor-67-J4-2",
     "suggested_acceptance": "Phrase choices follow the current question.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-9",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#10 same stale quiz after Mia's new line \"Art is fun. What do you like?\".",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-10",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#5 options 'Yes, I can see you.' answer Lena's real line; no throwaway distractor beyond 'The weather is cold today.'",
     "recurred_as": "LT-viktor-67-J4-2"
   },
   {

@@ -384,12 +384,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 12,
+    "recurrence": 13,
     "suggested_acceptance": "Cue gives a usable sentence starter.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-9",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-10",
     "recertify_status": "recurs",
-    "recertify_evidence": "#3 'Said more simply', #4 gloss of 'full ban', #5 'I agree that phones can…'. The B2 frame comes only on press three.",
+    "recertify_evidence": "#3 simplified question first, #4 gloss, #5 'I think social media…'.",
     "recurred_as": "LT-adela-17-J4-2"
   },
   {
@@ -1232,13 +1232,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 9,
     "suggested_acceptance": "Phrase options derive from the latest partner turn.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-9",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#10 same stale quiz after Mia's new line \"Art is fun. What do you like?\".",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-10",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#5 options 'Yes, I can see you.' answer Lena's real line; no throwaway distractor beyond 'The weather is cold today.'",
     "recurred_as": "LT-viktor-67-J4-2"
   },
   {

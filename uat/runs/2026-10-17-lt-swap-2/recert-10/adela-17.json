@@ -1,0 +1,748 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to B2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nSam · debate club partner\nB2Comfortable · self-chosen\nIs social media good for society?\nYour mission\nGive your opinion on technology and society and respond politely to a different view.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nIs social media good for society?\nGive your opinion on technology and society and respond politely to a different view.\n[button: Start talking]\nOr choose a situation [list: Is social media good for society? [plan-feb58554] | Mock interview: my plans [plan-269d8fba] | Train or plane for our trip? [plan-dc73423c] | What does this tradition mean? [plan-55589ca5] | My train was cancelled [plan-e3fb5bb7] | Unfair share of a group project [plan-9118967f] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The social media topic fits my exam practice, so I'll start talking.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8020
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate club partner\nIs social media good for society?\nSam says\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nYour turn\nAnswer on your phone: speak or type.\nNowGive your view with one reason\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion on technology and society and respond politely to a different view.\nNow: Give your view with one reason\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate club partner\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start; let me use the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate club partner\nIs social media good for society?\nSam says\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nSaid more simply\nSocial media helps people connect. What do you think?\nNowGive your view with one reason\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion on technology and society and respond politely to a different view.\nNow: Give your view with one reason\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nSaid more simply\nSocial media helps people connect. What do you think?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate club partner\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start, so I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate club partner\nIs social media good for society?\nSam says\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nWhat it means\nsmall businesses: small shops or companies with few workers\nNowGive your view with one reason\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion on technology and society and respond politely to a different view.\nNow: Give your view with one reason\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nWhat it means\nsmall businesses: small shops or companies with few workers\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate club partner\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I can answer this, but the journey says I should first struggle; let me just give a real opinion.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate club partner\nIs social media good for society?\nSam says\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nA way to start\nI think social media…\nNowGive your view with one reason\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion on technology and society and respond politely to a different view.\nNow: Give your view with one reason\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nA way to start\nI think social media…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate club partner\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to start; I'll look at the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate club partner\nA little support · recognition practice\nSam asks: Hi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\n01\nI think it helps people connect.\n02\nI usually use it at night.\nA little support\nTry: I see your point, but I think the problem is...\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion on technology and society and respond politely to a different view.\nNow: Give your view with one reason\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nA little support\nTry: I see your point, but I think the problem is...\nSam asks: Hi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\n[button: I think it helps people connect.] [button: I usually use it at night.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate club partner\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start; I'll try the phrase help first.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate club partner\nA little support · recognition practice\nSam asks: Hi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\n01\nI think it helps people connect.\n02\nI usually use it at night.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion on technology and society and respond politely to a different view.\nNow: Give your view with one reason\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nSam asks: Hi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\n[button: I think it helps people connect.] [button: I usually use it at night.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate club partner\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I have an opinion, so I'll answer in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "I partly agree with you. Social media helps people to connect, although I think it can also make people feel lonely. It depends on how much time they spend on it."
+          },
+          "result": "ok",
+          "ms": 10992
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate club partner\nIs social media good for society?\nSam says\nGood point, so time makes the difference for you. I see your view, but small shops really do gain customers online. Could we find some common ground on this?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion on technology and society and respond politely to a different view.\nNow: Politely disagree on one point\nGood point, so time makes the difference for you. I see your view, but small shops really do gain customers online. Could we find some common ground on this?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate club partner\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nYou · spoken\nI partly agree with you. Social media helps people to connect, although I think it can also make people feel lonely. It depends on how much time they spend on it.\nSam · debate club partner\nGood point, so time makes the difference for you. I see your view, but small shops really do gain customers online. Could we find some common ground on this?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good point, so time makes the difference for you. I see your view, but small shops really do gain customers online. Could we find some common ground on this?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to disagree politely here, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate club partner\nIs social media good for society?\nSam says\nGood point, so time makes the difference for you. I see your view, but small shops really do gain customers online. Could we find some common ground on this?\nSaid more simply\nSo it depends on how much time people spend online. Could we find some common ground?\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion on technology and society and respond politely to a different view.\nNow: Politely disagree on one point\nGood point, so time makes the difference for you. I see your view, but small shops really do gain customers online. Could we find some common ground on this?\nSaid more simply\nSo it depends on how much time people spend online. Could we find some common ground?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate club partner\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nYou · spoken\nI partly agree with you. Social media helps people to connect, although I think it can also make people feel lonely. It depends on how much time they spend on it.\nSam · debate club partner\nGood point, so time makes the difference for you. I see your view, but small shops really do gain customers online. Could we find some common ground on this?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good point, so time makes the difference for you. I see your view, but small shops really do gain customers online. Could we find some common ground on this?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I've got some help, now I can answer in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "I see your point about small shops, and I agree that they can gain customers online. However, I think big companies benefit much more than small ones. So maybe the common ground is that social media is useful if people use it in a responsible way. Was my sentence correct?"
+          },
+          "result": "ok",
+          "ms": 14362
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate club partner\nIs social media good for society?\nSam says\nYes, your sentence is correct: 'the common ground is that social media is useful if people use it in a responsible way.' Can we agree on this?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion on technology and society and respond politely to a different view.\nNow: Suggest a middle position\nYes, your sentence is correct: 'the common ground is that social media is useful if people use it in a responsible way.' Can we agree on this?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate club partner\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nYou · spoken\nI partly agree with you. Social media helps people to connect, although I think it can also make people feel lonely. It depends on how much time they spend on it.\nSam · debate club partner\nGood point, so time makes the difference for you. I see your view, but small shops really do gain customers online. Could we find some common ground on this?\nYou · spoken\nI see your point about small shops, and I agree that they can gain customers online. However, I think big companies benefit much more than small ones. So maybe the common ground is that social media is useful if people use it in a responsible way. Was my sentence correct?\nSam · debate club partner\nYes, your sentence is correct: 'the common ground is that social media is useful if people use it in a responsible way.' Can we agree on this?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, your sentence is correct: 'the common ground is that social media is useful if people use it in a responsible way.' Can we agree on this?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, we agreed; I'll answer and then finish soon.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I think we can agree on that. Social media is a useful tool as long as people are aware of the risks and use it responsibly. Thank you, this was a good discussion."
+          },
+          "result": "ok",
+          "ms": 13269
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nSam · debate club partner\nIs social media good for society?\nSam says\nThanks, I enjoyed this too. Are we still far apart on this, or can we find a compromise?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion on technology and society and respond politely to a different view.\nThanks, I enjoyed this too. Are we still far apart on this, or can we find a compromise?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nSam · debate club partner\nHi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?\nYou · spoken\nI partly agree with you. Social media helps people to connect, although I think it can also make people feel lonely. It depends on how much time they spend on it.\nSam · debate club partner\nGood point, so time makes the difference for you. I see your view, but small shops really do gain customers online. Could we find some common ground on this?\nYou · spoken\nI see your point about small shops, and I agree that they can gain customers online. However, I think big companies benefit much more than small ones. So maybe the common ground is that social media is useful if people use it in a responsible way. Was my sentence correct?\nSam · debate club partner\nYes, your sentence is correct: 'the common ground is that social media is useful if people use it in a responsible way.' Can we agree on this?\nYou · spoken\nYes, I think we can agree on that. Social media is a useful tool as long as people are aware of the risks and use it responsibly. Thank you, this was a good discussion.\nSam · debate club partner\nThanks, I enjoyed this too. Are we still far apart on this, or can we find a compromise?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, I enjoyed this too. Are we still far apart on this, or can we find a compromise?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I think I managed the discussion well, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 12,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nIs social media good for society?\nThe line hidden in this room\nMaybe we can meet in the middle.\nSaying or typing it\nNot tried\nWith help\nOn your own\nUsed elsewhere\n3 spoken · 0 written replies · 1 on your own · 2 with help\nYour mission\nChoose a fresh context for your next conversation.\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Maybe we can meet in the middle.”\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nMock interview: my plans\nExplain your study and career plans clearly and give reasons for your choices.\n[button: Start talking]\nOr choose a situation [list: Is social media good for society? [plan-feb58554] | Mock interview: my plans [plan-269d8fba] | Train or plane for our trip? [plan-dc73423c] | What does this tradition mean? [plan-55589ca5] | My train was cancelled [plan-e3fb5bb7] | Unfair share of a group project [plan-9118967f] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed a full discussion and got help when stuck, so I'm finished for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Is social media good for society?",
+          "goal": "Give your opinion on technology and society and respond politely to a different view.",
+          "partner": "Sam · debate club partner",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, I'm Sam. I think social media helps people connect and helps small businesses find customers. What do you think?"
+            },
+            {
+              "role": "learner",
+              "text": "I partly agree with you. Social media helps people to connect, although I think it can also make people feel lonely. It depends on how much time they spend on it.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Good point, so time makes the difference for you. I see your view, but small shops really do gain customers online. Could we find some common ground on this?"
+            },
+            {
+              "role": "learner",
+              "text": "I see your point about small shops, and I agree that they can gain customers online. However, I think big companies benefit much more than small ones. So maybe the common ground is that social media is useful if people use it in a responsible way. Was my sentence correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, your sentence is correct: 'the common ground is that social media is useful if people use it in a responsible way.' Can we agree on this?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I think we can agree on that. Social media is a useful tool as long as people are aware of the risks and use it responsibly. Thank you, this was a good discussion.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thanks, I enjoyed this too. Are we still far apart on this, or can we find a compromise?"
+            }
+          ],
+          "moments": [],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "I partly agree with you. Social media helps people to connect, although I think it can also make people feel lonely. It depends on how much time they spend on it.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "I see your point about small shops, and I agree that they can gain customers online. However, I think big companies benefit much more than small ones. So maybe the common ground is that social media is useful if people use it in a responsible way. Was my sentence correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Yes, I think we can agree on that. Social media is a useful tool as long as people are aware of the risks and use it responsibly. Thank you, this was a good discussion.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I partly agree with you"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "However, I think big companies benefit much more than small ones."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Social media is a useful tool as long as people are aware of the risks and use it responsibly."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 223482,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue gives a simplified question first; B2 frame is late and thin",
+          "expected": "A B2 opening frame on the first help press",
+          "got": "Press 1 'Said more simply', press 2 gloss of 'stand', then 'I think that…' as the phrase",
+          "evidence": [
+            "#3 'Said more simply', #4 'stand: what you think', #5 'I think that…'",
+            "cue prompt"
+          ],
+          "recurrence": 11
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Replay does not test the fix; recap quote is cut mid-sentence",
+          "expected": "A fresh question that checks 'often', and the full retry quoted",
+          "got": "Replay used:false; recap 'Tried again' ends 'whether '",
+          "evidence": [
+            "#15 'it depends on whether ' ; moments[0].replay.used=false",
+            "recap builder / replay"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Clear error 'not used to go' got no moment or coaching",
+          "expected": "Note: 'be used to + -ing': 'not used to going'",
+          "got": "Only 'eventually' flagged; 'not used to go to bed' passed silently and coaching is null",
+          "evidence": [
+            "#8 'they are not used to go to bed early'; facts.conversation.coaching null",
+            "moment prompt / LG-23 held fix"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue gives a simplified question first; B2 frame arrives on press three and is thin",
+          "expected": "A B2 answer frame on the first help press",
+          "got": "'Said more simply', then a gloss of 'full ban', then 'I agree that phones can…'",
+          "evidence": [
+            "#3 'Phones can help, but I think a full ban is safer. What do you think?'; #4 'full ban: a rule that stops all phone use'; #5 'I agree that phones can…'",
+            "cue prompt"
+          ],
+          "recurrence": 12
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "No coaching note and no replay after getting help",
+          "expected": "A coaching note quoting what she said, and a replay with a fresh question",
+          "got": "moments:[], coaching:null. The recap shows only 'The line hidden in this room'",
+          "evidence": [
+            "#10 recap has no replay or coaching. rawMoments kind 'none' for all 3 turns. The journey's promise to 'let me try again on my own' was not delivered.",
+            "moment prompt / replay builder"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Phrase choice is a recognition quiz that hands over the answer",
+          "expected": "A phrase choice that scaffolds her own words",
+          "got": "A quiz on polite disagreement, plus 'Try: I see your point, but I think phones can help if we set clear rules.'",
+          "evidence": [
+            "#6; her reply opens with 'I see your point, but I think a full ban…'",
+            "phrase help / quiz prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "trust",
+          "dimension": "trust",
+          "title": "Unaided reply recorded as supported",
+          "expected": "Only turns where help was used count as 'with help'",
+          "got": "The #8 reply, with no help pressed, is flagged supported:true. The recap says '2 with help'.",
+          "evidence": [
+            "#10 '1 on your own · 2 with help' against help used only at #2-#6",
+            "supported-flag logic"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Partner reply leaks a 'Dana:' speaker label and mixes feedback with the scene",
+          "expected": "A clean in-character partner turn",
+          "got": "'Yes, ... is correct and clear. Dana: Fair point, but...'",
+          "evidence": [
+            "#7 partner text",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement task in J4; level B2 set by fixture (#1 'B2 Comfortable · self-chosen')."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement verdict notes in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "No moments or coaching shown, so nothing wrong; #10 'Yes, your sentence is correct' is accurate for her sentence."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#8 'Could we find some common ground on this?' and 'small shops really do gain customers online' are B2 opinion/compromise prompts."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 list opens with social media, mock interview, train or plane, tradition, cancelled train, group project; at least four suit a 17-year-old exam candidate."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#9 she asks 'Was my sentence correct?'; #10 partner answers 'Yes, your sentence is correct', which is accurate, though it only quotes one clause."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#6 cue, 'Said more simply', 'What it means', 'A way to start', and phrase choice are all found on the talk screen without leaving the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Help did unblock replies (#7, #9), but facts.conversation.coaching is null and moments are empty; no coaching note quotes what she said."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "No replay offered: moments [] and the recap #12 shows no 'try again' or fresh question, only 'The line hidden in this room'."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#12 '1 on your own · 2 with help' matches help used at #2-#6 and #8; the unaided third reply is supported:false."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "No coaching note and no replay after getting help",
+            "expected": "A coaching note quoting what she said, then a replay with a fresh question",
+            "got": "moments [], coaching null; recap has no retry",
+            "evidence": "#12 recap shows only 'The line hidden in this room'; rawMoments kind 'none' for all 3 turns.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After a supported turn, the recap or a pause offers a quoted note and a fresh-question replay.",
+            "code_hint": "moment prompt / replay builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Cue opens with a simplified question and a thin frame",
+            "expected": "A B2 answer frame on the first press",
+            "got": "'Said more simply' restates the question, then a gloss of 'small businesses', then 'I think social media…' on press three",
+            "evidence": "#3 'Social media helps people connect. What do you think?'; #4 gloss; #5 'I think social media…'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "First help press gives a B2 frame such as 'It depends on… although…' for stretch learners.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Phrase choice is a recognition quiz with a weak distractor",
+            "expected": "A scaffold for her own words",
+            "got": "Options 'I think it helps people connect.' vs 'I usually use it at night.', plus 'Try: I see your point, but I think the problem is...' which does not fit the question",
+            "evidence": "#6",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Phrase help offers two or three B2 openers fitted to the question, with no obvious wrong answer.",
+            "code_hint": "phrase help / quiz prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Correctness answer only restates her clause; no examiner-level note",
+            "expected": "Confirm and add one concrete point, such as noting 'big companies benefit much more' as good comparison",
+            "got": "'Yes, your sentence is correct' plus a quote of one clause, then back to the debate",
+            "evidence": "#10",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Answer names what was right and any rule, within the scene.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Support flags are honest",
+            "expected": "Only helped turns marked supported",
+            "got": "2 with help, 1 on her own, matching the help presses",
+            "evidence": "#12 '1 on your own · 2 with help'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep supported flag tied to help presses.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Help is reachable in-scene and partner questions are B2",
+            "expected": "Help without leaving the scene",
+            "got": "Help me answer / Choose a phrase on screen; partner asks for common ground",
+            "evidence": "#2, #8",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep in-scene help and B2 partner turns.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Honestly, I got to talk about a proper topic and Sam's questions were at my level, which I liked. The help buttons are easy to find. But the first help just made the question simpler, which is a bit babyish for B2, and the phrase quiz had an option about using it at night. That is not a real choice. Then I finished and got no note about what I actually said, and no chance to try again, which was the whole point. I even asked whether my sentence was correct; the answer was yes, fine, but I'd like the rule or one thing to improve. I can't tell what I should fix, so my tutor still has to re-check me. I might use it for the conversation, but not yet as a replacement for my weekly tutor.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-2",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply', #4 gloss, #5 'I think social media…' as the frame.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "No replay at all; recap #12 has no retry quote, moments [].",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-3",
+            "status": "not-evaluable",
+            "evidence": "Adéla made no clear error such as 'not used to go' in this transcript; her replies were all correct.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-2",
+            "status": "recurs",
+            "evidence": "#3 simplified question first, #4 gloss, #5 'I think social media…'.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "coaching null, moments [], recap #12 only 'The line hidden in this room'.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-3",
+            "status": "recurs",
+            "evidence": "#6 recognition quiz with 'I usually use it at night.' and 'Try: I see your point, but I think the problem is...'",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-5",
+            "status": "not-seen",
+            "evidence": "#12 '1 on your own · 2 with help' matches help presses at #2-#6 and #8; the unaided reply is supported:false.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-4",
+            "status": "not-seen",
+            "evidence": "Partner turns #8 and #10 carry no 'Dana:' style speaker label.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Help did unblock replies (#7, #9), but facts.conversation.coaching is null and moments are empty; no coaching note quotes what she said.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: No replay offered: moments [] and the recap #12 shows no 'try again' or fresh question, only 'The line hidden in this room'.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 5,
+      "fail": 0,
+      "ms": 84879
+    },
+    "character": {
+      "n": 12,
+      "fail": 0,
+      "ms": 138076
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 42898
+    }
+  }
+}
