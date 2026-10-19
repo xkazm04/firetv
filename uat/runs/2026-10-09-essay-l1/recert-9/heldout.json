@@ -1,0 +1,642 @@
+{
+  "purpose": "Held-out measure of the Essay language check (paragraphIsEnglish, desk/src/lib/rules/essay.ts) at b7fca776426f764dd3b06bbfeac02098a4631559",
+  "note": "tools/essay-rules-test.cjs is the probe set the rule was tuned on (self-tuned, its 1.00 is not evidence of generalisation). This set is the learner text recorded under uat/runs/*essay*/ (essay-w-run results.json and the essay-l1 walks): not written for the rule. Items that also appear in tools/essay-rules-test.cjs are flagged inTools and left out of the held-out counts. The text is simulated-learner text (a model-played Sam in the W-run, walker-written repros in the L1 walks), not real learners (desk/data untouched).",
+  "method": "scratch scripts outside the repo, tools/ts-load.cjs, no model call; paragraphIsEnglish(text) per item",
+  "heldOut": {
+    "english": {
+      "total": 34,
+      "refused": 0,
+      "paragraphs": 7,
+      "sentences": 27
+    },
+    "czech": {
+      "total": 3,
+      "passedAsEnglish": 0
+    },
+    "german_or_other": {
+      "total": 0
+    }
+  },
+  "withToolsOverlap": {
+    "english": {
+      "total": 38,
+      "refused": 0
+    },
+    "czech": {
+      "total": 7,
+      "passedAsEnglish": 0
+    }
+  },
+  "items": [
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "source": "essay-w-run W4",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 57,
+      "english": 0.35,
+      "czech": 0,
+      "text": "Schools should start later in the morning. During puberty, teenagers' body clocks shift later, so many cannot fall asleep before 11 pm. When Seattle moved its high-school start from 7:50 to 8:45 in 2016, students slept about 34 minutes more each night. Also it is just better and everyone knows it. That is why a later start would help students learn."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-w-run W4 s1",
+      "inTools": true,
+      "passedAsEnglish": true,
+      "words": 7,
+      "english": 0.43,
+      "czech": 0,
+      "text": "Schools should start later in the morning."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-w-run W4 s2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 14,
+      "english": 0.07,
+      "czech": 0,
+      "text": "During puberty, teenagers' body clocks shift later, so many cannot fall asleep before 11 pm."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-w-run W4 s3",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 17,
+      "english": 0.35,
+      "czech": 0,
+      "text": "When Seattle moved its high-school start from 7:50 to 8:45 in 2016, students slept about 34 minutes more each night."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-w-run W4 s4",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 9,
+      "english": 0.67,
+      "czech": 0,
+      "text": "Also it is just better and everyone knows it."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-w-run W4 s5",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 10,
+      "english": 0.4,
+      "czech": 0,
+      "text": "That is why a later start would help students learn."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-w-run W5 rewrite",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 16,
+      "english": 0.44,
+      "czech": 0,
+      "text": "Also, in the same study, students' grades in their first class of the day went up."
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "source": "essay-l1 barbora-43--EM1",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 26,
+      "english": 0.42,
+      "czech": 0,
+      "text": "Many students in my class are always tired. Sleep is really important for teenagers. Schools start too early in the morning. This is bad for everyone."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 barbora-43--EM1",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 8,
+      "english": 0.38,
+      "czech": 0,
+      "text": "Many students in my class are always tired."
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "source": "essay-l1 eliska-12--EM1",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 48,
+      "english": 0.25,
+      "czech": 0,
+      "text": "Children should walk or cycle to school instead of going by car. A study from 2019 found that children who walk to school get 20 more minutes of exercise every day. Walking also makes children happier than going by car. So schools should ask parents to let their children walk."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 eliska-12--EM1",
+      "inTools": true,
+      "passedAsEnglish": true,
+      "words": 9,
+      "english": 0.22,
+      "czech": 0,
+      "text": "Walking also makes children happier than going by car."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 eliska-12--EM1",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 10,
+      "english": 0.6,
+      "czech": 0,
+      "text": "This means they are fitter and more awake in lessons."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 eliska-12--EM1",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 10,
+      "english": 0.2,
+      "czech": 0,
+      "text": "So walking to school is better than going by car."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 eliska-12--EM1",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 9,
+      "english": 0.44,
+      "czech": 0,
+      "text": "In Year 8 we all have to wear a blazer."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 eliska-12--EM1",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 5,
+      "english": 0.2,
+      "czech": 0,
+      "text": "I found the lesson boring."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 eliska-12--EM1",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 6,
+      "english": 0,
+      "czech": 0,
+      "text": "Walking to school makes children happier."
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "source": "essay-l1 eliska-12--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 38,
+      "english": 0.34,
+      "czech": 0,
+      "text": "Children should walk to school. It is healthier and better for the planet. I found out that my friends who walk are never tired in the first lesson. So walking is the best way to get to school."
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "source": "essay-l1 eliska-12--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 15,
+      "english": 0.4,
+      "czech": 0,
+      "text": "Walking to school is the best. It is also healthier. So schools should tell parents."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 eliska-12--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 18,
+      "english": 0.28,
+      "czech": 0,
+      "text": "Walking makes children happier, because a survey from 2020 found that 7 of 10 children who walk feel calm at school."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 eliska-12--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 9,
+      "english": 0.33,
+      "czech": 0,
+      "text": "Walking is much healthier than sitting in a car."
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 22,
+      "english": 0.5,
+      "czech": 0,
+      "text": "Phones are bad for school. Some 70% of teachers in a 2023 survey reported more distraction in lessons. This is why schools should act."
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 8,
+      "english": 0.25,
+      "czech": 0,
+      "text": "Schools should make rules. Phones go in lockers."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 6,
+      "english": 0.33,
+      "czech": 0,
+      "text": "In conclusion, schools should make rules."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 9,
+      "english": 0.44,
+      "czech": 0.11,
+      "text": "In my opinion phones should not be banned completely."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 7,
+      "english": 0.43,
+      "czech": 0,
+      "text": "In conclusion, schools should make some rules."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 8,
+      "english": 0.5,
+      "czech": 0,
+      "text": "In my opinion phones should not be banned."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 7,
+      "english": 0.43,
+      "czech": 0,
+      "text": "Some students play games in the lesson."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 7,
+      "english": 0,
+      "czech": 0,
+      "text": "Sometimes my teacher lets us use phones."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 6,
+      "english": 0.17,
+      "czech": 0,
+      "text": "Social media is a big distraction."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 6,
+      "english": 0.33,
+      "czech": 0,
+      "text": "Soon every school will ban them."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 5,
+      "english": 0,
+      "czech": 0,
+      "text": "Software like Quizlet helps us."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM2",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 5,
+      "english": 0.4,
+      "czech": 0,
+      "text": "It is a big problem."
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "source": "essay-l1 daniel-15--EM3",
+      "inTools": true,
+      "passedAsEnglish": true,
+      "words": 13,
+      "english": 0.38,
+      "czech": 0,
+      "text": "Many students are tired. Sleep is important. Schools start early. This is bad."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM3",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 11,
+      "english": 0.45,
+      "czech": 0,
+      "text": "Some students play games in the lesson and they don't listen."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM3",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 11,
+      "english": 0.18,
+      "czech": 0,
+      "text": "Schools should make rules, e.g. phones in lockers during lessons."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 daniel-15--EM3",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 7,
+      "english": 0.29,
+      "czech": 0,
+      "text": "Should mobile phones be banned at school?"
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 helena-46--EM5",
+      "inTools": false,
+      "passedAsEnglish": true,
+      "words": 11,
+      "english": 0.36,
+      "czech": 0,
+      "text": "Our board has cut the 2027 budget by 30%, please keep this confidential."
+    },
+    {
+      "lang": "cs",
+      "kind": "paragraph",
+      "source": "essay-l1 kristyna-17--EM1",
+      "inTools": true,
+      "passedAsEnglish": false,
+      "words": 24,
+      "english": 0,
+      "czech": 0.92,
+      "text": "Telefony by ve škole měly zůstat povolené. Někteří učitelé tvrdí, že rozptylují, avšak bez nich se žáci nenaučí sebekázni. Proto je lepší je regulovat."
+    },
+    {
+      "lang": "cs",
+      "kind": "paragraph",
+      "source": "essay-l1 kristyna-17--EM1",
+      "inTools": true,
+      "passedAsEnglish": false,
+      "words": 24,
+      "english": 0,
+      "czech": 0.67,
+      "text": "Telefony by ve škole měly zůstat povolené. Podle výzkumu Univerzity Karlovy se žáci s jasnými pravidly soustředí lépe. To ukazuje, že zákaz není nutný."
+    },
+    {
+      "lang": "cs",
+      "kind": "sentence",
+      "source": "essay-l1 kristyna-17--EM1",
+      "inTools": true,
+      "passedAsEnglish": false,
+      "words": 6,
+      "english": 0,
+      "czech": 0.67,
+      "text": "Školy by neměly telefony úplně zakazovat."
+    },
+    {
+      "lang": "cs",
+      "kind": "sentence",
+      "source": "essay-l1 kristyna-17--EM1",
+      "inTools": true,
+      "passedAsEnglish": false,
+      "words": 5,
+      "english": 0,
+      "czech": 1,
+      "text": "Žáci se tak učí sebekázni."
+    },
+    {
+      "lang": "cs",
+      "kind": "sentence",
+      "source": "essay-l1 kristyna-17--EM1",
+      "inTools": false,
+      "passedAsEnglish": false,
+      "words": 8,
+      "english": 0,
+      "czech": 0.75,
+      "text": "Mobilní telefony by ve škole neměly být zakázány."
+    },
+    {
+      "lang": "cs",
+      "kind": "sentence",
+      "source": "essay-l1 kristyna-17--EM1",
+      "inTools": false,
+      "passedAsEnglish": false,
+      "words": 8,
+      "english": 0,
+      "czech": 0.5,
+      "text": "Například v naší třídě telefony odkládáme do krabice."
+    },
+    {
+      "lang": "cs",
+      "kind": "sentence",
+      "source": "essay-l1 kristyna-17--EM1",
+      "inTools": false,
+      "passedAsEnglish": false,
+      "words": 8,
+      "english": 0,
+      "czech": 0.75,
+      "text": "Tento problém je hodně důležitý pro celou společnost."
+    },
+    {
+      "lang": "en",
+      "kind": "sentence",
+      "source": "essay-l1 kristyna-17--EM1",
+      "inTools": true,
+      "passedAsEnglish": true,
+      "words": 10,
+      "english": 0.4,
+      "czech": 0.1,
+      "text": "Many critics praise the novel. Émile Zola disagreed with them."
+    }
+  ],
+  "freshProbe": {
+    "note": "Written for round 9 by the walker after reading the rule: fresh to the repo, not held-out from the person tuning it. Not in tools/essay-rules-test.cjs.",
+    "results": {
+      "cz-diacritics": {
+        "total": 30,
+        "refused": 30,
+        "leaked": []
+      },
+      "cz-plain": {
+        "total": 30,
+        "refused": 24,
+        "leaked": [
+          "Moje sestra chodi do osme tridy a kazde rano vstava v sest hodin.",
+          "V lete jsme jeli k babicce na chalupu a cely tyden prselo.",
+          "Muj nejlepsi kamarad hraje fotbal a kazdy vikend ma zapas.",
+          "Jidelna je mala, takze se u obedu vzdycky tvori dlouha fronta.",
+          "Driv jsme chodili do skoly pesky, ale ted nas vozi rodice autem.",
+          "Skolni uniformy by podle me zhorsily naladu v tride."
+        ]
+      },
+      "cz-short": {
+        "total": 8,
+        "refused": 5,
+        "leaked": [
+          "To je pravda.",
+          "Děkuji za pomoc.",
+          "Ano, souhlasím s tebou."
+        ]
+      },
+      "cz-short-plain": {
+        "total": 8,
+        "refused": 2,
+        "leaked": [
+          "To je pravda.",
+          "Ja nevim.",
+          "Skola zacina v osm.",
+          "Mam hlad a zizen.",
+          "Dekuji za pomoc.",
+          "Ano, souhlasim s tebou."
+        ]
+      },
+      "de": {
+        "total": 10,
+        "refused": 6,
+        "leaked": [
+          "Die Schule beginnt jeden Morgen um acht Uhr.",
+          "Meine Schwester geht gern ins Kino und liest viele Bücher.",
+          "Ich bin müde.",
+          "Kannst du mir helfen?"
+        ]
+      },
+      "sk": {
+        "total": 2,
+        "refused": 2,
+        "leaked": []
+      },
+      "pl": {
+        "total": 2,
+        "refused": 1,
+        "leaked": [
+          "Moja siostra chodzi do szóstej klasy i bardzo lubi matematykę."
+        ]
+      },
+      "fr": {
+        "total": 2,
+        "refused": 2,
+        "leaked": []
+      },
+      "es": {
+        "total": 2,
+        "refused": 2,
+        "leaked": []
+      },
+      "it": {
+        "total": 1,
+        "refused": 0,
+        "leaked": [
+          "Penso che i telefoni cellulari dovrebbero essere vietati durante le lezioni."
+        ]
+      },
+      "nl": {
+        "total": 1,
+        "refused": 0,
+        "leaked": [
+          "Ik vind dat mobiele telefoons tijdens de les niet gebruikt mogen worden."
+        ]
+      },
+      "en": {
+        "total": 20,
+        "refused": 0,
+        "leaked": [
+          "My dog is old, but he still runs to the door when I come home from school.",
+          "To be honest, I do not think that a ban on phones would solve the problem.",
+          "So many students do their homework on the bus that the driver has started to complain.",
+          "A lot of teenagers go to bed late on a school night and then cannot get up on time.",
+          "On the other hand, a ban could make students want their phones even more.",
+          "Ten to one, the teacher will set a test on Friday.",
+          "By the time we arrived, the match had already started and the crowd was loud.",
+          "Not every pupil has a quiet room at home, so the library matters to them.",
+          "Schools could offer breakfast, which would help pupils concentrate in the morning.",
+          "Phones distract students.",
+          "Rain ruined the picnic.",
+          "Pizza tastes great.",
+          "Cats sleep often.",
+          "My mum and my dad both think that I should read more books than I do now.",
+          "It is not fair that we have to wear a blazer even in the summer heat.",
+          "Students who walk to school arrive calmer, and teachers say they listen better.",
+          "No one told us that the trip was cancelled until we were already on the platform.",
+          "He said that he would come, but he did not, and nobody knows why.",
+          "The museum was free on Sunday, so we went there after lunch with my cousins.",
+          "Reading aloud helps younger children, particularly when the story is funny."
+        ]
+      }
+    }
+  }
+}
