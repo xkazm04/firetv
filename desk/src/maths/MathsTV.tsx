@@ -296,6 +296,7 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
   const st = topicStates(s);
   const m = rulerModel(topics, st, focus, big);
   const N = topics.length;
+  const past = !!pastPathEnd(s);
   // a usual record with nothing seen (made by a step-up attempt, Family W8) is drawn as no record
   const has = topics.some((t) => usualSeen(s, t.id));
   const up = stretchSecure(s);
@@ -334,7 +335,7 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
           {up.has(t.id) && <div className="mb-ink2" data-role="maths-stretch" />}
           {slips.length > 0 && <div className="mb-slips" data-slips={slips.join(" ")} aria-label={`${slips.length} slips seen`}>{slips.map((x) => <span key={x}>{SLIP_MARK}</span>)}</div>}
           {/* on a panning ruler the name is laid out at its box's final width at once, so the fit never measures a box mid-slide */}
-          <div className="mb-tl" style={m.pan ? { right: "auto", width: box.w - 24 } : undefined}><div className="mb-tn">{t.name}</div>{t.year && <div className="mb-ty">{SYS_WORD[sys](t.year)}</div>}{big && <div className="mb-st">{stateWord(s, t.id, st)}</div>}</div>
+          <div className="mb-tl" style={m.pan ? { right: "auto", width: box.w - 24 } : undefined}><div className="mb-tn">{t.name}</div>{t.year && !past && <div className="mb-ty">{SYS_WORD[sys](t.year)}</div>}{big && <div className="mb-st">{stateWord(s, t.id, st)}</div>}</div>
         </div>
       );
     })}

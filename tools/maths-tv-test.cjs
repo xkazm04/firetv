@@ -1234,3 +1234,13 @@ test('paper 9 (L1-vojtech-18-MB4-1): each recovery topic row names the statement
  assert.ok(row,'the pct-of-amount row is drawn');
  assert.match(row[0].replace(/<[^>]*>/g,' '),/led by N12/,'the row says which statement led there');
 });
+
+test('MB2-2: past the path\'s end the Topics ruler prints no year under the topic names; a learner on the path keeps it in their system\'s words',()=>{
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),{createElement}=require(path.join(root,'node_modules/react'));
+ const M=require(path.join(root,'src/maths/MathsTV.tsx'));
+ const mk=(age,system)=>({...secondSession(null,'topics',{focus:0,practice:null}),profiles:[{id:'ema',name:'Ema',type:'high-school',age,system,modules:['maths']}]});
+ const draw=(s)=>renderToStaticMarkup(createElement(M.Topics,{s,focus:s.focus,busy:false}));
+ assert.doesNotMatch(draw(mk(17,'uk')),/class="mb-ty"/,'a 17-year-old is past the path: no year label on the ruler');
+ assert.match(draw(mk(12,'uk')),/class="mb-ty">Year \d+</,'a learner on the path keeps the year');
+ assert.match(draw(mk(12,'us')),/class="mb-ty">Grade \d+</,'in their school system\'s words');
+});
