@@ -28,6 +28,8 @@ export type Key = "up" | "down" | "left" | "right" | "select" | "back" | "menu" 
 const KEYBOARD = new Map<string, Key>([
   ["ArrowUp", "up"], ["ArrowDown", "down"], ["ArrowLeft", "left"], ["ArrowRight", "right"], ["Enter", "select"],
   ["Backspace", "back"], ["Escape", "back"], ["m", "menu"], ["M", "menu"], [" ", "play"],
+  // the Fire TV remote's own names (TV-led design 5.2): Play/Pause, the menu button, and Back as the browser reports it
+  ["MediaPlayPause", "play"], ["ContextMenu", "menu"], ["GoBack", "back"], ["BrowserBack", "back"],
 ]);
 export function keyOf(k: string): Key | null { return KEYBOARD.get(k) ?? null; }
 
@@ -506,7 +508,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "back" || k === "menu") { if (s.back === "forensic" && s.essay) o.nav("forensic", FORENSIC_STOPS.indexOf("why")); else o.nav("essaytype", s.essay ? readingLens(s) : 0); }
   },
   xray: (s, k, __, o) => { if (k === "back" || k === "menu") o.nav("playbook", s.focus); },
-  break: (_, k, __, o) => { if (k === "select") o.ev({ type: "timer.skipbreak" }); },
+  break: (_, k, __, o) => { if (k === "select" || k === "back") o.ev({ type: "timer.skipbreak" }); },
   topics: (s, k, local, o) => {
     const stops = topicStops(s);
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);

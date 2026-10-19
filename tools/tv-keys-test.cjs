@@ -999,3 +999,23 @@ test('profile setup (L1-radka-41-MB5-1, TV half): the rows start on the likely v
  assert.ok(profileRows({id:'n',name:'',type:'high-school',modules:['maths']}).some(r=>r.title==='Maths course'));
  assert.ok(profileRows({id:'n',name:'',type:'elementary',modules:['maths'],mathPath:'calc1'}).some(r=>r.title==='Maths course'),'a draft already on a course keeps its row');
 });
+
+// ---- TL-1 (TV-led design 5.2): every remote button reaches every screen ----
+test('TL-1: keyOf maps the remote\'s own names - MediaPlayPause, ContextMenu, GoBack, BrowserBack',()=>{
+ const {keyOf}=keys();
+ const want={MediaPlayPause:'play',ContextMenu:'menu',GoBack:'back',BrowserBack:'back'};
+ for(const [k,v] of Object.entries(want))assert.equal(keyOf(k),v,k);
+});
+
+test('TL-1: on the break, Back skips it as Select does',()=>{
+ const {tvKey}=keys();
+ const s=session({screen:'break'});
+ assert.deepEqual(tvKey(s,'back',LOCAL).events,[{type:'timer.skipbreak'}]);
+ assert.deepEqual(tvKey(s,'select',LOCAL).events,[{type:'timer.skipbreak'}]);
+});
+
+test('TL-1: LingaTV reads its keys through keyOf and spells no arrow key itself',()=>{
+ const src=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.match(src,/import \{[^}]*\bkeyOf\b[^}]*\} from "@\/tv\/keys"/,'LingaTV imports keyOf');
+ assert.doesNotMatch(src,/"ArrowLeft"/,'LingaTV holds no "ArrowLeft" literal');
+});

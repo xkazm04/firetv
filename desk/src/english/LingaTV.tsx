@@ -8,6 +8,7 @@ import { accepts } from "@/lib/english/turn";
 import { runningTake } from "@/lib/english/take";
 import { activeCheck, artOf, lingaView, NO_UI, progressDots, TRY_TAG, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
 import { landingFocus } from "@/tv/landingRows";
+import { keyOf } from "@/tv/keys";
 import { useEnglish } from "./useEnglish";
 import { useEnglishAudio } from "./useEnglishAudio";
 import { ART } from "./art";
@@ -45,10 +46,10 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
   useEffect(()=>{
     const handler=(e:KeyboardEvent)=>{
       if(e.target instanceof HTMLElement&&e.target.closest(".bar"))return;
-      const k=e.key;if(!["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Enter","Escape","Backspace","m","M"," "].includes(k))return;
+      const k=keyOf(e.key);if(!k)return;
       e.preventDefault();
-      if(k==="m"||k==="M"){go(menuKey);return;}
-      if(k==="Escape"||k==="Backspace"){
+      if(k==="menu"){go(menuKey);return;}
+      if(k==="back"){
         if(menu){patch({menu:false});post({type:"focus",focus:-1});}
         else if(picking){patch({picking:null});post({type:"focus",focus:0});}
         else if(home)post({type:"nav",screen:"landing",focus:landingFocus(s,"english")});
@@ -59,9 +60,9 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
         return;
       }
       // Space pauses and resumes the scene, only where the turn takes a pause: never over a reply in flight
-      if(k===" "){if(c&&!onCheck&&accepts(c,"pause"))cmd("pause");return;}
-      if(k==="ArrowUp"&&home&&!menu&&!picking){post({type:"nav",screen:"learner",from:"linga"});return;}
-      if(k.startsWith("Arrow")){const delta=k==="ArrowRight"||k==="ArrowDown"?1:-1;post({type:"focus",focus:focus<0?0:(focus+delta+actions.length)%actions.length});return;}
+      if(k==="play"){if(c&&!onCheck&&accepts(c,"pause"))cmd("pause");return;}
+      if(k==="up"&&home&&!menu&&!picking){post({type:"nav",screen:"learner",from:"linga"});return;}
+      if(k!=="select"){const delta=k==="right"||k==="down"?1:-1;post({type:"focus",focus:focus<0?0:(focus+delta+actions.length)%actions.length});return;}
       const a=actions[Math.max(0,focus)];if(a&&!a.disabled&&(!waiting||cancel(a)))go(a);
     };
     addEventListener("keydown",handler);return()=>removeEventListener("keydown",handler);
