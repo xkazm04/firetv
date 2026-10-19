@@ -23,8 +23,8 @@ import { Plot } from "./Plot";
 import { CALC_SHAPES, type CalcSpec } from "@/lib/rules/calc";
 import { deskLine, itemName, partPlace, type PartPlace } from "@/lib/rules/calc-word";
 const isCalcSpec = (spec: unknown): spec is CalcSpec => !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
-import { aimLine, calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, tonightsSheet, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
-import { playerCommand, running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
+import { aimLine, calendarWeeks, continueCard, explainLine, fitRow, handoffLine, handoffOf, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, tonightsSheet, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { playerCommand, running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, PRACTICE_STOPS, PAGE_ASK, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
 import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, pastPathEnd, pathEndsLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
@@ -55,10 +55,10 @@ export function MathsTV({ s, busy, ask = null }: { s: Session; busy: boolean; as
         : s.screen === "topics" ? <Topics s={s} focus={f} busy={busy} />
         : s.screen === "prepare" ? <Prepare s={s} focus={f} busy={busy} ask={ask} />
         : s.screen === "paper" ? <PaperScreen s={s} focus={f} />
-        : s.screen === "practice" ? <PracticeScreen s={s} />
+        : s.screen === "practice" ? <PracticeScreen s={s} focus={f} />
         : s.screen === "sheet" ? <Sheet s={s} focus={f} />
         : s.screen === "walk" ? <Walk s={s} focus={f} />
-        : s.screen === "page" ? <PageScreen s={s} />
+        : s.screen === "page" ? <PageScreen s={s} focus={f} />
         : s.screen === "hint" ? <HintScreen s={s} focus={f} />
         : s.screen === "lesson" ? <LessonScreen s={s} />
         : s.screen === "units" ? <Units s={s} focus={f} />
@@ -114,7 +114,9 @@ function Chips({ s, clock = true, phone = true, learner = true, menu }: { s: Ses
     <div className="mb-status">
       {menu && <div className="mb-glyph" data-role="maths-menu">{ICON.lesson}<span className="mb-lab">Menu</span><span className="to">{menu}</span></div>}
       {learner && <div className="mb-chip" data-role="maths-chip"><span className="av">{s.learner?.name.charAt(0)}</span>{s.learner?.name}</div>}
-      {phone && (s.joined
+      {handoffOf(s)
+        ? <div className="mb-glyph" data-role="maths-onphone">{PHONE}<span className="mb-lab">On your phone</span></div>
+        : phone && (s.joined
         ? <div className="mb-glyph" data-role="maths-chip">{PHONE}<span className="mb-lab">Phone</span></div>
         : <div className="mb-glyph" data-role="maths-chip">{PHONE}<span className="mb-lab">Pin</span><span className="pin">{s.pin}</span></div>)}
       {clock && (
@@ -591,7 +593,7 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
         </div>
       ))}
     </div>
-    <Caption text={cont && at === "continue" ? cont.cap : doorCaption(s, door)} />
+    <Caption text={handoffLine(s) ?? (cont && at === "continue" ? cont.cap : doorCaption(s, door))} />
     {topics.length > STRIP_AFTER ? <Strip s={s} /> : <Ruler s={s} />}
   </>);
 }
@@ -790,12 +792,12 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
  */
 const PRACTICE_ROOM = 1026 - 150 - 12;
 
-export function PracticeScreen({ s }: { s: Session }) {
+export function PracticeScreen({ s, focus = 0 }: { s: Session; focus?: number }) {
   const p = s.practice;
   const pan = usePaper(p ? `${p.topic}|${p.items.map((it) => it.question).join("\n")}` : "", PRACTICE_ROOM);
   if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No set on the desk" /></h1></>;
   const name = topicName(p.topic);
-  const job = markLine(s);
+  const job = markLine(s), wait = handoffLine(s);
   // a set opened from a paper's recovery row says what it aims at, in the caption slot (MB-B40); any other set, nothing
   const aim = aimLine(p, systemOf(s.profiles.find((q) => q.id === s.learner?.id)));
   return (<>
@@ -818,9 +820,13 @@ export function PracticeScreen({ s }: { s: Session }) {
         <div className="hl"><span className="mb-lab">What to do</span></div>
         {aim && <div className="aim" data-role="maths-practice-aim">{aim}</div>}
         <div className="ht">Work {workWhat(p.items.length)} on paper, then snap the whole sheet with the phone. The desk marks it and walks you through it here.</div>
-        {job ? <JobNote job={job} /> : <div className="nx">{ARROW}<span>{s.joined ? "The phone is waiting for the sheet or your answers." : `Pair the phone first · PIN ${s.pin}`}</span></div>}
+        {job ? <JobNote job={job} /> : <div className="nx" data-role={wait ? "maths-wait" : undefined}>{ARROW}<span>{wait ?? (s.joined ? "The phone is waiting for the sheet or your answers." : `Pair the phone first · PIN ${s.pin}`)}</span></div>}
       </div>
     </aside>
+    <div className="mb-acts">
+      <Act icon={ICON.paper} label="Snap the sheet" focused={stopAt(PRACTICE_STOPS, focus) === "sheet"} primary />
+      <Act icon={ICON.hint} label="Type my answers" focused={stopAt(PRACTICE_STOPS, focus) === "answers"} />
+    </div>
   </>);
 }
 
@@ -968,6 +974,7 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
   if (!p || !it) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="Nothing to walk" /></h1></>;
   const name = topicName(p.topic);
   const last = s.walkIx === p.items.length - 1;
+  const stops = walkStops(s), at = stopAt(stops, focus), wait = handoffLine(s);
   const sl = it.slip ? slipById(it.slip) : undefined;
   const sys = systemOf(s.profiles.find((q) => q.id === s.learner?.id));
   return (<>
@@ -980,9 +987,11 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
         </div>
       </div>
     </div>
-    <SlipSide topic={p.topic} items={p.items} ix={s.walkIx} points={sl?.points} job={explainLine(s, it.n)} />
+    <SlipSide topic={p.topic} items={p.items} ix={s.walkIx} points={sl?.points} job={explainLine(s, it.n) ?? (wait ? { phase: "running", text: wait } : null)} />
     <div className="mb-acts">
-      {last && <Act icon={ICON.back} label="Back to the sheet" focused={stopAt(walkStops(s), focus) === "sheet"} primary />}
+      {stops.includes("sheet") && <Act icon={ICON.back} label="Back to the sheet" focused={at === "sheet"} primary />}
+      {stops.includes("explain") && <Act icon={ICON.hint} label="Tell the desk how" focused={at === "explain"} primary={!stops.includes("sheet")} />}
+      {stops.includes("second") && <Act icon={ICON.paper} label="Type my second go" focused={at === "second"} />}
       <div className="mb-updn"><Chev dir="l" on={s.walkIx > 0} /><span>{it.n} of {p.items.length}</span><Chev dir="r" on={!last} /></div>
     </div>
   </>);
@@ -990,19 +999,19 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
 
 // ---------------------------------------------------------------- T3 Page: the snapped sheet, read, one problem lifted
 
-export function PageScreen({ s }: { s: Session }) {
+export function PageScreen({ s, focus = 0 }: { s: Session; focus?: number }) {
   const p = s.pages[s.pageIx];
   const it = p?.items[s.itemIx];
   const pan = usePaper(`${s.pageIx}|${s.itemIx}|${p?.items.length}|${s.view}`);
   if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No page yet" /></h1></>;
   const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
-  const line = s.reading ? "Reading the page… the problems appear here all at once when it is read."
+  const line = handoffLine(s) ?? (s.reading ? "Reading the page… the problems appear here all at once when it is read."
     : read?.phase === "failed" ? "The desk could not read this page. Open Try again on the phone."
     : hj?.phase === "running" ? "Thinking about a hint for this one…"
     : hj?.phase === "failed" ? (hj.retry === false ? "No hint for this one." : "No hint that time. Select to try again.")
     : p.missing?.length ? missingLine(p.missing)
     : p.marked ? markedLine(p.marked.items)
-    : it ? `Number ${it.label ?? it.n} is under the lamp. Select for a hint — the next step, never the answer.` : "Nothing on this page could be read as a problem.";
+    : it ? `Number ${it.label ?? it.n} is under the lamp. Select for a hint — the next step, never the answer.` : "Nothing on this page could be read as a problem.");
   const band = (scale: number) => it ? { top: it.band[0] * scale, height: Math.max(8, (it.band[1] - it.band[0]) * scale) } : null;
   const menu = <div className="mb-status"><div className="mb-chip" data-role="maths-chip"><span className="mb-lab" style={{ marginLeft: 14 }}>Menu</span>{s.view === "band" ? "The photo" : "The problems"}</div><Chips s={s} learner={false} /></div>;
   if (s.view === "overview") {
@@ -1051,6 +1060,7 @@ export function PageScreen({ s }: { s: Session }) {
       </div>
       <p className="mb-cap" key={line} style={{ position: "static", width: "auto", minHeight: 0, marginTop: 26, fontSize: 32 }}>{line}</p>
     </aside>
+    {p.subject === "maths" && p.items.length > 0 && !s.reading && <div className="mb-acts"><Act icon={ICON.hint} label="Ask in words" focused={focus === PAGE_ASK} primary /></div>}
   </>);
 }
 
@@ -1061,7 +1071,7 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
   if (!h) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No hint yet" /></h1></>;
   const hh = h.stage === 2 ? h.hint2 : h.hint1;
   const p = s.pages[s.pageIx], n = p?.items[s.itemIx]?.n;
-  const at = stopAt(HINT_STOPS, focus);
+  const at = stopAt(HINT_STOPS, focus), wait = handoffLine(s);
   const pick = s.jobs?.lesson?.key === h.key ? s.jobs.lesson : undefined;
   const pickFailed = pick?.phase === "failed" ? pick.error ?? "" : null;
   const like = likePill(s);
@@ -1086,6 +1096,7 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
         <div className="hl"><span className="mb-lab">Hint</span><span className="pips"><i className="on" /><i className={h.stage === 2 ? "on" : undefined} /></span></div>
         <div className="ht">{hh ? prose(hh.hint) : "…"}</div>
         {hh?.next && <div className="nx">{ARROW}<span>{prose(hh.next)}</span></div>}
+        {wait && <div className="nx" data-role="maths-wait">{ARROW}<span>{wait}</span></div>}
         {like ? like.failed && <div className="quiet">{like.failed}</div> : noLesson && <div className="quiet">{noLesson}</div>}
       </div>
     </aside>
@@ -1093,6 +1104,7 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
       <Act icon={ICON.hint} label={h.stage === 2 ? "That’s both hints" : "Still stuck"} focused={at === "stuck"} primary pips={[h.stage, 2]} disabled={h.stage === 2} />
       {like ? <Act icon={ICON.six} label={like.label} focused={at === "lesson"} disabled={like.busy} />
         : <Act icon={ICON.lesson} label={s.lesson ? "Show me the lesson" : pickFailed !== null ? "No lesson this time" : s.noLesson ? "No lesson for this" : "Finding the lesson…"} focused={at === "lesson"} disabled={!s.lesson} />}
+      <Act icon={ICON.paper} label="Ask in words" focused={at === "ask"} />
     </div>
   </>);
 }

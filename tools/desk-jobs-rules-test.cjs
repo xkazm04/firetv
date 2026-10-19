@@ -535,7 +535,7 @@ test('status case 1: a hint whose engine answered raw text fails with the desk s
 test('HW2: the door opens a maths page snapped tonight with problems; yesterday\'s, a failed one and an unstamped one ask for a photo',()=>{
  const {tvKey,LOCAL}=require(src('tv/keys.ts'));const {tonightsSheet,dayOf}=require(src('tv/mathsRows.ts'));const {tonightStops}=require(src('tv/keys.ts'));
  const door=(s)=>tvKey({...s,screen:'tonight',focus:tonightStops({...s,screen:'tonight'}).indexOf('homework')},'select',LOCAL).events;
- const asks=[{type:'subject',subject:'maths'},{type:'page.ask',subject:'maths'}];
+ const asks=[{type:'subject',subject:'maths'},{type:'page.ask',subject:'maths'},{type:'ask.open',kind:'page',detail:{subject:'maths'}}];
  onPage();
  let s=store.getSession();
  assert.equal(s.pages[0].day,dayOf(Date.now()),'a page is stamped with the day it was snapped');

@@ -16,8 +16,8 @@ import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { PATHS, frontierOn, learnerPath, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { lessonStates } from "@/lib/library/watched";
 import { profileRows, locate, flat, likelyIx, AGE_RANGE } from "@/tv/profileRows";
-import { continueCard, likeUnit, tonightsSheet } from "@/tv/mathsRows";
-import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
+import { continueCard, handoffOf, likeUnit, tonightsSheet } from "@/tv/mathsRows";
+import { sheetStops, firstToLook, tileOf, toLookAt } from "@/tv/sheetRows";
 import { LANDING_REST, essayWaiting, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
 import { pastPathEnd, prepareStops } from "@/tv/prepareRows";
@@ -210,7 +210,11 @@ export function nextFaultyAt(a: EssayAnalysis, i: number): number {
 export const rewriteStatus = (n: number) => `sentence ${n}: rewrite it in your own words on the phone's Essay tab, then analyse again`;
 /** The YouTube IFrame API's postMessage form of Play/Pause: what the lesson screens send the embed when lessonPaused flips. */
 export const playerCommand = (paused: boolean): string => JSON.stringify({ event: "command", func: paused ? "pauseVideo" : "playVideo", args: "" });
-export const HINT_STOPS = ["stuck", "lesson"] as const;
+export const HINT_STOPS = ["stuck", "lesson", "ask"] as const;
+/** The practice card's two ways in (TL-6): snap the sheet, or type the answers. Both are hand-offs to the phone. */
+export const PRACTICE_STOPS = ["sheet", "answers"] as const;
+/** The Page's one stop past the problems (TL-6): Ask in words. The page keeps its lamp on the problem at focus 0. */
+export const PAGE_ASK = 1;
 export const SENTENCE_STOPS = ["again", "unit"] as const;
 /** The recap: one tile per app on the desk, then back to the desk (tv/recapRows.ts). */
 export { recapStops, type RecapStop } from "@/tv/recapRows";
@@ -236,8 +240,29 @@ function prepareDoorFocus(s: Pick<Session, "profiles" | "learner">): number {
   const last = pastPathEnd(s);
   return last ? Math.max(0, prepareStops(s).findIndex((u) => u.id === last.id)) : 0;
 }
-/** The walk has one action, on its last item: back to the sheet. */
-export function walkStops(s: Session): Array<"sheet"> { const n = s.practice?.items.length ?? 0; return n && s.walkIx === n - 1 ? ["sheet"] : []; }
+/**
+ * The walk's actions (TL-6): back to the sheet on the last item, then, on an item that is wrong or unsure and not fixed,
+ * Tell the desk how and Type my second go - both hand-offs to the phone, for this item (detail.walkIx).
+ */
+export type WalkStop = "sheet" | "explain" | "second";
+export function walkStops(s: Session): WalkStop[] {
+  const p = s.practice, n = p?.items.length ?? 0, it = p?.items[s.walkIx];
+  const out: WalkStop[] = n && s.walkIx === n - 1 ? ["sheet"] : [];
+  if (p?.marked && it && (it.verdict === "wrong" || it.verdict === "unsure") && toLookAt(it)) out.push("explain", "second");
+  return out;
+}
+/** A hand-off cancelled by the first Back (TL-6): true when this screen had one open and the Back was spent on it. */
+function cancelAsk(s: Session, o: Out): boolean {
+  const a = handoffOf(s);
+  if (a) o.ev({ type: "ask.cancel", id: a.id });
+  return !!a;
+}
+/** With a hand-off open and no phone connected, Up goes to the pairing screen (the caption says so). */
+function pairUp(s: Session, k: Key, o: Out): boolean {
+  if (k !== "up" || s.phonesLive !== 0 || !handoffOf(s)) return false;
+  o.nav("pair", 0, s.screen);
+  return true;
+}
 
 // ---- the keymap ----
 class Out implements Step {
@@ -348,7 +373,13 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   joined: (_, k, __, o) => { if (k === "select" || k === "back") o.nav("landing", LANDING_REST); },
   tonight: (s, k, _, o) => {
     const stops = tonightStops(s), at = stopAt(stops, s.focus);
-    if (k === "back") { if (s.awaiting) o.ev({ type: "page.unask" }); else o.nav("landing", landingFocus(s, "maths")); return; }
+    if (k === "back") {
+      // the first Back puts the photo down (TL-6: ask.cancel beside page.unask); only the next one leaves
+      const asked = cancelAsk(s, o);
+      if (s.awaiting) o.ev({ type: "page.unask" }); else if (!asked) o.nav("landing", landingFocus(s, "maths"));
+      return;
+    }
+    if (pairUp(s, k, o)) return;
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     if (k === "up") o.nav("learner", 0, "tonight");
     if (k === "down" && !s.joined) o.nav("pair", 0, "tonight");
@@ -362,7 +393,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     else if (at === "prepare") { o.local.prepareAsk = null; o.nav("prepare", prepareDoorFocus(s)); }
     // tonight's sheet opens; anything else (nothing, an older sheet, a failed read) asks for tonight's photo
     else { const sheet = tonightsSheet(s);
-      if (sheet) { o.ev({ type: "page.select", pageIx: sheet.ix }); o.nav("page"); } else o.ev({ type: "page.ask", subject: "maths" }); }
+      if (sheet) { o.ev({ type: "page.select", pageIx: sheet.ix }); o.nav("page"); } else { o.ev({ type: "page.ask", subject: "maths" }); o.ev({ type: "ask.open", kind: "page", detail: { subject: "maths" } }); } }
   },
   learner: (s, k, _, o) => {
     const stops = learnerStops(s), at = stopAt(stops, s.focus);
@@ -413,8 +444,18 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   page: (s, k, local, o) => {
     const p = s.pages[s.pageIx], h = homeOf(s, p?.subject ?? s.subject);
     // Back always leaves, a page still being read included (the read lands on the page when it is done)
-    if (k === "back") { o.nav(h.screen, h.focus); return; }
+    // the first Back puts a question down (TL-6); the next one leaves
+    if (k === "back") { if (!cancelAsk(s, o)) o.nav(h.screen, h.focus); return; }
     if (!p || s.reading) return;
+    if (pairUp(s, k, o)) return;
+    // Ask in words (TL-6), a maths page's one stop past its problems: Down from the last problem, Up back to it
+    const askable = p.subject === "maths" && p.items.length > 0;
+    if (askable && s.focus === PAGE_ASK) {
+      if (k === "up") o.focus(0);
+      if (k === "select") o.ev({ type: "ask.open", kind: "question", detail: { n: p.items[s.itemIx]?.n } });
+      if (k !== "menu") return;
+    }
+    if (k === "down" && askable && s.itemIx >= p.items.length - 1) { o.focus(PAGE_ASK); return; }
     if (k === "down") o.ev({ type: "item", itemIx: Math.min(p.items.length - 1, s.itemIx + 1) });
     if (k === "up") o.ev({ type: "item", itemIx: Math.max(0, s.itemIx - 1) });
     if (k === "right" && s.pageIx < s.pages.length - 1) o.ev({ type: "page.select", pageIx: s.pageIx + 1 });
@@ -424,13 +465,15 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   },
   hint: (s, k, local, o) => {
     const at = stopAt(HINT_STOPS, s.focus);
+    if (k === "back") { if (!cancelAsk(s, o)) o.nav("page"); return; }
+    if (pairUp(s, k, o)) return;
     if (k === "left") o.move(HINT_STOPS.length, -1); if (k === "right") o.move(HINT_STOPS.length, 1);
+    if (k === "select" && at === "ask") { o.ev({ type: "ask.open", kind: "question", detail: { n: s.pages[s.pageIx]?.items[s.itemIx]?.n } }); return; }
     if (k === "select") { if (at === "stuck" && s.hint?.stage === 1) o.hint(local, { stage: 2 }); if (at === "lesson") {
         // a task that reads as a school unit has no lesson in the library: the stop is Six like this, a set on that unit, the hint kept on screen
         const unit = likeUnit(s);
         if (unit) o.set(local, unit, { stay: true }); else if (s.lesson) o.nav("lesson");
       } }
-    if (k === "back") o.nav("page");
   },
   lesson: (s, k, _, o) => {
     if (k === "play") o.ev({ type: "lesson.pause", paused: !s.lessonPaused });
@@ -585,7 +628,14 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     }
   },
   // the set on paper is parked, not thrown away: Tonight's continue card puts it back
-  practice: (_, k, __, o) => { if (k === "back") o.nav("tonight"); },
+  // The card's two stops (TL-6) hand the set's marking to the phone: Snap the sheet, Type my answers. Back keeps the set.
+  practice: (s, k, _, o) => {
+    if (k === "back") { if (!cancelAsk(s, o)) o.nav("tonight"); return; }
+    if (pairUp(s, k, o) || !s.practice) return;
+    if (k === "left" || k === "up") o.move(PRACTICE_STOPS.length, -1); if (k === "right" || k === "down") o.move(PRACTICE_STOPS.length, 1);
+    const at = stopAt(PRACTICE_STOPS, s.focus);
+    if (k === "select" && at && !running(s, "mark")) o.ev({ type: "ask.open", kind: at });
+  },
   // the marked set as one picture: the tiles on one row, the two actions below
   sheet: (s, k, local, o) => {
     const p = s.practice; if (!p) { if (k === "back") o.nav("tonight"); return; }
@@ -605,9 +655,15 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   },
   // one item at a time; leaving it goes back to the sheet at that item, never clears the set
   walk: (s, k, _, o) => {
-    if (k === "right") o.ev({ type: "walk", ix: s.walkIx + 1 });
-    if (k === "left") o.ev({ type: "walk", ix: s.walkIx - 1 });
-    if ((k === "select" && stopAt(walkStops(s), s.focus) === "sheet") || k === "back") o.nav("sheet", s.walkIx);
+    const stops = walkStops(s), at = stopAt(stops, s.focus);
+    if (k === "back") { if (!cancelAsk(s, o)) o.nav("sheet", s.walkIx); return; }
+    if (pairUp(s, k, o)) return;
+    // another item closes this item's hand-off (TV-led design 2.2) and starts its lamp over
+    if (k === "right" || k === "left") { cancelAsk(s, o); o.ev({ type: "walk", ix: s.walkIx + (k === "right" ? 1 : -1) }); o.focus(0); }
+    if (k === "down") o.move(stops.length, 1); if (k === "up") o.move(stops.length, -1);
+    if (k !== "select") return;
+    if (at === "sheet") o.nav("sheet", s.walkIx);
+    else if (at === "explain" || at === "second") o.ev({ type: "ask.open", kind: at, detail: { walkIx: s.walkIx } });
   },
   // tonight as one picture: Left/Right along the tiles, then the desk; Select opens what a tile's app still has on
   // the desk, through the helpers the landing and Tonight use; Back, or the desk, is the landing with the lamp at rest

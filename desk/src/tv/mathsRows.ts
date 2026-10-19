@@ -2,7 +2,7 @@
  * Math Buddy's pure rows: what the session alone says is open. Shared by the Tonight screen and
  * the D-pad (tv/keys.ts). Types only from the store - the TV never loads the filesystem.
  */
-import type { Practice, SchoolSystem, Screen, Session } from "@/lib/session/store";
+import type { Ask, AskKind, Practice, SchoolSystem, Screen, Session } from "@/lib/session/store";
 import { canOf } from "@/lib/rules/paperEntry";
 import { PATHS, learnerPath, topicIn, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { firstToLook } from "@/tv/sheetRows";
@@ -383,4 +383,25 @@ export function aimLine(p: (Pick<Practice, "aim"> & Partial<Pick<Practice, "topi
     kept.push(said[i]);
   }
   return `${AIM_HEAD} ${kept.join("; ")}${moreOf(said.length - kept.length)}.`;
+}
+
+/** The hand-offs each Math screen opens (TV-led design 2.2): the ask kinds that screen may hold open. */
+const HANDOFFS: Partial<Record<Screen, readonly AskKind[]>> = { tonight: ["page"], practice: ["sheet", "answers"], page: ["question"], hint: ["question"], walk: ["explain", "second"] };
+/** The job each kind names in the caption: "Waiting for the phone: <the job>. Back cancels." */
+const HANDOFF_JOB: Partial<Record<AskKind, string>> = { page: "the photo", sheet: "the photo of the sheet", answers: "your typed answers", question: "your question", explain: "how you got there", second: "your second go" };
+/**
+ * The hand-off this Math screen is waiting on (TL-6): the session's open ask, when it was opened from this screen, is one
+ * of the kinds the screen opens, and (on the Walk) is for the item in hand. Null otherwise. Pure, from the session alone.
+ */
+export function handoffOf(s: Pick<Session, "ask" | "screen" | "walkIx">): Ask | null {
+  const a = s.ask;
+  if (!a || a.screen !== s.screen || !HANDOFFS[s.screen]?.includes(a.kind)) return null;
+  if (s.screen === "walk" && a.detail?.walkIx !== s.walkIx) return null;
+  return a;
+}
+/** The caption while a hand-off is open: what is awaited and the way out, or that no phone is connected (phonesLive 0). Null with none open. */
+export function handoffLine(s: Pick<Session, "ask" | "screen" | "walkIx" | "phonesLive">): string | null {
+  const a = handoffOf(s);
+  if (!a) return null;
+  return s.phonesLive === 0 ? "No phone is connected. Up: pair a phone. Back: cancel." : `Waiting for the phone: ${HANDOFF_JOB[a.kind] ?? "the job"}. Back cancels.`;
 }

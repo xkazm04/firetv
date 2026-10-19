@@ -1032,3 +1032,85 @@ test('TL-1: LingaTV reads its keys through keyOf and spells no arrow key itself'
  assert.match(src,/import \{[^}]*\bkeyOf\b[^}]*\} from "@\/tv\/keys"/,'LingaTV imports keyOf');
  assert.doesNotMatch(src,/"ArrowLeft"/,'LingaTV holds no "ArrowLeft" literal');
 });
+
+// ---- TL-6 (TV-led design 6): Math Buddy opens its hand-offs from the TV ----
+const askOf=(kind,screen,detail)=>({id:'a1',kind,learner:'ema',screen,at:1,phase:'open',...(detail?{detail}:{})});
+const setOf=(verdicts,patch={})=>session({screen:'walk',practice:{topic:'linear-one-step',marked:true,items:verdicts.map((v,i)=>({n:i+1,question:`q${i}`,verdict:v}))},walkIx:0,...patch});
+
+test('TL-6: Select on I have homework with no sheet posts page.ask and ask.open page, the subject in its detail',()=>{
+ const {tvKey}=keys();
+ assert.deepEqual(tvKey(session({screen:'tonight',focus:0}),'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'page.ask',subject:'maths'},{type:'ask.open',kind:'page',detail:{subject:'maths'}}]);
+});
+
+test('TL-6: the practice card has two stops - Snap the sheet, Type my answers - and Select opens sheet or answers',()=>{
+ const {tvKey,PRACTICE_STOPS}=keys();
+ assert.deepEqual([...PRACTICE_STOPS],['sheet','answers']);
+ const set={topic:'linear-one-step',marked:false,items:[{n:1,question:'q'}]};
+ const on=(focus,extra={})=>session({screen:'practice',practice:set,focus,...extra});
+ assert.deepEqual(tvKey(on(0),'select',LOCAL).events,[{type:'ask.open',kind:'sheet'}]);
+ assert.deepEqual(tvKey(on(1),'select',LOCAL).events,[{type:'ask.open',kind:'answers'}]);
+ assert.deepEqual(tvKey(on(0),'right',LOCAL).events,[{type:'focus',focus:1}],'the D-pad reaches the second stop');
+ assert.deepEqual(tvKey(on(1),'left',LOCAL).events,[{type:'focus',focus:0}]);
+ assert.deepEqual(tvKey(on(0,{jobs:{mark:{phase:'running',startedAt:1,key:'k'}}}),'select',LOCAL).events,[],'no ask while the desk is marking');
+ assert.deepEqual(tvKey(on(0),'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}],'Back keeps the set and leaves');
+});
+
+test('TL-6: Ask in words is the last stop of the hint, and the Page reaches it with Down from the last problem',()=>{
+ const {tvKey,HINT_STOPS,PAGE_ASK}=keys();
+ assert.deepEqual([...HINT_STOPS],['stuck','lesson','ask']);
+ const hint={key:'k2',problem:'x + 2 = 5',stage:1,hint1:{hint:'h'},hint2:null,askedQ:''};
+ const onHint=(focus)=>session({screen:'hint',pages:[page()],itemIx:1,focus,hint});
+ assert.deepEqual(tvKey(onHint(2),'select',LOCAL).events,[{type:'ask.open',kind:'question',detail:{n:2}}]);
+ assert.deepEqual(tvKey(onHint(1),'right',LOCAL).events,[{type:'focus',focus:2}]);
+ const onPage=(extra)=>session({screen:'page',pages:[page()],...extra});
+ assert.deepEqual(tvKey(onPage({itemIx:0}),'down',LOCAL).events,[{type:'item',itemIx:1}],'Down still walks the problems');
+ assert.deepEqual(tvKey(onPage({itemIx:1}),'down',LOCAL).events,[{type:'focus',focus:PAGE_ASK}]);
+ assert.deepEqual(tvKey(onPage({itemIx:1,focus:PAGE_ASK}),'select',LOCAL).events,[{type:'ask.open',kind:'question',detail:{n:2}}]);
+ assert.deepEqual(tvKey(onPage({itemIx:1,focus:PAGE_ASK}),'up',LOCAL).events,[{type:'focus',focus:0}]);
+ assert.deepEqual(tvKey(session({screen:'page',subject:'essay',pages:[page('essay')],itemIx:1}),'down',LOCAL).events,[{type:'item',itemIx:1}],'an Essay page has no such stop');
+});
+
+test('TL-6: a walk item that is wrong or unsure has Tell the desk how and Type my second go, each with its walkIx; a right one has neither',()=>{
+ const {tvKey,walkStops}=keys();
+ const s=setOf(['right','wrong','unsure']);
+ assert.deepEqual(walkStops(s),[],'right, not last');
+ assert.deepEqual(walkStops({...s,walkIx:1}),['explain','second']);
+ assert.deepEqual(walkStops({...s,walkIx:2}),['sheet','explain','second'],'the last item keeps Back to the sheet first');
+ assert.deepEqual(walkStops(setOf(['wrong'],{practice:{topic:'t',marked:true,items:[{n:1,question:'q',verdict:'wrong',second:'right'}]}})),['sheet'],'a second go that held is done');
+ const at=(focus)=>({...s,walkIx:1,focus});
+ assert.deepEqual(tvKey(at(0),'select',LOCAL).events,[{type:'ask.open',kind:'explain',detail:{walkIx:1}}]);
+ assert.deepEqual(tvKey(at(1),'select',LOCAL).events,[{type:'ask.open',kind:'second',detail:{walkIx:1}}]);
+ assert.deepEqual(tvKey(at(0),'down',LOCAL).events,[{type:'focus',focus:1}]);
+ assert.deepEqual(tvKey({...s,walkIx:2,focus:0},'select',LOCAL).events,[{type:'nav',screen:'sheet',focus:2}],'Select on the last item still goes back to the sheet');
+ assert.deepEqual(tvKey({...at(1),ask:askOf('second','walk',{walkIx:1})},'right',LOCAL).events,[{type:'ask.cancel',id:'a1'},{type:'walk',ix:2},{type:'focus',focus:0}],'another item closes this items hand-off');
+});
+
+test('TL-6: the first Back with an ask open emits ask.cancel and stays; the next Back leaves as it did',()=>{
+ const {tvKey}=keys();
+ const hint={key:'k1',problem:'x',stage:1,hint1:{hint:'h'},hint2:null,askedQ:''};
+ const set={topic:'linear-one-step',marked:false,items:[{n:1,question:'q'}]};
+ const cases=[
+  ['page',session({screen:'page',pages:[page()]}),askOf('question','page'),{type:'nav',screen:'tonight',focus:0}],
+  ['hint',session({screen:'hint',pages:[page()],hint}),askOf('question','hint'),{type:'nav',screen:'page',focus:0}],
+  ['practice',session({screen:'practice',practice:set}),askOf('sheet','practice'),{type:'nav',screen:'tonight',focus:0}],
+  ['practice answers',session({screen:'practice',practice:set}),askOf('answers','practice'),{type:'nav',screen:'tonight',focus:0}],
+  ['walk',setOf(['wrong']),askOf('explain','walk',{walkIx:0}),{type:'nav',screen:'sheet',focus:0}],
+ ];
+ for(const [name,s,ask,leave] of cases){
+  assert.deepEqual(tvKey({...s,ask},'back',LOCAL).events,[{type:'ask.cancel',id:'a1'}],`${name}: the first Back cancels and does not leave`);
+  assert.deepEqual(tvKey(s,'back',LOCAL).events,[leave],`${name}: the next Back leaves`);
+ }
+ // Tonight keeps page.unask and adds ask.cancel beside it
+ const tonight=session({screen:'tonight',awaiting:'maths'});
+ assert.deepEqual(tvKey({...tonight,ask:askOf('page','tonight',{subject:'maths'})},'back',LOCAL).events,[{type:'ask.cancel',id:'a1'},{type:'page.unask'}]);
+ assert.deepEqual(tvKey(tonight,'back',LOCAL).events,[{type:'page.unask'}],'no ask open: as it was');
+ // an ask another screen opened is not this screen to cancel
+ assert.deepEqual(tvKey({...session({screen:'practice',practice:set}),ask:askOf('sheet','tonight')},'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}]);
+});
+
+test('TL-6: with no phone connected, Up on the asking screen goes to pairing, as the caption says',()=>{
+ const {tvKey}=keys();
+ const s=session({screen:'tonight',awaiting:'maths',ask:askOf('page','tonight'),phonesLive:0});
+ assert.deepEqual(tvKey(s,'up',LOCAL).events,[{type:'nav',screen:'pair',focus:0,from:'tonight'}]);
+ assert.deepEqual(tvKey({...s,phonesLive:1},'up',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'tonight'}],'a phone is live: Up is what it was');
+});

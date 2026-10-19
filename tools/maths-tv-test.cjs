@@ -1278,3 +1278,99 @@ test('MB2-2: past the path\'s end the Topics ruler prints no year under the topi
  assert.match(draw(mk(12,'uk')),/class="mb-ty">Year \d+</,'a learner on the path keeps the year');
  assert.match(draw(mk(12,'us')),/class="mb-ty">Grade \d+</,'in their school system\'s words');
 });
+
+// ---------------------------------------------------------------- TL-6: the hand-offs the TV opens - the stops, the chip, the caption
+
+const askAt=(kind,screen,detail)=>({id:'a1',kind,learner:'ema',screen,at:1,phase:'open',...(detail?{detail}:{})});
+const CHIP='data-role="maths-onphone"';
+const tlSet=()=>({topic:'linear-one-step',marked:false,items:SECOND_Q.slice(0,3).map((question,ix)=>({n:ix+1,question}))});
+const snapped=()=>({id:'p1',subject:'maths',day:'2026-10-19',title:'Sheet one',img:'',w:100,h:100,items:[{n:1,key:'k1',text:'x + 1 = 2',band:[0,10]},{n:2,key:'k2',text:'x + 2 = 5',band:[10,20]}]});
+const focusedLabel=(html)=>{const m=/<div class="mb-act"[^>]*data-focused="true"[^>]*><span class="ic">.*?<\/span><span>(.*?)<\/span>/.exec(html);return m&&m[1];};
+
+test('TL-6 1: handoffOf and handoffLine - the ask counts only on the screen that opened it, for a kind that screen opens, and on the Walk for the item in hand',()=>{
+ const {handoffOf,handoffLine}=R();
+ const base={screen:'practice',walkIx:1,phonesLive:1};
+ assert.equal(handoffOf({...base,ask:null}),null);
+ assert.equal(handoffOf({...base,ask:askAt('sheet','practice')}).kind,'sheet');
+ assert.equal(handoffOf({...base,ask:askAt('sheet','tonight')}),null,'opened from another screen');
+ assert.equal(handoffOf({...base,ask:askAt('question','practice')}),null,'not a kind the practice card opens');
+ assert.equal(handoffOf({...base,screen:'walk',ask:askAt('second','walk',{walkIx:1})}).kind,'second');
+ assert.equal(handoffOf({...base,screen:'walk',ask:askAt('second','walk',{walkIx:2})}),null,'another item');
+ assert.equal(handoffLine({...base,ask:askAt('sheet','practice')}),'Waiting for the phone: the photo of the sheet. Back cancels.');
+ assert.equal(handoffLine({...base,ask:askAt('answers','practice')}),'Waiting for the phone: your typed answers. Back cancels.');
+ assert.equal(handoffLine({...base,phonesLive:0,ask:askAt('sheet','practice')}),'No phone is connected. Up: pair a phone. Back: cancel.');
+ assert.equal(handoffLine({...base,ask:null}),null);
+ for(const kind of ['page','sheet','answers','question','explain','second'])for(const phonesLive of [0,1])
+  assert.ok(!/[—–]/.test(handoffLine({screen:'practice',walkIx:0,phonesLive,ask:{...askAt(kind,'practice'),screen:'practice'}})||''),'no dash in app text');
+});
+
+test('TL-6 2: the practice card draws two stops, Snap the sheet and Type my answers, the lamp on the one the focus names',()=>{
+ for(const [focus,lit] of [[0,'Snap the sheet'],[1,'Type my answers']]){
+  const html=drawMaths('PracticeScreen',secondSession(null,'practice',{practice:tlSet(),walkIx:0,focus}));
+  assert.ok(html.includes('Snap the sheet')&&html.includes('Type my answers'));
+  assert.equal(focusedLabel(html),lit);
+  assert.ok(!html.includes(CHIP),'no chip with no ask');
+ }
+});
+
+test('TL-6 3: while the practice ask matches, the card draws the On your phone chip and the caption; with no phone, the pairing caption',()=>{
+ for(const kind of ['sheet','answers']){
+  const s=secondSession(null,'practice',{practice:tlSet(),walkIx:0,focus:0,phonesLive:1,ask:askAt(kind,'practice')});
+  const html=drawMaths('PracticeScreen',s);
+  assert.ok(html.includes(CHIP)&&html.includes('On your phone'),`${kind}: the chip`);
+  assert.ok(html.includes(kind==='sheet'?'Waiting for the phone: the photo of the sheet. Back cancels.':'Waiting for the phone: your typed answers. Back cancels.'),`${kind}: the caption`);
+  assert.ok(html.includes('No phone is connected. Up: pair a phone. Back: cancel.')===false);
+  assert.ok(drawMaths('PracticeScreen',{...s,phonesLive:0}).includes('No phone is connected. Up: pair a phone. Back: cancel.'),`${kind}: no phone live`);
+  assert.ok(!drawMaths('PracticeScreen',{...s,ask:askAt(kind,'tonight')}).includes(CHIP),`${kind}: an ask from another screen draws nothing`);
+ }
+});
+
+test('TL-6 4: Tonight reads Waiting for the photo with the chip and the caption while the page ask is open',()=>{
+ const s=secondSession(null,'tonight',{practice:null,awaiting:'maths',focus:0,phonesLive:1,ask:askAt('page','tonight',{subject:'maths'})});
+ const html=drawMaths('Tonight',s);
+ assert.ok(html.includes('Waiting for the photo'));
+ assert.ok(html.includes(CHIP));
+ assert.ok(html.includes('Waiting for the phone: the photo. Back cancels.'));
+ assert.ok(drawMaths('Tonight',{...s,phonesLive:0}).includes('No phone is connected. Up: pair a phone. Back: cancel.'));
+ assert.ok(!drawMaths('Tonight',{...s,ask:null,awaiting:null}).includes(CHIP));
+});
+
+test('TL-6 5: the Page and the Hint draw an Ask in words stop; an open question draws the chip and the caption',()=>{
+ const page={...snapped(),day:undefined};
+ const onPage=(extra={})=>secondSession(null,'page',{practice:null,pages:[page],pageIx:0,itemIx:1,focus:0,phonesLive:1,...extra});
+ let html=drawMaths('PageScreen',onPage());
+ assert.ok(html.includes('Ask in words'));assert.equal(focusedLabel(html),null,'the lamp is on the problem');
+ assert.equal(focusedLabel(drawMaths('PageScreen',onPage({focus:1}))),'Ask in words');
+ html=drawMaths('PageScreen',onPage({ask:askAt('question','page',{n:2})}));
+ assert.ok(html.includes(CHIP)&&html.includes('Waiting for the phone: your question. Back cancels.'));
+ const hint={key:'k2',problem:'x + 2 = 5',stage:1,hint1:{hint:'Undo the +2.',next:'Then divide.'},hint2:null,askedQ:''};
+ const onHint=(extra={})=>secondSession(null,'hint',{practice:null,pages:[page],pageIx:0,itemIx:1,hint,focus:2,phonesLive:1,...extra});
+ html=drawMaths('HintScreen',onHint());
+ assert.equal(focusedLabel(html),'Ask in words');assert.ok(!html.includes(CHIP));
+ html=drawMaths('HintScreen',onHint({ask:askAt('question','hint',{n:2})}));
+ assert.ok(html.includes(CHIP)&&html.includes('Waiting for the phone: your question. Back cancels.'));
+ assert.ok(drawMaths('HintScreen',onHint({ask:askAt('question','hint',{n:2}),phonesLive:0})).includes('No phone is connected. Up: pair a phone. Back: cancel.'));
+});
+
+test('TL-6 6: the Walk draws Tell the desk how and Type my second go on a ringed item only, and the chip while that item\'s ask is open',()=>{
+ const ringed=secondSession('wrong','walk',{focus:0}),right=secondSession(null,'walk',{walkIx:0,focus:0});
+ let html=drawMaths('Walk',ringed);
+ assert.ok(html.includes('Tell the desk how')&&html.includes('Type my second go'));
+ assert.equal(focusedLabel(html),'Tell the desk how');
+ assert.equal(focusedLabel(drawMaths('Walk',{...ringed,focus:1})),'Type my second go');
+ html=drawMaths('Walk',right);
+ assert.ok(!html.includes('Tell the desk how')&&!html.includes('Type my second go'),'a right item has neither');
+ const asked=(kind,walkIx,extra={})=>({...ringed,phonesLive:1,ask:askAt(kind,'walk',{walkIx}),...extra});
+ for(const kind of ['explain','second']){
+  html=drawMaths('Walk',asked(kind,1));
+  assert.ok(html.includes(CHIP),`${kind}: the chip`);
+  assert.ok(html.includes(kind==='explain'?'Waiting for the phone: how you got there. Back cancels.':'Waiting for the phone: your second go. Back cancels.'),`${kind}: the caption`);
+  assert.ok(!drawMaths('Walk',asked(kind,3)).includes(CHIP),`${kind}: another item's ask draws nothing`);
+ }
+ assert.ok(drawMaths('Walk',asked('explain',1,{phonesLive:0})).includes('No phone is connected. Up: pair a phone. Back: cancel.'));
+});
+
+test('TL-6 7: no remote-only self-mark - the Practice card and the Walk offer no Right or Wrong stop (OD2 b)',()=>{
+ const html=drawMaths('PracticeScreen',secondSession(null,'practice',{practice:tlSet(),walkIx:0,focus:0}))+drawMaths('Walk',secondSession('wrong','walk',{focus:0}));
+ assert.doesNotMatch(html,/<span>(Right|Wrong|I got it right|Mark it)<\/span>/);
+});
