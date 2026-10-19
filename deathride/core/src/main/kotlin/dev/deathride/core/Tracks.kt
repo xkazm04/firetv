@@ -48,10 +48,16 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
     val checkpoints=spots.filter { it.kind=="checkpoint" }.map { it.fraction }.toDoubleArray()
     val grid=spots.filter { it.kind=="grid" }
     private val cell=TrackRules["projectionCellM"]
-    private val columns: Int; private val rows: Int; private val candidates: Array<IntArray>
+    private val columns: Int; private val rows: Int
+    /** Projection bins are cell*BIN_TOP/BIN_SPLIT on a side (see bakeCandidates): candidate lists ~10x shorter than the 20 m authoring cell gave. */
+    private val binM: Double
+    /** Baked on first projection, not at class load: the eager bake of every archived course stalled Android startup.
+     *  [prewarmProjection] bakes them ahead of use; a project() racing an unfinished bake waits on this lock. */
+    private val candidateBins=lazy(LazyThreadSafetyMode.SYNCHRONIZED) { bakeCandidates() }
+    private val candidates: Array<IntArray> by candidateBins
     val pool=TrackContent.pools[id]?:TrackPool(0,4)
     val json get()=json(region)
-    fun json(region: RegionDefinition)="{\"id\":\"$id\",\"name\":\"$name\",\"lesson\":\"$lesson\",\"theme\":\"$theme\",\"region\":\"${region.id}\",\"regionName\":\"${region.name}\",\"competitiveCars\":[${pool.eligible().joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"features\":[${features.joinToString(","){"{\"kind\":\"${it.kind}\",\"start\":${it.start},\"end\":${it.end},\"laneM\":${it.laneM},\"landmark\":\"${it.landmark}\"}"}}]}"
+    fun json(region: RegionDefinition)=courseJson(id,name,lesson,theme,features,pool,region)
     init {
         require(nodes.size>=5 && nodes.first()==nodes.last()) { "$id: centerline must explicitly close" }
         val n=nodes.size-1
@@ -72,16 +78,55 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
         curvature[count]=curvature[0]
         minX=min(x.min(),branches.minOfOrNull { it.alternative.x.min() }?:x.min())-width.max()-cell; maxX=max(x.max(),branches.maxOfOrNull { it.alternative.x.max() }?:x.max())+width.max()+cell
         minY=min(y.min(),branches.minOfOrNull { it.alternative.y.min() }?:y.min())-width.max()-cell; maxY=max(y.max(),branches.maxOfOrNull { it.alternative.y.max() }?:y.max())+width.max()+cell
-        columns=ceil((maxX-minX)/cell).toInt();rows=ceil((maxY-minY)/cell).toInt()
-        // Static spatial bins: each contains segments close enough to any point in its cell.
-        candidates=Array(columns*rows) { index ->
-            val cx=minX+(index%columns+.5)*cell;val cy=minY+(index/columns+.5)*cell
-            var nearest=Double.POSITIVE_INFINITY
-            for(i in 0 until count)nearest=min(nearest,sqrt(distance2(cx,cy,i)))
-            (0 until count).filter { sqrt(distance2(cx,cy,it))<=nearest+cell*sqrt(2.0) }.toIntArray()
-        }
+        columns=ceil((maxX-minX)/(cell*BIN_TOP)).toInt()*BIN_SPLIT;rows=ceil((maxY-minY)/(cell*BIN_TOP)).toInt()*BIN_SPLIT;binM=cell*BIN_TOP/BIN_SPLIT
         obstacles=ObstacleContent.bake(this,obstaclePlacements)
     }
+    // Static spatial bins: each contains every segment that can be the nearest segment of some point in its cell
+    // (centre distance <= nearest + cellSize*sqrt(2)). Built coarse-to-fine: a child bin only has to look through its
+    // parent's list, because a segment that cannot be nearest anywhere in the parent cannot be nearest in the child.
+    // For any in-bounds point the argmin is exactly what the single 20 m grid produced, with ~10x shorter lists.
+    private fun bakeCandidates(): Array<IntArray> {
+        val scratch=DoubleArray(count)
+        var size=cell*BIN_TOP;var cols=columns/BIN_SPLIT;var rws=rows/BIN_SPLIT
+        var level=Array(cols*rws) { index ->
+            val cx=minX+(index%cols+.5)*size;val cy=minY+(index/cols+.5)*size
+            var nearest=Double.POSITIVE_INFINITY
+            for(i in 0 until count) { val d=sqrt(distance2(cx,cy,i));scratch[i]=d;if(d<nearest)nearest=d }
+            val limit=nearest+size*sqrt(2.0)
+            var n=0;for(i in 0 until count)if(scratch[i]<=limit)n++
+            val out=IntArray(n);n=0;for(i in 0 until count)if(scratch[i]<=limit)out[n++]=i
+            out
+        }
+        var split=1
+        while(split<BIN_SPLIT) {
+            val half=size/2;val parents=level;val parentCols=cols;cols*=2;rws*=2
+            level=Array(cols*rws) { index ->
+                val fx=index%cols;val fy=index/cols;val parent=parents[(fy/2)*parentCols+fx/2]
+                val cx=minX+(fx+.5)*half;val cy=minY+(fy+.5)*half
+                var nearest=Double.POSITIVE_INFINITY
+                for(k in parent.indices) { val d=sqrt(distance2(cx,cy,parent[k]));scratch[k]=d;if(d<nearest)nearest=d }
+                val limit=nearest+half*sqrt(2.0)
+                var n=0;for(k in parent.indices)if(scratch[k]<=limit)n++
+                val out=IntArray(n);n=0;for(k in parent.indices)if(scratch[k]<=limit)out[n++]=parent[k]
+                out
+            }
+            size=half;split*=2
+        }
+        return level
+    }
+    /** Bakes this course's projection bins and every branch's on the calling thread, so the first project() is a lookup.
+     *  Call it off the render thread (see [CoursePrewarm]) for the course about to be used, never for the whole catalogue. */
+    fun prewarmProjection() { candidates;for(i in branches.indices)branches[i].alternative.prewarmProjection() }
+    /** True once [prewarmProjection] has nothing left to do. */
+    val projectionReady: Boolean get() {
+        if(!candidateBins.isInitialized())return false
+        for(i in branches.indices)if(!branches[i].alternative.projectionReady)return false
+        return true
+    }
+    /** Memory report only: ints held by this course's bins and its branches' (bakes them if needed). */
+    fun projectionInts(): Long { var n=0L;for(bin in candidates)n+=bin.size;for(i in branches.indices)n+=branches[i].alternative.projectionInts();return n }
+    /** Memory report only: bin arrays held, each with its own array header. */
+    fun projectionBinArrays(): Int { var n=candidates.size;for(i in branches.indices)n+=branches[i].alternative.projectionBinArrays();return n }
     private fun distance2(px: Double,py: Double,i: Int): Double {
         val t=((px-x[i])*dx[i]+(py-y[i])*dy[i])*inverseLength2[i]
         val u=t.coerceIn(0.0,1.0);val a=px-x[i]-dx[i]*u;val b=py-y[i]-dy[i]*u
@@ -119,7 +164,7 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
         out.heading=atan2(dy[i],dx[i]);out.curvature=curvature[i]
     }
     fun project(px: Double,py: Double,out: Projection,hintS: Double=Double.NaN,routeHint: Int=0) {
-        val col=((px-minX)/cell).toInt().coerceIn(0,columns-1);val row=((py-minY)/cell).toInt().coerceIn(0,rows-1)
+        val col=((px-minX)/binM).toInt().coerceIn(0,columns-1);val row=((py-minY)/binM).toInt().coerceIn(0,rows-1)
         val list=candidates[row*columns+col];var best=Double.POSITIVE_INFINITY;var chosen=0
         for(k in list.indices) { val i=list[k];val d=distance2(px,py,i);if(d<best){best=d;chosen=i} }
         // Preserve passage identity at an at-grade crossing. A far teleport still uses global projection.
@@ -148,22 +193,44 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
         }
     }
 }
+/** Projection bins: 4 authoring cells across at the top level, halved BIN_SPLIT-fold (8 -> 10 m bins; 16 -> 5 m is ~10% faster for ~3x the list memory). */
+private const val BIN_SPLIT=8
+private const val BIN_TOP=4
 object Courses {
-    val all=Content.table("tracks").map { row ->
-        val id=row.getValue("id")
-        Course(id,row.getValue("name"),row.getValue("lesson"),row.number("startFraction"),row.getValue("theme"),
+    private val rows=Content.table("tracks")
+    private val ids=rows.map { it.getValue("id") }
+    /** Built on first use. A course bakes a spline, obstacles, branches and junctions: building all 66 at class load cost ~270 ms on desktop (several seconds on a Stick) and only the selected course is ever raced. */
+    private val built=arrayOfNulls<Course>(rows.size)
+    private fun build(index: Int): Course {
+        val row=rows[index];val id=ids[index]
+        return Course(id,row.getValue("name"),row.getValue("lesson"),row.number("startFraction"),row.getValue("theme"),
             Content.table("tracks/$id").map { TrackNode(it.number("xM"),it.number("yM"),it.number("halfWidthM"),Surfaces.all.first { s->s.id==it.getValue("surface") },it.number("aiLaneM")) },
             Content.table("tracks/$id-spots").map { TrackSpot(it.getValue("kind"),it.number("fraction"),it.number("laneM")) })
     }
+    fun course(index: Int): Course = synchronized(built) { built[index]?:build(index).also { built[index]=it } }
+    /** Same order and stable legacy indices as before; elements materialise on access. */
+    val all: List<Course> = object: AbstractList<Course>(),RandomAccess {
+        override val size get()=ids.size
+        override fun get(index: Int)=course(index)
+    }
+    /** Cheap lookups that do not build any course. */
+    fun indexOf(id: String)=ids.indexOf(id)
+    fun id(index: Int)=ids[index]
     // Keep stable legacy indices for saved identifiers and archived authoring fixtures.
     // Only owner-selected campaign courses and retained alternates are offered for play.
     val playableIndices=Content.table("active-tracks").map { row->
-        all.indexOfFirst{it.id==row.getValue("id")}.also{require(it>=0){"Unknown active course"}}
+        ids.indexOf(row.getValue("id")).also{require(it>=0){"Unknown active course"}}
     }.also{require(it.isNotEmpty() && it.distinct().size==it.size)}
-    val playable=playableIndices.map{all[it]}
+    val playable: List<Course> = object: AbstractList<Course>(),RandomAccess {
+        override val size get()=playableIndices.size
+        override fun get(index: Int)=course(playableIndices[index])
+    }
     fun nextPlayable(index:Int)=playableIndices[(playableIndices.indexOf(index)+1).mod(playableIndices.size)]
-    val json=playable.joinToString(",","[","]"){it.json}
+    /** Catalogue metadata straight from the tables, byte-identical to Course.json, without baking any geometry. */
+    val json=playableIndices.joinToString(",","[","]"){ i->val row=rows[i];val id=ids[i];val theme=row.getValue("theme")
+        courseJson(id,row.getValue("name"),row.getValue("lesson"),theme,TrackContent.features[id]?:emptyList(),TrackContent.pools[id]?:TrackPool(0,4),Regions.forCourse(id,theme)) }
 }
+internal fun courseJson(id: String,name: String,lesson: String,theme: String,features: List<TrackFeature>,pool: TrackPool,region: RegionDefinition)="{\"id\":\"$id\",\"name\":\"$name\",\"lesson\":\"$lesson\",\"theme\":\"$theme\",\"region\":\"${region.id}\",\"regionName\":\"${region.name}\",\"competitiveCars\":[${pool.eligible().joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"features\":[${features.joinToString(","){"{\"kind\":\"${it.kind}\",\"start\":${it.start},\"end\":${it.end},\"laneM\":${it.laneM},\"landmark\":\"${it.landmark}\"}"}}]}"
 
 object TrackLinter {
     fun errors(c: Course): List<String> {

@@ -1,0 +1,52 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[153,153],"rejected":[0,0],"hostPumpStalls":0}
+{"second":71,"accepted":[2178,2178],"rejected":[0,0],"hostPumpStalls":0}
+{"second":137,"accepted":[4147,4147],"rejected":[0,0],"hostPumpStalls":0}
+{"hostPumpStall":{"second":204.2715037,"lateMs":104.83703331873403,"epochMs":1791332223994.5598,"cpu":{"user":6687000,"system":1828000},"memory":{"rss":161669120,"heapTotal":78893056,"heapUsed":52617560,"external":12717297,"arrayBuffers":8679826}}}
+{"second":204,"accepted":[6148,6147],"rejected":[0,0],"hostPumpStalls":1}
+{"second":271,"accepted":[8167,8167],"rejected":[0,0],"hostPumpStalls":1}
+{"second":336,"accepted":[10091,10091],"rejected":[0,0],"hostPumpStalls":1}
+{"second":400,"accepted":[12029,12029],"rejected":[0,0],"hostPumpStalls":1}
+{"second":465,"accepted":[13979,13979],"rejected":[0,0],"hostPumpStalls":1}
+{"second":530,"accepted":[15915,15915],"rejected":[0,0],"hostPumpStalls":1}
+{"second":595,"accepted":[17854,17854],"rejected":[0,0],"hostPumpStalls":1}
+{"hostPumpStall":{"second":659.5877332,"lateMs":116.2294999754522,"epochMs":1791332679310.7893,"cpu":{"user":17140000,"system":5218000},"memory":{"rss":210653184,"heapTotal":137220096,"heapUsed":72151592,"external":8938691,"arrayBuffers":4901220}}}
+{"second":659,"accepted":[19789,19789],"rejected":[0,0],"hostPumpStalls":2}
+{"second":724,"accepted":[21730,21730],"rejected":[0,0],"hostPumpStalls":2}
+{"second":788,"accepted":[23662,23662],"rejected":[0,0],"hostPumpStalls":2}
+{"hostPumpStall":{"second":853.4111318000001,"lateMs":190.065266441321,"epochMs":1791332873134.188,"cpu":{"user":21734000,"system":6265000},"memory":{"rss":225558528,"heapTotal":215023616,"heapUsed":84995768,"external":11265132,"arrayBuffers":7227661}}}
+{"second":853,"accepted":[25601,25601],"rejected":[0,0],"hostPumpStalls":3}
+{"second":900,"accepted":[26984,26984],"rejected":[5,5],"hostPumpStalls":3}
+{
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/50bd2af9/deathride/tools/ability-stick-probe.mjs:116:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 900.1474278000001,
+  "rounds": 14,
+  "classUses": {
+    "Needle": 22,
+    "Line": 15,
+    "Bastion": 15,
+    "Comet": 15,
+    "Trail": 17,
+    "Flint": 21,
+    "Quill": 16,
+    "Vandal": 14,
+    "Kestrel": 12,
+    "Bulwark": 10
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 26989,
+      "accepted": 26984,
+      "rejected": 5,
+      "hz": 29.98286632442233
+    },
+    {
+      "slot": 1,
+      "sent": 26989,
+      "accepted": 26984,
+      "rejected": 5,
+      "hz": 29.98286632442233
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "device": "10.0.0.139:5555 (AFTKM, Android 11)",
+  "ownerPackage": "dev.deathride.tv",
+  "atStart": {
+    "utc": "2026-10-07T03:52:54Z",
+    "resumed": "mResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}",
+    "pid": 14337,
+    "lastUpdateTime": "2026-10-06 23:44:23"
+  },
+  "beforeEachRun": {
+    "base-run1": "mResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}",
+    "base-run2": "mResumedActivity: ActivityRecord{830a566 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t341}",
+    "diag": "mResumedActivity: ActivityRecord{844cd76 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t342}",
+    "cut-run1": "mResumedActivity: ActivityRecord{1088289 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t343}",
+    "cut-run2": "mResumedActivity: ActivityRecord{1b3bf09 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t344}",
+    "soak": "mResumedActivity: ActivityRecord{b09e520 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t345}"
+  },
+  "afterRuns": "mResumedActivity: ActivityRecord{ba05de5 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t346}\n14337\n3859",
+  "afterRestore": "mResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}\n14337\n    versionName=0.1-spike\n    lastUpdateTime=2026-10-06 23:44:23\n19933 u0_a272      16  -4 1.5G  63M  36M S 62.2   3.7  22:23.11 GLThread 47610  dev.deathride.tv\n 7824 u0_a272      16  -4 1.5G  63M  36M S  3.3   3.7   0:00.18 GLThread 47610  dev.deathride.tv\n17039 u0_a272      16  -4 1.5G  63M  36M S  1.1   3.7   7:35.89 GLThread 47531  dev.deathride.tv\n 3977 u0_a272      16  -4 1.5G  63M  36M S  1.1   3.7  41:35.16 GLThread 47430  dev.deathride.tv\n14371 u0_a272      16  -4 1.5G  63M  36M S  0.0   3.7  75:13.94 GLThread 47312  dev.deathride.tv\n  783 audioserver   1 -19  83M 4.9M 2.2M S  0.0   0.2 106:51.09 writer          fireos.hardware.audio.service\n  683 audioserver   1 -19  76M 5.7M 3.9M S  0.0   0.3 107:43.87 AudioOut_D      audioserver",
+  "note": "perf-device installs and launches only dev.deathride.perf (aapt identity check). dev.deathride.tv was never installed over, cleared or stopped: its process 14337 and task t330 (activity record a03c5a7) survived throughout. After the runs dev.deathride.perf was force-stopped and the owner app brought back to the front; the intent was delivered to the running instance. With it in front the audio pair used 0.0% CPU."
+}

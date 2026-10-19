@@ -1,0 +1,81 @@
+{
+ "what": "p13f.apk (bb49e716): the app in the lobby, two phones paired by tools/perf-p13f-stats-load.mjs (the probe hello, 30 Hz neutral inputs), 60 s phases: quiet (no /stats) and the probe race loop (GET /stats, 160 ms pause). MB/s and GCs from art.gc.bytes-allocated and art.gc.gc-count read from /profile every 5 s.",
+ "startedUtc": "2026-10-07T21:46:18.269Z",
+ "phases": [
+  {
+   "index": 0,
+   "phase": "quiet",
+   "fromSecond": 5.0,
+   "toSecond": 65.1,
+   "allocatedMB": 40.5,
+   "allocatedMBps": 0.67,
+   "gcs": 3,
+   "gcPerMinute": 3.0
+  },
+  {
+   "index": 1,
+   "phase": "stats",
+   "fromSecond": 65.2,
+   "toSecond": 125.2,
+   "allocatedMB": 166.6,
+   "allocatedMBps": 2.78,
+   "gcs": 13,
+   "gcPerMinute": 13.0,
+   "statsRequests": 297,
+   "statsPerSecond": 4.95,
+   "statsBodyBytesMean": 76815,
+   "statsRequestMsMean": 35.2
+  },
+  {
+   "index": 2,
+   "phase": "quiet",
+   "fromSecond": 125.2,
+   "toSecond": 185.3,
+   "allocatedMB": 38.8,
+   "allocatedMBps": 0.65,
+   "gcs": 3,
+   "gcPerMinute": 3.0
+  },
+  {
+   "index": 3,
+   "phase": "stats",
+   "fromSecond": 185.4,
+   "toSecond": 245.5,
+   "allocatedMB": 166.8,
+   "allocatedMBps": 2.77,
+   "gcs": 12,
+   "gcPerMinute": 12.0,
+   "statsRequests": 299,
+   "statsPerSecond": 4.97,
+   "statsBodyBytesMean": 76824,
+   "statsRequestMsMean": 33.7
+  },
+  {
+   "index": 4,
+   "phase": "quiet",
+   "fromSecond": 245.5,
+   "toSecond": 305.6,
+   "allocatedMB": 39.5,
+   "allocatedMBps": 0.66,
+   "gcs": 3,
+   "gcPerMinute": 3.0
+  }
+ ],
+ "result": {
+  "quietMBps": 0.66,
+  "statsMBps": 2.77,
+  "statsAddsMBps": 2.11,
+  "statsPerSecond": 4.96,
+  "MBPerStatsRequest": 0.426,
+  "quietGcPerMinute": [
+   3.0,
+   3.0,
+   3.0
+  ],
+  "statsGcPerMinute": [
+   13.0,
+   12.0
+  ]
+ },
+ "limit": "Lobby, not race: the race adds its own allocation. The /profile samples (empty trace) are counted in every phase."
+}

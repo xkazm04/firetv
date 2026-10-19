@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-08T15:53:55.9626020Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "rustc",
+                             "IDProcess":  51580,
+                             "PercentProcessorTime":  188
+                         },
+                         {
+                             "Name":  "node#29",
+                             "IDProcess":  25144,
+                             "PercentProcessorTime":  174
+                         },
+                         {
+                             "Name":  "node#27",
+                             "IDProcess":  14332,
+                             "PercentProcessorTime":  108
+                         },
+                         {
+                             "Name":  "find#1",
+                             "IDProcess":  45632,
+                             "PercentProcessorTime":  98
+                         },
+                         {
+                             "Name":  "find",
+                             "IDProcess":  48088,
+                             "PercentProcessorTime":  94
+                         },
+                         {
+                             "Name":  "node#7",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  94
+                         },
+                         {
+                             "Name":  "bash#53",
+                             "IDProcess":  10928,
+                             "PercentProcessorTime":  80
+                         },
+                         {
+                             "Name":  "dwm",
+                             "IDProcess":  1856,
+                             "PercentProcessorTime":  51
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  42
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  2404,
+                             "PercentProcessorTime":  23
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                80,
+                                60,
+                                75
+                            ]
+}

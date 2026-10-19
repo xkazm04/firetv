@@ -1,0 +1,79 @@
+{
+ "what": "P13f's APK, rerun in this session: the app in the lobby, two phones paired by tools/perf-p13f-stats-load.mjs (the probe hello, 30 Hz neutral inputs), five 60 s phases: quiet (no /stats) and the probe race loop (GET /stats, 160 ms pause); launched by tools/perf-p13g-lobby-ab.py",
+ "apk": "p13f.apk (bb49e716, P13f in-place build, respondText)",
+ "apkSha256": "c155e09d30fa1fe3f4a7729a5501627a91143ba4bbc7fbbd0e14f0ae002136c1",
+ "startedUtc": "2026-10-07T23:41:58.458Z",
+ "finishedUtc": "2026-10-07T23:47:04.470Z",
+ "phases": [
+  {
+   "phase": "quiet",
+   "index": 0,
+   "fromSecond": 5.01,
+   "toSecond": 65.103,
+   "allocatedMB": 38.84,
+   "allocatedMBps": 0.646,
+   "gcs": 2,
+   "gcPerMinute": 1.997,
+   "statsRequests": 0,
+   "statsPerSecond": 0
+  },
+  {
+   "phase": "stats",
+   "index": 1,
+   "fromSecond": 65.143,
+   "toSecond": 125.171,
+   "allocatedMB": 164.406,
+   "allocatedMBps": 2.739,
+   "gcs": 12,
+   "gcPerMinute": 11.994,
+   "statsRequests": 294,
+   "statsPerSecond": 4.898,
+   "statsBodyBytesMean": 76833.884,
+   "statsRequestMsMean": 36.725
+  },
+  {
+   "phase": "quiet",
+   "index": 2,
+   "fromSecond": 125.198,
+   "toSecond": 185.242,
+   "allocatedMB": 38.552,
+   "allocatedMBps": 0.642,
+   "gcs": 2,
+   "gcPerMinute": 1.999,
+   "statsRequests": 0,
+   "statsPerSecond": 0
+  },
+  {
+   "phase": "stats",
+   "index": 3,
+   "fromSecond": 185.264,
+   "toSecond": 245.452,
+   "allocatedMB": 168.669,
+   "allocatedMBps": 2.802,
+   "gcs": 12,
+   "gcPerMinute": 11.962,
+   "statsRequests": 300,
+   "statsPerSecond": 4.984,
+   "statsBodyBytesMean": 76856.393,
+   "statsRequestMsMean": 33.101
+  },
+  {
+   "phase": "quiet",
+   "index": 4,
+   "fromSecond": 245.478,
+   "toSecond": 305.579,
+   "allocatedMB": 38.863,
+   "allocatedMBps": 0.647,
+   "gcs": 3,
+   "gcPerMinute": 2.995,
+   "statsRequests": 0,
+   "statsPerSecond": 0
+  }
+ ],
+ "quietMeanMBps": 0.645,
+ "allocatedMBPerStatsRead": [
+  0.428,
+  0.433
+ ],
+ "method": "(stats-phase MB/s - mean quiet MB/s) / stats reads a second; MB = 10^6 B; art.gc counters read from /profile every 5 s"
+}

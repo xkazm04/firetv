@@ -1,0 +1,7 @@
+{
+  "settled": true,
+  "waitedSeconds": 577,
+  "rule": "60 consecutive 1 s samples under 60%, wait up to 900 s",
+  "lastMinute": null,
+  "note": "Run 1's own record was overwritten by run 2's (the output path held a literal '$run' and both runs wrote the same file). This is the waiter's console line for run 1: 'settled=True waited=577s'. Its per-second samples are lost; run 1's host-cpu-start.json was taken at the probe start."
+}

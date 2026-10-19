@@ -43,7 +43,10 @@ class CombatTest {
         assertEquals(before-Weapons.all[0].damage*(1-w.cars[1].armorReduction),c.health(1),1e-9)
         assertEquals(c.capacity(0,0)-1,c.ammo(0,0));assertEquals(CombatRules["maxHp"],c.health(0))
         assertTrue(c.fire(0,Weapons.HAMMER));repeat(30){c.step(neutral,Tuning.STEP_SECONDS)}
-        assertEquals(before-(Weapons.all[0].damage+Weapons.all[1].damage)*(1-w.cars[1].armorReduction),c.health(1),1e-9)
+        // The press committed a whole burst: the first bullet above plus the rest during these 0.5 s.
+        val rivet=Weapons.all[Weapons.RIVET]
+        assertEquals(before-(rivet.burstDamage+Weapons.all[1].damage)*(1-w.cars[1].armorReduction),c.health(1),1e-9)
+        assertEquals(c.capacity(0,0)-rivet.burstRounds,c.ammo(0,0))
         assertTrue(c.projectiles.none { it.active });assertEquals(CombatRules["maxHp"],c.health(0))
     }
     @Test fun mineArmsThenHitsEachCarOnceIncludingOwnerAndPoolReuseIsClean() {

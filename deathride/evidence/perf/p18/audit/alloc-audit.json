@@ -1,0 +1,2175 @@
+{
+ "run": "audit",
+ "apkSha256": "be571718543b3981f76f13a60d4697e69a94437f376bfaad03675b994004fe66",
+ "sampler": {
+  "every": 5.0,
+  "window": 0.5,
+  "samples": 84,
+  "raceSamples": 67,
+  "fullSamples": 0,
+  "trackedRaceSeconds": 45.951,
+  "records": 524322,
+  "trackerOwnBytes": 10184,
+  "samplesByPhase": {
+   "outside": 12,
+   "race": 67,
+   "lobby": 3,
+   "round edge": 2
+  }
+ },
+ "raceRate": {
+  "MBps": 1.6928,
+  "objectsPerSecond": 11410.3,
+  "meanObjectBytes": 148.4
+ },
+ "runtime": {
+  "allocMBps": 2.676,
+  "gcCount": 36,
+  "gcTimeMs": 5036,
+  "seconds": 336.76241699999997,
+  "payloadMBps": 0.2971,
+  "limit": "ART counters over the probe (lobby and race, tracked and not); the REAL payloads are Java arrays too"
+ },
+ "byModule": {
+  "link (ktor engine)": {
+   "MBps": 0.9359,
+   "objectsPerSecond": 6951.8,
+   "share": 0.5529,
+   "shareOf2_59": 0.3614
+  },
+  "link": {
+   "MBps": 0.4302,
+   "objectsPerSecond": 1442.2,
+   "share": 0.2541,
+   "shareOf2_59": 0.1661
+  },
+  "game": {
+   "MBps": 0.1653,
+   "objectsPerSecond": 1123.7,
+   "share": 0.0976,
+   "shareOf2_59": 0.0638
+  },
+  "core": {
+   "MBps": 0.1328,
+   "objectsPerSecond": 1393.8,
+   "share": 0.0785,
+   "shareOf2_59": 0.0513
+  },
+  "audio": {
+   "MBps": 0.019,
+   "objectsPerSecond": 199.9,
+   "share": 0.0112,
+   "shareOf2_59": 0.0073
+  },
+  "link (coroutines)": {
+   "MBps": 0.0059,
+   "objectsPerSecond": 193.4,
+   "share": 0.0035,
+   "shareOf2_59": 0.0023
+  },
+  "platform": {
+   "MBps": 0.0036,
+   "objectsPerSecond": 102.4,
+   "share": 0.0021,
+   "shareOf2_59": 0.0014
+  },
+  "HUD/font": {
+   "MBps": 0.0001,
+   "objectsPerSecond": 3.2,
+   "share": 0.0001,
+   "shareOf2_59": 0.0
+  }
+ },
+ "byThread": {
+  "DefaultDispatch": {
+   "MBps": 1.5297,
+   "share": 0.9037
+  },
+  "render (GLThread)": {
+   "MBps": 0.1428,
+   "share": 0.0843
+  },
+  "deathride-cours": {
+   "MBps": 0.0083,
+   "share": 0.0049
+  },
+  "deathride-profi": {
+   "MBps": 0.0066,
+   "share": 0.0039
+  },
+  ".deathride.perf": {
+   "MBps": 0.0029,
+   "share": 0.0017
+  },
+  "DeathRideAudio": {
+   "MBps": 0.0016,
+   "share": 0.0009
+  },
+  "DefaultExecutor": {
+   "MBps": 0.0008,
+   "share": 0.0005
+  },
+  "AudioTrack": {
+   "MBps": 0.0001,
+   "share": 0.0001
+  },
+  "a thread that exited before the sample was read": {
+   "MBps": 0.0001,
+   "share": 0.0
+  },
+  "FinalizerDaemon": {
+   "MBps": 0.0,
+   "share": 0.0
+  }
+ },
+ "byPath": {
+  "probe: HTTP request parse": {
+   "MBps": 0.6243,
+   "objectsPerSecond": 630.2,
+   "share": 0.3688,
+   "shareOf2_59": 0.241,
+   "largeObjectShareOfPath": 0.972
+  },
+  "probe: /profile": {
+   "MBps": 0.3349,
+   "objectsPerSecond": 17.0,
+   "share": 0.1979,
+   "shareOf2_59": 0.1293,
+   "largeObjectShareOfPath": 0.991
+  },
+  "phones: websocket": {
+   "MBps": 0.2976,
+   "objectsPerSecond": 4648.4,
+   "share": 0.1758,
+   "shareOf2_59": 0.1149,
+   "largeObjectShareOfPath": 0.024
+  },
+  "probe: /stats": {
+   "MBps": 0.1816,
+   "objectsPerSecond": 1163.1,
+   "share": 0.1073,
+   "shareOf2_59": 0.0701,
+   "largeObjectShareOfPath": 0.0
+  },
+  "game loop (render thread)": {
+   "MBps": 0.1428,
+   "objectsPerSecond": 1821.2,
+   "share": 0.0843,
+   "shareOf2_59": 0.0551,
+   "largeObjectShareOfPath": 0.018
+  },
+  "other thread: DefaultDispatch": {
+   "MBps": 0.0913,
+   "objectsPerSecond": 2769.8,
+   "share": 0.0539,
+   "shareOf2_59": 0.0353,
+   "largeObjectShareOfPath": 0.0
+  },
+  "other thread: deathride-cours": {
+   "MBps": 0.0083,
+   "objectsPerSecond": 2.8,
+   "share": 0.0049,
+   "shareOf2_59": 0.0032,
+   "largeObjectShareOfPath": 0.107
+  },
+  "other thread: deathride-profi": {
+   "MBps": 0.0066,
+   "objectsPerSecond": 140.4,
+   "share": 0.0039,
+   "shareOf2_59": 0.0025,
+   "largeObjectShareOfPath": 0.068
+  },
+  "other thread: .deathride.perf": {
+   "MBps": 0.0029,
+   "objectsPerSecond": 89.2,
+   "share": 0.0017,
+   "shareOf2_59": 0.0011,
+   "largeObjectShareOfPath": 0.0
+  },
+  "other thread: DeathRideAudio": {
+   "MBps": 0.0016,
+   "objectsPerSecond": 92.5,
+   "share": 0.0009,
+   "shareOf2_59": 0.0006,
+   "largeObjectShareOfPath": 0.0
+  },
+  "other thread: DefaultExecutor": {
+   "MBps": 0.0008,
+   "objectsPerSecond": 30.7,
+   "share": 0.0005,
+   "shareOf2_59": 0.0003,
+   "largeObjectShareOfPath": 0.0
+  },
+  "other thread: AudioTrack": {
+   "MBps": 0.0001,
+   "objectsPerSecond": 3.0,
+   "share": 0.0001,
+   "shareOf2_59": 0.0,
+   "largeObjectShareOfPath": 0.0
+  },
+  "other thread: a thread that exited before the sample was read": {
+   "MBps": 0.0001,
+   "objectsPerSecond": 1.7,
+   "share": 0.0,
+   "shareOf2_59": 0.0,
+   "largeObjectShareOfPath": 0.0
+  },
+  "other thread: FinalizerDaemon": {
+   "MBps": 0.0,
+   "objectsPerSecond": 0.3,
+   "share": 0.0,
+   "shareOf2_59": 0.0,
+   "largeObjectShareOfPath": 0.0
+  }
+ },
+ "largeObjectShare": 0.5612,
+ "observerShare": 0.6739,
+ "sites": [
+  {
+   "site": "ktor engine (no app frame): io.ktor.utils.io.ByteBufferChannel.readUTF8LineToUtf8Suspend",
+   "path": "probe: HTTP request parse",
+   "module": "link (ktor engine)",
+   "MBps": 0.6134,
+   "objectsPerSecond": 267.0,
+   "share": 0.3624,
+   "shareOf2_59": 0.2368,
+   "meanObjectBytes": 2297.7,
+   "chain": [],
+   "topClasses": [
+    [
+     "char[]",
+     0.3586
+    ],
+    [
+     "io.ktor.utils.io.ByteBufferChannel$readUTF8LineToUtf8Suspend$1",
+     0.0013
+    ],
+    [
+     "io.ktor.utils.io.ByteBufferChannel$readUTF8LineToUtf8Suspend$2",
+     0.0008
+    ],
+    [
+     "kotlin.jvm.internal.Ref$IntRef",
+     0.0008
+    ]
+   ],
+   "allocatedVia": [
+    "io.ktor.utils.io.ByteBufferChannel.readUTF8LineToUtf8Suspend"
+   ],
+   "threads": {
+    "DefaultDispatch": 12268
+   }
+  },
+  {
+   "site": "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invokeSuspend:180",
+   "path": "probe: /profile",
+   "module": "link",
+   "MBps": 0.1723,
+   "objectsPerSecond": 1.8,
+   "share": 0.1018,
+   "shareOf2_59": 0.0665,
+   "meanObjectBytes": 93126.0,
+   "chain": [
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invokeSuspend:180",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invoke:-1",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invoke:-1"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.07
+    ],
+    [
+     "java.lang.String",
+     0.0159
+    ],
+    [
+     "byte[]",
+     0.0158
+    ],
+    [
+     "kotlinx.coroutines.internal.DispatchedContinuation",
+     0.0
+    ]
+   ],
+   "allocatedVia": [
+    "kotlinx.coroutines.CoroutineDispatcher.interceptContinuation",
+    "io.ktor.util.pipeline.SuspendFunctionGun.<init>"
+   ],
+   "threads": {
+    "DefaultDispatch": 85
+   }
+  },
+  {
+   "site": "dev.deathride.link.PerfTrace.json:35",
+   "path": "probe: /profile",
+   "module": "link",
+   "MBps": 0.1168,
+   "objectsPerSecond": 1.1,
+   "share": 0.069,
+   "shareOf2_59": 0.0451,
+   "meanObjectBytes": 107347.7,
+   "chain": [
+    "dev.deathride.link.PerfTrace.json:35",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invokeSuspend:180",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invoke:-1"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.069
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf"
+   ],
+   "threads": {
+    "DefaultDispatch": 50
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): java.util.Arrays.copyOf",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.1137,
+   "objectsPerSecond": 728.8,
+   "share": 0.0672,
+   "shareOf2_59": 0.0439,
+   "meanObjectBytes": 156.1,
+   "chain": [],
+   "topClasses": [
+    [
+     "char[]",
+     0.0672
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf"
+   ],
+   "threads": {
+    "DefaultDispatch": 33491
+   }
+  },
+  {
+   "site": "dev.deathride.game.RaceGame.combatHudJson:967",
+   "path": "game loop (render thread)",
+   "module": "game",
+   "MBps": 0.0529,
+   "objectsPerSecond": 109.0,
+   "share": 0.0313,
+   "shareOf2_59": 0.0204,
+   "meanObjectBytes": 485.7,
+   "chain": [
+    "dev.deathride.game.RaceGame.combatHudJson:967",
+    "dev.deathride.game.RaceGame.render:438"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0253
+    ],
+    [
+     "java.lang.String",
+     0.0059
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0001
+    ],
+    [
+     "int[]",
+     0.0
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "render (GLThread)": 5009
+   }
+  },
+  {
+   "site": "dev.deathride.core.Abilities.json:211",
+   "path": "probe: /stats",
+   "module": "core",
+   "MBps": 0.0331,
+   "objectsPerSecond": 184.4,
+   "share": 0.0195,
+   "shareOf2_59": 0.0128,
+   "meanObjectBytes": 179.4,
+   "chain": [
+    "dev.deathride.core.Abilities.json:211",
+    "dev.deathride.game.RaceGame.trafficJson:949",
+    "dev.deathride.game.RaceGame.create$lambda$29$lambda$28:252"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0149
+    ],
+    [
+     "java.lang.String",
+     0.0044
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0002
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "DefaultDispatch": 8472
+   }
+  },
+  {
+   "site": "dev.deathride.game.RaceGame.combatJson:977",
+   "path": "probe: /stats",
+   "module": "game",
+   "MBps": 0.0325,
+   "objectsPerSecond": 48.7,
+   "share": 0.0192,
+   "shareOf2_59": 0.0125,
+   "meanObjectBytes": 665.7,
+   "chain": [
+    "dev.deathride.game.RaceGame.combatJson:977",
+    "dev.deathride.game.RaceGame.create$lambda$33$lambda$32:253",
+    "dev.deathride.game.RaceGame.$r8$lambda$IfwXBDprKNdfY_m_96l5Frlfj-Y:-1"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.016
+    ],
+    [
+     "java.lang.String",
+     0.0031
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0001
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "DefaultDispatch": 2240
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): java.lang.StringFactory.newStringFromChars",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0292,
+   "objectsPerSecond": 435.2,
+   "share": 0.0173,
+   "shareOf2_59": 0.0113,
+   "meanObjectBytes": 67.1,
+   "chain": [],
+   "topClasses": [
+    [
+     "java.lang.String",
+     0.0173
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "DefaultDispatch": 19996
+   }
+  },
+  {
+   "site": "dev.deathride.core.AiBehaviour.json:291",
+   "path": "probe: /stats",
+   "module": "core",
+   "MBps": 0.028,
+   "objectsPerSecond": 147.9,
+   "share": 0.0165,
+   "shareOf2_59": 0.0108,
+   "meanObjectBytes": 189.3,
+   "chain": [
+    "dev.deathride.core.AiBehaviour.json:291",
+    "dev.deathride.game.RaceGame.trafficJson:949",
+    "dev.deathride.game.RaceGame.create$lambda$29$lambda$28:252"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.013
+    ],
+    [
+     "java.lang.String",
+     0.0033
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0002
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "DefaultDispatch": 6796
+   }
+  },
+  {
+   "site": "dev.deathride.link.RaceServer$handle$3.invokeSuspend:237",
+   "path": "phones: websocket",
+   "module": "link",
+   "MBps": 0.0256,
+   "objectsPerSecond": 50.2,
+   "share": 0.0151,
+   "shareOf2_59": 0.0099,
+   "meanObjectBytes": 511.2,
+   "chain": [
+    "dev.deathride.link.RaceServer$handle$3.invokeSuspend:237"
+   ],
+   "topClasses": [
+    [
+     "java.lang.String",
+     0.0074
+    ],
+    [
+     "byte[]",
+     0.0073
+    ],
+    [
+     "java.nio.HeapByteBuffer",
+     0.0003
+    ],
+    [
+     "io.ktor.websocket.Frame$Text",
+     0.0002
+    ]
+   ],
+   "allocatedVia": [
+    "io.ktor.websocket.WebSocketSessionKt.send",
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "DefaultDispatch": 2305
+   }
+  },
+  {
+   "site": "dev.deathride.link.PerfTrace.json:24",
+   "path": "probe: /profile",
+   "module": "link",
+   "MBps": 0.02,
+   "objectsPerSecond": 0.6,
+   "share": 0.0118,
+   "shareOf2_59": 0.0077,
+   "meanObjectBytes": 32786.3,
+   "chain": [
+    "dev.deathride.link.PerfTrace.json:24",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invokeSuspend:180",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invoke:-1"
+   ],
+   "topClasses": [
+    [
+     "java.lang.String",
+     0.0118
+    ],
+    [
+     "char[]",
+     0.0
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.StringFactory.newStringFromChars",
+    "java.lang.StringBuilder.toString"
+   ],
+   "threads": {
+    "DefaultDispatch": 28
+   }
+  },
+  {
+   "site": "dev.deathride.core.Abilities.hudJson:205",
+   "path": "game loop (render thread)",
+   "module": "core",
+   "MBps": 0.019,
+   "objectsPerSecond": 108.9,
+   "share": 0.0112,
+   "shareOf2_59": 0.0073,
+   "meanObjectBytes": 174.0,
+   "chain": [
+    "dev.deathride.core.Abilities.hudJson:205",
+    "dev.deathride.game.RaceGame.combatHudJson:967",
+    "dev.deathride.game.RaceGame.render:438"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0093
+    ],
+    [
+     "java.lang.String",
+     0.0017
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0001
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "java.lang.AbstractStringBuilder.<init>"
+   ],
+   "threads": {
+    "render (GLThread)": 5005
+   }
+  },
+  {
+   "site": "dev.deathride.link.Distribution.json:29",
+   "path": "probe: /stats",
+   "module": "link",
+   "MBps": 0.018,
+   "objectsPerSecond": 122.7,
+   "share": 0.0106,
+   "shareOf2_59": 0.0069,
+   "meanObjectBytes": 146.6,
+   "chain": [
+    "dev.deathride.link.Distribution.json:29",
+    "dev.deathride.link.RaceServer.appendStats:348",
+    "dev.deathride.link.RaceServer.statsReply$link:334"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0084
+    ],
+    [
+     "java.lang.String",
+     0.0018
+    ],
+    [
+     "sun.misc.FDBigInteger",
+     0.0002
+    ],
+    [
+     "int[]",
+     0.0002
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "DefaultDispatch": 5640
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): java.lang.AbstractStringBuilder.<init>",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0162,
+   "objectsPerSecond": 337.7,
+   "share": 0.0096,
+   "shareOf2_59": 0.0063,
+   "meanObjectBytes": 48.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "char[]",
+     0.0096
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.AbstractStringBuilder.<init>"
+   ],
+   "threads": {
+    "DefaultDispatch": 15519
+   }
+  },
+  {
+   "site": "dev.deathride.link.PerfTrace.json:20",
+   "path": "probe: /profile",
+   "module": "link",
+   "MBps": 0.0156,
+   "objectsPerSecond": 0.1,
+   "share": 0.0092,
+   "shareOf2_59": 0.006,
+   "meanObjectBytes": 119466.7,
+   "chain": [
+    "dev.deathride.link.PerfTrace.json:20",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invokeSuspend:180",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invoke:-1"
+   ],
+   "topClasses": [
+    [
+     "double[]",
+     0.0092
+    ]
+   ],
+   "allocatedVia": [
+    "dev.deathride.link.PerfTrace.json"
+   ],
+   "threads": {
+    "DefaultDispatch": 6
+   }
+  },
+  {
+   "site": "dev.deathride.game.RaceGame.trafficJson:953",
+   "path": "probe: /stats",
+   "module": "game",
+   "MBps": 0.0149,
+   "objectsPerSecond": 6.1,
+   "share": 0.0088,
+   "shareOf2_59": 0.0058,
+   "meanObjectBytes": 2432.9,
+   "chain": [
+    "dev.deathride.game.RaceGame.trafficJson:953",
+    "dev.deathride.game.RaceGame.create$lambda$29$lambda$28:252",
+    "dev.deathride.game.RaceGame.$r8$lambda$Ae2wLDvO-VAz3LCbwmkcfST_EdY:-1"
+   ],
+   "topClasses": [
+    [
+     "java.lang.String",
+     0.0088
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.StringFactory.newStringFromChars",
+    "java.lang.StringBuilder.toString"
+   ],
+   "threads": {
+    "DefaultDispatch": 282
+   }
+  },
+  {
+   "site": "dev.deathride.link.InputPacket.toDoubleOrNullFast:92",
+   "path": "phones: websocket",
+   "module": "link",
+   "MBps": 0.012,
+   "objectsPerSecond": 433.4,
+   "share": 0.0071,
+   "shareOf2_59": 0.0046,
+   "meanObjectBytes": 27.6,
+   "chain": [
+    "dev.deathride.link.InputPacket.toDoubleOrNullFast:92",
+    "dev.deathride.link.InputPacket.readNumber:86",
+    "dev.deathride.link.InputPacket.parse:41"
+   ],
+   "topClasses": [
+    [
+     "int[]",
+     0.0027
+    ],
+    [
+     "sun.misc.FDBigInteger",
+     0.0023
+    ],
+    [
+     "char[]",
+     0.0012
+    ],
+    [
+     "sun.misc.FloatingDecimal$ASCIIToBinaryBuffer",
+     0.0005
+    ]
+   ],
+   "allocatedVia": [
+    "sun.misc.FDBigInteger.valueOfMulPow52",
+    "sun.misc.FloatingDecimal.readJavaFormatString"
+   ],
+   "threads": {
+    "DefaultDispatch": 19916
+   }
+  },
+  {
+   "site": "dev.deathride.link.RaceServer.handle$handleInput:254",
+   "path": "phones: websocket",
+   "module": "link",
+   "MBps": 0.0105,
+   "objectsPerSecond": 219.4,
+   "share": 0.0062,
+   "shareOf2_59": 0.0041,
+   "meanObjectBytes": 48.0,
+   "chain": [
+    "dev.deathride.link.RaceServer.handle$handleInput:254",
+    "dev.deathride.link.RaceServer.handle:268",
+    "dev.deathride.link.RaceServer.access$handle:77"
+   ],
+   "topClasses": [
+    [
+     "java.lang.String",
+     0.0023
+    ],
+    [
+     "byte[]",
+     0.0019
+    ],
+    [
+     "java.nio.HeapByteBuffer",
+     0.0012
+    ],
+    [
+     "io.ktor.websocket.Frame$Text",
+     0.0008
+    ]
+   ],
+   "allocatedVia": [
+    "io.ktor.websocket.WebSocketSessionKt.send",
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "DefaultDispatch": 10083
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): kotlinx.coroutines.CoroutineDispatcher.interceptContinuation",
+   "path": "other thread: DefaultDispatch",
+   "module": "link (ktor engine)",
+   "MBps": 0.0093,
+   "objectsPerSecond": 194.0,
+   "share": 0.0055,
+   "shareOf2_59": 0.0036,
+   "meanObjectBytes": 48.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "kotlinx.coroutines.internal.DispatchedContinuation",
+     0.0055
+    ]
+   ],
+   "allocatedVia": [
+    "kotlinx.coroutines.CoroutineDispatcher.interceptContinuation"
+   ],
+   "threads": {
+    "DefaultDispatch": 8914
+   }
+  },
+  {
+   "site": "dev.deathride.link.PerfTrace.json:33",
+   "path": "probe: /profile",
+   "module": "link",
+   "MBps": 0.0093,
+   "objectsPerSecond": 0.1,
+   "share": 0.0055,
+   "shareOf2_59": 0.0036,
+   "meanObjectBytes": 70893.3,
+   "chain": [
+    "dev.deathride.link.PerfTrace.json:33",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invokeSuspend:180",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$6.invoke:-1"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0055
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf"
+   ],
+   "threads": {
+    "DefaultDispatch": 6
+   }
+  },
+  {
+   "site": "dev.deathride.game.audio.CueService.statsJson:181",
+   "path": "probe: /stats",
+   "module": "audio",
+   "MBps": 0.0091,
+   "objectsPerSecond": 27.8,
+   "share": 0.0054,
+   "shareOf2_59": 0.0035,
+   "meanObjectBytes": 326.2,
+   "chain": [
+    "dev.deathride.game.audio.CueService.statsJson:181",
+    "dev.deathride.game.RaceGame.create$lambda$23$lambda$22:252",
+    "dev.deathride.game.RaceGame.$r8$lambda$lxP1S7xLl9rhikItRmZdgpV8TxE:-1"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0042
+    ],
+    [
+     "java.lang.String",
+     0.0011
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "DefaultDispatch": 1278
+   }
+  },
+  {
+   "site": "dev.deathride.game.RaceGame.weaponStatesJson:972",
+   "path": "game loop (render thread)",
+   "module": "game",
+   "MBps": 0.0089,
+   "objectsPerSecond": 13.8,
+   "share": 0.0053,
+   "shareOf2_59": 0.0034,
+   "meanObjectBytes": 647.0,
+   "chain": [
+    "dev.deathride.game.RaceGame.weaponStatesJson:972",
+    "dev.deathride.game.RaceGame.combatHudJson:967",
+    "dev.deathride.game.RaceGame.render:438"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0053
+    ],
+    [
+     "int[]",
+     0.0
+    ],
+    [
+     "sun.misc.FDBigInteger",
+     0.0
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "sun.misc.FDBigInteger.valueOfPow52"
+   ],
+   "threads": {
+    "render (GLThread)": 634
+   }
+  },
+  {
+   "site": "dev.deathride.game.RaceGame.artJson:933",
+   "path": "probe: /stats",
+   "module": "game",
+   "MBps": 0.0088,
+   "objectsPerSecond": 27.8,
+   "share": 0.0052,
+   "shareOf2_59": 0.0034,
+   "meanObjectBytes": 317.8,
+   "chain": [
+    "dev.deathride.game.RaceGame.artJson:933",
+    "dev.deathride.game.RaceGame.create$lambda$25$lambda$24:252",
+    "dev.deathride.game.RaceGame.$r8$lambda$3hoZqZ075NFSelDmk0XwoaTd35g:-1"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0042
+    ],
+    [
+     "java.lang.String",
+     0.001
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "DefaultDispatch": 1278
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): io.ktor.network.sockets.CIOReaderKt.readFrom",
+   "path": "other thread: DefaultDispatch",
+   "module": "link (ktor engine)",
+   "MBps": 0.0069,
+   "objectsPerSecond": 289.2,
+   "share": 0.0041,
+   "shareOf2_59": 0.0027,
+   "meanObjectBytes": 24.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "io.ktor.network.sockets.CIOReaderKt$readFrom$1",
+     0.0018
+    ],
+    [
+     "io.ktor.network.sockets.CIOReaderKt$readFrom$2",
+     0.0014
+    ],
+    [
+     "kotlin.jvm.internal.Ref$IntRef",
+     0.0009
+    ]
+   ],
+   "allocatedVia": [
+    "io.ktor.network.sockets.CIOReaderKt.readFrom"
+   ],
+   "threads": {
+    "DefaultDispatch": 13287
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): java.nio.HeapByteBuffer.slice",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0064,
+   "objectsPerSecond": 132.9,
+   "share": 0.0038,
+   "shareOf2_59": 0.0025,
+   "meanObjectBytes": 48.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "java.nio.HeapByteBuffer",
+     0.0038
+    ]
+   ],
+   "allocatedVia": [
+    "java.nio.HeapByteBuffer.slice"
+   ],
+   "threads": {
+    "DefaultDispatch": 6109
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): io.ktor.util.NIOKt.moveToByteArray",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0059,
+   "objectsPerSecond": 44.3,
+   "share": 0.0035,
+   "shareOf2_59": 0.0023,
+   "meanObjectBytes": 133.9,
+   "chain": [],
+   "topClasses": [
+    [
+     "byte[]",
+     0.0035
+    ]
+   ],
+   "allocatedVia": [
+    "io.ktor.util.NIOKt.moveToByteArray"
+   ],
+   "threads": {
+    "DefaultDispatch": 2037
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): java.nio.HeapByteBuffer.<init>",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0059,
+   "objectsPerSecond": 44.3,
+   "share": 0.0035,
+   "shareOf2_59": 0.0023,
+   "meanObjectBytes": 133.9,
+   "chain": [],
+   "topClasses": [
+    [
+     "byte[]",
+     0.0035
+    ]
+   ],
+   "allocatedVia": [
+    "java.nio.HeapByteBuffer.<init>"
+   ],
+   "threads": {
+    "DefaultDispatch": 2036
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): kotlinx.coroutines.scheduling.CoroutineScheduler.createTask",
+   "path": "other thread: DefaultDispatch",
+   "module": "link (ktor engine)",
+   "MBps": 0.0057,
+   "objectsPerSecond": 176.7,
+   "share": 0.0033,
+   "shareOf2_59": 0.0022,
+   "meanObjectBytes": 32.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "kotlinx.coroutines.scheduling.TaskImpl",
+     0.0033
+    ]
+   ],
+   "allocatedVia": [
+    "kotlinx.coroutines.scheduling.CoroutineScheduler.createTask"
+   ],
+   "threads": {
+    "DefaultDispatch": 8121
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): java.lang.StringBuilder.toString",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0054,
+   "objectsPerSecond": 337.4,
+   "share": 0.0032,
+   "shareOf2_59": 0.0021,
+   "meanObjectBytes": 16.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "java.lang.String",
+     0.0032
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.StringBuilder.toString"
+   ],
+   "threads": {
+    "DefaultDispatch": 15504
+   }
+  },
+  {
+   "site": "dev.deathride.core.Abilities.json:211",
+   "path": "other thread: DefaultDispatch",
+   "module": "core",
+   "MBps": 0.0051,
+   "objectsPerSecond": 13.3,
+   "share": 0.003,
+   "shareOf2_59": 0.002,
+   "meanObjectBytes": 379.3,
+   "chain": [
+    "dev.deathride.core.Abilities.json:211",
+    "dev.deathride.game.RaceGame.trafficJson:949",
+    "dev.deathride.game.RaceGame.create$lambda$29$lambda$28:252"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.003
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf"
+   ],
+   "threads": {
+    "DefaultDispatch": 612
+   }
+  },
+  {
+   "site": "dev.deathride.game.RaceGame.driverName:212",
+   "path": "game loop (render thread)",
+   "module": "game",
+   "MBps": 0.0049,
+   "objectsPerSecond": 188.7,
+   "share": 0.0029,
+   "shareOf2_59": 0.0019,
+   "meanObjectBytes": 26.0,
+   "chain": [
+    "dev.deathride.game.RaceGame.driverName:212",
+    "dev.deathride.game.RaceGame.rebuildUi:769",
+    "dev.deathride.game.RaceGame.render:443"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0013
+    ],
+    [
+     "java.lang.String",
+     0.0011
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0004
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.StringFactory.newStringFromChars",
+    "java.lang.StringBuilder.toString"
+   ],
+   "threads": {
+    "render (GLThread)": 8672
+   }
+  },
+  {
+   "site": "dev.deathride.game.RaceGame.combatSummaryJson:937",
+   "path": "probe: /stats",
+   "module": "game",
+   "MBps": 0.0049,
+   "objectsPerSecond": 40.5,
+   "share": 0.0029,
+   "shareOf2_59": 0.0019,
+   "meanObjectBytes": 120.0,
+   "chain": [
+    "dev.deathride.game.RaceGame.combatSummaryJson:937",
+    "dev.deathride.game.RaceGame.create$lambda$27$lambda$26:252",
+    "dev.deathride.game.RaceGame.$r8$lambda$VQxYfFJQa0MAZGzCB27Gzr_Kpak:-1"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0022
+    ],
+    [
+     "java.lang.String",
+     0.0006
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0001
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "DefaultDispatch": 1862
+   }
+  },
+  {
+   "site": "dev.deathride.game.RaceGame.weaponStatesJson:971",
+   "path": "game loop (render thread)",
+   "module": "game",
+   "MBps": 0.0048,
+   "objectsPerSecond": 27.2,
+   "share": 0.0028,
+   "shareOf2_59": 0.0018,
+   "meanObjectBytes": 176.0,
+   "chain": [
+    "dev.deathride.game.RaceGame.weaponStatesJson:971",
+    "dev.deathride.game.RaceGame.combatHudJson:967",
+    "dev.deathride.game.RaceGame.render:438"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0027
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0001
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.AbstractStringBuilder.<init>",
+    "dev.deathride.game.RaceGame.weaponStatesJson"
+   ],
+   "threads": {
+    "render (GLThread)": 1250
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): java.lang.Integer.toUnsignedString0",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0047,
+   "objectsPerSecond": 195.6,
+   "share": 0.0028,
+   "shareOf2_59": 0.0018,
+   "meanObjectBytes": 24.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "char[]",
+     0.0018
+    ],
+    [
+     "java.lang.String",
+     0.0009
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.Integer.toUnsignedString0"
+   ],
+   "threads": {
+    "DefaultDispatch": 8987
+   }
+  },
+  {
+   "site": "dev.deathride.game.audio.QueuedAudioBackend.statsJson:124",
+   "path": "probe: /stats",
+   "module": "audio",
+   "MBps": 0.0046,
+   "objectsPerSecond": 22.4,
+   "share": 0.0027,
+   "shareOf2_59": 0.0018,
+   "meanObjectBytes": 207.1,
+   "chain": [
+    "dev.deathride.game.audio.QueuedAudioBackend.statsJson:124",
+    "dev.deathride.game.audio.CueService.statsJson:181",
+    "dev.deathride.game.RaceGame.create$lambda$23$lambda$22:252"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0021
+    ],
+    [
+     "java.lang.String",
+     0.0006
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "java.lang.StringFactory.newStringFromChars"
+   ],
+   "threads": {
+    "DefaultDispatch": 1031
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): kotlinx.coroutines.CoroutineDispatcher.interceptContinuation",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0046,
+   "objectsPerSecond": 96.7,
+   "share": 0.0027,
+   "shareOf2_59": 0.0018,
+   "meanObjectBytes": 48.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "kotlinx.coroutines.internal.DispatchedContinuation",
+     0.0027
+    ]
+   ],
+   "allocatedVia": [
+    "kotlinx.coroutines.CoroutineDispatcher.interceptContinuation"
+   ],
+   "threads": {
+    "DefaultDispatch": 4444
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): io.ktor.utils.io.ByteBufferChannel.write$suspendImpl",
+   "path": "other thread: DefaultDispatch",
+   "module": "link (ktor engine)",
+   "MBps": 0.0046,
+   "objectsPerSecond": 96.4,
+   "share": 0.0027,
+   "shareOf2_59": 0.0018,
+   "meanObjectBytes": 48.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "io.ktor.utils.io.ByteBufferChannel$write$1",
+     0.0027
+    ]
+   ],
+   "allocatedVia": [
+    "io.ktor.utils.io.ByteBufferChannel.write$suspendImpl"
+   ],
+   "threads": {
+    "DefaultDispatch": 4429
+   }
+  },
+  {
+   "site": "dev.deathride.core.Course.bakeCandidates:97",
+   "path": "other thread: deathride-cours",
+   "module": "core",
+   "MBps": 0.0046,
+   "objectsPerSecond": 1.2,
+   "share": 0.0027,
+   "shareOf2_59": 0.0018,
+   "meanObjectBytes": 3790.9,
+   "chain": [
+    "dev.deathride.core.Course.bakeCandidates:97",
+    "dev.deathride.core.Course.candidateBins$lambda$4:56",
+    "dev.deathride.core.Course.$r8$lambda$a3z68VTY5mlbrHtzR5oFKrZD5Hk:-1"
+   ],
+   "topClasses": [
+    [
+     "int[]",
+     0.0027
+    ]
+   ],
+   "allocatedVia": [
+    "dev.deathride.core.Course.bakeCandidates"
+   ],
+   "threads": {
+    "deathride-cours": 56
+   }
+  },
+  {
+   "site": "coroutines (no app frame): kotlinx.coroutines.scheduling.CoroutineScheduler.createTask",
+   "path": "other thread: DefaultDispatch",
+   "module": "link (coroutines)",
+   "MBps": 0.0046,
+   "objectsPerSecond": 144.2,
+   "share": 0.0027,
+   "shareOf2_59": 0.0018,
+   "meanObjectBytes": 32.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "kotlinx.coroutines.scheduling.TaskImpl",
+     0.0027
+    ]
+   ],
+   "allocatedVia": [
+    "kotlinx.coroutines.scheduling.CoroutineScheduler.createTask"
+   ],
+   "threads": {
+    "DefaultDispatch": 6628
+   }
+  },
+  {
+   "site": "dev.deathride.link.RaceServer.handle$handleInput:-1",
+   "path": "phones: websocket",
+   "module": "link",
+   "MBps": 0.0046,
+   "objectsPerSecond": 43.9,
+   "share": 0.0027,
+   "shareOf2_59": 0.0018,
+   "meanObjectBytes": 104.0,
+   "chain": [
+    "dev.deathride.link.RaceServer.handle$handleInput:-1",
+    "dev.deathride.link.RaceServer.handle:268",
+    "dev.deathride.link.RaceServer.access$handle:77"
+   ],
+   "topClasses": [
+    [
+     "dev.deathride.link.RaceServer$handle$handleInput$1",
+     0.0027
+    ]
+   ],
+   "allocatedVia": [
+    "dev.deathride.link.RaceServer.handle$handleInput"
+   ],
+   "threads": {
+    "DefaultDispatch": 2018
+   }
+  },
+  {
+   "site": "dev.deathride.link.Counter.json:36",
+   "path": "probe: /stats",
+   "module": "link",
+   "MBps": 0.0045,
+   "objectsPerSecond": 107.1,
+   "share": 0.0026,
+   "shareOf2_59": 0.0017,
+   "meanObjectBytes": 41.9,
+   "chain": [
+    "dev.deathride.link.Counter.json:36",
+    "dev.deathride.link.RaceServer.appendStats:349",
+    "dev.deathride.link.RaceServer.statsReply$link:334"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0016
+    ],
+    [
+     "java.lang.String",
+     0.0008
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0002
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.Arrays.copyOf",
+    "dev.deathride.link.Counter.json"
+   ],
+   "threads": {
+    "DefaultDispatch": 4922
+   }
+  },
+  {
+   "site": "dev.deathride.core.PowerRating.identity:22",
+   "path": "game loop (render thread)",
+   "module": "core",
+   "MBps": 0.0044,
+   "objectsPerSecond": 218.7,
+   "share": 0.0026,
+   "shareOf2_59": 0.0017,
+   "meanObjectBytes": 20.0,
+   "chain": [
+    "dev.deathride.core.PowerRating.identity:22",
+    "dev.deathride.core.PowerRating.identity$default:19",
+    "dev.deathride.game.RaceGame.rebuildUi:753"
+   ],
+   "topClasses": [
+    [
+     "java.lang.Double",
+     0.0016
+    ],
+    [
+     "java.util.ArrayList$Itr",
+     0.001
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.Double.valueOf",
+    "java.util.ArrayList.iterator"
+   ],
+   "threads": {
+    "render (GLThread)": 10048
+   }
+  },
+  {
+   "site": "dev.deathride.link.StatsReply.writeTo:57",
+   "path": "probe: /stats",
+   "module": "link",
+   "MBps": 0.0041,
+   "objectsPerSecond": 172.7,
+   "share": 0.0024,
+   "shareOf2_59": 0.0016,
+   "meanObjectBytes": 24.0,
+   "chain": [
+    "dev.deathride.link.StatsReply.writeTo:57",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$5$1.invokeSuspend:176",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$5$1.invoke:-1"
+   ],
+   "topClasses": [
+    [
+     "io.ktor.utils.io.ByteBufferChannel$readSuspendImpl$1",
+     0.0014
+    ],
+    [
+     "kotlin.jvm.internal.Ref$IntRef",
+     0.0011
+    ]
+   ],
+   "allocatedVia": [
+    "io.ktor.network.sockets.CIOWriterKt$attachForWritingDirectImpl$1$1.invokeSuspend",
+    "io.ktor.utils.io.ByteBufferChannel.readSuspendImpl"
+   ],
+   "threads": {
+    "DefaultDispatch": 7937
+   }
+  },
+  {
+   "site": "dev.deathride.game.RaceGame.rebuildUi:770",
+   "path": "game loop (render thread)",
+   "module": "game",
+   "MBps": 0.0041,
+   "objectsPerSecond": 146.2,
+   "share": 0.0024,
+   "shareOf2_59": 0.0016,
+   "meanObjectBytes": 28.0,
+   "chain": [
+    "dev.deathride.game.RaceGame.rebuildUi:770",
+    "dev.deathride.game.RaceGame.render:443"
+   ],
+   "topClasses": [
+    [
+     "java.lang.String",
+     0.001
+    ],
+    [
+     "char[]",
+     0.001
+    ],
+    [
+     "java.lang.StringBuilder",
+     0.0003
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.StringFactory.newStringFromChars",
+    "java.lang.StringBuilder.toString"
+   ],
+   "threads": {
+    "render (GLThread)": 6716
+   }
+  },
+  {
+   "site": "dev.deathride.game.RaceGame.pickupsJson:962",
+   "path": "probe: /stats",
+   "module": "game",
+   "MBps": 0.0039,
+   "objectsPerSecond": 6.1,
+   "share": 0.0023,
+   "shareOf2_59": 0.0015,
+   "meanObjectBytes": 643.3,
+   "chain": [
+    "dev.deathride.game.RaceGame.pickupsJson:962",
+    "dev.deathride.game.RaceGame.create$lambda$31$lambda$30:252",
+    "dev.deathride.game.RaceGame.$r8$lambda$gIPvuoK5ufrP2jBv8pfqZAgZ20M:-1"
+   ],
+   "topClasses": [
+    [
+     "java.lang.String",
+     0.0023
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.StringFactory.newStringFromChars",
+    "java.lang.StringBuilder.toString"
+   ],
+   "threads": {
+    "DefaultDispatch": 282
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): io.ktor.utils.io.ByteBufferChannel.readSuspendImpl",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0039,
+   "objectsPerSecond": 97.1,
+   "share": 0.0023,
+   "shareOf2_59": 0.0015,
+   "meanObjectBytes": 40.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "io.ktor.utils.io.ByteBufferChannel$readSuspendImpl$1",
+     0.0023
+    ]
+   ],
+   "allocatedVia": [
+    "io.ktor.utils.io.ByteBufferChannel.readSuspendImpl"
+   ],
+   "threads": {
+    "DefaultDispatch": 4461
+   }
+  },
+  {
+   "site": "dev.deathride.game.RaceGame.weaponStatesJson:973",
+   "path": "game loop (render thread)",
+   "module": "game",
+   "MBps": 0.0038,
+   "objectsPerSecond": 27.2,
+   "share": 0.0023,
+   "shareOf2_59": 0.0015,
+   "meanObjectBytes": 140.9,
+   "chain": [
+    "dev.deathride.game.RaceGame.weaponStatesJson:973",
+    "dev.deathride.game.RaceGame.combatHudJson:967",
+    "dev.deathride.game.RaceGame.render:438"
+   ],
+   "topClasses": [
+    [
+     "java.lang.String",
+     0.0023
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.StringFactory.newStringFromChars",
+    "java.lang.StringBuilder.toString"
+   ],
+   "threads": {
+    "render (GLThread)": 1250
+   }
+  },
+  {
+   "site": "dev.deathride.link.InputPacket.readNumber:85",
+   "path": "phones: websocket",
+   "module": "link",
+   "MBps": 0.0036,
+   "objectsPerSecond": 76.0,
+   "share": 0.0021,
+   "shareOf2_59": 0.0014,
+   "meanObjectBytes": 47.8,
+   "chain": [
+    "dev.deathride.link.InputPacket.readNumber:85",
+    "dev.deathride.link.InputPacket.parse:41",
+    "dev.deathride.link.InputPacket.parse$default:17"
+   ],
+   "topClasses": [
+    [
+     "char[]",
+     0.0012
+    ],
+    [
+     "java.lang.String",
+     0.0009
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.StringFactory.newStringFromChars",
+    "java.lang.StringFactory.newStringFromBytes"
+   ],
+   "threads": {
+    "DefaultDispatch": 3492
+   }
+  },
+  {
+   "site": "dev.deathride.link.Distribution.json:26",
+   "path": "probe: /stats",
+   "module": "link",
+   "MBps": 0.0035,
+   "objectsPerSecond": 12.2,
+   "share": 0.0021,
+   "shareOf2_59": 0.0014,
+   "meanObjectBytes": 288.0,
+   "chain": [
+    "dev.deathride.link.Distribution.json:26",
+    "dev.deathride.link.RaceServer.appendStats:348",
+    "dev.deathride.link.RaceServer.statsReply$link:334"
+   ],
+   "topClasses": [
+    [
+     "int[]",
+     0.0021
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.DualPivotQuicksort.doSort"
+   ],
+   "threads": {
+    "DefaultDispatch": 562
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): io.ktor.websocket.WebSocketWriter.drainQueueAndSerialize",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0034,
+   "objectsPerSecond": 105.6,
+   "share": 0.002,
+   "shareOf2_59": 0.0013,
+   "meanObjectBytes": 32.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "io.ktor.websocket.WebSocketWriter$drainQueueAndSerialize$1",
+     0.0015
+    ],
+    [
+     "kotlin.jvm.internal.Ref$ObjectRef",
+     0.0005
+    ]
+   ],
+   "allocatedVia": [
+    "io.ktor.websocket.WebSocketWriter.drainQueueAndSerialize"
+   ],
+   "threads": {
+    "DefaultDispatch": 4854
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): kotlin.coroutines.jvm.internal.Boxing.boxInt",
+   "path": "other thread: DefaultDispatch",
+   "module": "link (ktor engine)",
+   "MBps": 0.0033,
+   "objectsPerSecond": 206.6,
+   "share": 0.002,
+   "shareOf2_59": 0.0013,
+   "meanObjectBytes": 16.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "java.lang.Integer",
+     0.002
+    ]
+   ],
+   "allocatedVia": [
+    "kotlin.coroutines.jvm.internal.Boxing.boxInt"
+   ],
+   "threads": {
+    "DefaultDispatch": 9492
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): java.util.ArrayList.iterator",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0031,
+   "objectsPerSecond": 97.7,
+   "share": 0.0018,
+   "shareOf2_59": 0.0012,
+   "meanObjectBytes": 32.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "java.util.ArrayList$Itr",
+     0.0018
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.ArrayList.iterator"
+   ],
+   "threads": {
+    "DefaultDispatch": 4491
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): java.lang.Throwable.nativeFillInStackTrace",
+   "path": "other thread: DefaultDispatch",
+   "module": "link (ktor engine)",
+   "MBps": 0.003,
+   "objectsPerSecond": 6.7,
+   "share": 0.0018,
+   "shareOf2_59": 0.0011,
+   "meanObjectBytes": 442.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "int[]",
+     0.0012
+    ],
+    [
+     "java.lang.Object[]",
+     0.0006
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.Throwable.nativeFillInStackTrace"
+   ],
+   "threads": {
+    "DefaultDispatch": 308
+   }
+  },
+  {
+   "site": "platform: java.util.ArrayList.iterator",
+   "path": "other thread: .deathride.perf",
+   "module": "platform",
+   "MBps": 0.0029,
+   "objectsPerSecond": 89.2,
+   "share": 0.0017,
+   "shareOf2_59": 0.0011,
+   "meanObjectBytes": 32.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "java.util.ArrayList$Itr",
+     0.0017
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.ArrayList.iterator"
+   ],
+   "threads": {
+    ".deathride.perf": 4098
+   }
+  },
+  {
+   "site": "ktor engine (no app frame): java.nio.HeapByteBuffer.asIntBuffer",
+   "path": "phones: websocket",
+   "module": "link (ktor engine)",
+   "MBps": 0.0028,
+   "objectsPerSecond": 44.3,
+   "share": 0.0017,
+   "shareOf2_59": 0.0011,
+   "meanObjectBytes": 64.0,
+   "chain": [],
+   "topClasses": [
+    [
+     "java.nio.ByteBufferAsIntBuffer",
+     0.0017
+    ]
+   ],
+   "allocatedVia": [
+    "java.nio.HeapByteBuffer.asIntBuffer"
+   ],
+   "threads": {
+    "DefaultDispatch": 2036
+   }
+  },
+  {
+   "site": "dev.deathride.core.Course.bakeCandidates:110",
+   "path": "other thread: deathride-cours",
+   "module": "core",
+   "MBps": 0.0028,
+   "objectsPerSecond": 1.5,
+   "share": 0.0017,
+   "shareOf2_59": 0.0011,
+   "meanObjectBytes": 1863.4,
+   "chain": [
+    "dev.deathride.core.Course.bakeCandidates:110",
+    "dev.deathride.core.Course.candidateBins$lambda$4:56",
+    "dev.deathride.core.Course.$r8$lambda$a3z68VTY5mlbrHtzR5oFKrZD5Hk:-1"
+   ],
+   "topClasses": [
+    [
+     "int[]",
+     0.0017
+    ]
+   ],
+   "allocatedVia": [
+    "dev.deathride.core.Course.bakeCandidates"
+   ],
+   "threads": {
+    "deathride-cours": 69
+   }
+  },
+  {
+   "site": "dev.deathride.core.PowerRating.identity:42",
+   "path": "game loop (render thread)",
+   "module": "core",
+   "MBps": 0.0026,
+   "objectsPerSecond": 109.3,
+   "share": 0.0016,
+   "shareOf2_59": 0.001,
+   "meanObjectBytes": 24.0,
+   "chain": [
+    "dev.deathride.core.PowerRating.identity:42",
+    "dev.deathride.core.PowerRating.identity$default:19",
+    "dev.deathride.game.RaceGame.rebuildUi:753"
+   ],
+   "topClasses": [
+    [
+     "java.lang.Object[]",
+     0.0008
+    ],
+    [
+     "java.util.ArrayList",
+     0.0008
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.ArrayList.<init>",
+    "dev.deathride.core.PowerRating.identity"
+   ],
+   "threads": {
+    "render (GLThread)": 5024
+   }
+  },
+  {
+   "site": "dev.deathride.core.ProfileCodec.decode:28",
+   "path": "other thread: deathride-profi",
+   "module": "core",
+   "MBps": 0.0026,
+   "objectsPerSecond": 100.7,
+   "share": 0.0015,
+   "shareOf2_59": 0.001,
+   "meanObjectBytes": 25.6,
+   "chain": [
+    "dev.deathride.core.ProfileCodec.decode:28",
+    "dev.deathride.core.ProfileCodec.decode$default:18",
+    "dev.deathride.core.ProfileStore.save:136"
+   ],
+   "topClasses": [
+    [
+     "java.util.AbstractList$Itr",
+     0.0013
+    ],
+    [
+     "java.lang.String",
+     0.0001
+    ],
+    [
+     "java.lang.Integer",
+     0.0
+    ],
+    [
+     "kotlin.ranges.IntRange",
+     0.0
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.AbstractList.iterator",
+    "java.lang.String.fastSubstring"
+   ],
+   "threads": {
+    "deathride-profi": 4628
+   }
+  },
+  {
+   "site": "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$5.invokeSuspend:176",
+   "path": "probe: /stats",
+   "module": "link",
+   "MBps": 0.0025,
+   "objectsPerSecond": 74.2,
+   "share": 0.0015,
+   "shareOf2_59": 0.001,
+   "meanObjectBytes": 34.3,
+   "chain": [
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$5.invokeSuspend:176",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$5.invoke:-1",
+    "dev.deathride.link.RaceServer$start$1$1$candidate$1$2$5.invoke:-1"
+   ],
+   "topClasses": [
+    [
+     "kotlinx.coroutines.internal.DispatchedContinuation",
+     0.0002
+    ],
+    [
+     "java.lang.String",
+     0.0002
+    ],
+    [
+     "java.util.HashMap$Node[]",
+     0.0001
+    ],
+    [
+     "char[]",
+     0.0001
+    ]
+   ],
+   "allocatedVia": [
+    "java.lang.CaseMapper.toLowerCase",
+    "kotlinx.coroutines.CoroutineDispatcher.interceptContinuation"
+   ],
+   "threads": {
+    "DefaultDispatch": 3408
+   }
+  },
+  {
+   "site": "dev.deathride.core.PowerRating.identity:50",
+   "path": "game loop (render thread)",
+   "module": "core",
+   "MBps": 0.0025,
+   "objectsPerSecond": 56.7,
+   "share": 0.0015,
+   "shareOf2_59": 0.001,
+   "meanObjectBytes": 43.6,
+   "chain": [
+    "dev.deathride.core.PowerRating.identity:50",
+    "dev.deathride.core.PowerRating.identity$default:19",
+    "dev.deathride.game.RaceGame.rebuildUi:753"
+   ],
+   "topClasses": [
+    [
+     "java.util.LinkedHashMap$LinkedHashMapEntry",
+     0.0008
+    ],
+    [
+     "java.util.HashMap$Node[]",
+     0.0006
+    ]
+   ],
+   "allocatedVia": [
+    "java.util.LinkedHashMap.newNode",
+    "java.util.HashMap.resize"
+   ],
+   "threads": {
+    "render (GLThread)": 2605
+   }
+  }
+ ],
+ "siteCount": 659,
+ "cost": {
+  "activeRowsInside": 2804,
+  "activeRowsOutside": 14598,
+  "intervalP50Ms": [
+   16.685077,
+   16.684616
+  ],
+  "intervalP95Ms": [
+   20.761154,
+   22.611077
+  ],
+  "workP50Ms": [
+   9.41,
+   9.428
+  ],
+  "over33": [
+   20,
+   222
+  ],
+  "worstIntervalAroundEachReadMs": {
+   "p50": 232.649692,
+   "max": 807.2836159999999
+  },
+  "readSecondsP50Max": [
+   0.33,
+   0.908
+  ],
+  "order": "[inside a tracked window, outside every window], active rows only",
+  "clockFit": {
+   "statsOriginShare": 1.0,
+   "limit": "host epoch -> probe second -> device uptime -> profile clock; tens of ms"
+  }
+ },
+ "pss": {
+  "rangeMiB": [
+   155.171875,
+   172.8681640625
+  ],
+  "samples": [
+   [
+    0,
+    155.2
+   ],
+   [
+    3.7,
+    163.9
+   ],
+   [
+    71.4,
+    169.5
+   ],
+   [
+    139.0,
+    161.7
+   ],
+   [
+    207.2,
+    164.2
+   ],
+   [
+    275.4,
+    172.9
+   ],
+   [
+    340.5,
+    169.5
+   ],
+   [
+    360.3,
+    165.2
+   ]
+  ],
+  "peak": {
+   "second": 275.4,
+   "breakdownMiB": {
+    "Java Heap": 71.66,
+    "Native Heap": 10.97,
+    "Code": 19.25,
+    "Stack": 1.51,
+    "Graphics": 52.06,
+    "Private Other": 7.68,
+    "System": 9.74,
+    "pss Dalvik Heap": 65.68,
+    "pss Dalvik Other": 5.11,
+    "pss GL mtrack": 52.06,
+    "pss Native Heap": 11.04,
+    "pss Ashmem": 4.83,
+    "pss Unknown": 0.36,
+    "TOTAL PSS": 172.87
+   }
+  },
+  "lowest": {
+   "second": 0,
+   "breakdownMiB": {
+    "Java Heap": 50.62,
+    "Native Heap": 10.97,
+    "Code": 23.51,
+    "Stack": 0.98,
+    "Graphics": 51.97,
+    "Private Other": 7.71,
+    "System": 9.42,
+    "pss Dalvik Heap": 44.71,
+    "pss Dalvik Other": 3.92,
+    "pss GL mtrack": 51.97,
+    "pss Native Heap": 11.04,
+    "pss Ashmem": 4.88,
+    "pss Unknown": 0.36,
+    "TOTAL PSS": 155.17
+   }
+  },
+  "peakMinusLowestMiB": {
+   "Java Heap": 21.04,
+   "Native Heap": 0.0,
+   "Code": -4.26,
+   "Stack": 0.53,
+   "Graphics": 0.09,
+   "Private Other": -0.03,
+   "System": 0.32,
+   "pss Dalvik Heap": 20.97,
+   "pss Dalvik Other": 1.19,
+   "pss GL mtrack": 0.09,
+   "pss Native Heap": 0.0,
+   "pss Ashmem": -0.05,
+   "pss Unknown": 0.0,
+   "TOTAL PSS": 17.7
+  }
+ },
+ "frames": {
+  "activeWorstP95Ms": 27.604231,
+  "activeMaxMs": 280.374
+ }
+}

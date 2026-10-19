@@ -1,0 +1,576 @@
+{
+ "apkSha256": "d156d758c3c4dd07b098dbd670bbd4b6d6063069658185a5dd71b8c1222a832a",
+ "props": [
+  "2",
+  "2",
+  "[aaudio.mixer_bursts]: [1]",
+  "[aaudio.mmap_exclusive_policy]: [2]",
+  "[aaudio.mmap_policy]: [2]"
+ ],
+ "trackColumns": "Track row columns: Type Id Active Client Session PortId S Flags Format ChnMask SRate ST Usg CT G L R VS Server FrmCnt FrmRdy F Underruns Flushed Latency",
+ "checks": {
+  "baseline (perf package stopped)": {
+   "aaudio": {
+    "Exclusive MMAP Endpoints": 0,
+    "ExclusiveSearchCount": 0,
+    "ExclusiveFoundCount": 0,
+    "ExclusiveOpenCount": 0,
+    "ExclusiveCloseCount": 0,
+    "ExclusiveStolenCount": 0,
+    "Shared Endpoints": 0,
+    "SharedSearchCount": 0,
+    "SharedFoundCount": 0,
+    "SharedOpenCount": 0,
+    "SharedCloseCount": 0
+   },
+   "flinger": {
+    "outputThreads": {
+     "AudioOut_D": {
+      "tid": 683,
+      "type": "MIXER",
+      "standby": "yes"
+     },
+     "AudioOut_15": {
+      "tid": 689,
+      "type": "MIXER",
+      "standby": "yes"
+     }
+    },
+    "activeTrackRows": [],
+    "mmapLines": []
+   },
+   "threads": {
+    "seconds": 12.74,
+    "threadsAtLeastHalfPercent": []
+   }
+  },
+  "silentMmap EXCLUSIVE, lobby (25 s after launch)": {
+   "granted": [
+    "silentMmap open requestedSharing=EXCLUSIVE sharing=SHARED performanceMode=NONE sampleRate=48000 channels=2 format=1 framesPerBurst=770 bufferCapacity=1540 bufferSize=1540 framesPerDataCallback=0 deviceId=2 session=-1 mmapUsed=0"
+   ],
+   "aaudio": {
+    "Exclusive MMAP Endpoints": 0,
+    "ExclusiveSearchCount": 2,
+    "ExclusiveFoundCount": 0,
+    "ExclusiveOpenCount": 0,
+    "ExclusiveCloseCount": 0,
+    "ExclusiveStolenCount": 0,
+    "Shared Endpoints": 0,
+    "SharedSearchCount": 1,
+    "SharedFoundCount": 0,
+    "SharedOpenCount": 0,
+    "SharedCloseCount": 0
+   },
+   "flinger": {
+    "outputThreads": {
+     "AudioOut_D": {
+      "tid": 683,
+      "type": "MIXER",
+      "standby": "no"
+     },
+     "AudioOut_15": {
+      "tid": 689,
+      "type": "MIXER",
+      "standby": "yes"
+     }
+    },
+    "activeTrackRows": [
+     "47148    yes    440  376905   47235 A  0x000 00000001 00000003  48000  3   e  4    -6     0     0     0  00000000   1540    1540 A         0        0       new"
+    ],
+    "mmapLines": []
+   },
+   "threads": {
+    "seconds": 14.38,
+    "threadsAtLeastHalfPercent": [
+     {
+      "process": "dev.deathride.perf",
+      "tid": 507,
+      "thread": "GLThread",
+      "cpuPercentOfOneCore": 58.8,
+      "slicesPerSecond": 856
+     },
+     {
+      "process": "audioserver",
+      "tid": 683,
+      "thread": "AudioOut_D",
+      "cpuPercentOfOneCore": 55.9,
+      "slicesPerSecond": 18173
+     },
+     {
+      "process": "fireos.hardware.audio.service",
+      "tid": 783,
+      "thread": "writer",
+      "cpuPercentOfOneCore": 55.5,
+      "slicesPerSecond": 18186
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 514,
+      "thread": "RenderThread",
+      "cpuPercentOfOneCore": 2.8,
+      "slicesPerSecond": 138
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 440,
+      "thread": ".deathride.perf",
+      "cpuPercentOfOneCore": 2.7,
+      "slicesPerSecond": 88
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 466,
+      "thread": "Jit",
+      "cpuPercentOfOneCore": 0.8,
+      "slicesPerSecond": 23
+     }
+    ]
+   },
+   "afterForceStop": {
+    "AudioOut_D": {
+     "tid": 683,
+     "type": "MIXER",
+     "standby": "yes"
+    },
+    "AudioOut_15": {
+     "tid": 689,
+     "type": "MIXER",
+     "standby": "yes"
+    }
+   }
+  },
+  "silentMmap SHARED (mmapSharing=shared), lobby": {
+   "granted": [
+    "silentMmap open requestedSharing=SHARED sharing=SHARED performanceMode=NONE sampleRate=48000 channels=2 format=1 framesPerBurst=770 bufferCapacity=1540 bufferSize=1540 framesPerDataCallback=0 deviceId=2 session=-1 mmapUsed=0"
+   ],
+   "aaudio": {
+    "Exclusive MMAP Endpoints": 0,
+    "ExclusiveSearchCount": 3,
+    "ExclusiveFoundCount": 0,
+    "ExclusiveOpenCount": 0,
+    "ExclusiveCloseCount": 0,
+    "ExclusiveStolenCount": 0,
+    "Shared Endpoints": 0,
+    "SharedSearchCount": 2,
+    "SharedFoundCount": 0,
+    "SharedOpenCount": 0,
+    "SharedCloseCount": 0
+   },
+   "flinger": {
+    "outputThreads": {
+     "AudioOut_D": {
+      "tid": 683,
+      "type": "MIXER",
+      "standby": "no"
+     },
+     "AudioOut_15": {
+      "tid": 689,
+      "type": "MIXER",
+      "standby": "yes"
+     }
+    },
+    "activeTrackRows": [
+     "47149    yes   1805  376921   47236 A  0x000 00000001 00000003  48000  3   e  4    -6     0     0     0  00000000   1540    1540 A         0        0       new"
+    ],
+    "mmapLines": []
+   },
+   "threads": {
+    "seconds": 14.55,
+    "threadsAtLeastHalfPercent": [
+     {
+      "process": "audioserver",
+      "tid": 683,
+      "thread": "AudioOut_D",
+      "cpuPercentOfOneCore": 55.9,
+      "slicesPerSecond": 17899
+     },
+     {
+      "process": "fireos.hardware.audio.service",
+      "tid": 783,
+      "thread": "writer",
+      "cpuPercentOfOneCore": 55.3,
+      "slicesPerSecond": 17911
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 1844,
+      "thread": "GLThread",
+      "cpuPercentOfOneCore": 54.2,
+      "slicesPerSecond": 741
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 2049,
+      "thread": "GLThread",
+      "cpuPercentOfOneCore": 3.6,
+      "slicesPerSecond": 238
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 1805,
+      "thread": ".deathride.perf",
+      "cpuPercentOfOneCore": 2.7,
+      "slicesPerSecond": 93
+     }
+    ]
+   },
+   "afterForceStop": {
+    "AudioOut_D": {
+     "tid": 683,
+     "type": "MIXER",
+     "standby": "yes"
+    },
+    "AudioOut_15": {
+     "tid": 689,
+     "type": "MIXER",
+     "standby": "yes"
+    }
+   }
+  },
+  "silentMmap EXCLUSIVE, probe run, 30 s after pairing": {
+   "statsPhase": "lobby",
+   "raceSeconds": 26.71666666666643,
+   "granted": [
+    "silentMmap open requestedSharing=EXCLUSIVE sharing=SHARED performanceMode=NONE sampleRate=48000 channels=2 format=1 framesPerBurst=770 bufferCapacity=1540 bufferSize=1540 framesPerDataCallback=0 deviceId=2 session=-1 mmapUsed=0"
+   ],
+   "aaudio": {
+    "Exclusive MMAP Endpoints": 0,
+    "ExclusiveSearchCount": 9,
+    "ExclusiveFoundCount": 0,
+    "ExclusiveOpenCount": 0,
+    "ExclusiveCloseCount": 0,
+    "ExclusiveStolenCount": 0,
+    "Shared Endpoints": 0,
+    "SharedSearchCount": 5,
+    "SharedFoundCount": 0,
+    "SharedOpenCount": 0,
+    "SharedCloseCount": 0
+   },
+   "flinger": {
+    "outputThreads": {
+     "AudioOut_D": {
+      "tid": 683,
+      "type": "MIXER",
+      "standby": "no"
+     },
+     "AudioOut_15": {
+      "tid": 689,
+      "type": "MIXER",
+      "standby": "yes"
+     }
+    },
+    "activeTrackRows": [
+     "47152    yes   7113  376993   47239 A  0x000 00000001 00000003  48000  3   e  4    -6     0     0     0  00000000   1540    1540 A         0        0       new"
+    ],
+    "mmapLines": []
+   },
+   "threads": {
+    "seconds": 15.26,
+    "threadsAtLeastHalfPercent": [
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7146,
+      "thread": "GLThread",
+      "cpuPercentOfOneCore": 56.9,
+      "slicesPerSecond": 2712
+     },
+     {
+      "process": "audioserver",
+      "tid": 683,
+      "thread": "AudioOut_D",
+      "cpuPercentOfOneCore": 51.0,
+      "slicesPerSecond": 17658
+     },
+     {
+      "process": "fireos.hardware.audio.service",
+      "tid": 783,
+      "thread": "writer",
+      "cpuPercentOfOneCore": 49.7,
+      "slicesPerSecond": 17535
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7126,
+      "thread": "Jit",
+      "cpuPercentOfOneCore": 7.9,
+      "slicesPerSecond": 349
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7220,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 4.6,
+      "slicesPerSecond": 377
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7365,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 4.5,
+      "slicesPerSecond": 380
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7223,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 4.0,
+      "slicesPerSecond": 338
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7371,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 3.8,
+      "slicesPerSecond": 307
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7366,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 3.7,
+      "slicesPerSecond": 380
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7380,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 3.7,
+      "slicesPerSecond": 341
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7308,
+      "thread": "GLThread",
+      "cpuPercentOfOneCore": 3.5,
+      "slicesPerSecond": 403
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7219,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 3.4,
+      "slicesPerSecond": 348
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7367,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 3.3,
+      "slicesPerSecond": 344
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7113,
+      "thread": ".deathride.perf",
+      "cpuPercentOfOneCore": 2.3,
+      "slicesPerSecond": 88
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7201,
+      "thread": "deathride-profi",
+      "cpuPercentOfOneCore": 0.9,
+      "slicesPerSecond": 12
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7127,
+      "thread": "HeapTaskDaemon",
+      "cpuPercentOfOneCore": 0.6,
+      "slicesPerSecond": 13
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7305,
+      "thread": "DefaultExecutor",
+      "cpuPercentOfOneCore": 0.5,
+      "slicesPerSecond": 81
+     }
+    ]
+   }
+  },
+  "silentMmap EXCLUSIVE, probe run, 60 s after pairing": {
+   "statsPhase": "race",
+   "raceSeconds": 27.29999999999973,
+   "granted": [
+    "silentMmap open requestedSharing=EXCLUSIVE sharing=SHARED performanceMode=NONE sampleRate=48000 channels=2 format=1 framesPerBurst=770 bufferCapacity=1540 bufferSize=1540 framesPerDataCallback=0 deviceId=2 session=-1 mmapUsed=0"
+   ],
+   "aaudio": {
+    "Exclusive MMAP Endpoints": 0,
+    "ExclusiveSearchCount": 9,
+    "ExclusiveFoundCount": 0,
+    "ExclusiveOpenCount": 0,
+    "ExclusiveCloseCount": 0,
+    "ExclusiveStolenCount": 0,
+    "Shared Endpoints": 0,
+    "SharedSearchCount": 5,
+    "SharedFoundCount": 0,
+    "SharedOpenCount": 0,
+    "SharedCloseCount": 0
+   },
+   "flinger": {
+    "outputThreads": {
+     "AudioOut_D": {
+      "tid": 683,
+      "type": "MIXER",
+      "standby": "no"
+     },
+     "AudioOut_15": {
+      "tid": 689,
+      "type": "MIXER",
+      "standby": "yes"
+     }
+    },
+    "activeTrackRows": [
+     "47152    yes   7113  376993   47239 A  0x000 00000001 00000003  48000  3   e  4    -6     0     0     0  00000000   1540    1540 A         0        0       new"
+    ],
+    "mmapLines": []
+   },
+   "threads": {
+    "seconds": 14.24,
+    "threadsAtLeastHalfPercent": [
+     {
+      "process": "audioserver",
+      "tid": 683,
+      "thread": "AudioOut_D",
+      "cpuPercentOfOneCore": 51.6,
+      "slicesPerSecond": 17825
+     },
+     {
+      "process": "fireos.hardware.audio.service",
+      "tid": 783,
+      "thread": "writer",
+      "cpuPercentOfOneCore": 50.8,
+      "slicesPerSecond": 17792
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7146,
+      "thread": "GLThread",
+      "cpuPercentOfOneCore": 50.6,
+      "slicesPerSecond": 1715
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7308,
+      "thread": "GLThread",
+      "cpuPercentOfOneCore": 3.8,
+      "slicesPerSecond": 353
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7365,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 3.7,
+      "slicesPerSecond": 254
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 8271,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 3.1,
+      "slicesPerSecond": 330
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7223,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 3.0,
+      "slicesPerSecond": 213
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 8268,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 2.7,
+      "slicesPerSecond": 259
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 8272,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 2.6,
+      "slicesPerSecond": 176
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7220,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 2.5,
+      "slicesPerSecond": 209
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7366,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 2.5,
+      "slicesPerSecond": 238
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7380,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 2.4,
+      "slicesPerSecond": 220
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7113,
+      "thread": ".deathride.perf",
+      "cpuPercentOfOneCore": 2.3,
+      "slicesPerSecond": 81
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7219,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 2.3,
+      "slicesPerSecond": 220
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7371,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 2.3,
+      "slicesPerSecond": 222
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 8253,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 2.1,
+      "slicesPerSecond": 248
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 8270,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 2.0,
+      "slicesPerSecond": 232
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7367,
+      "thread": "DefaultDispatch",
+      "cpuPercentOfOneCore": 1.8,
+      "slicesPerSecond": 184
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 7126,
+      "thread": "Jit",
+      "cpuPercentOfOneCore": 0.9,
+      "slicesPerSecond": 54
+     },
+     {
+      "process": "dev.deathride.perf",
+      "tid": 8267,
+      "thread": "DeathRideAudio",
+      "cpuPercentOfOneCore": 0.8,
+      "slicesPerSecond": 149
+     }
+    ]
+   }
+  }
+ }
+}

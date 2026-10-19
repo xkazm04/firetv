@@ -1,0 +1,9 @@
+{
+  "device": "AFTKM 10.0.0.139:5555 (Android 11), private ADB 5041, isolated package dev.deathride.perf / port 8772",
+  "ownerAppBefore": {"utc": "2026-10-08T08:00:56Z", "resumed": "dev.deathride.tv/.MainActivity task t330, record a03c5a7", "pid": 14337, "lastUpdateTime": "2026-10-06 23:44:23"},
+  "ownerAppAfter": {"utc": "2026-10-08T11:46:16Z", "resumed": "dev.deathride.tv/.MainActivity task t330, record a03c5a7 (intent delivered to the running instance)", "pid": 14337, "lastUpdateTime": "2026-10-06 23:44:23"},
+  "perfPackageAtEnd": "force-stopped (no pid)",
+  "audioFlingerAtEnd": "AudioOut_D and AudioOut_15 both in standby with the owner's app in front",
+  "deviceTmp": "nothing copied to the device by this session remains; /data/local/tmp holds only files dated 2026-10-01..03 from earlier sessions, left as found",
+  "hostTools": "ws 8.18.0 copied from the main checkout into the worktree's gitignored tools/node_modules for the probe, removed after the runs; the main checkout was only read"
+}

@@ -1,0 +1,52 @@
+P15 step 2: why no MMAP route (excerpts of raw/route/silentMmap-lobby-*.txt, bound by manifest.json)
+
+== getprop (nothing running)
+2
+2
+[aaudio.mixer_bursts]: [1]
+[aaudio.mmap_exclusive_policy]: [2]
+[aaudio.mmap_policy]: [2]
+
+== the open, in order (full logcat, 16:08:32 device time)
+10-08 16:08:32.426   421  2176 I APM_AudioPolicyManager: getOutputForAttrInt() device {type:0x2,@:}, sampling rate 48000, format 0x1, channel mask 0x3, flags 0x4001 stream AUDIO_STREAM_MUSIC
+10-08 16:08:32.427   421  2176 W AAudioService: openStream(), could not open in EXCLUSIVE mode
+10-08 16:08:32.429   421  2176 I APM_AudioPolicyManager: getOutputForAttrInt() device {type:0x2,@:}, sampling rate 48000, format 0x1, channel mask 0x3, flags 0x4001 stream AUDIO_STREAM_MUSIC
+10-08 16:08:32.429   421  2176 W AAudioService: openStream(), could not open in EXCLUSIVE mode
+10-08 16:08:32.448   421  2176 I APM_AudioPolicyManager: getOutputForAttrInt() device {type:0x2,@:}, sampling rate 48000, format 0x1, channel mask 0x3, flags 0x104 stream AUDIO_STREAM_MUSIC
+10-08 16:08:32.448   421  2176 I APM_AudioPolicyManager: getOutputForAttr() returns output 13 requestedPortId 0 selectedDeviceId 2 for port ID 47235
+10-08 16:08:32.450   421  2176 W AudioFlinger: createTrack_l(): mismatch between requested flags (00000104) and output flags (00000002)
+10-08 16:08:32.478   421  2176 I APM_AudioPolicyManager: startOutput() output 13, stream 3, session 376905
+10-08 16:09:14.308   421   627 I APM_AudioPolicyManager: stopOutput() output 13, stream 3, session 376905
+
+== dumpsys media.audio_policy: available output devices
+- Available output devices:
+  Device 1:
+  - id:  2
+  - tag name: Speaker
+  - type: AUDIO_DEVICE_OUT_SPEAKER                        
+  - supported encapsulation modes: 0  - supported encapsulation metadata types: 0  - Profiles:
+      Profile 0:[dynamic format][dynamic channels][dynamic rates]
+  Device 2:
+  - id:  7
+  - tag name: Default Out
+  - type: AUDIO_DEVICE_OUT_DEFAULT|AUDIO_DEVICE_OUT_STUB  
+  - supported encapsulation modes: 0  - supported encapsulation metadata types: 0  - Profiles:
+      Profile 0:[dynamic format][dynamic channels][dynamic rates]
+
+== dumpsys media.audio_policy: the mmap_no_irq_out mix port
+  output 2:
+    - name: mmap_no_irq_out
+    - Profiles:
+        Profile 0:
+            - format: AUDIO_FORMAT_PCM_16_BIT
+            - sampling rates:48000
+            - channel masks:0x0003, 0x003f, 0x063f
+    - flags: 0x4001 (AUDIO_OUTPUT_FLAG_DIRECT|AUDIO_OUTPUT_FLAG_MMAP_NOIRQ)
+    - Supported devices:
+      Device 1:
+      - tag name: HDMI-Out
+      - type: AUDIO_DEVICE_OUT_AUX_DIGITAL|AUDIO_DEVICE_OUT_HDMI
+      - supported encapsulation modes: 0      - supported encapsulation metadata types: 0
+    - maxOpenCount: 1 - curOpenCount: 0
+    - maxActiveCount: 1 - curActiveCount: 0
+    

@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "stream": "WPN-B",
+  "purpose": "Weapon and spike mounts drawn on cars (game/src/main/kotlin/dev/deathride/game/MountPainter.kt)",
+  "generated_art": 0,
+  "mount_atlas_page": false,
+  "reason": "No owner-approved or exact-reference-approved weapon/spike art exists that is a transparent top-down right-facing mount sprite. Every procedural mount is made of tinted rectangles of the shared 1x1 pixel texture (no texture budget, no atlas page).",
+  "attachment_data": "game/src/main/resources/mounts/mount-attachments.csv (measured with desktop --mount-shots on the shipped car atlas sprites; fractions of drawn body length/width)",
+  "sprite_hook": "a catalog row whose sprite column names a region passes AtlasArt.approved() or is ignored; no row names one",
+  "unapproved_candidates_not_used": [
+    {"logical_name": "hud/icon-light-gun", "asset_id": "v4-fusion-hud-icons-icon-light-gun-v1", "weapon": "Rivet", "kind": "HUD icon", "owner_approved": false},
+    {"logical_name": "hud/icon-heavy-gun", "asset_id": "v4-fusion-hud-icons-icon-heavy-gun-v1", "weapon": "Hammer", "kind": "HUD icon", "owner_approved": false},
+    {"logical_name": "combat-icons/scatter", "asset_id": "v4-fusion-hud-icons-scatter-v1", "weapon": "Scatter", "kind": "HUD icon", "owner_approved": false},
+    {"logical_name": "combat-icons/spikes", "asset_id": "v4-fusion-hud-icons-spikes-v1", "weapon": "Spikes consumable", "kind": "HUD icon", "owner_approved": false},
+    {"logical_name": "pickups/mine", "asset_id": "v4-fusion-pickups-mine-v1", "weapon": "Mine", "kind": "pickup icon", "owner_approved": false},
+    {"logical_name": "effects/muzzle", "asset_id": "v4-fusion-effects-muzzle-layout-v1", "weapon": "muzzle flash", "kind": "6-frame effect", "owner_approved": false, "note": "already used by AtlasEffects at the ray origin; mounts add only procedural flash"}
+  ]
+}

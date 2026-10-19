@@ -1,0 +1,22 @@
+{
+ "runs": [
+  {
+   "what": "AudioArmTest + perf APK build (step 1, before commit 43e547e3)",
+   "command": "gradlew.bat :game:test --tests dev.deathride.game.AudioArmTest :app:assembleDebug -PsilentMmap=true -PappId=dev.deathride.perf \"-PappLabel=Death Ride Perf\" -PracePort=8772 --offline",
+   "result": "BUILD SUCCESSFUL; AudioArmTest 9 cases, 0 failures (SILENT_MMAP among them)"
+  },
+  {
+   "what": "release build with the property (proof)",
+   "command": "gradlew.bat :app:assembleRelease -PsilentMmap=true -PnoPngReencode=true -PappId=dev.deathride.perf \"-PappLabel=Death Ride Perf\" -PracePort=8772 --offline",
+   "result": "BUILD SUCCESSFUL; no libdrsilentmmap.so, no SilentMmap class (release-proof.json)",
+   "log": "raw/p15/release-build.log"
+  },
+  {
+   "what": "acceptance gate",
+   "commit": "07ccb265 (code identical to 43e547e3)",
+   "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+   "result": "BUILD SUCCESSFUL; core 261 (0 skipped, 0 failed), link 29 (2 skipped, as on the base), game 114 (0 failed); EvidenceRuleTest green with evidence/perf/p15 committed; no link timing test failed",
+   "log": "raw/p15/gate-final.log"
+  }
+ ]
+}

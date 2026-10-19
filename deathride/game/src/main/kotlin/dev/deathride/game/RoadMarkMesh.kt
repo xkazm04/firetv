@@ -6,12 +6,13 @@ import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector2
 
 /** One bounded, context-managed static buffer shared by successive courses. */
-class RoadMarkMesh {
-    private val vertices=FloatArray(12000*4)
+class RoadMarkMesh(private val capacityVertices: Int=12000,shared: ShaderProgram?=null) {
+    private val vertices=FloatArray(capacityVertices*4)
     private val normal=Vector2()
     private var used=0
-    private val mesh=Mesh(true,12000,0,VertexAttribute.Position(),VertexAttribute.ColorPacked())
-    private val shader=ShaderProgram("""
+    private val mesh=Mesh(true,capacityVertices,0,VertexAttribute.Position(),VertexAttribute.ColorPacked())
+    private val ownsShader=shared==null
+    private val shader=shared?:ShaderProgram("""
         attribute vec4 a_position;
         attribute vec4 a_color;
         uniform mat4 u_projTrans;
@@ -25,7 +26,10 @@ class RoadMarkMesh {
         void main(){gl_FragColor=v_color;}
     """)
     init { check(shader.isCompiled){shader.log} }
+    val program: ShaderProgram get()=shader
     val capacityBytes get()=vertices.size*4
+    /** True when [lines] more rectLines still fit. */
+    fun fits(lines: Int)=used+lines*24<=vertices.size
     fun clear(){used=0}
     private fun vertex(x: Float,y: Float,color: Float){vertices[used++]=x;vertices[used++]=y;vertices[used++]=0f;vertices[used++]=color}
     fun line(x1: Float,y1: Float,x2: Float,y2: Float,width: Float,r: Float,g: Float,b: Float){
@@ -39,5 +43,5 @@ class RoadMarkMesh {
     }
     fun upload(){mesh.setVertices(vertices,0,used)}
     fun draw(matrix: Matrix4){if(used==0)return;shader.bind();shader.setUniformMatrix("u_projTrans",matrix);mesh.render(shader,GL20.GL_TRIANGLES,0,used/4)}
-    fun dispose(){mesh.dispose();shader.dispose()}
+    fun dispose(){mesh.dispose();if(ownsShader)shader.dispose()}
 }

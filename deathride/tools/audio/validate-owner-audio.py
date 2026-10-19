@@ -70,7 +70,8 @@ def validate(manifest=None,apk=True):
     require(not rejected_hashes.intersection(c['sha256'] for c in cues.values() if c['path']),'rejected audio bytes shipped under alias')
     require(cues['race.countdown'].get('reviewFlag'),'countdown review flag absent')
     require(all(cues[id]['bus']=='effects' and not cues[id]['stream'] for id in ('race.victory','race.defeat')),'kept percussion effects must remain audible')
-    require(cues['voice.mechanic.seizure']['status']=='owner-accepted' and cues['voice.mechanic.seizure']['technicalFailures']==['silence'],'delivered paused voice must retain honest status')
+    sz=cues['voice.mechanic.seizure']  # 2026-10-15 re-record passes the screen; status must follow the measured result, never be hidden
+    require(sz['status']==('technical-pass' if sz['technicalStatus']=='pass' else 'owner-accepted') and (sz['technicalFailures']==[]) == (sz['technicalStatus']=='pass'),'seizure voice status must follow its measured screen')
     for alias,base in [('race.low-hp','ui.denied'),('race.empty','ui.denied'),('race.ability-ready','ui.confirm')]:
         require(cues[alias]['path']==cues[base]['path'] and cues[alias]['sha256']==cues[base]['sha256'],f'alias mismatch {alias}')
     decoded=sum(c['decodedBytes'] for c in selected)
@@ -103,7 +104,7 @@ def self_review():
     case('Needle candidate substituted',lambda m:m['engineVariants'].update(Needle=['engine.line.1']))
     case('rejected lap path restored',lambda m:next(c for c in m['cues'] if c['id']=='race.lap').update(path='audio/clips/race.start.wav'))
     case('kept exact hash stale',lambda m:next(c for c in m['cues'] if c['id']=='engine.base').update(sha256='0'*64))
-    case('technical failed silence hidden',lambda m:next(c for c in m['cues'] if c['id']=='voice.mechanic.seizure').update(technicalStatus='pass'))
+    case('technical failed silence hidden',lambda m:next(c for c in m['cues'] if c['id']=='voice.mechanic.seizure').update(technicalStatus='fail',technicalFailures=['silence']))
     case('countdown flag removed',lambda m:next(c for c in m['cues'] if c['id']=='race.countdown').pop('reviewFlag'))
     case('kept victory accidentally muted',lambda m:next(c for c in m['cues'] if c['id']=='race.victory').update(bus='music'))
     return results

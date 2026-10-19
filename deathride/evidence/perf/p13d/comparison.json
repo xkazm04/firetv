@@ -1,0 +1,1061 @@
+{
+ "p13c": {
+  "run1": {
+   "bar": {
+    "transitionMaxMs": 111.1,
+    "windowsOver100": 36,
+    "transitionWindows": 58,
+    "pass": false
+   },
+   "requestsMs": {
+    "car": [
+     11.6,
+     32.7
+    ],
+    "startRace": [
+     20.6,
+     69.2
+    ],
+    "raceLaunch": [
+     7.1,
+     10.5
+    ],
+    "track": [
+     14.3,
+     72.3
+    ],
+    "lobby": [
+     7.1,
+     23.7
+    ],
+    "profileSubmit": [
+     4.8,
+     19.6
+    ],
+    "profileDeferredPublish": [
+     0.0,
+     6.3
+    ]
+   },
+   "flushMsPerSeat": {
+    "seat0": {
+     "count": 24,
+     "rangeMs": [
+      11.0,
+      51.8
+     ],
+     "meanMs": 17.0
+    },
+    "seat1": {
+     "count": 23,
+     "rangeMs": [
+      11.2,
+      61.2
+     ],
+     "meanMs": 20.3
+    }
+   },
+   "pssMiB": [
+    159.0,
+    190.4
+   ]
+  },
+  "run2": {
+   "bar": {
+    "transitionMaxMs": 112.0,
+    "windowsOver100": 23,
+    "transitionWindows": 56,
+    "pass": false
+   },
+   "requestsMs": {
+    "car": [
+     10.4,
+     21.1
+    ],
+    "startRace": [
+     20.1,
+     37.3
+    ],
+    "raceLaunch": [
+     6.9,
+     30.1
+    ],
+    "track": [
+     18.1,
+     65.7
+    ],
+    "lobby": [
+     7.0,
+     28.8
+    ],
+    "profileSubmit": [
+     3.9,
+     12.1
+    ],
+    "profileDeferredPublish": [
+     0.0,
+     0.2
+    ]
+   },
+   "flushMsPerSeat": {
+    "seat0": {
+     "count": 24,
+     "rangeMs": [
+      9.4,
+      54.3
+     ],
+     "meanMs": 19.3
+    },
+    "seat1": {
+     "count": 23,
+     "rangeMs": [
+      9.5,
+      46.8
+     ],
+     "meanMs": 18.9
+    }
+   },
+   "pssMiB": [
+    164.4,
+    197.8
+   ]
+  }
+ },
+ "runs": {
+  "run1": {
+   "bar": {
+    "transitionMaxMs": 136.7,
+    "windowsOver100": 19,
+    "transitionWindows": 55,
+    "pass": false
+   },
+   "perRoundTransitionMaxMs": [
+    [
+     "scrap-1-c",
+     136.7
+    ],
+    [
+     "foundry-1-c",
+     99.3
+    ],
+    [
+     "salt-1-b",
+     99.5
+    ],
+    [
+     "switchback-1-a",
+     110.7
+    ],
+    [
+     "crown-1-a",
+     104.1
+    ],
+    [
+     "scrap-1-c",
+     93.4
+    ]
+   ],
+   "renders100msPlus": [
+    {
+     "approxSecond": -32.3,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 32.8,
+     "startup": true,
+     "intervalMs": 125.9,
+     "workMs": 78.4,
+     "cpuMs": 71.6,
+     "requestsMs": 0.8,
+     "prepareMs": 13.4,
+     "simulationMs": 0.2,
+     "audioMs": 0.2,
+     "telemetryMs": 1.5,
+     "clearMs": 6.6,
+     "sceneryDrawMs": 0,
+     "carsEffectsMs": 0.0,
+     "hudMs": 55.6,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": -31.9,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 32.4,
+     "startup": true,
+     "intervalMs": 109.5,
+     "workMs": 14.0,
+     "cpuMs": 12.9,
+     "requestsMs": 0.7,
+     "prepareMs": 4.4,
+     "simulationMs": 0.2,
+     "audioMs": 0.1,
+     "telemetryMs": 1.4,
+     "clearMs": 0.9,
+     "sceneryDrawMs": 0,
+     "carsEffectsMs": 0.0,
+     "hudMs": 6.1,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": -29.9,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 30.4,
+     "startup": true,
+     "intervalMs": 98.3,
+     "workMs": 125.4,
+     "cpuMs": 124.7,
+     "requestsMs": 0.5,
+     "prepareMs": 0.0,
+     "simulationMs": 108.5,
+     "audioMs": 0.1,
+     "telemetryMs": 1.2,
+     "clearMs": 0.9,
+     "sceneryDrawMs": 1.6,
+     "carsEffectsMs": 9.2,
+     "hudMs": 2.9,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": -29.8,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 30.3,
+     "startup": true,
+     "intervalMs": 126.8,
+     "workMs": 92.2,
+     "cpuMs": 91.6,
+     "requestsMs": 0.7,
+     "prepareMs": 0.0,
+     "simulationMs": 76.5,
+     "audioMs": 0.1,
+     "telemetryMs": 0.0,
+     "clearMs": 1.0,
+     "sceneryDrawMs": 1.4,
+     "carsEffectsMs": 9.2,
+     "hudMs": 2.8,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": -29.1,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 29.6,
+     "startup": true,
+     "intervalMs": 30.0,
+     "workMs": 213.5,
+     "cpuMs": 21.0,
+     "requestsMs": 0.4,
+     "prepareMs": 0.0,
+     "simulationMs": 8.8,
+     "audioMs": 0.1,
+     "telemetryMs": 0.0,
+     "clearMs": 0.7,
+     "sceneryDrawMs": 1.6,
+     "carsEffectsMs": 5.9,
+     "hudMs": 2.7,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": -28.9,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 29.4,
+     "startup": true,
+     "intervalMs": 214.9,
+     "workMs": 55.9,
+     "cpuMs": 53.9,
+     "requestsMs": 0.4,
+     "prepareMs": 0.0,
+     "simulationMs": 42.2,
+     "audioMs": 0.1,
+     "telemetryMs": 1.7,
+     "clearMs": 0.8,
+     "sceneryDrawMs": 1.5,
+     "carsEffectsMs": 5.9,
+     "hudMs": 2.8,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 0.2,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 0.3,
+     "startup": false,
+     "intervalMs": 52.9,
+     "workMs": 123.0,
+     "cpuMs": 56.9,
+     "requestsMs": 4.0,
+     "prepareMs": 0.0,
+     "simulationMs": 13.2,
+     "audioMs": 0.0,
+     "telemetryMs": 76.1,
+     "clearMs": 2.2,
+     "sceneryDrawMs": 4.5,
+     "carsEffectsMs": 11.7,
+     "hudMs": 10.8,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 0.3,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 0.2,
+     "startup": false,
+     "intervalMs": 131.0,
+     "workMs": 24.9,
+     "cpuMs": 17.5,
+     "requestsMs": 0.1,
+     "prepareMs": 0.0,
+     "simulationMs": 14.1,
+     "audioMs": 0.0,
+     "telemetryMs": 0.0,
+     "clearMs": 5.2,
+     "sceneryDrawMs": 1.0,
+     "carsEffectsMs": 2.2,
+     "hudMs": 2.0,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 0.8,
+     "beforeRound": 1,
+     "track": "foundry-1-c",
+     "secondsBeforeRoundStart": 67.1,
+     "startup": false,
+     "intervalMs": 37.3,
+     "workMs": 134.0,
+     "cpuMs": 43.5,
+     "requestsMs": 0.6,
+     "prepareMs": 0.0,
+     "simulationMs": 26.0,
+     "audioMs": 0.0,
+     "telemetryMs": 91.9,
+     "clearMs": 7.0,
+     "sceneryDrawMs": 1.8,
+     "carsEffectsMs": 2.1,
+     "hudMs": 4.4,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 0.9,
+     "beforeRound": 1,
+     "track": "foundry-1-c",
+     "secondsBeforeRoundStart": 67.0,
+     "startup": false,
+     "intervalMs": 136.7,
+     "workMs": 49.9,
+     "cpuMs": 32.5,
+     "requestsMs": 0.5,
+     "prepareMs": 0.0,
+     "simulationMs": 20.6,
+     "audioMs": 0.0,
+     "telemetryMs": 22.6,
+     "clearMs": 0.8,
+     "sceneryDrawMs": 1.0,
+     "carsEffectsMs": 2.0,
+     "hudMs": 2.3,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 200.7,
+     "beforeRound": 3,
+     "track": "switchback-1-a",
+     "secondsBeforeRoundStart": 0.8,
+     "startup": false,
+     "intervalMs": 110.7,
+     "workMs": 6.0,
+     "cpuMs": 5.7,
+     "requestsMs": 0.1,
+     "prepareMs": 3.2,
+     "simulationMs": 0.1,
+     "audioMs": 0.0,
+     "telemetryMs": 0.2,
+     "clearMs": 0.6,
+     "sceneryDrawMs": 0,
+     "carsEffectsMs": 0.0,
+     "hudMs": 1.7,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 268.2,
+     "beforeRound": 4,
+     "track": "crown-1-a",
+     "secondsBeforeRoundStart": 0.8,
+     "startup": false,
+     "intervalMs": 104.1,
+     "workMs": 16.2,
+     "cpuMs": 6.4,
+     "requestsMs": 0.1,
+     "prepareMs": 3.6,
+     "simulationMs": 0.0,
+     "audioMs": 0.0,
+     "telemetryMs": 0.0,
+     "clearMs": 10.3,
+     "sceneryDrawMs": 0,
+     "carsEffectsMs": 0.0,
+     "hudMs": 2.1,
+     "textureUploads": 0,
+     "active": 0
+    }
+   ],
+   "switchK11IntervalsMs": [
+    99.3,
+    99.5,
+    110.7,
+    104.1,
+    93.4
+   ],
+   "switchSlowIntervals": [
+    [
+     [
+      11,
+      99.3
+     ]
+    ],
+    [
+     [
+      11,
+      99.5
+     ]
+    ],
+    [
+     [
+      11,
+      110.7
+     ]
+    ],
+    [
+     [
+      11,
+      104.1
+     ]
+    ],
+    [
+     [
+      11,
+      93.4
+     ]
+    ]
+   ],
+   "requestsMs": {
+    "car": [
+     12.3,
+     40.5
+    ],
+    "startRace": [
+     23.8,
+     43.0
+    ],
+    "raceLaunch": [
+     6.6,
+     10.2
+    ],
+    "track": [
+     12.3,
+     62.7
+    ],
+    "lobby": [
+     6.8,
+     16.3
+    ]
+   },
+   "flushMsPerSeat": {
+    "seat0": {
+     "count": 25,
+     "rangeMs": [
+      9.3,
+      73.6
+     ],
+     "all": [
+      27.0,
+      73.6,
+      19.2,
+      20.7,
+      22.2,
+      12.4,
+      11.4,
+      13.1,
+      15.8,
+      11.5,
+      24.8,
+      12.1,
+      10.8,
+      10.2,
+      14.2,
+      10.3,
+      39.2,
+      10.1,
+      12.0,
+      12.7,
+      15.2,
+      11.8,
+      14.6,
+      9.7,
+      9.3
+     ]
+    },
+    "seat1": {
+     "count": 23,
+     "rangeMs": [
+      9.8,
+      90.8
+     ],
+     "all": [
+      25.0,
+      90.8,
+      36.2,
+      12.2,
+      12.3,
+      17.0,
+      14.3,
+      10.8,
+      11.5,
+      17.7,
+      12.4,
+      10.2,
+      13.6,
+      10.8,
+      11.5,
+      11.5,
+      12.1,
+      38.0,
+      10.5,
+      18.3,
+      9.8,
+      10.9,
+      10.2
+     ]
+    }
+   },
+   "uiDeferredMs": [
+    0.5,
+    3.7
+   ],
+   "pssMiB": [
+    168.1,
+    192.5
+   ],
+   "rejected": [
+    0,
+    0
+   ],
+   "inputStream": {
+    "hz": [
+     30.000946020946962,
+     30.000946020946962
+    ],
+    "pumpStalls": 0
+   },
+   "hostCpuPercent": {
+    "host-cpu-start.json": [
+     20,
+     26,
+     25
+    ],
+    "host-cpu-end.json": [
+     41,
+     45,
+     46
+    ]
+   },
+   "hostSettle": {
+    "settled": true,
+    "waitedSeconds": 301,
+    "rule": "60 consecutive 1 s samples under 60%, wait up to 900 s"
+   },
+   "finishRace": "no finishRace timer (no race finished, or none logged)",
+   "artStatsFirst": null
+  },
+  "run2": {
+   "bar": {
+    "transitionMaxMs": 177.9,
+    "windowsOver100": 30,
+    "transitionWindows": 56,
+    "pass": false
+   },
+   "perRoundTransitionMaxMs": [
+    [
+     "scrap-1-c",
+     177.9
+    ],
+    [
+     "foundry-1-c",
+     108.2
+    ],
+    [
+     "salt-1-b",
+     100.0
+    ],
+    [
+     "switchback-1-a",
+     110.5
+    ],
+    [
+     "crown-1-a",
+     104.5
+    ],
+    [
+     "scrap-1-c",
+     102.4
+    ]
+   ],
+   "renders100msPlus": [
+    {
+     "approxSecond": -36.5,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 37.0,
+     "startup": true,
+     "intervalMs": 132.1,
+     "workMs": 51.6,
+     "cpuMs": 49.3,
+     "requestsMs": 0.9,
+     "prepareMs": 6.3,
+     "simulationMs": 0.2,
+     "audioMs": 0.2,
+     "telemetryMs": 1.6,
+     "clearMs": 7.0,
+     "sceneryDrawMs": 0,
+     "carsEffectsMs": 0.0,
+     "hudMs": 35.3,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": -36.1,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 36.7,
+     "startup": true,
+     "intervalMs": 106.5,
+     "workMs": 16.1,
+     "cpuMs": 13.1,
+     "requestsMs": 0.5,
+     "prepareMs": 3.8,
+     "simulationMs": 0.1,
+     "audioMs": 0.1,
+     "telemetryMs": 2.7,
+     "clearMs": 3.5,
+     "sceneryDrawMs": 0,
+     "carsEffectsMs": 0.0,
+     "hudMs": 5.1,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": -34.4,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 35.0,
+     "startup": true,
+     "intervalMs": 16.6,
+     "workMs": 165.3,
+     "cpuMs": 165.0,
+     "requestsMs": 0.3,
+     "prepareMs": 28.7,
+     "simulationMs": 0.0,
+     "audioMs": 0.1,
+     "telemetryMs": 0.0,
+     "clearMs": 1.0,
+     "sceneryDrawMs": 2.0,
+     "carsEffectsMs": 129.2,
+     "hudMs": 3.3,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": -34.2,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 34.8,
+     "startup": true,
+     "intervalMs": 166.5,
+     "workMs": 124.2,
+     "cpuMs": 123.3,
+     "requestsMs": 0.6,
+     "prepareMs": 0.0,
+     "simulationMs": 107.6,
+     "audioMs": 0.1,
+     "telemetryMs": 1.3,
+     "clearMs": 0.9,
+     "sceneryDrawMs": 1.6,
+     "carsEffectsMs": 8.8,
+     "hudMs": 2.8,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": -34.1,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 34.7,
+     "startup": true,
+     "intervalMs": 125.7,
+     "workMs": 95.8,
+     "cpuMs": 93.5,
+     "requestsMs": 0.5,
+     "prepareMs": 0.0,
+     "simulationMs": 79.0,
+     "audioMs": 0.1,
+     "telemetryMs": 0.0,
+     "clearMs": 0.9,
+     "sceneryDrawMs": 1.8,
+     "carsEffectsMs": 9.7,
+     "hudMs": 3.3,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": -33.4,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 34.0,
+     "startup": true,
+     "intervalMs": 19.5,
+     "workMs": 206.0,
+     "cpuMs": 24.8,
+     "requestsMs": 0.3,
+     "prepareMs": 0.0,
+     "simulationMs": 7.9,
+     "audioMs": 0.1,
+     "telemetryMs": 180.4,
+     "clearMs": 0.9,
+     "sceneryDrawMs": 1.9,
+     "carsEffectsMs": 10.1,
+     "hudMs": 3.8,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": -33.1,
+     "beforeRound": 0,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 33.7,
+     "startup": true,
+     "intervalMs": 207.6,
+     "workMs": 50.3,
+     "cpuMs": 49.2,
+     "requestsMs": 0.4,
+     "prepareMs": 0.0,
+     "simulationMs": 37.6,
+     "audioMs": 0.1,
+     "telemetryMs": 0.9,
+     "clearMs": 0.8,
+     "sceneryDrawMs": 1.4,
+     "carsEffectsMs": 5.7,
+     "hudMs": 2.9,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 0.6,
+     "beforeRound": 1,
+     "track": "foundry-1-c",
+     "secondsBeforeRoundStart": 67.5,
+     "startup": false,
+     "intervalMs": 32.7,
+     "workMs": 176.6,
+     "cpuMs": 70.6,
+     "requestsMs": 147.1,
+     "prepareMs": 0.1,
+     "simulationMs": 19.0,
+     "audioMs": 0.0,
+     "telemetryMs": 0.0,
+     "clearMs": 1.1,
+     "sceneryDrawMs": 4.2,
+     "carsEffectsMs": 2.3,
+     "hudMs": 2.4,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 0.8,
+     "beforeRound": 1,
+     "track": "foundry-1-c",
+     "secondsBeforeRoundStart": 67.4,
+     "startup": false,
+     "intervalMs": 177.9,
+     "workMs": 54.5,
+     "cpuMs": 40.9,
+     "requestsMs": 2.7,
+     "prepareMs": 0.0,
+     "simulationMs": 16.6,
+     "audioMs": 0.0,
+     "telemetryMs": 27.7,
+     "clearMs": 1.6,
+     "sceneryDrawMs": 1.0,
+     "carsEffectsMs": 2.8,
+     "hudMs": 2.0,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 67.0,
+     "beforeRound": 1,
+     "track": "foundry-1-c",
+     "secondsBeforeRoundStart": 1.2,
+     "startup": false,
+     "intervalMs": 108.2,
+     "workMs": 28.5,
+     "cpuMs": 11.1,
+     "requestsMs": 0.2,
+     "prepareMs": 3.3,
+     "simulationMs": 0.0,
+     "audioMs": 0.0,
+     "telemetryMs": 0.5,
+     "clearMs": 2.0,
+     "sceneryDrawMs": 0,
+     "carsEffectsMs": 0.1,
+     "hudMs": 22.1,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 201.9,
+     "beforeRound": 3,
+     "track": "switchback-1-a",
+     "secondsBeforeRoundStart": 0.7,
+     "startup": false,
+     "intervalMs": 110.5,
+     "workMs": 8.3,
+     "cpuMs": 6.1,
+     "requestsMs": 0.1,
+     "prepareMs": 3.2,
+     "simulationMs": 0.0,
+     "audioMs": 0.0,
+     "telemetryMs": 0.4,
+     "clearMs": 2.5,
+     "sceneryDrawMs": 0,
+     "carsEffectsMs": 0.0,
+     "hudMs": 1.9,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 269.4,
+     "beforeRound": 4,
+     "track": "crown-1-a",
+     "secondsBeforeRoundStart": 0.7,
+     "startup": false,
+     "intervalMs": 104.5,
+     "workMs": 16.0,
+     "cpuMs": 7.6,
+     "requestsMs": 0.1,
+     "prepareMs": 3.9,
+     "simulationMs": 0.0,
+     "audioMs": 0.0,
+     "telemetryMs": 0.8,
+     "clearMs": 8.8,
+     "sceneryDrawMs": 0,
+     "carsEffectsMs": 0.0,
+     "hudMs": 2.2,
+     "textureUploads": 0,
+     "active": 0
+    },
+    {
+     "approxSecond": 334.4,
+     "beforeRound": 5,
+     "track": "scrap-1-c",
+     "secondsBeforeRoundStart": 0.7,
+     "startup": false,
+     "intervalMs": 102.4,
+     "workMs": 16.2,
+     "cpuMs": 6.5,
+     "requestsMs": 0.1,
+     "prepareMs": 3.8,
+     "simulationMs": 0.0,
+     "audioMs": 0.0,
+     "telemetryMs": 1.0,
+     "clearMs": 9.8,
+     "sceneryDrawMs": 0,
+     "carsEffectsMs": 0.0,
+     "hudMs": 1.5,
+     "textureUploads": 0,
+     "active": 0
+    }
+   ],
+   "switchK11IntervalsMs": [
+    108.2,
+    100.0,
+    110.5,
+    104.5,
+    102.4
+   ],
+   "switchSlowIntervals": [
+    [
+     [
+      1,
+      92.7
+     ],
+     [
+      11,
+      108.2
+     ]
+    ],
+    [
+     [
+      11,
+      100.0
+     ]
+    ],
+    [
+     [
+      11,
+      110.5
+     ]
+    ],
+    [
+     [
+      11,
+      104.5
+     ]
+    ],
+    [
+     [
+      11,
+      102.4
+     ]
+    ]
+   ],
+   "requestsMs": {
+    "car": [
+     10.9,
+     29.7
+    ],
+    "startRace": [
+     21.1,
+     145.9
+    ],
+    "raceLaunch": [
+     6.5,
+     11.5
+    ],
+    "track": [
+     10.8,
+     81.4
+    ],
+    "lobby": [
+     7.1,
+     15.7
+    ]
+   },
+   "flushMsPerSeat": {
+    "seat0": {
+     "count": 25,
+     "rangeMs": [
+      11.1,
+      45.0
+     ],
+     "all": [
+      28.0,
+      27.0,
+      20.3,
+      26.6,
+      15.8,
+      14.0,
+      18.5,
+      12.9,
+      14.0,
+      18.4,
+      14.9,
+      12.7,
+      16.3,
+      44.7,
+      11.9,
+      11.8,
+      11.7,
+      12.9,
+      12.2,
+      16.4,
+      45.0,
+      12.9,
+      15.0,
+      11.1,
+      13.1
+     ]
+    },
+    "seat1": {
+     "count": 23,
+     "rangeMs": [
+      11.3,
+      28.5
+     ],
+     "all": [
+      22.1,
+      24.3,
+      28.5,
+      28.4,
+      13.2,
+      14.9,
+      15.0,
+      15.6,
+      15.7,
+      11.7,
+      24.9,
+      11.3,
+      11.8,
+      11.8,
+      12.3,
+      13.2,
+      14.7,
+      12.0,
+      12.5,
+      21.2,
+      14.5,
+      18.6,
+      23.7
+     ]
+    }
+   },
+   "uiDeferredMs": [
+    0.5,
+    3.8
+   ],
+   "pssMiB": [
+    175.8,
+    203.9
+   ],
+   "rejected": [
+    0,
+    0
+   ],
+   "inputStream": {
+    "hz": [
+     30.001918631996634,
+     30.001918631996634
+    ],
+    "pumpStalls": 0
+   },
+   "hostCpuPercent": {
+    "host-cpu-start.json": [
+     16,
+     17,
+     16
+    ],
+    "host-cpu-end.json": [
+     53,
+     37,
+     56
+    ]
+   },
+   "hostSettle": {
+    "settled": true,
+    "waitedSeconds": 76,
+    "rule": "60 consecutive 1 s samples under 60%, wait up to 900 s"
+   },
+   "finishRace": "no finishRace timer (no race finished, or none logged)",
+   "artStatsFirst": null
+  }
+ }
+}

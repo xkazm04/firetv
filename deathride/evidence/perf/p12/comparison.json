@@ -1,0 +1,1933 @@
+{
+  "rule": "Fixed before the first run. Primary: active frames over 33 ms per 360 s run. An arm beats full on a reading when BOTH of its runs read lower than BOTH full runs; anything else is \"not shown\". Worst active-window p95 and active frames over 20 ms are judged the same way and reported beside it, not decisive. An arm clears the I2 frame limits only if both its runs read worst p95 <= 16.7 ms and active max <= 33 ms. Runs are interleaved full, muted, capped, still, full, muted, capped, still; a run whose logcat or /stats does not show its arm is void.",
+  "runs": [
+    {
+      "arm": "full",
+      "run": "full-run1",
+      "apkSha256": "bf6a17bf5bf15b91ec2af52d480cc9cc28ab52f011043dae40da0ebe5eb1856b",
+      "durationSeconds": 360.16729860000004,
+      "functionalPass": true,
+      "error": null,
+      "armCheck": {
+        "logcat": [],
+        "statsArm": "full",
+        "matches": true
+      },
+      "activeFrames": 18938,
+      "activeFramesOver33Ms": 128,
+      "activeFramesOver20Ms": 966,
+      "activeFramesOver16_7Ms": 8715,
+      "activeP95WorstMs": 24.238308,
+      "activeMaxMs": 81.736385,
+      "activeP50RangeMs": [
+        16.656306999999998,
+        16.695999999999998
+      ],
+      "pssRangeMiB": [
+        167.091796875,
+        198.5341796875
+      ],
+      "over33OffCpuOver8Ms": 128,
+      "over33DuringGc": 15,
+      "over33ByDominantCategory": {
+        "cars": 67,
+        "simulation": 34,
+        "hud": 16,
+        "flushSwap": 3,
+        "audio": 3,
+        "scenery": 3,
+        "telemetry": 1,
+        "requests": 1
+      },
+      "audioPairCpuPercentOfOneCore": {
+        "audioserver AudioOut_D": 46.3,
+        "audio HAL writer": 51.41
+      },
+      "scheduler": {
+        "seconds": 385.03,
+        "threads": {
+          "AudioOut_D": {
+            "tid": 683,
+            "cpuPercentOfOneCore": 46.54,
+            "slicesPerSecond": 17450,
+            "runqueueWaitMsPerSecond": 74.45
+          },
+          "writer": {
+            "tid": 783,
+            "cpuPercentOfOneCore": 51.69,
+            "slicesPerSecond": 17399,
+            "runqueueWaitMsPerSecond": 70.63
+          },
+          "render (GLThread)": {
+            "tid": 14858,
+            "cpuPercentOfOneCore": 53.92,
+            "slicesPerSecond": 1584,
+            "runqueueWaitMsPerSecond": 88.66
+          }
+        },
+        "limit": "/proc/<pid>/task/<tid>/schedstat between the two counter reads around the probe (the probe only, no tracing). Runqueue wait is all time runnable but not running (preempted or waking), whoever held the CPU."
+      },
+      "audioStats": {
+        "played": 1004,
+        "highWater": 8,
+        "workerStarts": 998,
+        "failedStarts": 0,
+        "nativeHighWater": 8,
+        "native": null
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.00272385084324,
+          30.00272385084324
+        ],
+        "pumpStalls": 0
+      },
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 8085210.493092393,
+        "gcCount": 110,
+        "gcTimeMs": 10243,
+        "blockingGcCount": 1,
+        "seconds": 342.924151,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "gcLines": 66,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T06:18:25.0204104Z",
+          "totalPercentSamples": [
+            86,
+            56,
+            43
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "git#1",
+              99
+            ],
+            [
+              "Code - Insiders#7",
+              99
+            ],
+            [
+              "node#36",
+              94
+            ],
+            [
+              "SearchIndexer",
+              75
+            ],
+            [
+              "node#43",
+              61
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T06:24:34.7022228Z",
+          "totalPercentSamples": [
+            36,
+            66,
+            57
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "UnrealEditor-Cmd",
+              407
+            ],
+            [
+              "node#36",
+              98
+            ],
+            [
+              "rustc",
+              89
+            ],
+            [
+              "Code - Insiders#7",
+              74
+            ],
+            [
+              "MsMpEng",
+              42
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "muted",
+      "run": "muted-run1",
+      "apkSha256": "bf6a17bf5bf15b91ec2af52d480cc9cc28ab52f011043dae40da0ebe5eb1856b",
+      "durationSeconds": 360.0640008,
+      "functionalPass": true,
+      "error": null,
+      "armCheck": {
+        "logcat": [
+          "muted"
+        ],
+        "statsArm": "muted",
+        "matches": true
+      },
+      "activeFrames": 19259,
+      "activeFramesOver33Ms": 3,
+      "activeFramesOver20Ms": 138,
+      "activeFramesOver16_7Ms": 8833,
+      "activeP95WorstMs": 19.433539,
+      "activeMaxMs": 71.545153,
+      "activeP50RangeMs": [
+        16.666230000000002,
+        16.761769
+      ],
+      "pssRangeMiB": [
+        152.0546875,
+        196.7373046875
+      ],
+      "over33OffCpuOver8Ms": 3,
+      "over33DuringGc": 2,
+      "over33ByDominantCategory": {
+        "scenery": 2,
+        "cars": 1
+      },
+      "audioPairCpuPercentOfOneCore": {
+        "audioserver AudioOut_D": 0.0,
+        "audio HAL writer": 0.0
+      },
+      "scheduler": {
+        "seconds": 391.73,
+        "threads": {
+          "AudioOut_D": {
+            "tid": 683,
+            "cpuPercentOfOneCore": 0.0,
+            "slicesPerSecond": 0,
+            "runqueueWaitMsPerSecond": 0.0
+          },
+          "writer": {
+            "tid": 783,
+            "cpuPercentOfOneCore": 0.0,
+            "slicesPerSecond": 0,
+            "runqueueWaitMsPerSecond": 0.0
+          },
+          "render (GLThread)": {
+            "tid": 17401,
+            "cpuPercentOfOneCore": 55.11,
+            "slicesPerSecond": 383,
+            "runqueueWaitMsPerSecond": 13.35
+          }
+        },
+        "limit": "/proc/<pid>/task/<tid>/schedstat between the two counter reads around the probe (the probe only, no tracing). Runqueue wait is all time runnable but not running (preempted or waking), whoever held the CPU."
+      },
+      "audioStats": {
+        "played": 1105,
+        "highWater": 7,
+        "workerStarts": 1105,
+        "failedStarts": 0,
+        "nativeHighWater": 7,
+        "native": {
+          "arm": "muted",
+          "voiceCap": 8,
+          "parameterIntervalMs": 0,
+          "platformStarts": 0,
+          "silentStarts": 1105,
+          "refusedStarts": 0,
+          "appliedParameters": 0,
+          "heldParameters": 0
+        }
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.000222116067764,
+          30.000222116067764
+        ],
+        "pumpStalls": 0
+      },
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 8417788.269916506,
+        "gcCount": 114,
+        "gcTimeMs": 8848,
+        "blockingGcCount": 0,
+        "seconds": 341.3133165,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "gcLines": 45,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T06:25:27.1185835Z",
+          "totalPercentSamples": [
+            95,
+            65,
+            68
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#30",
+              354
+            ],
+            [
+              "rustc",
+              156
+            ],
+            [
+              "UnrealEditor-Cmd",
+              104
+            ],
+            [
+              "git#1",
+              94
+            ],
+            [
+              "SearchIndexer",
+              89
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T06:31:43.3581983Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "rustc#3",
+              292
+            ],
+            [
+              "rustc#5",
+              222
+            ],
+            [
+              "rustc#1",
+              108
+            ],
+            [
+              "MsMpEng",
+              99
+            ],
+            [
+              "rustc#6",
+              89
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "capped",
+      "run": "capped-run1",
+      "apkSha256": "bf6a17bf5bf15b91ec2af52d480cc9cc28ab52f011043dae40da0ebe5eb1856b",
+      "durationSeconds": 360.1435334,
+      "functionalPass": true,
+      "error": null,
+      "armCheck": {
+        "logcat": [
+          "capped"
+        ],
+        "statsArm": "capped",
+        "matches": true
+      },
+      "activeFrames": 18797,
+      "activeFramesOver33Ms": 200,
+      "activeFramesOver20Ms": 1019,
+      "activeFramesOver16_7Ms": 8815,
+      "activeP95WorstMs": 41.732077,
+      "activeMaxMs": 240.852308,
+      "activeP50RangeMs": [
+        16.658922999999998,
+        16.716846
+      ],
+      "pssRangeMiB": [
+        141.6259765625,
+        196.7421875
+      ],
+      "over33OffCpuOver8Ms": 200,
+      "over33DuringGc": 33,
+      "over33ByDominantCategory": {
+        "cars": 104,
+        "simulation": 72,
+        "hud": 18,
+        "scenery": 4,
+        "flushSwap": 2
+      },
+      "audioPairCpuPercentOfOneCore": {
+        "audioserver AudioOut_D": 47.05,
+        "audio HAL writer": 50.59
+      },
+      "scheduler": {
+        "seconds": 388.16,
+        "threads": {
+          "AudioOut_D": {
+            "tid": 683,
+            "cpuPercentOfOneCore": 47.3,
+            "slicesPerSecond": 17020,
+            "runqueueWaitMsPerSecond": 73.05
+          },
+          "writer": {
+            "tid": 783,
+            "cpuPercentOfOneCore": 50.86,
+            "slicesPerSecond": 16975,
+            "runqueueWaitMsPerSecond": 70.96
+          },
+          "render (GLThread)": {
+            "tid": 19395,
+            "cpuPercentOfOneCore": 52.94,
+            "slicesPerSecond": 1592,
+            "runqueueWaitMsPerSecond": 85.46
+          }
+        },
+        "limit": "/proc/<pid>/task/<tid>/schedstat between the two counter reads around the probe (the probe only, no tracing). Runqueue wait is all time runnable but not running (preempted or waking), whoever held the CPU."
+      },
+      "audioStats": {
+        "played": 1681,
+        "highWater": 5,
+        "workerStarts": 700,
+        "failedStarts": 978,
+        "nativeHighWater": 3,
+        "native": {
+          "arm": "capped",
+          "voiceCap": 3,
+          "parameterIntervalMs": 0,
+          "platformStarts": 700,
+          "silentStarts": 0,
+          "refusedStarts": 978,
+          "appliedParameters": 38361,
+          "heldParameters": 0
+        }
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.001927003918265,
+          30.001927003918265
+        ],
+        "pumpStalls": 0
+      },
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 8159625.869035738,
+        "gcCount": 109,
+        "gcTimeMs": 11181,
+        "blockingGcCount": 0,
+        "seconds": 342.6856482,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "gcLines": 58,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T06:32:36.9071373Z",
+          "totalPercentSamples": [
+            96,
+            98,
+            95
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#27",
+              131
+            ],
+            [
+              "svchost#72",
+              98
+            ],
+            [
+              "SearchIndexer",
+              98
+            ],
+            [
+              "rustc",
+              94
+            ],
+            [
+              "git#1",
+              94
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T06:38:48.9533977Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            99
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#31",
+              176
+            ],
+            [
+              "git#7",
+              108
+            ],
+            [
+              "node#52",
+              95
+            ],
+            [
+              "rustc#2",
+              95
+            ],
+            [
+              "rustc",
+              95
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "still",
+      "run": "still-run1",
+      "apkSha256": "bf6a17bf5bf15b91ec2af52d480cc9cc28ab52f011043dae40da0ebe5eb1856b",
+      "durationSeconds": 360.12384499999996,
+      "functionalPass": true,
+      "error": null,
+      "armCheck": {
+        "logcat": [
+          "still"
+        ],
+        "statsArm": "still",
+        "matches": true
+      },
+      "activeFrames": 18839,
+      "activeFramesOver33Ms": 170,
+      "activeFramesOver20Ms": 1040,
+      "activeFramesOver16_7Ms": 8796,
+      "activeP95WorstMs": 30.058768999999998,
+      "activeMaxMs": 87.515923,
+      "activeP50RangeMs": [
+        16.657077,
+        16.699692
+      ],
+      "pssRangeMiB": [
+        153.9541015625,
+        184.650390625
+      ],
+      "over33OffCpuOver8Ms": 169,
+      "over33DuringGc": 25,
+      "over33ByDominantCategory": {
+        "cars": 105,
+        "simulation": 46,
+        "hud": 11,
+        "flushSwap": 3,
+        "telemetry": 2,
+        "audio": 2,
+        "scenery": 1
+      },
+      "audioPairCpuPercentOfOneCore": {
+        "audioserver AudioOut_D": 47.2,
+        "audio HAL writer": 52.75
+      },
+      "scheduler": {
+        "seconds": 385.77,
+        "threads": {
+          "AudioOut_D": {
+            "tid": 683,
+            "cpuPercentOfOneCore": 47.43,
+            "slicesPerSecond": 18002,
+            "runqueueWaitMsPerSecond": 68.23
+          },
+          "writer": {
+            "tid": 783,
+            "cpuPercentOfOneCore": 53.04,
+            "slicesPerSecond": 18002,
+            "runqueueWaitMsPerSecond": 67.38
+          },
+          "render (GLThread)": {
+            "tid": 22272,
+            "cpuPercentOfOneCore": 59.04,
+            "slicesPerSecond": 1661,
+            "runqueueWaitMsPerSecond": 83.17
+          }
+        },
+        "limit": "/proc/<pid>/task/<tid>/schedstat between the two counter reads around the probe (the probe only, no tracing). Runqueue wait is all time runnable but not running (preempted or waking), whoever held the CPU."
+      },
+      "audioStats": {
+        "played": 1034,
+        "highWater": 7,
+        "workerStarts": 1030,
+        "failedStarts": 0,
+        "nativeHighWater": 7,
+        "native": {
+          "arm": "still",
+          "voiceCap": 8,
+          "parameterIntervalMs": 200,
+          "platformStarts": 1030,
+          "silentStarts": 0,
+          "refusedStarts": 0,
+          "appliedParameters": 3438,
+          "heldParameters": 41151
+        }
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.00079042252812,
+          30.00079042252812
+        ],
+        "pumpStalls": 0
+      },
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 8010785.006334185,
+        "gcCount": 109,
+        "gcTimeMs": 10011,
+        "blockingGcCount": 0,
+        "seconds": 343.47210240000004,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "gcLines": 62,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T06:39:57.4662408Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "rustc#1",
+              426
+            ],
+            [
+              "SearchIndexer",
+              85
+            ],
+            [
+              "rustc#2",
+              85
+            ],
+            [
+              "rustc",
+              85
+            ],
+            [
+              "node#32",
+              80
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T06:46:08.0721333Z",
+          "totalPercentSamples": [
+            87,
+            69,
+            75
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "rustc#1",
+              493
+            ],
+            [
+              "node#21",
+              149
+            ],
+            [
+              "rustc",
+              104
+            ],
+            [
+              "node#18",
+              104
+            ],
+            [
+              "svchost#72",
+              94
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "full",
+      "run": "full-run2",
+      "apkSha256": "bf6a17bf5bf15b91ec2af52d480cc9cc28ab52f011043dae40da0ebe5eb1856b",
+      "durationSeconds": 360.05898219999995,
+      "functionalPass": true,
+      "error": null,
+      "armCheck": {
+        "logcat": [],
+        "statsArm": "full",
+        "matches": true
+      },
+      "activeFrames": 18943,
+      "activeFramesOver33Ms": 120,
+      "activeFramesOver20Ms": 881,
+      "activeFramesOver16_7Ms": 8780,
+      "activeP95WorstMs": 24.850461,
+      "activeMaxMs": 69.998846,
+      "activeP50RangeMs": [
+        16.659461,
+        16.696922999999998
+      ],
+      "pssRangeMiB": [
+        173.5537109375,
+        198.3056640625
+      ],
+      "over33OffCpuOver8Ms": 120,
+      "over33DuringGc": 17,
+      "over33ByDominantCategory": {
+        "cars": 63,
+        "simulation": 32,
+        "hud": 13,
+        "scenery": 6,
+        "audio": 4,
+        "telemetry": 1,
+        "requests": 1
+      },
+      "audioPairCpuPercentOfOneCore": {
+        "audioserver AudioOut_D": 46.67,
+        "audio HAL writer": 52.24
+      },
+      "scheduler": {
+        "seconds": 384.79,
+        "threads": {
+          "AudioOut_D": {
+            "tid": 683,
+            "cpuPercentOfOneCore": 46.91,
+            "slicesPerSecond": 17808,
+            "runqueueWaitMsPerSecond": 72.39
+          },
+          "writer": {
+            "tid": 783,
+            "cpuPercentOfOneCore": 52.53,
+            "slicesPerSecond": 17762,
+            "runqueueWaitMsPerSecond": 67.94
+          },
+          "render (GLThread)": {
+            "tid": 24951,
+            "cpuPercentOfOneCore": 54.38,
+            "slicesPerSecond": 1471,
+            "runqueueWaitMsPerSecond": 76.53
+          }
+        },
+        "limit": "/proc/<pid>/task/<tid>/schedstat between the two counter reads around the probe (the probe only, no tracing). Runqueue wait is all time runnable but not running (preempted or waking), whoever held the CPU."
+      },
+      "audioStats": {
+        "played": 995,
+        "highWater": 8,
+        "workerStarts": 993,
+        "failedStarts": 0,
+        "nativeHighWater": 8,
+        "native": null
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.000640267321184,
+          30.000640267321184
+        ],
+        "pumpStalls": 0
+      },
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 8183077.090131844,
+        "gcCount": 111,
+        "gcTimeMs": 9906,
+        "blockingGcCount": 0,
+        "seconds": 343.21923269999996,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "gcLines": 62,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T06:47:00.1463638Z",
+          "totalPercentSamples": [
+            40,
+            57,
+            51
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#16",
+              121
+            ],
+            [
+              "node#19",
+              116
+            ],
+            [
+              "rustc",
+              102
+            ],
+            [
+              "rustc#1",
+              102
+            ],
+            [
+              "chrome-headless-shell#1",
+              97
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T06:53:10.3505168Z",
+          "totalPercentSamples": [
+            84,
+            89,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#25",
+              186
+            ],
+            [
+              "node#24",
+              147
+            ],
+            [
+              "node#26",
+              142
+            ],
+            [
+              "chrome-headless-shell#1",
+              103
+            ],
+            [
+              "com.docker.backend#1",
+              103
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "muted",
+      "run": "muted-run2",
+      "apkSha256": "bf6a17bf5bf15b91ec2af52d480cc9cc28ab52f011043dae40da0ebe5eb1856b",
+      "durationSeconds": 360.1013468,
+      "functionalPass": true,
+      "error": null,
+      "armCheck": {
+        "logcat": [
+          "muted"
+        ],
+        "statsArm": "muted",
+        "matches": true
+      },
+      "activeFrames": 19272,
+      "activeFramesOver33Ms": 1,
+      "activeFramesOver20Ms": 137,
+      "activeFramesOver16_7Ms": 8701,
+      "activeP95WorstMs": 19.451152999999998,
+      "activeMaxMs": 34.912769000000004,
+      "activeP50RangeMs": [
+        16.666,
+        16.698692
+      ],
+      "pssRangeMiB": [
+        171.146484375,
+        200.5205078125
+      ],
+      "over33OffCpuOver8Ms": 1,
+      "over33DuringGc": 0,
+      "over33ByDominantCategory": {
+        "hud": 1
+      },
+      "audioPairCpuPercentOfOneCore": {
+        "audioserver AudioOut_D": 0.0,
+        "audio HAL writer": 0.0
+      },
+      "scheduler": {
+        "seconds": 394.86,
+        "threads": {
+          "AudioOut_D": {
+            "tid": 683,
+            "cpuPercentOfOneCore": 0.0,
+            "slicesPerSecond": 0,
+            "runqueueWaitMsPerSecond": 0.0
+          },
+          "writer": {
+            "tid": 783,
+            "cpuPercentOfOneCore": 0.0,
+            "slicesPerSecond": 0,
+            "runqueueWaitMsPerSecond": 0.0
+          },
+          "render (GLThread)": {
+            "tid": 27311,
+            "cpuPercentOfOneCore": 56.98,
+            "slicesPerSecond": 388,
+            "runqueueWaitMsPerSecond": 12.44
+          }
+        },
+        "limit": "/proc/<pid>/task/<tid>/schedstat between the two counter reads around the probe (the probe only, no tracing). Runqueue wait is all time runnable but not running (preempted or waking), whoever held the CPU."
+      },
+      "audioStats": {
+        "played": 1083,
+        "highWater": 7,
+        "workerStarts": 1082,
+        "failedStarts": 0,
+        "nativeHighWater": 7,
+        "native": {
+          "arm": "muted",
+          "voiceCap": 8,
+          "parameterIntervalMs": 0,
+          "platformStarts": 0,
+          "silentStarts": 1082,
+          "refusedStarts": 0,
+          "appliedParameters": 0,
+          "heldParameters": 0
+        }
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          29.999887798253578,
+          29.999887798253578
+        ],
+        "pumpStalls": 0
+      },
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 8592832.151906589,
+        "gcCount": 116,
+        "gcTimeMs": 8513,
+        "blockingGcCount": 0,
+        "seconds": 341.0004632,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "gcLines": 50,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T06:54:02.1018431Z",
+          "totalPercentSamples": [
+            59,
+            98,
+            85
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#27",
+              112
+            ],
+            [
+              "rustc",
+              103
+            ],
+            [
+              "rustc#1",
+              95
+            ],
+            [
+              "node#30",
+              90
+            ],
+            [
+              "SearchIndexer",
+              86
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T07:00:21.3360705Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "chrome-headless-shell#1",
+              94
+            ],
+            [
+              "svchost#72",
+              94
+            ],
+            [
+              "node#44",
+              85
+            ],
+            [
+              "SearchIndexer",
+              85
+            ],
+            [
+              "rustfmt",
+              76
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "capped",
+      "run": "capped-run2",
+      "apkSha256": "bf6a17bf5bf15b91ec2af52d480cc9cc28ab52f011043dae40da0ebe5eb1856b",
+      "durationSeconds": 360.0394152,
+      "functionalPass": true,
+      "error": null,
+      "armCheck": {
+        "logcat": [
+          "capped"
+        ],
+        "statsArm": "capped",
+        "matches": true
+      },
+      "activeFrames": 19048,
+      "activeFramesOver33Ms": 107,
+      "activeFramesOver20Ms": 757,
+      "activeFramesOver16_7Ms": 8806,
+      "activeP95WorstMs": 24.869615,
+      "activeMaxMs": 79.883616,
+      "activeP50RangeMs": [
+        16.623616000000002,
+        16.701692
+      ],
+      "pssRangeMiB": [
+        153.1591796875,
+        179.01953125
+      ],
+      "over33OffCpuOver8Ms": 107,
+      "over33DuringGc": 20,
+      "over33ByDominantCategory": {
+        "cars": 48,
+        "simulation": 27,
+        "hud": 19,
+        "scenery": 4,
+        "audio": 4,
+        "flushSwap": 3,
+        "requests": 2
+      },
+      "audioPairCpuPercentOfOneCore": {
+        "audioserver AudioOut_D": 45.58,
+        "audio HAL writer": 47.63
+      },
+      "scheduler": {
+        "seconds": 405.8,
+        "threads": {
+          "AudioOut_D": {
+            "tid": 683,
+            "cpuPercentOfOneCore": 45.8,
+            "slicesPerSecond": 16032,
+            "runqueueWaitMsPerSecond": 69.13
+          },
+          "writer": {
+            "tid": 783,
+            "cpuPercentOfOneCore": 47.88,
+            "slicesPerSecond": 15990,
+            "runqueueWaitMsPerSecond": 67.98
+          },
+          "render (GLThread)": {
+            "tid": 29269,
+            "cpuPercentOfOneCore": 51.91,
+            "slicesPerSecond": 1344,
+            "runqueueWaitMsPerSecond": 72.98
+          }
+        },
+        "limit": "/proc/<pid>/task/<tid>/schedstat between the two counter reads around the probe (the probe only, no tracing). Runqueue wait is all time runnable but not running (preempted or waking), whoever held the CPU."
+      },
+      "audioStats": {
+        "played": 1528,
+        "highWater": 7,
+        "workerStarts": 680,
+        "failedStarts": 845,
+        "nativeHighWater": 3,
+        "native": {
+          "arm": "capped",
+          "voiceCap": 3,
+          "parameterIntervalMs": 0,
+          "platformStarts": 680,
+          "silentStarts": 0,
+          "refusedStarts": 845,
+          "appliedParameters": 38375,
+          "heldParameters": 0
+        }
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.00227070694342,
+          30.00227070694342
+        ],
+        "pumpStalls": 0
+      },
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 8124610.867615743,
+        "gcCount": 110,
+        "gcTimeMs": 10924,
+        "blockingGcCount": 1,
+        "seconds": 342.6170126,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "gcLines": 64,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T07:01:47.2694051Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "rustc#18",
+              146
+            ],
+            [
+              "rustc#16",
+              109
+            ],
+            [
+              "SearchIndexer",
+              97
+            ],
+            [
+              "svchost#72",
+              97
+            ],
+            [
+              "rustc#1",
+              93
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T07:08:07.0241744Z",
+          "totalPercentSamples": [
+            96,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "rustc",
+              345
+            ],
+            [
+              "node#20",
+              139
+            ],
+            [
+              "node#21",
+              139
+            ],
+            [
+              "node#28",
+              129
+            ],
+            [
+              "node#26",
+              100
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "still",
+      "run": "still-run2",
+      "apkSha256": "bf6a17bf5bf15b91ec2af52d480cc9cc28ab52f011043dae40da0ebe5eb1856b",
+      "durationSeconds": 363.5967499000001,
+      "functionalPass": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/e48eb7ce/deathride/tools/ability-stick-probe.mjs:128:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+      "armCheck": {
+        "logcat": [
+          "still"
+        ],
+        "statsArm": "still",
+        "matches": true
+      },
+      "activeFrames": 18603,
+      "activeFramesOver33Ms": 89,
+      "activeFramesOver20Ms": 804,
+      "activeFramesOver16_7Ms": 8611,
+      "activeP95WorstMs": 23.333769,
+      "activeMaxMs": 66.125461,
+      "activeP50RangeMs": [
+        16.664308,
+        16.699846
+      ],
+      "pssRangeMiB": [
+        181.1875,
+        204.9248046875
+      ],
+      "over33OffCpuOver8Ms": 89,
+      "over33DuringGc": 18,
+      "over33ByDominantCategory": {
+        "cars": 44,
+        "simulation": 17,
+        "hud": 12,
+        "scenery": 7,
+        "audio": 4,
+        "flushSwap": 3,
+        "requests": 1,
+        "telemetry": 1
+      },
+      "audioPairCpuPercentOfOneCore": {
+        "audioserver AudioOut_D": 46.88,
+        "audio HAL writer": 53.25
+      },
+      "scheduler": {
+        "seconds": 402.16,
+        "threads": {
+          "AudioOut_D": {
+            "tid": 683,
+            "cpuPercentOfOneCore": 47.11,
+            "slicesPerSecond": 18118,
+            "runqueueWaitMsPerSecond": 67.87
+          },
+          "writer": {
+            "tid": 783,
+            "cpuPercentOfOneCore": 53.52,
+            "slicesPerSecond": 18117,
+            "runqueueWaitMsPerSecond": 66.06
+          },
+          "render (GLThread)": {
+            "tid": 31512,
+            "cpuPercentOfOneCore": 52.9,
+            "slicesPerSecond": 1407,
+            "runqueueWaitMsPerSecond": 69.16
+          }
+        },
+        "limit": "/proc/<pid>/task/<tid>/schedstat between the two counter reads around the probe (the probe only, no tracing). Runqueue wait is all time runnable but not running (preempted or waking), whoever held the CPU."
+      },
+      "audioStats": {
+        "played": 1066,
+        "highWater": 8,
+        "workerStarts": 1062,
+        "failedStarts": 0,
+        "nativeHighWater": 8,
+        "native": {
+          "arm": "still",
+          "voiceCap": 8,
+          "parameterIntervalMs": 200,
+          "platformStarts": 1062,
+          "silentStarts": 0,
+          "refusedStarts": 0,
+          "appliedParameters": 3451,
+          "heldParameters": 41164
+        }
+      },
+      "rejectedInputs": [
+        4,
+        5
+      ],
+      "inputStream": {
+        "hz": [
+          30.000268162463016,
+          30.000268162463016
+        ],
+        "pumpStalls": 0
+      },
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 8342276.3849305315,
+        "gcCount": 111,
+        "gcTimeMs": 9907,
+        "blockingGcCount": 1,
+        "seconds": 335.47115329999997,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "gcLines": 66,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T07:09:00.2524014Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#22",
+              158
+            ],
+            [
+              "svchost#72",
+              95
+            ],
+            [
+              "clippy-driver",
+              95
+            ],
+            [
+              "clippy-driver#1",
+              86
+            ],
+            [
+              "SearchIndexer",
+              86
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T07:15:25.6619072Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "python#1",
+              796
+            ],
+            [
+              "svchost#72",
+              88
+            ],
+            [
+              "node#39",
+              83
+            ],
+            [
+              "SearchIndexer",
+              79
+            ],
+            [
+              "node#11",
+              66
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "still",
+      "run": "still-run3",
+      "apkSha256": "bf6a17bf5bf15b91ec2af52d480cc9cc28ab52f011043dae40da0ebe5eb1856b",
+      "durationSeconds": 360.0657772,
+      "functionalPass": true,
+      "error": null,
+      "armCheck": {
+        "logcat": [
+          "still"
+        ],
+        "statsArm": "still",
+        "matches": true
+      },
+      "activeFrames": 18976,
+      "activeFramesOver33Ms": 113,
+      "activeFramesOver20Ms": 889,
+      "activeFramesOver16_7Ms": 8707,
+      "activeP95WorstMs": 23.919769,
+      "activeMaxMs": 87.693769,
+      "activeP50RangeMs": [
+        16.661693000000003,
+        16.699384000000002
+      ],
+      "pssRangeMiB": [
+        165.62890625,
+        200.431640625
+      ],
+      "over33OffCpuOver8Ms": 112,
+      "over33DuringGc": 24,
+      "over33ByDominantCategory": {
+        "cars": 67,
+        "simulation": 32,
+        "hud": 8,
+        "flushSwap": 5,
+        "scenery": 1
+      },
+      "audioPairCpuPercentOfOneCore": {
+        "audioserver AudioOut_D": 47.25,
+        "audio HAL writer": 52.91
+      },
+      "scheduler": {
+        "seconds": 388.35,
+        "threads": {
+          "AudioOut_D": {
+            "tid": 683,
+            "cpuPercentOfOneCore": 47.5,
+            "slicesPerSecond": 18038,
+            "runqueueWaitMsPerSecond": 67.88
+          },
+          "writer": {
+            "tid": 783,
+            "cpuPercentOfOneCore": 53.2,
+            "slicesPerSecond": 18037,
+            "runqueueWaitMsPerSecond": 67.05
+          },
+          "render (GLThread)": {
+            "tid": 10692,
+            "cpuPercentOfOneCore": 53.08,
+            "slicesPerSecond": 1548,
+            "runqueueWaitMsPerSecond": 75.89
+          }
+        },
+        "limit": "/proc/<pid>/task/<tid>/schedstat between the two counter reads around the probe (the probe only, no tracing). Runqueue wait is all time runnable but not running (preempted or waking), whoever held the CPU."
+      },
+      "audioStats": {
+        "played": 1125,
+        "highWater": 8,
+        "workerStarts": 1119,
+        "failedStarts": 0,
+        "nativeHighWater": 8,
+        "native": {
+          "arm": "still",
+          "voiceCap": 8,
+          "parameterIntervalMs": 200,
+          "platformStarts": 1119,
+          "silentStarts": 0,
+          "refusedStarts": 0,
+          "appliedParameters": 3885,
+          "heldParameters": 46142
+        }
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.000074108681495,
+          30.000074108681495
+        ],
+        "pumpStalls": 0
+      },
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 8167031.090226226,
+        "gcCount": 110,
+        "gcTimeMs": 9793,
+        "blockingGcCount": 0,
+        "seconds": 342.01932539999996,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "gcLines": 62,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T07:37:10.3664327Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "python#1",
+              906
+            ],
+            [
+              "clippy-driver",
+              92
+            ],
+            [
+              "svchost#72",
+              88
+            ],
+            [
+              "link",
+              88
+            ],
+            [
+              "bash#53",
+              65
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T07:43:22.3261396Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "python#1",
+              854
+            ],
+            [
+              "svchost#72",
+              102
+            ],
+            [
+              "MsMpEng",
+              79
+            ],
+            [
+              "clippy-driver",
+              79
+            ],
+            [
+              "node#25",
+              74
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "void": [
+    {
+      "run": "still-run2",
+      "reason": "functional failure: AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n"
+    }
+  ],
+  "verdicts": {
+    "muted": {
+      "activeFramesOver33Ms": {
+        "verdict": "beats full",
+        "arm": [
+          3,
+          1
+        ],
+        "full": [
+          128,
+          120
+        ],
+        "meanChange": -122.0,
+        "meanChangePercent": -98.4
+      },
+      "activeP95WorstMs": {
+        "verdict": "beats full",
+        "arm": [
+          19.433539,
+          19.451152999999998
+        ],
+        "full": [
+          24.238308,
+          24.850461
+        ],
+        "meanChange": -5.102,
+        "meanChangePercent": -20.8
+      },
+      "activeFramesOver20Ms": {
+        "verdict": "beats full",
+        "arm": [
+          138,
+          137
+        ],
+        "full": [
+          966,
+          881
+        ],
+        "meanChange": -786.0,
+        "meanChangePercent": -85.1
+      },
+      "primary": "beats full",
+      "clearsI2Frames": false
+    },
+    "capped": {
+      "activeFramesOver33Ms": {
+        "verdict": "not shown",
+        "arm": [
+          200,
+          107
+        ],
+        "full": [
+          128,
+          120
+        ],
+        "meanChange": 29.5,
+        "meanChangePercent": 23.8
+      },
+      "activeP95WorstMs": {
+        "verdict": "not shown",
+        "arm": [
+          41.732077,
+          24.869615
+        ],
+        "full": [
+          24.238308,
+          24.850461
+        ],
+        "meanChange": 8.756,
+        "meanChangePercent": 35.7
+      },
+      "activeFramesOver20Ms": {
+        "verdict": "not shown",
+        "arm": [
+          1019,
+          757
+        ],
+        "full": [
+          966,
+          881
+        ],
+        "meanChange": -35.5,
+        "meanChangePercent": -3.8
+      },
+      "primary": "not shown",
+      "clearsI2Frames": false
+    },
+    "still": {
+      "activeFramesOver33Ms": {
+        "verdict": "not shown",
+        "arm": [
+          170,
+          113
+        ],
+        "full": [
+          128,
+          120
+        ],
+        "meanChange": 17.5,
+        "meanChangePercent": 14.1
+      },
+      "activeP95WorstMs": {
+        "verdict": "not shown",
+        "arm": [
+          30.058768999999998,
+          23.919769
+        ],
+        "full": [
+          24.238308,
+          24.850461
+        ],
+        "meanChange": 2.445,
+        "meanChangePercent": 10.0
+      },
+      "activeFramesOver20Ms": {
+        "verdict": "not shown",
+        "arm": [
+          1040,
+          889
+        ],
+        "full": [
+          966,
+          881
+        ],
+        "meanChange": 41.0,
+        "meanChangePercent": 4.4
+      },
+      "primary": "not shown",
+      "clearsI2Frames": false
+    }
+  },
+  "perArmMeans": {
+    "full": {
+      "activeFramesOver33Ms": 124.0,
+      "activeP95WorstMs": 24.544,
+      "activeFramesOver20Ms": 923.5,
+      "activeMaxMs": 75.868
+    },
+    "muted": {
+      "activeFramesOver33Ms": 2.0,
+      "activeP95WorstMs": 19.442,
+      "activeFramesOver20Ms": 137.5,
+      "activeMaxMs": 53.229
+    },
+    "capped": {
+      "activeFramesOver33Ms": 153.5,
+      "activeP95WorstMs": 33.301,
+      "activeFramesOver20Ms": 888.0,
+      "activeMaxMs": 160.368
+    },
+    "still": {
+      "activeFramesOver33Ms": 141.5,
+      "activeP95WorstMs": 26.989,
+      "activeFramesOver20Ms": 964.5,
+      "activeMaxMs": 87.605
+    }
+  },
+  "traces": [
+    {
+      "arm": "full",
+      "trace": "diag-full-trace",
+      "frames": 575,
+      "spanSeconds": 10.576,
+      "intervalsOver": {
+        "16.7": 296,
+        "20": 77,
+        "25": 41,
+        "33": 18,
+        "50": 6
+      },
+      "over33Ms": {
+        "frames": 18,
+        "meanMs": {
+          "runningMs": 16.377,
+          "preemptedMs": 13.15,
+          "wakeupLatencyMs": 20.774,
+          "sleepMs": 6.213
+        },
+        "preemptedTotalMs": 236.7,
+        "preemptedByAudioPairMs": 205.8,
+        "audioPairShareOfPreempted": 0.869,
+        "preemptedByAppAudioThreadsMs": 1.9,
+        "preemptedByTop": {
+          "AudioOut_D (nice -19)": 111.0,
+          "writer (nice -19)": 94.8,
+          "app (RT)": 7.3,
+          "hif_thread (nice -10)": 6.5,
+          "GLThread": 2.6,
+          "Binder:584_": 2.0
+        }
+      },
+      "over20Ms": {
+        "frames": 77,
+        "meanMs": {
+          "runningMs": 13.823,
+          "preemptedMs": 8.724,
+          "wakeupLatencyMs": 5.895,
+          "sleepMs": 3.67
+        },
+        "preemptedTotalMs": 671.7,
+        "preemptedByAudioPairMs": 452.6,
+        "audioPairShareOfPreempted": 0.674,
+        "preemptedByAppAudioThreadsMs": 44.5,
+        "preemptedByTop": {
+          "AudioOut_D (nice -19)": 247.9,
+          "writer (nice -19)": 204.7,
+          "DeathRideAudio": 30.7,
+          "Binder:424_": 24.0,
+          "kworker/0:": 16.3,
+          "app (RT)": 15.4
+        }
+      },
+      "audioPairThreads": [
+        {
+          "thread": "writer",
+          "process": "audio.service",
+          "prio": 101,
+          "cpuPercentOfOneCore": 42.9,
+          "switchInsPerSecond": 13637,
+          "meanSliceUs": 31.5
+        },
+        {
+          "thread": "AudioOut_D",
+          "process": "audioserver",
+          "prio": 101,
+          "cpuPercentOfOneCore": 42.2,
+          "switchInsPerSecond": 13858,
+          "meanSliceUs": 30.4
+        }
+      ],
+      "note": "Intrusive trace beside a diagnostic run; its frame counts are not I2 figures. preemptedByMs lists the top 12 takers only."
+    },
+    {
+      "arm": "muted",
+      "trace": "diag-muted-trace",
+      "frames": 1196,
+      "spanSeconds": 19.982,
+      "intervalsOver": {
+        "16.7": 571,
+        "20": 7,
+        "25": 2,
+        "33": 1,
+        "50": 0
+      },
+      "over33Ms": {
+        "frames": 1,
+        "meanMs": {
+          "runningMs": 14.829,
+          "preemptedMs": 0.199,
+          "wakeupLatencyMs": 1.077,
+          "sleepMs": 18.094
+        },
+        "preemptedTotalMs": 0.2,
+        "preemptedByAudioPairMs": 0,
+        "audioPairShareOfPreempted": 0.0,
+        "preemptedByAppAudioThreadsMs": 0,
+        "preemptedByTop": {
+          "hif_thread (nice -10)": 0.1,
+          "disp_osd2_irq_k (RT)": 0.1,
+          "swapper/": 0.0
+        }
+      },
+      "over20Ms": {
+        "frames": 7,
+        "meanMs": {
+          "runningMs": 13.338,
+          "preemptedMs": 0.987,
+          "wakeupLatencyMs": 1.709,
+          "sleepMs": 8.537
+        },
+        "preemptedTotalMs": 6.9,
+        "preemptedByAudioPairMs": 0,
+        "audioPairShareOfPreempted": 0.0,
+        "preemptedByAppAudioThreadsMs": 0.1,
+        "preemptedByTop": {
+          "kworker/0:": 2.9,
+          "hif_thread (nice -10)": 2.1,
+          "Binder:424_": 0.6,
+          "TimerDispatch (RT)": 0.3,
+          "swapper/": 0.3,
+          "app (RT)": 0.3
+        }
+      },
+      "audioPairThreads": [],
+      "note": "Intrusive trace beside a diagnostic run; its frame counts are not I2 figures. preemptedByMs lists the top 12 takers only."
+    },
+    {
+      "arm": "capped",
+      "trace": "diag-capped-trace",
+      "frames": 579,
+      "spanSeconds": 10.235,
+      "intervalsOver": {
+        "16.7": 281,
+        "20": 36,
+        "25": 15,
+        "33": 9,
+        "50": 5
+      },
+      "over33Ms": {
+        "frames": 9,
+        "meanMs": {
+          "runningMs": 18.585,
+          "preemptedMs": 15.305,
+          "wakeupLatencyMs": 25.149,
+          "sleepMs": 11.391
+        },
+        "preemptedTotalMs": 137.7,
+        "preemptedByAudioPairMs": 129.5,
+        "audioPairShareOfPreempted": 0.94,
+        "preemptedByAppAudioThreadsMs": 0,
+        "preemptedByTop": {
+          "AudioOut_D (nice -19)": 71.6,
+          "writer (nice -19)": 57.9,
+          "app (RT)": 2.4,
+          "GLThread": 0.7,
+          "sf (RT)": 0.6,
+          "kworker/1:": 0.6
+        }
+      },
+      "over20Ms": {
+        "frames": 36,
+        "meanMs": {
+          "runningMs": 14.807,
+          "preemptedMs": 7.966,
+          "wakeupLatencyMs": 7.042,
+          "sleepMs": 5.291
+        },
+        "preemptedTotalMs": 286.8,
+        "preemptedByAudioPairMs": 227.5,
+        "audioPairShareOfPreempted": 0.793,
+        "preemptedByAppAudioThreadsMs": 5.8,
+        "preemptedByTop": {
+          "AudioOut_D (nice -19)": 116.9,
+          "writer (nice -19)": 110.6,
+          "surfaceflinger (RT)": 7.0,
+          "hif_thread (nice -10)": 6.3,
+          "SoundPool_": 5.8,
+          ".deathride.perf (nice -10)": 5.2
+        }
+      },
+      "audioPairThreads": [
+        {
+          "thread": "AudioOut_D",
+          "process": "audioserver",
+          "prio": 101,
+          "cpuPercentOfOneCore": 44.6,
+          "switchInsPerSecond": 14310,
+          "meanSliceUs": 31.2
+        },
+        {
+          "thread": "writer",
+          "process": "audio.service",
+          "prio": 101,
+          "cpuPercentOfOneCore": 43.7,
+          "switchInsPerSecond": 14102,
+          "meanSliceUs": 31.0
+        }
+      ],
+      "note": "Intrusive trace beside a diagnostic run; its frame counts are not I2 figures. preemptedByMs lists the top 12 takers only."
+    },
+    {
+      "arm": "still",
+      "trace": "diag-still-trace",
+      "frames": 543,
+      "spanSeconds": 10.608,
+      "intervalsOver": {
+        "16.7": 276,
+        "20": 83,
+        "25": 51,
+        "33": 27,
+        "50": 13
+      },
+      "over33Ms": {
+        "frames": 27,
+        "meanMs": {
+          "runningMs": 15.735,
+          "preemptedMs": 16.66,
+          "wakeupLatencyMs": 22.006,
+          "sleepMs": 8.235
+        },
+        "preemptedTotalMs": 449.8,
+        "preemptedByAudioPairMs": 341.5,
+        "audioPairShareOfPreempted": 0.759,
+        "preemptedByAppAudioThreadsMs": 32.9,
+        "preemptedByTop": {
+          "writer (nice -19)": 236.9,
+          "AudioOut_D (nice -19)": 104.6,
+          "Binder:695_ (nice -2)": 18.2,
+          "DeathRideAudio": 17.2,
+          "SoundPool_": 15.7,
+          "Binder:421_": 11.0
+        }
+      },
+      "over20Ms": {
+        "frames": 83,
+        "meanMs": {
+          "runningMs": 14.145,
+          "preemptedMs": 10.392,
+          "wakeupLatencyMs": 8.307,
+          "sleepMs": 4.321
+        },
+        "preemptedTotalMs": 862.5,
+        "preemptedByAudioPairMs": 554.7,
+        "audioPairShareOfPreempted": 0.643,
+        "preemptedByAppAudioThreadsMs": 70.0,
+        "preemptedByTop": {
+          "writer (nice -19)": 310.4,
+          "AudioOut_D (nice -19)": 244.3,
+          "SoundPool_": 49.0,
+          "Binder:424_": 25.4,
+          "TimerDispatch (RT)": 21.8,
+          "DeathRideAudio": 21.0
+        }
+      },
+      "audioPairThreads": [
+        {
+          "thread": "writer",
+          "process": "audio.service",
+          "prio": 101,
+          "cpuPercentOfOneCore": 43.6,
+          "switchInsPerSecond": 13843,
+          "meanSliceUs": 31.5
+        },
+        {
+          "thread": "AudioOut_D",
+          "process": "audioserver",
+          "prio": 101,
+          "cpuPercentOfOneCore": 42.2,
+          "switchInsPerSecond": 13904,
+          "meanSliceUs": 30.4
+        }
+      ],
+      "note": "Intrusive trace beside a diagnostic run; its frame counts are not I2 figures. preemptedByMs lists the top 12 takers only."
+    }
+  ],
+  "limits": "Two profiled 360 s runs per arm on one Stick, interleaved, with the host shared with other builders (host CPU per run recorded). One atrace per arm, beside a separate diagnostic run. No listening test: whether capped or still sounds different is not measured."
+}

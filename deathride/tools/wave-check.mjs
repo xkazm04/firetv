@@ -8,7 +8,7 @@ const page=await context.newPage(); const errors=[]; const checks=[];
 page.on('pageerror',e=>errors.push(e.message));
 const stats=async()=>await(await fetch(base+'/stats')).json();
 try {
-  await page.goto(base+'/?pin='+pin);
+  await page.goto(base+'/?pin='+pin+'&layout=Classic');
   await page.waitForFunction(()=>document.getElementById('player').textContent==='PLAYER 1');
   await page.locator('#carButton').tap();
   for(const id of ['Needle','Line','Bastion','Comet','Trail']) {

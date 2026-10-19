@@ -1,0 +1,41 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[123,124],"rejected":[0,0],"hostPumpStalls":0}
+{"second":71,"accepted":[2133,2125],"rejected":[14,22],"hostPumpStalls":0}
+{"second":139,"accepted":[4162,4152],"rejected":[20,29],"hostPumpStalls":0}
+{"second":207,"accepted":[6178,6163],"rejected":[44,59],"hostPumpStalls":0}
+{"second":275,"accepted":[8216,8199],"rejected":[53,70],"hostPumpStalls":0}
+{"second":340,"accepted":[10165,10147],"rejected":[55,73],"hostPumpStalls":0}
+{"second":360,"accepted":[10752,10735],"rejected":[58,75],"hostPumpStalls":0}
+{
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/acbad996/deathride/tools/ability-stick-probe.mjs:128:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 360.31778860000003,
+  "rounds": 6,
+  "classUses": {
+    "Needle": 11,
+    "Line": 9,
+    "Bastion": 6,
+    "Comet": 5,
+    "Trail": 6,
+    "Flint": 7,
+    "Quill": 7,
+    "Vandal": 5,
+    "Kestrel": 6,
+    "Bulwark": 5
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 10810,
+      "accepted": 10752,
+      "rejected": 58,
+      "hz": 30.00129425194857
+    },
+    {
+      "slot": 1,
+      "sent": 10810,
+      "accepted": 10735,
+      "rejected": 75,
+      "hz": 30.00129425194857
+    }
+  ]
+}

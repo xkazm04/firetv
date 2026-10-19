@@ -12,6 +12,9 @@ import kotlin.math.*
 /** One reusable GPU target and renderer; never allocate/delete them at a course change. */
 class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
     val roadMarks=RoadMarkMesh()
+    /** HUD minimap road lines: 360 centre-line segments and every branch, 6 vertices each, retained on the GPU. */
+    val minimap=RoadMarkMesh(6*(VisualTuning["roadSamples"].toInt()+8*128+16),roadMarks.program)
+    var minimapOwner: Any?=null
     val regionShader=RegionShader.create()
     val markMatrix=Matrix4()
     val textureSize=VisualTuning["sceneryTextureSize"].toInt()
@@ -47,16 +50,31 @@ class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
             sprites.end();renderer.begin(ShapeRenderer.ShapeType.Filled)
         }
     }
-    fun dispose() { regionShader.dispose();roadMarks.dispose();sprites.dispose();renderer.dispose();buffer.dispose() }
+    fun dispose() { regionShader.dispose();roadMarks.dispose();minimap.dispose();sprites.dispose();renderer.dispose();buffer.dispose() }
 }
 /** Static geometry and asset placement are generated in bounded render-thread slices. */
 class TrackScene(private val course: Course,private val canvas: SceneryCanvas,private val art: AtlasArt,private val signageFont: BitmapFont?=null,
                  val regionDefinition: RegionDefinition=course.region,private val regionEnabled: Boolean=true,
                  candidates: Boolean=true) {
     private val look=if(regionEnabled)RegionLook(regionDefinition) else null
-    init { canvas.roadMarks.clear();art.selectRegion(if(regionEnabled)regionDefinition else null,candidates) }
+    private val barrierKey=(look?.barrier(course.boundaryMaterial)?:"").let{k->if(k.isNotEmpty() && art.available(k))k else if(course.boundaryMaterial==BoundaryMaterial.METAL)"barriers/metal-straight" else "barriers/concrete-straight"}
+    /** Diagnostic: wall and GL-upload ms of the region-material switch below, logged with the bake (see [bakeStages]). */
+    private var selectRegionMs=0.0
+    private var selectRegionUploadMs=-1.0
+    init {
+        canvas.roadMarks.clear()
+        val gl=Gdx.gl20 as? ProfileGl;val uploadNs=gl?.uploadNanos?:0L;val started=System.nanoTime()
+        art.selectRegion(if(regionEnabled)regionDefinition else null,candidates)
+        selectRegionMs=(System.nanoTime()-started)/1e6;if(gl!=null)selectRegionUploadMs=(gl.uploadNanos-uploadNs)/1e6
+    }
     private val region=TextureRegion(canvas.buffer.colorBufferTexture).apply { flip(false,true);texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear) }
     var ready=false;private set
+    /** P13d FLUSHBOUND arm (perf-only): glFlush at the end of every bake slice, with the scenery target still bound. */
+    var flushSlices=false
+    /** P13d HALFSLICE arm (perf-only): the share of the bake budget a slice may use. */
+    var sliceScale=1.0
+    /** P13d NOCLEAR arm (perf-only): the first pass fills the target with a rect instead of clearing it. */
+    var clearByDraw=false
     private var buildFrames=0
     private var buildCpuMs=0.0
     private var buildMaxMs=0.0
@@ -91,14 +109,41 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         // Preserve compositing order: shortcuts are separate from the base surface batches.
         for((t,v) in grouped)put(t,v.toFloatArray())
     }
+    // The whole road is retained as textured quads; only the stretch the camera can show is submitted each frame.
+    private val roadTextures=liveRoad.keys.toTypedArray()
+    private val roadVertices=liveRoad.values.toTypedArray()
+    private val roadChunks=Array(roadVertices.size){chunkBounds(roadVertices[it])}
+    private fun chunkBounds(v: FloatArray): FloatArray {
+        val quads=v.size/QUAD_FLOATS;val chunks=(quads+CHUNK_QUADS-1)/CHUNK_QUADS
+        val b=FloatArray(chunks*4)
+        for(c in 0 until chunks) {
+            var x0=Float.MAX_VALUE;var y0=Float.MAX_VALUE;var x1=-Float.MAX_VALUE;var y1=-Float.MAX_VALUE
+            var i=c*CHUNK_QUADS*QUAD_FLOATS;val end=minOf(v.size,(c+1)*CHUNK_QUADS*QUAD_FLOATS)
+            while(i<end){x0=minOf(x0,v[i]);x1=maxOf(x1,v[i]);y0=minOf(y0,v[i+1]);y1=maxOf(y1,v[i+1]);i+=5}
+            b[c*4]=x0;b[c*4+1]=y0;b[c*4+2]=x1;b[c*4+3]=y1
+        }
+        return b
+    }
     private val marks=ArrayList<FloatArray>()
     private val oils=ArrayList<FloatArray>()
     private val shortcuts=ArrayList<FloatArray>()
     private fun mark(ax: Float,ay: Float,bx: Float,by: Float,width: Float,r: Float,g: Float,b: Float) { marks.add(floatArrayOf(ax,ay,bx,by,width,r,g,b));canvas.roadMarks.line(ax,ay,bx,by,width,r,g,b) }
+    /** Diagnostic: which bake section ran each step, its summed ms, the slowest single step and the first project() call. */
+    private var stage=0
+    private val stageMs=DoubleArray(bakeStages.size)
+    private var slowStage=-1
+    private var slowStepMs=0.0
+    private var firstProjectMs=-1.0
+    /** Frames and wall ms this bake waited for the course worker to finish the projection bins (0 when they were ready). */
+    private var binWaitFrames=0
+    private var binWaitMs=0.0
+    private var waitingForBins=false
     private val baking=sequence {
         val r=canvas.renderer;val point=TrackPoint();val q=TrackPoint();val rand=java.util.Random(VisualTuning["scenerySeed"].toLong())
         val desert=course.theme=="desert";val wet=course.theme=="wetland"
-        if(look!=null)ScreenUtils.clear(look.color(look.groundSlot)) else ScreenUtils.clear(if(desert).29f else .13f,if(desert).25f else .19f,if(wet).20f else .15f,1f)
+        stage=0
+        if(clearByDraw) { if(look!=null)r.color=look.color(look.groundSlot) else r.setColor(if(desert).29f else .13f,if(desert).25f else .19f,if(wet).20f else .15f,1f);r.rect(left,bottom,width,height) }
+        else if(look!=null)ScreenUtils.clear(look.color(look.groundSlot)) else ScreenUtils.clear(if(desert).29f else .13f,if(desert).25f else .19f,if(wet).20f else .15f,1f)
         val groundTile=art.tile(if(look!=null)RegionMaterials.tileSlots.getValue(look.groundSlot) else if(desert)"tiles/dirt" else if(course.theme=="alpine")"tiles/ice" else "tiles/grass")
         // Opaque material art already supplies grain. Retain procedural specks only for fallback.
         if(groundTile==null)repeat(VisualTuning["groundGrainCount"].toInt()) {
@@ -106,7 +151,17 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             if(look!=null){val c=look.color(look.groundSlot);r.setColor(c.r+v,c.g+v,c.b+v,1f)} else r.setColor((if(desert).32f else .15f)+v,(if(desert).28f else .21f)+v,(if(wet).23f else .17f)+v,1f)
             r.rect(x,y,.25f+rand.nextFloat()*1.4f,.15f+rand.nextFloat()*.8f);yield(Unit)
         }
-        canvas.tile(groundTile,left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height,look?.tileColor(look.groundSlot,art.hasRegionVariant(look.groundSlot))?:Color.WHITE)
+        val groundTint=look?.tileColor(look.groundSlot,art.hasRegionVariant(look.groundSlot))?:Color.WHITE
+        if(shape.groundBands<0) {} // NOGROUND arm (diagnostic): no ground tile
+        else if(shape.groundBands<=1 || groundTile==null)canvas.tile(groundTile,left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height,groundTint)
+        else for((y0,y1) in BakeShape.rows(canvas.textureSize,shape.groundBands)) {
+            // The same full-target quad through a scissor of one row band, one band per pass (see BakeShape). The scissor
+            // only limits which pixels are written, so every pixel gets the value the single draw gives it.
+            Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);Gdx.gl.glScissor(0,y0,canvas.textureSize,y1-y0)
+            canvas.tile(groundTile,left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height,groundTint)
+            Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST)
+            endPass=true;bandPass=true;yield(Unit)
+        }
         // Distant silhouettes stay beyond every playable road/branch, baked into the existing target.
         look?.backdrop(r,left,bottom+height-margin.toFloat()*.8f,width,margin.toFloat()*.7f)
         // Outer shoulders underneath a continuous asphalt ribbon.
@@ -134,10 +189,10 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             }
         }
         // Road material art is drawn live; do not bake hundreds of duplicate texture passes.
-        ribbon(2.2,0);ribbon(1.1,1);ribbon(0.0,2)
+        stage=1;ribbon(2.2,0);ribbon(1.1,1);ribbon(0.0,2)
         for(branch in course.branches)ribbon(0.0,2,branch.alternative,branch.altStart,branch.altEnd)
         // Draw the actual authored shortcut bands: art never defines collision or changes the route.
-        for(f in course.features)if(f.kind=="shortcut") {
+        stage=2;for(f in course.features)if(f.kind=="shortcut") {
             val count=ceil((f.end-f.start)*samples).toInt().coerceAtLeast(1)
             for(i in 0 until count) {
                 val a=(f.start+(f.end-f.start)*i/count)*course.lengthM;val b=(f.start+(f.end-f.start)*(i+1)/count)*course.lengthM
@@ -152,7 +207,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
                 yield(Unit)
             }
         }
-        val missingRoadArt=course.surfaces.any{art.tile(when(it.id){"Gravel"->"tiles/gravel";"Ice"->"tiles/ice";"Oil"->"tiles/oil";else->"tiles/asphalt-worn"})==null}
+        stage=3;val missingRoadArt=course.surfaces.any{art.tile(when(it.id){"Gravel"->"tiles/gravel";"Ice"->"tiles/ice";"Oil"->"tiles/oil";else->"tiles/asphalt-worn"})==null}
         if(missingRoadArt)repeat(VisualTuning["roadGrainCount"].toInt()) {
             val s=rand.nextDouble()*course.lengthM;val lateral=(rand.nextDouble()*2-1)*(course.widthAt(s)-.7)
             course.sample(s,lateral,point);val v=.24f+rand.nextFloat()*.065f
@@ -163,7 +218,15 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             }
             r.rect(point.x.toFloat(),point.y.toFloat(),.16f+rand.nextFloat()*.35f,.1f+rand.nextFloat()*.25f);yield(Unit)
         }
-        for(i in 0..samples) {
+        // Kerbs (branch boundaries) and landmarks project onto the course. Its bins bake on the course worker, never on
+        // this thread (P9: 1.1-2.3 s per first visit): give back whole frames until they are ready. The sim and the
+        // countdown wait for this scene, so nothing else on the render thread projects onto the course before it.
+        if(!course.projectionReady) {
+            CoursePrewarm.submit(course);val waitStarted=System.nanoTime();waitingForBins=true
+            while(!course.projectionReady){binWaitFrames++;yield(Unit)}
+            waitingForBins=false;binWaitMs=(System.nanoTime()-waitStarted)/1e6
+        }
+        stage=4;for(i in 0..samples) {
             val s=course.lengthM*i/samples;course.sample(s,0.0,point);center[i*2]=point.x.toFloat();center[i*2+1]=point.y.toFloat()
             if(i==samples || TrackJunctions.nearPassage(course,s) || TrackBranches.merging(course,s))continue
             val next=course.lengthM*(i+1)/samples
@@ -176,7 +239,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
                 mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),Movement.kerbWidthM.toFloat(),r.color.r,r.color.g,r.color.b)
                 course.sample(s,side*(w+.5),point);course.sample(next,side*(wn+.5),q)
                 r.setColor(.50f,.55f,.52f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.32f)
-                if(i%3==0)canvas.sprite(art,if(course.boundaryMaterial==BoundaryMaterial.METAL)"barriers/metal-straight" else "barriers/concrete-straight",point.x.toFloat(),point.y.toFloat(),5f,1.8f,(point.heading*180/PI).toFloat())
+                if(i%3==0)canvas.sprite(art,barrierKey,point.x.toFloat(),point.y.toFloat(),5f,1.8f,(point.heading*180/PI).toFloat())
                 if(i%6==0) { r.setColor(.15f,.18f,.17f,1f);r.circle(point.x.toFloat()+.3f,point.y.toFloat()-.3f,.65f,8);r.setColor(.45f,.49f,.45f,1f);r.circle(point.x.toFloat(),point.y.toFloat(),.48f,8) }
             }
             if(i%9<3) { course.sample(s,0.0,point);course.sample(next,0.0,q);r.setColor(.46f,.48f,.43f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.16f);mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.16f,.46f,.48f,.43f) };yield(Unit)
@@ -194,18 +257,18 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             }
             return best<(width-.2)*(width-.2)
         }
-        for(branch in course.branches)for(i in 0 until 128) {
+        stage=5;for(branch in course.branches)for(i in 0 until 128) {
             val road=branch.alternative;val a=road.lengthM*(branch.altStart+(branch.altEnd-branch.altStart)*i/128);val b=road.lengthM*(branch.altStart+(branch.altEnd-branch.altStart)*(i+1)/128)
             for(side in listOf(-1,1)) {
                 road.sample(a,side*(road.widthAt(a)+.5),point);road.sample(b,side*(road.widthAt(b)+.5),q)
                 if(insideMain(point.x,point.y) || insideMain(q.x,q.y))continue
                 r.setColor(.5f,.55f,.52f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.32f)
                 mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.32f,.5f,.55f,.52f)
-                if(i%3==0)canvas.sprite(art,if(course.boundaryMaterial==BoundaryMaterial.METAL)"barriers/metal-straight" else "barriers/concrete-straight",point.x.toFloat(),point.y.toFloat(),5f,1.8f,(point.heading*180/PI).toFloat())
+                if(i%3==0)canvas.sprite(art,barrierKey,point.x.toFloat(),point.y.toFloat(),5f,1.8f,(point.heading*180/PI).toFloat())
             }
             yield(Unit)
         }
-        val start=course.startFraction*course.lengthM
+        stage=6;val start=course.startFraction*course.lengthM
         val w=course.widthAt(start)-Movement.vergeWidthM
         var lane=-w
         var checker=0
@@ -217,7 +280,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
                 mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.9f,v,v,v)
             };lane+=.9;checker++;yield(Unit)
         }
-        for(spot in course.spots) {
+        stage=7;for(spot in course.spots) {
             val s=(course.startFraction+spot.fraction)*course.lengthM;course.sample(s,spot.laneM,point)
             if(spot.kind=="grid") {
                 val gl=CarShapes.all.maxOf { it.lengthM }*.5;val gw=(CarShapes.all.maxOf { it.widthM }+TrackRules["gridClearanceM"])*.5
@@ -230,11 +293,11 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             if(spot.kind=="hazard") { r.setColor(.08f,.12f,.14f,1f);r.ellipse(point.x.toFloat()-3,point.y.toFloat()-1.8f,6f,3.6f,24);r.setColor(.15f,.22f,.25f,1f);r.ellipse(point.x.toFloat()-1.8f,point.y.toFloat()-.7f,3.4f,1.4f,18) }
             if(spot.kind=="hazard") { oils.add(floatArrayOf(point.x.toFloat(),point.y.toFloat(),(point.heading*180/PI).toFloat()));canvas.sprite(art,"decals/oil",point.x.toFloat(),point.y.toFloat(),6f,3.6f,(point.heading*180/PI).toFloat()) }
         }
-        for(f in course.features) {
+        stage=8;for(f in course.features) {
             course.sample(f.start*course.lengthM-f.warningM,course.widthAt(f.start*course.lengthM)+5,point)
             canvas.sprite(art,f.landmark,point.x.toFloat(),point.y.toFloat(),8f,8f);yield(Unit)
         }
-        for(junction in course.junctions)for(fraction in listOf(junction.first,junction.second)) {
+        stage=9;for(junction in course.junctions)for(fraction in listOf(junction.first,junction.second)) {
             val s=fraction*course.lengthM-junction.warningM;course.sample(s,course.widthAt(s)+5,point)
             canvas.sprite(art,TrackContent.themes.single { it.id==course.theme }.props.last(),point.x.toFloat(),point.y.toFloat(),8f,8f);yield(Unit)
         }
@@ -244,10 +307,12 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         }
         yield(Unit)
         // Recognizable infield landmarks, placed only well clear of the road.
-        val projection=Projection()
+        stage=10;val projection=Projection()
         repeat(VisualTuning["landmarkCount"].toInt()) {
             val x=left+rand.nextFloat()*width;val y=bottom+rand.nextFloat()*height
+            val projectStarted=System.nanoTime()
             course.project(x.toDouble(),y.toDouble(),projection)
+            if(firstProjectMs<0)firstProjectMs=(System.nanoTime()-projectStarted)/1e6
             if(abs(projection.distance)>course.widthAt(projection.s)+12) {
                 val props=look?.definition?.props?:art.themeProps(course.theme).toList()
                 val key=props[it%props.size]
@@ -262,7 +327,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         }
         yield(Unit)
         // Repeated grandstand steps and service bays give the start area an authored landmark.
-        for(side in -1..1 step 2)for(row in 0..4) {
+        stage=11;for(side in -1..1 step 2)for(row in 0..4) {
             val laneM=side*(course.widthAt(start)+5+row*1.1)
             course.sample(start-22,laneM,point);course.sample(start+18,laneM,q)
             r.setColor(.07f,.09f,.10f,1f);r.rectLine(point.x.toFloat()+.7f,point.y.toFloat()-.8f,q.x.toFloat()+.7f,q.y.toFloat()-.8f,1.3f)
@@ -271,7 +336,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         }
         yield(Unit)
         // Direction chevrons at the approach to sharper bends are visible at driving scale.
-        for(i in 0 until course.count step 20)if(course.curvature[i]>TrackRules["straightCurvature"]) {
+        stage=12;for(i in 0 until course.count step 20)if(course.curvature[i]>TrackRules["straightCurvature"]) {
             for(j in 0..2) {
                 course.sample(course.arc[i]-8-j*3,0.0,point)
                 val cx=cos(point.heading);val cy=sin(point.heading);val px=point.x;val py=point.y
@@ -283,26 +348,95 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             }
         }
     }.iterator()
+    /** P13e: how the bake is submitted ([BakeShape.SHIPPED] unless a perf-only arm says otherwise). Set before the first [advance]. */
+    var shape=BakeShape.SHIPPED
+    /** Set by a bake step that must end its pass (a ground band). */
+    private var endPass=false
+    private var bandPass=false
+    private var advanced=false
+    private var plan: BakePasses?=null
+    /** Each pass's ms, logged with the bake. */
+    private val sliceLog=StringBuilder()
+    private var idleFrames=0
     fun advance() {
         if(ready)return
-        val started=System.nanoTime();val deadline=started+(VisualTuning["sceneryBuildBudgetMs"]*1e6).toLong()
+        val passes=plan?:BakePasses.of(shape.passLimit,VisualTuning["sceneryBuildBudgetMs"]*sliceScale).also{plan=it}
+        // A limited plan binds nothing while the bake waits for the course worker's bins: a waiting frame is not a pass.
+        if(shape.passLimit>0 && waitingForBins && !course.projectionReady){idleFrames++;return}
+        if(shape.skipCreationFrame && !advanced){advanced=true;idleFrames++;return}
+        advanced=true
+        val started=System.nanoTime();endPass=false;bandPass=false
         canvas.buffer.begin();Gdx.gl.glViewport(0,0,canvas.textureSize,canvas.textureSize)
         val r=canvas.renderer;r.projectionMatrix=projectionMatrix;r.begin(ShapeRenderer.ShapeType.Filled)
-        do {
-            if(!baking.hasNext()) { canvas.roadMarks.upload();ready=true;break }
-            baking.next()
-        } while(System.nanoTime()<deadline)
-        r.end();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
-        if(ready)Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
+        val finished=passes.pass({System.nanoTime()},{
+            // hasNext() runs the section up to its next yield; time the whole step.
+            val step=System.nanoTime()
+            if(!baking.hasNext())false
+            else {
+                baking.next()
+                val stepMs=(System.nanoTime()-step)/1e6;stageMs[stage]+=stepMs
+                if(stepMs>slowStepMs){slowStepMs=stepMs;slowStage=stage}
+                true
+            }
+        },{waitingForBins || endPass})
+        if(finished) { canvas.roadMarks.upload();ready=true }
+        r.end();if(flushSlices || bandPass && shape.bandSync==BakeShape.SYNC_FLUSH)Gdx.gl.glFlush();if(shape.finishSlices || bandPass && shape.bandSync==BakeShape.SYNC_FINISH)Gdx.gl.glFinish();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
+        if(sliceLog.isNotEmpty())sliceLog.append(',');sliceLog.append(String.format(java.util.Locale.ROOT,"%.1f",sliceMs))
+        if(ready) {
+            Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
+            Gdx.app.log("DeathRide","sceneryBakePasses ${course.id} limit=${shape.passLimit} budgetMs=${passes.budgetMs} passes=${passes.passes} idleFrames=$idleFrames finish=${shape.finishSlices} groundBands=${shape.groundBands} bandSync=${shape.bandSync} skipCreationFrame=${shape.skipCreationFrame} sliceMs=$sliceLog")
+            Gdx.app.log("DeathRide","sceneryBakeDetail ${course.id} selectRegionMs=$selectRegionMs selectRegionUploadMs=$selectRegionUploadMs slowStep=${bakeStages.getOrElse(slowStage){"none"}}:$slowStepMs firstProjectMs=$firstProjectMs stages="+
+                bakeStages.indices.joinToString(","){"${bakeStages[it]}:${String.format(java.util.Locale.ROOT,"%.3f",stageMs[it])}"}+" binWaitMs=$binWaitMs binWaitFrames=$binWaitFrames")
+        }
     }
-    fun draw(batch: SpriteBatch) {
+    /** P13e perf-only proof of the bake shape: SHA-256 of the finished scenery target's RGBA pixels (a 16 MiB readback, so
+     * only in an ungraded run). */
+    fun targetSha256(): String {
+        check(ready)
+        val size=canvas.textureSize;val pixels=com.badlogic.gdx.utils.BufferUtils.newByteBuffer(size*size*4)
+        canvas.buffer.begin();Gdx.gl.glPixelStorei(GL20.GL_PACK_ALIGNMENT,1)
+        Gdx.gl.glReadPixels(0,0,size,size,GL20.GL_RGBA,GL20.GL_UNSIGNED_BYTE,pixels);canvas.buffer.end()
+        val digest=java.security.MessageDigest.getInstance("SHA-256");pixels.position(0);digest.update(pixels)
+        return digest.digest().joinToString(""){String.format(java.util.Locale.ROOT,"%02x",it)}
+    }
+    fun draw(batch: SpriteBatch,view: ViewBounds=ViewBounds.ALL) {
         val previous=batch.shader
         if(look!=null){batch.shader=canvas.regionShader;val g=regionDefinition.grade;canvas.regionShader.setUniformf("u_regionGrade",g[0].toFloat(),g[1].toFloat(),g[2].toFloat())}
         batch.draw(region,left,bottom,width,height)
-        for((texture,vertices) in liveRoad)batch.draw(texture,vertices,0,vertices.size)
-        art.tile("tiles/gravel")?.let{t->for(v in shortcuts)batch.draw(t,v,0,v.size)}
-        for(p in oils)art.draw(batch,"decals/oil",p[0],p[1],6f,3.6f,p[2])
+        for(t in roadTextures.indices) {
+            val v=roadVertices[t];val b=roadChunks[t];val chunks=b.size/4;var run=-1
+            for(c in 0..chunks) {
+                if(c<chunks && view.seesBox(b[c*4],b[c*4+1],b[c*4+2],b[c*4+3])){if(run<0)run=c}
+                else if(run>=0) {
+                    val from=run*CHUNK_QUADS*QUAD_FLOATS;val to=minOf(v.size,c*CHUNK_QUADS*QUAD_FLOATS)
+                    batch.draw(roadTextures[t],v,from,to-from);run=-1
+                }
+            }
+        }
+        val gravel=art.tile("tiles/gravel")
+        if(gravel!=null)for(i in shortcuts.indices){val v=shortcuts[i];if(view.seesBox(minOf(minOf(v[0],v[5]),minOf(v[10],v[15])),minOf(minOf(v[1],v[6]),minOf(v[11],v[16])),maxOf(maxOf(v[0],v[5]),maxOf(v[10],v[15])),maxOf(maxOf(v[1],v[6]),maxOf(v[11],v[16]))))batch.draw(gravel,v,0,v.size)}
+        for(i in oils.indices){val p=oils[i];if(view.sees(p[0].toDouble(),p[1].toDouble(),4.0))art.draw(batch,"decals/oil",p[0],p[1],6f,3.6f,p[2])}
         if(look!=null)batch.shader=previous
+    }
+    private companion object {
+        const val QUAD_FLOATS=20;const val CHUNK_QUADS=12
+        val bakeStages=arrayOf("ground","ribbons","shortcuts","roadGrain","kerbsBarriers","branchWalls","startChecker","spots","features","junctionProps","landmarks","grandstands","chevrons")
+    }
+    private var minimapFits=true
+    /** Draws the HUD minimap road lines from the retained mesh; false (nothing drawn) when they do not fit, so the caller keeps the immediate path. */
+    fun drawMinimapRoad(matrix: Matrix4,r: Float,g: Float,b: Float): Boolean {
+        if(!ready || !minimapFits)return false
+        if(canvas.minimapOwner!==this) {
+            val lines=samples+branchCenters.sumOf{it.size/2-1}
+            if(!canvas.minimap.let{it.clear();it.fits(lines)}){minimapFits=false;return false}
+            val scale=min(166/(course.maxX-course.minX),112/(course.maxY-course.minY)).toFloat()
+            val ox=1144f-((course.minX+course.maxX)*.5).toFloat()*scale;val oy=469f-((course.minY+course.maxY)*.5).toFloat()*scale
+            val m=canvas.minimap
+            for(i in 0 until samples)m.line(ox+center[i*2]*scale,oy+center[i*2+1]*scale,ox+center[(i+1)*2]*scale,oy+center[(i+1)*2+1]*scale,3f,r,g,b)
+            for(line in branchCenters)for(i in 0 until line.size/2-1)m.line(ox+line[i*2]*scale,oy+line[i*2+1]*scale,ox+line[(i+1)*2]*scale,oy+line[(i+1)*2+1]*scale,3f,r,g,b)
+            m.upload();canvas.minimapOwner=this
+        }
+        canvas.minimap.draw(matrix);return true
     }
     fun drawRoadMarks(r: ShapeRenderer) {
         if(liveRoad.isEmpty())return
@@ -356,6 +490,13 @@ class CarPainter {
         val ax=x+a*c-b*s;val ay=y+a*s+b*c;val bx=ax+w*c;val by=ay+w*s;val cx=bx-h*s;val cy=by+h*c;val dx=ax-h*s;val dy=ay+h*c
         r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
     }
+    /** Quad centred on car-frame (a,b), turned by [ang] relative to the car heading: steered front tyres. */
+    private fun quadTurned(r: ShapeRenderer,a: Float,b: Float,w: Float,h: Float,ang: Float) {
+        val ca=cos(ang);val sa=sin(ang);val cc=c*ca-s*sa;val ss=s*ca+c*sa
+        val mx=x+a*c-b*s;val my=y+a*s+b*c;val hw=w*.5f;val hh=h*.5f
+        val ux=hw*cc;val uy=hw*ss;val vx=-hh*ss;val vy=hh*cc
+        r.triangle(mx-ux-vx,my-uy-vy,mx+ux-vx,my+uy-vy,mx+ux+vx,my+uy+vy);r.triangle(mx-ux-vx,my-uy-vy,mx+ux+vx,my+uy+vy,mx-ux+vx,my-uy+vy)
+    }
     private fun body(r: ShapeRenderer,l: Float,w: Float,nose: Float) {
         quad(r,-l*.46f,-w*.5f,l*.75f,w)
         val ax=x+l*.29f*c+w*.5f*s;val ay=y+l*.29f*s-w*.5f*c
@@ -364,14 +505,25 @@ class CarPainter {
         val dx=x+l*.29f*c-w*.5f*s;val dy=y+l*.29f*s+w*.5f*c
         r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
     }
-    fun draw(r: ShapeRenderer,car: Car,px: Float,py: Float,heading: Double,color: Color,flash: Boolean,scale: Float=1f,healthFraction: Float=1f,wrecked: Boolean=false) {
-        val spec=CarShapes.forId(car.carClass?.id?:"Line");val l=spec.lengthM.toFloat()*scale;val w=spec.widthM.toFloat()*scale
+    fun draw(r: ShapeRenderer,car: Car,px: Float,py: Float,heading: Double,color: Color,flash: Boolean,scale: Float=1f,healthFraction: Float=1f,wrecked: Boolean=false,wheelAngle: Float=0f,tread: Float=0f,braking: Float=0f) {
+        val spec=CarShapeCache.of(car.carClass?.id?:"Line");val l=spec.lengthM.toFloat()*scale;val w=spec.widthM.toFloat()*scale
         x=px+.35f*scale;y=py-.45f*scale;c=cos(heading).toFloat();s=sin(heading).toFloat()
         r.setColor(.025f,.035f,.04f,.65f);body(r,l*1.08f,w*1.15f,spec.noseWidth.toFloat())
         x=px;y=py
         // Four tires and their sidewalls sit outside the colored shell.
         r.setColor(.035f,.045f,.05f,1f)
-        for(axle in -1..1 step 2)for(side in -1..1 step 2)quad(r,axle*l*.29f-l*.105f,side*w*.43f-w*.115f,l*.21f,w*.23f)
+        for(k in 0..1)quad(r,-l*.29f-l*.105f,(k*2-1)*w*.43f-w*.115f,l*.21f,w*.23f)
+        for(k in 0..1) {
+            val side=k*2-1
+            quadTurned(r,l*.29f,side*w*.43f,l*.21f,w*.23f,wheelAngle)
+            // Hub line and one scrolling tread block say the wheel turns and rolls; brakes darken the block.
+            val shade=.30f-braking*.14f
+            r.setColor(shade,shade+.01f,shade+.02f,1f);quadTurned(r,l*.29f,side*w*.43f,l*.17f,w*.035f,wheelAngle)
+            val o=(tread/.9f-.5f)*l*.17f
+            r.setColor(shade*.8f,shade*.8f,shade*.85f,1f)
+            quadTurned(r,l*.29f+o*kotlin.math.cos(wheelAngle),side*w*.43f+o*kotlin.math.sin(wheelAngle),l*.03f,w*.19f,wheelAngle)
+            r.setColor(.035f,.045f,.05f,1f)
+        }
         if(wrecked)r.setColor(.17f,.18f,.17f,1f) else if(flash)r.color=Color.WHITE else r.color=color;body(r,l,w*.87f,spec.noseWidth.toFloat())
         r.setColor(color.r*.55f,color.g*.55f,color.b*.55f,1f);quad(r,-l*.43f,-w*.43f,l*.72f,w*.09f)
         r.setColor(min(1f,color.r+.22f),min(1f,color.g+.22f),min(1f,color.b+.22f),1f);quad(r,-l*.40f,w*.30f,l*.65f,w*.08f)

@@ -1,0 +1,104 @@
+{
+  "command": "cd deathride && gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+  "code": "ebe59cd3 (P13b wiring + tests) on cc5a6a13",
+  "runs": [
+    {
+      "utcTimestamp": "2026-10-07T09:02:26.823Z",
+      "result": "BUILD SUCCESSFUL in 2m 33s, 15 tasks executed",
+      "modules": {
+        "core": {
+          "tests": 247,
+          "skipped": 0,
+          "failed": 0
+        },
+        "link": {
+          "tests": 20,
+          "skipped": 2,
+          "failed": 0
+        },
+        "game": {
+          "tests": 85,
+          "skipped": 0,
+          "failed": 0
+        }
+      },
+      "note": "--rerun-tasks: every task executed, none from cache. link skips 2, as on the base."
+    },
+    {
+      "when": "before the wiring commit, same sources",
+      "result": "BUILD SUCCESSFUL",
+      "modules": {
+        "core": {
+          "tests": 247,
+          "skipped": 0,
+          "failed": 0
+        },
+        "link": {
+          "tests": 20,
+          "skipped": 2,
+          "failed": 0
+        },
+        "game": {
+          "tests": 85,
+          "skipped": 0,
+          "failed": 0
+        }
+      }
+    },
+    {
+      "when": "ProfileSavesTest alone, three consecutive --rerun-tasks runs",
+      "result": "9/9 each time"
+    }
+  ],
+  "newTests": {
+    "class": "game/src/test/kotlin/dev/deathride/game/ProfileSavesTest.kt",
+    "cases": [
+      {
+        "name": "aFailedTicketStartsNoRaceAndRevertsToDurable()",
+        "seconds": 0.026,
+        "status": "passed"
+      },
+      {
+        "name": "aProfileSwitchDrainsTheOldProfileAndIgnoresItsCompletions()",
+        "seconds": 0.1,
+        "status": "passed"
+      },
+      {
+        "name": "aFailedSettleRemovesTheReceipt()",
+        "seconds": 0.007,
+        "status": "passed"
+      },
+      {
+        "name": "aRaceDoesNotStartUntilBothTicketsAreDurable()",
+        "seconds": 0.005,
+        "status": "passed"
+      },
+      {
+        "name": "aPendingSettleBlocksTheNextRaceUntilItIsDurable()",
+        "seconds": 0.008,
+        "status": "passed"
+      },
+      {
+        "name": "aCancelledTicketStartsNoRaceAndRevertsOnce()",
+        "seconds": 0.003,
+        "status": "passed"
+      },
+      {
+        "name": "aFailedChoiceRevertsThePickOnce()",
+        "seconds": 0.007,
+        "status": "passed"
+      },
+      {
+        "name": "requestsDuringAPendingStartAreRefused()",
+        "seconds": 0.004,
+        "status": "passed"
+      },
+      {
+        "name": "pauseDrainsQueuedSavesAndNeverDropsThem()",
+        "seconds": 0.434,
+        "status": "passed"
+      }
+    ]
+  },
+  "unchanged": "GarageTest, ProfileWriterTest and every other existing test file are unchanged and green."
+}

@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-08T10:47:56.9218492Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "node#42",
+                             "IDProcess":  45248,
+                             "PercentProcessorTime":  93
+                         },
+                         {
+                             "Name":  "node#44",
+                             "IDProcess":  11152,
+                             "PercentProcessorTime":  84
+                         },
+                         {
+                             "Name":  "node#47",
+                             "IDProcess":  28356,
+                             "PercentProcessorTime":  79
+                         },
+                         {
+                             "Name":  "clang-cl",
+                             "IDProcess":  48884,
+                             "PercentProcessorTime":  79
+                         },
+                         {
+                             "Name":  "node#49",
+                             "IDProcess":  31532,
+                             "PercentProcessorTime":  75
+                         },
+                         {
+                             "Name":  "node#46",
+                             "IDProcess":  37272,
+                             "PercentProcessorTime":  75
+                         },
+                         {
+                             "Name":  "clang-cl#3",
+                             "IDProcess":  34232,
+                             "PercentProcessorTime":  66
+                         },
+                         {
+                             "Name":  "clang-cl#7",
+                             "IDProcess":  35412,
+                             "PercentProcessorTime":  66
+                         },
+                         {
+                             "Name":  "clang-cl#4",
+                             "IDProcess":  11256,
+                             "PercentProcessorTime":  66
+                         },
+                         {
+                             "Name":  "clang-cl#1",
+                             "IDProcess":  54696,
+                             "PercentProcessorTime":  62
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                100,
+                                100,
+                                100
+                            ]
+}

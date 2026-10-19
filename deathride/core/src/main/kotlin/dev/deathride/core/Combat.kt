@@ -8,6 +8,22 @@ import java.lang.StrictMath.sqrt
 object CombatRules {
     private val values=Content.table("combat").associate { it.getValue("key") to it.number("value") }
     operator fun get(key: String)=values.getValue(key)
+    // Per-tick rules resolved once: the step and the AI read these dozens of times a tick.
+    val startProtectionSeconds=values.getValue("startProtectionSeconds")
+    val aiForwardConeRadians=values.getValue("aiForwardConeRadians")
+    val aiMaxAttackers=values.getValue("aiMaxAttackers")
+    val aiChaserRangeM=values.getValue("aiChaserRangeM")
+    val aiChaserCarWidths=values.getValue("aiChaserCarWidths")
+    val aiHeavyMinRangeM=values.getValue("aiHeavyMinRangeM")
+    val aiMineAvoidDistanceM=values.getValue("aiMineAvoidDistanceM")
+    val aiMineAvoidMarginM=values.getValue("aiMineAvoidMarginM")
+    val wallMinImpactMps=values.getValue("wallMinImpactMps")
+    val wallDamagePerMps=values.getValue("wallDamagePerMps")
+    val wallCooldownSeconds=values.getValue("wallCooldownSeconds")
+    val ramMaxDamage=values.getValue("ramMaxDamage")
+    val ramDamagePerMps=values.getValue("ramDamagePerMps")
+    val ramCooldownSeconds=values.getValue("ramCooldownSeconds")
+    val wreckDragPerSecond=values.getValue("wreckDragPerSecond")
 }
 enum class LifeState { ACTIVE, WRECKED }
 enum class DamageKind { RIVET, HAMMER, MINE, RAM, WALL, SCATTER, ABILITY }
@@ -16,8 +32,19 @@ class Weapon(row: Map<String,String>) {
     val damage=row.number("damage");val cooldownSeconds=row.number("cooldownSeconds");val ammo=row.number("ammo").toInt()
     val rangeM=row.number("rangeM");val speedMps=row.number("speedMps");val radiusM=row.number("radiusM")
     val armingSeconds=row.number("armingSeconds");val lifeSeconds=row.number("lifeSeconds");val traceSeconds=row.number("traceSeconds")
-    init { require(kind in setOf("ray","projectile","mine","spread"));require(damage>0 && cooldownSeconds>0 && ammo>0 && radiusM>0 && lifeSeconds>0) }
-    val json="{\"id\":\"$id\",\"damage\":$damage,\"cooldownSeconds\":$cooldownSeconds,\"ammo\":$ammo,\"radiusM\":$radiusM,\"armingSeconds\":$armingSeconds}"
+    /** One press fires [burstRounds] bullets [burstIntervalSeconds] apart; the cooldown then runs from the last bullet. */
+    val burstRounds=row.number("burstRounds").toInt();val burstIntervalSeconds=row.number("burstIntervalSeconds")
+    /** Heat is 0..1; each bullet adds [heatPerShot], it cools at [heatCoolPerSecond], and 1.0 locks the weapon until it falls to [overheatResumeFraction] at [overheatCoolPerSecond]. */
+    val heatPerShot=row.number("heatPerShot");val heatCoolPerSecond=row.number("heatCoolPerSecond")
+    val overheatCoolPerSecond=row.number("overheatCoolPerSecond");val overheatResumeFraction=row.number("overheatResumeFraction")
+    val overheats get()=heatPerShot>0
+    /** Time from the first bullet of a burst to the moment the weapon can fire again, and the damage one full burst can deal. */
+    val cycleSeconds get()=cooldownSeconds+(burstRounds-1)*burstIntervalSeconds
+    val burstDamage get()=damage*burstRounds
+    init { require(kind in setOf("ray","projectile","mine","spread"));require(damage>0 && cooldownSeconds>0 && ammo>0 && radiusM>0 && lifeSeconds>0)
+        require(burstRounds>=1 && (burstRounds==1 || burstIntervalSeconds>0 && (kind=="ray" || kind=="spread")) && heatPerShot>=0)
+        if(heatPerShot>0)require(heatCoolPerSecond>0 && overheatCoolPerSecond>0 && overheatResumeFraction in 0.0..0.95) }
+    val json="{\"id\":\"$id\",\"damage\":$damage,\"cooldownSeconds\":$cooldownSeconds,\"ammo\":$ammo,\"radiusM\":$radiusM,\"armingSeconds\":$armingSeconds,\"burstRounds\":$burstRounds,\"burstIntervalSeconds\":$burstIntervalSeconds,\"heatPerShot\":$heatPerShot}"
 }
 object Weapons {
     const val RIVET=0;const val HAMMER=1;const val MINE=2;const val SCATTER=3
@@ -34,7 +61,7 @@ object ControllerLayouts {
     private val rows=Content.table("controller-layouts")
     val ids=rows.map { it.getValue("id") }
     val json=rows.joinToString(",","[","]") {
-        "{\"id\":\"${it.getValue("id")}\",\"name\":\"${it.getValue("name")}\",\"fireDrives\":${it.number("fireDrives")!=0.0},\"padThrottle\":${it.number("padThrottle")!=0.0},\"throttleTravelPx\":${it.number("throttleTravelPx")},\"description\":\"${it.getValue("description")}\"}"
+        "{\"id\":\"${it.getValue("id")}\",\"name\":\"${it.getValue("name")}\",\"fireDrives\":${it.number("fireDrives")!=0.0},\"padThrottle\":${it.number("padThrottle")!=0.0},\"throttleTravelPx\":${it.number("throttleTravelPx")},\"padBrake\":${it.number("padBrake")!=0.0},\"brakeTravelPx\":${it.number("brakeTravelPx")},\"autoThrottle\":${(it.number("autoThrottle")?:0.0)!=0.0},\"description\":\"${it.getValue("description")}\"}"
     }
 }
 class Projectile { var active=false;var owner=0;var x=0.0;var y=0.0;var vx=0.0;var vy=0.0;var remainingM=0.0;var remainingSeconds=0.0;var hitMask=0 }
@@ -50,6 +77,12 @@ class Combat(private val world: World,val enabled: Boolean) {
     private val states=Array(Tuning.CAR_COUNT){LifeState.ACTIVE}
     private val ammunition=IntArray(Tuning.CAR_COUNT*Weapons.all.size)
     private val cooldowns=DoubleArray(ammunition.size)
+    // Per car and weapon: bullets still owed by a committed burst, the gap to the next one, heat 0..1, lockout, and a monotonic bullet-fired id.
+    private val burstLeft=IntArray(ammunition.size)
+    private val burstTimer=DoubleArray(ammunition.size)
+    private val heat=DoubleArray(ammunition.size)
+    private val locked=BooleanArray(ammunition.size)
+    private val fireCounter=IntArray(ammunition.size)
     private val ramCooldown=DoubleArray(Tuning.CAR_COUNT*Tuning.CAR_COUNT)
     private val wallCooldown=DoubleArray(Tuning.CAR_COUNT)
     internal val lastTarget=IntArray(Tuning.CAR_COUNT){-1}
@@ -68,6 +101,8 @@ class Combat(private val world: World,val enabled: Boolean) {
     val sabotageTarget=IntArray(Tuning.CAR_COUNT){-1}
     val repairPickupsTaken=IntArray(Tuning.CAR_COUNT);val ammoPickupsTaken=IntArray(Tuning.CAR_COUNT)
     val shots=IntArray(Weapons.all.size);val hits=IntArray(DamageKind.entries.size);val deaths=IntArray(DamageKind.entries.size)
+    /** Weapon index of the last traced volley per car; visual only, so the renderer can draw it from the mount. */
+    val traceWeapon=IntArray(Tuning.CAR_COUNT)
     val traceSeconds=DoubleArray(Tuning.CAR_COUNT);val traceX=DoubleArray(Tuning.CAR_COUNT);val traceY=DoubleArray(Tuning.CAR_COUNT)
     val traceEndX=DoubleArray(Tuning.CAR_COUNT);val traceEndY=DoubleArray(Tuning.CAR_COUNT)
     val projectiles=Array(CombatRules["projectileCapacity"].toInt()){Projectile()}
@@ -78,7 +113,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     private var activation=0
     var poolExhaustions=0;private set
     var oneShotKills=0;private set
-    val armingSeconds get()=max(0.0,CombatRules["startProtectionSeconds"]-world.seconds)
+    val armingSeconds get()=max(0.0,CombatRules.startProtectionSeconds-world.seconds)
     val wreckCount get(): Int { var count=0;for(i in states.indices)if(world.cars[i].entered && states[i]==LifeState.WRECKED)count++;return count }
     init {
         val point=TrackPoint()
@@ -93,12 +128,34 @@ class Combat(private val world: World,val enabled: Boolean) {
     fun wrecked(id: Int)=states[id]==LifeState.WRECKED
     fun ammo(id: Int,weapon: Int)=ammunition[id*Weapons.all.size+weapon]
     fun cooldown(id: Int,weapon: Int)=cooldowns[id*Weapons.all.size+weapon]
+    /** Bullets a burst still has to fire (0 when none is in flight). */
+    fun burstRemaining(id: Int,weapon: Int)=burstLeft[id*Weapons.all.size+weapon]
+    /** 0 when the weapon is off cooldown, 1 right after a shot; a burst counts down from its first bullet. */
+    fun cooldownFraction(id: Int,weapon: Int)=min(1.0,cooldowns[id*Weapons.all.size+weapon]/Weapons.all[weapon].cooldownSeconds)
+    fun heatFraction(id: Int,weapon: Int)=heat[id*Weapons.all.size+weapon]
+    fun overheated(id: Int,weapon: Int)=locked[id*Weapons.all.size+weapon]
+    /** The one word a weapon shows the player: EMPTY (no rounds), OVERHEATED (locked out), COOLING (burst in flight or
+     * between shots), HOT (heat >= [HOT_FRACTION], still firing), else READY. Constants only: no allocation, no sim state. */
+    fun weaponStatus(id: Int,weapon: Int): String {
+        val n=id*Weapons.all.size+weapon
+        return when {
+            ammunition[n]<=0->"EMPTY"
+            locked[n]->"OVERHEATED"
+            burstLeft[n]>0 || cooldowns[n]/Weapons.all[weapon].cooldownSeconds>0.005->"COOLING"
+            heat[n]>=HOT_FRACTION->"HOT"
+            else->"READY"
+        }
+    }
+    private companion object { const val HOT_FRACTION=0.6 }
+    /** Monotonic count of bullets/shots/drops this weapon has fired since the race reset; a change means "muzzle flash now". */
+    fun fireCount(id: Int,weapon: Int)=fireCounter[id*Weapons.all.size+weapon]
+    internal fun setAmmo(id: Int,weapon: Int,count: Int){ammunition[id*Weapons.all.size+weapon]=count}
     fun capacity(id: Int,weapon: Int): Int {
         if((weapon==Weapons.HAMMER || weapon==Weapons.SCATTER) && world.cars[id].weaponSlots<2)return 0
         return floor(Weapons.all[weapon].ammo*(world.cars[id].carClass?.ammoScale?:1.0)).toInt()+if(weapon==Weapons.HAMMER)max(0,world.cars[id].weaponSlots-2)*CombatRules["heavyExtraAmmoPerSlot"].toInt() else 0
     }
     fun reset() {
-        for(i in hp.indices)hp[i]=if(world.cars[i].entered)maxHealth(i)*world.cars[i].startingCondition else 0.0;states.fill(LifeState.ACTIVE);cooldowns.fill(0.0);ramCooldown.fill(0.0);wallCooldown.fill(0.0)
+        for(i in hp.indices)hp[i]=if(world.cars[i].entered)maxHealth(i)*world.cars[i].startingCondition else 0.0;states.fill(LifeState.ACTIVE);cooldowns.fill(0.0);burstLeft.fill(0);burstTimer.fill(0.0);heat.fill(0.0);locked.fill(false);fireCounter.fill(0);ramCooldown.fill(0.0);wallCooldown.fill(0.0)
         wreckSource.fill(-1);selectedWeapon.fill(0);kills.fill(0);damageEvents.fill(0);damageDealt.fill(0.0);damageTaken.fill(0.0);damageFlashSeconds.fill(0.0);wreckSeconds.fill(-1.0)
         cashCollected.fill(0);sabotageTarget.fill(-1);firstDamageSeconds.fill(-1.0);repairPickupsTaken.fill(0);ammoPickupsTaken.fill(0)
         abilityDamage.fill(0.0);abilityHits.fill(0);damageByKind.fill(0.0)
@@ -132,7 +189,7 @@ class Combat(private val world: World,val enabled: Boolean) {
             world.presentationEvents.emit(PresentationKind.WRECK,id,source,x=world.cars[id].x,y=world.cars[id].y,seconds=world.seconds)
             if(full)oneShotKills++
             if(source>=0 && source!=id)kills[source]++
-            val c=world.cars[id];c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.aiInput.ability=0.0;c.filteredThrottle=0.0;c.drifting=false;DriftDynamics.reset(c);world.abilities.cancel(c);lastTarget[id]=-1
+            val c=world.cars[id];c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.aiInput.ability=0.0;c.filteredThrottle=0.0;c.drifting=false;DriftDynamics.reset(c);world.abilities.cancel(c);lastTarget[id]=-1;cancelBursts(id)
         }
     }
     private fun repair(id: Int,amount: Double) { if(canAct(id))hp[id]=min(maxHealth(id),hp[id]+amount) }
@@ -142,8 +199,8 @@ class Combat(private val world: World,val enabled: Boolean) {
         if(a<1e-12)return Double.POSITIVE_INFINITY
         var earliest=Double.POSITIVE_INFINITY
         for(end in -1..1) {
-            val cx=target.x+cos(target.heading)*target.spec.circleOffsetM*end
-            val cy=target.y+sin(target.heading)*target.spec.circleOffsetM*end
+            val cx=target.x+target.cosHeading*target.spec.circleOffsetM*end
+            val cy=target.y+target.sinHeading*target.spec.circleOffsetM*end
             val ox=ax-cx;val oy=ay-cy;val r=radius+target.spec.circleRadiusM
             val c=ox*ox+oy*oy-r*r
             if(c<=0)return 0.0
@@ -154,11 +211,11 @@ class Combat(private val world: World,val enabled: Boolean) {
     }
     internal fun inRadius(c: Car,x: Double,y: Double,radius: Double): Boolean {
         val r=radius+c.spec.circleRadiusM
-        for(end in -1..1) { val dx=c.x+cos(c.heading)*c.spec.circleOffsetM*end-x;val dy=c.y+sin(c.heading)*c.spec.circleOffsetM*end-y;if(dx*dx+dy*dy<=r*r)return true }
+        for(end in -1..1) { val dx=c.x+c.cosHeading*c.spec.circleOffsetM*end-x;val dy=c.y+c.sinHeading*c.spec.circleOffsetM*end-y;if(dx*dx+dy*dy<=r*r)return true }
         return false
     }
-    private fun muzzleX(c: Car)=c.x+cos(c.heading)*(c.spec.circleOffsetM+c.spec.circleRadiusM)
-    private fun muzzleY(c: Car)=c.y+sin(c.heading)*(c.spec.circleOffsetM+c.spec.circleRadiusM)
+    private fun muzzleX(c: Car)=c.x+c.cosHeading*(c.spec.circleOffsetM+c.spec.circleRadiusM)
+    private fun muzzleY(c: Car)=c.y+c.sinHeading*(c.spec.circleOffsetM+c.spec.circleRadiusM)
     /** Same road obstruction test used by guns, ability tells and AI visibility. */
     internal fun roadFraction(x: Double,y: Double,ex: Double,ey: Double,spacingM: Double,obstacles: Boolean=true): Double {
         val barrier=if(obstacles)world.obstacles.solidFraction(x,y,ex,ey) else 1.0
@@ -172,15 +229,59 @@ class Combat(private val world: World,val enabled: Boolean) {
     fun fire(id: Int,weapon: Int): Boolean {
         if(!enabled || !canAct(id) || weapon !in Weapons.all.indices || armingSeconds>0 || world.cars[id].ability.weaponsLocked)return false
         val n=id*Weapons.all.size+weapon
-        if(ammunition[n]<=0 || cooldowns[n]>1e-9)return false
+        if(ammunition[n]<=0 || cooldowns[n]>1e-9 || locked[n] || burstLeft[n]>0)return false
         val c=world.cars[id];val w=Weapons.all[weapon]
         if(weapon==Weapons.MINE) {
             if(!placeMine(c))return false
         } else if(weapon==Weapons.HAMMER) {
             var free: Projectile?=null;for(p in projectiles)if(!p.active){free=p;break}
             if(free==null){poolExhaustions++;return false}
-            free.active=true;free.owner=id;free.x=muzzleX(c);free.y=muzzleY(c);free.vx=cos(c.heading)*w.speedMps;free.vy=sin(c.heading)*w.speedMps;free.remainingM=w.rangeM;free.remainingSeconds=w.lifeSeconds;free.hitMask=0
+            free.active=true;free.owner=id;free.x=muzzleX(c);free.y=muzzleY(c);free.vx=c.cosHeading*w.speedMps;free.vy=c.sinHeading*w.speedMps;free.remainingM=w.rangeM;free.remainingSeconds=w.lifeSeconds;free.hitMask=0
         } else {
+            volley(id,weapon)
+        }
+        spend(id,weapon,c)
+        // A burst is committed by this press: the cooldown counts down from the first bullet and ends one weapon cooldown after the last.
+        val bullets=min(w.burstRounds,ammunition[n]+1)
+        cooldowns[n]=w.cooldownSeconds+(bullets-1)*w.burstIntervalSeconds
+        if(bullets>1){burstLeft[n]=bullets-1;burstTimer[n]=w.burstIntervalSeconds}
+        return true
+    }
+    /** One bullet or shot has left the muzzle: ammunition, counters, heat and the flash event. */
+    private fun spend(id: Int,weapon: Int,c: Car) {
+        val n=id*Weapons.all.size+weapon;val w=Weapons.all[weapon]
+        ammunition[n]--;shots[weapon]++;fireCounter[n]++
+        if(w.overheats){heat[n]=min(1.0,heat[n]+w.heatPerShot);if(heat[n]>=1.0-1e-9)locked[n]=true}
+        world.presentationEvents.emit(PresentationKind.FIRE,id,detail=weapon,x=c.x,y=c.y,seconds=world.seconds)
+    }
+    private fun cancelBursts(id: Int) {
+        for(w in Weapons.all.indices){val n=id*Weapons.all.size+w;if(burstLeft[n]>0){burstLeft[n]=0;cooldowns[n]=min(cooldowns[n],Weapons.all[w].cooldownSeconds)}}
+    }
+    /** Cooling, then the follow-up bullets of every committed burst, in deterministic car/weapon order. */
+    private fun advanceWeapons(dt: Double) {
+        for(n in heat.indices)if(heat[n]>0) {
+            val w=Weapons.all[n%Weapons.all.size]
+            if(locked[n]){heat[n]=max(0.0,heat[n]-w.overheatCoolPerSecond*dt);if(heat[n]<=w.overheatResumeFraction+1e-9)locked[n]=false}
+            else heat[n]=max(0.0,heat[n]-w.heatCoolPerSecond*dt)
+        }
+    }
+    private fun advanceBursts(id: Int,dt: Double) {
+        val c=world.cars[id]
+        for(weapon in Weapons.all.indices) {
+            val n=id*Weapons.all.size+weapon
+            if(burstLeft[n]<=0)continue
+            if(c.ability.weaponsLocked){burstLeft[n]=0;cooldowns[n]=min(cooldowns[n],Weapons.all[weapon].cooldownSeconds);continue}
+            val w=Weapons.all[weapon]
+            burstTimer[n]-=dt
+            while(burstLeft[n]>0 && burstTimer[n]<=1e-9) {
+                if(ammunition[n]<=0){burstLeft[n]=0;break}
+                volley(id,weapon);spend(id,weapon,c);burstLeft[n]--;burstTimer[n]+=w.burstIntervalSeconds
+            }
+        }
+    }
+    /** One ray (Rivet) or fan of rays (Scatter): resolves hits at the instant it is fired. */
+    private fun volley(id: Int,weapon: Int) {
+        val c=world.cars[id];val w=Weapons.all[weapon]
             val rays=if(weapon==Weapons.SCATTER)CombatRules["scatterRays"].toInt() else 1
             var hitMask=0
             for(ray in 0 until rays) {
@@ -193,26 +294,22 @@ class Combat(private val world: World,val enabled: Boolean) {
                 val barrier=world.obstacles.solidFraction(x,y,ex,ey)
                 if(barrier<time){time=barrier;target=-1}
                 if(target>=0 && hitMask and (1 shl target)==0){hitMask=hitMask or (1 shl target);damage(target,w.damage*c.weaponDamageScale,id,if(weapon==Weapons.SCATTER)DamageKind.SCATTER else DamageKind.RIVET)}
-                if(ray==rays/2){traceX[id]=x;traceY[id]=y;traceEndX[id]=x+(ex-x)*time;traceEndY[id]=y+(ey-y)*time;traceSeconds[id]=w.lifeSeconds}
+                if(ray==rays/2){traceX[id]=x;traceY[id]=y;traceEndX[id]=x+(ex-x)*time;traceEndY[id]=y+(ey-y)*time;traceSeconds[id]=w.lifeSeconds;traceWeapon[id]=weapon}
             }
-        }
-        ammunition[n]--;cooldowns[n]=w.cooldownSeconds;shots[weapon]++
-        world.presentationEvents.emit(PresentationKind.FIRE,id,detail=weapon,x=c.x,y=c.y,seconds=world.seconds)
-        return true
     }
     private fun placeMine(c: Car): Boolean {
         var free: Mine?=null;for(m in mines)if(!m.active){free=m;break}
         if(free==null){poolExhaustions++;return false}
         val rear=c.spec.circleOffsetM+c.spec.circleRadiusM+CombatRules["dropClearanceM"]
-        if(world.obstacles.solidAt(c.x-cos(c.heading)*rear,c.y-sin(c.heading)*rear,Weapons.all[Weapons.MINE].radiusM))return false
-        free.active=true;free.owner=c.id;free.x=c.x-cos(c.heading)*rear;free.y=c.y-sin(c.heading)*rear;free.ageSeconds=0.0;free.activation=++activation
+        if(world.obstacles.solidAt(c.x-c.cosHeading*rear,c.y-c.sinHeading*rear,Weapons.all[Weapons.MINE].radiusM))return false
+        free.active=true;free.owner=c.id;free.x=c.x-c.cosHeading*rear;free.y=c.y-c.sinHeading*rear;free.ageSeconds=0.0;free.activation=++activation
         return true
     }
     internal fun dispatchMine(id: Int): Boolean {
         val c=world.cars[id]
         if(!enabled || !canAct(id) || armingSeconds>0 || c.ability.definition?.kind!=AbilityKind.DISPATCHER || c.ability.phase!=AbilityPhase.ACTIVE)return false
         if(!placeMine(c))return false
-        shots[Weapons.MINE]++
+        shots[Weapons.MINE]++;fireCounter[id*Weapons.all.size+Weapons.MINE]++
         world.presentationEvents.emit(PresentationKind.FIRE,id,detail=Weapons.MINE,x=c.x,y=c.y,seconds=world.seconds)
         return true
     }
@@ -235,20 +332,20 @@ class Combat(private val world: World,val enabled: Boolean) {
         if(world.ai.think(c))return
         if(!enabled || !canAct(c.id)){c.aiInput.fire=0.0;c.aiInput.mine=0.0;return}
         var target=-1;var distance=Weapons.all[Weapons.RIVET].rangeM*(c.aiStyle?.fireRangeScale?:1.0);var chaser=false
-        val cx=cos(c.heading);val cy=sin(c.heading)
+        val cx=c.cosHeading;val cy=c.sinHeading
         for(o in world.cars)if(o!==c && canAct(o.id)) {
             val dx=o.x-c.x;val dy=o.y-c.y;val along=dx*cx+dy*cy;val side=abs(-dx*cy+dy*cx)
-            if(along>0 && along<distance && side<o.spec.circleRadiusM+along*CombatRules["aiForwardConeRadians"]) {
+            if(along>0 && along<distance && side<o.spec.circleRadiusM+along*CombatRules.aiForwardConeRadians) {
                 var attackers=0;for(i in lastTarget.indices)if(i!=c.id && lastTarget[i]==o.id && canAct(i))attackers++
-                if(attackers<CombatRules["aiMaxAttackers"]){target=o.id;distance=along}
+                if(attackers<CombatRules.aiMaxAttackers){target=o.id;distance=along}
             }
-            if(along<0 && -along<CombatRules["aiChaserRangeM"] && side<c.spec.circleRadiusM*2*CombatRules["aiChaserCarWidths"])chaser=true
+            if(along<0 && -along<CombatRules.aiChaserRangeM && side<c.spec.circleRadiusM*2*CombatRules.aiChaserCarWidths)chaser=true
         }
         lastTarget[c.id]=target
         c.aiInput.fire=if(target>=0)1.0 else 0.0
         c.aiInput.mine=if(chaser && c.aiSkill?.mines!=false && c.aiStyle?.mines!=false)1.0 else 0.0
         c.aiCombatReason=if(c.aiInput.mine>0)2 else if(target>=0)1 else 0
-        c.aiInput.weapon=if(target>=0 && distance<Weapons.all[Weapons.SCATTER].rangeM && ammo(c.id,Weapons.SCATTER)>0)Weapons.SCATTER else if(target>=0 && distance>CombatRules["aiHeavyMinRangeM"]*(c.aiStyle?.heavyRangeScale?:1.0) && ammo(c.id,Weapons.HAMMER)>0)Weapons.HAMMER else Weapons.RIVET
+        c.aiInput.weapon=if(target>=0 && distance<Weapons.all[Weapons.SCATTER].rangeM && ammo(c.id,Weapons.SCATTER)>0 && !overheated(c.id,Weapons.SCATTER))Weapons.SCATTER else if(target>=0 && distance>CombatRules.aiHeavyMinRangeM*(c.aiStyle?.heavyRangeScale?:1.0) && ammo(c.id,Weapons.HAMMER)>0)Weapons.HAMMER else Weapons.RIVET
     }
     fun seekRepair(c: Car,lane: Double): Double {
         c.aiPickupTarget=-1
@@ -256,7 +353,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         var closest=Career["repairSeekDistanceM"];var chosen=lane
         for(i in pickups.indices) {
             val p=pickups[i];if(p.type.id!="repair" || p.cooldownSeconds>0)continue
-            val dx=p.x-c.x;val dy=p.y-c.y;val ahead=dx*cos(c.heading)+dy*sin(c.heading)
+            val dx=p.x-c.x;val dy=p.y-c.y;val ahead=dx*c.cosHeading+dy*c.sinHeading
             if(ahead>c.spec.circleOffsetM+c.spec.circleRadiusM && dx*dx+dy*dy<closest*closest) {
                 world.track.project(p.x,p.y,projection)
                 if(abs(projection.distance)<=world.track.widthAt(projection.s,projection.route)*Career["repairSeekLaneLimitFraction"]) { closest=sqrt(dx*dx+dy*dy);chosen=projection.distance;c.aiPickupTarget=i }
@@ -267,10 +364,10 @@ class Combat(private val world: World,val enabled: Boolean) {
     fun avoidMine(c: Car,s: Double,lane: Double): Double {
         if(!enabled || c.aiSkill?.avoidMines==false)return lane
         for(m in mines)if(m.active && m.ageSeconds>=Weapons.all[Weapons.MINE].armingSeconds) {
-            val dx=m.x-c.x;val dy=m.y-c.y;val ahead=dx*cos(c.heading)+dy*sin(c.heading)
-            if(ahead>0 && ahead<CombatRules["aiMineAvoidDistanceM"] && dx*dx+dy*dy<CombatRules["aiMineAvoidDistanceM"]*CombatRules["aiMineAvoidDistanceM"]) {
+            val dx=m.x-c.x;val dy=m.y-c.y;val ahead=dx*c.cosHeading+dy*c.sinHeading
+            if(ahead>0 && ahead<CombatRules.aiMineAvoidDistanceM && dx*dx+dy*dy<CombatRules.aiMineAvoidDistanceM*CombatRules.aiMineAvoidDistanceM) {
                 world.track.project(m.x,m.y,projection)
-                val margin=Weapons.all[Weapons.MINE].radiusM+c.spec.circleRadiusM+CombatRules["aiMineAvoidMarginM"]
+                val margin=Weapons.all[Weapons.MINE].radiusM+c.spec.circleRadiusM+CombatRules.aiMineAvoidMarginM
                 return if(projection.distance>=lane)projection.distance-margin else projection.distance+margin
             }
         }
@@ -279,19 +376,21 @@ class Combat(private val world: World,val enabled: Boolean) {
     fun step(inputs: Array<InputFrame>,dt: Double) {
         if(!enabled)return
         for(i in cooldowns.indices)cooldowns[i]=max(0.0,cooldowns[i]-dt)
+        advanceWeapons(dt)
         for(i in ramCooldown.indices)ramCooldown[i]=max(0.0,ramCooldown[i]-dt)
         for(i in wallCooldown.indices){wallCooldown[i]=max(0.0,wallCooldown[i]-dt);damageFlashSeconds[i]=max(0.0,damageFlashSeconds[i]-dt);traceSeconds[i]=max(0.0,traceSeconds[i]-dt)}
         for(b in blasts)b.remainingSeconds=max(0.0,b.remainingSeconds-dt)
         for(i in world.cars.indices) {
             val c=world.cars[i]
-            if(!canAct(i))continue
-            if(c.wallImpactMps>CombatRules["wallMinImpactMps"] && wallCooldown[i]<=0) { damage(i,(c.wallImpactMps-CombatRules["wallMinImpactMps"])*CombatRules["wallDamagePerMps"],-1,DamageKind.WALL);wallCooldown[i]=CombatRules["wallCooldownSeconds"] }
+            if(!canAct(i)){cancelBursts(i);continue}
+            advanceBursts(i,dt)
+            if(c.wallImpactMps>CombatRules.wallMinImpactMps && wallCooldown[i]<=0) { damage(i,(c.wallImpactMps-CombatRules.wallMinImpactMps)*CombatRules.wallDamagePerMps,-1,DamageKind.WALL);wallCooldown[i]=CombatRules.wallCooldownSeconds }
             for(j in i+1 until world.cars.size) {
                 val pair=i*Tuning.CAR_COUNT+j;val closing=world.ramClosingMps[pair]
                 if(closing>0 && ramCooldown[pair]<=0) {
                     val other=world.cars[j];val total=c.spec.massKg+other.spec.massKg
-                    val raw=min(CombatRules["ramMaxDamage"],closing*CombatRules["ramDamagePerMps"])
-                    damage(i,raw*other.spec.massKg/total*(if(other.utilityMask and 1!=0)Consumables.all[Consumables.SPIKES].magnitude else 1.0),j,DamageKind.RAM);damage(j,raw*c.spec.massKg/total*(if(c.utilityMask and 1!=0)Consumables.all[Consumables.SPIKES].magnitude else 1.0),i,DamageKind.RAM);ramCooldown[pair]=CombatRules["ramCooldownSeconds"]
+                    val raw=min(CombatRules.ramMaxDamage,closing*CombatRules.ramDamagePerMps)
+                    damage(i,raw*other.spec.massKg/total*(if(other.utilityMask and 1!=0)Consumables.all[Consumables.SPIKES].magnitude else 1.0),j,DamageKind.RAM);damage(j,raw*c.spec.massKg/total*(if(c.utilityMask and 1!=0)Consumables.all[Consumables.SPIKES].magnitude else 1.0),i,DamageKind.RAM);ramCooldown[pair]=CombatRules.ramCooldownSeconds
                 }
             }
             val input=if(c.human)inputs[i] else c.aiInput
@@ -342,7 +441,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     fun appendHash(initial: Long): Long {
         var h=initial
         for(i in hp.indices){h=31*h+hp[i].toBits();h=31*h+states[i].ordinal;h=31*h+kills[i]}
-        for(i in ammunition.indices){h=31*h+ammunition[i];h=31*h+cooldowns[i].toBits()}
+        for(i in ammunition.indices){h=31*h+ammunition[i];h=31*h+cooldowns[i].toBits();if(burstLeft[i]>0 || heat[i]>0){h=31*h+burstLeft[i];h=31*h+burstTimer[i].toBits();h=31*h+heat[i].toBits();h=31*h+if(locked[i])1 else 0}}
         for(p in projectiles)if(p.active){h=31*h+p.x.toBits();h=31*h+p.y.toBits();h=31*h+p.remainingM.toBits();h=31*h+p.remainingSeconds.toBits();h=31*h+p.owner;h=31*h+p.hitMask}
         for(m in mines)if(m.active){h=31*h+m.x.toBits();h=31*h+m.y.toBits();h=31*h+m.ageSeconds.toBits();h=31*h+m.owner;h=31*h+m.activation}
         for(p in pickups)h=31*h+p.cooldownSeconds.toBits()

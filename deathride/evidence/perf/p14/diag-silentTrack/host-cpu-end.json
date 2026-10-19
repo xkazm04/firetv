@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-08T11:33:32.8791180Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "git#1",
+                             "IDProcess":  9376,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "svchost#89",
+                             "IDProcess":  3080,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "node#9",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  23200,
+                             "PercentProcessorTime":  14
+                         },
+                         {
+                             "Name":  "msedgewebview2#18",
+                             "IDProcess":  37388,
+                             "PercentProcessorTime":  9
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  4
+                         },
+                         {
+                             "Name":  "msedgewebview2#15",
+                             "IDProcess":  45408,
+                             "PercentProcessorTime":  4
+                         },
+                         {
+                             "Name":  "python",
+                             "IDProcess":  41056,
+                             "PercentProcessorTime":  0
+                         },
+                         {
+                             "Name":  "rustup",
+                             "IDProcess":  33000,
+                             "PercentProcessorTime":  0
+                         },
+                         {
+                             "Name":  "powershell#10",
+                             "IDProcess":  39776,
+                             "PercentProcessorTime":  0
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                35,
+                                38,
+                                25
+                            ]
+}

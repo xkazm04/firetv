@@ -1,0 +1,542 @@
+{
+  "rule": "Keep only if each cut run beats both baseline runs on worst active-window p95 and on active frames over 33 ms (fixed before the cut arm ran). Active max and over-20 ms counts are reported, not decisive.",
+  "baseline": [
+    {
+      "run": "base-run1",
+      "apkSha256": "6b303179b4ca8d2b40ef0f75727caa046c2ed59c0d24af40334859fb07bbb176",
+      "durationSeconds": 360.20347459999994,
+      "functionalPass": true,
+      "activeP95WorstMs": 23.078000000000003,
+      "activeFramesOver33Ms": 81,
+      "activeMaxMs": 64.752462,
+      "activeFramesOver20Ms": 765,
+      "activeFramesOver16_7Ms": 8815,
+      "activeFrames": 19037,
+      "activeP50RangeMs": [
+        16.660924,
+        16.695384
+      ],
+      "pssRangeMiB": [
+        154.4619140625,
+        173.6943359375
+      ],
+      "over33ByDominantCategory": {
+        "cars": 46,
+        "simulation": 24,
+        "hud": 6,
+        "audio": 3,
+        "scenery": 1,
+        "flushSwap": 1
+      },
+      "over33DuringGc": 18,
+      "gcLines": 60,
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 8172239.995704115,
+        "gcCount": 111,
+        "gcTimeMs": 10151,
+        "blockingGcCount": 0,
+        "seconds": 342.54546139999997,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "deviceCounters": null,
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.00248682220791,
+          30.00248682220791
+        ],
+        "pumpStalls": 0
+      },
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T04:04:47.9818770Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#35",
+              155
+            ],
+            [
+              "node#37",
+              100
+            ],
+            [
+              "rustc",
+              100
+            ],
+            [
+              "Code - Insiders#7",
+              100
+            ],
+            [
+              "node#38",
+              96
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T04:10:57.7385444Z",
+          "totalPercentSamples": [
+            50,
+            53,
+            36
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "Code - Insiders#7",
+              98
+            ],
+            [
+              "git#1",
+              98
+            ],
+            [
+              "MsMpEng",
+              79
+            ],
+            [
+              "WmiPrvSE#2",
+              18
+            ],
+            [
+              "claude#12",
+              14
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "run": "base-run2",
+      "apkSha256": "6b303179b4ca8d2b40ef0f75727caa046c2ed59c0d24af40334859fb07bbb176",
+      "durationSeconds": 360.0716105,
+      "functionalPass": true,
+      "activeP95WorstMs": 24.102385,
+      "activeFramesOver33Ms": 97,
+      "activeMaxMs": 74.49615399999999,
+      "activeFramesOver20Ms": 788,
+      "activeFramesOver16_7Ms": 8804,
+      "activeFrames": 19005,
+      "activeP50RangeMs": [
+        16.668539,
+        16.706308
+      ],
+      "pssRangeMiB": [
+        163.828125,
+        179.1748046875
+      ],
+      "over33ByDominantCategory": {
+        "cars": 60,
+        "simulation": 26,
+        "hud": 7,
+        "audio": 2,
+        "scenery": 1,
+        "flushSwap": 1
+      },
+      "over33DuringGc": 20,
+      "gcLines": 58,
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 8086032.069007302,
+        "gcCount": 109,
+        "gcTimeMs": 9774,
+        "blockingGcCount": 0,
+        "seconds": 341.8163243,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "deviceCounters": null,
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.00236532116158,
+          30.00236532116158
+        ],
+        "pumpStalls": 0
+      },
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T04:12:46.1883055Z",
+          "totalPercentSamples": [
+            48,
+            53,
+            41
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#33",
+              135
+            ],
+            [
+              "UnrealEditor-Cmd",
+              103
+            ],
+            [
+              "git#1",
+              98
+            ],
+            [
+              "Code - Insiders#7",
+              98
+            ],
+            [
+              "MsMpEng",
+              56
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T04:18:56.5958903Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "SearchIndexer",
+              94
+            ],
+            [
+              "Code - Insiders#7",
+              80
+            ],
+            [
+              "git#1",
+              52
+            ],
+            [
+              "node#46",
+              37
+            ],
+            [
+              "WmiPrvSE#2",
+              23
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "cut": [
+    {
+      "run": "cut-run1",
+      "apkSha256": "64c0708d379732e70b15dc5e468a1f0e725311ddceb3dbdfe7647010d077bfde",
+      "durationSeconds": 360.2186001,
+      "functionalPass": true,
+      "activeP95WorstMs": 26.964846,
+      "activeFramesOver33Ms": 44,
+      "activeMaxMs": 141.929847,
+      "activeFramesOver20Ms": 487,
+      "activeFramesOver16_7Ms": 8562,
+      "activeFrames": 18933,
+      "activeP50RangeMs": [
+        16.646462,
+        16.700923
+      ],
+      "pssRangeMiB": [
+        164.294921875,
+        192.048828125
+      ],
+      "over33ByDominantCategory": {
+        "cars": 18,
+        "simulation": 13,
+        "scenery": 4,
+        "hud": 3,
+        "flushSwap": 3,
+        "audio": 2,
+        "telemetry": 1
+      },
+      "over33DuringGc": 8,
+      "gcLines": 27,
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 3683321.0007412885,
+        "gcCount": 49,
+        "gcTimeMs": 4639,
+        "blockingGcCount": 0,
+        "seconds": 338.54669949999993,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "deviceCounters": {
+        "seconds": 383.43,
+        "cpuPercentOfOneCore": {
+          "audio HAL writer": 52.98,
+          "app GLThread": 47.72,
+          "audioserver AudioOut_D": 47.31,
+          "app DefaultDispatcher (link)": 33.93,
+          "app other threads": 6.77,
+          "app SoundPool": 4.74,
+          "app audio worker": 3.48,
+          "system_server NetworkStats": 2.92,
+          "app JIT": 1.0,
+          "app GC (HeapTaskDaemon)": 0.9,
+          "app link threads": 0.05,
+          "audioserver AudioOut_15": 0.0,
+          "app AudioTrack": 0.0
+        },
+        "wlan0BytesPerSecond": {
+          "rx": 18032,
+          "tx": 157258
+        },
+        "limit": "Clock ticks of 10 ms between two reads around the probe (app threads that exited during the run are missing)."
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.00122702436764,
+          30.00122702436764
+        ],
+        "pumpStalls": 0
+      },
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T04:47:13.2917549Z",
+          "totalPercentSamples": [
+            52,
+            75,
+            55
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "git#1",
+              101
+            ],
+            [
+              "Code - Insiders#7",
+              96
+            ],
+            [
+              "WmiPrvSE#2",
+              19
+            ],
+            [
+              "System",
+              19
+            ],
+            [
+              "msedgewebview2#15",
+              14
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T04:53:23.0414991Z",
+          "totalPercentSamples": [
+            64,
+            46,
+            77
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "rustc#1",
+              100
+            ],
+            [
+              "rustc",
+              100
+            ],
+            [
+              "SearchIndexer",
+              100
+            ],
+            [
+              "Code - Insiders#7",
+              100
+            ],
+            [
+              "git",
+              82
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "run": "cut-run2",
+      "apkSha256": "64c0708d379732e70b15dc5e468a1f0e725311ddceb3dbdfe7647010d077bfde",
+      "durationSeconds": 360.2049167,
+      "functionalPass": true,
+      "activeP95WorstMs": 22.335307,
+      "activeFramesOver33Ms": 49,
+      "activeMaxMs": 67.739461,
+      "activeFramesOver20Ms": 568,
+      "activeFramesOver16_7Ms": 8859,
+      "activeFrames": 19160,
+      "activeP50RangeMs": [
+        16.655307,
+        16.705692000000003
+      ],
+      "pssRangeMiB": [
+        172.7021484375,
+        196.9189453125
+      ],
+      "over33ByDominantCategory": {
+        "cars": 35,
+        "simulation": 10,
+        "flushSwap": 3,
+        "hud": 1
+      },
+      "over33DuringGc": 10,
+      "gcLines": 29,
+      "runtimeAllocation": {
+        "bytesAllocatedPerSecond": 3640641.729511054,
+        "gcCount": 49,
+        "gcTimeMs": 4865,
+        "blockingGcCount": 1,
+        "seconds": 342.1784478,
+        "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+      },
+      "deviceCounters": {
+        "seconds": 383.06,
+        "cpuPercentOfOneCore": {
+          "audio HAL writer": 52.0,
+          "app DefaultDispatcher (link)": 48.52,
+          "app GLThread": 47.38,
+          "audioserver AudioOut_D": 47.2,
+          "app other threads": 6.92,
+          "app SoundPool": 4.64,
+          "app audio worker": 3.5,
+          "system_server NetworkStats": 2.8,
+          "app JIT": 1.01,
+          "app GC (HeapTaskDaemon)": 0.91,
+          "app link threads": 0.05,
+          "audioserver AudioOut_15": 0.0,
+          "app AudioTrack": 0.0
+        },
+        "wlan0BytesPerSecond": {
+          "rx": 15139,
+          "tx": 154966
+        },
+        "limit": "Clock ticks of 10 ms between two reads around the probe (app threads that exited during the run are missing)."
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.00236670561804,
+          30.00236670561804
+        ],
+        "pumpStalls": 0
+      },
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T04:54:12.9033003Z",
+          "totalPercentSamples": [
+            87,
+            77,
+            70
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "MsMpEng",
+              99
+            ],
+            [
+              "rustc",
+              99
+            ],
+            [
+              "git#1",
+              95
+            ],
+            [
+              "Code - Insiders#7",
+              95
+            ],
+            [
+              "SearchIndexer",
+              95
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T05:00:22.9988899Z",
+          "totalPercentSamples": [
+            95,
+            97,
+            97
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "MsMpEng",
+              169
+            ],
+            [
+              "node#40",
+              136
+            ],
+            [
+              "node#37",
+              131
+            ],
+            [
+              "node#39",
+              122
+            ],
+            [
+              "SearchIndexer",
+              94
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "checks": {
+    "cut-run1.activeP95WorstMs": {
+      "cut": 26.964846,
+      "baseline": [
+        23.078000000000003,
+        24.102385
+      ],
+      "better": false
+    },
+    "cut-run1.activeFramesOver33Ms": {
+      "cut": 44,
+      "baseline": [
+        81,
+        97
+      ],
+      "better": true
+    },
+    "cut-run2.activeP95WorstMs": {
+      "cut": 22.335307,
+      "baseline": [
+        23.078000000000003,
+        24.102385
+      ],
+      "better": true
+    },
+    "cut-run2.activeFramesOver33Ms": {
+      "cut": 49,
+      "baseline": [
+        81,
+        97
+      ],
+      "better": true
+    }
+  },
+  "verdict": "revert",
+  "limits": "Two profiled 360 s runs per arm, back to back, one Stick, a host shared with other builders (host CPU per run recorded). Run-to-run variation is not modelled beyond two runs."
+}

@@ -1,0 +1,130 @@
+{
+ "what": "P18 (descriptive, written after the A/B runs; no verdict reads it): ART's heap envelope from each run's logged GC lines.",
+ "runs": [
+  {
+   "run": "audit",
+   "loggedGcs": 29,
+   "raceGcs": 26,
+   "fullGcs": 20,
+   "headroomMB": [
+    24
+   ],
+   "usedAfterGcMB": [
+    41,
+    58
+   ],
+   "footprintMB": [
+    65,
+    82
+   ],
+   "freedPerGcMiB": {
+    "median": 23.0,
+    "losShareOfFreed": 0.563
+   },
+   "loggedGcTotalMs": [
+    105.065,
+    370.728
+   ]
+  },
+  {
+   "run": "base-run1",
+   "loggedGcs": 22,
+   "raceGcs": 20,
+   "fullGcs": 19,
+   "headroomMB": [
+    24
+   ],
+   "usedAfterGcMB": [
+    48,
+    58
+   ],
+   "footprintMB": [
+    72,
+    82
+   ],
+   "freedPerGcMiB": {
+    "median": 23.0,
+    "losShareOfFreed": 0.522
+   },
+   "loggedGcTotalMs": [
+    101.643,
+    166.118
+   ]
+  },
+  {
+   "run": "cut-run1",
+   "loggedGcs": 11,
+   "raceGcs": 9,
+   "fullGcs": 7,
+   "headroomMB": [
+    24
+   ],
+   "usedAfterGcMB": [
+    50,
+    58
+   ],
+   "footprintMB": [
+    74,
+    82
+   ],
+   "freedPerGcMiB": {
+    "median": 21,
+    "losShareOfFreed": 0.45
+   },
+   "loggedGcTotalMs": [
+    110.217,
+    164.095
+   ]
+  },
+  {
+   "run": "base-run2",
+   "loggedGcs": 20,
+   "raceGcs": 19,
+   "fullGcs": 18,
+   "headroomMB": [
+    24
+   ],
+   "usedAfterGcMB": [
+    48,
+    59
+   ],
+   "footprintMB": [
+    72,
+    83
+   ],
+   "freedPerGcMiB": {
+    "median": 23,
+    "losShareOfFreed": 0.527
+   },
+   "loggedGcTotalMs": [
+    106.187,
+    201.9
+   ]
+  },
+  {
+   "run": "cut-run2",
+   "loggedGcs": 11,
+   "raceGcs": 10,
+   "fullGcs": 9,
+   "headroomMB": [
+    24
+   ],
+   "usedAfterGcMB": [
+    50,
+    58
+   ],
+   "footprintMB": [
+    74,
+    82
+   ],
+   "freedPerGcMiB": {
+    "median": 22.44,
+    "losShareOfFreed": 0.459
+   },
+   "loggedGcTotalMs": [
+    108.616,
+    346.659
+   ]
+  }
+ ]
+}

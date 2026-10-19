@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T07:16:23.6682177Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "python",
+                             "IDProcess":  46440,
+                             "PercentProcessorTime":  828
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  12836,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "rustc",
+                             "IDProcess":  27048,
+                             "PercentProcessorTime":  90
+                         },
+                         {
+                             "Name":  "clippy-driver",
+                             "IDProcess":  24032,
+                             "PercentProcessorTime":  81
+                         },
+                         {
+                             "Name":  "node#31",
+                             "IDProcess":  50172,
+                             "PercentProcessorTime":  49
+                         },
+                         {
+                             "Name":  "node#33",
+                             "IDProcess":  52100,
+                             "PercentProcessorTime":  49
+                         },
+                         {
+                             "Name":  "node#46",
+                             "IDProcess":  53668,
+                             "PercentProcessorTime":  40
+                         },
+                         {
+                             "Name":  "node#42",
+                             "IDProcess":  54624,
+                             "PercentProcessorTime":  40
+                         },
+                         {
+                             "Name":  "node#45",
+                             "IDProcess":  15364,
+                             "PercentProcessorTime":  40
+                         },
+                         {
+                             "Name":  "git#10",
+                             "IDProcess":  4840,
+                             "PercentProcessorTime":  22
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                100,
+                                100,
+                                100
+                            ]
+}

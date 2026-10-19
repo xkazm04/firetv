@@ -1,0 +1,42 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[147,146],"rejected":[0,0],"hostPumpStalls":0}
+{"hostPumpStall":{"second":71.3486778,"lateMs":182.0111333327659,"epochMs":1791341711196.5476,"cpu":{"user":1890000,"system":562000},"memory":{"rss":132284416,"heapTotal":71254016,"heapUsed":35706736,"external":4306703,"arrayBuffers":269232}}}
+{"second":71,"accepted":[2156,2156],"rejected":[0,0],"hostPumpStalls":1}
+{"second":138,"accepted":[4173,4173],"rejected":[0,0],"hostPumpStalls":1}
+{"second":204,"accepted":[6185,6185],"rejected":[0,0],"hostPumpStalls":1}
+{"second":272,"accepted":[8190,8190],"rejected":[0,0],"hostPumpStalls":1}
+{"second":336,"accepted":[10157,10157],"rejected":[0,0],"hostPumpStalls":1}
+{"second":360,"accepted":[10801,10801],"rejected":[0,0],"hostPumpStalls":1}
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 0\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/ae3015cf/deathride/tools/ability-stick-probe.mjs:116:90\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 360.2243663,
+  "rounds": 6,
+  "classUses": {
+    "Needle": 12,
+    "Line": 10,
+    "Bastion": 6,
+    "Comet": 5,
+    "Trail": 7,
+    "Flint": 7,
+    "Quill": 7,
+    "Vandal": 5,
+    "Kestrel": 6,
+    "Bulwark": 5
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 10801,
+      "accepted": 10801,
+      "rejected": 0,
+      "hz": 29.98409050154251
+    },
+    {
+      "slot": 1,
+      "sent": 10801,
+      "accepted": 10801,
+      "rejected": 0,
+      "hz": 29.98409050154251
+    }
+  ]
+}

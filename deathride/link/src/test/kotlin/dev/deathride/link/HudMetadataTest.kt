@@ -14,8 +14,8 @@ class HudMetadataTest {
         assertEquals(setOf("t"),packet(100.0).keys)
         assertEquals(setOf("t","garage"),packet(200.0,garage="{\"revision\":2}").keys)
         assertEquals(7,packet(300.0,phase="garage").size)
-        assertEquals(1,packet(5299.0,phase="garage").size)
-        assertEquals(7,packet(5300.0,phase="garage").size)
+        assertEquals(1,packet(59999.0,phase="garage").size)
+        assertEquals(7,packet(60300.0,phase="garage").size)
         assertEquals(3,metadata.fullSnapshots)
     }
     @Test fun legacyClientsStillGetEveryMetadataFieldEveryTime() {

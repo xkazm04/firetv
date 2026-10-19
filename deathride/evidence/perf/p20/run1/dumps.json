@@ -1,0 +1,55 @@
+{
+ "run": "run1",
+ "plan": [
+  "a",
+  "b",
+  "c",
+  "d"
+ ],
+ "startedUtc": "2026-10-09T03:44:05.432Z",
+ "dumps": [
+  {
+   "label": "a",
+   "remote": "/data/local/tmp/p20-run1-a.hprof",
+   "hostStartUtc": "2026-10-09T03:44:40.957Z",
+   "amSeconds": 8.555,
+   "amOutput": "File: /data/local/tmp/p20-run1-a.hprof\r\nWaiting for dump to finish...",
+   "hprofStart": "10-09 05:44:43.217 32563 32563 I .deathride.per: hprof: heap dump \"/data/local/tmp/p20-run1-a.hprof\" starting...",
+   "hprofCompleted": "10-09 05:44:50.439 32563 32563 I .deathride.per: hprof: heap dump completed (69MB) in 7.222s objects 467244 objects with stack traces 0",
+   "hostDoneUtc": "2026-10-09T03:44:50.170Z",
+   "remoteLs": "-rwxrwx--- 1 shell shell 72800351 2026-10-09 05:44 /data/local/tmp/p20-run1-a.hprof",
+   "probeAlive": true,
+   "probeStartedBeforeDone": false,
+   "pull": "",
+   "rm": "ls: /data/local/tmp/p20-run1-a.hprof: No such file or directory",
+   "localBytes": 72800351,
+   "hprofConv": 0
+  },
+  {
+   "label": "b",
+   "remote": "/data/local/tmp/p20-run1-b.hprof",
+   "hostStartUtc": "2026-10-09T03:45:30.991Z",
+   "amSeconds": 8.18,
+   "amOutput": "File: /data/local/tmp/p20-run1-b.hprof\r\nWaiting for dump to finish...",
+   "hprofStart": "10-09 05:45:32.915 32563 32563 I .deathride.per: hprof: heap dump \"/data/local/tmp/p20-run1-b.hprof\" starting...",
+   "hprofCompleted": "10-09 05:45:40.377 32563 32563 I .deathride.per: hprof: heap dump completed (71MB) in 7.461s objects 476890 objects with stack traces 0",
+   "hostDoneUtc": "2026-10-09T03:45:40.088Z",
+   "remoteLs": "-rwxrwx--- 1 shell shell 74743105 2026-10-09 05:45 /data/local/tmp/p20-run1-b.hprof",
+   "probeAlive": true,
+   "pull": "",
+   "rm": "ls: /data/local/tmp/p20-run1-b.hprof: No such file or directory",
+   "localBytes": 74743105,
+   "hprofConv": 0
+  }
+ ],
+ "notes": [
+  "c not taken: no raceLaunch at or after 290 s, or the probe ended",
+  "d not taken: without c the lobby is not the one after the last round"
+ ],
+ "pid": "32563",
+ "probeSeenUtc": "2026-10-09T03:45:00.338Z",
+ "deviceExit": 1,
+ "deviceEndedUtc": "2026-10-09T03:45:57.018Z",
+ "endedUtc": "2026-10-09T03:46:12.463Z",
+ "leftOnDevice": ""
+}

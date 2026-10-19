@@ -1,0 +1,84 @@
+{
+  "command": "cd deathride && gradlew.bat :core:test :link:test :game:test --console=plain",
+  "base": {
+    "commit": "e170d4e5",
+    "exit": 0,
+    "note": "deathride/main before P12: game tests ran; core and link test results came from the build cache (gate-base.log)"
+  },
+  "final": {
+    "commit": "20189c47",
+    "rerunTasks": true,
+    "exit": 0,
+    "seconds": 239,
+    "results": {
+      "core": {
+        "tests": 239,
+        "skipped": 0,
+        "failures": 0,
+        "errors": 0
+      },
+      "link": {
+        "tests": 20,
+        "skipped": 2,
+        "failures": 0,
+        "errors": 0
+      },
+      "game": {
+        "tests": 76,
+        "skipped": 0,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    "log": "gate-final-rerun.log (raw)",
+    "note": "20189c47 holds the final game/app/core/link code (df31a677 switch); later commits change only tools (perf-p12.py), docs, evidence and the ledger."
+  },
+  "runs": [
+    {
+      "what": ":game:test --tests AudioArmTest (+ GdxAudioBackendTest, QueuedAudioTest) on the switch",
+      "exit": 0
+    },
+    {
+      "what": "Mutation: AudioArm FULL cap 8 -> 5",
+      "exit": 1,
+      "failed": [
+        "defaultArmGivesThePlatformTheSameStartParametersAndStopCallsAsBefore",
+        "eachPerfArm MUTED",
+        "eachPerfArm STILL"
+      ],
+      "log": "mutation-check.log (raw)"
+    },
+    {
+      "what": "Mutation: setPan before setPitch in GdxAudioBackend.parameters",
+      "exit": 1,
+      "failed": [
+        "defaultArmGivesThePlatformTheSameStartParametersAndStopCallsAsBefore"
+      ],
+      "log": "mutation-check.log (raw)"
+    },
+    {
+      "what": "Full gate on the switch (df31a677 working tree)",
+      "exit": 0,
+      "results": {
+        "core": 239,
+        "link": "20 (2 skipped)",
+        "game": 76
+      },
+      "log": "gate-step1.log (raw)"
+    }
+  ],
+  "replay": {
+    "report": "audio-arms-replay.json",
+    "fullSha256": "7678bc908328bbf8412d4331d6f14e66bec44a3819708308ffb961cbb25fd97b",
+    "note": "The pre-change backend (LegacyGdxAudioBackend, verbatim from e170d4e5) and FULL (explicit and default constructor) give the same 16,890 platform calls line for line; the --rerun-tasks gate regenerated the report byte for byte."
+  },
+  "apk": {
+    "sha256": "bf6a17bf5bf15b91ec2af52d480cc9cc28ab52f011043dae40da0ebe5eb1856b",
+    "package": "dev.deathride.perf",
+    "label": "Death Ride Perf",
+    "racePort": 8772,
+    "entries": 576,
+    "build": "gradlew.bat :app:assembleDebug -PappId=dev.deathride.perf \"-PappLabel=Death Ride Perf\" -PracePort=8772 (build-perf.cmd, build-arms.log, raw)",
+    "source": "df31a677 code (built from that working tree before the commit; later commits change no app/game/core/link file)"
+  }
+}

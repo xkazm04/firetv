@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T06:31:43.3581983Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "rustc#3",
+                             "IDProcess":  32612,
+                             "PercentProcessorTime":  292
+                         },
+                         {
+                             "Name":  "rustc#5",
+                             "IDProcess":  51600,
+                             "PercentProcessorTime":  222
+                         },
+                         {
+                             "Name":  "rustc#1",
+                             "IDProcess":  25368,
+                             "PercentProcessorTime":  108
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "rustc#6",
+                             "IDProcess":  26144,
+                             "PercentProcessorTime":  89
+                         },
+                         {
+                             "Name":  "rustc#7",
+                             "IDProcess":  30820,
+                             "PercentProcessorTime":  89
+                         },
+                         {
+                             "Name":  "rustc",
+                             "IDProcess":  50388,
+                             "PercentProcessorTime":  80
+                         },
+                         {
+                             "Name":  "rustc#2",
+                             "IDProcess":  25404,
+                             "PercentProcessorTime":  70
+                         },
+                         {
+                             "Name":  "rustc#4",
+                             "IDProcess":  55108,
+                             "PercentProcessorTime":  61
+                         },
+                         {
+                             "Name":  "rustc#8",
+                             "IDProcess":  12872,
+                             "PercentProcessorTime":  61
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                100,
+                                100,
+                                100
+                            ]
+}

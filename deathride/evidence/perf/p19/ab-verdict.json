@@ -1,0 +1,790 @@
+{
+ "rule": "Fixed before the first P19 A/B run. Arms: base (deathride/main afc4d4cc code, as found) and cut (the same plus the re-land of P16 card 1, git revert 8443a99f), each a dev.deathride.perf debug APK built by the same command. Four profiled 360 s runs on the default sound arm (no audioArm extra), P18's arm and procedure (perf-device.py --install --profile --seconds 360), interleaved base, cut, base, cut. No heap dump, no allocation tracker and no forced GC in these runs. Settle (settle.ps1 unchanged, P13g's rule: 60 consecutive 1 s samples under 60%): at most two 900 s waits before the first run; if the first run does not settle, the other three run without waits and the pair is research for the host-sensitive lines; if it settles, each later run also tries at most two waits. A run is void, and rerun once, when its probe fails functionally (rounds or input rate) or its installed APK is not its arm's built APK; rejected inputs are recorded and do not void a run. Readings per run: owned textures (telemetry ownedTextureBytes, max over the run, MiB); the meminfo line that holds GL textures, GL mtrack Pss Total (max over the run's dumpsys meminfo --local samples, MiB; min reported); PSS min and max; hudMs mean and p95 and hudFlushes mean over active race frames; active frames over 33 ms, the worst active-window p95 and rejected inputs. Verdict, keep the card: FontPageTest is green (its JUnit result has tests, no failure, no error, no skip) AND both cut runs read owned textures at least 2.5 MiB below both base runs AND both cut runs read GL mtrack (max) lower than both base runs AND no guard is worse. A guard is worse when both cut runs read worse (higher) than both base runs; the guards are active frames over 33 ms, the worst active-window p95, hudMs mean and rejected inputs. Owned textures and GL mtrack are not host-sensitive and are graded settled or not; the guards apply settled or not, and on an unsettled pair their readings are research. Otherwise the card is reverted (git revert of the re-land). hudMs p95 is reported, not graded (P17 gives the HUD no share of the tail). PSS: graded only on a settled pair (all four runs settled); then it passes when both cut runs read a lower PSS max than both base runs. On any unsettled run PSS is reported and not graded; its grade goes to the next goal-1 soak.",
+ "glLine": "GL mtrack",
+ "apks": {
+  "base": "9253fc9fcaf569d31311608e11a24ed5de32bd4b492f2801d4ff33cebe6ede6e",
+  "cut": "522b73c14a669868595b1546abe7d765d4dd53acea556e4babc889e0f3aefa89"
+ },
+ "runs": [
+  {
+   "run": "base-run1",
+   "apkSha256": "9253fc9fcaf569d31311608e11a24ed5de32bd4b492f2801d4ff33cebe6ede6e",
+   "arm": "base",
+   "settled": false,
+   "settledNote": "no",
+   "durationSeconds": 360.06953469999996,
+   "functionalPass": true,
+   "probeFunctionalPass": false,
+   "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/a4123307/deathride/tools/ability-stick-probe.mjs:128:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+   "rounds": 6,
+   "hostCpu": {
+    "host-cpu-start.json": {
+     "utc": "2026-10-09T02:02:35.3363247Z",
+     "totalPercentSamples": [
+      52,
+      78,
+      58
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#17",
+       157
+      ],
+      [
+       "node#21",
+       147
+      ],
+      [
+       "node#27",
+       100
+      ],
+      [
+       "node#7",
+       100
+      ],
+      [
+       "grep#46",
+       95
+      ]
+     ]
+    },
+    "host-cpu-end.json": {
+     "utc": "2026-10-09T02:08:46.6334930Z",
+     "totalPercentSamples": [
+      50,
+      62,
+      89
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#21",
+       141
+      ],
+      [
+       "node#38",
+       132
+      ],
+      [
+       "node#17",
+       127
+      ],
+      [
+       "node#33",
+       122
+      ],
+      [
+       "node#7",
+       99
+      ]
+     ]
+    }
+   },
+   "ownedTextureMiB": {
+    "max": 39.97,
+    "min": 39.97,
+    "summaryMax": 39.9697265625,
+    "fontMiBMax": 5.0,
+    "windows": 292
+   },
+   "glMtrackMiB": {
+    "line": "GL mtrack",
+    "max": 52.23,
+    "min": 51.97,
+    "samples": 8,
+    "graphicsSummaryMax": 52.23,
+    "eglMtrackRows": 0
+   },
+   "pss": {
+    "minMiB": 157.47,
+    "maxMiB": 175.22,
+    "samples": 8,
+    "peakSecond": 205.3,
+    "lowestSecond": 360.1,
+    "peakBreakdownMiB": {
+     "Java Heap": 61.5,
+     "Native Heap": 11.87,
+     "Code": 27.11,
+     "Stack": 1.53,
+     "Graphics": 52.11,
+     "Private Other": 7.88,
+     "System": 13.24,
+     "pss Dalvik Heap": 55.53,
+     "pss Dalvik Other": 5.19,
+     "pss GL mtrack": 52.11,
+     "pss Native Heap": 11.96,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.43,
+     "TOTAL PSS": 175.22
+    },
+    "lowestBreakdownMiB": {
+     "Java Heap": 55.35,
+     "Native Heap": 11.31,
+     "Code": 14.61,
+     "Stack": 1.46,
+     "Graphics": 52.09,
+     "Private Other": 7.54,
+     "System": 15.11,
+     "pss Dalvik Heap": 53.54,
+     "pss Dalvik Other": 4.9,
+     "pss GL mtrack": 52.09,
+     "pss Native Heap": 11.38,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.33,
+     "TOTAL PSS": 157.47
+    }
+   },
+   "hud": {
+    "activeFrames": 18988,
+    "hudMsMean": 1.22,
+    "hudMsP95": 1.9023,
+    "hudFlushesMean": 3.0,
+    "hudFlushesCounts": {
+     "3": 18988
+    },
+    "hudDrawsMean": 6.0,
+    "drawCallsMean": 18.091,
+    "textureBindsMean": 12.164,
+    "workMsMean": 10.8508,
+    "cpuMsMean": 7.6557
+   },
+   "allocation": {
+    "MBps": 2.2625,
+    "gcCount": 31,
+    "gcTimeMs": 2895
+   },
+   "guards": {
+    "activeFrames": 18982,
+    "over33": 102,
+    "worstActiveWindowP95Ms": 37.116923,
+    "activeMaxMs": 97.22384600000001,
+    "pooledActiveP95Ms": 20.011,
+    "rejectedInputs": [
+     5,
+     6
+    ]
+   }
+  },
+  {
+   "run": "cut-run1",
+   "apkSha256": "522b73c14a669868595b1546abe7d765d4dd53acea556e4babc889e0f3aefa89",
+   "arm": "cut",
+   "settled": false,
+   "settledNote": "no (no wait)",
+   "durationSeconds": 360.0382158,
+   "functionalPass": true,
+   "probeFunctionalPass": false,
+   "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/a4123307/deathride/tools/ability-stick-probe.mjs:128:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+   "rounds": 6,
+   "hostCpu": {
+    "host-cpu-start.json": {
+     "utc": "2026-10-09T02:10:03.5937117Z",
+     "totalPercentSamples": [
+      98,
+      100,
+      95
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "msedgewebview2#27",
+       215
+      ],
+      [
+       "node#33",
+       123
+      ],
+      [
+       "node#36",
+       96
+      ],
+      [
+       "svchost#72",
+       96
+      ],
+      [
+       "node#17",
+       91
+      ]
+     ]
+    },
+    "host-cpu-end.json": {
+     "utc": "2026-10-09T02:16:20.3366510Z",
+     "totalPercentSamples": [
+      100,
+      100,
+      100
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#47",
+       175
+      ],
+      [
+       "node#50",
+       142
+      ],
+      [
+       "node#56",
+       100
+      ],
+      [
+       "svchost#72",
+       92
+      ],
+      [
+       "node#51",
+       92
+      ]
+     ]
+    }
+   },
+   "ownedTextureMiB": {
+    "max": 36.97,
+    "min": 36.97,
+    "summaryMax": 36.9697265625,
+    "fontMiBMax": 2.0,
+    "windows": 300
+   },
+   "glMtrackMiB": {
+    "line": "GL mtrack",
+    "max": 49.06,
+    "min": 48.88,
+    "samples": 8,
+    "graphicsSummaryMax": 49.06,
+    "eglMtrackRows": 0
+   },
+   "pss": {
+    "minMiB": 151.06,
+    "maxMiB": 164.96,
+    "samples": 8,
+    "peakSecond": 338.5,
+    "lowestSecond": 206.0,
+    "peakBreakdownMiB": {
+     "Java Heap": 69.5,
+     "Native Heap": 10.06,
+     "Code": 17.06,
+     "Stack": 1.49,
+     "Graphics": 49.04,
+     "Private Other": 7.89,
+     "System": 9.93,
+     "pss Dalvik Heap": 63.62,
+     "pss Dalvik Other": 5.37,
+     "pss GL mtrack": 49.04,
+     "pss Native Heap": 10.11,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.37,
+     "TOTAL PSS": 164.96
+    },
+    "lowestBreakdownMiB": {
+     "Java Heap": 56.08,
+     "Native Heap": 10.24,
+     "Code": 16.83,
+     "Stack": 1.43,
+     "Graphics": 49.05,
+     "Private Other": 7.56,
+     "System": 9.87,
+     "pss Dalvik Heap": 50.2,
+     "pss Dalvik Other": 5.05,
+     "pss GL mtrack": 49.05,
+     "pss Native Heap": 10.29,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.37,
+     "TOTAL PSS": 151.06
+    }
+   },
+   "hud": {
+    "activeFrames": 19008,
+    "hudMsMean": 1.1643,
+    "hudMsP95": 1.8692,
+    "hudFlushesMean": 2.0,
+    "hudFlushesCounts": {
+     "2": 19008
+    },
+    "hudDrawsMean": 5.0,
+    "drawCallsMean": 17.769,
+    "textureBindsMean": 11.824,
+    "workMsMean": 10.5287,
+    "cpuMsMean": 7.7478
+   },
+   "allocation": {
+    "MBps": 2.1695,
+    "gcCount": 32,
+    "gcTimeMs": 2821
+   },
+   "guards": {
+    "activeFrames": 19002,
+    "over33": 130,
+    "worstActiveWindowP95Ms": 26.326769,
+    "activeMaxMs": 100.308923,
+    "pooledActiveP95Ms": 19.75,
+    "rejectedInputs": [
+     4,
+     4
+    ]
+   }
+  },
+  {
+   "run": "base-run2",
+   "apkSha256": "9253fc9fcaf569d31311608e11a24ed5de32bd4b492f2801d4ff33cebe6ede6e",
+   "arm": "base",
+   "settled": false,
+   "settledNote": "no (no wait)",
+   "durationSeconds": 360.1033566,
+   "functionalPass": true,
+   "probeFunctionalPass": true,
+   "error": null,
+   "rounds": 6,
+   "hostCpu": {
+    "host-cpu-start.json": {
+     "utc": "2026-10-09T02:17:36.2023888Z",
+     "totalPercentSamples": [
+      99,
+      94,
+      71
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#38",
+       95
+      ],
+      [
+       "svchost#72",
+       86
+      ],
+      [
+       "node#51",
+       73
+      ],
+      [
+       "grep#46",
+       69
+      ],
+      [
+       "node#7",
+       69
+      ]
+     ]
+    },
+    "host-cpu-end.json": {
+     "utc": "2026-10-09T02:23:50.0217583Z",
+     "totalPercentSamples": [
+      100,
+      100,
+      100
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "msedgewebview2#27",
+       149
+      ],
+      [
+       "node#47",
+       98
+      ],
+      [
+       "node#46",
+       89
+      ],
+      [
+       "dwm",
+       89
+      ],
+      [
+       "node#43",
+       85
+      ]
+     ]
+    }
+   },
+   "ownedTextureMiB": {
+    "max": 39.97,
+    "min": 39.97,
+    "summaryMax": 39.9697265625,
+    "fontMiBMax": 5.0,
+    "windows": 292
+   },
+   "glMtrackMiB": {
+    "line": "GL mtrack",
+    "max": 52.2,
+    "min": 51.91,
+    "samples": 8,
+    "graphicsSummaryMax": 52.2,
+    "eglMtrackRows": 0
+   },
+   "pss": {
+    "minMiB": 172.46,
+    "maxMiB": 185.24,
+    "samples": 8,
+    "peakSecond": 337.1,
+    "lowestSecond": 0,
+    "peakBreakdownMiB": {
+     "Java Heap": 68.3,
+     "Native Heap": 10.86,
+     "Code": 32.75,
+     "Stack": 1.45,
+     "Graphics": 52.19,
+     "Private Other": 7.99,
+     "System": 11.71,
+     "pss Dalvik Heap": 62.32,
+     "pss Dalvik Other": 5.39,
+     "pss GL mtrack": 52.19,
+     "pss Native Heap": 10.94,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.38,
+     "TOTAL PSS": 185.24
+    },
+    "lowestBreakdownMiB": {
+     "Java Heap": 56.7,
+     "Native Heap": 9.24,
+     "Code": 34.55,
+     "Stack": 0.97,
+     "Graphics": 51.91,
+     "Private Other": 7.95,
+     "System": 11.14,
+     "pss Dalvik Heap": 50.74,
+     "pss Dalvik Other": 4.2,
+     "pss GL mtrack": 51.91,
+     "pss Native Heap": 9.32,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.38,
+     "TOTAL PSS": 172.46
+    }
+   },
+   "hud": {
+    "activeFrames": 19050,
+    "hudMsMean": 1.2446,
+    "hudMsP95": 1.753,
+    "hudFlushesMean": 3.0,
+    "hudFlushesCounts": {
+     "3": 19050
+    },
+    "hudDrawsMean": 6.0,
+    "drawCallsMean": 18.339,
+    "textureBindsMean": 12.41,
+    "workMsMean": 10.9166,
+    "cpuMsMean": 7.8158
+   },
+   "allocation": {
+    "MBps": 2.2828,
+    "gcCount": 33,
+    "gcTimeMs": 2360
+   },
+   "guards": {
+    "activeFrames": 19044,
+    "over33": 87,
+    "worstActiveWindowP95Ms": 27.268461000000002,
+    "activeMaxMs": 65.539615,
+    "pooledActiveP95Ms": 19.231,
+    "rejectedInputs": [
+     0,
+     0
+    ]
+   }
+  },
+  {
+   "run": "cut-run2",
+   "apkSha256": "522b73c14a669868595b1546abe7d765d4dd53acea556e4babc889e0f3aefa89",
+   "arm": "cut",
+   "settled": false,
+   "settledNote": "no (no wait)",
+   "durationSeconds": 360.1109756,
+   "functionalPass": true,
+   "probeFunctionalPass": true,
+   "error": null,
+   "rounds": 6,
+   "hostCpu": {
+    "host-cpu-start.json": {
+     "utc": "2026-10-09T02:25:05.1946786Z",
+     "totalPercentSamples": [
+      55,
+      32,
+      70
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#36",
+       120
+      ],
+      [
+       "node#7",
+       80
+      ],
+      [
+       "svchost#72",
+       66
+      ],
+      [
+       "bash#56",
+       62
+      ],
+      [
+       "node#38",
+       44
+      ]
+     ]
+    },
+    "host-cpu-end.json": {
+     "utc": "2026-10-09T02:31:15.6211715Z",
+     "totalPercentSamples": [
+      81,
+      50,
+      63
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#17",
+       161
+      ],
+      [
+       "node#29",
+       147
+      ],
+      [
+       "node#7",
+       101
+      ],
+      [
+       "node#36",
+       32
+      ],
+      [
+       "WmiPrvSE#2",
+       23
+      ]
+     ]
+    }
+   },
+   "ownedTextureMiB": {
+    "max": 36.97,
+    "min": 36.97,
+    "summaryMax": 36.9697265625,
+    "fontMiBMax": 2.0,
+    "windows": 295
+   },
+   "glMtrackMiB": {
+    "line": "GL mtrack",
+    "max": 49.07,
+    "min": 48.92,
+    "samples": 8,
+    "graphicsSummaryMax": 49.07,
+    "eglMtrackRows": 0
+   },
+   "pss": {
+    "minMiB": 178.24,
+    "maxMiB": 195.19,
+    "samples": 8,
+    "peakSecond": 336.4,
+    "lowestSecond": 3.8,
+    "peakBreakdownMiB": {
+     "Java Heap": 74.75,
+     "Native Heap": 10.75,
+     "Code": 39.3,
+     "Stack": 1.43,
+     "Graphics": 49.04,
+     "Private Other": 7.86,
+     "System": 12.05,
+     "pss Dalvik Heap": 68.73,
+     "pss Dalvik Other": 5.13,
+     "pss GL mtrack": 49.04,
+     "pss Native Heap": 10.84,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.38,
+     "TOTAL PSS": 195.19
+    },
+    "lowestBreakdownMiB": {
+     "Java Heap": 58.7,
+     "Native Heap": 9.91,
+     "Code": 40.06,
+     "Stack": 1.36,
+     "Graphics": 48.97,
+     "Private Other": 7.79,
+     "System": 11.45,
+     "pss Dalvik Heap": 52.68,
+     "pss Dalvik Other": 4.23,
+     "pss GL mtrack": 48.97,
+     "pss Native Heap": 10.0,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.38,
+     "TOTAL PSS": 178.24
+    }
+   },
+   "hud": {
+    "activeFrames": 19028,
+    "hudMsMean": 1.1337,
+    "hudMsP95": 1.8218,
+    "hudFlushesMean": 2.0,
+    "hudFlushesCounts": {
+     "2": 19028
+    },
+    "hudDrawsMean": 5.0,
+    "drawCallsMean": 17.308,
+    "textureBindsMean": 11.361,
+    "workMsMean": 10.2234,
+    "cpuMsMean": 7.5722
+   },
+   "allocation": {
+    "MBps": 2.2313,
+    "gcCount": 33,
+    "gcTimeMs": 2636
+   },
+   "guards": {
+    "activeFrames": 19022,
+    "over33": 79,
+    "worstActiveWindowP95Ms": 26.339000000000002,
+    "activeMaxMs": 78.33438500000001,
+    "pooledActiveP95Ms": 19.205,
+    "rejectedInputs": [
+     0,
+     0
+    ]
+   }
+  }
+ ],
+ "verdict": {
+  "baseRuns": [
+   "base-run1",
+   "base-run2"
+  ],
+  "cutRuns": [
+   "cut-run1",
+   "cut-run2"
+  ],
+  "fontPageTest": {
+   "green": true,
+   "suite": "dev.deathride.game.FontPageTest",
+   "tests": 4,
+   "failures": 0,
+   "errors": 0,
+   "skipped": 0,
+   "timestamp": "2026-10-09T01:22:31.405Z",
+   "file": "TEST-dev.deathride.game.FontPageTest.xml"
+  },
+  "ownedTextureMiB": {
+   "base": [
+    39.97,
+    39.97
+   ],
+   "cut": [
+    36.97,
+    36.97
+   ],
+   "requiredCutBelowBothBaseBy": 2.5,
+   "pass": true
+  },
+  "glMtrackMiB": {
+   "line": "GL mtrack",
+   "base": [
+    52.23,
+    52.2
+   ],
+   "cut": [
+    49.06,
+    49.07
+   ],
+   "bothCutBelowBothBase": true
+  },
+  "guards": {
+   "over33": {
+    "base": [
+     102,
+     87
+    ],
+    "cut": [
+     130,
+     79
+    ],
+    "worse": false
+   },
+   "worstActiveWindowP95Ms": {
+    "base": [
+     37.116923,
+     27.268461000000002
+    ],
+    "cut": [
+     26.326769,
+     26.339000000000002
+    ],
+    "worse": false
+   },
+   "hudMsMean": {
+    "base": [
+     1.22,
+     1.2446
+    ],
+    "cut": [
+     1.1643,
+     1.1337
+    ],
+    "worse": false
+   },
+   "rejectedInputs": {
+    "base": [
+     11,
+     0
+    ],
+    "cut": [
+     8,
+     0
+    ],
+    "worse": false
+   }
+  },
+  "allSettled": false,
+  "guardsAre": "applied; readings are research (unsettled)",
+  "keep": true,
+  "keepWhy": "kept: FontPageTest green, owned textures at least 2.5 MiB lower and GL mtrack lower in both cut runs than both base runs, no guard worse",
+  "reported": {
+   "hudMsP95": {
+    "base": [
+     1.9023,
+     1.753
+    ],
+    "cut": [
+     1.8692,
+     1.8218
+    ]
+   },
+   "hudFlushesMean": {
+    "base": [
+     3.0,
+     3.0
+    ],
+    "cut": [
+     2.0,
+     2.0
+    ]
+   }
+  },
+  "pss": {
+   "maxMiB": {
+    "base": [
+     175.22,
+     185.24
+    ],
+    "cut": [
+     164.96,
+     195.19
+    ]
+   },
+   "minMiB": {
+    "base": [
+     157.47,
+     172.46
+    ],
+    "cut": [
+     151.06,
+     178.24
+    ]
+   },
+   "bothCutMaxBelowBothBase": false
+  },
+  "pssGrade": "not graded (unsettled): to the next goal-1 soak"
+ }
+}

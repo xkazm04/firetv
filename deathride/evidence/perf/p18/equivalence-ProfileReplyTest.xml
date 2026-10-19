@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.deathride.link.ProfileReplyTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-10-08T23:50:24.371Z" hostname="KAZIHO" time="3.258">
+  <properties/>
+  <testcase name="traceJsonIsThePreP18Text()" classname="dev.deathride.link.ProfileReplyTest" time="0.203"/>
+  <testcase name="replyBytesAreTheUtf8OfThePreP18Text()" classname="dev.deathride.link.ProfileReplyTest" time="1.694"/>
+  <testcase name="servedProfileIsTheOldRouteByteForByte()" classname="dev.deathride.link.ProfileReplyTest" time="0.971"/>
+  <testcase name="theReplyIsReusedAndTrimmedAndTheFreeListBounded()" classname="dev.deathride.link.ProfileReplyTest" time="0.037"/>
+  <testcase name="aWarmReplyAllocatesNoReplySizedText()" classname="dev.deathride.link.ProfileReplyTest" time="0.346"/>
+  <system-out><![CDATA[profile served bytes=1530169 type=application/json query= accept=null
+profile served bytes=1530169 type=application/json query= accept=gzip, deflate
+profile served bytes=1530169 type=application/json query= accept=gzip
+profile served bytes=1530169 type=application/json query=?frames=0&inputs=0 accept=null
+profile served bytes=1530169 type=application/json query=?frames=0&inputs=0 accept=gzip, deflate
+profile served bytes=1530169 type=application/json query=?frames=0&inputs=0 accept=gzip
+profile served bytes=261811 type=application/json query=?frames=3600&inputs=4000 accept=null
+profile served bytes=261811 type=application/json query=?frames=3600&inputs=4000 accept=gzip, deflate
+profile served bytes=261811 type=application/json query=?frames=3600&inputs=4000 accept=gzip
+profile served bytes=1073 type=application/json query=?frames=4200&inputs=5000 accept=null
+profile served bytes=1073 type=application/json query=?frames=4200&inputs=5000 accept=gzip, deflate
+profile served bytes=1073 type=application/json query=?frames=4200&inputs=5000 accept=gzip
+profile served bytes=1530169 type=application/json query=?frames=x&inputs=-3 accept=null
+profile served bytes=1530169 type=application/json query=?frames=x&inputs=-3 accept=gzip, deflate
+profile served bytes=1530169 type=application/json query=?frames=x&inputs=-3 accept=gzip
+profile reply bytes=225034 per warm read: reply=2951312 floor=2950320 (row copies 235200) pre-P18=5264088; above the floor: reply 992, pre-P18 2313768
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

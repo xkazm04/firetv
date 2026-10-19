@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T17:34:38.5229064Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "node#58",
+                             "IDProcess":  32312,
+                             "PercentProcessorTime":  360
+                         },
+                         {
+                             "Name":  "node#61",
+                             "IDProcess":  44620,
+                             "PercentProcessorTime":  317
+                         },
+                         {
+                             "Name":  "node#37",
+                             "IDProcess":  45812,
+                             "PercentProcessorTime":  158
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  111
+                         },
+                         {
+                             "Name":  "com.docker.backend#1",
+                             "IDProcess":  16696,
+                             "PercentProcessorTime":  94
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  12836,
+                             "PercentProcessorTime":  94
+                         },
+                         {
+                             "Name":  "node#63",
+                             "IDProcess":  22052,
+                             "PercentProcessorTime":  60
+                         },
+                         {
+                             "Name":  "bash#111",
+                             "IDProcess":  27236,
+                             "PercentProcessorTime":  55
+                         },
+                         {
+                             "Name":  "node#52",
+                             "IDProcess":  38760,
+                             "PercentProcessorTime":  51
+                         },
+                         {
+                             "Name":  "logioptionsplus_agent",
+                             "IDProcess":  10956,
+                             "PercentProcessorTime":  42
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                89,
+                                73,
+                                91
+                            ]
+}

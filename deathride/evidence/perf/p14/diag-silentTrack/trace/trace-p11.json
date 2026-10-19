@@ -1,0 +1,234 @@
+{
+  "source": "C:/Users/kazda/kiro/deathride-raw-evidence/p14/diag-silentTrack-trace/trace.txt.gz",
+  "glThread": {
+    "tid": 16201,
+    "name": "GLThread 50038"
+  },
+  "frames": 530,
+  "spanSeconds": 9.668,
+  "intervalsOver": {
+    "16.7": 261,
+    "20": 45,
+    "25": 30,
+    "33": 18,
+    "50": 8
+  },
+  "wholeSpanMs": {
+    "preemptedMs": 700.9,
+    "runningMs": 5966.7,
+    "sleepMs": 2441.1,
+    "wakeupLatencyMs": 558.9
+  },
+  "concurrentGc": {
+    "count": 1,
+    "totalMs": 72.6
+  },
+  "networkStatsPolls": {
+    "count": 2,
+    "seconds": [
+      0.31,
+      7.03
+    ],
+    "durationsMs": [
+      731,
+      688
+    ],
+    "shareOfSpan": 0.147
+  },
+  "slow": {
+    "over20Ms": {
+      "frames": 45,
+      "meanIntervalMs": 36.949,
+      "meanMs": {
+        "runningMs": 14.277,
+        "preemptedMs": 6.816,
+        "wakeupLatencyMs": 10.064,
+        "sleepMs": 5.792
+      },
+      "duringConcurrentGc": 2,
+      "insideNetworkStatsPoll": 18,
+      "preemptedByMs": {
+        "AudioOut_D (nice -19)": 134.3,
+        "writer (nice -19)": 75.9,
+        "Binder:424_": 22.7,
+        "kworker/0:": 11.0,
+        "app (RT)": 8.3,
+        "NetworkStats": 7.3,
+        "surfaceflinger (RT)": 7.2,
+        "TimerDispatch (RT)": 6.1,
+        "servicemanager": 5.8,
+        "hif_thread (nice -10)": 5.2,
+        "rcu_preempt": 4.1,
+        "kworker/u8:": 3.3
+      },
+      "waitingInSectionMs": {
+        "queueBuffer": 293.9,
+        "dequeueBuffer": 134.5,
+        "DR.carsEffects": 97.2,
+        "(none)": 84.9,
+        "DR.simulation": 50.4,
+        "DR.sceneryDraw": 36.0,
+        "DR.hud": 26.7,
+        "DR.clear": 11.8,
+        "DR.telemetry": 5.1,
+        "eglSwapBuffers": 4.2
+      },
+      "sleepBySectionAndWakerMs": {
+        "queueBuffer <- ?": 78.2,
+        "queueBuffer <- Binder:424_": 76.3,
+        "dequeueBuffer <- Binder:424_": 40.4,
+        "queueBuffer <- .deathride.perf": 22.2,
+        "(none) <- .deathride.perf": 10.9,
+        "Lock contention on thread list lock (owner tid: 16987) <- DefaultDispatch": 9.2,
+        "(none) <- Binder:424_": 8.3,
+        "queueBuffer <- <...>": 5.3,
+        "Lock contention on large object map space lock (owner tid: 16180) <- <...>": 3.0,
+        "dequeueBuffer <- ?": 2.9,
+        "dequeueBuffer <- <...>": 2.5,
+        "(none) <- DefaultDispatch": 0.5
+      },
+      "waitingMs": 759.6,
+      "whileWaitingSomeCpuIdleMs": 472.2,
+      "whileWaitingAnyCpuHeldByMs": {
+        "DefaultDispatch (nice 13)": 393.2,
+        "AudioOut_D (nice -19)": 338.0,
+        "writer (nice -19)": 272.6,
+        "NetworkStats": 158.4,
+        "surfaceflinger (RT)": 67.3,
+        "kswapd": 54.6,
+        "Jit thread pool": 27.6,
+        "Binder:424_": 26.9,
+        "hif_thread (nice -10)": 24.2,
+        "GLThread": 22.9,
+        "composer@2.1-se (RT)": 19.4,
+        ".deathride.perf (nice -10)": 17.2,
+        "main_thread (nice -10)": 17.0,
+        "kworker/0:": 13.4
+      }
+    },
+    "over33Ms": {
+      "frames": 18,
+      "meanIntervalMs": 55.104,
+      "meanMs": {
+        "runningMs": 14.094,
+        "preemptedMs": 7.736,
+        "wakeupLatencyMs": 23.448,
+        "sleepMs": 9.827
+      },
+      "duringConcurrentGc": 0,
+      "insideNetworkStatsPoll": 3,
+      "preemptedByMs": {
+        "AudioOut_D (nice -19)": 87.4,
+        "writer (nice -19)": 22.7,
+        "Binder:424_": 20.1,
+        "kworker/0:": 1.8,
+        "kworker/u8:": 1.4,
+        "m.amazon.tv.ime (nice -10)": 1.3,
+        "TimerDispatch (RT)": 1.1,
+        "app (RT)": 0.9,
+        "sf (RT)": 0.5,
+        "hif_thread (nice -10)": 0.3,
+        "rcu_preempt": 0.2,
+        "Thread (nice -10)": 0.2
+      },
+      "waitingInSectionMs": {
+        "queueBuffer": 260.3,
+        "dequeueBuffer": 120.6,
+        "(none)": 69.3,
+        "DR.carsEffects": 61.3,
+        "DR.sceneryDraw": 14.6,
+        "DR.hud": 12.1,
+        "DR.simulation": 10.8,
+        "DR.telemetry": 3.6,
+        "DR.clear": 2.4,
+        "eglSwapBuffers": 2.3
+      },
+      "sleepBySectionAndWakerMs": {
+        "queueBuffer <- ?": 73.0,
+        "queueBuffer <- Binder:424_": 48.2,
+        "queueBuffer <- .deathride.perf": 22.2,
+        "dequeueBuffer <- Binder:424_": 17.6,
+        "(none) <- Binder:424_": 8.3,
+        "(none) <- .deathride.perf": 3.1,
+        "dequeueBuffer <- ?": 2.9,
+        "queueBuffer <- <...>": 1.5,
+        "dequeueBuffer <- <...>": 0.2,
+        "DR.hud <- ?": 0.0,
+        "DR.sceneryDraw <- GLThread": 0.0
+      },
+      "waitingMs": 561.3,
+      "whileWaitingSomeCpuIdleMs": 370.9,
+      "whileWaitingAnyCpuHeldByMs": {
+        "AudioOut_D (nice -19)": 241.9,
+        "DefaultDispatch (nice 13)": 235.5,
+        "writer (nice -19)": 170.7,
+        "NetworkStats": 80.7,
+        "surfaceflinger (RT)": 43.7,
+        "kswapd": 24.7,
+        "Binder:424_": 19.6,
+        "GLThread": 15.7,
+        "composer@2.1-se (RT)": 12.7,
+        "hif_thread (nice -10)": 11.4,
+        "Jit thread pool": 11.4,
+        ".deathride.perf (nice -10)": 9.6,
+        "main_thread (nice -10)": 9.1,
+        "TimerDispatch (RT)": 7.0
+      }
+    }
+  },
+  "highPriorityThreads": [
+    {
+      "thread": "AudioOut_D",
+      "tid": 683,
+      "process": "AudioOut_D",
+      "prio": 101,
+      "cpuPercentOfOneCore": 46.3,
+      "switchInsPerSecond": 15684,
+      "meanSliceUs": 29.5
+    },
+    {
+      "thread": "writer",
+      "tid": 783,
+      "process": "writer",
+      "prio": 101,
+      "cpuPercentOfOneCore": 43.8,
+      "switchInsPerSecond": 15474,
+      "meanSliceUs": 28.3
+    },
+    {
+      "thread": "surfaceflinger",
+      "tid": 424,
+      "process": "surfaceflinger",
+      "prio": 97,
+      "cpuPercentOfOneCore": 8.3,
+      "switchInsPerSecond": 237,
+      "meanSliceUs": 350.9
+    }
+  ],
+  "cpuPercentOfOneCoreByProcess": {
+    ".deathride.perf (16165)": 111.6,
+    "AudioOut_D (421)": 46.3,
+    "writer (388)": 43.8,
+    "surfaceflinger (424)": 16.8,
+    "Binder:695_3 (695)": 12.3,
+    "kswapd0 (127)": 3.7,
+    "composer@2.1-se (366)": 2.5,
+    "hif_thread (1099)": 2.4,
+    "main_thread (1098)": 1.7,
+    "m.amazon.tv.ime (1382)": 1.4,
+    "pvr_defer_free (168)": 1.4,
+    "kworker/0:1 (15342)": 1.2
+  },
+  "cpuPercentOfOneCoreByThread": {
+    "GLThread (16165)": 4.0,
+    "AudioOut_D (421)": 46.3,
+    "writer (388)": 43.8,
+    "NetworkStats (695)": 11.8,
+    "surfaceflinger (424)": 8.3,
+    "kswapd (127)": 3.7,
+    "DefaultDispatch (16165)": 2.6,
+    "Binder:424_ (424)": 3.1,
+    "Jit thread pool (16165)": 2.8
+  },
+  "limits": "Bounded intrusive trace (atrace with app sections); tracing adds work to every phase. Frames are DR.requests to DR.requests on the GL thread, whatever the phase. Preempted time is charged to the task that took the GL thread's CPU (the GL thread may later run elsewhere); sleep to the section open at switch-out and the task that woke it; wakeup latency is the wait from that wakeup until it runs. Occupancy sums the CPU-ms of every other task on any CPU while the GL thread waited. NetworkStats polls are inferred from that thread's CPU bursts."
+}

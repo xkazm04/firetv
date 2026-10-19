@@ -51,7 +51,7 @@ class DeathDuelTest {
         File("build/reports/campaign/q2-fixture.sav").apply{parentFile.mkdirs();writeText(ProfileCodec.encode(p))}
         File("build/reports/campaign/q2-guest.sav").writeText(ProfileCodec.encode(Profile("campaign-guest-q2").also{it.inventory=3}))
         DeathDuel.seize(p);val revision=p.marketRevision;DeathDuel.seize(p);assertEquals(revision,p.marketRevision)
-        assertTrue(DeathDuel.story(p).lines[0].contains(CarCatalog.all[seized].id))
+        assertEquals(AshStory.cards.getValue("crown-7").lines,DeathDuel.story(p).lines) // scripted card shows the chained car; the seizure scene names the clause
         val reload=ProfileCodec.decode(ProfileCodec.encode(p),p.id)
         assertEquals(ProfileCodec.encode(p),ProfileCodec.encode(reload));assertEquals(seized,reload.campaign.seizedCar)
         val ticket=Economy.start(p);assertEquals(3,p.inventory);assertEquals(0,p.raceItems)

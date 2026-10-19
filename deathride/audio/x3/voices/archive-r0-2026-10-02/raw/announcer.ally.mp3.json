@@ -1,0 +1,35 @@
+{
+  "id": "6aad4475-d4ac-406a-8950-66c14467603e",
+  "ts": "2026-10-02T21:52:13.946Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/x3/voices/raw/announcer.ally.mp3",
+  "seconds": null,
+  "request": {
+    "text": "A beaten rival. A new ally. Their backing keeps you on the road.",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.55,
+      "similarity_boost": 0.75,
+      "style": 0.3,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/N2lVS1w4EtoT3dr4eOWO",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 64,
+  "budgetCharge": 64,
+  "creditsBefore": 23873,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 81964,
+  "providerCredits": 64,
+  "sha256": "a5603b556fc1888cfd7b1b8fb27d7c11d81b99064d072e1b41ef575d166db507",
+  "completedAt": "2026-10-02T21:52:23.973Z",
+  "creditsAfter": 23873,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5646
+}

@@ -1,0 +1,32 @@
+{
+  "driveNumbers": {
+    "padWidthPx": 428,
+    "looseTravelPx": 47.5,
+    "up49": 0.5,
+    "down30": 0.3548387096774194,
+    "right24": 0.5052631578947369,
+    "packetsPerSecondAt250HzMoves": 60
+  },
+  "browser": "Chromium headless, 896 x 414, mobile touch emulation; not a physical phone",
+  "checks": [
+    "two browser contexts pair",
+    "simultaneous steer + throttle via CDP touch",
+    "release steer holds gas",
+    "release gas clears throttle",
+    "Drive default; pad UP analog GO; pad DOWN analog BRAKE; steer at doubled sensitivity; diagonal; release coasts",
+    "pad held + DRIFT + FIRE + MINE register together (3 and 4 touches); DRIFT releases alone",
+    "Drive geometry: pad left, right-hand controls >=72 px, no overlaps, FIRE/DRIFT largest; mirror",
+    "uplink capped at 250 Hz of moves",
+    "reload reclaims original car",
+    "start/countdown/race",
+    "phone white and one TV flash",
+    "lobby command",
+    "zero page exceptions"
+  ],
+  "capabilities": {
+    "secureContext": true,
+    "wakeLock": true,
+    "fullscreen": true
+  },
+  "errors": []
+}

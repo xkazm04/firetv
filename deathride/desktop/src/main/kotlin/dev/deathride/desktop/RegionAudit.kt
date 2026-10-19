@@ -71,7 +71,7 @@ class RegionAudit: ApplicationAdapter() {
                 shape.projectionMatrix=matrix;shape.begin(ShapeRenderer.ShapeType.Filled);scene.drawRoadMarks(shape)
                 if(mode==2)for(c in world.cars)painter.draw(shape,c,c.x.toFloat(),c.y.toFloat(),c.heading,Color.WHITE,false)
                 shape.end()
-                if(mode!=2){batch.begin();for(c in world.cars){val id=c.carClass!!.id;val key=art.carKey(id,1f,false,c.id)?:continue;val spec=CarShapes.forId(id);art.car(batch,key,c.x.toFloat(),c.y.toFloat(),spec.lengthM.toFloat(),spec.widthM.toFloat(),c.heading,Color.WHITE,false)};batch.end()}
+                if(mode!=2){batch.begin();for(c in world.cars){val id=c.carClass!!.id;val key=art.carKey(id,1f,false,c.id)?:continue;val spec=CarShapes.forId(id);art.car(batch,key,c.x.toFloat(),c.y.toFloat(),spec.lengthM.toFloat(),spec.widthM.toFloat(),c.heading)};batch.end()}
                 Gdx.gl.glEnable(GL20.GL_BLEND);Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA)
                 shape.projectionMatrix=matrix.setToOrtho2D(0f,0f,w,h);shape.begin(ShapeRenderer.ShapeType.Filled);weather.draw(shape,w,h);shape.end()
             }

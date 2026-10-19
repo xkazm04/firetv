@@ -1,0 +1,228 @@
+{
+  "schema": 1,
+  "generated": "2026-10-15T10:56:38.026636+00:00",
+  "stage": "proof",
+  "provider": "agy",
+  "model": "gemini-3.8-flash-high",
+  "owner_approved": false,
+  "runtime_enabled": false,
+  "images_reserved_this_pilot": 3,
+  "pilot_cap": 30,
+  "results": [
+    {
+      "id": "mount-rivet-needle-v1",
+      "source_sha256": "b92335d99954b0fc39d54fb0e6aef1d064b73db82d34a441c64f720644efdbb9",
+      "processed_sha256": "d7517f5e3b2af7e7a46c897160b9fa174d7fc9c7754c3782bf08f8a46d2ab8fe",
+      "verdict": "owner-review",
+      "codes": [],
+      "metrics": {
+        "foreground_fraction": 0.0893564224243164,
+        "margin_fraction": 0.0908203125,
+        "aspect": 2.931407942238267,
+        "bounds_px": [
+          119,
+          368,
+          931,
+          645
+        ],
+        "palette_p90_delta_e": 11.26056723709797,
+        "magenta_key": true,
+        "components": 1
+      },
+      "placement": {
+        "source_bounds_px": [
+          119,
+          368,
+          931,
+          645
+        ],
+        "source_pivot_px": [
+          525.0,
+          506.5
+        ],
+        "pivot_px": [
+          64.0,
+          31.5
+        ],
+        "cell_px": [
+          128,
+          64
+        ],
+        "subject_px": [
+          120,
+          41
+        ],
+        "scale": 0.1477832512315271,
+        "world_length_m": null,
+        "gutter_px": 4,
+        "filter": "Linear",
+        "mipmaps": false,
+        "export_cell_limit_px": 128
+      }
+    },
+    {
+      "id": "mount-rivet-bastion-v1",
+      "source_sha256": "60c31cf8e241fa98206fbed95b65e20b8cf858fcc3462d76f360dceeb0e82f7f",
+      "processed_sha256": "b6e5bef19fc2c0e00ae4a9d256e1fc76fd608de8084d5eebe08c903ec8302d00",
+      "verdict": "owner-review",
+      "codes": [],
+      "metrics": {
+        "foreground_fraction": 0.09086132049560547,
+        "margin_fraction": 0.1171875,
+        "aspect": 2.6654804270462633,
+        "bounds_px": [
+          155,
+          360,
+          904,
+          641
+        ],
+        "palette_p90_delta_e": 10.853731345112859,
+        "magenta_key": true,
+        "components": 1
+      },
+      "placement": {
+        "source_bounds_px": [
+          155,
+          360,
+          904,
+          641
+        ],
+        "source_pivot_px": [
+          529.5,
+          500.5
+        ],
+        "pivot_px": [
+          64.0,
+          31.5
+        ],
+        "cell_px": [
+          128,
+          64
+        ],
+        "subject_px": [
+          120,
+          45
+        ],
+        "scale": 0.1602136181575434,
+        "world_length_m": null,
+        "gutter_px": 4,
+        "filter": "Linear",
+        "mipmaps": false,
+        "export_cell_limit_px": 128
+      }
+    },
+    {
+      "id": "mount-rivet-comet-v1",
+      "source_sha256": "adccb399b64fcd711e920cdeee3595aaaaf6877cc9e60562d8734b97295cda94",
+      "processed_sha256": "da372ee16031209a6d2ca21b4a3ac943011d218baa83c5bc5ed60bf136f11dd5",
+      "verdict": "owner-review",
+      "codes": [],
+      "metrics": {
+        "foreground_fraction": 0.19365215301513672,
+        "margin_fraction": 0.0859375,
+        "aspect": 1.927107061503417,
+        "bounds_px": [
+          90,
+          225,
+          936,
+          664
+        ],
+        "palette_p90_delta_e": 10.111404950352998,
+        "magenta_key": true,
+        "components": 1
+      },
+      "placement": {
+        "source_bounds_px": [
+          90,
+          225,
+          936,
+          664
+        ],
+        "source_pivot_px": [
+          513.0,
+          444.5
+        ],
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "subject_px": [
+          120,
+          62
+        ],
+        "scale": 0.14184397163120568,
+        "world_length_m": null,
+        "gutter_px": 4,
+        "filter": "Linear",
+        "mipmaps": false,
+        "export_cell_limit_px": 128
+      }
+    }
+  ],
+  "overlay_geometry": [
+    {
+      "class_": "Needle",
+      "L": 6.6,
+      "W": 3.0,
+      "mounts": [
+        [
+          "0.22",
+          "0.2",
+          "0.15"
+        ],
+        [
+          "0.22",
+          "-0.2",
+          "0.15"
+        ]
+      ]
+    },
+    {
+      "class_": "Bastion",
+      "L": 9.3,
+      "W": 4.65,
+      "mounts": [
+        [
+          "0.28",
+          "0.22",
+          "0.12"
+        ],
+        [
+          "0.28",
+          "-0.22",
+          "0.12"
+        ]
+      ]
+    },
+    {
+      "class_": "Comet",
+      "L": 9.0,
+      "W": 3.5,
+      "mounts": [
+        [
+          "0.26",
+          "0.1",
+          "0.13"
+        ],
+        [
+          "0.26",
+          "-0.1",
+          "0.13"
+        ]
+      ]
+    }
+  ],
+  "sheet": {
+    "path": "art/mount-pilot/proof-sheet.png",
+    "sha256": "05570c539adc8a82a060b8c1c2151dd7866dd68aaa3833fbbbab06b46a3b65b8"
+  },
+  "attempts": {
+    "mount-rivet-needle-v1": 1,
+    "mount-rivet-bastion-v1": 1,
+    "mount-rivet-comet-v1": 1
+  }
+}

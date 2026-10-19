@@ -1,0 +1,2026 @@
+{
+ "rule": "Fixed before the first P21 graded run. Arms, each a dev.deathride.perf debug APK built by the same command (gradlew.bat :app:assembleDebug -PappId=dev.deathride.perf \"-PappLabel=Death Ride Perf\" -PracePort=8772) and checked with aapt badging before any install: base (the base commit, deathride/main 4f05315e code), c14 (card 14 alone) and c15 (cards 14 and 15). Six profiled 360 s runs on the default sound arm (no audioArm extra), P18's arm and procedure (perf-device.py --install --profile --seconds 360, its default /routes warm-up and five-course cycle), interleaved base, c14, c15, base, c14, c15. No heap dump, no allocation tracker and no forced GC in any graded run. Settle (P13g's settle.ps1, unchanged: 60 consecutive 1 s samples under 60%): at most two 900 s waits before the first run; if the first run does not settle, the other five run without waits and the six are research for the host-sensitive lines; if it settles, each later run also tries at most two waits. A run is void, and rerun once, when its probe fails functionally (rounds or input rate; perf-p19.py's functional test) or its installed APK is not its arm's built APK; rejected inputs are recorded and do not void a run. Nothing is graded on fewer than two functional runs of an arm. Survivors: the usedMB of every logged full (non-young) concurrent copying GC with over 30 MB surviving, read with perf-p18-gc.py's LINE from the run's logcat.txt, grouped by round: round k holds the GCs logged after the k-th \"transition raceLaunch\" line and before the next (round 0, before the first race, is reported and not graded). A round is graded for a pair of arms when every run of both arms logged at least one such GC in it. Guards (P19's): active frames over 33 ms, the worst active-window p95 and rejected inputs. A guard is worse only when both runs of the arm read above (higher than) both runs it is compared with. The track transition (card 15 only): for rounds 1-5, the \"transition track\" totalMs and the totalMs of the \"transition configureWorld\" line logged just before it (the pick's own configureWorld), both read from the rounds' preparation (the lines before raceLaunch k); per run the guard reads the max over rounds 1-5 of each, and the per-round values are reported. Card 14 is kept when: its served-bytes tests are green (RoutesReplyTest unchanged and the two-request test, JUnit results with tests and no failure, error or skip) AND in every graded round both c14 runs' lowest survivors read at least 12 MB below both base runs' lowest AND at least one round is graded AND no guard is worse against base. Otherwise it is declined and reverted by git revert. Card 15 is kept when: its tests are green (RoutesReplyTest unchanged, so the /routes body is byte-identical, and the kept-courses test) AND in every graded round both c15 runs' lowest survivors read at least 10 MB below both runs' lowest of the arm it is compared with AND at least one round is graded AND no guard is worse, the track transition included. It is compared with c14 when card 14 is kept, and with base when card 14 is declined. PSS max is reported for every run and graded only on a settled pair (all runs of both arms settled); then it passes when both runs of the card's arm read a lower PSS max than both runs it is compared with. On any unsettled run PSS is reported and not graded; its grade goes to the goal-1 soak (P22). routes-warmup seconds are reported, not graded.",
+ "apks": {
+  "base": "840bc7b06df91bd024bd1178fe75a4a9eb8c1b4d08f882838fdf4f29af0b8256",
+  "c14": "bc2222561d6caf4d325c2ae4a27e1f0dc945f14cac5498fc2bc694a5dabb04b1",
+  "c15": "e191b04ce76a937930a9c78a9019fceba1e50d42a18c9fc61cb5b2524b29e640"
+ },
+ "runs": [
+  {
+   "run": "base-run1",
+   "apkSha256": "840bc7b06df91bd024bd1178fe75a4a9eb8c1b4d08f882838fdf4f29af0b8256",
+   "arm": "base",
+   "settled": false,
+   "settledNote": "no",
+   "durationSeconds": 360.1177452,
+   "functionalPass": true,
+   "probeFunctionalPass": true,
+   "error": null,
+   "rounds": 6,
+   "hostCpu": {
+    "host-cpu-start.json": {
+     "utc": "2026-10-09T08:34:14.5978567Z",
+     "totalPercentSamples": [
+      78,
+      100,
+      94
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#18",
+       165
+      ],
+      [
+       "node#12",
+       165
+      ],
+      [
+       "node#27",
+       139
+      ],
+      [
+       "node#26",
+       130
+      ],
+      [
+       "node#4",
+       100
+      ]
+     ]
+    },
+    "host-cpu-end.json": {
+     "utc": "2026-10-09T08:40:46.6900949Z",
+     "totalPercentSamples": [
+      100,
+      100,
+      100
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#91",
+       162
+      ],
+      [
+       "node#85",
+       104
+      ],
+      [
+       "node#83",
+       100
+      ],
+      [
+       "svchost#72",
+       96
+      ],
+      [
+       "node#92",
+       88
+      ]
+     ]
+    }
+   },
+   "ownedTextureMiB": {
+    "max": 36.97,
+    "min": 36.97,
+    "summaryMax": 36.9697265625,
+    "fontMiBMax": 2.0,
+    "windows": 299
+   },
+   "glMtrackMiB": {
+    "line": "GL mtrack",
+    "max": 49.09,
+    "min": 48.87,
+    "samples": 8,
+    "graphicsSummaryMax": 49.09,
+    "eglMtrackRows": 0
+   },
+   "pss": {
+    "minMiB": 157.1,
+    "maxMiB": 166.28,
+    "samples": 8,
+    "peakSecond": 360.1,
+    "lowestSecond": 3.7,
+    "peakBreakdownMiB": {
+     "Java Heap": 64.05,
+     "Native Heap": 9.48,
+     "Code": 21.05,
+     "Stack": 1.29,
+     "Graphics": 49.06,
+     "Private Other": 7.19,
+     "System": 14.16,
+     "pss Dalvik Heap": 62.17,
+     "pss Dalvik Other": 4.88,
+     "pss GL mtrack": 49.06,
+     "pss Native Heap": 9.56,
+     "pss Ashmem": 4.72,
+     "pss Unknown": 0.26,
+     "TOTAL PSS": 166.28
+    },
+    "lowestBreakdownMiB": {
+     "Java Heap": 50.9,
+     "Native Heap": 9.54,
+     "Code": 30.05,
+     "Stack": 1.35,
+     "Graphics": 48.87,
+     "Private Other": 7.61,
+     "System": 8.79,
+     "pss Dalvik Heap": 44.96,
+     "pss Dalvik Other": 4.12,
+     "pss GL mtrack": 48.87,
+     "pss Native Heap": 9.62,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.37,
+     "TOTAL PSS": 157.1
+    }
+   },
+   "hud": {
+    "activeFrames": 18986,
+    "hudMsMean": 1.1287,
+    "hudMsP95": 1.7871,
+    "hudFlushesMean": 2.0,
+    "hudFlushesCounts": {
+     "2": 18986
+    },
+    "hudDrawsMean": 5.0,
+    "drawCallsMean": 17.733,
+    "textureBindsMean": 11.791,
+    "workMsMean": 10.9651,
+    "cpuMsMean": 7.6891
+   },
+   "allocation": {
+    "MBps": 2.221,
+    "gcCount": 31,
+    "gcTimeMs": 2858
+   },
+   "guards": {
+    "activeFrames": 18980,
+    "over33": 107,
+    "worstActiveWindowP95Ms": 27.195615,
+    "activeMaxMs": 72.070077,
+    "pooledActiveP95Ms": 19.666,
+    "rejectedInputs": [
+     0,
+     0
+    ]
+   },
+   "raceLaunches": 6,
+   "fullGcs": 11,
+   "survivorsPerRound": {
+    "1": {
+     "lowestMB": 49,
+     "highestMB": 49,
+     "gcs": 1
+    },
+    "2": {
+     "lowestMB": 50,
+     "highestMB": 50,
+     "gcs": 1
+    },
+    "3": {
+     "lowestMB": 52,
+     "highestMB": 54,
+     "gcs": 3
+    },
+    "4": {
+     "lowestMB": 55,
+     "highestMB": 55,
+     "gcs": 2
+    },
+    "5": {
+     "lowestMB": 58,
+     "highestMB": 58,
+     "gcs": 3
+    },
+    "6": {
+     "lowestMB": 58,
+     "highestMB": 58,
+     "gcs": 1
+    }
+   },
+   "headroomMB": [
+    24
+   ],
+   "transition": {
+    "1": {
+     "trackMs": [
+      10.227077
+     ],
+     "configureWorldMs": [
+      10.025154
+     ],
+     "course": [
+      "scrap-1-c"
+     ],
+     "changed": [
+      false
+     ]
+    },
+    "2": {
+     "trackMs": [
+      65.105
+     ],
+     "configureWorldMs": [
+      64.824231
+     ],
+     "course": [
+      "foundry-1-c"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "3": {
+     "trackMs": [
+      27.908538
+     ],
+     "configureWorldMs": [
+      27.649308
+     ],
+     "course": [
+      "salt-1-b"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "4": {
+     "trackMs": [
+      24.139462
+     ],
+     "configureWorldMs": [
+      23.882538
+     ],
+     "course": [
+      "switchback-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "5": {
+     "trackMs": [
+      24.175077
+     ],
+     "configureWorldMs": [
+      23.926539
+     ],
+     "course": [
+      "crown-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    }
+   },
+   "trackMsMax": 65.105,
+   "configureWorldMsMax": 64.824231,
+   "transitionRoundsRead": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "routesWarmup": {
+    "seconds": 15.817173999967054,
+    "bytes": 17540089,
+    "limit": "One untimed-out GET before the probe; includes LAN transfer."
+   }
+  },
+  {
+   "run": "c14-run1",
+   "apkSha256": "bc2222561d6caf4d325c2ae4a27e1f0dc945f14cac5498fc2bc694a5dabb04b1",
+   "arm": "c14",
+   "settled": false,
+   "settledNote": "no (no wait)",
+   "durationSeconds": 360.2260593,
+   "functionalPass": true,
+   "probeFunctionalPass": false,
+   "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/2b60edfb/deathride/tools/ability-stick-probe.mjs:128:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+   "rounds": 6,
+   "hostCpu": {
+    "host-cpu-start.json": {
+     "utc": "2026-10-09T08:42:44.4199678Z",
+     "totalPercentSamples": [
+      100,
+      99,
+      96
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#12",
+       149
+      ],
+      [
+       "node#18",
+       137
+      ],
+      [
+       "node#58",
+       101
+      ],
+      [
+       "claude#13",
+       101
+      ],
+      [
+       "claude#8",
+       101
+      ]
+     ]
+    },
+    "host-cpu-end.json": {
+     "utc": "2026-10-09T08:49:05.7906067Z",
+     "totalPercentSamples": [
+      100,
+      89,
+      85
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#12",
+       179
+      ],
+      [
+       "node#16",
+       136
+      ],
+      [
+       "node#4",
+       102
+      ],
+      [
+       "svchost#72",
+       98
+      ],
+      [
+       "cl",
+       93
+      ]
+     ]
+    }
+   },
+   "ownedTextureMiB": {
+    "max": 36.97,
+    "min": 36.97,
+    "summaryMax": 36.9697265625,
+    "fontMiBMax": 2.0,
+    "windows": 299
+   },
+   "glMtrackMiB": {
+    "line": "GL mtrack",
+    "max": 49.12,
+    "min": 48.91,
+    "samples": 8,
+    "graphicsSummaryMax": 49.12,
+    "eglMtrackRows": 0
+   },
+   "pss": {
+    "minMiB": 140.92,
+    "maxMiB": 164.88,
+    "samples": 8,
+    "peakSecond": 360.2,
+    "lowestSecond": 0,
+    "peakBreakdownMiB": {
+     "Java Heap": 56.37,
+     "Native Heap": 10.67,
+     "Code": 30.63,
+     "Stack": 1.43,
+     "Graphics": 48.92,
+     "Private Other": 7.8,
+     "System": 9.06,
+     "pss Dalvik Heap": 50.38,
+     "pss Dalvik Other": 5.12,
+     "pss GL mtrack": 48.92,
+     "pss Native Heap": 10.74,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.4,
+     "TOTAL PSS": 164.88
+    },
+    "lowestBreakdownMiB": {
+     "Java Heap": 31.03,
+     "Native Heap": 9.66,
+     "Code": 33.09,
+     "Stack": 1.02,
+     "Graphics": 48.91,
+     "Private Other": 7.77,
+     "System": 9.45,
+     "pss Dalvik Heap": 25.09,
+     "pss Dalvik Other": 3.99,
+     "pss GL mtrack": 48.91,
+     "pss Native Heap": 9.73,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.39,
+     "TOTAL PSS": 140.92
+    }
+   },
+   "hud": {
+    "activeFrames": 19043,
+    "hudMsMean": 1.1197,
+    "hudMsP95": 1.7648,
+    "hudFlushesMean": 2.0,
+    "hudFlushesCounts": {
+     "2": 19043
+    },
+    "hudDrawsMean": 5.0,
+    "drawCallsMean": 17.639,
+    "textureBindsMean": 11.699,
+    "workMsMean": 10.5472,
+    "cpuMsMean": 7.6154
+   },
+   "allocation": {
+    "MBps": 2.2346,
+    "gcCount": 31,
+    "gcTimeMs": 3100
+   },
+   "guards": {
+    "activeFrames": 19037,
+    "over33": 103,
+    "worstActiveWindowP95Ms": 26.034539,
+    "activeMaxMs": 73.39099999999999,
+    "pooledActiveP95Ms": 19.376,
+    "rejectedInputs": [
+     3,
+     3
+    ]
+   },
+   "raceLaunches": 6,
+   "fullGcs": 13,
+   "survivorsPerRound": {
+    "1": {
+     "lowestMB": 31,
+     "highestMB": 32,
+     "gcs": 3
+    },
+    "2": {
+     "lowestMB": 32,
+     "highestMB": 32,
+     "gcs": 1
+    },
+    "3": {
+     "lowestMB": 35,
+     "highestMB": 35,
+     "gcs": 2
+    },
+    "4": {
+     "lowestMB": 37,
+     "highestMB": 40,
+     "gcs": 4
+    },
+    "5": {
+     "lowestMB": 40,
+     "highestMB": 40,
+     "gcs": 2
+    },
+    "6": {
+     "lowestMB": 40,
+     "highestMB": 40,
+     "gcs": 1
+    }
+   },
+   "headroomMB": [
+    24
+   ],
+   "transition": {
+    "1": {
+     "trackMs": [
+      9.613923
+     ],
+     "configureWorldMs": [
+      9.406154
+     ],
+     "course": [
+      "scrap-1-c"
+     ],
+     "changed": [
+      false
+     ]
+    },
+    "2": {
+     "trackMs": [
+      78.222462
+     ],
+     "configureWorldMs": [
+      77.959154
+     ],
+     "course": [
+      "foundry-1-c"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "3": {
+     "trackMs": [
+      26.988307
+     ],
+     "configureWorldMs": [
+      26.747616
+     ],
+     "course": [
+      "salt-1-b"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "4": {
+     "trackMs": [
+      25.383462
+     ],
+     "configureWorldMs": [
+      24.914615
+     ],
+     "course": [
+      "switchback-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "5": {
+     "trackMs": [
+      24.976692
+     ],
+     "configureWorldMs": [
+      24.729461
+     ],
+     "course": [
+      "crown-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    }
+   },
+   "trackMsMax": 78.222462,
+   "configureWorldMsMax": 77.959154,
+   "transitionRoundsRead": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "routesWarmup": {
+    "seconds": 16.52525379997678,
+    "bytes": 17540089,
+    "limit": "One untimed-out GET before the probe; includes LAN transfer."
+   }
+  },
+  {
+   "run": "c15-run1",
+   "apkSha256": "e191b04ce76a937930a9c78a9019fceba1e50d42a18c9fc61cb5b2524b29e640",
+   "arm": "c15",
+   "settled": false,
+   "settledNote": "no (no wait)",
+   "durationSeconds": 360.1608686,
+   "functionalPass": true,
+   "probeFunctionalPass": true,
+   "error": null,
+   "rounds": 6,
+   "hostCpu": {
+    "host-cpu-start.json": {
+     "utc": "2026-10-09T08:50:47.8604799Z",
+     "totalPercentSamples": [
+      100,
+      100,
+      85
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#54",
+       150
+      ],
+      [
+       "node#12",
+       130
+      ],
+      [
+       "chrome#49",
+       126
+      ],
+      [
+       "node#16",
+       126
+      ],
+      [
+       "node#66",
+       98
+      ]
+     ]
+    },
+    "host-cpu-end.json": {
+     "utc": "2026-10-09T08:57:09.7020001Z",
+     "totalPercentSamples": [
+      99,
+      100,
+      100
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "chrome#42",
+       161
+      ],
+      [
+       "chrome#38",
+       74
+      ],
+      [
+       "node#22",
+       74
+      ],
+      [
+       "node#49",
+       66
+      ],
+      [
+       "node#55",
+       62
+      ]
+     ]
+    }
+   },
+   "ownedTextureMiB": {
+    "max": 36.97,
+    "min": 36.97,
+    "summaryMax": 36.9697265625,
+    "fontMiBMax": 2.0,
+    "windows": 299
+   },
+   "glMtrackMiB": {
+    "line": "GL mtrack",
+    "max": 48.99,
+    "min": 48.92,
+    "samples": 8,
+    "graphicsSummaryMax": 48.99,
+    "eglMtrackRows": 0
+   },
+   "pss": {
+    "minMiB": 139.28,
+    "maxMiB": 158.31,
+    "samples": 8,
+    "peakSecond": 338.2,
+    "lowestSecond": 3.8,
+    "peakBreakdownMiB": {
+     "Java Heap": 40.75,
+     "Native Heap": 10.42,
+     "Code": 38.38,
+     "Stack": 1.52,
+     "Graphics": 48.92,
+     "Private Other": 8.04,
+     "System": 10.27,
+     "pss Dalvik Heap": 34.79,
+     "pss Dalvik Other": 5.22,
+     "pss GL mtrack": 48.92,
+     "pss Native Heap": 10.52,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.41,
+     "TOTAL PSS": 158.31
+    },
+    "lowestBreakdownMiB": {
+     "Java Heap": 19.91,
+     "Native Heap": 9.56,
+     "Code": 41.5,
+     "Stack": 1.31,
+     "Graphics": 48.92,
+     "Private Other": 7.84,
+     "System": 10.24,
+     "pss Dalvik Heap": 13.94,
+     "pss Dalvik Other": 4.21,
+     "pss GL mtrack": 48.92,
+     "pss Native Heap": 9.66,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.41,
+     "TOTAL PSS": 139.28
+    }
+   },
+   "hud": {
+    "activeFrames": 18917,
+    "hudMsMean": 1.5894,
+    "hudMsP95": 2.2846,
+    "hudFlushesMean": 2.0,
+    "hudFlushesCounts": {
+     "2": 18917
+    },
+    "hudDrawsMean": 5.0,
+    "drawCallsMean": 17.288,
+    "textureBindsMean": 11.364,
+    "workMsMean": 11.272,
+    "cpuMsMean": 8.579
+   },
+   "allocation": {
+    "MBps": 2.2129,
+    "gcCount": 39,
+    "gcTimeMs": 3459
+   },
+   "guards": {
+    "activeFrames": 18911,
+    "over33": 135,
+    "worstActiveWindowP95Ms": 30.138308,
+    "activeMaxMs": 80.926231,
+    "pooledActiveP95Ms": 20.643,
+    "rejectedInputs": [
+     0,
+     0
+    ]
+   },
+   "raceLaunches": 6,
+   "fullGcs": 0,
+   "survivorsPerRound": {},
+   "headroomMB": [],
+   "transition": {
+    "1": {
+     "trackMs": [
+      20.364769
+     ],
+     "configureWorldMs": [
+      20.074154
+     ],
+     "course": [
+      "scrap-1-c"
+     ],
+     "changed": [
+      false
+     ]
+    },
+    "2": {
+     "trackMs": [
+      58.29577
+     ],
+     "configureWorldMs": [
+      58.007769
+     ],
+     "course": [
+      "foundry-1-c"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "3": {
+     "trackMs": [
+      27.110923
+     ],
+     "configureWorldMs": [
+      26.846615
+     ],
+     "course": [
+      "salt-1-b"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "4": {
+     "trackMs": [
+      25.189846
+     ],
+     "configureWorldMs": [
+      24.890846
+     ],
+     "course": [
+      "switchback-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "5": {
+     "trackMs": [
+      25.512616
+     ],
+     "configureWorldMs": [
+      25.259769
+     ],
+     "course": [
+      "crown-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    }
+   },
+   "trackMsMax": 58.29577,
+   "configureWorldMsMax": 58.007769,
+   "transitionRoundsRead": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "routesWarmup": {
+    "seconds": 21.795605199993588,
+    "bytes": 17540089,
+    "limit": "One untimed-out GET before the probe; includes LAN transfer."
+   }
+  },
+  {
+   "run": "base-run2",
+   "apkSha256": "840bc7b06df91bd024bd1178fe75a4a9eb8c1b4d08f882838fdf4f29af0b8256",
+   "arm": "base",
+   "settled": false,
+   "settledNote": "no (no wait)",
+   "durationSeconds": 360.0577775,
+   "functionalPass": true,
+   "probeFunctionalPass": false,
+   "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/2b60edfb/deathride/tools/ability-stick-probe.mjs:128:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+   "rounds": 6,
+   "hostCpu": {
+    "host-cpu-start.json": {
+     "utc": "2026-10-09T08:58:20.6028362Z",
+     "totalPercentSamples": [
+      100,
+      100,
+      100
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "headless_shell#4",
+       114
+      ],
+      [
+       "node#58",
+       106
+      ],
+      [
+       "node#55",
+       90
+      ],
+      [
+       "SearchIndexer",
+       82
+      ],
+      [
+       "node#4",
+       78
+      ]
+     ]
+    },
+    "host-cpu-end.json": {
+     "utc": "2026-10-09T09:04:37.5352132Z",
+     "totalPercentSamples": [
+      100,
+      100,
+      100
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "svchost#72",
+       95
+      ],
+      [
+       "node#54",
+       91
+      ],
+      [
+       "node#58",
+       78
+      ],
+      [
+       "bash#112",
+       74
+      ],
+      [
+       "WmiPrvSE",
+       74
+      ]
+     ]
+    }
+   },
+   "ownedTextureMiB": {
+    "max": 36.97,
+    "min": 36.97,
+    "summaryMax": 36.9697265625,
+    "fontMiBMax": 2.0,
+    "windows": 299
+   },
+   "glMtrackMiB": {
+    "line": "GL mtrack",
+    "max": 49.09,
+    "min": 48.89,
+    "samples": 8,
+    "graphicsSummaryMax": 49.09,
+    "eglMtrackRows": 0
+   },
+   "pss": {
+    "minMiB": 148.33,
+    "maxMiB": 180.85,
+    "samples": 8,
+    "peakSecond": 71.1,
+    "lowestSecond": 360.1,
+    "peakBreakdownMiB": {
+     "Java Heap": 61.61,
+     "Native Heap": 10.37,
+     "Code": 40.21,
+     "Stack": 1.45,
+     "Graphics": 49.05,
+     "Private Other": 7.95,
+     "System": 10.2,
+     "pss Dalvik Heap": 55.65,
+     "pss Dalvik Other": 4.96,
+     "pss GL mtrack": 49.05,
+     "pss Native Heap": 10.47,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.41,
+     "TOTAL PSS": 180.85
+    },
+    "lowestBreakdownMiB": {
+     "Java Heap": 55.39,
+     "Native Heap": 6.22,
+     "Code": 13.82,
+     "Stack": 1.18,
+     "Graphics": 49.04,
+     "Private Other": 4.64,
+     "System": 18.04,
+     "pss Dalvik Heap": 53.76,
+     "pss Dalvik Other": 4.96,
+     "pss GL mtrack": 49.04,
+     "pss Native Heap": 6.3,
+     "pss Ashmem": 1.87,
+     "pss Unknown": 0.19,
+     "TOTAL PSS": 148.33
+    }
+   },
+   "hud": {
+    "activeFrames": 18961,
+    "hudMsMean": 1.1415,
+    "hudMsP95": 1.8502,
+    "hudFlushesMean": 2.0,
+    "hudFlushesCounts": {
+     "2": 18961
+    },
+    "hudDrawsMean": 5.0,
+    "drawCallsMean": 17.91,
+    "textureBindsMean": 11.967,
+    "workMsMean": 10.6244,
+    "cpuMsMean": 7.5495
+   },
+   "allocation": {
+    "MBps": 2.2339,
+    "gcCount": 31,
+    "gcTimeMs": 2597
+   },
+   "guards": {
+    "activeFrames": 18955,
+    "over33": 129,
+    "worstActiveWindowP95Ms": 38.979307,
+    "activeMaxMs": 84.618,
+    "pooledActiveP95Ms": 19.76,
+    "rejectedInputs": [
+     11,
+     12
+    ]
+   },
+   "raceLaunches": 6,
+   "fullGcs": 9,
+   "survivorsPerRound": {
+    "1": {
+     "lowestMB": 48,
+     "highestMB": 48,
+     "gcs": 1
+    },
+    "3": {
+     "lowestMB": 52,
+     "highestMB": 52,
+     "gcs": 3
+    },
+    "4": {
+     "lowestMB": 55,
+     "highestMB": 55,
+     "gcs": 3
+    },
+    "5": {
+     "lowestMB": 57,
+     "highestMB": 57,
+     "gcs": 2
+    }
+   },
+   "headroomMB": [
+    24
+   ],
+   "transition": {
+    "1": {
+     "trackMs": [
+      23.182385
+     ],
+     "configureWorldMs": [
+      22.962846
+     ],
+     "course": [
+      "scrap-1-c"
+     ],
+     "changed": [
+      false
+     ]
+    },
+    "2": {
+     "trackMs": [
+      60.159385
+     ],
+     "configureWorldMs": [
+      59.949384
+     ],
+     "course": [
+      "foundry-1-c"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "3": {
+     "trackMs": [
+      26.304
+     ],
+     "configureWorldMs": [
+      26.101308
+     ],
+     "course": [
+      "salt-1-b"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "4": {
+     "trackMs": [
+      30.285077
+     ],
+     "configureWorldMs": [
+      30.020615
+     ],
+     "course": [
+      "switchback-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "5": {
+     "trackMs": [
+      24.139154
+     ],
+     "configureWorldMs": [
+      23.921616
+     ],
+     "course": [
+      "crown-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    }
+   },
+   "trackMsMax": 60.159385,
+   "configureWorldMsMax": 59.949384,
+   "transitionRoundsRead": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "routesWarmup": {
+    "seconds": 10.564015500014648,
+    "bytes": 17540089,
+    "limit": "One untimed-out GET before the probe; includes LAN transfer."
+   }
+  },
+  {
+   "run": "c14-run2",
+   "apkSha256": "bc2222561d6caf4d325c2ae4a27e1f0dc945f14cac5498fc2bc694a5dabb04b1",
+   "arm": "c14",
+   "settled": false,
+   "settledNote": "no (no wait)",
+   "durationSeconds": 360.0420357,
+   "functionalPass": true,
+   "probeFunctionalPass": true,
+   "error": null,
+   "rounds": 6,
+   "hostCpu": {
+    "host-cpu-start.json": {
+     "utc": "2026-10-09T09:06:18.2118596Z",
+     "totalPercentSamples": [
+      100,
+      100,
+      100
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "MsMpEng",
+       143
+      ],
+      [
+       "node#12",
+       119
+      ],
+      [
+       "node#57",
+       111
+      ],
+      [
+       "svchost#72",
+       98
+      ],
+      [
+       "node#52",
+       78
+      ]
+     ]
+    },
+    "host-cpu-end.json": {
+     "utc": "2026-10-09T09:12:35.8196703Z",
+     "totalPercentSamples": [
+      100,
+      100,
+      100
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#57",
+       521
+      ],
+      [
+       "headless_shell#7",
+       122
+      ],
+      [
+       "node#12",
+       105
+      ],
+      [
+       "node#4",
+       93
+      ],
+      [
+       "MsMpEng",
+       85
+      ]
+     ]
+    }
+   },
+   "ownedTextureMiB": {
+    "max": 36.97,
+    "min": 36.97,
+    "summaryMax": 36.9697265625,
+    "fontMiBMax": 2.0,
+    "windows": 296
+   },
+   "glMtrackMiB": {
+    "line": "GL mtrack",
+    "max": 49.13,
+    "min": 48.91,
+    "samples": 8,
+    "graphicsSummaryMax": 49.13,
+    "eglMtrackRows": 0
+   },
+   "pss": {
+    "minMiB": 132.31,
+    "maxMiB": 153.14,
+    "samples": 8,
+    "peakSecond": 205.0,
+    "lowestSecond": 0,
+    "peakBreakdownMiB": {
+     "Java Heap": 49.84,
+     "Native Heap": 10.24,
+     "Code": 24.17,
+     "Stack": 1.48,
+     "Graphics": 49.12,
+     "Private Other": 7.94,
+     "System": 10.35,
+     "pss Dalvik Heap": 43.91,
+     "pss Dalvik Other": 5.33,
+     "pss GL mtrack": 49.12,
+     "pss Native Heap": 10.32,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.37,
+     "TOTAL PSS": 153.14
+    },
+    "lowestBreakdownMiB": {
+     "Java Heap": 30.17,
+     "Native Heap": 8.89,
+     "Code": 25.53,
+     "Stack": 0.95,
+     "Graphics": 48.91,
+     "Private Other": 7.56,
+     "System": 10.31,
+     "pss Dalvik Heap": 24.24,
+     "pss Dalvik Other": 3.82,
+     "pss GL mtrack": 48.91,
+     "pss Native Heap": 8.96,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.37,
+     "TOTAL PSS": 132.31
+    }
+   },
+   "hud": {
+    "activeFrames": 19063,
+    "hudMsMean": 1.1466,
+    "hudMsP95": 1.6581,
+    "hudFlushesMean": 2.0,
+    "hudFlushesCounts": {
+     "2": 19063
+    },
+    "hudDrawsMean": 5.0,
+    "drawCallsMean": 17.821,
+    "textureBindsMean": 11.885,
+    "workMsMean": 10.1328,
+    "cpuMsMean": 7.6525
+   },
+   "allocation": {
+    "MBps": 2.2654,
+    "gcCount": 38,
+    "gcTimeMs": 2173
+   },
+   "guards": {
+    "activeFrames": 19057,
+    "over33": 84,
+    "worstActiveWindowP95Ms": 25.325077,
+    "activeMaxMs": 75.748231,
+    "pooledActiveP95Ms": 18.913,
+    "rejectedInputs": [
+     0,
+     0
+    ]
+   },
+   "raceLaunches": 6,
+   "fullGcs": 2,
+   "survivorsPerRound": {
+    "4": {
+     "lowestMB": 37,
+     "highestMB": 37,
+     "gcs": 1
+    },
+    "5": {
+     "lowestMB": 40,
+     "highestMB": 40,
+     "gcs": 1
+    }
+   },
+   "headroomMB": [
+    24
+   ],
+   "transition": {
+    "1": {
+     "trackMs": [
+      9.336307
+     ],
+     "configureWorldMs": [
+      9.180923
+     ],
+     "course": [
+      "scrap-1-c"
+     ],
+     "changed": [
+      false
+     ]
+    },
+    "2": {
+     "trackMs": [
+      67.728923
+     ],
+     "configureWorldMs": [
+      67.309385
+     ],
+     "course": [
+      "foundry-1-c"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "3": {
+     "trackMs": [
+      28.844769
+     ],
+     "configureWorldMs": [
+      28.639616
+     ],
+     "course": [
+      "salt-1-b"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "4": {
+     "trackMs": [
+      27.513846
+     ],
+     "configureWorldMs": [
+      27.265231
+     ],
+     "course": [
+      "switchback-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "5": {
+     "trackMs": [
+      32.438846
+     ],
+     "configureWorldMs": [
+      32.193692
+     ],
+     "course": [
+      "crown-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    }
+   },
+   "trackMsMax": 67.728923,
+   "configureWorldMsMax": 67.309385,
+   "transitionRoundsRead": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "routesWarmup": {
+    "seconds": 9.660620299982838,
+    "bytes": 17540089,
+    "limit": "One untimed-out GET before the probe; includes LAN transfer."
+   }
+  },
+  {
+   "run": "c15-run2",
+   "apkSha256": "e191b04ce76a937930a9c78a9019fceba1e50d42a18c9fc61cb5b2524b29e640",
+   "arm": "c15",
+   "settled": false,
+   "settledNote": "no (no wait)",
+   "durationSeconds": 360.14906160000004,
+   "functionalPass": true,
+   "probeFunctionalPass": true,
+   "error": null,
+   "rounds": 6,
+   "hostCpu": {
+    "host-cpu-start.json": {
+     "utc": "2026-10-09T09:14:10.3746096Z",
+     "totalPercentSamples": [
+      100,
+      100,
+      99
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#12",
+       145
+      ],
+      [
+       "node#16",
+       135
+      ],
+      [
+       "node#20",
+       131
+      ],
+      [
+       "node#24",
+       117
+      ],
+      [
+       "node#31",
+       117
+      ]
+     ]
+    },
+    "host-cpu-end.json": {
+     "utc": "2026-10-09T09:20:20.8187063Z",
+     "totalPercentSamples": [
+      100,
+      100,
+      97
+     ],
+     "logicalProcessors": 16,
+     "top": [
+      [
+       "node#50",
+       146
+      ],
+      [
+       "node#12",
+       138
+      ],
+      [
+       "node#52",
+       130
+      ],
+      [
+       "node#24",
+       113
+      ],
+      [
+       "node#29",
+       100
+      ]
+     ]
+    }
+   },
+   "ownedTextureMiB": {
+    "max": 36.97,
+    "min": 36.97,
+    "summaryMax": 36.9697265625,
+    "fontMiBMax": 2.0,
+    "windows": 287
+   },
+   "glMtrackMiB": {
+    "line": "GL mtrack",
+    "max": 49.16,
+    "min": 48.86,
+    "samples": 8,
+    "graphicsSummaryMax": 49.16,
+    "eglMtrackRows": 0
+   },
+   "pss": {
+    "minMiB": 137.01,
+    "maxMiB": 152.62,
+    "samples": 8,
+    "peakSecond": 360.1,
+    "lowestSecond": 4.0,
+    "peakBreakdownMiB": {
+     "Java Heap": 39.37,
+     "Native Heap": 10.79,
+     "Code": 30.67,
+     "Stack": 1.6,
+     "Graphics": 49.07,
+     "Private Other": 7.79,
+     "System": 13.34,
+     "pss Dalvik Heap": 33.43,
+     "pss Dalvik Other": 5.15,
+     "pss GL mtrack": 49.07,
+     "pss Native Heap": 10.88,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.37,
+     "TOTAL PSS": 152.62
+    },
+    "lowestBreakdownMiB": {
+     "Java Heap": 19.19,
+     "Native Heap": 10.81,
+     "Code": 36.97,
+     "Stack": 1.53,
+     "Graphics": 48.86,
+     "Private Other": 7.76,
+     "System": 11.89,
+     "pss Dalvik Heap": 13.23,
+     "pss Dalvik Other": 4.16,
+     "pss GL mtrack": 48.86,
+     "pss Native Heap": 10.92,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.37,
+     "TOTAL PSS": 137.01
+    }
+   },
+   "hud": {
+    "activeFrames": 18125,
+    "hudMsMean": 1.2123,
+    "hudMsP95": 2.1553,
+    "hudFlushesMean": 2.0,
+    "hudFlushesCounts": {
+     "2": 18125
+    },
+    "hudDrawsMean": 5.0,
+    "drawCallsMean": 17.495,
+    "textureBindsMean": 11.558,
+    "workMsMean": 11.4323,
+    "cpuMsMean": 7.8638
+   },
+   "allocation": {
+    "MBps": 2.1302,
+    "gcCount": 37,
+    "gcTimeMs": 4289
+   },
+   "guards": {
+    "activeFrames": 18119,
+    "over33": 241,
+    "worstActiveWindowP95Ms": 34.455692000000006,
+    "activeMaxMs": 79.165385,
+    "pooledActiveP95Ms": 22.869,
+    "rejectedInputs": [
+     0,
+     0
+    ]
+   },
+   "raceLaunches": 6,
+   "fullGcs": 0,
+   "survivorsPerRound": {},
+   "headroomMB": [],
+   "transition": {
+    "1": {
+     "trackMs": [
+      14.477385
+     ],
+     "configureWorldMs": [
+      14.241538
+     ],
+     "course": [
+      "scrap-1-c"
+     ],
+     "changed": [
+      false
+     ]
+    },
+    "2": {
+     "trackMs": [
+      60.980846
+     ],
+     "configureWorldMs": [
+      60.661308
+     ],
+     "course": [
+      "foundry-1-c"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "3": {
+     "trackMs": [
+      37.763924
+     ],
+     "configureWorldMs": [
+      37.497615
+     ],
+     "course": [
+      "salt-1-b"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "4": {
+     "trackMs": [
+      28.168
+     ],
+     "configureWorldMs": [
+      27.867308
+     ],
+     "course": [
+      "switchback-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    },
+    "5": {
+     "trackMs": [
+      34.035154
+     ],
+     "configureWorldMs": [
+      33.755693
+     ],
+     "course": [
+      "crown-1-a"
+     ],
+     "changed": [
+      true
+     ]
+    }
+   },
+   "trackMsMax": 60.980846,
+   "configureWorldMsMax": 60.661308,
+   "transitionRoundsRead": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "routesWarmup": {
+    "seconds": 21.451450099993963,
+    "bytes": 17540089,
+    "limit": "One untimed-out GET before the probe; includes LAN transfer."
+   }
+  }
+ ],
+ "verdict": {
+  "card14": {
+   "arm": "c14",
+   "comparedWith": "base",
+   "runs": [
+    "c14-run1",
+    "c14-run2"
+   ],
+   "comparedRuns": [
+    "base-run1",
+    "base-run2"
+   ],
+   "tests": {
+    "results": [
+     {
+      "file": "TEST-dev.deathride.link.RoutesReplyTest.xml",
+      "suite": "dev.deathride.link.RoutesReplyTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-09T07:46:04.395Z",
+      "green": true
+     },
+     {
+      "file": "TEST-dev.deathride.link.RoutesServedTest.xml",
+      "suite": "dev.deathride.link.RoutesServedTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-09T07:46:09.931Z",
+      "green": true
+     }
+    ],
+    "green": true
+   },
+   "survivors": {
+    "requiredLowerByMB": 12,
+    "perRound": {
+     "1": {
+      "cut": [
+       31,
+       null
+      ],
+      "ref": [
+       49,
+       48
+      ],
+      "graded": false
+     },
+     "2": {
+      "cut": [
+       32,
+       null
+      ],
+      "ref": [
+       50,
+       null
+      ],
+      "graded": false
+     },
+     "3": {
+      "cut": [
+       35,
+       null
+      ],
+      "ref": [
+       52,
+       52
+      ],
+      "graded": false
+     },
+     "4": {
+      "cut": [
+       37,
+       37
+      ],
+      "ref": [
+       55,
+       55
+      ],
+      "graded": true,
+      "gapMB": 18,
+      "pass": true
+     },
+     "5": {
+      "cut": [
+       40,
+       40
+      ],
+      "ref": [
+       58,
+       57
+      ],
+      "graded": true,
+      "gapMB": 17,
+      "pass": true
+     },
+     "6": {
+      "cut": [
+       40,
+       null
+      ],
+      "ref": [
+       58,
+       null
+      ],
+      "graded": false
+     }
+    },
+    "roundsGraded": 2,
+    "pass": true
+   },
+   "guards": {
+    "over33": {
+     "cut": [
+      103,
+      84
+     ],
+     "ref": [
+      107,
+      129
+     ],
+     "worse": false
+    },
+    "worstActiveWindowP95Ms": {
+     "cut": [
+      26.034539,
+      25.325077
+     ],
+     "ref": [
+      27.195615,
+      38.979307
+     ],
+     "worse": false
+    },
+    "rejectedInputs": {
+     "cut": [
+      6,
+      0
+     ],
+     "ref": [
+      0,
+      23
+     ],
+     "worse": false
+    }
+   },
+   "allSettled": false,
+   "guardsAre": "applied; readings are research (unsettled)",
+   "keep": true,
+   "keepWhy": "kept: tests green, survivors at least 12 MB lower in every graded round, no guard worse",
+   "pss": {
+    "maxMiB": {
+     "cut": [
+      164.88,
+      153.14
+     ],
+     "ref": [
+      166.28,
+      180.85
+     ]
+    },
+    "minMiB": {
+     "cut": [
+      140.92,
+      132.31
+     ],
+     "ref": [
+      157.1,
+      148.33
+     ]
+    },
+    "bothCutMaxBelowBothRef": true
+   },
+   "pssGrade": "not graded (unsettled): to the goal-1 soak (P22)",
+   "routesWarmupSeconds": {
+    "cut": [
+     16.52525379997678,
+     9.660620299982838
+    ],
+    "ref": [
+     15.817173999967054,
+     10.564015500014648
+    ]
+   }
+  },
+  "card15": {
+   "arm": "c15",
+   "comparedWith": "c14",
+   "runs": [
+    "c15-run1",
+    "c15-run2"
+   ],
+   "comparedRuns": [
+    "c14-run1",
+    "c14-run2"
+   ],
+   "tests": {
+    "results": [
+     {
+      "file": "TEST-dev.deathride.core.CoursePrewarmTest.xml",
+      "suite": "dev.deathride.core.CoursePrewarmTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-09T07:54:09.890Z",
+      "green": true
+     },
+     {
+      "file": "TEST-dev.deathride.core.CoursesKeptTest.xml",
+      "suite": "dev.deathride.core.CoursesKeptTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-09T07:53:05.545Z",
+      "green": true
+     },
+     {
+      "file": "TEST-dev.deathride.link.RoutesReplyTest.xml",
+      "suite": "dev.deathride.link.RoutesReplyTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-09T07:53:18.581Z",
+      "green": true
+     },
+     {
+      "file": "TEST-dev.deathride.link.RoutesServedTest.xml",
+      "suite": "dev.deathride.link.RoutesServedTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-09T07:53:31.222Z",
+      "green": true
+     }
+    ],
+    "green": true
+   },
+   "survivors": {
+    "requiredLowerByMB": 10,
+    "perRound": {
+     "1": {
+      "cut": [
+       null,
+       null
+      ],
+      "ref": [
+       31,
+       null
+      ],
+      "graded": false
+     },
+     "2": {
+      "cut": [
+       null,
+       null
+      ],
+      "ref": [
+       32,
+       null
+      ],
+      "graded": false
+     },
+     "3": {
+      "cut": [
+       null,
+       null
+      ],
+      "ref": [
+       35,
+       null
+      ],
+      "graded": false
+     },
+     "4": {
+      "cut": [
+       null,
+       null
+      ],
+      "ref": [
+       37,
+       37
+      ],
+      "graded": false
+     },
+     "5": {
+      "cut": [
+       null,
+       null
+      ],
+      "ref": [
+       40,
+       40
+      ],
+      "graded": false
+     },
+     "6": {
+      "cut": [
+       null,
+       null
+      ],
+      "ref": [
+       40,
+       null
+      ],
+      "graded": false
+     }
+    },
+    "roundsGraded": 0,
+    "pass": false
+   },
+   "guards": {
+    "over33": {
+     "cut": [
+      135,
+      241
+     ],
+     "ref": [
+      103,
+      84
+     ],
+     "worse": true
+    },
+    "worstActiveWindowP95Ms": {
+     "cut": [
+      30.138308,
+      34.455692000000006
+     ],
+     "ref": [
+      26.034539,
+      25.325077
+     ],
+     "worse": true
+    },
+    "rejectedInputs": {
+     "cut": [
+      0,
+      0
+     ],
+     "ref": [
+      6,
+      0
+     ],
+     "worse": false
+    },
+    "trackMsMax": {
+     "cut": [
+      58.29577,
+      60.980846
+     ],
+     "ref": [
+      78.222462,
+      67.728923
+     ],
+     "worse": false
+    },
+    "configureWorldMsMax": {
+     "cut": [
+      58.007769,
+      60.661308
+     ],
+     "ref": [
+      77.959154,
+      67.309385
+     ],
+     "worse": false
+    }
+   },
+   "allSettled": false,
+   "guardsAre": "applied; readings are research (unsettled)",
+   "keep": false,
+   "keepWhy": "declined: no round graded; a guard is worse: over33, worstActiveWindowP95Ms",
+   "pss": {
+    "maxMiB": {
+     "cut": [
+      158.31,
+      152.62
+     ],
+     "ref": [
+      164.88,
+      153.14
+     ]
+    },
+    "minMiB": {
+     "cut": [
+      139.28,
+      137.01
+     ],
+     "ref": [
+      140.92,
+      132.31
+     ]
+    },
+    "bothCutMaxBelowBothRef": false
+   },
+   "pssGrade": "not graded (unsettled): to the goal-1 soak (P22)",
+   "routesWarmupSeconds": {
+    "cut": [
+     21.795605199993588,
+     21.451450099993963
+    ],
+    "ref": [
+     16.52525379997678,
+     9.660620299982838
+    ]
+   }
+  }
+ }
+}

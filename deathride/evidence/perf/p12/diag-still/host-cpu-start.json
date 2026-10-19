@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T07:29:53.5614540Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "python",
+                             "IDProcess":  45048,
+                             "PercentProcessorTime":  317
+                         },
+                         {
+                             "Name":  "rustc#5",
+                             "IDProcess":  55196,
+                             "PercentProcessorTime":  93
+                         },
+                         {
+                             "Name":  "rustc#2",
+                             "IDProcess":  43416,
+                             "PercentProcessorTime":  88
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  12836,
+                             "PercentProcessorTime":  88
+                         },
+                         {
+                             "Name":  "clippy-driver",
+                             "IDProcess":  26004,
+                             "PercentProcessorTime":  88
+                         },
+                         {
+                             "Name":  "svchost#72",
+                             "IDProcess":  15040,
+                             "PercentProcessorTime":  83
+                         },
+                         {
+                             "Name":  "rustc",
+                             "IDProcess":  2100,
+                             "PercentProcessorTime":  79
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  60
+                         },
+                         {
+                             "Name":  "node#37",
+                             "IDProcess":  12884,
+                             "PercentProcessorTime":  55
+                         },
+                         {
+                             "Name":  "com.docker.backend#1",
+                             "IDProcess":  16696,
+                             "PercentProcessorTime":  46
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                100,
+                                100,
+                                100
+                            ]
+}

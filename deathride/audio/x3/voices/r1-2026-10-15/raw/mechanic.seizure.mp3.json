@@ -1,0 +1,35 @@
+{
+  "id": "99792283-199c-48d7-addc-7017a6f9a20b",
+  "ts": "2026-10-15T10:43:23.915Z",
+  "session": "r1-2026-10-15",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/x3/voices/r1-2026-10-15/raw/mechanic.seizure.mp3",
+  "seconds": null,
+  "request": {
+    "text": "He took your car? Right. I thought he might. Round back.",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.25,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/SOYHLrjzK2X1ezoPC6cr",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 56,
+  "budgetCharge": 56,
+  "creditsBefore": 142838,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 78201,
+  "providerCredits": 25,
+  "sha256": "52c8221bcf187fa13b43ccdc4144c9bae2796b50a8f67f2368b066ec61292eeb",
+  "completedAt": "2026-10-15T10:43:26.503Z",
+  "creditsAfter": 142838,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 438
+}

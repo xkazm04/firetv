@@ -1,0 +1,5 @@
+# Release-only PNG re-encode (see reencode_release_assets.py). The release build checks the pinned line.
+# The settings are fixed in the script: level max, zopfli 15, no reductions, strip none (= oxipng -o max --zopfli --nx).
+pyoxipng==9.1.1
+# Decoder for the per-file pixel checks; any recent version (not pinned: it is not what changes bytes).
+Pillow>=10

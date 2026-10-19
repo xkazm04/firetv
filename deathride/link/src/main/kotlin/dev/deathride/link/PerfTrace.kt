@@ -10,7 +10,12 @@ class PerfTrace(val columns: Array<String>, private val capacity: Int = 4096) {
         System.arraycopy(row, 0, rows, offset, columns.size)
         sequence++
     }
-    fun json(after: Long = 0): String {
+    fun json(after: Long = 0): String = StringBuilder().also { writeJson(after, it) {} }.toString()
+    /** P18: [json]'s text, appended to [out] a piece at a time: [flush] is called whenever [out] holds [PIECE] chars or more,
+     *  and it may consume and clear [out] (the /profile reply encodes each piece, so no reply-sized text is ever built). The
+     *  rows are copied under the lock as before; the text is formatted outside it, so the render thread's [append] never waits
+     *  on formatting. The last piece is left in [out]. */
+    fun writeJson(after: Long, out: StringBuilder, flush: (StringBuilder) -> Unit) {
         val copy: DoubleArray
         val first: Long
         val end: Long
@@ -21,22 +26,25 @@ class PerfTrace(val columns: Array<String>, private val capacity: Int = 4096) {
             for (n in first until end) System.arraycopy(rows, (n % capacity).toInt() * columns.size,
                 copy, (n - first).toInt() * columns.size, columns.size)
         }
-        return buildString {
-            append("{\"first\":").append(first).append(",\"end\":").append(end)
-            append(",\"columns\":[")
-            for (i in columns.indices) { if (i > 0) append(','); append('"').append(columns[i]).append('"') }
-            append("],\"rows\":[")
-            for (n in first until end) {
-                if (n > first) append(',')
-                append('[')
-                for (i in columns.indices) {
-                    if (i > 0) append(',')
-                    val value = copy[(n - first).toInt() * columns.size + i]
-                    if (value.isFinite()) append(value) else append("null")
-                }
-                append(']')
+        out.append("{\"first\":").append(first).append(",\"end\":").append(end)
+        out.append(",\"columns\":[")
+        for (i in columns.indices) { if (i > 0) out.append(','); out.append('"').append(columns[i]).append('"') }
+        out.append("],\"rows\":[")
+        for (n in first until end) {
+            if (n > first) out.append(',')
+            out.append('[')
+            for (i in columns.indices) {
+                if (i > 0) out.append(',')
+                val value = copy[(n - first).toInt() * columns.size + i]
+                if (value.isFinite()) out.append(value) else out.append("null")
             }
-            append("]}")
+            out.append(']')
+            if (out.length >= PIECE) flush(out)
         }
+        out.append("]}")
+    }
+    companion object {
+        /** Chars per piece handed to [writeJson]'s flush: about ten frame rows. */
+        const val PIECE = 4096
     }
 }

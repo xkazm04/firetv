@@ -11,6 +11,12 @@ p.add_argument('--seconds', type=int, default=900)
 p.add_argument('--install', action='store_true')
 p.add_argument('--profile', action='store_true')
 p.add_argument('--extra', action='append', default=[])
+# Courses build lazily since baf5181a: the first /routes builds every playable course, past the
+# probe's 5 s setup fetch on a Stick. P8 paid that at class load; this pays it before the probe.
+# P11: the P9/P10 arm is the default (--no-warm-routes and --tracks override it).
+p.add_argument('--warm-routes', action=argparse.BooleanOptionalAction, default=True)
+p.add_argument('--tracks', default='scrap-1-c,foundry-1-c,salt-1-b,switchback-1-a,crown-1-a',
+    help='comma-separated five playable course ids (PROBE_TRACKS); default: the first course of each region')
 p.add_argument('--apk', type=Path, default=ROOT / 'app/build/outputs/apk/debug/app-debug.apk')
 a = p.parse_args()
 a.output.mkdir(parents=True, exist_ok=True)
@@ -23,7 +29,8 @@ def adb(*args, **kw):
 
 apk = a.apk.resolve()
 receipt = {'apkSha256': hashlib.sha256(apk.read_bytes()).hexdigest(),
-    'device': a.device, 'package': package, 'profile': a.profile, 'extra': a.extra}
+    'device': a.device, 'package': package, 'profile': a.profile, 'extra': a.extra,
+    'warmRoutes': a.warm_routes, 'tracks': a.tracks}
 # aapt identity check before any installation.
 sdk = Path(os.environ['ANDROID_HOME'])
 aapt = sorted((sdk / 'build-tools').glob('*/aapt.exe'))[-1]
@@ -45,29 +52,80 @@ if a.profile:
 for entry in a.extra:
     name, value = entry.split('=', 1)
     launch += ['--es', name, value]
+# P12: when other sessions keep the Stick's adbd busy, its 256 KiB main log turns over in about three minutes and the
+# pairing line can be gone before the scenery is ready. The DeathRide lines are streamed from just before the launch
+# (startup-logcat.txt, which also keeps the startup lines) and the stream stops before the probe.
+startup_log = (a.output / 'startup-logcat.txt').open('wb')
+startup = subprocess.Popen(['adb', '-P', '5041', '-s', a.device, 'logcat', '-v', 'threadtime', '-T', '1', '-s', 'DeathRide:I'],
+    stdout=startup_log, stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
 adb(*launch)
 pin = None
-for _ in range(100):
-    time.sleep(.5)
-    pid = adb('shell', 'pidof', package).decode().strip()
-    if not pid:
-        continue
-    log = adb('logcat', '-d', '--pid=' + pid, '-s', 'DeathRide:I').decode(errors='replace')
-    pins = re.findall(r'pairing http[^\n]*pin=(\d+)', log)
-    if pins:
-        try:
-            with urllib.request.urlopen(base + '/stats', timeout=3) as r:
-                stats = json.load(r)
-            if stats['sceneryReady']:
-                pin = pins[-1]
-                break
-        except OSError:
-            pass
+try:
+    for _ in range(100):
+        time.sleep(.5)
+        pid = adb('shell', 'pidof', package).decode().strip()
+        if not pid:
+            continue
+        startup_log.flush()
+        log = (a.output / 'startup-logcat.txt').read_text(errors='replace')
+        pins = re.findall(r'^\S+ \S+\s+' + pid + r'\s.*pairing http[^\n]*pin=(\d+)', log, re.M)
+        if pins:
+            try:
+                with urllib.request.urlopen(base + '/stats', timeout=3) as r:
+                    stats = json.load(r)
+                if stats['sceneryReady']:
+                    pin = pins[-1]
+                    break
+            except OSError:
+                pass
+finally:
+    startup.terminate()
+    startup.wait(timeout=10)
+    startup_log.close()
 assert pin, 'Listener not ready; no fixed-delay pairing'
+if a.warm_routes:
+    started = time.perf_counter()
+    with urllib.request.urlopen(base + '/routes', timeout=300) as r:
+        size = len(r.read())
+    (a.output / 'routes-warmup.json').write_text(json.dumps({'seconds': time.perf_counter() - started,
+        'bytes': size, 'limit': 'One untimed-out GET before the probe; includes LAN transfer.'}, indent=2))
 (a.output / 'thread-priorities-before.txt').write_bytes(adb('shell','ps','-T','-p',pid,'-o','PID,TID,NI,CMD'))
+
+def host_cpu(name):
+    # P9: other sessions held the host at 85-91% CPU; record it beside each run (3 x 1 s samples, top processes).
+    ps = ("$t=1..3|%{(Get-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\").PercentProcessorTime;Start-Sleep 1};"
+          "$p=Get-CimInstance Win32_PerfFormattedData_PerfProc_Process|?{$_.Name -notin '_Total','Idle'}|sort PercentProcessorTime -desc|select -first 10 Name,IDProcess,PercentProcessorTime;"
+          "@{utc=(Get-Date).ToUniversalTime().ToString('o');totalPercentSamples=@($t);logicalProcessors=[Environment]::ProcessorCount;"
+          "topProcesses=@($p);limit='Process percentages are per logical processor (can exceed 100)'}|ConvertTo-Json -Depth 3")
+    try:
+        (a.output / name).write_text(subprocess.check_output(['powershell', '-NoProfile', '-Command', ps], text=True,
+            creationflags=subprocess.CREATE_NO_WINDOW, timeout=60))
+    except (OSError, subprocess.SubprocessError) as e:
+        (a.output / name).write_text(json.dumps({'error': repr(e)}))
+
+def device_counters(name):
+    # P11: Wi-Fi bytes and per-thread CPU ticks (utime+stime) of the threads that took the render thread's CPU in the
+    # trace (system_server's NetworkStats, the audio mixer and HAL writer, this app), read once before and once after
+    # the probe, never during it.
+    # P12: plus /proc schedstat (CPU ns, runqueue-wait ns, slices) of the audio pair's processes and this app, at the same
+    # two reads; readers that predate P12 skip the section.
+    script = ('for p in $(pidof system_server) $(pidof audioserver) $(pidof fireos.hardware.audio.service) $(pidof ' + package + '); '
+              'do for t in /proc/$p/task/*; do echo "$p $(cat $t/stat)"; done; done; '
+              'echo ==schedstat; for p in $(pidof audioserver) $(pidof fireos.hardware.audio.service) $(pidof ' + package + '); '
+              'do for t in /proc/$p/task/*; do echo "$p ${t##*/} $(cat $t/schedstat)"; done; done; '
+              'echo ==net; cat /proc/net/dev; echo ==uptime; cat /proc/uptime')
+    try:
+        (a.output / name).write_bytes(adb('shell', script))
+    except (OSError, subprocess.SubprocessError) as e:
+        (a.output / name).write_text(repr(e))
+
+device_counters('device-counters-start.txt')
+host_cpu('host-cpu-start.json')
 env = {**os.environ, 'DEATHRIDE_TEST_STREAM': 'perf', 'PROBE_SCREENSHOTS': '0',
     'PROBE_MINES': '1', 'PROBE_DEVICE': a.device, 'PROBE_ADB_PORT': '5041',
     'PROBE_PRIORITY': 'AboveNormal', 'PROBE_PROFILE': '1' if a.profile else '0', 'PROBE_APK_PATH': str(apk)}
+if a.tracks:
+    env['PROBE_TRACKS'] = a.tracks
 with (a.output / 'logcat.txt').open('wb') as log:
     logcat = subprocess.Popen(['adb', '-P', '5041', '-s', a.device, 'logcat', '--pid=' + pid,
         '-v', 'threadtime'], stdout=log, stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
@@ -79,5 +137,7 @@ with (a.output / 'logcat.txt').open('wb') as log:
     finally:
         logcat.terminate()
         logcat.wait(timeout=10)
+host_cpu('host-cpu-end.json')
+device_counters('device-counters-end.txt')
 print(json.dumps({'output': str(a.output), 'returncode': result.returncode, **receipt}), flush=True)
 raise SystemExit(result.returncode)

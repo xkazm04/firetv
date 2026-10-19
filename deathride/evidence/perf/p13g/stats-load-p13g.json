@@ -1,0 +1,79 @@
+{
+ "what": "P13g's APK: the app in the lobby, two phones paired by tools/perf-p13f-stats-load.mjs (the probe hello, 30 Hz neutral inputs), five 60 s phases: quiet (no /stats) and the probe race loop (GET /stats, 160 ms pause); launched by tools/perf-p13g-lobby-ab.py",
+ "apk": "p13g.apk (db1ec55a, /stats as pooled UTF-8 blocks)",
+ "apkSha256": "6f5614b66e6f9553242ae8e2248c0adddf4d6db3488d9446ba5c07db1b62d6e0",
+ "startedUtc": "2026-10-07T23:53:33.778Z",
+ "finishedUtc": "2026-10-07T23:58:40.148Z",
+ "phases": [
+  {
+   "phase": "quiet",
+   "index": 0,
+   "fromSecond": 5.003,
+   "toSecond": 65.08,
+   "allocatedMB": 40.419,
+   "allocatedMBps": 0.673,
+   "gcs": 3,
+   "gcPerMinute": 2.996,
+   "statsRequests": 0,
+   "statsPerSecond": 0
+  },
+  {
+   "phase": "stats",
+   "index": 1,
+   "fromSecond": 65.11,
+   "toSecond": 125.329,
+   "allocatedMB": 120.922,
+   "allocatedMBps": 2.008,
+   "gcs": 11,
+   "gcPerMinute": 10.96,
+   "statsRequests": 297,
+   "statsPerSecond": 4.932,
+   "statsBodyBytesMean": 76928.707,
+   "statsRequestMsMean": 35.925
+  },
+  {
+   "phase": "quiet",
+   "index": 2,
+   "fromSecond": 125.354,
+   "toSecond": 185.442,
+   "allocatedMB": 38.928,
+   "allocatedMBps": 0.648,
+   "gcs": 4,
+   "gcPerMinute": 3.994,
+   "statsRequests": 0,
+   "statsPerSecond": 0
+  },
+  {
+   "phase": "stats",
+   "index": 3,
+   "fromSecond": 185.467,
+   "toSecond": 245.847,
+   "allocatedMB": 120.726,
+   "allocatedMBps": 1.999,
+   "gcs": 11,
+   "gcPerMinute": 10.931,
+   "statsRequests": 299,
+   "statsPerSecond": 4.952,
+   "statsBodyBytesMean": 76872.753,
+   "statsRequestMsMean": 34.887
+  },
+  {
+   "phase": "quiet",
+   "index": 4,
+   "fromSecond": 245.866,
+   "toSecond": 306.002,
+   "allocatedMB": 38.584,
+   "allocatedMBps": 0.642,
+   "gcs": 3,
+   "gcPerMinute": 2.993,
+   "statsRequests": 0,
+   "statsPerSecond": 0
+  }
+ ],
+ "quietMeanMBps": 0.654,
+ "allocatedMBPerStatsRead": [
+  0.275,
+  0.272
+ ],
+ "method": "(stats-phase MB/s - mean quiet MB/s) / stats reads a second; MB = 10^6 B; art.gc counters read from /profile every 5 s"
+}

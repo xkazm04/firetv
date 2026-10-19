@@ -1,0 +1,4223 @@
+{
+ "traces": [
+  {
+   "vsyncAppTicks": {
+    "intervals": 1498,
+    "p5Ms": 16.624,
+    "p50Ms": 16.679,
+    "p95Ms": 16.739,
+    "maxMs": 16.816,
+    "over16_7": 411,
+    "over16_7Share": 0.2744
+   },
+   "sfMissedCounters": {
+    "PrevFrameMissed": 0,
+    "PrevHwcFrameMissed": 0,
+    "PrevGpuFrameMissed": 0,
+    "compositions": 1499
+   },
+   "mainThreadCallback": {
+    "tickToWakeMs": [
+     0.116,
+     0.162
+    ],
+    "wakeToRunMs": [
+     0.038,
+     2.013
+    ],
+    "runToCallbackMs": [
+     0.223,
+     2.106
+    ],
+    "tickToCallbackMs": [
+     0.398,
+     2.522
+    ],
+    "callbacks": 1499,
+    "waitsOverHalfMs": 181,
+    "cpuHeldDuringThoseWaitsMs": {
+     "surfaceflinger (RT)": 261.6,
+     "DefaultDispatch (nice 13)": 109.1,
+     "HwBinder:366_ (RT)": 75.2,
+     "m.amazon.tv.ime (nice -10)": 34.2,
+     "NetworkStats": 29.1,
+     "sf (RT)": 27.4,
+     "app (RT)": 15.3,
+     "surfaceflinger": 12.5
+    }
+   },
+   "startDelay": {
+    "appVsyncPeriodMs": 16.67947,
+    "vsyncTicks": 1499,
+    "callbacks": 1499,
+    "allStarts": {
+     "vsyncToStartMs": [
+      0.893,
+      9.869
+     ],
+     "callbackLagMs": [
+      0.398,
+      2.522
+     ],
+     "callbackToWakeMs": [
+      0.042,
+      8.729
+     ],
+     "wakeToRunMs": [
+      0.208,
+      0.382
+     ],
+     "runToStartMs": [
+      0.197,
+      0.477
+     ],
+     "frames": 1498,
+     "busy": 0
+    },
+    "startsEndingIntervalsOver16_7": {
+     "vsyncToStartMs": [
+      1.651,
+      10.811
+     ],
+     "callbackLagMs": [
+      0.444,
+      2.667
+     ],
+     "callbackToWakeMs": [
+      0.044,
+      9.595
+     ],
+     "wakeToRunMs": [
+      0.205,
+      0.441
+     ],
+     "runToStartMs": [
+      0.216,
+      0.487
+     ],
+     "frames": 695,
+     "busy": 0
+    },
+    "meanChangeAcrossIntervalsOver16_7Ms": {
+     "vsyncToStartMs": 0.739,
+     "callbackLagMs": 0.382,
+     "callbackToWakeMs": 0.244,
+     "wakeToRunMs": 0.101,
+     "runToStartMs": 0.015
+    },
+    "intervalsOver16_7WithBothStarts": 695,
+    "limit": "[p50, p95] per component. callbackToWake and wakeToRun are absent when the GL thread was busy at the callback."
+   },
+   "trace": "diag-muted-trace1",
+   "glThread": 9879,
+   "frames": 1497,
+   "framesOnRows": 1486,
+   "spanSeconds": 24.978,
+   "offsetSeconds": 0.000162,
+   "medianSplitMs": {
+    "running": 9.684,
+    "preempted": 0.122,
+    "wakeupLatency": 0.021,
+    "sleep": 6.739
+   },
+   "intervalsOver": {
+    "16.7": 695,
+    "20": 11,
+    "33": 0
+   },
+   "concurrentGcs": 4,
+   "gcNames": {
+    "ConcurrentGC": 4
+   },
+   "networkStatsPolls": 4,
+   "linkThreadsCpuPercent": 47.9
+  },
+  {
+   "vsyncAppTicks": {
+    "intervals": 1498,
+    "p5Ms": 16.622,
+    "p50Ms": 16.679,
+    "p95Ms": 16.736,
+    "maxMs": 16.808,
+    "over16_7": 409,
+    "over16_7Share": 0.273
+   },
+   "sfMissedCounters": {
+    "PrevFrameMissed": 0,
+    "PrevHwcFrameMissed": 0,
+    "PrevGpuFrameMissed": 0,
+    "compositions": 1499
+   },
+   "mainThreadCallback": {
+    "tickToWakeMs": [
+     0.12,
+     0.164
+    ],
+    "wakeToRunMs": [
+     0.042,
+     1.986
+    ],
+    "runToCallbackMs": [
+     0.208,
+     0.898
+    ],
+    "tickToCallbackMs": [
+     0.383,
+     2.437
+    ],
+    "callbacks": 1499,
+    "waitsOverHalfMs": 215,
+    "cpuHeldDuringThoseWaitsMs": {
+     "surfaceflinger (RT)": 306.4,
+     "DefaultDispatch (nice 13)": 108.2,
+     "HwBinder:366_ (RT)": 86.1,
+     "NetworkStats": 67.5,
+     "m.amazon.tv.ime (nice -10)": 37.2,
+     "sf (RT)": 31.2,
+     "app (RT)": 16.9,
+     "surfaceflinger": 15.2
+    }
+   },
+   "startDelay": {
+    "appVsyncPeriodMs": 16.67946,
+    "vsyncTicks": 1499,
+    "callbacks": 1499,
+    "allStarts": {
+     "vsyncToStartMs": [
+      0.755,
+      2.762
+     ],
+     "callbackLagMs": [
+      0.383,
+      2.437
+     ],
+     "callbackToWakeMs": [
+      0.039,
+      0.046
+     ],
+     "wakeToRunMs": [
+      0.23,
+      0.349
+     ],
+     "runToStartMs": [
+      0.111,
+      0.234
+     ],
+     "frames": 1499,
+     "busy": 0
+    },
+    "startsEndingIntervalsOver16_7": {
+     "vsyncToStartMs": [
+      0.873,
+      2.891
+     ],
+     "callbackLagMs": [
+      0.468,
+      2.522
+     ],
+     "callbackToWakeMs": [
+      0.04,
+      0.047
+     ],
+     "wakeToRunMs": [
+      0.245,
+      0.389
+     ],
+     "runToStartMs": [
+      0.11,
+      0.238
+     ],
+     "frames": 717,
+     "busy": 0
+    },
+    "meanChangeAcrossIntervalsOver16_7Ms": {
+     "vsyncToStartMs": 0.56,
+     "callbackLagMs": 0.481,
+     "callbackToWakeMs": 0.01,
+     "wakeToRunMs": 0.07,
+     "runToStartMs": -0.002
+    },
+    "intervalsOver16_7WithBothStarts": 717,
+    "limit": "[p50, p95] per component. callbackToWake and wakeToRun are absent when the GL thread was busy at the callback."
+   },
+   "trace": "diag-muted-trace2",
+   "glThread": 9879,
+   "frames": 1498,
+   "framesOnRows": 1495,
+   "spanSeconds": 24.986,
+   "offsetSeconds": 0.000256,
+   "medianSplitMs": {
+    "running": 9.93,
+    "preempted": 0.132,
+    "wakeupLatency": 0.021,
+    "sleep": 6.52
+   },
+   "intervalsOver": {
+    "16.7": 717,
+    "20": 1,
+    "33": 0
+   },
+   "concurrentGcs": 3,
+   "gcNames": {
+    "ConcurrentGC": 3
+   },
+   "networkStatsPolls": 4,
+   "linkThreadsCpuPercent": 44.5
+  },
+  {
+   "vsyncAppTicks": {
+    "intervals": 1498,
+    "p5Ms": 16.623,
+    "p50Ms": 16.678,
+    "p95Ms": 16.736,
+    "maxMs": 16.832,
+    "over16_7": 410,
+    "over16_7Share": 0.2737
+   },
+   "sfMissedCounters": {
+    "PrevFrameMissed": 0,
+    "PrevHwcFrameMissed": 0,
+    "PrevGpuFrameMissed": 0,
+    "compositions": 1498
+   },
+   "mainThreadCallback": {
+    "tickToWakeMs": [
+     0.118,
+     0.173
+    ],
+    "wakeToRunMs": [
+     0.045,
+     1.926
+    ],
+    "runToCallbackMs": [
+     0.202,
+     1.928
+    ],
+    "tickToCallbackMs": [
+     0.39,
+     2.362
+    ],
+    "callbacks": 1498,
+    "waitsOverHalfMs": 221,
+    "cpuHeldDuringThoseWaitsMs": {
+     "surfaceflinger (RT)": 302.0,
+     "DefaultDispatch (nice 13)": 110.2,
+     "HwBinder:366_ (RT)": 83.0,
+     "deathride-cours (nice 13)": 51.8,
+     "m.amazon.tv.ime (nice -10)": 37.3,
+     "sf (RT)": 32.3,
+     "NetworkStats": 30.7,
+     "Binder:424_": 18.5
+    }
+   },
+   "startDelay": {
+    "appVsyncPeriodMs": 16.67945,
+    "vsyncTicks": 1499,
+    "callbacks": 1498,
+    "allStarts": {
+     "vsyncToStartMs": [
+      7.64,
+      10.949
+     ],
+     "callbackLagMs": [
+      0.39,
+      2.358
+     ],
+     "callbackToWakeMs": [
+      5.78,
+      9.583
+     ],
+     "wakeToRunMs": [
+      0.008,
+      0.44
+     ],
+     "runToStartMs": [
+      0.375,
+      0.527
+     ],
+     "frames": 1491,
+     "busy": 0
+    },
+    "startsEndingIntervalsOver16_7": {
+     "vsyncToStartMs": [
+      8.299,
+      11.672
+     ],
+     "callbackLagMs": [
+      0.416,
+      2.416
+     ],
+     "callbackToWakeMs": [
+      6.36,
+      10.229
+     ],
+     "wakeToRunMs": [
+      0.01,
+      0.87
+     ],
+     "runToStartMs": [
+      0.382,
+      0.59
+     ],
+     "frames": 712,
+     "busy": 0
+    },
+    "meanChangeAcrossIntervalsOver16_7Ms": {
+     "vsyncToStartMs": 0.917,
+     "callbackLagMs": 0.167,
+     "callbackToWakeMs": 0.573,
+     "wakeToRunMs": 0.135,
+     "runToStartMs": 0.016
+    },
+    "intervalsOver16_7WithBothStarts": 712,
+    "limit": "[p50, p95] per component. callbackToWake and wakeToRun are absent when the GL thread was busy at the callback."
+   },
+   "trace": "diag-muted-trace3",
+   "glThread": 9879,
+   "frames": 1492,
+   "framesOnRows": 1481,
+   "spanSeconds": 24.979,
+   "offsetSeconds": 0.00014,
+   "medianSplitMs": {
+    "running": 9.795,
+    "preempted": 0.084,
+    "wakeupLatency": 0.018,
+    "sleep": 6.631
+   },
+   "intervalsOver": {
+    "16.7": 714,
+    "20": 42,
+    "33": 0
+   },
+   "concurrentGcs": 4,
+   "gcNames": {
+    "ConcurrentGC": 4
+   },
+   "networkStatsPolls": 4,
+   "linkThreadsCpuPercent": 46.5
+  }
+ ],
+ "accounts": [
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3326,
+   "active": true,
+   "second": 1.332,
+   "intervalMs": 22.364,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 10.17,
+   "preemptedMs": 3.71,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 8.48,
+   "traceCause": "waiting",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "rcu_preempt": 3.71
+   },
+   "whileWaitingCpuHeldBy": {
+    "ksmd (nice 5)": 3.58,
+    "NetworkStats": 3.5,
+    "DefaultDispatch (nice 13)": 2.35,
+    "m.amazon.tv.ime (nice -10)": 0.24,
+    "hif_thread (nice -10)": 0.23
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 8.24,
+    "queueBuffer <- Binder:424_": 0.24
+   },
+   "sleepInDequeueOrSwapMs": 8.48,
+   "gc": [],
+   "linkThreadsCpuMs": 7.53,
+   "inNetworkStatsPoll": true,
+   "profileCause": "preempted",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3330,
+   "active": true,
+   "second": 1.399,
+   "intervalMs": 20.268,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 10.48,
+   "preemptedMs": 1.35,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 8.42,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "m.amazon.tv.ime (nice -10)": 1.14,
+    "hif_thread (nice -10)": 0.11,
+    "RenderThread (nice -10)": 0.05,
+    "disp_osd1_irq_k (RT)": 0.04
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 2.07,
+    "NetworkStats": 1.31,
+    "Jit thread pool": 0.88,
+    "m.amazon.tv.ime (nice -10)": 0.23,
+    "Binder:424_": 0.23
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 8.16,
+    "queueBuffer <- Binder:424_": 0.26
+   },
+   "sleepInDequeueOrSwapMs": 8.42,
+   "gc": [],
+   "linkThreadsCpuMs": 14.78,
+   "inNetworkStatsPoll": true,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "hud"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3356,
+   "active": true,
+   "second": 1.832,
+   "intervalMs": 20.64,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 10.72,
+   "preemptedMs": 1.04,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 8.87,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "disp_osd1_irq_k (RT)": 0.95,
+    "hif_thread (nice -10)": 0.09
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 2.82,
+    "Jit thread pool": 0.9,
+    "hif_thread (nice -10)": 0.12,
+    "kworker/u8:": 0.04,
+    "kworker/1:": 0.03
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 8.58,
+    "queueBuffer <- Binder:424_": 0.28
+   },
+   "sleepInDequeueOrSwapMs": 8.87,
+   "gc": [],
+   "linkThreadsCpuMs": 32.78,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3498,
+   "active": true,
+   "second": 4.202,
+   "intervalMs": 21.764,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 10.68,
+   "preemptedMs": 1.53,
+   "wakeupLatencyMs": 0.23,
+   "sleepMs": 9.33,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "app (RT)": 1.2,
+    "disp_osd1_irq_k (RT)": 0.33
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 4.71,
+    "sleep": 1.68,
+    "main_thread (nice -10)": 0.14,
+    "Binder:424_": 0.1,
+    "hif_thread (nice -10)": 0.08
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 9.0,
+    "queueBuffer <- Binder:424_": 0.33
+   },
+   "sleepInDequeueOrSwapMs": 9.33,
+   "gc": [],
+   "linkThreadsCpuMs": 15.37,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3510,
+   "active": true,
+   "second": 4.402,
+   "intervalMs": 20.696,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 11.85,
+   "preemptedMs": 0.52,
+   "wakeupLatencyMs": 0.07,
+   "sleepMs": 8.25,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "kworker/0:": 0.26,
+    "Binder:424_": 0.21,
+    "disp_osd2_irq_k (RT)": 0.03,
+    "psimon (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 1.0,
+    "kworker/0:": 0.29,
+    "Binder:424_": 0.25,
+    "app (RT)": 0.08,
+    "m.amazon.tv.ime (nice -10)": 0.06
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 7.97,
+    "queueBuffer <- Binder:424_": 0.28
+   },
+   "sleepInDequeueOrSwapMs": 8.25,
+   "gc": [],
+   "linkThreadsCpuMs": 18.45,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3522,
+   "active": true,
+   "second": 4.601,
+   "intervalMs": 20.692,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 10.61,
+   "preemptedMs": 1.22,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 8.85,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "Jit thread pool": 1.22
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 2.98,
+    "Jit thread pool": 1.18,
+    "hif_thread (nice -10)": 0.27,
+    "kworker/0:": 0.23,
+    "main_thread (nice -10)": 0.08
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 8.56,
+    "queueBuffer <- Binder:424_": 0.29
+   },
+   "sleepInDequeueOrSwapMs": 8.85,
+   "gc": [],
+   "linkThreadsCpuMs": 20.11,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3534,
+   "active": true,
+   "second": 4.803,
+   "intervalMs": 20.578,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 12.57,
+   "preemptedMs": 0.57,
+   "wakeupLatencyMs": 0.56,
+   "sleepMs": 6.88,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "m.amazon.tv.ime (nice -10)": 0.26,
+    "kworker/0:": 0.22,
+    "GPU completion (nice -4)": 0.06,
+    "disp_osd2_irq_k (RT)": 0.03
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 2.88,
+    "Jit thread pool": 0.47,
+    "m.amazon.tv.ime (nice -10)": 0.26,
+    "kworker/0:": 0.22,
+    "Binder:424_": 0.11
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 6.3,
+    "queueBuffer <- Binder:424_": 0.49,
+    "DR.carsEffects <- DefaultDispatch": 0.09
+   },
+   "sleepInDequeueOrSwapMs": 6.8,
+   "gc": [],
+   "linkThreadsCpuMs": 22.35,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3598,
+   "active": true,
+   "second": 5.871,
+   "intervalMs": 21.026,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 20.28,
+   "preemptedMs": 0.23,
+   "wakeupLatencyMs": 0.06,
+   "sleepMs": 0.47,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "sf (RT)": 0.19,
+    "surfaceflinger": 0.04
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.29,
+    "sf (RT)": 0.19,
+    "surfaceflinger (RT)": 0.18,
+    ".deathride.perf (nice -10)": 0.1,
+    "app (RT)": 0.07
+   },
+   "sleepBy": {
+    "queueBuffer <- Binder:424_": 0.24,
+    "dequeueBuffer <- Binder:424_": 0.22
+   },
+   "sleepInDequeueOrSwapMs": 0.47,
+   "gc": [
+    {
+     "name": "ConcurrentGC",
+     "ms": 94.5
+    }
+   ],
+   "linkThreadsCpuMs": 15.75,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:simulation",
+   "profileDominantPhase": "simulation"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3599,
+   "active": true,
+   "second": 5.892,
+   "intervalMs": 22.008,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 13.23,
+   "preemptedMs": 0.59,
+   "wakeupLatencyMs": 1.15,
+   "sleepMs": 7.03,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "sf (RT)": 0.44,
+    "swapper/": 0.15
+   },
+   "whileWaitingCpuHeldBy": {
+    "HeapTaskDaemon (nice 4)": 1.45,
+    "surfaceflinger (RT)": 0.39,
+    "DefaultDispatch (nice 13)": 0.25,
+    "sf (RT)": 0.21,
+    "app (RT)": 0.17
+   },
+   "sleepBy": {
+    "Lock contention on large object map space lock (owner tid: 9858) <- HeapTaskDaemon": 4.65,
+    "DR.hud <- HeapTaskDaemon": 1.68,
+    "dequeueBuffer <- Binder:424_": 0.46,
+    "queueBuffer <- Binder:424_": 0.23
+   },
+   "sleepInDequeueOrSwapMs": 0.69,
+   "gc": [
+    {
+     "name": "ConcurrentGC",
+     "ms": 94.5
+    }
+   ],
+   "linkThreadsCpuMs": 1.54,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:hud",
+   "profileDominantPhase": "hud"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3782,
+   "active": true,
+   "second": 8.948,
+   "intervalMs": 16.564,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.84,
+   "preemptedMs": 0.14,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 6.57,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "app (RT)": 0.14
+   },
+   "whileWaitingCpuHeldBy": {
+    "app (RT)": 0.14,
+    "surfaceflinger (RT)": 0.08,
+    "Binder:424_": 0.07,
+    "m.amazon.tv.ime (nice -10)": 0.06,
+    ".deathride.perf (nice -10)": 0.02
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.19,
+    "queueBuffer <- Binder:424_": 0.21,
+    "dequeueBuffer <- Binder:424_": 0.18
+   },
+   "sleepInDequeueOrSwapMs": 0.38,
+   "gc": [],
+   "linkThreadsCpuMs": 0.23,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:simulation",
+   "profileDominantPhase": "simulation"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3806,
+   "active": true,
+   "second": 9.348,
+   "intervalMs": 18.395,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.35,
+   "preemptedMs": 0.15,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.88,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "app (RT)": 0.15
+   },
+   "whileWaitingCpuHeldBy": {
+    "app (RT)": 0.15,
+    "Binder:424_": 0.05,
+    ".deathride.perf (nice -10)": 0.05,
+    "DefaultExecutor (nice 13)": 0.0,
+    "surfaceflinger": 0.0
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 7.45,
+    "queueBuffer <- Binder:424_": 0.24,
+    "dequeueBuffer <- Binder:424_": 0.19
+   },
+   "sleepInDequeueOrSwapMs": 0.43,
+   "gc": [],
+   "linkThreadsCpuMs": 4.8,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:flushSwap",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3812,
+   "active": true,
+   "second": 9.448,
+   "intervalMs": 16.406,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.37,
+   "preemptedMs": 0.41,
+   "wakeupLatencyMs": 0.03,
+   "sleepMs": 5.6,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "m.amazon.tv.ime (nice -10)": 0.24,
+    "kworker/0:": 0.15,
+    "disp_osd2_irq_k (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.35,
+    "m.amazon.tv.ime (nice -10)": 0.24,
+    "kworker/0:": 0.15,
+    "Binder:424_": 0.1,
+    "main_thread (nice -10)": 0.03
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 5.14,
+    "queueBuffer <- Binder:424_": 0.24,
+    "dequeueBuffer <- Binder:424_": 0.21
+   },
+   "sleepInDequeueOrSwapMs": 0.46,
+   "gc": [],
+   "linkThreadsCpuMs": 10.07,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:scenery",
+   "profileDominantPhase": "scenery"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3816,
+   "active": true,
+   "second": 9.515,
+   "intervalMs": 16.601,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 8.57,
+   "preemptedMs": 0.07,
+   "wakeupLatencyMs": 0.05,
+   "sleepMs": 7.91,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "app (RT)": 0.07
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.13,
+    "app (RT)": 0.07,
+    "Binder:424_": 0.05,
+    ".deathride.perf (nice -10)": 0.04,
+    "surfaceflinger (RT)": 0.04
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 7.54,
+    "queueBuffer <- Binder:424_": 0.2,
+    "dequeueBuffer <- Binder:424_": 0.17
+   },
+   "sleepInDequeueOrSwapMs": 0.37,
+   "gc": [],
+   "linkThreadsCpuMs": 0.46,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3818,
+   "active": true,
+   "second": 9.548,
+   "intervalMs": 16.645,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 8.51,
+   "preemptedMs": 0.21,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.9,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "app (RT)": 0.14,
+    "main_thread (nice -10)": 0.07
+   },
+   "whileWaitingCpuHeldBy": {
+    "app (RT)": 0.14,
+    "surfaceflinger (RT)": 0.08,
+    "Binder:424_": 0.07,
+    "main_thread (nice -10)": 0.07,
+    "DefaultDispatch (nice 13)": 0.06
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 7.5,
+    "queueBuffer <- Binder:424_": 0.23,
+    "dequeueBuffer <- Binder:424_": 0.17
+   },
+   "sleepInDequeueOrSwapMs": 0.4,
+   "gc": [],
+   "linkThreadsCpuMs": 1.24,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3828,
+   "active": true,
+   "second": 9.716,
+   "intervalMs": 15.851,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.02,
+   "preemptedMs": 0.15,
+   "wakeupLatencyMs": 0.08,
+   "sleepMs": 6.6,
+   "traceCause": "waiting",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.07,
+    "disp_osd2_confi (RT)": 0.04,
+    "disp_osd1_irq_k (RT)": 0.02,
+    "video_disp (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.11,
+    ".deathride.perf (nice -10)": 0.08,
+    "surfaceflinger (RT)": 0.08,
+    "sf (RT)": 0.07,
+    "HwBinder:366_ (RT)": 0.04
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.19,
+    "queueBuffer <- Binder:424_": 0.23,
+    "dequeueBuffer <- Binder:424_": 0.18
+   },
+   "sleepInDequeueOrSwapMs": 0.41,
+   "gc": [],
+   "linkThreadsCpuMs": 0.5,
+   "inNetworkStatsPoll": false,
+   "profileCause": "preempted",
+   "profileDominantPhase": "scenery"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3830,
+   "active": true,
+   "second": 9.749,
+   "intervalMs": 18.376,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.95,
+   "preemptedMs": 0.06,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 8.35,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "disp_osd1_irq_k (RT)": 0.02,
+    "disp_osd2_confi (RT)": 0.02,
+    "video_disp (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "disp_osd1_irq_k (RT)": 0.02,
+    "HwBinder:366_ (RT)": 0.02,
+    "disp_osd2_confi (RT)": 0.02,
+    "disp_osd2_irq_k (RT)": 0.02,
+    "kworker/u8:": 0.02
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 7.82,
+    "queueBuffer <- Binder:424_": 0.29,
+    "dequeueBuffer <- Binder:424_": 0.24
+   },
+   "sleepInDequeueOrSwapMs": 0.53,
+   "gc": [],
+   "linkThreadsCpuMs": 0.9,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3838,
+   "active": true,
+   "second": 9.882,
+   "intervalMs": 16.813,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 8.96,
+   "preemptedMs": 0.18,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.66,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "app (RT)": 0.14,
+    "disp_osd1_irq_k (RT)": 0.02,
+    "video_disp (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.15,
+    "app (RT)": 0.14,
+    ".deathride.perf (nice -10)": 0.08,
+    "DefaultDispatch (nice 13)": 0.07,
+    "Binder:424_": 0.07
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 7.21,
+    "queueBuffer <- Binder:424_": 0.27,
+    "dequeueBuffer <- Binder:424_": 0.18
+   },
+   "sleepInDequeueOrSwapMs": 0.45,
+   "gc": [],
+   "linkThreadsCpuMs": 8.96,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3841,
+   "active": true,
+   "second": 9.932,
+   "intervalMs": 16.655,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 8.85,
+   "preemptedMs": 0.13,
+   "wakeupLatencyMs": 0.08,
+   "sleepMs": 7.59,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.07,
+    "disp_osd1_irq_k (RT)": 0.02,
+    "disp_osd2_confi (RT)": 0.02,
+    "video_disp (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.11,
+    "surfaceflinger (RT)": 0.08,
+    "sf (RT)": 0.07,
+    "surfaceflinger": 0.03,
+    "app (RT)": 0.02
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 7.16,
+    "queueBuffer <- Binder:424_": 0.28,
+    "dequeueBuffer <- Binder:424_": 0.16
+   },
+   "sleepInDequeueOrSwapMs": 0.43,
+   "gc": [],
+   "linkThreadsCpuMs": 10.46,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3847,
+   "active": true,
+   "second": 10.032,
+   "intervalMs": 16.599,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.34,
+   "preemptedMs": 0.13,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 6.11,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "sf (RT)": 0.08,
+    "disp_osd2_irq_k (RT)": 0.02,
+    "kworker/0:": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.08,
+    "sf (RT)": 0.08,
+    "Binder:424_": 0.06,
+    "app (RT)": 0.03,
+    "ksmd_seeker (nice 5)": 0.02
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 5.69,
+    "queueBuffer <- Binder:424_": 0.26,
+    "dequeueBuffer <- Binder:424_": 0.16
+   },
+   "sleepInDequeueOrSwapMs": 0.42,
+   "gc": [],
+   "linkThreadsCpuMs": 0.24,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:simulation",
+   "profileDominantPhase": "simulation"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3849,
+   "active": true,
+   "second": 10.065,
+   "intervalMs": 16.534,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.95,
+   "preemptedMs": 0.12,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 6.44,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "sf (RT)": 0.06,
+    "disp_osd1_irq_k (RT)": 0.02,
+    "video_disp (RT)": 0.02,
+    "disp_osd2_confi (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.07,
+    "sf (RT)": 0.06,
+    "Binder:424_": 0.05,
+    "app (RT)": 0.02,
+    "disp_osd1_irq_k (RT)": 0.02
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.0,
+    "queueBuffer <- Binder:424_": 0.27,
+    "dequeueBuffer <- Binder:424_": 0.17
+   },
+   "sleepInDequeueOrSwapMs": 0.44,
+   "gc": [],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:simulation",
+   "profileDominantPhase": "simulation"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3851,
+   "active": true,
+   "second": 10.099,
+   "intervalMs": 16.712,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.95,
+   "preemptedMs": 0.15,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 5.59,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "sf (RT)": 0.09,
+    "disp_osd1_irq_k (RT)": 0.02,
+    "disp_osd2_confi (RT)": 0.02,
+    "video_disp (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.09,
+    "sf (RT)": 0.09,
+    "Binder:424_": 0.06,
+    "main_thread (nice -10)": 0.05,
+    "hdmi_timer_kthr": 0.03
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 5.13,
+    "queueBuffer <- Binder:424_": 0.3,
+    "dequeueBuffer <- Binder:424_": 0.17
+   },
+   "sleepInDequeueOrSwapMs": 0.46,
+   "gc": [],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:simulation",
+   "profileDominantPhase": "simulation"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3853,
+   "active": true,
+   "second": 10.132,
+   "intervalMs": 16.311,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.72,
+   "preemptedMs": 0.06,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 5.51,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "disp_osd1_irq_k (RT)": 0.02,
+    "disp_osd2_confi (RT)": 0.02,
+    "video_disp (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "disp_osd1_irq_k (RT)": 0.02,
+    "HwBinder:366_ (RT)": 0.02,
+    "disp_osd2_confi (RT)": 0.02,
+    "video_disp (RT)": 0.02,
+    "disp_osd2_irq_k (RT)": 0.02
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 5.04,
+    "dequeueBuffer <- Binder:424_": 0.26,
+    "queueBuffer <- Binder:424_": 0.21
+   },
+   "sleepInDequeueOrSwapMs": 0.47,
+   "gc": [],
+   "linkThreadsCpuMs": 6.33,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:simulation",
+   "profileDominantPhase": "simulation"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3856,
+   "active": true,
+   "second": 10.182,
+   "intervalMs": 16.684,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 8.97,
+   "preemptedMs": 0.13,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.56,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.08,
+    "disp_osd1_irq_k (RT)": 0.02,
+    "disp_osd2_confi (RT)": 0.02,
+    "video_disp (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.08,
+    "SmartHomed": 0.08,
+    "sf (RT)": 0.08,
+    "Binder:424_": 0.05,
+    "app (RT)": 0.04
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 7.16,
+    "queueBuffer <- Binder:424_": 0.26,
+    "dequeueBuffer <- Binder:424_": 0.15
+   },
+   "sleepInDequeueOrSwapMs": 0.41,
+   "gc": [],
+   "linkThreadsCpuMs": 0.67,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3859,
+   "active": true,
+   "second": 10.232,
+   "intervalMs": 16.375,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.13,
+   "preemptedMs": 0.18,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.05,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "app (RT)": 0.07,
+    "GPU completion (nice -4)": 0.05,
+    "disp_osd1_irq_k (RT)": 0.02,
+    "video_disp (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.19,
+    "surfaceflinger (RT)": 0.08,
+    "app (RT)": 0.07,
+    "Binder:424_": 0.05,
+    ".deathride.perf (nice -10)": 0.05
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.61,
+    "queueBuffer <- Binder:424_": 0.3,
+    "dequeueBuffer <- Binder:424_": 0.15
+   },
+   "sleepInDequeueOrSwapMs": 0.45,
+   "gc": [],
+   "linkThreadsCpuMs": 9.63,
+   "inNetworkStatsPoll": false,
+   "profileCause": "preempted",
+   "profileDominantPhase": "hud"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3861,
+   "active": true,
+   "second": 10.266,
+   "intervalMs": 16.607,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.99,
+   "preemptedMs": 0.23,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 6.37,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "app (RT)": 0.17,
+    "disp_osd1_irq_k (RT)": 0.02,
+    "disp_osd2_confi (RT)": 0.02,
+    "video_disp (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.17,
+    "app (RT)": 0.17,
+    ".deathride.perf (nice -10)": 0.1,
+    "Binder:424_": 0.08,
+    "sf (RT)": 0.04
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 5.91,
+    "queueBuffer <- Binder:424_": 0.3,
+    "dequeueBuffer <- Binder:424_": 0.16
+   },
+   "sleepInDequeueOrSwapMs": 0.46,
+   "gc": [],
+   "linkThreadsCpuMs": 0.22,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:simulation",
+   "profileDominantPhase": "simulation"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3868,
+   "active": true,
+   "second": 10.382,
+   "intervalMs": 16.648,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 7.23,
+   "preemptedMs": 0.09,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 9.31,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.09
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.1,
+    "sf (RT)": 0.09,
+    "Binder:424_": 0.06,
+    ".deathride.perf (nice -10)": 0.05,
+    "m.amazon.tv.ime (nice -10)": 0.05
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 8.81,
+    "queueBuffer <- Binder:424_": 0.34,
+    "dequeueBuffer <- Binder:424_": 0.15
+   },
+   "sleepInDequeueOrSwapMs": 0.5,
+   "gc": [],
+   "linkThreadsCpuMs": 0.86,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3876,
+   "active": true,
+   "second": 10.516,
+   "intervalMs": 18.876,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 8.24,
+   "preemptedMs": 0.57,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 10.05,
+   "traceCause": "sleep",
+   "traceDetail": "preempted by Binder:424_",
+   "preemptedBy": {
+    "Binder:424_": 0.24,
+    "app (RT)": 0.2,
+    "RenderThread (nice -10)": 0.08,
+    "disp_osd1_irq_k (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.77,
+    "Binder:424_": 0.32,
+    "app (RT)": 0.2,
+    "kworker/u8:": 0.1,
+    "surfaceflinger (RT)": 0.09
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 9.81,
+    "queueBuffer <- Binder:424_": 0.24
+   },
+   "sleepInDequeueOrSwapMs": 0.24,
+   "gc": [],
+   "linkThreadsCpuMs": 8.52,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3885,
+   "active": true,
+   "second": 10.667,
+   "intervalMs": 15.137,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 8.16,
+   "preemptedMs": 0.07,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 6.89,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.07
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.08,
+    "sf (RT)": 0.07,
+    "Binder:424_": 0.05,
+    "app (RT)": 0.03,
+    "surfaceflinger": 0.02
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.4,
+    "dequeueBuffer <- Binder:424_": 0.26,
+    "queueBuffer <- Binder:424_": 0.24
+   },
+   "sleepInDequeueOrSwapMs": 0.5,
+   "gc": [],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": "preempted",
+   "profileDominantPhase": "requests"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3897,
+   "active": true,
+   "second": 10.866,
+   "intervalMs": 16.643,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 11.15,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 5.47,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.01,
+    "surfaceflinger": 0.01,
+    ".deathride.perf (nice -10)": 0.01,
+    "surfaceflinger (RT)": 0.01
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 4.98,
+    "queueBuffer <- Binder:424_": 0.29,
+    "dequeueBuffer <- Binder:424_": 0.2
+   },
+   "sleepInDequeueOrSwapMs": 0.5,
+   "gc": [],
+   "linkThreadsCpuMs": 1.4,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:simulation",
+   "profileDominantPhase": "simulation"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3901,
+   "active": true,
+   "second": 10.933,
+   "intervalMs": 16.486,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 7.98,
+   "preemptedMs": 0.07,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 8.41,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "disp_osd2_irq_k (RT)": 0.03,
+    "sf (RT)": 0.03,
+    "disp_osd2_confi (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.03,
+    "DefaultDispatch (nice 13)": 0.03,
+    "disp_osd2_irq_k (RT)": 0.03,
+    "sf (RT)": 0.03,
+    "app (RT)": 0.03
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 8.03,
+    "queueBuffer <- Binder:424_": 0.24,
+    "dequeueBuffer <- Binder:424_": 0.14
+   },
+   "sleepInDequeueOrSwapMs": 0.38,
+   "gc": [],
+   "linkThreadsCpuMs": 3.94,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3905,
+   "active": true,
+   "second": 10.999,
+   "intervalMs": 16.92,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 8.11,
+   "preemptedMs": 0.1,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 8.7,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.1
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.1,
+    "surfaceflinger (RT)": 0.1,
+    "sf (RT)": 0.1,
+    "Binder:424_": 0.06,
+    ".deathride.perf (nice -10)": 0.05
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 8.28,
+    "queueBuffer <- Binder:424_": 0.24,
+    "dequeueBuffer <- Binder:424_": 0.18
+   },
+   "sleepInDequeueOrSwapMs": 0.42,
+   "gc": [],
+   "linkThreadsCpuMs": 16.2,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3909,
+   "active": true,
+   "second": 11.066,
+   "intervalMs": 16.863,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 7.7,
+   "preemptedMs": 0.1,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 9.05,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.1
+   },
+   "whileWaitingCpuHeldBy": {
+    "kcompactd": 0.11,
+    "surfaceflinger (RT)": 0.11,
+    ".deathride.perf (nice -10)": 0.11,
+    "sf (RT)": 0.1,
+    "Binder:424_": 0.01
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 8.65,
+    "queueBuffer <- Binder:424_": 0.26,
+    "dequeueBuffer <- Binder:424_": 0.13
+   },
+   "sleepInDequeueOrSwapMs": 0.4,
+   "gc": [],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3926,
+   "active": true,
+   "second": 11.35,
+   "intervalMs": 18.518,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.3,
+   "preemptedMs": 0.19,
+   "wakeupLatencyMs": 0.03,
+   "sleepMs": 8.0,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "app (RT)": 0.14,
+    "disp_osd1_irq_k (RT)": 0.03,
+    "video_disp (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "app (RT)": 0.14,
+    "Binder:424_": 0.1,
+    "DefaultDispatch (nice 13)": 0.04,
+    "kworker/u8:": 0.03,
+    "disp_osd1_irq_k (RT)": 0.03
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 7.44,
+    "queueBuffer <- Binder:424_": 0.37,
+    "dequeueBuffer <- Binder:424_": 0.19
+   },
+   "sleepInDequeueOrSwapMs": 0.56,
+   "gc": [],
+   "linkThreadsCpuMs": 9.24,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3928,
+   "active": true,
+   "second": 11.383,
+   "intervalMs": 16.565,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.23,
+   "preemptedMs": 0.07,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.25,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.07
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.07,
+    ".deathride.perf (nice -10)": 0.07,
+    "sf (RT)": 0.07,
+    "Binder:424_": 0.05,
+    "surfaceflinger": 0.03
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.77,
+    "queueBuffer <- Binder:424_": 0.25,
+    "dequeueBuffer <- Binder:424_": 0.23
+   },
+   "sleepInDequeueOrSwapMs": 0.48,
+   "gc": [],
+   "linkThreadsCpuMs": 12.43,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3935,
+   "active": true,
+   "second": 11.5,
+   "intervalMs": 16.536,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.09,
+   "preemptedMs": 0.09,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.34,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.09
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.09,
+    "sf (RT)": 0.09,
+    "Binder:424_": 0.06,
+    "app (RT)": 0.04,
+    "surfaceflinger": 0.03
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.86,
+    "queueBuffer <- Binder:424_": 0.26,
+    "dequeueBuffer <- Binder:424_": 0.23
+   },
+   "sleepInDequeueOrSwapMs": 0.49,
+   "gc": [],
+   "linkThreadsCpuMs": 0.88,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "telemetry"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 3960,
+   "active": true,
+   "second": 11.917,
+   "intervalMs": 16.507,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.72,
+   "preemptedMs": 0.11,
+   "wakeupLatencyMs": 0.08,
+   "sleepMs": 6.59,
+   "traceCause": "waiting",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.07,
+    "disp_osd1_irq_k (RT)": 0.03,
+    "video_disp (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.1,
+    "surfaceflinger (RT)": 0.07,
+    "sf (RT)": 0.07,
+    "disp_osd1_irq_k (RT)": 0.03,
+    "app (RT)": 0.03
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.16,
+    "queueBuffer <- Binder:424_": 0.25,
+    "dequeueBuffer <- Binder:424_": 0.18
+   },
+   "sleepInDequeueOrSwapMs": 0.43,
+   "gc": [],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:requests",
+   "profileDominantPhase": "requests"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 4058,
+   "active": true,
+   "second": 13.554,
+   "intervalMs": 15.428,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.98,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 5.43,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "cat": 0.01,
+    "Binder:424_": 0.01,
+    "dumpsys": 0.01,
+    ".deathride.perf (nice -10)": 0.01,
+    "surfaceflinger (RT)": 0.01
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 4.89,
+    "queueBuffer <- Binder:424_": 0.35,
+    "dequeueBuffer <- Binder:424_": 0.19
+   },
+   "sleepInDequeueOrSwapMs": 0.54,
+   "gc": [],
+   "linkThreadsCpuMs": 0.28,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:telemetry",
+   "profileDominantPhase": "telemetry"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 4246,
+   "active": true,
+   "second": 16.688,
+   "intervalMs": 23.412,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 15.04,
+   "preemptedMs": 0.6,
+   "wakeupLatencyMs": 1.74,
+   "sleepMs": 6.03,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "swapper/": 0.24,
+    "DefaultDispatch (nice 13)": 0.19,
+    "hif_thread (nice -10)": 0.14,
+    "rcu_preempt": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "HeapTaskDaemon (nice 4)": 2.13,
+    "dumpsys": 1.8,
+    "DefaultDispatch (nice 13)": 1.75,
+    "hif_thread (nice -10)": 0.37,
+    ".deathride.perf (nice -10)": 0.36
+   },
+   "sleepBy": {
+    "Lock contention on large object map space lock (owner tid: 9858) <- HeapTaskDaemon": 4.16,
+    "DR.carsEffects <- HeapTaskDaemon": 0.91,
+    "Lock contention on large object map space lock (owner tid: 0) <- HeapTaskDaemon": 0.3,
+    "queueBuffer <- Binder:424_": 0.27
+   },
+   "sleepInDequeueOrSwapMs": 0.47,
+   "gc": [
+    {
+     "name": "ConcurrentGC",
+     "ms": 54.4
+    }
+   ],
+   "linkThreadsCpuMs": 14.25,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:scenery",
+   "profileDominantPhase": "scenery"
+  },
+  {
+   "trace": "diag-muted-trace1",
+   "row": 4464,
+   "active": true,
+   "second": 20.323,
+   "intervalMs": 26.243,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 10.43,
+   "preemptedMs": 0.05,
+   "wakeupLatencyMs": 0.32,
+   "sleepMs": 15.45,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: Lock contention on Jit code cache",
+   "preemptedBy": {
+    "disp_osd2_irq_k (RT)": 0.02,
+    "disp_osd2_confi (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "Profile Saver (nice 9)": 0.36,
+    "NetworkStats": 0.34,
+    ".deathride.perf (nice -10)": 0.27,
+    "DefaultDispatch (nice 13)": 0.23,
+    "Binder:424_": 0.08
+   },
+   "sleepBy": {
+    "Lock contention on Jit code cache (owner tid: 9870) <- Profile Saver": 14.72,
+    "queueBuffer <- Binder:424_": 0.27,
+    "(none) <- .deathride.perf": 0.25,
+    "dequeueBuffer <- Binder:424_": 0.21
+   },
+   "sleepInDequeueOrSwapMs": 0.48,
+   "gc": [],
+   "linkThreadsCpuMs": 6.84,
+   "inNetworkStatsPoll": true,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 7693,
+   "active": true,
+   "second": 13.194,
+   "intervalMs": 23.166,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 12.24,
+   "preemptedMs": 0.29,
+   "wakeupLatencyMs": 0.24,
+   "sleepMs": 10.39,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: Lock contention on ClassLinker classes lock",
+   "preemptedBy": {
+    "hif_thread (nice -10)": 0.23,
+    "app (RT)": 0.06
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.76,
+    "HeapTaskDaemon (nice 4)": 0.48,
+    "Jit thread pool": 0.2,
+    "Binder:424_": 0.15,
+    "hif_thread (nice -10)": 0.15
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 8.36,
+    "Lock contention on ClassLinker classes lock (owner tid: 9858) <- <...>": 1.46,
+    "queueBuffer <- Binder:424_": 0.36,
+    "dequeueBuffer <- Binder:424_": 0.18
+   },
+   "sleepInDequeueOrSwapMs": 0.55,
+   "gc": [
+    {
+     "name": "ConcurrentGC",
+     "ms": 45.4
+    }
+   ],
+   "linkThreadsCpuMs": 24.99,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8065,
+   "active": true,
+   "second": 19.4,
+   "intervalMs": 16.374,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.08,
+   "preemptedMs": 0.27,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 6.01,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "Binder:424_": 0.25,
+    "disp_osd2_irq_k (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.43,
+    "Binder:424_": 0.26,
+    "m.amazon.tv.ime (nice -10)": 0.07,
+    "GPU completion (nice -4)": 0.07,
+    "kworker/0:": 0.05
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 5.63,
+    "queueBuffer <- <...>": 0.38
+   },
+   "sleepInDequeueOrSwapMs": 0.38,
+   "gc": [],
+   "linkThreadsCpuMs": 8.31,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8078,
+   "active": true,
+   "second": 19.615,
+   "intervalMs": 16.673,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 8.93,
+   "preemptedMs": 0.07,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.65,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.07
+   },
+   "whileWaitingCpuHeldBy": {
+    "dumpsys": 0.07,
+    "surfaceflinger (RT)": 0.07,
+    "sf (RT)": 0.07,
+    "Binder:424_": 0.06,
+    ".deathride.perf (nice -10)": 0.02
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 7.22,
+    "queueBuffer <- <...>": 0.27,
+    "dequeueBuffer <- <...>": 0.17
+   },
+   "sleepInDequeueOrSwapMs": 0.44,
+   "gc": [],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8087,
+   "active": true,
+   "second": 19.765,
+   "intervalMs": 16.805,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.42,
+   "preemptedMs": 0.52,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 5.86,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "Binder:424_": 0.39,
+    "app (RT)": 0.13
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 1.08,
+    "Binder:424_": 0.46,
+    "app (RT)": 0.13,
+    "hif_thread (nice -10)": 0.08,
+    "surfaceflinger (RT)": 0.07
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 5.65,
+    "dequeueBuffer <- <...>": 0.21
+   },
+   "sleepInDequeueOrSwapMs": 0.21,
+   "gc": [],
+   "linkThreadsCpuMs": 11.09,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8089,
+   "active": true,
+   "second": 19.799,
+   "intervalMs": 16.72,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 11.5,
+   "preemptedMs": 0.21,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 4.99,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "app (RT)": 0.21
+   },
+   "whileWaitingCpuHeldBy": {
+    "app (RT)": 0.21,
+    "surfaceflinger (RT)": 0.16,
+    "Binder:424_": 0.1,
+    "sf (RT)": 0.05,
+    ".deathride.perf (nice -10)": 0.04
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 4.39,
+    "queueBuffer <- <...>": 0.36,
+    "dequeueBuffer <- <...>": 0.23
+   },
+   "sleepInDequeueOrSwapMs": 0.6,
+   "gc": [],
+   "linkThreadsCpuMs": 8.63,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:simulation",
+   "profileDominantPhase": "simulation"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8098,
+   "active": true,
+   "second": 19.949,
+   "intervalMs": 16.53,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.3,
+   "preemptedMs": 0.1,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.11,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.07,
+    "disp_osd1_irq_k (RT)": 0.02,
+    "video_disp": 0.01
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.08,
+    "sf (RT)": 0.07,
+    "app (RT)": 0.05,
+    "Binder:424_": 0.04,
+    "surfaceflinger": 0.03
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.62,
+    "queueBuffer <- <...>": 0.33,
+    "dequeueBuffer <- <...>": 0.16
+   },
+   "sleepInDequeueOrSwapMs": 0.49,
+   "gc": [],
+   "linkThreadsCpuMs": 0.55,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:other",
+   "profileDominantPhase": "telemetry"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8110,
+   "active": true,
+   "second": 20.149,
+   "intervalMs": 16.751,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.82,
+   "preemptedMs": 0.19,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 6.72,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "app (RT)": 0.19
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.2,
+    "app (RT)": 0.19,
+    "Binder:424_": 0.08,
+    "DefaultDispatch (nice 13)": 0.07,
+    "sf (RT)": 0.06
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.21,
+    "queueBuffer <- <...>": 0.28,
+    "dequeueBuffer <- <...>": 0.22
+   },
+   "sleepInDequeueOrSwapMs": 0.5,
+   "gc": [],
+   "linkThreadsCpuMs": 1.63,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:telemetry",
+   "profileDominantPhase": "telemetry"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8112,
+   "active": true,
+   "second": 20.182,
+   "intervalMs": 16.832,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.24,
+   "preemptedMs": 0.16,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 6.41,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "app (RT)": 0.16
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.16,
+    "app (RT)": 0.16,
+    "Binder:424_": 0.08,
+    "surfaceflinger": 0.05,
+    ".deathride.perf (nice -10)": 0.04
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 5.94,
+    "queueBuffer <- <...>": 0.3,
+    "dequeueBuffer <- <...>": 0.17
+   },
+   "sleepInDequeueOrSwapMs": 0.47,
+   "gc": [],
+   "linkThreadsCpuMs": 0.66,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8116,
+   "active": true,
+   "second": 20.251,
+   "intervalMs": 16.79,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.0,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 6.78,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.01,
+    ".deathride.perf (nice -10)": 0.0
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.25,
+    "queueBuffer <- Binder:424_": 0.36,
+    "dequeueBuffer <- Binder:424_": 0.17
+   },
+   "sleepInDequeueOrSwapMs": 0.53,
+   "gc": [],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:scenery",
+   "profileDominantPhase": "scenery"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8118,
+   "active": true,
+   "second": 20.283,
+   "intervalMs": 16.353,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.51,
+   "preemptedMs": 0.55,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 6.28,
+   "traceCause": "waiting",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "Binder:424_": 0.26,
+    "hdmi_timer_kthr": 0.22,
+    "app (RT)": 0.07
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 1.3,
+    "Binder:424_": 0.29,
+    "surfaceflinger (RT)": 0.08,
+    "app (RT)": 0.07,
+    "hif_thread (nice -10)": 0.07
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.01,
+    "queueBuffer <- Binder:424_": 0.26
+   },
+   "sleepInDequeueOrSwapMs": 0.26,
+   "gc": [],
+   "linkThreadsCpuMs": 8.63,
+   "inNetworkStatsPoll": false,
+   "profileCause": "preempted",
+   "profileDominantPhase": "telemetry"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8124,
+   "active": true,
+   "second": 20.384,
+   "intervalMs": 16.793,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.86,
+   "preemptedMs": 0.08,
+   "wakeupLatencyMs": 0.05,
+   "sleepMs": 6.81,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "app (RT)": 0.08
+   },
+   "whileWaitingCpuHeldBy": {
+    "app (RT)": 0.08,
+    ".deathride.perf (nice -10)": 0.06,
+    "Binder:424_": 0.03
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.33,
+    "queueBuffer <- Binder:424_": 0.31,
+    "dequeueBuffer <- Binder:424_": 0.17
+   },
+   "sleepInDequeueOrSwapMs": 0.48,
+   "gc": [],
+   "linkThreadsCpuMs": 0.62,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8126,
+   "active": true,
+   "second": 20.418,
+   "intervalMs": 14.405,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 8.65,
+   "preemptedMs": 0.1,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 5.64,
+   "traceCause": "waiting",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "app (RT)": 0.1
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.11,
+    "app (RT)": 0.1,
+    "Binder:424_": 0.04,
+    ".deathride.perf (nice -10)": 0.03,
+    "surfaceflinger": 0.03
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 5.23,
+    "queueBuffer <- Binder:424_": 0.26,
+    "dequeueBuffer <- Binder:424_": 0.15
+   },
+   "sleepInDequeueOrSwapMs": 0.41,
+   "gc": [],
+   "linkThreadsCpuMs": 0.03,
+   "inNetworkStatsPoll": false,
+   "profileCause": "preempted",
+   "profileDominantPhase": "scenery"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8128,
+   "active": true,
+   "second": 20.449,
+   "intervalMs": 16.601,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.63,
+   "preemptedMs": 0.11,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 5.84,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "app (RT)": 0.11
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.12,
+    "app (RT)": 0.11,
+    "Binder:424_": 0.05,
+    "sf (RT)": 0.04,
+    ".deathride.perf (nice -10)": 0.03
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 5.34,
+    "queueBuffer <- Binder:424_": 0.31,
+    "dequeueBuffer <- Binder:424_": 0.19
+   },
+   "sleepInDequeueOrSwapMs": 0.5,
+   "gc": [],
+   "linkThreadsCpuMs": 0.25,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8131,
+   "active": true,
+   "second": 20.499,
+   "intervalMs": 16.808,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 11.35,
+   "preemptedMs": 0.13,
+   "wakeupLatencyMs": 0.08,
+   "sleepMs": 5.25,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "app (RT)": 0.13
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.13,
+    "app (RT)": 0.13,
+    ".deathride.perf (nice -10)": 0.1,
+    "Binder:424_": 0.06,
+    "sf (RT)": 0.06
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 4.84,
+    "queueBuffer <- Binder:424_": 0.23,
+    "dequeueBuffer <- Binder:424_": 0.18
+   },
+   "sleepInDequeueOrSwapMs": 0.41,
+   "gc": [],
+   "linkThreadsCpuMs": 2.72,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:simulation",
+   "profileDominantPhase": "simulation"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8138,
+   "active": true,
+   "second": 20.616,
+   "intervalMs": 16.573,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 8.99,
+   "preemptedMs": 0.07,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.49,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.07
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.08,
+    "sf (RT)": 0.07,
+    "Binder:424_": 0.05,
+    "app (RT)": 0.03,
+    "surfaceflinger": 0.02
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 7.08,
+    "queueBuffer <- Binder:424_": 0.27,
+    "dequeueBuffer <- Binder:424_": 0.14
+   },
+   "sleepInDequeueOrSwapMs": 0.41,
+   "gc": [],
+   "linkThreadsCpuMs": 0.53,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8140,
+   "active": true,
+   "second": 20.649,
+   "intervalMs": 16.664,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.5,
+   "preemptedMs": 0.09,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.04,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "sf (RT)": 0.09
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.1,
+    "sf (RT)": 0.09,
+    "Binder:424_": 0.06,
+    ".deathride.perf (nice -10)": 0.06,
+    "app (RT)": 0.05
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.59,
+    "queueBuffer <- Binder:424_": 0.29,
+    "dequeueBuffer <- Binder:424_": 0.16
+   },
+   "sleepInDequeueOrSwapMs": 0.45,
+   "gc": [],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8143,
+   "active": true,
+   "second": 20.699,
+   "intervalMs": 17.041,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 11.58,
+   "preemptedMs": 0.14,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 5.31,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "sf (RT)": 0.14
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.14,
+    "sf (RT)": 0.14,
+    "Binder:424_": 0.08,
+    "DefaultDispatch (nice 13)": 0.05,
+    "app (RT)": 0.05
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 4.73,
+    "queueBuffer <- Binder:424_": 0.34,
+    "dequeueBuffer <- Binder:424_": 0.24
+   },
+   "sleepInDequeueOrSwapMs": 0.58,
+   "gc": [],
+   "linkThreadsCpuMs": 21.95,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8150,
+   "active": true,
+   "second": 20.816,
+   "intervalMs": 16.349,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 10.25,
+   "preemptedMs": 0.02,
+   "wakeupLatencyMs": 0.06,
+   "sleepMs": 6.01,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "disp_osd1_irq_k (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    ".deathride.perf (nice -10)": 0.05,
+    "surfaceflinger (RT)": 0.05,
+    "disp_osd1_irq_k (RT)": 0.02,
+    "Binder:424_": 0.01,
+    "disp_osd2_irq_k (RT)": 0.01
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 5.57,
+    "queueBuffer <- Binder:424_": 0.31,
+    "dequeueBuffer <- Binder:424_": 0.14
+   },
+   "sleepInDequeueOrSwapMs": 0.45,
+   "gc": [],
+   "linkThreadsCpuMs": 1.04,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8153,
+   "active": true,
+   "second": 20.866,
+   "intervalMs": 18.657,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 11.26,
+   "preemptedMs": 0.15,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.23,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "app (RT)": 0.15
+   },
+   "whileWaitingCpuHeldBy": {
+    "app (RT)": 0.15,
+    "DefaultDispatch (nice 13)": 0.14,
+    "Binder:424_": 0.07,
+    "pool-9-thread": 0.04,
+    ".deathride.perf (nice -10)": 0.0
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.71,
+    "queueBuffer <- Binder:424_": 0.33,
+    "dequeueBuffer <- Binder:424_": 0.19
+   },
+   "sleepInDequeueOrSwapMs": 0.51,
+   "gc": [],
+   "linkThreadsCpuMs": 10.34,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8157,
+   "active": true,
+   "second": 20.933,
+   "intervalMs": 16.803,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.42,
+   "preemptedMs": 0.12,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.25,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "app (RT)": 0.1,
+    "disp_osd2_irq_k (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "surfaceflinger (RT)": 0.1,
+    "app (RT)": 0.1,
+    "Binder:424_": 0.05,
+    ".deathride.perf (nice -10)": 0.03,
+    "disp_osd2_irq_k (RT)": 0.02
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.72,
+    "queueBuffer <- Binder:424_": 0.29,
+    "dequeueBuffer <- Binder:424_": 0.24
+   },
+   "sleepInDequeueOrSwapMs": 0.53,
+   "gc": [],
+   "linkThreadsCpuMs": 0.54,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:flushSwap",
+   "profileDominantPhase": "flushSwap"
+  },
+  {
+   "trace": "diag-muted-trace2",
+   "row": 8171,
+   "active": true,
+   "second": 21.166,
+   "intervalMs": 17.058,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 9.67,
+   "preemptedMs": 0.17,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 7.2,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: queueBuffer",
+   "preemptedBy": {
+    "app (RT)": 0.17
+   },
+   "whileWaitingCpuHeldBy": {
+    "app (RT)": 0.17,
+    "surfaceflinger (RT)": 0.11,
+    "DefaultDispatch (nice 13)": 0.11,
+    "cat": 0.08,
+    "Binder:424_": 0.07
+   },
+   "sleepBy": {
+    "(none) <- .deathride.perf": 6.77,
+    "queueBuffer <- Binder:424_": 0.27,
+    "dequeueBuffer <- Binder:424_": 0.15
+   },
+   "sleepInDequeueOrSwapMs": 0.42,
+   "gc": [],
+   "linkThreadsCpuMs": 6.21,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:simulation",
+   "profileDominantPhase": "simulation"
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10111,
+   "active": false,
+   "second": 1.317,
+   "intervalMs": 30.809,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 24.74,
+   "preemptedMs": 5.6,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 0.45,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "app (RT)": 5.09,
+    "kworker/2:": 0.43,
+    "hif_thread (nice -10)": 0.08
+   },
+   "whileWaitingCpuHeldBy": {
+    "deathride-cours (nice 13)": 4.99,
+    "deathride-profi (nice 13)": 3.99,
+    "surfaceflinger (RT)": 1.47,
+    "DefaultDispatch (nice 13)": 1.11,
+    "kworker/u8:": 0.66
+   },
+   "sleepBy": {
+    "queueBuffer <- Binder:424_": 0.28,
+    "dequeueBuffer <- Binder:424_": 0.17
+   },
+   "sleepInDequeueOrSwapMs": 0.45,
+   "gc": [],
+   "linkThreadsCpuMs": 16.68,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10112,
+   "active": false,
+   "second": 1.348,
+   "intervalMs": 21.808,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 20.11,
+   "preemptedMs": 1.7,
+   "wakeupLatencyMs": 0,
+   "sleepMs": 0,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "Binder:424_": 0.57,
+    "kworker/2:": 0.54,
+    "app (RT)": 0.37,
+    "Thread (nice -10)": 0.18
+   },
+   "whileWaitingCpuHeldBy": {
+    "deathride-cours (nice 13)": 1.69,
+    "Binder:424_": 0.58,
+    "kworker/2:": 0.54,
+    "DefaultDispatch (nice 13)": 0.49,
+    "deathride-profi (nice 13)": 0.45
+   },
+   "sleepBy": {},
+   "sleepInDequeueOrSwapMs": 0,
+   "gc": [],
+   "linkThreadsCpuMs": 4.42,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10113,
+   "active": false,
+   "second": 1.369,
+   "intervalMs": 18.029,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 16.92,
+   "preemptedMs": 0.85,
+   "wakeupLatencyMs": 0.0,
+   "sleepMs": 0.26,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "Binder:424_": 0.68,
+    "app (RT)": 0.16,
+    "kworker/2:": 0.01
+   },
+   "whileWaitingCpuHeldBy": {
+    "deathride-cours (nice 13)": 0.81,
+    "deathride-profi (nice 13)": 0.66,
+    "Binder:424_": 0.52,
+    "app (RT)": 0.31,
+    "surfaceflinger (RT)": 0.25
+   },
+   "sleepBy": {
+    "queueBuffer <- Binder:424_": 0.26
+   },
+   "sleepInDequeueOrSwapMs": 0.26,
+   "gc": [],
+   "linkThreadsCpuMs": 3.53,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10120,
+   "active": false,
+   "second": 1.483,
+   "intervalMs": 21.607,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 18.68,
+   "preemptedMs": 2.75,
+   "wakeupLatencyMs": 0.01,
+   "sleepMs": 0.17,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "surfaceflinger (RT)": 1.93,
+    "Binder:424_": 0.33,
+    "TimerDispatch (RT)": 0.21,
+    "hif_thread (nice -10)": 0.2
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 3.14,
+    "deathride-cours (nice 13)": 2.51,
+    "surfaceflinger (RT)": 1.46,
+    "HwBinder:366_ (RT)": 0.43,
+    "Binder:424_": 0.42
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 0.17
+   },
+   "sleepInDequeueOrSwapMs": 0.17,
+   "gc": [],
+   "linkThreadsCpuMs": 14.22,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10136,
+   "active": false,
+   "second": 1.752,
+   "intervalMs": 28.391,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 13.2,
+   "preemptedMs": 5.61,
+   "wakeupLatencyMs": 0.04,
+   "sleepMs": 9.55,
+   "traceCause": "waiting",
+   "traceDetail": "preempted by hif_thread (nice -10)",
+   "preemptedBy": {
+    "hif_thread (nice -10)": 5.41,
+    "Binder:424_": 0.19
+   },
+   "whileWaitingCpuHeldBy": {
+    "cat": 5.43,
+    "deathride-cours (nice 13)": 5.08,
+    "HeapTaskDaemon (nice 4)": 3.56,
+    "surfaceflinger (RT)": 1.34,
+    "DefaultDispatch (nice 13)": 0.93
+   },
+   "sleepBy": {
+    "DR.hud <- DefaultDispatch": 5.23,
+    "dequeueBuffer <- Binder:424_": 3.77,
+    "queueBuffer <- Binder:424_": 0.26,
+    "DR.sceneryDraw <- DefaultDispatch": 0.14
+   },
+   "sleepInDequeueOrSwapMs": 4.04,
+   "gc": [
+    {
+     "name": "ConcurrentGC",
+     "ms": 60.3
+    }
+   ],
+   "linkThreadsCpuMs": 19.47,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10224,
+   "active": false,
+   "second": 3.228,
+   "intervalMs": 32.165,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 29.83,
+   "preemptedMs": 1.35,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 0.96,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "app (RT)": 0.78,
+    "Binder:424_": 0.46,
+    "RenderThread (nice -10)": 0.05,
+    "swapper/": 0.04
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 1.71,
+    "surfaceflinger (RT)": 0.67,
+    "Binder:424_": 0.51,
+    ".deathride.perf (nice -10)": 0.38,
+    "app (RT)": 0.32
+   },
+   "sleepBy": {
+    "DR.requests <- <...>": 0.72,
+    "queueBuffer <- Binder:424_": 0.24
+   },
+   "sleepInDequeueOrSwapMs": 0.24,
+   "gc": [],
+   "linkThreadsCpuMs": 28.35,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10231,
+   "active": false,
+   "second": 3.373,
+   "intervalMs": 17.793,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 5.98,
+   "preemptedMs": 0.22,
+   "wakeupLatencyMs": 0.03,
+   "sleepMs": 11.56,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: DR.prepare",
+   "preemptedBy": {
+    "hif_thread (nice -10)": 0.22
+   },
+   "whileWaitingCpuHeldBy": {
+    "app (RT)": 0.16,
+    "TimerDispatch (RT)": 0.14,
+    "DefaultDispatch (nice 13)": 0.12,
+    "hif_thread (nice -10)": 0.08,
+    "sf (RT)": 0.08
+   },
+   "sleepBy": {
+    "DR.prepare <- kworker/u8:": 7.8,
+    "DR.prepare <- <...>": 3.08,
+    "dequeueBuffer <- <...>": 0.35,
+    "queueBuffer <- <...>": 0.34
+   },
+   "sleepInDequeueOrSwapMs": 0.68,
+   "gc": [],
+   "linkThreadsCpuMs": 15.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10234,
+   "active": false,
+   "second": 3.427,
+   "intervalMs": 22.925,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 10.76,
+   "preemptedMs": 0.76,
+   "wakeupLatencyMs": 0.1,
+   "sleepMs": 11.31,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: DR.prepare",
+   "preemptedBy": {
+    "app (RT)": 0.61,
+    "sf (RT)": 0.07,
+    "video_disp (RT)": 0.05,
+    "disp_osd2_confi (RT)": 0.03
+   },
+   "whileWaitingCpuHeldBy": {
+    "app (RT)": 0.57,
+    "surfaceflinger (RT)": 0.39,
+    "sf (RT)": 0.37,
+    "TimerDispatch (RT)": 0.29,
+    ".deathride.perf (nice -10)": 0.24
+   },
+   "sleepBy": {
+    "DR.prepare <- kworker/u8:": 10.56,
+    "queueBuffer <- <...>": 0.43,
+    "dequeueBuffer <- <...>": 0.32
+   },
+   "sleepInDequeueOrSwapMs": 0.75,
+   "gc": [],
+   "linkThreadsCpuMs": 0.97,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10237,
+   "active": false,
+   "second": 3.487,
+   "intervalMs": 20.632,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.13,
+   "preemptedMs": 0.26,
+   "wakeupLatencyMs": 0.04,
+   "sleepMs": 12.2,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: DR.prepare",
+   "preemptedBy": {
+    "hif_thread (nice -10)": 0.26
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.66,
+    "hif_thread (nice -10)": 0.17,
+    "kworker/3:": 0.1,
+    "kworker/0:": 0.09,
+    "main_thread (nice -10)": 0.04
+   },
+   "sleepBy": {
+    "DR.prepare <- kworker/u8:": 8.22,
+    "DR.prepare <- <...>": 3.14,
+    "queueBuffer <- <...>": 0.62,
+    "dequeueBuffer <- <...>": 0.23
+   },
+   "sleepInDequeueOrSwapMs": 0.85,
+   "gc": [],
+   "linkThreadsCpuMs": 20.13,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10240,
+   "active": false,
+   "second": 3.548,
+   "intervalMs": 21.798,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 9.77,
+   "preemptedMs": 0.82,
+   "wakeupLatencyMs": 0.04,
+   "sleepMs": 11.16,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: DR.prepare",
+   "preemptedBy": {
+    "kworker/0:": 0.37,
+    "hif_thread (nice -10)": 0.34,
+    "disp_osd2_irq_k (RT)": 0.11
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 1.15,
+    "hif_thread (nice -10)": 0.45,
+    "surfaceflinger (RT)": 0.35,
+    "kworker/0:": 0.33,
+    "Binder:424_": 0.31
+   },
+   "sleepBy": {
+    "DR.prepare <- <...>": 10.2,
+    "queueBuffer <- <...>": 0.75,
+    "dequeueBuffer <- <...>": 0.22
+   },
+   "sleepInDequeueOrSwapMs": 0.97,
+   "gc": [],
+   "linkThreadsCpuMs": 13.21,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10306,
+   "active": false,
+   "second": 4.646,
+   "intervalMs": 21.422,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 19.57,
+   "preemptedMs": 1.85,
+   "wakeupLatencyMs": 0,
+   "sleepMs": 0,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "Binder:424_": 1.35,
+    "sf (RT)": 0.44,
+    "GPU completion (nice -4)": 0.05,
+    "hdmi_timer_kthr": 0.01
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 2.74,
+    "NetworkStats": 0.74,
+    "deathride-profi (nice 13)": 0.67,
+    "Binder:424_": 0.63,
+    "surfaceflinger (RT)": 0.38
+   },
+   "sleepBy": {},
+   "sleepInDequeueOrSwapMs": 0,
+   "gc": [],
+   "linkThreadsCpuMs": 19.86,
+   "inNetworkStatsPoll": true,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10307,
+   "active": false,
+   "second": 4.667,
+   "intervalMs": 22.347,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 21.3,
+   "preemptedMs": 1.04,
+   "wakeupLatencyMs": 0,
+   "sleepMs": 0,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "Binder:424_": 0.63,
+    "hdmi_timer_kthr": 0.2,
+    "sf (RT)": 0.1,
+    "GPU completion (nice -4)": 0.07
+   },
+   "whileWaitingCpuHeldBy": {
+    "deathride-profi (nice 13)": 0.9,
+    "Binder:424_": 0.55,
+    "NetworkStats": 0.51,
+    "ip6tables-resto": 0.42,
+    "adbd": 0.22
+   },
+   "sleepBy": {},
+   "sleepInDequeueOrSwapMs": 0,
+   "gc": [],
+   "linkThreadsCpuMs": 2.68,
+   "inNetworkStatsPoll": true,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10308,
+   "active": false,
+   "second": 4.689,
+   "intervalMs": 19.982,
+   "presentIntervalMs": 33.367,
+   "classB": true,
+   "runningMs": 18.08,
+   "preemptedMs": 1.91,
+   "wakeupLatencyMs": 0,
+   "sleepMs": 0,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "Jit thread pool": 1.03,
+    "Binder:424_": 0.68,
+    "sf (RT)": 0.1,
+    "rcu_preempt": 0.05
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 1.85,
+    "NetworkStats": 1.81,
+    "Jit thread pool": 1.03,
+    "deathride-profi (nice 13)": 0.67,
+    "Binder:424_": 0.6
+   },
+   "sleepBy": {},
+   "sleepInDequeueOrSwapMs": 0,
+   "gc": [],
+   "linkThreadsCpuMs": 10.34,
+   "inNetworkStatsPoll": true,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10311,
+   "active": false,
+   "second": 4.737,
+   "intervalMs": 21.462,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 19.83,
+   "preemptedMs": 1.63,
+   "wakeupLatencyMs": 0,
+   "sleepMs": 0,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "kworker/u8:": 0.57,
+    "Binder:424_": 0.56,
+    "sf (RT)": 0.19,
+    "Binder:331_": 0.16
+   },
+   "whileWaitingCpuHeldBy": {
+    "deathride-profi (nice 13)": 1.27,
+    "DefaultDispatch (nice 13)": 0.83,
+    "NetworkStats": 0.8,
+    "Binder:424_": 0.61,
+    "kworker/u8:": 0.4
+   },
+   "sleepBy": {},
+   "sleepInDequeueOrSwapMs": 0,
+   "gc": [],
+   "linkThreadsCpuMs": 10.33,
+   "inNetworkStatsPoll": true,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10326,
+   "active": false,
+   "second": 4.986,
+   "intervalMs": 20.434,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.18,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.11,
+   "sleepMs": 12.14,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.09,
+    "DefaultDispatch (nice 13)": 0.01,
+    "hif_thread (nice -10)": 0.01,
+    "kworker/2:": 0.01,
+    "rcu_preempt": 0.0
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 11.6,
+    "queueBuffer <- Binder:424_": 0.55
+   },
+   "sleepInDequeueOrSwapMs": 12.14,
+   "gc": [],
+   "linkThreadsCpuMs": 6.8,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10330,
+   "active": false,
+   "second": 5.052,
+   "intervalMs": 20.3,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 7.03,
+   "preemptedMs": 0.35,
+   "wakeupLatencyMs": 0.04,
+   "sleepMs": 12.88,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "rx_thread (nice -10)": 0.35
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.79,
+    "rx_thread (nice -10)": 0.33,
+    "hif_thread (nice -10)": 0.14,
+    "main_thread (nice -10)": 0.11,
+    "kworker/0:": 0.07
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 12.55,
+    "queueBuffer <- Binder:424_": 0.32
+   },
+   "sleepInDequeueOrSwapMs": 12.88,
+   "gc": [],
+   "linkThreadsCpuMs": 23.04,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10340,
+   "active": false,
+   "second": 5.219,
+   "intervalMs": 20.831,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.17,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.09,
+   "sleepMs": 12.58,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.09,
+    ".deathride.perf (nice -10)": 0.07,
+    "surfaceflinger (RT)": 0.07
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 12.07,
+    "queueBuffer <- Binder:424_": 0.5
+   },
+   "sleepInDequeueOrSwapMs": 12.58,
+   "gc": [],
+   "linkThreadsCpuMs": 0.6,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10351,
+   "active": false,
+   "second": 5.402,
+   "intervalMs": 20.217,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.17,
+   "preemptedMs": 0.17,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 11.86,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "RenderThread (nice -10)": 0.17
+   },
+   "whileWaitingCpuHeldBy": {
+    "RenderThread (nice -10)": 0.17,
+    "DefaultDispatch (nice 13)": 0.17,
+    "DefaultExecutor (nice 13)": 0.05,
+    "kworker/u8:": 0.04,
+    "pvr_defer_free (nice 19)": 0.02
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 11.51,
+    "queueBuffer <- <...>": 0.36
+   },
+   "sleepInDequeueOrSwapMs": 11.86,
+   "gc": [],
+   "linkThreadsCpuMs": 0.77,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10354,
+   "active": false,
+   "second": 5.453,
+   "intervalMs": 20.095,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.6,
+   "preemptedMs": 1.13,
+   "wakeupLatencyMs": 0.07,
+   "sleepMs": 10.3,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "Binder:424_": 0.5,
+    "kworker/u8:": 0.46,
+    "app (RT)": 0.07,
+    "surfaceflinger": 0.05
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 1.9,
+    "Binder:424_": 0.57,
+    "kworker/u8:": 0.49,
+    "kworker/0:": 0.38,
+    "hif_thread (nice -10)": 0.24
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 10.3
+   },
+   "sleepInDequeueOrSwapMs": 10.3,
+   "gc": [],
+   "linkThreadsCpuMs": 31.73,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10356,
+   "active": false,
+   "second": 5.486,
+   "intervalMs": 20.669,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.37,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.03,
+   "sleepMs": 12.27,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.03,
+    "Binder:424_": 0.03,
+    "surfaceflinger (RT)": 0.01
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 11.87,
+    "queueBuffer <- <...>": 0.4
+   },
+   "sleepInDequeueOrSwapMs": 12.27,
+   "gc": [],
+   "linkThreadsCpuMs": 15.02,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10361,
+   "active": false,
+   "second": 5.569,
+   "intervalMs": 20.629,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.56,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 12.05,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.02,
+    "surfaceflinger (RT)": 0.01
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 11.64,
+    "queueBuffer <- <...>": 0.41
+   },
+   "sleepInDequeueOrSwapMs": 12.05,
+   "gc": [],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10363,
+   "active": false,
+   "second": 5.603,
+   "intervalMs": 22.161,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.09,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.04,
+   "sleepMs": 14.03,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.04,
+    "Thread": 0.01,
+    "hif_thread (nice -10)": 0.01
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 13.7,
+    "queueBuffer <- <...>": 0.32
+   },
+   "sleepInDequeueOrSwapMs": 14.03,
+   "gc": [],
+   "linkThreadsCpuMs": 14.59,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10368,
+   "active": false,
+   "second": 5.686,
+   "intervalMs": 21.808,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.82,
+   "preemptedMs": 0.06,
+   "wakeupLatencyMs": 0.11,
+   "sleepMs": 12.82,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "DeathRideAudio": 0.06
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.38,
+    "Binder:424_": 0.11,
+    "DeathRideAudio": 0.06,
+    "HwBinder:366_ (RT)": 0.05,
+    "surfaceflinger (RT)": 0.04
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 12.42,
+    "queueBuffer <- Binder:424_": 0.4
+   },
+   "sleepInDequeueOrSwapMs": 12.82,
+   "gc": [],
+   "linkThreadsCpuMs": 13.01,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10378,
+   "active": false,
+   "second": 5.853,
+   "intervalMs": 20.139,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.54,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 11.58,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.02,
+    "surfaceflinger (RT)": 0.01
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 11.15,
+    "queueBuffer <- Binder:424_": 0.44
+   },
+   "sleepInDequeueOrSwapMs": 11.58,
+   "gc": [],
+   "linkThreadsCpuMs": 13.32,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10389,
+   "active": false,
+   "second": 6.038,
+   "intervalMs": 20.214,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 9.15,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 11.04,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.02,
+    "DefaultDispatch (nice 13)": 0.02,
+    "surfaceflinger (RT)": 0.01
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 10.6,
+    "queueBuffer <- Binder:424_": 0.44
+   },
+   "sleepInDequeueOrSwapMs": 11.04,
+   "gc": [],
+   "linkThreadsCpuMs": 21.95,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10394,
+   "active": false,
+   "second": 6.12,
+   "intervalMs": 20.815,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.14,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.03,
+   "sleepMs": 12.64,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.04,
+    "Binder:424_": 0.03,
+    "surfaceflinger (RT)": 0.02
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 12.21,
+    "queueBuffer <- Binder:424_": 0.43
+   },
+   "sleepInDequeueOrSwapMs": 12.64,
+   "gc": [],
+   "linkThreadsCpuMs": 12.04,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10397,
+   "active": false,
+   "second": 6.171,
+   "intervalMs": 20.449,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 9.14,
+   "preemptedMs": 0.52,
+   "wakeupLatencyMs": 0.1,
+   "sleepMs": 10.7,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "kworker/u8:": 0.3,
+    "hif_thread (nice -10)": 0.11,
+    "app (RT)": 0.1
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.61,
+    "kworker/u8:": 0.3,
+    "hif_thread (nice -10)": 0.21,
+    "kworker/0:": 0.11,
+    "main_thread (nice -10)": 0.1
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 10.24,
+    "queueBuffer <- Binder:424_": 0.46
+   },
+   "sleepInDequeueOrSwapMs": 10.7,
+   "gc": [],
+   "linkThreadsCpuMs": 20.29,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": null,
+   "active": false,
+   "second": 6.253,
+   "intervalMs": 21.156,
+   "presentIntervalMs": null,
+   "classB": false,
+   "runningMs": 8.44,
+   "preemptedMs": 0.5,
+   "wakeupLatencyMs": 0.19,
+   "sleepMs": 12.02,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "kworker/0:": 0.47,
+    "psimon (RT)": 0.03
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 1.04,
+    "kworker/u8:": 0.3,
+    "kworker/0:": 0.2,
+    "main_thread (nice -10)": 0.16,
+    "Binder:424_": 0.12
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 11.63,
+    "queueBuffer <- <...>": 0.4
+   },
+   "sleepInDequeueOrSwapMs": 12.02,
+   "gc": [],
+   "linkThreadsCpuMs": 14.41,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": null,
+   "active": false,
+   "second": 6.286,
+   "intervalMs": 22.756,
+   "presentIntervalMs": null,
+   "classB": false,
+   "runningMs": 8.83,
+   "preemptedMs": 1.02,
+   "wakeupLatencyMs": 0.11,
+   "sleepMs": 12.8,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "Binder:424_": 0.49,
+    "RenderThread (nice -10)": 0.42,
+    "GPU completion (nice -4)": 0.09,
+    "hdmi_timer_kthr": 0.03
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 2.78,
+    "Binder:424_": 0.6,
+    "RenderThread (nice -10)": 0.42,
+    "kworker/u8:": 0.11,
+    "GPU completion (nice -4)": 0.09
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 12.8
+   },
+   "sleepInDequeueOrSwapMs": 12.8,
+   "gc": [],
+   "linkThreadsCpuMs": 22.53,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10420,
+   "active": false,
+   "second": 6.553,
+   "intervalMs": 21.823,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.52,
+   "preemptedMs": 0.18,
+   "wakeupLatencyMs": 0.04,
+   "sleepMs": 13.09,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "hif_thread (nice -10)": 0.18
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.58,
+    "hif_thread (nice -10)": 0.14,
+    "Binder:424_": 0.04,
+    "kworker/0:": 0.04,
+    "surfaceflinger": 0.02
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 12.62,
+    "queueBuffer <- <...>": 0.48
+   },
+   "sleepInDequeueOrSwapMs": 13.09,
+   "gc": [],
+   "linkThreadsCpuMs": 15.85,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10423,
+   "active": false,
+   "second": 6.605,
+   "intervalMs": 22.896,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 11.89,
+   "preemptedMs": 0.41,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 10.57,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "kworker/0:": 0.41
+   },
+   "whileWaitingCpuHeldBy": {
+    "kworker/0:": 0.41,
+    "DefaultDispatch (nice 13)": 0.41,
+    "main_thread (nice -10)": 0.13,
+    "hif_thread (nice -10)": 0.11,
+    "kworker/1:": 0.06
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 10.15,
+    "queueBuffer <- <...>": 0.42
+   },
+   "sleepInDequeueOrSwapMs": 10.57,
+   "gc": [],
+   "linkThreadsCpuMs": 18.6,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10425,
+   "active": false,
+   "second": 6.637,
+   "intervalMs": 21.4,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.96,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.03,
+   "sleepMs": 12.41,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.03,
+    "surfaceflinger (RT)": 0.01
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 11.9,
+    "queueBuffer <- <...>": 0.51
+   },
+   "sleepInDequeueOrSwapMs": 12.41,
+   "gc": [],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": null,
+   "active": false,
+   "second": 6.67,
+   "intervalMs": 23.003,
+   "presentIntervalMs": null,
+   "classB": false,
+   "runningMs": 8.99,
+   "preemptedMs": 0.79,
+   "wakeupLatencyMs": 0.5,
+   "sleepMs": 12.72,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "RenderThread (nice -10)": 0.52,
+    "Thread (nice -10)": 0.28
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 2.88,
+    "RenderThread (nice -10)": 0.4,
+    "ksmd (nice 5)": 0.39,
+    "surfaceflinger (RT)": 0.33,
+    "Thread (nice -10)": 0.28
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 12.32,
+    "queueBuffer <- <...>": 0.41
+   },
+   "sleepInDequeueOrSwapMs": 12.72,
+   "gc": [],
+   "linkThreadsCpuMs": 37.86,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10429,
+   "active": false,
+   "second": 6.704,
+   "intervalMs": 21.231,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.45,
+   "preemptedMs": 0.09,
+   "wakeupLatencyMs": 0.22,
+   "sleepMs": 12.47,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "GPU completion (nice -4)": 0.09
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.97,
+    "GPU completion (nice -4)": 0.09,
+    "kworker/u8:": 0.07,
+    "RenderThread (nice -10)": 0.06,
+    "Binder:424_": 0.04
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 12.05,
+    "queueBuffer <- <...>": 0.41
+   },
+   "sleepInDequeueOrSwapMs": 12.47,
+   "gc": [],
+   "linkThreadsCpuMs": 11.04,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10432,
+   "active": false,
+   "second": 6.755,
+   "intervalMs": 21.186,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 9.05,
+   "preemptedMs": 0.04,
+   "wakeupLatencyMs": 0.05,
+   "sleepMs": 12.04,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "rcu_preempt": 0.03,
+    "hif_thread (nice -10)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.12,
+    "Binder:424_": 0.06,
+    "surfaceflinger (RT)": 0.05,
+    "hif_thread (nice -10)": 0.04,
+    "rcu_preempt": 0.03
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 10.53,
+    "queueBuffer <- <...>": 1.51
+   },
+   "sleepInDequeueOrSwapMs": 12.04,
+   "gc": [],
+   "linkThreadsCpuMs": 27.65,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10437,
+   "active": false,
+   "second": 6.838,
+   "intervalMs": 20.33,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.93,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.03,
+   "sleepMs": 11.38,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.03,
+    "surfaceflinger (RT)": 0.01
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 11.01,
+    "queueBuffer <- <...>": 0.37
+   },
+   "sleepInDequeueOrSwapMs": 11.38,
+   "gc": [],
+   "linkThreadsCpuMs": 0.26,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10442,
+   "active": false,
+   "second": 6.921,
+   "intervalMs": 20.384,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.19,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 12.17,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.02,
+    "surfaceflinger (RT)": 0.01
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 11.68,
+    "queueBuffer <- <...>": 0.49
+   },
+   "sleepInDequeueOrSwapMs": 12.17,
+   "gc": [],
+   "linkThreadsCpuMs": 8.94,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10459,
+   "active": false,
+   "second": 7.205,
+   "intervalMs": 20.124,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.0,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.82,
+   "sleepMs": 11.31,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 1.79,
+    "ksmd (nice 5)": 0.81,
+    "kworker/u8:": 0.28,
+    "DefaultExecutor (nice 13)": 0.24,
+    "Binder:424_": 0.1
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 11.0,
+    "queueBuffer <- <...>": 0.31
+   },
+   "sleepInDequeueOrSwapMs": 11.31,
+   "gc": [],
+   "linkThreadsCpuMs": 2.6,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10462,
+   "active": false,
+   "second": 7.255,
+   "intervalMs": 20.265,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.16,
+   "preemptedMs": 0.06,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 12.03,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "Binder:424_": 0.06
+   },
+   "whileWaitingCpuHeldBy": {
+    "Binder:424_": 0.09,
+    "kworker/u8:": 0.08,
+    "app (RT)": 0.04,
+    "surfaceflinger (RT)": 0.01
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 11.74,
+    "queueBuffer <- Binder:424_": 0.29
+   },
+   "sleepInDequeueOrSwapMs": 12.03,
+   "gc": [],
+   "linkThreadsCpuMs": 12.7,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10464,
+   "active": false,
+   "second": 7.288,
+   "intervalMs": 20.475,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 8.23,
+   "preemptedMs": 0,
+   "wakeupLatencyMs": 0.04,
+   "sleepMs": 12.21,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {},
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.09,
+    "Binder:424_": 0.04,
+    "surfaceflinger (RT)": 0.02
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 11.73,
+    "queueBuffer <- Binder:424_": 0.48
+   },
+   "sleepInDequeueOrSwapMs": 12.21,
+   "gc": [],
+   "linkThreadsCpuMs": 25.04,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10471,
+   "active": false,
+   "second": 7.406,
+   "intervalMs": 21.135,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 7.68,
+   "preemptedMs": 0.13,
+   "wakeupLatencyMs": 0.54,
+   "sleepMs": 12.78,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "swapper/": 0.13
+   },
+   "whileWaitingCpuHeldBy": {
+    "HeapTaskDaemon (nice 4)": 0.68,
+    "Binder:424_": 0.01,
+    "DeathRideAudio": 0.01,
+    "surfaceflinger (RT)": 0.01,
+    "app (RT)": 0.01
+   },
+   "sleepBy": {
+    "dequeueBuffer <- Binder:424_": 9.14,
+    "Lock contention on large object map space lock (owner tid: 9858) <- HeapTaskDaemon": 1.79,
+    "DR.carsEffects <- HeapTaskDaemon": 1.46,
+    "queueBuffer <- Binder:424_": 0.37
+   },
+   "sleepInDequeueOrSwapMs": 9.52,
+   "gc": [
+    {
+     "name": "ConcurrentGC",
+     "ms": 121.0
+    }
+   ],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": null,
+   "profileDominantPhase": null
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10618,
+   "active": true,
+   "second": 9.857,
+   "intervalMs": 20.397,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 10.0,
+   "preemptedMs": 0.54,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 9.84,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: dequeueBuffer",
+   "preemptedBy": {
+    "kworker/0:": 0.54
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.62,
+    "kworker/0:": 0.54,
+    "main_thread (nice -10)": 0.12,
+    "ksoftirqd/": 0.11,
+    "hif_thread (nice -10)": 0.1
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 9.59,
+    "queueBuffer <- <...>": 0.25
+   },
+   "sleepInDequeueOrSwapMs": 9.84,
+   "gc": [],
+   "linkThreadsCpuMs": 25.59,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 10642,
+   "active": true,
+   "second": 10.258,
+   "intervalMs": 21.809,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 13.71,
+   "preemptedMs": 1.62,
+   "wakeupLatencyMs": 0.02,
+   "sleepMs": 6.46,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "kworker/0:": 1.62
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 3.9,
+    "DefaultExecutor (nice 13)": 0.59,
+    "deathride-link (nice 13)": 0.55,
+    "kworker/0:": 0.5,
+    "main_thread (nice -10)": 0.15
+   },
+   "sleepBy": {
+    "dequeueBuffer <- <...>": 6.18,
+    "queueBuffer <- <...>": 0.27
+   },
+   "sleepInDequeueOrSwapMs": 6.46,
+   "gc": [],
+   "linkThreadsCpuMs": 28.51,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 11042,
+   "active": true,
+   "second": 16.931,
+   "intervalMs": 24.413,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 17.62,
+   "preemptedMs": 0.66,
+   "wakeupLatencyMs": 1.14,
+   "sleepMs": 5.0,
+   "traceCause": "running",
+   "traceDetail": "running",
+   "preemptedBy": {
+    "app (RT)": 0.43,
+    "swapper/": 0.21,
+    "disp_osd2_irq_k (RT)": 0.02
+   },
+   "whileWaitingCpuHeldBy": {
+    "HeapTaskDaemon (nice 4)": 1.59,
+    "app (RT)": 0.43,
+    "TimerDispatch (RT)": 0.19,
+    "sf (RT)": 0.18,
+    "surfaceflinger (RT)": 0.15
+   },
+   "sleepBy": {
+    "Lock contention on large object map space lock (owner tid: 9858) <- HeapTaskDaemon": 4.29,
+    "dequeueBuffer <- Binder:424_": 0.34,
+    "queueBuffer <- Binder:424_": 0.27,
+    "Lock contention on large object map space lock (owner tid: 9858) <- <idle>": 0.1
+   },
+   "sleepInDequeueOrSwapMs": 0.61,
+   "gc": [
+    {
+     "name": "ConcurrentGC",
+     "ms": 37.1
+    }
+   ],
+   "linkThreadsCpuMs": 0.0,
+   "inNetworkStatsPoll": false,
+   "profileCause": "running:cars",
+   "profileDominantPhase": "cars"
+  },
+  {
+   "trace": "diag-muted-trace3",
+   "row": 11414,
+   "active": true,
+   "second": 23.143,
+   "intervalMs": 23.302,
+   "presentIntervalMs": 16.683,
+   "classB": false,
+   "runningMs": 11.18,
+   "preemptedMs": 0.09,
+   "wakeupLatencyMs": 0.34,
+   "sleepMs": 11.69,
+   "traceCause": "sleep",
+   "traceDetail": "sleep: Lock contention on Jit code cache",
+   "preemptedBy": {
+    "RenderThread (nice -10)": 0.09
+   },
+   "whileWaitingCpuHeldBy": {
+    "DefaultDispatch (nice 13)": 0.61,
+    "Profile Saver (nice 9)": 0.25,
+    ".deathride.perf (nice -10)": 0.22,
+    "m.amazon.tv.ime (nice -10)": 0.18,
+    "hif_thread (nice -10)": 0.1
+   },
+   "sleepBy": {
+    "Lock contention on Jit code cache (owner tid: 9870) <- Profile Saver": 11.0,
+    "queueBuffer <- <...>": 0.34,
+    "dequeueBuffer <- <...>": 0.32,
+    "(none) <- .deathride.perf": 0.04
+   },
+   "sleepInDequeueOrSwapMs": 0.66,
+   "gc": [],
+   "linkThreadsCpuMs": 31.83,
+   "inNetworkStatsPoll": false,
+   "profileCause": "sleep:dequeue",
+   "profileDominantPhase": "flushSwap"
+  }
+ ],
+ "over20": {
+  "waiting": 1,
+  "sleep": 8,
+  "running": 7
+ },
+ "classB": {
+  "running": 18,
+  "sleep": 26,
+  "waiting": 4
+ },
+ "notActive": 41,
+ "over20Detail": {
+  "sleep: dequeueBuffer": 6,
+  "running": 7,
+  "sleep: Lock contention on Jit code cache": 2,
+  "sleep: Lock contention on ClassLinker classes lock": 1
+ },
+ "over20WithGc": 5,
+ "limits": "Intrusive trace: tracing adds work to every phase, so its frame counts are not I2 figures. Waiting = preempted + wakeup latency. Preempted time is charged to the task that took the GL thread's CPU; sleep to the section open at switch-out and the task that woke it. Link threads are the app's threads named DefaultDispatch*, deathride-link*, ktor* or eventLoop*."
+}

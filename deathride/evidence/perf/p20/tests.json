@@ -1,0 +1,27 @@
+{
+ "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+ "codeUnderTest": "deathride/main 059d1982's Kotlin code, unchanged: P20 adds tools, evidence, ledger and docs only",
+ "runs": [
+  {"run": 1, "commit": "968909f2 (tools and the step 2/3 evidence committed; ledger and docs not yet)", "result": "pass",
+   "core": "261 passed (EvidenceRuleTest included)", "link": "34, 2 skipped (as on the base)", "game": "121 passed",
+   "host": "started 2026-10-09T06:10:39Z", "duration": "4 min 48 s", "log": "raw p20/gate-tests-run1.log"},
+  {"run": 2, "commit": "dfe98f9a (all P20 evidence, ledger and docs committed but this file and manifest.json)", "result": "pass",
+   "core": "261 passed (EvidenceRuleTest included, P20 evidence committed)", "link": "34, 2 skipped (as on the base)", "game": "121 passed",
+   "host": "started 2026-10-09T06:19:43Z", "duration": "4 min 41 s", "log": "raw p20/gate-tests-run2.log"}
+ ],
+ "reading": "Both runs are green. No run failed, so nothing was rerun.",
+ "dominatorTest": {
+  "command": "python tools/test_perf_p20_retained.py",
+  "committedAt": "36868014, before the first P20 dump was read (run 1's dumps were taken 03:44-03:45Z, after it)",
+  "result": "8 tests OK (rerun at the end: raw p20/test-p20-retained.log)",
+  "cases": "hand graph with a shared child and two cycles (idoms and retained sizes known); the Lengauer-Tarjan paper graph; 300 random graphs against the definition of dominance; a hand-built ART-style dump (heap ids, root kinds, inline String chars, a referent-only object, garbage, a large array); the dump's GC line read with perf-p18-gc.py's reader; growth between two dumps"
+ },
+ "perfApk": {
+  "command": "gradlew.bat :app:assembleDebug -PappId=dev.deathride.perf \"-PappLabel=Death Ride Perf\" -PracePort=8772 --console=plain (P19's perfApks.command)",
+  "builtAt": "36868014 (deathride/main code); BUILD SUCCESSFUL, 22 tasks from the build cache (raw p20/build-perf.log)",
+  "sha256": "bf07c7328e10428fc6645b83a2e24108adf64a52b04a80056e399eb590b4c8a9",
+  "package": "dev.deathride.perf, debuggable (aapt dump badging before any install: perf-badging.txt; perf-device.py asserts it again)",
+  "sameEntriesAs": "P19 cut.apk 522b73c1... (9c20b2b4 code): 576 entries, every CRC equal (apk-diff.txt)"
+ },
+ "skipped": {"typecheck": "no command configured", "lint": "no command configured"}
+}

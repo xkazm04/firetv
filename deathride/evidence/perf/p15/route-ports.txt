@@ -1,0 +1,18 @@
+P15: every output mix port of dumpsys media.audio_policy (raw/p15/route/silentMmap-lobby-audio-policy.txt) and the devices it supports.
+Attached output devices: Speaker (id 2, AUDIO_DEVICE_OUT_SPEAKER) and Default Out (stub). Only primary_out serves Speaker.
+
+primary_out                  0x0002 (AUDIO_OUTPUT_FLAG_PRIMARY)                         HDMI-Out, Speaker, AVLS-Out
+hdmi_pcm_passthrough_direct  0x0001 (AUDIO_OUTPUT_FLAG_DIRECT)                          HDMI-Out
+mmap_no_irq_out              0x4001 (AUDIO_OUTPUT_FLAG_DIRECT|AUDIO_OUTPUT_FLAG_MMAP_NOIRQ) HDMI-Out
+hdmi_passthrough_direct      0x0001 (AUDIO_OUTPUT_FLAG_DIRECT)                          HDMI-Out
+hdmi_passthrough_tunnel      0x0041 (AUDIO_OUTPUT_FLAG_DIRECT|AUDIO_OUTPUT_FLAG_HW_AV_SYNC) HDMI-Out
+avls_out                     0x0001 (AUDIO_OUTPUT_FLAG_DIRECT)                          AVLS-Out
+avls_out_tunnel              0x0041 (AUDIO_OUTPUT_FLAG_DIRECT|AUDIO_OUTPUT_FLAG_HW_AV_SYNC) AVLS-Out
+bt_sco_out                   0x0002 (AUDIO_OUTPUT_FLAG_PRIMARY)                         BT-SCO-Out, BT-SCO-Headset-Out
+a2dp                         0x0000 (AUDIO_OUTPUT_FLAG_NONE)                            BT A2DP Out, BT A2DP Headphones, BT A2DP Speaker
+hearing                      0x0000 (AUDIO_OUTPUT_FLAG_NONE)                            BT Hearing Aid Out
+hw_av_sync                   0x0041 (AUDIO_OUTPUT_FLAG_DIRECT|AUDIO_OUTPUT_FLAG_HW_AV_SYNC) BT A2DP Out, BT A2DP Headphones, BT A2DP Speaker, BT Hearing Aid Out
+usb_accessory                0x0000 (AUDIO_OUTPUT_FLAG_NONE)                            USB Host Out
+usb_device                   0x0000 (AUDIO_OUTPUT_FLAG_NONE)                            USB Device Out, USB Headset Out
+stub                         0x0002 (AUDIO_OUTPUT_FLAG_PRIMARY)                         Default Out
+r_submix                     0x0000 (AUDIO_OUTPUT_FLAG_NONE)                            Remote Submix Out

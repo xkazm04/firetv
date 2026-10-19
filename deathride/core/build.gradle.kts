@@ -47,6 +47,17 @@ tasks.register<JavaExec>("combatDepthReport") {
     args(providers.gradleProperty("combatSamples").getOrElse("2000"))
 }
 
+tasks.register<JavaExec>("weaponCooldownReport") {
+    group="verification"
+    description="Held-FIRE duel and seeded AI scenarios for weapons.csv cooldown/heat numbers"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.WeaponCooldownReportKt")
+    maxHeapSize="1g"
+    jvmArgs("-Djava.util.concurrent.ForkJoinPool.common.parallelism=4")
+    args(providers.gradleProperty("cooldownSamples").getOrElse("300"),providers.gradleProperty("cooldownLabel").getOrElse("current"))
+}
+
 tasks.register<JavaExec>("careerV2Report") {
     group="verification"
     dependsOn(tasks.testClasses)

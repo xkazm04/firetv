@@ -1,0 +1,1357 @@
+{
+ "run1": {
+  "events": [
+   {
+    "event": "switch",
+    "logTime": "10-07 14:53:31.647",
+    "frame": 5664,
+    "frames": [
+     {
+      "k": 0,
+      "frame": 5664,
+      "intervalMs": 15.9,
+      "workMs": 75.0,
+      "gl": {
+       "texGen": 4,
+       "texDelete": 4,
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 2,
+       "texUploads": 4,
+       "texUploadBytes": 1048576,
+       "bufBytes": 74752
+      }
+     },
+     {
+      "k": 1,
+      "frame": 5665,
+      "intervalMs": 76.9,
+      "workMs": 12.0,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 76064
+      }
+     },
+     {
+      "k": 2,
+      "frame": 5666,
+      "intervalMs": 13.5,
+      "workMs": 12.6,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74336
+      }
+     },
+     {
+      "k": 3,
+      "frame": 5667,
+      "intervalMs": 14.0,
+      "workMs": 7.0,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 80288
+      }
+     },
+     {
+      "k": 4,
+      "frame": 5668,
+      "intervalMs": 11.9,
+      "workMs": 7.4,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 80000
+      }
+     },
+     {
+      "k": 5,
+      "frame": 5669,
+      "intervalMs": 16.7,
+      "workMs": 12.3,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 79904
+      }
+     },
+     {
+      "k": 6,
+      "frame": 5670,
+      "intervalMs": 16.7,
+      "workMs": 7.7,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 73472
+      }
+     },
+     {
+      "k": 7,
+      "frame": 5671,
+      "intervalMs": 16.6,
+      "workMs": 6.9,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 82688
+      }
+     },
+     {
+      "k": 8,
+      "frame": 5672,
+      "intervalMs": 16.8,
+      "workMs": 7.0,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 87680
+      }
+     },
+     {
+      "k": 9,
+      "frame": 5673,
+      "intervalMs": 16.7,
+      "workMs": 7.5,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 83648
+      }
+     },
+     {
+      "k": 10,
+      "frame": 5674,
+      "intervalMs": 18.0,
+      "workMs": 7.1,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 89600
+      }
+     },
+     {
+      "k": 11,
+      "frame": 5675,
+      "intervalMs": 99.3,
+      "workMs": 28.5,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 72992
+      }
+     },
+     {
+      "k": 12,
+      "frame": 5676,
+      "intervalMs": 29.9,
+      "workMs": 10.9,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74624
+      }
+     },
+     {
+      "k": 13,
+      "frame": 5677,
+      "intervalMs": 12.5,
+      "workMs": 11.7,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 71840
+      }
+     },
+     {
+      "k": 14,
+      "frame": 5678,
+      "intervalMs": 13.4,
+      "workMs": 15.8,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74240
+      }
+     },
+     {
+      "k": 15,
+      "frame": 5679,
+      "intervalMs": 17.4,
+      "workMs": 23.7,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 71744
+      }
+     },
+     {
+      "k": 16,
+      "frame": 5680,
+      "intervalMs": 28.9,
+      "workMs": 17.4,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 73088
+      }
+     },
+     {
+      "k": 17,
+      "frame": 5681,
+      "intervalMs": 19.1,
+      "workMs": 7.8,
+      "gl": {
+       "bufData": 8,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 71456
+      }
+     },
+     {
+      "k": 18,
+      "frame": 5682,
+      "intervalMs": 11.7,
+      "workMs": 7.9,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 73280
+      }
+     },
+     {
+      "k": 19,
+      "frame": 5683,
+      "intervalMs": 16.7,
+      "workMs": 7.6,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 72320
+      }
+     }
+    ],
+    "slowIntervals": [
+     {
+      "k": 11,
+      "intervalMs": 99.3
+     }
+    ],
+    "k11IntervalMs": 99.3,
+    "maxIntervalMs": 99.3,
+    "objectEvents": [
+     {
+      "k": 0,
+      "texGen": 4,
+      "texDelete": 4,
+      "texUploads": 4,
+      "texUploadBytes": 1048576
+     }
+    ]
+   },
+   {
+    "event": "switch",
+    "logTime": "10-07 14:54:39.115",
+    "frame": 9599,
+    "frames": [
+     {
+      "k": 0,
+      "frame": 9599,
+      "intervalMs": 14.9,
+      "workMs": 33.6,
+      "gl": {
+       "texGen": 4,
+       "texDelete": 4,
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 2,
+       "texUploads": 4,
+       "texUploadBytes": 1048576,
+       "bufBytes": 89984
+      }
+     },
+     {
+      "k": 1,
+      "frame": 9600,
+      "intervalMs": 35.3,
+      "workMs": 10.4,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 95840
+      }
+     },
+     {
+      "k": 2,
+      "frame": 9601,
+      "intervalMs": 11.9,
+      "workMs": 7.1,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 95840
+      }
+     },
+     {
+      "k": 3,
+      "frame": 9602,
+      "intervalMs": 13.0,
+      "workMs": 7.0,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 95264
+      }
+     },
+     {
+      "k": 4,
+      "frame": 9603,
+      "intervalMs": 16.6,
+      "workMs": 9.2,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77408
+      }
+     },
+     {
+      "k": 5,
+      "frame": 9604,
+      "intervalMs": 15.0,
+      "workMs": 7.3,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74432
+      }
+     },
+     {
+      "k": 6,
+      "frame": 9605,
+      "intervalMs": 16.7,
+      "workMs": 6.2,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75968
+      }
+     },
+     {
+      "k": 7,
+      "frame": 9606,
+      "intervalMs": 16.6,
+      "workMs": 6.9,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74432
+      }
+     },
+     {
+      "k": 8,
+      "frame": 9607,
+      "intervalMs": 16.7,
+      "workMs": 6.0,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 73568
+      }
+     },
+     {
+      "k": 9,
+      "frame": 9608,
+      "intervalMs": 16.6,
+      "workMs": 5.9,
+      "gl": {
+       "bufData": 10,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 72896
+      }
+     },
+     {
+      "k": 10,
+      "frame": 9609,
+      "intervalMs": 16.7,
+      "workMs": 6.5,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 73088
+      }
+     },
+     {
+      "k": 11,
+      "frame": 9610,
+      "intervalMs": 99.5,
+      "workMs": 6.8,
+      "gl": {
+       "bufData": 10,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 73184
+      }
+     },
+     {
+      "k": 12,
+      "frame": 9611,
+      "intervalMs": 8.1,
+      "workMs": 13.0,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75968
+      }
+     },
+     {
+      "k": 13,
+      "frame": 9612,
+      "intervalMs": 15.2,
+      "workMs": 14.7,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 70400
+      }
+     },
+     {
+      "k": 14,
+      "frame": 9613,
+      "intervalMs": 16.1,
+      "workMs": 15.5,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 73568
+      }
+     },
+     {
+      "k": 15,
+      "frame": 9614,
+      "intervalMs": 17.3,
+      "workMs": 13.8,
+      "gl": {
+       "bufData": 10,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 72896
+      }
+     },
+     {
+      "k": 16,
+      "frame": 9615,
+      "intervalMs": 15.1,
+      "workMs": 15.7,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75968
+      }
+     },
+     {
+      "k": 17,
+      "frame": 9616,
+      "intervalMs": 17.1,
+      "workMs": 15.0,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 73088
+      }
+     },
+     {
+      "k": 18,
+      "frame": 9617,
+      "intervalMs": 16.5,
+      "workMs": 15.2,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 73184
+      }
+     },
+     {
+      "k": 19,
+      "frame": 9618,
+      "intervalMs": 16.6,
+      "workMs": 15.2,
+      "gl": {
+       "bufData": 12,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74432
+      }
+     }
+    ],
+    "slowIntervals": [
+     {
+      "k": 11,
+      "intervalMs": 99.5
+     }
+    ],
+    "k11IntervalMs": 99.5,
+    "maxIntervalMs": 99.5,
+    "objectEvents": [
+     {
+      "k": 0,
+      "texGen": 4,
+      "texDelete": 4,
+      "texUploads": 4,
+      "texUploadBytes": 1048576
+     }
+    ]
+   },
+   {
+    "event": "switch",
+    "logTime": "10-07 14:55:45.837",
+    "frame": 13519,
+    "frames": [
+     {
+      "k": 0,
+      "frame": 13519,
+      "intervalMs": 20.5,
+      "workMs": 32.6,
+      "gl": {
+       "texGen": 4,
+       "texDelete": 4,
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 2,
+       "texUploads": 4,
+       "texUploadBytes": 1048576,
+       "bufBytes": 89504
+      }
+     },
+     {
+      "k": 1,
+      "frame": 13520,
+      "intervalMs": 34.2,
+      "workMs": 9.5,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 95136
+      }
+     },
+     {
+      "k": 2,
+      "frame": 13521,
+      "intervalMs": 10.8,
+      "workMs": 12.0,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 96672
+      }
+     },
+     {
+      "k": 3,
+      "frame": 13522,
+      "intervalMs": 14.0,
+      "workMs": 14.9,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 97152
+      }
+     },
+     {
+      "k": 4,
+      "frame": 13523,
+      "intervalMs": 16.2,
+      "workMs": 15.2,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 79776
+      }
+     },
+     {
+      "k": 5,
+      "frame": 13524,
+      "intervalMs": 16.9,
+      "workMs": 14.9,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75552
+      }
+     },
+     {
+      "k": 6,
+      "frame": 13525,
+      "intervalMs": 16.4,
+      "workMs": 15.1,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77088
+      }
+     },
+     {
+      "k": 7,
+      "frame": 13526,
+      "intervalMs": 16.8,
+      "workMs": 14.8,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75072
+      }
+     },
+     {
+      "k": 8,
+      "frame": 13527,
+      "intervalMs": 16.2,
+      "workMs": 15.5,
+      "gl": {
+       "bufData": 12,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74784
+      }
+     },
+     {
+      "k": 9,
+      "frame": 13528,
+      "intervalMs": 17.2,
+      "workMs": 15.4,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77088
+      }
+     },
+     {
+      "k": 10,
+      "frame": 13529,
+      "intervalMs": 16.7,
+      "workMs": 14.8,
+      "gl": {
+       "bufData": 12,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75552
+      }
+     },
+     {
+      "k": 11,
+      "frame": 13530,
+      "intervalMs": 110.7,
+      "workMs": 6.4,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74784
+      }
+     },
+     {
+      "k": 12,
+      "frame": 13531,
+      "intervalMs": 7.9,
+      "workMs": 13.2,
+      "gl": {
+       "bufData": 14,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77856
+      }
+     },
+     {
+      "k": 13,
+      "frame": 13532,
+      "intervalMs": 15.0,
+      "workMs": 14.5,
+      "gl": {
+       "bufData": 15,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 78336
+      }
+     },
+     {
+      "k": 14,
+      "frame": 13533,
+      "intervalMs": 16.1,
+      "workMs": 15.3,
+      "gl": {
+       "bufData": 14,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 78432
+      }
+     },
+     {
+      "k": 15,
+      "frame": 13534,
+      "intervalMs": 16.8,
+      "workMs": 15.4,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75168
+      }
+     },
+     {
+      "k": 16,
+      "frame": 13535,
+      "intervalMs": 17.2,
+      "workMs": 14.9,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 76128
+      }
+     },
+     {
+      "k": 17,
+      "frame": 13536,
+      "intervalMs": 17.1,
+      "workMs": 16.1,
+      "gl": {
+       "bufData": 8,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 71616
+      }
+     },
+     {
+      "k": 18,
+      "frame": 13537,
+      "intervalMs": 17.7,
+      "workMs": 13.6,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77088
+      }
+     },
+     {
+      "k": 19,
+      "frame": 13538,
+      "intervalMs": 14.9,
+      "workMs": 15.3,
+      "gl": {
+       "bufData": 12,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75552
+      }
+     }
+    ],
+    "slowIntervals": [
+     {
+      "k": 11,
+      "intervalMs": 110.7
+     }
+    ],
+    "k11IntervalMs": 110.7,
+    "maxIntervalMs": 110.7,
+    "objectEvents": [
+     {
+      "k": 0,
+      "texGen": 4,
+      "texDelete": 4,
+      "texUploads": 4,
+      "texUploadBytes": 1048576
+     }
+    ]
+   },
+   {
+    "event": "switch",
+    "logTime": "10-07 14:56:53.337",
+    "frame": 17475,
+    "frames": [
+     {
+      "k": 0,
+      "frame": 17475,
+      "intervalMs": 19.0,
+      "workMs": 34.1,
+      "gl": {
+       "texGen": 4,
+       "texDelete": 4,
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 2,
+       "texUploads": 4,
+       "texUploadBytes": 1048576,
+       "bufBytes": 88768
+      }
+     },
+     {
+      "k": 1,
+      "frame": 17476,
+      "intervalMs": 35.7,
+      "workMs": 8.0,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 89152
+      }
+     },
+     {
+      "k": 2,
+      "frame": 17477,
+      "intervalMs": 9.5,
+      "workMs": 7.1,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 95104
+      }
+     },
+     {
+      "k": 3,
+      "frame": 17478,
+      "intervalMs": 12.2,
+      "workMs": 7.3,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 95680
+      }
+     },
+     {
+      "k": 4,
+      "frame": 17479,
+      "intervalMs": 16.3,
+      "workMs": 11.3,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 95104
+      }
+     },
+     {
+      "k": 5,
+      "frame": 17480,
+      "intervalMs": 17.0,
+      "workMs": 6.9,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74944
+      }
+     },
+     {
+      "k": 6,
+      "frame": 17481,
+      "intervalMs": 16.6,
+      "workMs": 7.4,
+      "gl": {
+       "bufData": 12,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 76192
+      }
+     },
+     {
+      "k": 7,
+      "frame": 17482,
+      "intervalMs": 16.5,
+      "workMs": 6.8,
+      "gl": {
+       "bufData": 10,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75040
+      }
+     },
+     {
+      "k": 8,
+      "frame": 17483,
+      "intervalMs": 16.7,
+      "workMs": 6.2,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74848
+      }
+     },
+     {
+      "k": 9,
+      "frame": 17484,
+      "intervalMs": 17.2,
+      "workMs": 6.9,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77728
+      }
+     },
+     {
+      "k": 10,
+      "frame": 17485,
+      "intervalMs": 16.1,
+      "workMs": 7.1,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74944
+      }
+     },
+     {
+      "k": 11,
+      "frame": 17486,
+      "intervalMs": 104.1,
+      "workMs": 16.7,
+      "gl": {
+       "bufData": 12,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 76192
+      }
+     },
+     {
+      "k": 12,
+      "frame": 17487,
+      "intervalMs": 18.1,
+      "workMs": 15.9,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77728
+      }
+     },
+     {
+      "k": 13,
+      "frame": 17488,
+      "intervalMs": 17.2,
+      "workMs": 15.3,
+      "gl": {
+       "bufData": 12,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 76192
+      }
+     },
+     {
+      "k": 14,
+      "frame": 17489,
+      "intervalMs": 17.0,
+      "workMs": 14.3,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77728
+      }
+     },
+     {
+      "k": 15,
+      "frame": 17490,
+      "intervalMs": 15.7,
+      "workMs": 15.1,
+      "gl": {
+       "bufData": 12,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 76192
+      }
+     },
+     {
+      "k": 16,
+      "frame": 17491,
+      "intervalMs": 16.8,
+      "workMs": 15.5,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77728
+      }
+     },
+     {
+      "k": 17,
+      "frame": 17492,
+      "intervalMs": 18.0,
+      "workMs": 25.9,
+      "gl": {
+       "bufData": 12,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 76192
+      }
+     },
+     {
+      "k": 18,
+      "frame": 17493,
+      "intervalMs": 27.7,
+      "workMs": 7.5,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77728
+      }
+     },
+     {
+      "k": 19,
+      "frame": 17494,
+      "intervalMs": 8.9,
+      "workMs": 10.8,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75040
+      }
+     }
+    ],
+    "slowIntervals": [
+     {
+      "k": 11,
+      "intervalMs": 104.1
+     }
+    ],
+    "k11IntervalMs": 104.1,
+    "maxIntervalMs": 104.1,
+    "objectEvents": [
+     {
+      "k": 0,
+      "texGen": 4,
+      "texDelete": 4,
+      "texUploads": 4,
+      "texUploadBytes": 1048576
+     }
+    ]
+   },
+   {
+    "event": "switch",
+    "logTime": "10-07 14:57:58.237",
+    "frame": 21322,
+    "frames": [
+     {
+      "k": 0,
+      "frame": 21322,
+      "intervalMs": 32.6,
+      "workMs": 34.6,
+      "gl": {
+       "texGen": 4,
+       "texDelete": 4,
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 2,
+       "texUploads": 4,
+       "texUploadBytes": 1048576,
+       "bufBytes": 85168
+      }
+     },
+     {
+      "k": 1,
+      "frame": 21323,
+      "intervalMs": 36.8,
+      "workMs": 24.0,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 91456
+      }
+     },
+     {
+      "k": 2,
+      "frame": 21324,
+      "intervalMs": 25.3,
+      "workMs": 8.1,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 86848
+      }
+     },
+     {
+      "k": 3,
+      "frame": 21325,
+      "intervalMs": 12.1,
+      "workMs": 7.4,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 89248
+      }
+     },
+     {
+      "k": 4,
+      "frame": 21326,
+      "intervalMs": 17.0,
+      "workMs": 14.5,
+      "gl": {
+       "bufData": 7,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 96736
+      }
+     },
+     {
+      "k": 5,
+      "frame": 21327,
+      "intervalMs": 17.8,
+      "workMs": 7.9,
+      "gl": {
+       "bufData": 9,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75616
+      }
+     },
+     {
+      "k": 6,
+      "frame": 21328,
+      "intervalMs": 15.2,
+      "workMs": 19.5,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74752
+      }
+     },
+     {
+      "k": 7,
+      "frame": 21329,
+      "intervalMs": 20.9,
+      "workMs": 6.5,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 76288
+      }
+     },
+     {
+      "k": 8,
+      "frame": 21330,
+      "intervalMs": 12.9,
+      "workMs": 6.5,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74752
+      }
+     },
+     {
+      "k": 9,
+      "frame": 21331,
+      "intervalMs": 16.2,
+      "workMs": 6.4,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 76288
+      }
+     },
+     {
+      "k": 10,
+      "frame": 21332,
+      "intervalMs": 16.7,
+      "workMs": 7.8,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 74752
+      }
+     },
+     {
+      "k": 11,
+      "frame": 21333,
+      "intervalMs": 93.4,
+      "workMs": 10.5,
+      "gl": {
+       "bufData": 14,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77632
+      }
+     },
+     {
+      "k": 12,
+      "frame": 21334,
+      "intervalMs": 12.2,
+      "workMs": 14.5,
+      "gl": {
+       "bufData": 11,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 73888
+      }
+     },
+     {
+      "k": 13,
+      "frame": 21335,
+      "intervalMs": 15.9,
+      "workMs": 15.3,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75808
+      }
+     },
+     {
+      "k": 14,
+      "frame": 21336,
+      "intervalMs": 16.6,
+      "workMs": 15.8,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75712
+      }
+     },
+     {
+      "k": 15,
+      "frame": 21337,
+      "intervalMs": 17.6,
+      "workMs": 14.3,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75328
+      }
+     },
+     {
+      "k": 16,
+      "frame": 21338,
+      "intervalMs": 15.7,
+      "workMs": 16.0,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75232
+      }
+     },
+     {
+      "k": 17,
+      "frame": 21339,
+      "intervalMs": 17.2,
+      "workMs": 14.9,
+      "gl": {
+       "bufData": 13,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 75808
+      }
+     },
+     {
+      "k": 18,
+      "frame": 21340,
+      "intervalMs": 16.8,
+      "workMs": 14.8,
+      "gl": {
+       "bufData": 8,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 70816
+      }
+     },
+     {
+      "k": 19,
+      "frame": 21341,
+      "intervalMs": 16.3,
+      "workMs": 15.2,
+      "gl": {
+       "bufData": 14,
+       "fboBinds": 2,
+       "clears": 1,
+       "bufBytes": 77440
+      }
+     }
+    ],
+    "slowIntervals": [
+     {
+      "k": 11,
+      "intervalMs": 93.4
+     }
+    ],
+    "k11IntervalMs": 93.4,
+    "maxIntervalMs": 93.4,
+    "objectEvents": [
+     {
+      "k": 0,
+      "texGen": 4,
+      "texDelete": 4,
+      "texUploads": 4,
+      "texUploadBytes": 1048576
+     }
+    ]
+   }
+  ],
+  "strayObjectFrames": [],
+  "strayCount": 0,
+  "regionMaterials": [
+   "regionMaterials scrap:true candidates=3 bytes=19660800 prepared=false",
+   "regionMaterials foundry:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=scrap:true",
+   "regionMaterials salt:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=foundry:true",
+   "regionMaterials switchback:true candidates=4 bytes=19660800 prepared=true held=0 peak=19660800 from=salt:true",
+   "regionMaterials crown:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=switchback:true",
+   "regionMaterials scrap:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=crown:true"
+  ]
+ },
+ "limits": "From the glInventory log lines of a profiled perf build; slowIntervals are intervals over 85 ms inside a 20-frame window. A frame interval holds the previous frame's GPU wait, so the slow job belongs to frame k-1."
+}

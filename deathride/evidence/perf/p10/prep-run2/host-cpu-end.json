@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T03:00:11.2419646Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "python",
+                             "IDProcess":  52008,
+                             "PercentProcessorTime":  851
+                         },
+                         {
+                             "Name":  "node#58",
+                             "IDProcess":  46760,
+                             "PercentProcessorTime":  124
+                         },
+                         {
+                             "Name":  "git#1",
+                             "IDProcess":  53160,
+                             "PercentProcessorTime":  88
+                         },
+                         {
+                             "Name":  "Code - Insiders#7",
+                             "IDProcess":  23724,
+                             "PercentProcessorTime":  84
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  12836,
+                             "PercentProcessorTime":  44
+                         },
+                         {
+                             "Name":  "node#65",
+                             "IDProcess":  16156,
+                             "PercentProcessorTime":  31
+                         },
+                         {
+                             "Name":  "bash#69",
+                             "IDProcess":  50756,
+                             "PercentProcessorTime":  31
+                         },
+                         {
+                             "Name":  "node#55",
+                             "IDProcess":  46696,
+                             "PercentProcessorTime":  26
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  15304,
+                             "PercentProcessorTime":  26
+                         },
+                         {
+                             "Name":  "node#53",
+                             "IDProcess":  36916,
+                             "PercentProcessorTime":  22
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                100,
+                                100,
+                                100
+                            ]
+}

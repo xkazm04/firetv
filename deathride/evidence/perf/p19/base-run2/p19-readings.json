@@ -1,0 +1,160 @@
+{
+ "run": "base-run2",
+ "apkSha256": "9253fc9fcaf569d31311608e11a24ed5de32bd4b492f2801d4ff33cebe6ede6e",
+ "arm": "base",
+ "settled": false,
+ "settledNote": "no (no wait)",
+ "durationSeconds": 360.1033566,
+ "functionalPass": true,
+ "probeFunctionalPass": true,
+ "error": null,
+ "rounds": 6,
+ "hostCpu": {
+  "host-cpu-start.json": {
+   "utc": "2026-10-09T02:17:36.2023888Z",
+   "totalPercentSamples": [
+    99,
+    94,
+    71
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "node#38",
+     95
+    ],
+    [
+     "svchost#72",
+     86
+    ],
+    [
+     "node#51",
+     73
+    ],
+    [
+     "grep#46",
+     69
+    ],
+    [
+     "node#7",
+     69
+    ]
+   ]
+  },
+  "host-cpu-end.json": {
+   "utc": "2026-10-09T02:23:50.0217583Z",
+   "totalPercentSamples": [
+    100,
+    100,
+    100
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "msedgewebview2#27",
+     149
+    ],
+    [
+     "node#47",
+     98
+    ],
+    [
+     "node#46",
+     89
+    ],
+    [
+     "dwm",
+     89
+    ],
+    [
+     "node#43",
+     85
+    ]
+   ]
+  }
+ },
+ "ownedTextureMiB": {
+  "max": 39.97,
+  "min": 39.97,
+  "summaryMax": 39.9697265625,
+  "fontMiBMax": 5.0,
+  "windows": 292
+ },
+ "glMtrackMiB": {
+  "line": "GL mtrack",
+  "max": 52.2,
+  "min": 51.91,
+  "samples": 8,
+  "graphicsSummaryMax": 52.2,
+  "eglMtrackRows": 0
+ },
+ "pss": {
+  "minMiB": 172.46,
+  "maxMiB": 185.24,
+  "samples": 8,
+  "peakSecond": 337.1,
+  "lowestSecond": 0,
+  "peakBreakdownMiB": {
+   "Java Heap": 68.3,
+   "Native Heap": 10.86,
+   "Code": 32.75,
+   "Stack": 1.45,
+   "Graphics": 52.19,
+   "Private Other": 7.99,
+   "System": 11.71,
+   "pss Dalvik Heap": 62.32,
+   "pss Dalvik Other": 5.39,
+   "pss GL mtrack": 52.19,
+   "pss Native Heap": 10.94,
+   "pss Ashmem": 4.88,
+   "pss Unknown": 0.38,
+   "TOTAL PSS": 185.24
+  },
+  "lowestBreakdownMiB": {
+   "Java Heap": 56.7,
+   "Native Heap": 9.24,
+   "Code": 34.55,
+   "Stack": 0.97,
+   "Graphics": 51.91,
+   "Private Other": 7.95,
+   "System": 11.14,
+   "pss Dalvik Heap": 50.74,
+   "pss Dalvik Other": 4.2,
+   "pss GL mtrack": 51.91,
+   "pss Native Heap": 9.32,
+   "pss Ashmem": 4.88,
+   "pss Unknown": 0.38,
+   "TOTAL PSS": 172.46
+  }
+ },
+ "hud": {
+  "activeFrames": 19050,
+  "hudMsMean": 1.2446,
+  "hudMsP95": 1.753,
+  "hudFlushesMean": 3.0,
+  "hudFlushesCounts": {
+   "3": 19050
+  },
+  "hudDrawsMean": 6.0,
+  "drawCallsMean": 18.339,
+  "textureBindsMean": 12.41,
+  "workMsMean": 10.9166,
+  "cpuMsMean": 7.8158
+ },
+ "allocation": {
+  "MBps": 2.2828,
+  "gcCount": 33,
+  "gcTimeMs": 2360
+ },
+ "guards": {
+  "activeFrames": 19044,
+  "over33": 87,
+  "worstActiveWindowP95Ms": 27.268461000000002,
+  "activeMaxMs": 65.539615,
+  "pooledActiveP95Ms": 19.231,
+  "rejectedInputs": [
+   0,
+   0
+  ]
+ }
+}

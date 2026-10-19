@@ -1,0 +1,49 @@
+{
+ "what": "hprof-conv check: the converted dump (no heap ids) reaches the same bytes as the raw dump summed over its heaps",
+ "dumps": [
+  {
+   "dump": "a1",
+   "convReachableBytes": 58744738,
+   "rawAllHeapsReachableBytes": 58744738,
+   "equal": true,
+   "rawHeaps": {
+    "app": 45395347,
+    "image": 8276772,
+    "zygote": 5072619
+   }
+  },
+  {
+   "dump": "b1",
+   "convReachableBytes": 60481523,
+   "rawAllHeapsReachableBytes": 60481523,
+   "equal": true,
+   "rawHeaps": {
+    "app": 47132132,
+    "image": 8276772,
+    "zygote": 5072619
+   }
+  },
+  {
+   "dump": "a2",
+   "convReachableBytes": 58749690,
+   "rawAllHeapsReachableBytes": 58749690,
+   "equal": true,
+   "rawHeaps": {
+    "app": 45400299,
+    "image": 8276772,
+    "zygote": 5072619
+   }
+  },
+  {
+   "dump": "d2",
+   "convReachableBytes": 63754611,
+   "rawAllHeapsReachableBytes": 63754611,
+   "equal": true,
+   "rawHeaps": {
+    "app": 50405220,
+    "image": 8276772,
+    "zygote": 5072619
+   }
+  }
+ ]
+}

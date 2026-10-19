@@ -1,4 +1,6 @@
-id,name,fireDrives,padThrottle,throttleTravelPx,description
-Classic,Classic,0,0,100,Separate pedals and weapons; coast while attacking
-Cruise,Cruise,1,0,100,FIRE or ABILITY also holds GO; brake overrides both
-Split,Split,0,1,100,Drag UP on the steering pad for GO; right thumb fights
+id,name,fireDrives,padThrottle,throttleTravelPx,padBrake,brakeTravelPx,description,autoThrottle
+Auto,Auto,0,0,100,1,70,GO is automatic. Left thumb steers and brakes,1
+Drive,Drive,0,1,90,1,70,Left pad: up is GO and down is BRAKE,0
+Classic,Classic,0,0,100,0,0,Separate pedals; coast while attacking,0
+Cruise,Cruise,1,0,100,0,0,FIRE or ABILITY holds GO; brake wins,0
+Split,Split,0,1,100,0,0,Left pad: drag up for GO,0

@@ -1,0 +1,667 @@
+{
+  "arm": "tools/perf-device.py --install --profile --warm-routes --tracks scrap-1-c,foundry-1-c,salt-1-b,switchback-1-a,crown-1-a --seconds 360",
+  "bar": "no frame over 100 ms in any lobby-to-race transition window (window last10s max), in both runs",
+  "p13": {
+    "run1": {
+      "bar": {
+        "transitionMaxMs": 186.1,
+        "windowsOver100": 31,
+        "transitionWindows": 57,
+        "pass": false
+      },
+      "requestsMs": {
+        "car": [
+          18.9,
+          118.6
+        ],
+        "startRace": [
+          46.6,
+          142.7
+        ],
+        "raceLaunch": [
+          7.9,
+          13.2
+        ],
+        "track": [
+          28.6,
+          72.1
+        ],
+        "lobby": [
+          8.5,
+          40.5
+        ]
+      },
+      "rendersByGroup": {
+        "bake-phase gap (no work)": 5,
+        "interval after a slow frame": 4,
+        "request": 4,
+        "simulation (finishRace or catch-up)": 2
+      },
+      "pssMiB": [
+        154.5,
+        188.7
+      ],
+      "startBreakdown": [
+        {
+          "logTime": "10-07 10:41:45.797",
+          "totalMs": 129.1,
+          "ticketSubmitMs": 17.0,
+          "ticketPublishMs": 52.8,
+          "restMs": 59.4
+        },
+        {
+          "logTime": "10-07 10:42:32.837",
+          "totalMs": 142.7,
+          "ticketSubmitMs": 30.8,
+          "ticketPublishMs": 72.8,
+          "restMs": 39.1
+        },
+        {
+          "logTime": "10-07 10:43:39.846",
+          "totalMs": 68.9,
+          "ticketSubmitMs": 9.2,
+          "ticketPublishMs": 19.1,
+          "restMs": 40.6
+        },
+        {
+          "logTime": "10-07 10:44:47.244",
+          "totalMs": 62.0,
+          "ticketSubmitMs": 10.0,
+          "ticketPublishMs": 21.4,
+          "restMs": 30.6
+        },
+        {
+          "logTime": "10-07 10:45:54.992",
+          "totalMs": 51.2,
+          "ticketSubmitMs": 8.2,
+          "ticketPublishMs": 21.1,
+          "restMs": 21.9
+        },
+        {
+          "logTime": "10-07 10:47:00.071",
+          "totalMs": 46.6,
+          "ticketSubmitMs": 7.5,
+          "ticketPublishMs": 20.0,
+          "restMs": 19.1
+        }
+      ]
+    },
+    "run2": {
+      "bar": {
+        "transitionMaxMs": 117.2,
+        "windowsOver100": 32,
+        "transitionWindows": 58,
+        "pass": false
+      },
+      "requestsMs": {
+        "car": [
+          21.7,
+          52.5
+        ],
+        "startRace": [
+          56.4,
+          106.1
+        ],
+        "raceLaunch": [
+          7.2,
+          10.9
+        ],
+        "track": [
+          11.5,
+          71.9
+        ],
+        "lobby": [
+          6.9,
+          31.6
+        ]
+      },
+      "rendersByGroup": {
+        "bake-phase gap (no work)": 4,
+        "interval after a slow frame": 5,
+        "request": 4,
+        "simulation (finishRace or catch-up)": 1
+      },
+      "pssMiB": [
+        171.7,
+        197.8
+      ],
+      "startBreakdown": [
+        {
+          "logTime": "10-07 10:51:14.826",
+          "totalMs": 106.1,
+          "ticketSubmitMs": 18.0,
+          "ticketPublishMs": 46.9,
+          "restMs": 41.3
+        },
+        {
+          "logTime": "10-07 10:52:01.319",
+          "totalMs": 90.9,
+          "ticketSubmitMs": 18.6,
+          "ticketPublishMs": 27.4,
+          "restMs": 44.8
+        },
+        {
+          "logTime": "10-07 10:53:08.526",
+          "totalMs": 61.9,
+          "ticketSubmitMs": 12.7,
+          "ticketPublishMs": 24.1,
+          "restMs": 25.1
+        },
+        {
+          "logTime": "10-07 10:54:15.904",
+          "totalMs": 56.4,
+          "ticketSubmitMs": 9.3,
+          "ticketPublishMs": 21.8,
+          "restMs": 25.3
+        },
+        {
+          "logTime": "10-07 10:55:23.394",
+          "totalMs": 60.5,
+          "ticketSubmitMs": 10.5,
+          "ticketPublishMs": 25.5,
+          "restMs": 24.6
+        },
+        {
+          "logTime": "10-07 10:56:28.309",
+          "totalMs": 56.8,
+          "ticketSubmitMs": 10.2,
+          "ticketPublishMs": 22.0,
+          "restMs": 24.6
+        }
+      ]
+    }
+  },
+  "runs": {
+    "run1": {
+      "bar": {
+        "transitionMaxMs": 111.1,
+        "windowsOver100": 36,
+        "transitionWindows": 58,
+        "pass": false
+      },
+      "perRoundTransitionMaxMs": [
+        [
+          "scrap-1-c",
+          100.5
+        ],
+        [
+          "foundry-1-c",
+          101.0
+        ],
+        [
+          "salt-1-b",
+          101.7
+        ],
+        [
+          "switchback-1-a",
+          101.1
+        ],
+        [
+          "crown-1-a",
+          102.9
+        ],
+        [
+          "scrap-1-c",
+          111.1
+        ]
+      ],
+      "requestsMs": {
+        "car": [
+          11.6,
+          32.7
+        ],
+        "startRace": [
+          20.6,
+          69.2
+        ],
+        "raceLaunch": [
+          7.1,
+          10.5
+        ],
+        "track": [
+          14.3,
+          72.3
+        ],
+        "lobby": [
+          7.1,
+          23.7
+        ],
+        "profileSubmit": [
+          4.8,
+          19.6
+        ],
+        "profileDeferredPublish": [
+          0.0,
+          6.3
+        ]
+      },
+      "flushMsPerSeat": {
+        "seat0": {
+          "count": 24,
+          "rangeMs": [
+            11.0,
+            51.8
+          ],
+          "meanMs": 17.0
+        },
+        "seat1": {
+          "count": 23,
+          "rangeMs": [
+            11.2,
+            61.2
+          ],
+          "meanMs": 20.3
+        }
+      },
+      "uiDeferredMs": {
+        "count": 16,
+        "rangeMs": [
+          0.5,
+          17.8
+        ],
+        "meanMs": 2.1
+      },
+      "renders100msPlus": [
+        {
+          "approxSecond": -36.48,
+          "workMs": 60.4,
+          "intervalMs": 119.0,
+          "requestsMs": 0.7,
+          "simulationMs": 0.4,
+          "prepareMs": 12.7,
+          "textureUploads": 0,
+          "group": "other"
+        },
+        {
+          "approxSecond": -36.11,
+          "workMs": 19.9,
+          "intervalMs": 103.4,
+          "requestsMs": 0.3,
+          "simulationMs": 0.1,
+          "prepareMs": 3.6,
+          "textureUploads": 0,
+          "group": "bake-phase gap (no work)"
+        },
+        {
+          "approxSecond": -34.21,
+          "workMs": 145.0,
+          "intervalMs": 16.7,
+          "requestsMs": 0.3,
+          "simulationMs": 25.6,
+          "prepareMs": 31.7,
+          "textureUploads": 0,
+          "group": "other"
+        },
+        {
+          "approxSecond": -34.07,
+          "workMs": 127.4,
+          "intervalMs": 146.6,
+          "requestsMs": 0.3,
+          "simulationMs": 107.1,
+          "prepareMs": 0.0,
+          "textureUploads": 0,
+          "group": "simulation (finishRace or catch-up)"
+        },
+        {
+          "approxSecond": -33.94,
+          "workMs": 92.2,
+          "intervalMs": 128.8,
+          "requestsMs": 0.3,
+          "simulationMs": 74.8,
+          "prepareMs": 0.0,
+          "textureUploads": 0,
+          "group": "simulation (finishRace or catch-up)"
+        },
+        {
+          "approxSecond": 0.74,
+          "workMs": 78.9,
+          "intervalMs": 100.5,
+          "requestsMs": 0.2,
+          "simulationMs": 45.7,
+          "prepareMs": 0.0,
+          "textureUploads": 0,
+          "group": "other"
+        },
+        {
+          "approxSecond": 66.66,
+          "workMs": 6.7,
+          "intervalMs": 101.0,
+          "requestsMs": 0.1,
+          "simulationMs": 0.0,
+          "prepareMs": 3.6,
+          "textureUploads": 0,
+          "group": "bake-phase gap (no work)"
+        },
+        {
+          "approxSecond": 134.19,
+          "workMs": 17.9,
+          "intervalMs": 101.7,
+          "requestsMs": 0.1,
+          "simulationMs": 0.0,
+          "prepareMs": 3.3,
+          "textureUploads": 0,
+          "group": "bake-phase gap (no work)"
+        },
+        {
+          "approxSecond": 201.35,
+          "workMs": 18.5,
+          "intervalMs": 101.1,
+          "requestsMs": 0.1,
+          "simulationMs": 0.0,
+          "prepareMs": 3.6,
+          "textureUploads": 0,
+          "group": "bake-phase gap (no work)"
+        },
+        {
+          "approxSecond": 269.02,
+          "workMs": 17.4,
+          "intervalMs": 102.9,
+          "requestsMs": 0.1,
+          "simulationMs": 0.0,
+          "prepareMs": 3.6,
+          "textureUploads": 0,
+          "group": "bake-phase gap (no work)"
+        },
+        {
+          "approxSecond": 333.42,
+          "workMs": 110.0,
+          "intervalMs": 35.7,
+          "requestsMs": 102.9,
+          "simulationMs": 0.0,
+          "prepareMs": 3.6,
+          "textureUploads": 4,
+          "group": "request"
+        },
+        {
+          "approxSecond": 333.53,
+          "workMs": 21.1,
+          "intervalMs": 111.1,
+          "requestsMs": 13.7,
+          "simulationMs": 0.0,
+          "prepareMs": 4.0,
+          "textureUploads": 0,
+          "group": "bake-phase gap (no work)"
+        },
+        {
+          "approxSecond": 333.79,
+          "workMs": 11.1,
+          "intervalMs": 102.2,
+          "requestsMs": 0.1,
+          "simulationMs": 0.0,
+          "prepareMs": 3.3,
+          "textureUploads": 0,
+          "group": "bake-phase gap (no work)"
+        }
+      ],
+      "rendersByGroup": {
+        "bake-phase gap (no work)": 7,
+        "other": 3,
+        "request": 1,
+        "simulation (finishRace or catch-up)": 2
+      },
+      "pssMiB": [
+        159.0,
+        190.4
+      ],
+      "rejected": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          29.99991844388434,
+          29.99991844388434
+        ],
+        "pumpStalls": 0
+      },
+      "hostCpuPercent": {
+        "host-cpu-start.json": [
+          59,
+          43,
+          29
+        ],
+        "host-cpu-end.json": [
+          23,
+          24,
+          58
+        ]
+      },
+      "hostSettle": {
+        "settled": true,
+        "waitedSeconds": 577,
+        "rule": "60 consecutive 1 s samples under 60%, wait up to 900 s"
+      }
+    },
+    "run2": {
+      "bar": {
+        "transitionMaxMs": 112.0,
+        "windowsOver100": 23,
+        "transitionWindows": 56,
+        "pass": false
+      },
+      "perRoundTransitionMaxMs": [
+        [
+          "scrap-1-c",
+          93.4
+        ],
+        [
+          "foundry-1-c",
+          108.5
+        ],
+        [
+          "salt-1-b",
+          109.0
+        ],
+        [
+          "switchback-1-a",
+          101.0
+        ],
+        [
+          "crown-1-a",
+          112.0
+        ],
+        [
+          "scrap-1-c",
+          92.1
+        ]
+      ],
+      "requestsMs": {
+        "car": [
+          10.4,
+          21.1
+        ],
+        "startRace": [
+          20.1,
+          37.3
+        ],
+        "raceLaunch": [
+          6.9,
+          30.1
+        ],
+        "track": [
+          18.1,
+          65.7
+        ],
+        "lobby": [
+          7.0,
+          28.8
+        ],
+        "profileSubmit": [
+          3.9,
+          12.1
+        ],
+        "profileDeferredPublish": [
+          0.0,
+          0.2
+        ]
+      },
+      "flushMsPerSeat": {
+        "seat0": {
+          "count": 24,
+          "rangeMs": [
+            9.4,
+            54.3
+          ],
+          "meanMs": 19.3
+        },
+        "seat1": {
+          "count": 23,
+          "rangeMs": [
+            9.5,
+            46.8
+          ],
+          "meanMs": 18.9
+        }
+      },
+      "uiDeferredMs": {
+        "count": 12,
+        "rangeMs": [
+          0.5,
+          4.9
+        ],
+        "meanMs": 1.8
+      },
+      "renders100msPlus": [
+        {
+          "approxSecond": -38.49,
+          "workMs": 68.9,
+          "intervalMs": 131.0,
+          "requestsMs": 0.7,
+          "simulationMs": 0.2,
+          "prepareMs": 13.9,
+          "textureUploads": 0,
+          "group": "other"
+        },
+        {
+          "approxSecond": -36.44,
+          "workMs": 214.0,
+          "intervalMs": 16.7,
+          "requestsMs": 0.3,
+          "simulationMs": 29.3,
+          "prepareMs": 24.7,
+          "textureUploads": 0,
+          "group": "other"
+        },
+        {
+          "approxSecond": -36.23,
+          "workMs": 121.5,
+          "intervalMs": 215.7,
+          "requestsMs": 0.4,
+          "simulationMs": 103.1,
+          "prepareMs": 0.0,
+          "textureUploads": 0,
+          "group": "simulation (finishRace or catch-up)"
+        },
+        {
+          "approxSecond": -36.1,
+          "workMs": 90.1,
+          "intervalMs": 122.9,
+          "requestsMs": 0.3,
+          "simulationMs": 73.9,
+          "prepareMs": 0.1,
+          "textureUploads": 0,
+          "group": "simulation (finishRace or catch-up)"
+        },
+        {
+          "approxSecond": -29.32,
+          "workMs": 105.4,
+          "intervalMs": 16.7,
+          "requestsMs": 0.2,
+          "simulationMs": 5.3,
+          "prepareMs": 0.0,
+          "textureUploads": 0,
+          "group": "other"
+        },
+        {
+          "approxSecond": -29.21,
+          "workMs": 26.0,
+          "intervalMs": 106.8,
+          "requestsMs": 0.2,
+          "simulationMs": 18.5,
+          "prepareMs": 0.0,
+          "textureUploads": 0,
+          "group": "interval after a slow frame"
+        },
+        {
+          "approxSecond": 66.55,
+          "workMs": 14.0,
+          "intervalMs": 108.5,
+          "requestsMs": 0.1,
+          "simulationMs": 0.1,
+          "prepareMs": 4.7,
+          "textureUploads": 0,
+          "group": "bake-phase gap (no work)"
+        },
+        {
+          "approxSecond": 133.71,
+          "workMs": 18.4,
+          "intervalMs": 109.0,
+          "requestsMs": 0.1,
+          "simulationMs": 0.0,
+          "prepareMs": 3.9,
+          "textureUploads": 0,
+          "group": "bake-phase gap (no work)"
+        },
+        {
+          "approxSecond": 200.63,
+          "workMs": 17.4,
+          "intervalMs": 101.0,
+          "requestsMs": 0.1,
+          "simulationMs": 0.0,
+          "prepareMs": 3.5,
+          "textureUploads": 0,
+          "group": "bake-phase gap (no work)"
+        },
+        {
+          "approxSecond": 268.09,
+          "workMs": 5.8,
+          "intervalMs": 112.0,
+          "requestsMs": 0.1,
+          "simulationMs": 0.0,
+          "prepareMs": 3.2,
+          "textureUploads": 0,
+          "group": "bake-phase gap (no work)"
+        }
+      ],
+      "rendersByGroup": {
+        "bake-phase gap (no work)": 4,
+        "interval after a slow frame": 1,
+        "other": 3,
+        "simulation (finishRace or catch-up)": 2
+      },
+      "pssMiB": [
+        164.4,
+        197.8
+      ],
+      "rejected": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.001261699520594,
+          30.001261699520594
+        ],
+        "pumpStalls": 0
+      },
+      "hostCpuPercent": {
+        "host-cpu-start.json": [
+          49,
+          47,
+          51
+        ],
+        "host-cpu-end.json": [
+          60,
+          38,
+          58
+        ]
+      },
+      "hostSettle": {
+        "settled": true,
+        "waitedSeconds": 311,
+        "rule": "60 consecutive 1 s samples under 60%, wait up to 900 s"
+      }
+    }
+  },
+  "limits": "Two profiled 360 s runs of one APK. Render seconds are on the /profile fetch clock (about 0.1 s); a render is tied to its request through the log, by hand, in the concept doc. Groups as P13. A frame interval contains the previous frame's work, so a slow frame is followed by one long interval. profileDeferredPublish is publishMs in the profile line, now the cost of marking a seat (the JSON is built by a later flush)."
+}

@@ -18,9 +18,9 @@ class LinkTest {
             try {
                 host.start()
                 val deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(15)
-                while(!host.serverStatus.contains("unavailable") && System.nanoTime()<deadline)Thread.sleep(20)
+                while(host.serverStatus!=LinkText.PORT_BUSY && System.nanoTime()<deadline)Thread.sleep(20)
                 assertFalse(host.running)
-                assertTrue(host.serverStatus.contains("unavailable"),host.serverStatus)
+                assertTrue(host.serverStatus==LinkText.PORT_BUSY,host.serverStatus)
             } finally { host.stop() }
         }
     }
@@ -50,12 +50,14 @@ class LinkTest {
             val feedback=Json.parseToJsonElement(catalog.body()).jsonObject["driftFeedback"]!!.jsonObject
             assertEquals(dev.deathride.core.VisualTuning["driftHapticQuality"],feedback["quality"]!!.jsonPrimitive.double)
             host.slots[0].driftQuality=.5;host.slots[0].slipRadians=.4;host.slots[0].spunOut=true
-            val bad=Listener(); val badWs=connect(bad); badWs.sendText("""{"t":"hello","pin":"invalid"}""",true).join(); assertEquals("error",bad.next("error")["t"]!!.jsonPrimitive.content); badWs.abort()
+            val bad=Listener(); val badWs=connect(bad); badWs.sendText("""{"t":"hello","pin":"invalid"}""",true).join(); val refused=bad.next("error"); assertEquals("BAD_PIN",refused["code"]!!.jsonPrimitive.content); assertTrue(refused["message"]!!.jsonPrimitive.content.length<=44); badWs.abort()
+            val stale=Listener(); val staleWs=connect(stale); staleWs.sendText("""{"t":"hello","pin":"invalid","token":"forgotten-token"}""",true).join(); assertEquals("RESET",stale.next("error")["code"]!!.jsonPrimitive.content); staleWs.abort()
             val good=Listener(); val ws=connect(good); ws.sendText("""{"t":"hello","pin":"${host.pin}"}""",true).join()
             val welcome=good.next("welcome"); val token=welcome["token"]!!.jsonPrimitive.content; assertEquals(0,welcome["slot"]!!.jsonPrimitive.int)
+            assertEquals("LOBBY",good.next("hud")["screen"]!!.jsonPrimitive.content)
             fun barrier() { ws.sendText("""{"t":"ping","ts":123}""",true).join();good.next("pong") }
             val buy="""{"t":"buy","profile":"couch-0","car":"Line","part":"brakes","tier":0}"""
-            host.phase="race";ws.sendText(buy,true).join();barrier();assertNull(host.slots[0].shopRequest.get())
+            host.phase="race";ws.sendText(buy,true).join();val notNow=good.next("notNow");assertEquals("buy",notNow["for"]!!.jsonPrimitive.content);assertEquals("RACE",notNow["screen"]!!.jsonPrimitive.content);barrier();assertNull(host.slots[0].shopRequest.get())
             host.phase="garage";ws.sendText(buy,true).join();ws.sendText(buy.replace("brakes","engine"),true).join();barrier()
             val request=host.slots[0].shopRequest.getAndSet(null)!!;assertEquals("brakes",dev.deathride.core.Parts.all[request.part].id);assertEquals(0,request.tier)
             ws.sendText(buy.replace("couch-0","another-profile"),true).join();barrier();assertNull(host.slots[0].shopRequest.get())
@@ -81,7 +83,7 @@ class LinkTest {
             host.suspendLink();host.consume(0,host.nowMs(),input);assertEquals(0.0,input.ability); assertFalse(host.running); host.start(); waitReady()
             val returned=Listener(); val again=connect(returned); again.sendText("""{"t":"hello","token":"$token"}""",true).join(); assertEquals(0,returned.next("welcome")["slot"]!!.jsonPrimitive.int)
             host.eventType="ELIMINATION";host.raceEntrants=2;host.raceLaps=0
-            host.audioJson="""{"lastNarration":"voice.announcer.duel","cap":8}"""
+            host.audioJson={"""{"lastNarration":"voice.announcer.duel","cap":8}"""}
             val response=http.send(HttpRequest.newBuilder(URI("http://127.0.0.1:$port/stats")).build(),HttpResponse.BodyHandlers.ofString())
             assertEquals(200,response.statusCode()); assertTrue(Json.parseToJsonElement(response.body()).jsonObject["slots"]!!.jsonArray[0].jsonObject["connected"]!!.jsonPrimitive.boolean)
             val stats=Json.parseToJsonElement(response.body()).jsonObject

@@ -1,0 +1,8 @@
+start-ab 2026-10-09T08:03:06Z head=10170a82 base=840bc7b06df9 c14=bc2222561d6c c15=e191b04ce76a
+base-run1 base 2026-10-09T08:41:19Z exit 0 settled=no
+c14-run1 c14 2026-10-09T08:49:29Z exit 1 settled=no (no wait)
+c15-run1 c15 2026-10-09T08:57:28Z exit 0 settled=no (no wait)
+base-run2 base 2026-10-09T09:05:05Z exit 1 settled=no (no wait)
+c14-run2 c14 2026-10-09T09:12:58Z exit 0 settled=no (no wait)
+c15-run2 c15 2026-10-09T09:20:38Z exit 0 settled=no (no wait)
+end-ab 2026-10-09T09:20:39Z

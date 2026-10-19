@@ -1,0 +1,161 @@
+{
+  "id": "mechanic.after",
+  "cue": "voice.mechanic.after",
+  "category": "tts",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:56:44.842695+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\voices\\raw\\mechanic.after.mp3.json",
+    "sourceSha256": "d5303383054a92e34cc435dd91d2c9889bc6ff8a7407a5488a7ec35293deb03c",
+    "generatedAt": "2026-10-02T21:53:53.136Z",
+    "request": {
+      "text": "You are back. I kept listening for the engine. Thought I had lost you.",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.75,
+        "style": 0.25,
+        "use_speaker_boost": true
+      }
+    },
+    "budgetCharge": 70,
+    "providerCredits": 70,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/voices/raw/mechanic.after.mp3",
+    "sha256": "d5303383054a92e34cc435dd91d2c9889bc6ff8a7407a5488a7ec35293deb03c",
+    "bytes": 72351,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "loudness"
+    ],
+    "durationSeconds": 4.458231292517007,
+    "durationWindowSeconds": [
+      1,
+      20
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 196608,
+    "decodedBytes": 393216,
+    "integratedLufs": -24.1,
+    "truePeakDbtp": -7.03,
+    "loudnessRangeLu": 0.9,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          30928,
+          43846
+        ],
+        [
+          100829,
+          135188
+        ],
+        [
+          184000,
+          196608
+        ]
+      ],
+      "fraction": 0.3045908610026042,
+      "longestInteriorSeconds": 0.7791156462585034
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 1164,
+    "endFrameExclusive": 91971,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 1.1246049739669264,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/voices/edited/mechanic.after.wav",
+    "sha256": "97afd59ad5d763e5a2c8d7881885091f5e1740e728f267d328d9890cb9b198a0",
+    "bytes": 181692,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 4.118231292517007,
+    "durationWindowSeconds": [
+      4.116231292517007,
+      4.120231292517007
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 90807,
+    "decodedBytes": 181614,
+    "integratedLufs": -18.01,
+    "truePeakDbtp": -5.56,
+    "loudnessRangeLu": 0.3,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          14554,
+          20744
+        ],
+        [
+          49513,
+          66277
+        ]
+      ],
+      "fraction": 0.25277786954750187,
+      "longestInteriorSeconds": 0.7602721088435375
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness"
+  ]
+}

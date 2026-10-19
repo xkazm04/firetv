@@ -1,0 +1,956 @@
+{
+ "what": "Two am dumpheap dumps (no forced GC) of dev.deathride.perf running p13e.apk under the probe, ~140 s in, taken 14.8 s apart; what is unreachable (garbage the next GC frees), and every unreachable array of 12 KiB or more (ART large objects) with the start of its content. Reader: tools/perf-p13f-heap.py.",
+ "utc": [
+  "2026-10-07T21:27:03.815Z",
+  "2026-10-07T21:27:18.646Z"
+ ],
+ "limit": "A dump pauses the app for several seconds; the probe timed out after it (ungraded diagnostic run). Previews show only the first 100 characters.",
+ "dumps": [
+  {
+   "path": "heap-a.hprof",
+   "objects": 311998,
+   "unreachable": 3780,
+   "unreachableBytes": 1168546,
+   "unreachableByClass": [
+    {
+     "class": "char[]",
+     "bytes": 835374,
+     "count": 575
+    },
+    {
+     "class": "double[]",
+     "bytes": 131072,
+     "count": 4
+    },
+    {
+     "class": "byte[]",
+     "bytes": 127022,
+     "count": 624
+    },
+    {
+     "class": "java.lang.String",
+     "bytes": 11040,
+     "count": 552
+    },
+    {
+     "class": "java.lang.Object[]",
+     "bytes": 11012,
+     "count": 80
+    },
+    {
+     "class": "kotlinx.coroutines.internal.DispatchedContinuation",
+     "bytes": 4532,
+     "count": 103
+    },
+    {
+     "class": "java.nio.HeapByteBuffer",
+     "bytes": 4089,
+     "count": 87
+    },
+    {
+     "class": "int[]",
+     "bytes": 2864,
+     "count": 64
+    },
+    {
+     "class": "java.lang.StringBuilder",
+     "bytes": 2816,
+     "count": 176
+    },
+    {
+     "class": "java.util.ArrayList$Itr",
+     "bytes": 2576,
+     "count": 92
+    },
+    {
+     "class": "io.ktor.utils.io.ByteBufferChannel$readSuspendImpl$1",
+     "bytes": 2560,
+     "count": 64
+    },
+    {
+     "class": "kotlinx.coroutines.scheduling.TaskImpl",
+     "bytes": 1920,
+     "count": 80
+    },
+    {
+     "class": "kotlinx.coroutines.channels.ChannelSegment",
+     "bytes": 1368,
+     "count": 38
+    },
+    {
+     "class": "kotlinx.coroutines.internal.LimitedDispatcher$Worker",
+     "bytes": 1280,
+     "count": 80
+    },
+    {
+     "class": "kotlin.jvm.internal.Ref$IntRef",
+     "bytes": 1260,
+     "count": 105
+    },
+    {
+     "class": "sun.misc.FDBigInteger",
+     "bytes": 1092,
+     "count": 52
+    },
+    {
+     "class": "dev.deathride.link.RaceServer$handle$handleInput$1",
+     "bytes": 1010,
+     "count": 10
+    },
+    {
+     "class": "java.lang.Double",
+     "bytes": 992,
+     "count": 62
+    },
+    {
+     "class": "kotlinx.coroutines.CancellableContinuationImpl",
+     "bytes": 968,
+     "count": 22
+    },
+    {
+     "class": "java.util.LinkedHashMap$LinkedHashMapEntry",
+     "bytes": 960,
+     "count": 30
+    },
+    {
+     "class": "io.ktor.utils.io.ByteBufferChannel$writeSuspend$1",
+     "bytes": 912,
+     "count": 19
+    },
+    {
+     "class": "java.lang.Integer",
+     "bytes": 852,
+     "count": 71
+    },
+    {
+     "class": "io.ktor.utils.io.ByteBufferChannel$write$1",
+     "bytes": 836,
+     "count": 19
+    },
+    {
+     "class": "io.ktor.websocket.Frame$Text",
+     "bytes": 756,
+     "count": 27
+    },
+    {
+     "class": "io.ktor.websocket.WebSocketWriter$drainQueueAndSerialize$1",
+     "bytes": 720,
+     "count": 15
+    }
+   ],
+   "unreachableLarge": {
+    "count": 19,
+    "bytes": 923436,
+    "arrays": [
+     {
+      "id": "b7c7b000",
+      "type": "char[]",
+      "bytes": 176396,
+      "length": 88198,
+      "preview": "{\"audio\":{\"active\":1,\"highWater\":8,\"cap\":8,\"played\":433,\"suppressed\":3331,\"stolen\":9,\"missing\":0,\"in"
+     },
+     {
+      "id": "b7cbd000",
+      "type": "char[]",
+      "bytes": 104764,
+      "length": 52382,
+      "preview": "{\"slot\":0,\"hudDelta\":true,\"hudMessages\":854,\"hudCharacters\":1399636,\"hudFullSnapshots\":10,\"hidden\":f"
+     },
+     {
+      "id": "b7c4c000",
+      "type": "char[]",
+      "bytes": 104764,
+      "length": 52382,
+      "preview": "{\"slot\":1,\"hudDelta\":true,\"hudMessages\":1062,\"hudCharacters\":1583820,\"hudFullSnapshots\":10,\"hidden\":"
+     },
+     {
+      "id": "b7ca7000",
+      "type": "char[]",
+      "bytes": 88196,
+      "length": 44098,
+      "preview": "{\"audio\":{\"active\":1,\"highWater\":8,\"cap\":8,\"played\":433,\"suppressed\":3331,\"stolen\":9,\"missing\":0,\"in"
+     },
+     {
+      "id": "bac41000",
+      "type": "char[]",
+      "bytes": 52380,
+      "length": 26190,
+      "preview": "{\"slot\":0,\"hudDelta\":true,\"hudMessages\":854,\"hudCharacters\":1399636,\"hudFullSnapshots\":10,\"hidden\":f"
+     },
+     {
+      "id": "b7c6e000",
+      "type": "char[]",
+      "bytes": 52380,
+      "length": 26190,
+      "preview": "{\"slot\":1,\"hudDelta\":true,\"hudMessages\":1062,\"hudCharacters\":1583820,\"hudFullSnapshots\":10,\"hidden\":"
+     },
+     {
+      "id": "b9467010",
+      "type": "byte[]",
+      "bytes": 34238,
+      "length": 34238,
+      "preview": "{\"slot\":0,\"hudDelta\":true,\"hudMessages\":854,\"hudCharacters\":1399636,\"hudFullSnapshots\":10,\"hidden\":f"
+     },
+     {
+      "id": "b7d07010",
+      "type": "byte[]",
+      "bytes": 34206,
+      "length": 34206,
+      "preview": "{\"slot\":1,\"hudDelta\":true,\"hudMessages\":1062,\"hudCharacters\":1583820,\"hudFullSnapshots\":10,\"hidden\":"
+     },
+     {
+      "id": "bad6e000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       9.249231,
+       9.476462,
+       9.992923000000001,
+       10.140846,
+       10.582692,
+       10.762231,
+       10.909923000000001,
+       10.988154
+      ]
+     },
+     {
+      "id": "bac51000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       1.202616,
+       1.209538,
+       1.262461,
+       1.268154,
+       1.293077,
+       1.329615,
+       1.348,
+       1.383154
+      ]
+     },
+     {
+      "id": "b9472000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       4.188964000000851,
+       4.22363300001598,
+       4.26248599999235,
+       4.3010400000202935,
+       4.750509000004968,
+       4.753602000011597,
+       4.9526630000036675,
+       4.958994000015082
+      ]
+     },
+     {
+      "id": "b945e000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       3.954059999989113,
+       4.065321000001859,
+       4.207128999987617,
+       4.62619799998356,
+       4.641505999985384,
+       4.8375900000100955,
+       4.849367000017082,
+       4.90146699998877
+      ]
+     },
+     {
+      "id": "bad5f000",
+      "type": "char[]",
+      "bytes": 26188,
+      "length": 13094,
+      "preview": "{\"slot\":0,\"hudDelta\":true,\"hudMessages\":854,\"hudCharacters\":1399636,\"hudFullSnapshots\":10,\"hidden\":f"
+     },
+     {
+      "id": "baca6000",
+      "type": "char[]",
+      "bytes": 26188,
+      "length": 13094,
+      "preview": "{\"slot\":1,\"hudDelta\":true,\"hudMessages\":1062,\"hudCharacters\":1583820,\"hudFullSnapshots\":10,\"hidden\":"
+     },
+     {
+      "id": "bd697000",
+      "type": "char[]",
+      "bytes": 23792,
+      "length": 11896,
+      "preview": "{\"audio\":{\"active\":1,\"highWater\":8,\"cap\":8,\"played\":433,\"suppressed\":3331,\"stolen\":9,\"missing\":0,\"in"
+     },
+     {
+      "id": "e7d2f000",
+      "type": "char[]",
+      "bytes": 19720,
+      "length": 9860,
+      "preview": "{\"audio\":{\"active\":1,\"highWater\":8,\"cap\":8,\"played\":433,\"suppressed\":3331,\"stolen\":9,\"missing\":0,\"in"
+     },
+     {
+      "id": "abe0c000",
+      "type": "char[]",
+      "bytes": 16384,
+      "length": 8192,
+      "preview": "GET /stats HTTP/1.1\r\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+     },
+     {
+      "id": "ac0ad000",
+      "type": "char[]",
+      "bytes": 16384,
+      "length": 8192,
+      "preview": "GET /stats HTTP/1.1\r\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+     },
+     {
+      "id": "b7cf5000",
+      "type": "char[]",
+      "bytes": 16384,
+      "length": 8192,
+      "preview": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+     }
+    ]
+   }
+  },
+  {
+   "path": "heap-b.hprof",
+   "objects": 369309,
+   "unreachable": 62100,
+   "unreachableBytes": 4940386,
+   "unreachableByClass": [
+    {
+     "class": "char[]",
+     "bytes": 3013638,
+     "count": 11460
+    },
+    {
+     "class": "byte[]",
+     "bytes": 696020,
+     "count": 12598
+    },
+    {
+     "class": "double[]",
+     "bytes": 262288,
+     "count": 10
+    },
+    {
+     "class": "java.lang.String",
+     "bytes": 232440,
+     "count": 11622
+    },
+    {
+     "class": "java.nio.HeapByteBuffer",
+     "bytes": 115385,
+     "count": 2455
+    },
+    {
+     "class": "java.util.ArrayList$Itr",
+     "bytes": 85988,
+     "count": 3071
+    },
+    {
+     "class": "java.lang.StringBuilder",
+     "bytes": 63392,
+     "count": 3962
+    },
+    {
+     "class": "java.lang.Object[]",
+     "bytes": 49224,
+     "count": 987
+    },
+    {
+     "class": "java.util.LinkedHashMap$LinkedHashMapEntry",
+     "bytes": 32672,
+     "count": 1021
+    },
+    {
+     "class": "java.lang.Double",
+     "bytes": 30720,
+     "count": 1920
+    },
+    {
+     "class": "dev.deathride.link.RaceServer$handle$handleInput$1",
+     "bytes": 30502,
+     "count": 302
+    },
+    {
+     "class": "int[]",
+     "bytes": 28176,
+     "count": 1347
+    },
+    {
+     "class": "sun.misc.FDBigInteger",
+     "bytes": 25536,
+     "count": 1216
+    },
+    {
+     "class": "kotlinx.coroutines.internal.DispatchedContinuation",
+     "bytes": 18656,
+     "count": 424
+    },
+    {
+     "class": "java.nio.ByteBufferAsIntBuffer",
+     "bytes": 17328,
+     "count": 304
+    },
+    {
+     "class": "io.ktor.websocket.Frame$Text",
+     "bytes": 17220,
+     "count": 615
+    },
+    {
+     "class": "java.util.ArrayList",
+     "bytes": 16880,
+     "count": 844
+    },
+    {
+     "class": "java.lang.Long",
+     "bytes": 14512,
+     "count": 907
+    },
+    {
+     "class": "java.util.LinkedHashMap",
+     "bytes": 13573,
+     "count": 277
+    },
+    {
+     "class": "java.util.HashMap$Node[]",
+     "bytes": 13456,
+     "count": 211
+    },
+    {
+     "class": "io.ktor.websocket.WebSocketReader$handleFrameIfProduced$1",
+     "bytes": 11124,
+     "count": 309
+    },
+    {
+     "class": "io.ktor.websocket.DefaultWebSocketSessionImpl$checkMaxFrameSize$1",
+     "bytes": 10872,
+     "count": 302
+    },
+    {
+     "class": "kotlinx.coroutines.scheduling.TaskImpl",
+     "bytes": 9864,
+     "count": 411
+    },
+    {
+     "class": "io.ktor.utils.io.ByteBufferChannel$readSuspendImpl$1",
+     "bytes": 7120,
+     "count": 178
+    },
+    {
+     "class": "kotlinx.coroutines.CancellableContinuationImpl",
+     "bytes": 6600,
+     "count": 150
+    }
+   ],
+   "unreachableLarge": {
+    "count": 32,
+    "bytes": 1935994,
+    "arrays": [
+     {
+      "id": "b7c7b000",
+      "type": "char[]",
+      "bytes": 176396,
+      "length": 88198,
+      "preview": "{\"audio\":{\"active\":1,\"highWater\":8,\"cap\":8,\"played\":433,\"suppressed\":3331,\"stolen\":9,\"missing\":0,\"in"
+     },
+     {
+      "id": "ae766000",
+      "type": "char[]",
+      "bytes": 136056,
+      "length": 68028,
+      "preview": "{\"t\":\"hud\",\"speed\":24.1,\"lap\":1,\"pos\":1,\"combat\":{\"spectating\":false,\"ability\":{\"id\":\"punch-lance\",\""
+     },
+     {
+      "id": "ae857000",
+      "type": "char[]",
+      "bytes": 135964,
+      "length": 67982,
+      "preview": "{\"t\":\"hud\",\"speed\":23.99,\"lap\":1,\"pos\":4,\"combat\":{\"spectating\":false,\"ability\":{\"id\":\"ground-bite\","
+     },
+     {
+      "id": "ae80b000",
+      "type": "char[]",
+      "bytes": 131028,
+      "length": 65514,
+      "preview": "{\"t\":\"hud\",\"speed\":25.1,\"lap\":1,\"pos\":4,\"combat\":{\"spectating\":false,\"ability\":{\"id\":\"ground-bite\",\""
+     },
+     {
+      "id": "ae7a2000",
+      "type": "char[]",
+      "bytes": 112004,
+      "length": 56002,
+      "preview": ",\"hostCareer\":{\"campaign\":{\"profile\":\"ability-probe-76b271e2-63ad-47eb-8366-dae6f3241b99\",\"car\":\"Tra"
+     },
+     {
+      "id": "ae893000",
+      "type": "char[]",
+      "bytes": 112004,
+      "length": 56002,
+      "preview": ",\"hostCareer\":{\"campaign\":{\"profile\":\"ability-probe-76b271e2-63ad-47eb-8366-dae6f3241b99\",\"car\":\"Tra"
+     },
+     {
+      "id": "b7cbd000",
+      "type": "char[]",
+      "bytes": 104764,
+      "length": 52382,
+      "preview": "{\"slot\":0,\"hudDelta\":true,\"hudMessages\":854,\"hudCharacters\":1399636,\"hudFullSnapshots\":10,\"hidden\":f"
+     },
+     {
+      "id": "b7c4c000",
+      "type": "char[]",
+      "bytes": 104764,
+      "length": 52382,
+      "preview": "{\"slot\":1,\"hudDelta\":true,\"hudMessages\":1062,\"hudCharacters\":1583820,\"hudFullSnapshots\":10,\"hidden\":"
+     },
+     {
+      "id": "b7ca7000",
+      "type": "char[]",
+      "bytes": 88196,
+      "length": 44098,
+      "preview": "{\"audio\":{\"active\":1,\"highWater\":8,\"cap\":8,\"played\":433,\"suppressed\":3331,\"stolen\":9,\"missing\":0,\"in"
+     },
+     {
+      "id": "ae6f4000",
+      "type": "char[]",
+      "bytes": 81432,
+      "length": 40716,
+      "preview": "{\"t\":\"hud\",\"speed\":25.16,\"lap\":1,\"pos\":1,\"combat\":{\"spectating\":false,\"ability\":{\"id\":\"punch-lance\","
+     },
+     {
+      "id": "b7c10010",
+      "type": "byte[]",
+      "bytes": 78307,
+      "length": 78307,
+      "preview": "{\"audio\":{\"active\":1,\"highWater\":8,\"cap\":8,\"played\":433,\"suppressed\":3331,\"stolen\":9,\"missing\":0,\"in"
+     },
+     {
+      "id": "aee09000",
+      "type": "byte[]",
+      "bytes": 78307,
+      "length": 78307,
+      "preview": "{\"audio\":{\"active\":1,\"highWater\":8,\"cap\":8,\"played\":433,\"suppressed\":3331,\"stolen\":9,\"missing\":0,\"in"
+     },
+     {
+      "id": "bac41000",
+      "type": "char[]",
+      "bytes": 52380,
+      "length": 26190,
+      "preview": "{\"slot\":0,\"hudDelta\":true,\"hudMessages\":854,\"hudCharacters\":1399636,\"hudFullSnapshots\":10,\"hidden\":f"
+     },
+     {
+      "id": "b7c6e000",
+      "type": "char[]",
+      "bytes": 52380,
+      "length": 26190,
+      "preview": "{\"slot\":1,\"hudDelta\":true,\"hudMessages\":1062,\"hudCharacters\":1583820,\"hudFullSnapshots\":10,\"hidden\":"
+     },
+     {
+      "id": "b9467010",
+      "type": "byte[]",
+      "bytes": 34238,
+      "length": 34238,
+      "preview": "{\"slot\":0,\"hudDelta\":true,\"hudMessages\":854,\"hudCharacters\":1399636,\"hudFullSnapshots\":10,\"hidden\":f"
+     },
+     {
+      "id": "b7d07010",
+      "type": "byte[]",
+      "bytes": 34206,
+      "length": 34206,
+      "preview": "{\"slot\":1,\"hudDelta\":true,\"hudMessages\":1062,\"hudCharacters\":1583820,\"hudFullSnapshots\":10,\"hidden\":"
+     },
+     {
+      "id": "bad6e000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       9.249231,
+       9.476462,
+       9.992923000000001,
+       10.140846,
+       10.582692,
+       10.762231,
+       10.909923000000001,
+       10.988154
+      ]
+     },
+     {
+      "id": "bac51000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       1.202616,
+       1.209538,
+       1.262461,
+       1.268154,
+       1.293077,
+       1.329615,
+       1.348,
+       1.383154
+      ]
+     },
+     {
+      "id": "b9472000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       4.188964000000851,
+       4.22363300001598,
+       4.26248599999235,
+       4.3010400000202935,
+       4.750509000004968,
+       4.753602000011597,
+       4.9526630000036675,
+       4.958994000015082
+      ]
+     },
+     {
+      "id": "b945e000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       3.954059999989113,
+       4.065321000001859,
+       4.207128999987617,
+       4.62619799998356,
+       4.641505999985384,
+       4.8375900000100955,
+       4.849367000017082,
+       4.90146699998877
+      ]
+     },
+     {
+      "id": "acfc2000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       9.992923000000001,
+       11.034461,
+       11.105385,
+       12.777231,
+       12.954538999999999,
+       13.06877,
+       13.459461000000001,
+       13.704923
+      ]
+     },
+     {
+      "id": "acfa9000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       1.202616,
+       1.329615,
+       1.403462,
+       1.410538,
+       1.413154,
+       1.415077,
+       1.416846,
+       1.447769
+      ]
+     },
+     {
+      "id": "acfa0000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       4.188964000000851,
+       5.244302000006428,
+       5.661201999988407,
+       5.695279000006849,
+       5.714340000005905,
+       5.916840000019874,
+       5.963979000021936,
+       6.448263000027509
+      ]
+     },
+     {
+      "id": "acf97000",
+      "type": "double[]",
+      "bytes": 32768,
+      "length": 4096,
+      "preview": [
+       4.065321000001859,
+       5.156343999988167,
+       5.553929000016069,
+       5.565875000029337,
+       5.806544000020949,
+       6.421543999982532,
+       6.975714000029257,
+       7.134920999989845
+      ]
+     },
+     {
+      "id": "bad5f000",
+      "type": "char[]",
+      "bytes": 26188,
+      "length": 13094,
+      "preview": "{\"slot\":0,\"hudDelta\":true,\"hudMessages\":854,\"hudCharacters\":1399636,\"hudFullSnapshots\":10,\"hidden\":f"
+     },
+     {
+      "id": "baca6000",
+      "type": "char[]",
+      "bytes": 26188,
+      "length": 13094,
+      "preview": "{\"slot\":1,\"hudDelta\":true,\"hudMessages\":1062,\"hudCharacters\":1583820,\"hudFullSnapshots\":10,\"hidden\":"
+     },
+     {
+      "id": "bd697000",
+      "type": "char[]",
+      "bytes": 23792,
+      "length": 11896,
+      "preview": "{\"audio\":{\"active\":1,\"highWater\":8,\"cap\":8,\"played\":433,\"suppressed\":3331,\"stolen\":9,\"missing\":0,\"in"
+     },
+     {
+      "id": "e7d2f000",
+      "type": "char[]",
+      "bytes": 19720,
+      "length": 9860,
+      "preview": "{\"audio\":{\"active\":1,\"highWater\":8,\"cap\":8,\"played\":433,\"suppressed\":3331,\"stolen\":9,\"missing\":0,\"in"
+     },
+     {
+      "id": "abbbc000",
+      "type": "char[]",
+      "bytes": 16384,
+      "length": 8192,
+      "preview": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+     },
+     {
+      "id": "abe0c000",
+      "type": "char[]",
+      "bytes": 16384,
+      "length": 8192,
+      "preview": "GET /stats HTTP/1.1\r\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+     },
+     {
+      "id": "ac0ad000",
+      "type": "char[]",
+      "bytes": 16384,
+      "length": 8192,
+      "preview": "GET /stats HTTP/1.1\r\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+     },
+     {
+      "id": "b7cf5000",
+      "type": "char[]",
+      "bytes": 16384,
+      "length": 8192,
+      "preview": "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"
+     }
+    ]
+   }
+  }
+ ],
+ "newInSecond": {
+  "objects": 57311,
+  "unreachable": 56949,
+  "unreachableBytes": 2838563,
+  "unreachableByClass": [
+   {
+    "class": "char[]",
+    "bytes": 1453008,
+    "count": 10876
+   },
+   {
+    "class": "byte[]",
+    "bytes": 410151,
+    "count": 11917
+   },
+   {
+    "class": "java.lang.String",
+    "bytes": 220460,
+    "count": 11023
+   },
+   {
+    "class": "double[]",
+    "bytes": 131072,
+    "count": 4
+   },
+   {
+    "class": "java.nio.HeapByteBuffer",
+    "bytes": 111202,
+    "count": 2366
+   },
+   {
+    "class": "java.util.ArrayList$Itr",
+    "bytes": 83384,
+    "count": 2978
+   },
+   {
+    "class": "java.lang.StringBuilder",
+    "bytes": 60448,
+    "count": 3778
+   },
+   {
+    "class": "java.util.LinkedHashMap$LinkedHashMapEntry",
+    "bytes": 31200,
+    "count": 975
+   },
+   {
+    "class": "java.lang.Double",
+    "bytes": 29648,
+    "count": 1853
+   },
+   {
+    "class": "dev.deathride.link.RaceServer$handle$handleInput$1",
+    "bytes": 29492,
+    "count": 292
+   },
+   {
+    "class": "java.lang.Object[]",
+    "bytes": 24884,
+    "count": 858
+   },
+   {
+    "class": "int[]",
+    "bytes": 24656,
+    "count": 1282
+   },
+   {
+    "class": "sun.misc.FDBigInteger",
+    "bytes": 24444,
+    "count": 1164
+   },
+   {
+    "class": "java.nio.ByteBufferAsIntBuffer",
+    "bytes": 16758,
+    "count": 294
+   },
+   {
+    "class": "io.ktor.websocket.Frame$Text",
+    "bytes": 16464,
+    "count": 588
+   },
+   {
+    "class": "java.util.ArrayList",
+    "bytes": 15500,
+    "count": 775
+   },
+   {
+    "class": "java.lang.Long",
+    "bytes": 14176,
+    "count": 886
+   },
+   {
+    "class": "java.util.LinkedHashMap",
+    "bytes": 12740,
+    "count": 260
+   },
+   {
+    "class": "java.util.HashMap$Node[]",
+    "bytes": 12480,
+    "count": 195
+   },
+   {
+    "class": "kotlinx.coroutines.internal.DispatchedContinuation",
+    "bytes": 11044,
+    "count": 251
+   },
+   {
+    "class": "io.ktor.websocket.WebSocketReader$handleFrameIfProduced$1",
+    "bytes": 10764,
+    "count": 299
+   },
+   {
+    "class": "io.ktor.websocket.DefaultWebSocketSessionImpl$checkMaxFrameSize$1",
+    "bytes": 10512,
+    "count": 292
+   },
+   {
+    "class": "kotlinx.coroutines.scheduling.TaskImpl",
+    "bytes": 7896,
+    "count": 329
+   },
+   {
+    "class": "sun.misc.FloatingDecimal$ASCIIToBinaryBuffer",
+    "bytes": 6090,
+    "count": 290
+   },
+   {
+    "class": "kotlinx.coroutines.internal.LimitedDispatcher$Worker",
+    "bytes": 5264,
+    "count": 329
+   }
+  ],
+  "unreachableLarge": {
+   "count": 4,
+   "bytes": 131072,
+   "arrays": [
+    {
+     "id": "acfc2000",
+     "type": "double[]",
+     "bytes": 32768,
+     "length": 4096,
+     "preview": [
+      9.992923000000001,
+      11.034461,
+      11.105385,
+      12.777231,
+      12.954538999999999,
+      13.06877,
+      13.459461000000001,
+      13.704923
+     ]
+    },
+    {
+     "id": "acfa9000",
+     "type": "double[]",
+     "bytes": 32768,
+     "length": 4096,
+     "preview": [
+      1.202616,
+      1.329615,
+      1.403462,
+      1.410538,
+      1.413154,
+      1.415077,
+      1.416846,
+      1.447769
+     ]
+    },
+    {
+     "id": "acfa0000",
+     "type": "double[]",
+     "bytes": 32768,
+     "length": 4096,
+     "preview": [
+      4.188964000000851,
+      5.244302000006428,
+      5.661201999988407,
+      5.695279000006849,
+      5.714340000005905,
+      5.916840000019874,
+      5.963979000021936,
+      6.448263000027509
+     ]
+    },
+    {
+     "id": "acf97000",
+     "type": "double[]",
+     "bytes": 32768,
+     "length": 4096,
+     "preview": [
+      4.065321000001859,
+      5.156343999988167,
+      5.553929000016069,
+      5.565875000029337,
+      5.806544000020949,
+      6.421543999982532,
+      6.975714000029257,
+      7.134920999989845
+     ]
+    }
+   ]
+  },
+  "path": "new in second"
+ }
+}

@@ -1,0 +1,613 @@
+{
+ "run1": {
+  "settled": true,
+  "settleWaitedSeconds": 665,
+  "transitionMaxMs": 83.9,
+  "transitionWindows": 55,
+  "windowsOver100": 0,
+  "bar": "pass",
+  "perRoundMaxMs": [
+   [
+    0,
+    "scrap-1-c",
+    71.0
+   ],
+   [
+    1,
+    "foundry-1-c",
+    83.9
+   ],
+   [
+    2,
+    "salt-1-b",
+    68.1
+   ],
+   [
+    3,
+    "switchback-1-a",
+    60.0
+   ],
+   [
+    4,
+    "crown-1-a",
+    68.7
+   ],
+   [
+    5,
+    "scrap-1-c",
+    62.9
+   ]
+  ],
+  "switches": [
+   {
+    "course": "foundry-1-c",
+    "k11IntervalMs": 18.6,
+    "maxIntervalMs": 72.4,
+    "switchFrameWorkMs": 70.6,
+    "passes": 98,
+    "maxSliceMs": 22.0
+   },
+   {
+    "course": "salt-1-b",
+    "k11IntervalMs": 17.5,
+    "maxIntervalMs": 31.4,
+    "switchFrameWorkMs": 29.9,
+    "passes": 71,
+    "maxSliceMs": 13.0
+   },
+   {
+    "course": "switchback-1-a",
+    "k11IntervalMs": 19.5,
+    "maxIntervalMs": 29.8,
+    "switchFrameWorkMs": 28.3,
+    "passes": 69,
+    "maxSliceMs": 13.2
+   },
+   {
+    "course": "crown-1-a",
+    "k11IntervalMs": 19.4,
+    "maxIntervalMs": 30.0,
+    "switchFrameWorkMs": 28.6,
+    "passes": 59,
+    "maxSliceMs": 13.5
+   },
+   {
+    "course": "scrap-1-c",
+    "k11IntervalMs": 17.8,
+    "maxIntervalMs": 40.4,
+    "switchFrameWorkMs": 39.0,
+    "passes": 58,
+    "maxSliceMs": 13.9
+   }
+  ],
+  "carPickMs": [
+   9.6,
+   42.9,
+   11
+  ],
+  "startRaceMs": [
+   17.7,
+   27.1,
+   6
+  ],
+  "raceLaunchMs": [
+   7.2,
+   11.6,
+   6
+  ],
+  "trackMs": [
+   14.7,
+   65.6,
+   6
+  ],
+  "flushMs": {
+   "0": [
+    11.8,
+    42.5,
+    25
+   ],
+   "1": [
+    11.4,
+    48.2,
+    23
+   ]
+  },
+  "pssRangeMiB": [
+   169.7,
+   178.4
+  ],
+  "rejected": [
+   0,
+   0
+  ],
+  "inputStream": {
+   "hz": [
+    30.00029818680164,
+    30.00029818680164
+   ],
+   "pumpStalls": 0
+  },
+  "hostCpu": {
+   "host-cpu-start.json": [
+    21,
+    17,
+    20
+   ],
+   "host-cpu-end.json": [
+    21,
+    26,
+    19
+   ]
+  },
+  "settleLastMinute": [
+   21,
+   19,
+   12,
+   14,
+   11,
+   22,
+   20,
+   18,
+   24,
+   16,
+   21,
+   26,
+   39,
+   36,
+   24,
+   15,
+   25,
+   15,
+   13,
+   19,
+   15,
+   15,
+   20,
+   15,
+   20,
+   15,
+   11,
+   34,
+   18,
+   20,
+   14,
+   11,
+   18,
+   15,
+   19,
+   43,
+   18,
+   12,
+   9,
+   13,
+   24,
+   32,
+   11,
+   16,
+   14,
+   31,
+   48,
+   34,
+   26,
+   36,
+   25,
+   35,
+   29,
+   24,
+   40,
+   26,
+   25,
+   22,
+   22,
+   33
+  ],
+  "framesOver100": [
+   {
+    "approxSecond": -31.8,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 121.4,
+    "workMs": 53.7,
+    "cpuMs": 47.6,
+    "requestsMs": 0.7,
+    "prepareMs": 0.7,
+    "simulationMs": 0.2,
+    "telemetryMs": 1.3,
+    "carsEffectsMs": 0.0,
+    "hudMs": 46.4
+   },
+   {
+    "approxSecond": -29.4,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 81.9,
+    "workMs": 117.4,
+    "cpuMs": 111.2,
+    "requestsMs": 0.3,
+    "prepareMs": 0.0,
+    "simulationMs": 102.1,
+    "telemetryMs": 0.9,
+    "carsEffectsMs": 8.7,
+    "hudMs": 2.6
+   },
+   {
+    "approxSecond": -29.2,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 118.9,
+    "workMs": 92.2,
+    "cpuMs": 87.2,
+    "requestsMs": 0.3,
+    "prepareMs": 0.0,
+    "simulationMs": 76.1,
+    "telemetryMs": 0.0,
+    "carsEffectsMs": 8.1,
+    "hudMs": 2.5
+   },
+   {
+    "approxSecond": -28.2,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 17.0,
+    "workMs": 190.3,
+    "cpuMs": 16.8,
+    "requestsMs": 0.3,
+    "prepareMs": 0.0,
+    "simulationMs": 7.4,
+    "telemetryMs": 173.1,
+    "carsEffectsMs": 4.1,
+    "hudMs": 2.5
+   },
+   {
+    "approxSecond": -28.0,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 191.6,
+    "workMs": 41.9,
+    "cpuMs": 39.7,
+    "requestsMs": 0.3,
+    "prepareMs": 0.0,
+    "simulationMs": 32.1,
+    "telemetryMs": 0.5,
+    "carsEffectsMs": 4.0,
+    "hudMs": 2.5
+   }
+  ],
+  "decodeCompiles": [
+   "10-08 02:15:50.464 Compiler allocated 4206KB to compile dev.deathride.core.Profile dev.deathride.core.ProfileCodec.decode(java.lang.String, java.lang.String, boolean)"
+  ],
+  "firstProbeRequest": "10-08 02:16:23.116",
+  "decodeCompileBeforeFirstRequest": true,
+  "codecWarm": [
+   "10-08 02:15:58.046 profileCodecWarm calls=200 ms=8765.2"
+  ],
+  "gcOver300msTotal": [],
+  "fails": [
+   "activeMaxMs"
+  ],
+  "gc": {
+   "loggedGcs": 22,
+   "loggedBackgroundGcs": 22,
+   "losMBPerGc": [
+    2.63,
+    15.0
+   ],
+   "losMBTotal": 252.5,
+   "losMBps": 0.7,
+   "gapSeconds": [
+    2.22,
+    20.37,
+    35.99
+   ],
+   "totalMs": [
+    100.9,
+    303.3
+   ],
+   "runtime": {
+    "fromSecond": 3.7,
+    "toSecond": 357.6,
+    "allocatedMB": 918.1,
+    "allocatedMBps": 2.59,
+    "gcCount": 36,
+    "gcPerMinute": 6.1,
+    "unit": "MB = 10^6 B, from art.gc.bytes-allocated and art.gc.gc-count"
+   }
+  }
+ },
+ "run2": {
+  "settled": true,
+  "settleWaitedSeconds": 76,
+  "transitionMaxMs": 99.6,
+  "transitionWindows": 56,
+  "windowsOver100": 0,
+  "bar": "pass",
+  "perRoundMaxMs": [
+   [
+    0,
+    "scrap-1-c",
+    76.3
+   ],
+   [
+    1,
+    "foundry-1-c",
+    67.9
+   ],
+   [
+    2,
+    "salt-1-b",
+    99.6
+   ],
+   [
+    3,
+    "switchback-1-a",
+    71.2
+   ],
+   [
+    4,
+    "crown-1-a",
+    75.6
+   ],
+   [
+    5,
+    "scrap-1-c",
+    74.4
+   ]
+  ],
+  "switches": [
+   {
+    "course": "foundry-1-c",
+    "k11IntervalMs": 18.6,
+    "maxIntervalMs": 67.9,
+    "switchFrameWorkMs": 65.6,
+    "passes": 96,
+    "maxSliceMs": 25.3
+   },
+   {
+    "course": "salt-1-b",
+    "k11IntervalMs": 20.7,
+    "maxIntervalMs": 42.1,
+    "switchFrameWorkMs": 39.4,
+    "passes": 72,
+    "maxSliceMs": 14.5
+   },
+   {
+    "course": "switchback-1-a",
+    "k11IntervalMs": 19.3,
+    "maxIntervalMs": 32.9,
+    "switchFrameWorkMs": 31.3,
+    "passes": 71,
+    "maxSliceMs": 14.4
+   },
+   {
+    "course": "crown-1-a",
+    "k11IntervalMs": 18.6,
+    "maxIntervalMs": 34.4,
+    "switchFrameWorkMs": 31.4,
+    "passes": 67,
+    "maxSliceMs": 13.4
+   },
+   {
+    "course": "scrap-1-c",
+    "k11IntervalMs": 17.7,
+    "maxIntervalMs": 50.4,
+    "switchFrameWorkMs": 30.6,
+    "passes": 57,
+    "maxSliceMs": 13.0
+   }
+  ],
+  "carPickMs": [
+   10.2,
+   22.5,
+   11
+  ],
+  "startRaceMs": [
+   19.9,
+   35.9,
+   6
+  ],
+  "raceLaunchMs": [
+   6.8,
+   27.8,
+   6
+  ],
+  "trackMs": [
+   13.7,
+   59.1,
+   6
+  ],
+  "flushMs": {
+   "0": [
+    10.6,
+    49.9,
+    25
+   ],
+   "1": [
+    10.9,
+    27.5,
+    23
+   ]
+  },
+  "pssRangeMiB": [
+   168.8,
+   188.5
+  ],
+  "rejected": [
+   0,
+   0
+  ],
+  "inputStream": {
+   "hz": [
+    30.002146765661305,
+    30.002146765661305
+   ],
+   "pumpStalls": 0
+  },
+  "hostCpu": {
+   "host-cpu-start.json": [
+    19,
+    19,
+    19
+   ],
+   "host-cpu-end.json": [
+    21,
+    24,
+    22
+   ]
+  },
+  "settleLastMinute": [
+   36,
+   22,
+   28,
+   20,
+   18,
+   21,
+   18,
+   17,
+   15,
+   21,
+   22,
+   19,
+   22,
+   22,
+   21,
+   24,
+   19,
+   17,
+   21,
+   16,
+   29,
+   21,
+   21,
+   26,
+   22,
+   19,
+   20,
+   20,
+   22,
+   21,
+   22,
+   26,
+   32,
+   23,
+   27,
+   23,
+   30,
+   32,
+   38,
+   35,
+   26,
+   19,
+   29,
+   17,
+   19,
+   20,
+   27,
+   23,
+   21,
+   25,
+   26,
+   22,
+   24,
+   28,
+   23,
+   19,
+   16,
+   24,
+   19,
+   19
+  ],
+  "framesOver100": [
+   {
+    "approxSecond": -30.7,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 114.4,
+    "workMs": 42.4,
+    "cpuMs": 41.5,
+    "requestsMs": 0.8,
+    "prepareMs": 0.7,
+    "simulationMs": 0.1,
+    "telemetryMs": 1.4,
+    "carsEffectsMs": 0.0,
+    "hudMs": 34.6
+   },
+   {
+    "approxSecond": -27.5,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 16.8,
+    "workMs": 187.2,
+    "cpuMs": 18.0,
+    "requestsMs": 0.2,
+    "prepareMs": 0.0,
+    "simulationMs": 4.9,
+    "telemetryMs": 170.1,
+    "carsEffectsMs": 4.8,
+    "hudMs": 3.6
+   },
+   {
+    "approxSecond": -27.3,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 188.7,
+    "workMs": 46.2,
+    "cpuMs": 45.6,
+    "requestsMs": 0.3,
+    "prepareMs": 0.0,
+    "simulationMs": 35.8,
+    "telemetryMs": 0.5,
+    "carsEffectsMs": 4.1,
+    "hudMs": 2.8
+   }
+  ],
+  "decodeCompiles": [
+   "10-08 02:24:05.605 Compiler allocated 4206KB to compile dev.deathride.core.Profile dev.deathride.core.ProfileCodec.decode(java.lang.String, java.lang.String, boolean)"
+  ],
+  "firstProbeRequest": "10-08 02:24:37.167",
+  "decodeCompileBeforeFirstRequest": true,
+  "codecWarm": [
+   "10-08 02:24:11.889 profileCodecWarm calls=200 ms=7223.1"
+  ],
+  "gcOver300msTotal": [],
+  "fails": [
+   "activeP95WorstVsG1Ms",
+   "activeMaxMs"
+  ],
+  "gc": {
+   "loggedGcs": 19,
+   "loggedBackgroundGcs": 19,
+   "losMBPerGc": [
+    8.01,
+    14.0
+   ],
+   "losMBTotal": 222.3,
+   "losMBps": 0.62,
+   "gapSeconds": [
+    5.59,
+    20.45,
+    42.27
+   ],
+   "totalMs": [
+    100.6,
+    281.6
+   ],
+   "runtime": {
+    "fromSecond": 3.8,
+    "toSecond": 358.5,
+    "allocatedMB": 912.1,
+    "allocatedMBps": 2.57,
+    "gcCount": 37,
+    "gcPerMinute": 6.3,
+    "unit": "MB = 10^6 B, from art.gc.bytes-allocated and art.gc.gc-count"
+   }
+  }
+ }
+}

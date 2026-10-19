@@ -1,0 +1,217 @@
+{
+  "command": "cd deathride && gradlew.bat :core:test :link:test :game:test --console=plain",
+  "final": {
+    "commit": "59f5605e",
+    "rerunTasks": true,
+    "exit": 0,
+    "results": {
+      "core": {
+        "tests": 239,
+        "skipped": 0,
+        "failures": 0,
+        "errors": 0
+      },
+      "link": {
+        "tests": 20,
+        "skipped": 2,
+        "failures": 0,
+        "errors": 0
+      },
+      "game": {
+        "tests": 71,
+        "skipped": 0,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    "log": "gate-final-rerun.log (raw)"
+  },
+  "runs": [
+    {
+      "when": "after d3c68fec",
+      "combined": true,
+      "exit": 1,
+      "results": {
+        "core": {
+          "tests": 239,
+          "failures": 0
+        },
+        "link": {
+          "tests": 19,
+          "skipped": 2,
+          "failures": 2
+        },
+        "game": {
+          "tests": 71,
+          "failures": 0
+        }
+      },
+      "failed": [
+        "CompactLinkTest.compactHudReconnectionAndFreshnessUseActualSockets",
+        "HiddenPhoneTest.hiddenPhoneReceivesNoHudAndResumesFull"
+      ],
+      "note": "link socket timing tests while the core suite ran in parallel; log gate-first-combined.log"
+    },
+    {
+      "when": "after d3c68fec",
+      "combined": false,
+      "task": ":link:test --rerun-tasks",
+      "exit": 0,
+      "results": {
+        "link": {
+          "tests": 19,
+          "skipped": 2,
+          "failures": 0
+        }
+      }
+    },
+    {
+      "when": "after a0bbb3c5",
+      "combined": true,
+      "exit": 1,
+      "results": {
+        "core": {
+          "tests": 239,
+          "failures": 0,
+          "note": "up to date"
+        },
+        "link": {
+          "tests": 20,
+          "skipped": 2,
+          "failures": 2
+        },
+        "game": {
+          "tests": 71,
+          "failures": 0
+        }
+      },
+      "failed": [
+        "HiddenPhoneTest.hiddenPhoneReceivesNoHudAndResumesFull",
+        "HudPayloadTest.anIdleSnapshotIsHeartbeatOnlyAndAChangeIsSentAtOnce"
+      ],
+      "note": "host at 100% CPU from other sessions; log gate-final.log"
+    },
+    {
+      "when": "after a0bbb3c5",
+      "combined": false,
+      "task": ":link:test --rerun-tasks",
+      "exit": 0,
+      "results": {
+        "link": {
+          "tests": 20,
+          "skipped": 2,
+          "failures": 0
+        }
+      },
+      "log": "link-alone-final.log"
+    },
+    {
+      "when": "base c4763248 (git archive export of core/link/game and their inputs)",
+      "combined": true,
+      "rerunTasks": true,
+      "exit": 1,
+      "results": {
+        "core": {
+          "tests": 236,
+          "failures": 1
+        },
+        "link": {
+          "tests": 18,
+          "skipped": 2,
+          "failures": 0
+        },
+        "game": {
+          "tests": 71,
+          "failures": 1
+        }
+      },
+      "note": "core ScriptTest and game ObstacleArtTest failed on files the partial export left out (run-from-checkout check, art/fusion-obstacles-selected.json); link passed under the same combined load. log gate-base-c4763248.log"
+    },
+    {
+      "when": "after 59f5605e",
+      "combined": true,
+      "exit": 0,
+      "results": {
+        "core": {
+          "tests": 239,
+          "failures": 0,
+          "note": "up to date"
+        },
+        "link": {
+          "tests": 20,
+          "skipped": 2,
+          "failures": 0
+        },
+        "game": {
+          "tests": 71,
+          "failures": 0
+        }
+      },
+      "log": "gate-final2.log"
+    },
+    {
+      "when": "after 59f5605e",
+      "combined": true,
+      "rerunTasks": true,
+      "exit": 0,
+      "results": {
+        "core": {
+          "tests": 239,
+          "skipped": 0,
+          "failures": 0,
+          "errors": 0
+        },
+        "link": {
+          "tests": 20,
+          "skipped": 2,
+          "failures": 0,
+          "errors": 0
+        },
+        "game": {
+          "tests": 71,
+          "skipped": 0,
+          "failures": 0,
+          "errors": 0
+        }
+      },
+      "log": "gate-final-rerun.log"
+    }
+  ],
+  "newTests": [
+    "core CoursePrewarmTest (3)",
+    "link TrackRequestTest (2)"
+  ],
+  "desktopBinsFromFinalRerun": [
+    {
+      "course": "scrap-1-c",
+      "ints": 332538,
+      "arrays": 2304,
+      "desktopBakeMs": 6.3
+    },
+    {
+      "course": "foundry-1-c",
+      "ints": 421862,
+      "arrays": 2688,
+      "desktopBakeMs": 7.0
+    },
+    {
+      "course": "salt-1-b",
+      "ints": 545012,
+      "arrays": 3584,
+      "desktopBakeMs": 9.4
+    },
+    {
+      "course": "switchback-1-a",
+      "ints": 555683,
+      "arrays": 3584,
+      "desktopBakeMs": 8.9
+    },
+    {
+      "course": "crown-1-a",
+      "ints": 730393,
+      "arrays": 4480,
+      "desktopBakeMs": 11.9
+    }
+  ],
+  "skipped": "typecheck and lint: no command configured for this project"
+}

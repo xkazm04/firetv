@@ -1,0 +1,44 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[137,137],"rejected":[0,0],"hostPumpStalls":0}
+{"hostPumpStall":{"second":71.069363,"lateMs":169.36299999937182,"epochMs":1791334581868.7998,"cpu":{"user":2109000,"system":921000},"memory":{"rss":134799360,"heapTotal":70991872,"heapUsed":36515920,"external":4155402,"arrayBuffers":117931}}}
+{"second":71,"accepted":[2137,2137],"rejected":[0,0],"hostPumpStalls":1}
+{"hostPumpStall":{"second":137.8930533,"lateMs":390.35696667202865,"epochMs":1791334648692.4902,"cpu":{"user":3875000,"system":1593000},"memory":{"rss":153534464,"heapTotal":74174464,"heapUsed":45282848,"external":9577198,"arrayBuffers":5539727}}}
+{"second":137,"accepted":[4137,4137],"rejected":[0,0],"hostPumpStalls":2}
+{"hostPumpStall":{"second":204.0255715,"lateMs":132.51819998081191,"epochMs":1791334714825.0083,"cpu":{"user":5656000,"system":2296000},"memory":{"rss":161034240,"heapTotal":77578240,"heapUsed":51773640,"external":11898515,"arrayBuffers":7861044}}}
+{"second":204,"accepted":[6107,6107],"rejected":[0,0],"hostPumpStalls":3}
+{"second":270,"accepted":[8108,8108],"rejected":[0,0],"hostPumpStalls":3}
+{"second":335,"accepted":[10054,10054],"rejected":[0,0],"hostPumpStalls":3}
+{"second":360,"accepted":[10778,10778],"rejected":[0,0],"hostPumpStalls":3}
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n3 !== 0\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/50bd2af9/deathride/tools/ability-stick-probe.mjs:116:90\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 360.0357096,
+  "rounds": 6,
+  "classUses": {
+    "Needle": 9,
+    "Line": 10,
+    "Bastion": 6,
+    "Comet": 5,
+    "Trail": 7,
+    "Flint": 7,
+    "Quill": 7,
+    "Vandal": 5,
+    "Kestrel": 6,
+    "Bulwark": 5
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 10778,
+      "accepted": 10778,
+      "rejected": 0,
+      "hz": 29.935919445252715
+    },
+    {
+      "slot": 1,
+      "sent": 10778,
+      "accepted": 10778,
+      "rejected": 0,
+      "hz": 29.935919445252715
+    }
+  ]
+}

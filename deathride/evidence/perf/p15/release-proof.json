@@ -1,0 +1,25 @@
+{
+ "perfDebug": {
+  "command": "gradlew.bat :app:assembleDebug -PsilentMmap=true -PappId=dev.deathride.perf \"-PappLabel=Death Ride Perf\" -PracePort=8772",
+  "sha256": "d156d758c3c4dd07b098dbd670bbd4b6d6063069658185a5dd71b8c1222a832a",
+  "nativeLibraries": [
+   "lib/arm64-v8a/libdrsilentmmap.so",
+   "lib/arm64-v8a/libgdx.so",
+   "lib/armeabi-v7a/libdrsilentmmap.so",
+   "lib/armeabi-v7a/libgdx.so"
+  ],
+  "dexMentionsSilentMmap": true,
+  "dexMentionsNativeOpen": true
+ },
+ "releaseWithProperty": {
+  "command": "gradlew.bat :app:assembleRelease -PsilentMmap=true -PnoPngReencode=true -PappId=dev.deathride.perf \"-PappLabel=Death Ride Perf\" -PracePort=8772",
+  "sha256": "6e4c6b4722b23b1890a4e6f9dfe05d42b2e7225a83a46e638e1ea9bb2b4aed36",
+  "nativeLibraries": [
+   "lib/arm64-v8a/libgdx.so",
+   "lib/armeabi-v7a/libgdx.so"
+  ],
+  "dexMentionsSilentMmap": false,
+  "dexMentionsNativeOpen": false
+ },
+ "wiring": "app/build.gradle.kts: without -PsilentMmap no externalNativeBuild and no extra source dir; with it, CMake runs for every variant but DR_SILENT_MMAP=ON reaches the debug build type only (CMakeLists builds no target without it), and src/main/mmap (SilentMmap.kt) is added to the debug source set only. MainActivity reaches SilentMmap by name and throws when it is absent."
+}

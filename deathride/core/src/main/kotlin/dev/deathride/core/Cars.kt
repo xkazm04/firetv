@@ -45,8 +45,11 @@ object CarCatalog {
     val all=Content.table("cars").map { CarClass(Content.table("cars/"+it.getValue("id")).single()+it) }
     init { require(upgradeLimits.keys==all.map{it.id}.toSet()) }
     val json=all.joinToString(",","[","]") { it.json }
+    private val armorPart=Parts.all.indexOfFirst{it.id=="armor"}
+    /** Armour tier shown on the car, from the armour bonus the garage tiers add; 0 without bonuses. */
+    fun armorTierOf(bonuses: IntArray?): Int { val per=Parts.all[armorPart].bonuses[3];return if(bonuses==null || per<=0)0 else (bonuses[3]/per).coerceIn(0,Parts.all[armorPart].maxTier) }
     fun apply(car: Car,index: Int,bonuses: IntArray?=null)=apply(car,all[index],bonuses)
-    fun apply(car: Car,type: CarClass,bonuses: IntArray?=null) { car.aiBossHealthScale=1.0;for(i in statNames.indices)car.effectiveStats[i]=type.stat(statNames[i],bonuses);car.carClass=type; car.ability.definition=type.ability;car.spec=type.spec(bonuses);car.maxHp=CombatRules["maxHp"]*CarLoadouts.forCar(type).hullScale;car.startingCondition=1.0;car.utilityMask=0;car.armorReduction=type.derive("armorReduction",bonuses);car.weaponSlots=type.derive("weaponSlots",bonuses).toInt() }
+    fun apply(car: Car,type: CarClass,bonuses: IntArray?=null) { car.aiBossHealthScale=1.0;for(i in statNames.indices)car.effectiveStats[i]=type.stat(statNames[i],bonuses);car.carClass=type; car.ability.definition=type.ability;car.spec=type.spec(bonuses);car.maxHp=CombatRules["maxHp"]*CarLoadouts.forCar(type).hullScale;car.startingCondition=1.0;car.utilityMask=0;car.armorTier=armorTierOf(bonuses);car.armorReduction=type.derive("armorReduction",bonuses);car.weaponSlots=type.derive("weaponSlots",bonuses).toInt() }
 }
 
 /** Load-time audit data; deliberately never consulted by the fixed simulation step. */

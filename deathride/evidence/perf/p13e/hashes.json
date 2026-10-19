@@ -1,0 +1,69 @@
+{
+ "what": "P13e step 2 (iii): pixel identity of the shipped bake. One ungraded 360 s run (perf-device.py --install --seconds 360 --extra bakeHash=on, the five soak courses) of p13e.apk itself (the graded APK, built from 5df2a49b; byte-identical to the hash APK). After each bake finished, RaceGame read the 2048 x 2048 RGBA scenery target back (glReadPixels, 16 MiB) and hashed it (SHA-256), then baked the same course again as before P13e (BakeShape.UNBANDED: one ground draw, 3 ms slices, blocking) and hashed that.",
+ "apkSha256": "fd8c6dd86f5ae613a546324ae0b31c0012fb2727265a0445affa26ad662fc5d0",
+ "result": "identical for all five courses",
+ "courses": [
+  "crown-1-a",
+  "foundry-1-c",
+  "salt-1-b",
+  "scrap-1-c",
+  "switchback-1-a"
+ ],
+ "hashes": [
+  {
+   "logTime": "10-07 18:41:49.751",
+   "course": "scrap-1-c",
+   "arm": "off",
+   "shape": "BakeShape(groundBands=16, bandSync=2, skipCreationFrame=true, passLimit=0, finishSlices=false)",
+   "shippedSha256": "5c78525306be7ce67de3e42edf96b33599a4f4dddc69ab1e4d87d4dc5b0a65f8",
+   "unbandedSha256": "5c78525306be7ce67de3e42edf96b33599a4f4dddc69ab1e4d87d4dc5b0a65f8",
+   "same": true
+  },
+  {
+   "logTime": "10-07 18:43:34.800",
+   "course": "foundry-1-c",
+   "arm": "off",
+   "shape": "BakeShape(groundBands=16, bandSync=2, skipCreationFrame=true, passLimit=0, finishSlices=false)",
+   "shippedSha256": "d75b50c039a6bf963668fb1d1c6151b046dc924e3a9483b00788bb14907852ce",
+   "unbandedSha256": "d75b50c039a6bf963668fb1d1c6151b046dc924e3a9483b00788bb14907852ce",
+   "same": true
+  },
+  {
+   "logTime": "10-07 18:44:42.376",
+   "course": "salt-1-b",
+   "arm": "off",
+   "shape": "BakeShape(groundBands=16, bandSync=2, skipCreationFrame=true, passLimit=0, finishSlices=false)",
+   "shippedSha256": "1fe83af7aeb2bd00759eda8650259956266cf0381d068f3c6806f7e8d43447d7",
+   "unbandedSha256": "1fe83af7aeb2bd00759eda8650259956266cf0381d068f3c6806f7e8d43447d7",
+   "same": true
+  },
+  {
+   "logTime": "10-07 18:45:50.296",
+   "course": "switchback-1-a",
+   "arm": "off",
+   "shape": "BakeShape(groundBands=16, bandSync=2, skipCreationFrame=true, passLimit=0, finishSlices=false)",
+   "shippedSha256": "40dbb1682e360c60ee25d731e86c01111a13b6592938ac5f2a4346ce6223892a",
+   "unbandedSha256": "40dbb1682e360c60ee25d731e86c01111a13b6592938ac5f2a4346ce6223892a",
+   "same": true
+  },
+  {
+   "logTime": "10-07 18:46:58.716",
+   "course": "crown-1-a",
+   "arm": "off",
+   "shape": "BakeShape(groundBands=16, bandSync=2, skipCreationFrame=true, passLimit=0, finishSlices=false)",
+   "shippedSha256": "8e13eb06c99224a52b4ab909a765d46a5e6a7762253b684029cd76005a0b086f",
+   "unbandedSha256": "8e13eb06c99224a52b4ab909a765d46a5e6a7762253b684029cd76005a0b086f",
+   "same": true
+  },
+  {
+   "logTime": "10-07 18:48:04.591",
+   "course": "scrap-1-c",
+   "arm": "off",
+   "shape": "BakeShape(groundBands=16, bandSync=2, skipCreationFrame=true, passLimit=0, finishSlices=false)",
+   "shippedSha256": "5c78525306be7ce67de3e42edf96b33599a4f4dddc69ab1e4d87d4dc5b0a65f8",
+   "unbandedSha256": "5c78525306be7ce67de3e42edf96b33599a4f4dddc69ab1e4d87d4dc5b0a65f8",
+   "same": true
+  }
+ ],
+ "limits": "Both bakes ran on the same device, art and driver in the same process. The unbanded reference runs today's code path (BakePasses with no limit is today's slicing, BakePassesTest); it is not a recording from before the change. scrap-1-c was baked twice (startup and round 5): the same hash both times."
+}

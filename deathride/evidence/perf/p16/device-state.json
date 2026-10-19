@@ -1,0 +1,35 @@
+{
+ "owner package": "dev.deathride.tv",
+ "start": [
+  "2026-10-08T15:27:44Z",
+  "    mResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}",
+  "pid=14337",
+  "    versionName=0.1-spike",
+  "    lastUpdateTime=2026-10-06 23:44:23",
+  "  * Recent #0: Task{37b1d63 #330 visible=true type=standard mode=fullscreen translucent=false A=10272:dev.deathride.tv U=0 StackId=330 sz=4}"
+ ],
+ "afterRunsBeforeRestore": [
+  "2026-10-08T17:41:45Z",
+  "== before restore",
+  "    mResumedActivity: ActivityRecord{ec3e6ae u0 dev.deathride.perf/dev.deathride.tv.MainActivity t439}",
+  "tv=14337 perf=18025"
+ ],
+ "end": [
+  "2026-10-08T17:42:22Z",
+  "    mResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}",
+  "pid=14337 perf=",
+  "    versionName=0.1-spike",
+  "    lastUpdateTime=2026-10-06 23:44:23",
+  "  * Recent #0: Task{37b1d63 #330 visible=true type=standard mode=fullscreen translucent=false A=10272:dev.deathride.tv U=0 StackId=330 sz=4}",
+  "Output thread 0xea91a800, name AudioOut_D, tid 683, type 0 (MIXER):",
+  "  Standby: yes",
+  "Output thread 0xea6a3540, name AudioOut_15, tid 689, type 0 (MIXER):",
+  "  Standby: yes"
+ ],
+ "actions": [
+  "dev.deathride.perf force-stopped at the end (pidof empty)",
+  "am start -n dev.deathride.tv/.MainActivity: delivered to the running top-most instance (no new activity)",
+  "tools/node_modules/ws (copied from the main checkout for the probe, gitignored) removed"
+ ],
+ "verdict": "dev.deathride.tv as found: task t330, activity record a03c5a7, pid 14337, task size 4, lastUpdateTime 2026-10-06 23:44:23; both mixers in standby at the end"
+}

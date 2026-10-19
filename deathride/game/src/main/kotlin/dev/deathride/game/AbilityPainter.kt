@@ -9,10 +9,9 @@ import kotlin.math.*
 /** Semantic shapes remain visible even if a future decorative atlas hook is available. */
 class AbilityPainter {
     private fun ring(r: ShapeRenderer,x: Double,y: Double,radius: Double,dashed: Boolean) {
-        for(i in 0 until 24)if(!dashed || i%2==0) {
-            val a=i*2*PI/24;val b=(i+1)*2*PI/24
-            r.rectLine((x+cos(a)*radius).toFloat(),(y+sin(a)*radius).toFloat(),(x+cos(b)*radius).toFloat(),(y+sin(b)*radius).toFloat(),.16f)
-        }
+        val u=UnitRing.SEGMENTS_24
+        for(i in 0 until 24)if(!dashed || i%2==0)
+            r.rectLine((x+u.cos[i]*radius).toFloat(),(y+u.sin[i]*radius).toFloat(),(x+u.cos[i+1]*radius).toFloat(),(y+u.sin[i+1]*radius).toFloat(),.16f)
     }
     fun draw(r: ShapeRenderer,s: Snapshot) {
         for(i in 0 until Tuning.CAR_COUNT)if(s.entered(i) && !s.wrecked(i)) {

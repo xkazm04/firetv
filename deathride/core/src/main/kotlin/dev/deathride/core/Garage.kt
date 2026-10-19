@@ -92,13 +92,13 @@ object Garage {
         val useful=before.indices.any { part.bonuses[it]>0 && after[it]>before[it] }
         val lock=Career.partLock(profile,partIndex,tier+1)
         val seized=DeathDuel.seized(profile)
-        val reason=when { seized->"Car seized - the supplied rig is ready";tier>=part.maxTier->"Maximum tier";!useful->"At class limit";lock.isNotEmpty()->lock;profile.credits<price->"Earn more credits";else->"Ready to install" }
+        val reason=when { seized->"Car seized - rig is supplied";tier>=part.maxTier->"Maximum tier";!useful->"At class limit";lock.isNotEmpty()->lock;profile.credits<price->"Earn more credits";else->"Ready to install" }
         return Offer(partIndex,tier,min(tier+1,part.maxTier),price,!seized && tier<part.maxTier && useful && lock.isEmpty() && profile.credits>=price,reason,before,after)
     }
     fun buy(profile: Profile,partIndex: Int,expectedTier: Int,priceScale: Double=1.0,expectedCar: Int=profile.selectedCar): String {
-        if(profile.selectedCar!=expectedCar)return "Car changed - check the selected car"
+        if(profile.selectedCar!=expectedCar)return "Car changed - check selection"
         val offer=offer(profile,partIndex,priceScale)
-        if(offer.tier!=expectedTier)return "Offer changed - check the installed tier"
+        if(offer.tier!=expectedTier)return "Offer changed - check the tier"
         if(!offer.available)return offer.reason
         profile.marketRevision++;profile.credits-=offer.price;profile.tiers[profile.selectedCar*Parts.all.size+partIndex]++
         return "Installed ${Parts.all[partIndex].name} ${offer.nextTier}"

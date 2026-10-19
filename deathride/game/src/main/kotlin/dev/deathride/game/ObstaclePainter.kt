@@ -7,9 +7,15 @@ import dev.deathride.core.*
 
 /** Uses core's immutable transforms. Shadow and crown never enlarge the physical footprint. */
 class ObstaclePainter {
-    fun shapes(shape: ShapeRenderer,world: World,art: AtlasArt,tall: Boolean) {
+    /** Radius that covers the sprite, its rotation and its shadow offset. */
+    private fun reach(o: TrackObstacle): Double {
+        val d=o.definition;val sx=d.height*d.shadowX;val sy=d.height*d.shadowY
+        return .5*Math.sqrt(d.visualWidth*d.visualWidth+d.visualHeight*d.visualHeight)+Math.sqrt(sx*sx+sy*sy)
+    }
+    fun shapes(shape: ShapeRenderer,world: World,art: AtlasArt,tall: Boolean,view: ViewBounds=ViewBounds.ALL) {
         if(!world.obstacles.enabled)return
         for(o in world.obstacles.all) {
+            if(!view.sees(o.x,o.y,reach(o)))continue
             val d=o.definition;val x=o.x.toFloat();val y=o.y.toFloat()
             if(!tall && !art.available("fusion-render-shadow")) {
                 shape.setColor(.035f,.045f,.04f,d.shadowAlpha.toFloat())
@@ -25,10 +31,11 @@ class ObstaclePainter {
             shape.circle(x,y,(minOf(d.rx,d.ry)*.45).toFloat(),8)
         }
     }
-    fun sprites(batch: Batch,world: World,art: AtlasArt,tall: Boolean) {
+    fun sprites(batch: Batch,world: World,art: AtlasArt,tall: Boolean,view: ViewBounds=ViewBounds.ALL) {
         if(!world.obstacles.enabled)return
         batch.color=Color.WHITE
         for(o in world.obstacles.all) {
+            if(!view.sees(o.x,o.y,reach(o)))continue
             val d=o.definition
             if(!tall && art.available("fusion-render-shadow")) {
                 batch.setColor(.035f,.045f,.04f,d.shadowAlpha.toFloat())

@@ -1,0 +1,1875 @@
+{
+ "what": "P20 (card 13, research; no verdict reads it): what survives a GC, read from Android heap dumps.",
+ "dumps": [
+  {
+   "label": "a",
+   "version": "JAVA PROFILE 1.0.3",
+   "heapRecords": 6078,
+   "heaps": [
+    "default",
+    "app",
+    "image",
+    "zygote"
+   ],
+   "objects": 304622,
+   "roots": {
+    "vm-internal": 115604,
+    "interned-string": 41497,
+    "sticky-class": 18982,
+    "class": 2910,
+    "jni-global": 599,
+    "java-frame": 109,
+    "thread-object": 36,
+    "native-stack": 14,
+    "unknown": 7,
+    "jni-local": 6
+   },
+   "perHeap": {
+    "default": {
+     "objects": 0,
+     "bytes": 0,
+     "reachableObjects": 0,
+     "reachableBytes": 0,
+     "reachableMiB": 0.0,
+     "unreachableMiB": 0.0
+    },
+    "app": {
+     "objects": 62553,
+     "bytes": 10872531,
+     "reachableObjects": 62548,
+     "reachableBytes": 10872379,
+     "reachableMiB": 10.37,
+     "unreachableMiB": 0.0
+    },
+    "image": {
+     "objects": 160916,
+     "bytes": 8276772,
+     "reachableObjects": 160916,
+     "reachableBytes": 8276772,
+     "reachableMiB": 7.89,
+     "unreachableMiB": 0.0
+    },
+    "zygote": {
+     "objects": 81153,
+     "bytes": 5072619,
+     "reachableObjects": 81153,
+     "reachableBytes": 5072619,
+     "reachableMiB": 4.84,
+     "unreachableMiB": 0.0
+    }
+   },
+   "app": {
+    "heap": "app",
+    "reachableBytes": 10872379,
+    "reachableMiB": 10.37,
+    "onlyThroughReferentBytes": 152,
+    "onlyThroughReferentObjects": 5,
+    "stringCharsInline": 67690
+   },
+   "topRetained": [
+    {
+     "class": "dev.deathride.link.RaceServer",
+     "heap": "app",
+     "shallow": 232,
+     "retained": 3018592,
+     "retainedMiB": 2.88,
+     "idomClass": "(root)",
+     "owner": "dev.deathride.link.RaceServer",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.link.Metrics",
+     "heap": "app",
+     "shallow": 40,
+     "retained": 2387592,
+     "retainedMiB": 2.28,
+     "idomClass": "dev.deathride.link.RaceServer",
+     "owner": "dev.deathride.link.Metrics",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.metrics",
+       "dev.deathride.link.Metrics"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.game.RaceGame",
+     "heap": "app",
+     "shallow": 528,
+     "retained": 2326800,
+     "retainedMiB": 2.22,
+     "idomClass": "(root)",
+     "owner": "dev.deathride.game.RaceGame",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.core.Course",
+     "heap": "app",
+     "shallow": 208,
+     "retained": 1697280,
+     "retainedMiB": 1.62,
+     "idomClass": "(root)",
+     "owner": "dev.deathride.core.Course",
+     "path": {
+      "root": "class",
+      "rootClass": "dev.deathride.core.Courses",
+      "steps": [
+       "dev.deathride.core.Courses.static built",
+       "dev.deathride.core.Course[].[29]",
+       "dev.deathride.core.Course"
+      ]
+     }
+    },
+    {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "heap": "app",
+     "shallow": 24,
+     "retained": 1371512,
+     "retainedMiB": 1.31,
+     "idomClass": "dev.deathride.core.Course",
+     "owner": "dev.deathride.core.Course",
+     "path": {
+      "root": "class",
+      "rootClass": "dev.deathride.core.Courses",
+      "steps": [
+       "dev.deathride.core.Courses.static built",
+       "dev.deathride.core.Course[].[29]",
+       "dev.deathride.core.Course.candidateBins",
+       "kotlin.SynchronizedLazyImpl"
+      ]
+     }
+    },
+    {
+     "class": "int[][]",
+     "heap": "app",
+     "shallow": 9232,
+     "retained": 1371488,
+     "retainedMiB": 1.31,
+     "idomClass": "kotlin.SynchronizedLazyImpl",
+     "owner": "dev.deathride.core.Course",
+     "path": {
+      "root": "class",
+      "rootClass": "dev.deathride.core.Courses",
+      "steps": [
+       "dev.deathride.core.Courses.static built",
+       "dev.deathride.core.Course[].[29]",
+       "dev.deathride.core.Course.candidateBins",
+       "kotlin.SynchronizedLazyImpl._value",
+       "int[][]"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.link.PerfTrace",
+     "heap": "app",
+     "shallow": 32,
+     "retained": 1310944,
+     "retainedMiB": 1.25,
+     "idomClass": "(root)",
+     "owner": "dev.deathride.link.PerfTrace",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.profiler",
+       "dev.deathride.game.FrameProfiler.trace",
+       "dev.deathride.link.PerfTrace"
+      ]
+     }
+    },
+    {
+     "class": "double[]",
+     "heap": "app",
+     "shallow": 1310736,
+     "retained": 1310736,
+     "retainedMiB": 1.25,
+     "idomClass": "dev.deathride.link.PerfTrace",
+     "owner": "dev.deathride.link.PerfTrace",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.profiler",
+       "dev.deathride.game.FrameProfiler.trace",
+       "dev.deathride.link.PerfTrace.rows",
+       "double[]"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.link.Distribution[]",
+     "heap": "app",
+     "shallow": 24,
+     "retained": 931384,
+     "retainedMiB": 0.89,
+     "idomClass": "dev.deathride.link.Metrics",
+     "owner": "dev.deathride.link.Metrics",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.metrics",
+       "dev.deathride.link.Metrics.inputAgeMs",
+       "dev.deathride.link.Distribution[]"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.game.SceneryCanvas",
+     "heap": "app",
+     "shallow": 64,
+     "retained": 775976,
+     "retainedMiB": 0.74,
+     "idomClass": "dev.deathride.game.RaceGame",
+     "owner": "dev.deathride.game.SceneryCanvas",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.sceneryCanvas",
+       "dev.deathride.game.SceneryCanvas"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.link.Distribution",
+     "heap": "app",
+     "shallow": 72,
+     "retained": 498448,
+     "retainedMiB": 0.48,
+     "idomClass": "dev.deathride.link.Metrics",
+     "owner": "dev.deathride.link.Distribution",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.metrics",
+       "dev.deathride.link.Metrics.frameMs",
+       "dev.deathride.link.Distribution"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.link.Distribution",
+     "heap": "app",
+     "shallow": 72,
+     "retained": 498448,
+     "retainedMiB": 0.48,
+     "idomClass": "dev.deathride.link.Metrics",
+     "owner": "dev.deathride.link.Distribution",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.metrics",
+       "dev.deathride.link.Metrics.simMs",
+       "dev.deathride.link.Distribution"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.link.Distribution",
+     "heap": "app",
+     "shallow": 72,
+     "retained": 465680,
+     "retainedMiB": 0.44,
+     "idomClass": "dev.deathride.link.Distribution[]",
+     "owner": "dev.deathride.link.Distribution",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.metrics",
+       "dev.deathride.link.Metrics.inputAgeMs",
+       "dev.deathride.link.Distribution[].[0]",
+       "dev.deathride.link.Distribution"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.link.Distribution",
+     "heap": "app",
+     "shallow": 72,
+     "retained": 465680,
+     "retainedMiB": 0.44,
+     "idomClass": "dev.deathride.link.Distribution[]",
+     "owner": "dev.deathride.link.Distribution",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.metrics",
+       "dev.deathride.link.Metrics.inputAgeMs",
+       "dev.deathride.link.Distribution[].[1]",
+       "dev.deathride.link.Distribution"
+      ]
+     }
+    },
+    {
+     "class": "long[]",
+     "heap": "app",
+     "shallow": 400024,
+     "retained": 400024,
+     "retainedMiB": 0.38,
+     "idomClass": "dev.deathride.link.Distribution",
+     "owner": "dev.deathride.link.Distribution",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.metrics",
+       "dev.deathride.link.Metrics.inputAgeMs",
+       "dev.deathride.link.Distribution[].[1]",
+       "dev.deathride.link.Distribution.histogram",
+       "long[]"
+      ]
+     }
+    },
+    {
+     "class": "long[]",
+     "heap": "app",
+     "shallow": 400024,
+     "retained": 400024,
+     "retainedMiB": 0.38,
+     "idomClass": "dev.deathride.link.Distribution",
+     "owner": "dev.deathride.link.Distribution",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.metrics",
+       "dev.deathride.link.Metrics.inputAgeMs",
+       "dev.deathride.link.Distribution[].[0]",
+       "dev.deathride.link.Distribution.histogram",
+       "long[]"
+      ]
+     }
+    },
+    {
+     "class": "long[]",
+     "heap": "app",
+     "shallow": 400024,
+     "retained": 400024,
+     "retainedMiB": 0.38,
+     "idomClass": "dev.deathride.link.Distribution",
+     "owner": "dev.deathride.link.Distribution",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.metrics",
+       "dev.deathride.link.Metrics.simMs",
+       "dev.deathride.link.Distribution.histogram",
+       "long[]"
+      ]
+     }
+    },
+    {
+     "class": "long[]",
+     "heap": "app",
+     "shallow": 400024,
+     "retained": 400024,
+     "retainedMiB": 0.38,
+     "idomClass": "dev.deathride.link.Distribution",
+     "owner": "dev.deathride.link.Distribution",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.metrics",
+       "dev.deathride.link.Metrics.frameMs",
+       "dev.deathride.link.Distribution.histogram",
+       "long[]"
+      ]
+     }
+    },
+    {
+     "class": "com.badlogic.gdx.graphics.glutils.ShapeRenderer",
+     "heap": "app",
+     "shallow": 48,
+     "retained": 384576,
+     "retainedMiB": 0.37,
+     "idomClass": "dev.deathride.game.SceneryCanvas",
+     "owner": "dev.deathride.game.SceneryCanvas",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.sceneryCanvas",
+       "dev.deathride.game.SceneryCanvas.renderer",
+       "com.badlogic.gdx.graphics.glutils.ShapeRenderer"
+      ]
+     }
+    },
+    {
+     "class": "com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20",
+     "heap": "app",
+     "shallow": 72,
+     "retained": 384200,
+     "retainedMiB": 0.37,
+     "idomClass": "com.badlogic.gdx.graphics.glutils.ShapeRenderer",
+     "owner": "dev.deathride.game.SceneryCanvas",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.sceneryCanvas",
+       "dev.deathride.game.SceneryCanvas.renderer",
+       "com.badlogic.gdx.graphics.glutils.ShapeRenderer.renderer",
+       "com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20"
+      ]
+     }
+    },
+    {
+     "class": "float[]",
+     "heap": "app",
+     "shallow": 384016,
+     "retained": 384016,
+     "retainedMiB": 0.37,
+     "idomClass": "com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20",
+     "owner": "dev.deathride.game.SceneryCanvas",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.sceneryCanvas",
+       "dev.deathride.game.SceneryCanvas.renderer",
+       "com.badlogic.gdx.graphics.glutils.ShapeRenderer.renderer",
+       "com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20.vertices",
+       "float[]"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.link.PerfTrace",
+     "heap": "app",
+     "shallow": 32,
+     "retained": 295008,
+     "retainedMiB": 0.28,
+     "idomClass": "dev.deathride.link.RaceServer",
+     "owner": "dev.deathride.link.PerfTrace",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.profileInputs",
+       "dev.deathride.link.PerfTrace"
+      ]
+     }
+    },
+    {
+     "class": "double[]",
+     "heap": "app",
+     "shallow": 294928,
+     "retained": 294928,
+     "retainedMiB": 0.28,
+     "idomClass": "dev.deathride.link.PerfTrace",
+     "owner": "dev.deathride.link.PerfTrace",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.profileInputs",
+       "dev.deathride.link.PerfTrace.rows",
+       "double[]"
+      ]
+     }
+    },
+    {
+     "class": "java.lang.StringBuilder",
+     "heap": "app",
+     "shallow": 16,
+     "retained": 192152,
+     "retainedMiB": 0.18,
+     "idomClass": "dev.deathride.link.RaceServer",
+     "owner": "dev.deathride.link.RaceServer",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.statsBuffer",
+       "java.lang.StringBuilder"
+      ]
+     }
+    },
+    {
+     "class": "char[]",
+     "heap": "app",
+     "shallow": 192136,
+     "retained": 192136,
+     "retainedMiB": 0.18,
+     "idomClass": "java.lang.StringBuilder",
+     "owner": "dev.deathride.link.RaceServer",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.server",
+       "dev.deathride.link.RaceServer.statsBuffer",
+       "java.lang.StringBuilder.value",
+       "char[]"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.game.RoadMarkMesh",
+     "heap": "app",
+     "shallow": 40,
+     "retained": 192072,
+     "retainedMiB": 0.18,
+     "idomClass": "dev.deathride.game.SceneryCanvas",
+     "owner": "dev.deathride.game.RoadMarkMesh",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.sceneryCanvas",
+       "dev.deathride.game.SceneryCanvas.roadMarks",
+       "dev.deathride.game.RoadMarkMesh"
+      ]
+     }
+    },
+    {
+     "class": "float[]",
+     "heap": "app",
+     "shallow": 192016,
+     "retained": 192016,
+     "retainedMiB": 0.18,
+     "idomClass": "dev.deathride.game.RoadMarkMesh",
+     "owner": "dev.deathride.game.RoadMarkMesh",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.sceneryCanvas",
+       "dev.deathride.game.SceneryCanvas.roadMarks",
+       "dev.deathride.game.RoadMarkMesh.vertices",
+       "float[]"
+      ]
+     }
+    },
+    {
+     "class": "io.ktor.server.engine.ApplicationEngineEnvironmentReloading",
+     "heap": "app",
+     "shallow": 80,
+     "retained": 168256,
+     "retainedMiB": 0.16,
+     "idomClass": "(root)",
+     "owner": "io.ktor.server.engine.ApplicationEngineEnvironmentReloading",
+     "path": {
+      "root": "java-frame",
+      "rootClass": "kotlinx.coroutines.StandaloneCoroutine",
+      "steps": [
+       "kotlinx.coroutines.StandaloneCoroutine._parentHandle",
+       "kotlinx.coroutines.ChildHandleNode.job",
+       "kotlinx.coroutines.LazyStandaloneCoroutine.continuation",
+       "io.ktor.server.cio.CIOApplicationEngine$initServerJob$1.$environment",
+       "io.ktor.server.engine.ApplicationEngineEnvironmentReloading"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.game.GlyphLayer",
+     "heap": "app",
+     "shallow": 56,
+     "retained": 162600,
+     "retainedMiB": 0.16,
+     "idomClass": "dev.deathride.game.RaceGame",
+     "owner": "dev.deathride.game.GlyphLayer",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.detail",
+       "dev.deathride.game.GlyphLayer"
+      ]
+     }
+    },
+    {
+     "class": "dev.deathride.game.GlyphLayer",
+     "heap": "app",
+     "shallow": 56,
+     "retained": 161728,
+     "retainedMiB": 0.15,
+     "idomClass": "dev.deathride.game.RaceGame",
+     "owner": "dev.deathride.game.GlyphLayer",
+     "path": {
+      "root": "class",
+      "rootClass": "com.badlogic.gdx.Gdx",
+      "steps": [
+       "com.badlogic.gdx.Gdx.static app",
+       "dev.deathride.tv.MainActivity.listener",
+       "dev.deathride.game.RaceGame.headline",
+       "dev.deathride.game.GlyphLayer"
+      ]
+     }
+    }
+   ],
+   "byOwnerGroup": [
+    {
+     "owner": "dev.deathride.link",
+     "bytes": 4495100,
+     "MiB": 4.29,
+     "share": 0.4134
+    },
+    {
+     "owner": "dev.deathride.core",
+     "bytes": 2391644,
+     "MiB": 2.28,
+     "share": 0.22
+    },
+    {
+     "owner": "dev.deathride.game",
+     "bytes": 2225852,
+     "MiB": 2.12,
+     "share": 0.2047
+    },
+    {
+     "owner": "library",
+     "bytes": 996225,
+     "MiB": 0.95,
+     "share": 0.0916
+    },
+    {
+     "owner": "kotlin",
+     "bytes": 296672,
+     "MiB": 0.28,
+     "share": 0.0273
+    },
+    {
+     "owner": "java",
+     "bytes": 214118,
+     "MiB": 0.2,
+     "share": 0.0197
+    },
+    {
+     "owner": "android",
+     "bytes": 120166,
+     "MiB": 0.11,
+     "share": 0.0111
+    },
+    {
+     "owner": "(no owner: class)",
+     "bytes": 75242,
+     "MiB": 0.07,
+     "share": 0.0069
+    },
+    {
+     "owner": "dev.deathride.game.audio",
+     "bytes": 47260,
+     "MiB": 0.05,
+     "share": 0.0043
+    },
+    {
+     "owner": "dev.deathride.tv",
+     "bytes": 8540,
+     "MiB": 0.01,
+     "share": 0.0008
+    },
+    {
+     "owner": "(no owner: vm-internal)",
+     "bytes": 664,
+     "MiB": 0.0,
+     "share": 0.0001
+    },
+    {
+     "owner": "(no owner: sticky-class)",
+     "bytes": 656,
+     "MiB": 0.0,
+     "share": 0.0001
+    },
+    {
+     "owner": "(no owner: jni-global)",
+     "bytes": 160,
+     "MiB": 0.0,
+     "share": 0.0
+    },
+    {
+     "owner": "(no owner: java-frame)",
+     "bytes": 64,
+     "MiB": 0.0,
+     "share": 0.0
+    },
+    {
+     "owner": "(no owner: native-stack)",
+     "bytes": 16,
+     "MiB": 0.0,
+     "share": 0.0
+    }
+   ],
+   "byOwnerClass": [
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.link.Distribution",
+     "bytes": 1928452,
+     "MiB": 1.84,
+     "share": 0.1774
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.Course",
+     "bytes": 1699460,
+     "MiB": 1.62,
+     "share": 0.1563
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.link.PerfTrace",
+     "bytes": 1606164,
+     "MiB": 1.53,
+     "share": 0.1477
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.GlyphLayer",
+     "bytes": 809652,
+     "MiB": 0.77,
+     "share": 0.0745
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.link.Counter",
+     "bytes": 459396,
+     "MiB": 0.44,
+     "share": 0.0423
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.SceneryCanvas",
+     "bytes": 449676,
+     "MiB": 0.43,
+     "share": 0.0414
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.RoadMarkMesh",
+     "bytes": 326764,
+     "MiB": 0.31,
+     "share": 0.0301
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.RaceGame",
+     "bytes": 303704,
+     "MiB": 0.29,
+     "share": 0.0279
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.link.RaceServer",
+     "bytes": 224332,
+     "MiB": 0.21,
+     "share": 0.0206
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.ScriptLine",
+     "bytes": 153012,
+     "MiB": 0.15,
+     "share": 0.0141
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.link.Packed",
+     "bytes": 147156,
+     "MiB": 0.14,
+     "share": 0.0135
+    },
+    {
+     "tier": "library",
+     "owner": "io.ktor.http.cio.internals.CharArrayPoolKt$CharArrayPool$2",
+     "bytes": 135604,
+     "MiB": 0.13,
+     "share": 0.0125
+    },
+    {
+     "tier": "java",
+     "owner": "java.lang.String",
+     "bytes": 129592,
+     "MiB": 0.12,
+     "share": 0.0119
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.TrackScene",
+     "bytes": 115708,
+     "MiB": 0.11,
+     "share": 0.0106
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.link.StatsReply",
+     "bytes": 82420,
+     "MiB": 0.08,
+     "share": 0.0076
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.AtlasArt",
+     "bytes": 78596,
+     "MiB": 0.07,
+     "share": 0.0072
+    },
+    {
+     "tier": "-",
+     "owner": "(none)",
+     "bytes": 76802,
+     "MiB": 0.07,
+     "share": 0.0071
+    },
+    {
+     "tier": "library",
+     "owner": "io.ktor.http.cio.internals.AsciiCharTree$Node",
+     "bytes": 72892,
+     "MiB": 0.07,
+     "share": 0.0067
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.AiBehaviour",
+     "bytes": 65980,
+     "MiB": 0.06,
+     "share": 0.0061
+    },
+    {
+     "tier": "library",
+     "owner": "io.ktor.utils.io.pool.DirectByteBufferPool",
+     "bytes": 65964,
+     "MiB": 0.06,
+     "share": 0.0061
+    },
+    {
+     "tier": "library",
+     "owner": "com.badlogic.gdx.math.MathUtils$Sin",
+     "bytes": 65744,
+     "MiB": 0.06,
+     "share": 0.006
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.Courses",
+     "bytes": 47532,
+     "MiB": 0.05,
+     "share": 0.0044
+    },
+    {
+     "tier": "library",
+     "owner": "io.ktor.http.cio.HttpHeadersMapKt$IntArrayPool$1",
+     "bytes": 35252,
+     "MiB": 0.03,
+     "share": 0.0032
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.StoryArt",
+     "bytes": 35192,
+     "MiB": 0.03,
+     "share": 0.0032
+    },
+    {
+     "tier": "kotlin",
+     "owner": "kotlin.reflect.jvm.internal.impl.name.FqNameUnsafe",
+     "bytes": 33768,
+     "MiB": 0.03,
+     "share": 0.0031
+    },
+    {
+     "tier": "library",
+     "owner": "io.ktor.utils.io.core.DefaultBufferPool",
+     "bytes": 33204,
+     "MiB": 0.03,
+     "share": 0.0031
+    },
+    {
+     "tier": "library",
+     "owner": "io.ktor.utils.io.internal.ObjectPoolKt$BufferObjectPool$1",
+     "bytes": 33188,
+     "MiB": 0.03,
+     "share": 0.0031
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.link.Slot",
+     "bytes": 29924,
+     "MiB": 0.03,
+     "share": 0.0028
+    },
+    {
+     "tier": "library",
+     "owner": "io.ktor.server.engine.LongKt",
+     "bytes": 26480,
+     "MiB": 0.03,
+     "share": 0.0024
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.AshStory",
+     "bytes": 25576,
+     "MiB": 0.02,
+     "share": 0.0024
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.CoursePacing",
+     "bytes": 25444,
+     "MiB": 0.02,
+     "share": 0.0023
+    },
+    {
+     "tier": "library",
+     "owner": "com.badlogic.gdx.utils.ObjectIntMap",
+     "bytes": 22228,
+     "MiB": 0.02,
+     "share": 0.002
+    },
+    {
+     "tier": "java",
+     "owner": "java.lang.DexCache",
+     "bytes": 20544,
+     "MiB": 0.02,
+     "share": 0.0019
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.MotionEffects",
+     "bytes": 20404,
+     "MiB": 0.02,
+     "share": 0.0019
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.CarClass",
+     "bytes": 19500,
+     "MiB": 0.02,
+     "share": 0.0018
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.DriftParameters",
+     "bytes": 18460,
+     "MiB": 0.02,
+     "share": 0.0017
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.ObstaclePlacement",
+     "bytes": 17764,
+     "MiB": 0.02,
+     "share": 0.0016
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.RegionDefinition",
+     "bytes": 16840,
+     "MiB": 0.02,
+     "share": 0.0015
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.AtlasArt$Entry",
+     "bytes": 16692,
+     "MiB": 0.02,
+     "share": 0.0015
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.Profile",
+     "bytes": 16308,
+     "MiB": 0.02,
+     "share": 0.0015
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.World",
+     "bytes": 16084,
+     "MiB": 0.02,
+     "share": 0.0015
+    },
+    {
+     "tier": "java",
+     "owner": "dalvik.system.PathClassLoader",
+     "bytes": 13480,
+     "MiB": 0.01,
+     "share": 0.0012
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.audio.Cue",
+     "bytes": 12604,
+     "MiB": 0.01,
+     "share": 0.0012
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.TrackContent",
+     "bytes": 12528,
+     "MiB": 0.01,
+     "share": 0.0012
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.audio.CueManifest",
+     "bytes": 11920,
+     "MiB": 0.01,
+     "share": 0.0011
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.TrackNode",
+     "bytes": 10596,
+     "MiB": 0.01,
+     "share": 0.001
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.TrackFeature",
+     "bytes": 10316,
+     "MiB": 0.01,
+     "share": 0.0009
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.RegionLook",
+     "bytes": 10244,
+     "MiB": 0.01,
+     "share": 0.0009
+    },
+    {
+     "tier": "library",
+     "owner": "io.ktor.http.CodecsKt",
+     "bytes": 10232,
+     "MiB": 0.01,
+     "share": 0.0009
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.FeelProfile",
+     "bytes": 10084,
+     "MiB": 0.01,
+     "share": 0.0009
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.CarCatalog",
+     "bytes": 10036,
+     "MiB": 0.01,
+     "share": 0.0009
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.ObstacleContent",
+     "bytes": 9764,
+     "MiB": 0.01,
+     "share": 0.0009
+    },
+    {
+     "tier": "kotlin",
+     "owner": "kotlin.reflect.jvm.internal.impl.name.FqName",
+     "bytes": 9424,
+     "MiB": 0.01,
+     "share": 0.0009
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.PresentationEvent",
+     "bytes": 8452,
+     "MiB": 0.01,
+     "share": 0.0008
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.AtlasArt$Region",
+     "bytes": 8292,
+     "MiB": 0.01,
+     "share": 0.0008
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.Unlock",
+     "bytes": 8220,
+     "MiB": 0.01,
+     "share": 0.0008
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.DriftGeometry",
+     "bytes": 8024,
+     "MiB": 0.01,
+     "share": 0.0007
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.core.Snapshot",
+     "bytes": 7876,
+     "MiB": 0.01,
+     "share": 0.0007
+    },
+    {
+     "tier": "dev.deathride",
+     "owner": "dev.deathride.game.audio.GdxAudioBackend$Cached",
+     "bytes": 7772,
+     "MiB": 0.01,
+     "share": 0.0007
+    },
+    {
+     "tier": "kotlin",
+     "owner": "kotlin.reflect.jvm.internal.impl.builtins.jvm.JavaToKotlinClassMap",
+     "bytes": 7512,
+     "MiB": 0.01,
+     "share": 0.0007
+    }
+   ],
+   "largeArrays": {
+    "count": 73,
+    "bytes": 6908008,
+    "byHolder": [
+     {
+      "owner": "dev.deathride.link.PerfTrace",
+      "heldBy": "dev.deathride.link.PerfTrace.rows",
+      "type": "double[]",
+      "count": 2,
+      "bytes": 1605664,
+      "MiB": 1.53
+     },
+     {
+      "owner": "dev.deathride.link.Distribution",
+      "heldBy": "dev.deathride.link.Distribution.histogram",
+      "type": "long[]",
+      "count": 4,
+      "bytes": 1600096,
+      "MiB": 1.53
+     },
+     {
+      "owner": "dev.deathride.game.GlyphLayer",
+      "heldBy": "dev.deathride.game.GlyphLayer.vertices",
+      "type": "float[]",
+      "count": 5,
+      "bytes": 800080,
+      "MiB": 0.76
+     },
+     {
+      "owner": "dev.deathride.game.SceneryCanvas",
+      "heldBy": "com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20.vertices",
+      "type": "float[]",
+      "count": 1,
+      "bytes": 384016,
+      "MiB": 0.37
+     },
+     {
+      "owner": "dev.deathride.game.RoadMarkMesh",
+      "heldBy": "dev.deathride.game.RoadMarkMesh.vertices",
+      "type": "float[]",
+      "count": 2,
+      "bytes": 326432,
+      "MiB": 0.31
+     },
+     {
+      "owner": "dev.deathride.link.Counter",
+      "heldBy": "dev.deathride.link.Counter.value",
+      "type": "long[]",
+      "count": 7,
+      "bytes": 229488,
+      "MiB": 0.22
+     },
+     {
+      "owner": "dev.deathride.link.Counter",
+      "heldBy": "dev.deathride.link.Counter.time",
+      "type": "double[]",
+      "count": 7,
+      "bytes": 229488,
+      "MiB": 0.22
+     },
+     {
+      "owner": "dev.deathride.link.RaceServer",
+      "heldBy": "java.lang.StringBuilder.value",
+      "type": "char[]",
+      "count": 1,
+      "bytes": 192136,
+      "MiB": 0.18
+     },
+     {
+      "owner": "dev.deathride.game.RaceGame",
+      "heldBy": "com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20.vertices",
+      "type": "float[]",
+      "count": 1,
+      "bytes": 160016,
+      "MiB": 0.15
+     },
+     {
+      "owner": "dev.deathride.link.Distribution",
+      "heldBy": "dev.deathride.link.Distribution.times",
+      "type": "double[]",
+      "count": 4,
+      "bytes": 131136,
+      "MiB": 0.13
+     },
+     {
+      "owner": "dev.deathride.link.Distribution",
+      "heldBy": "dev.deathride.link.Distribution.values",
+      "type": "double[]",
+      "count": 4,
+      "bytes": 131136,
+      "MiB": 0.13
+     },
+     {
+      "owner": "dev.deathride.game.RaceGame",
+      "heldBy": "com.badlogic.gdx.graphics.g2d.SpriteBatch.vertices",
+      "type": "float[]",
+      "count": 1,
+      "bytes": 80016,
+      "MiB": 0.08
+     },
+     {
+      "owner": "dev.deathride.link.Distribution",
+      "heldBy": "dev.deathride.link.Distribution.scratch",
+      "type": "double[]",
+      "count": 2,
+      "bytes": 65568,
+      "MiB": 0.06
+     },
+     {
+      "owner": "io.ktor.http.cio.internals.CharArrayPoolKt$CharArrayPool$2",
+      "heldBy": "java.util.concurrent.atomic.AtomicReferenceArray.array",
+      "type": "java.lang.Object[]",
+      "count": 1,
+      "bytes": 65552,
+      "MiB": 0.06
+     },
+     {
+      "owner": "io.ktor.http.cio.internals.CharArrayPoolKt$CharArrayPool$2",
+      "heldBy": "io.ktor.http.cio.internals.CharArrayPoolKt$CharArrayPool$2.next",
+      "type": "int[]",
+      "count": 1,
+      "bytes": 65552,
+      "MiB": 0.06
+     },
+     {
+      "owner": "dev.deathride.core.AiBehaviour",
+      "heldBy": "dev.deathride.core.AiBehaviour.trace",
+      "type": "int[]",
+      "count": 1,
+      "bytes": 65552,
+      "MiB": 0.06
+     },
+     {
+      "owner": "com.badlogic.gdx.math.MathUtils$Sin",
+      "heldBy": "com.badlogic.gdx.math.MathUtils$Sin.static table",
+      "type": "float[]",
+      "count": 1,
+      "bytes": 65552,
+      "MiB": 0.06
+     },
+     {
+      "owner": "dev.deathride.link.Packed",
+      "heldBy": "dev.deathride.link.Packed.raw",
+      "type": "byte[]",
+      "count": 1,
+      "bytes": 46040,
+      "MiB": 0.04
+     },
+     {
+      "owner": "dev.deathride.game.SceneryCanvas",
+      "heldBy": "com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch.vertices",
+      "type": "float[]",
+      "count": 1,
+      "bytes": 40016,
+      "MiB": 0.04
+     },
+     {
+      "owner": "dev.deathride.core.Course",
+      "heldBy": "dev.deathride.core.Course.curvature",
+      "type": "double[]",
+      "count": 1,
+      "bytes": 32984,
+      "MiB": 0.03
+     },
+     {
+      "owner": "dev.deathride.core.Course",
+      "heldBy": "dev.deathride.core.Course.arc",
+      "type": "double[]",
+      "count": 1,
+      "bytes": 32984,
+      "MiB": 0.03
+     },
+     {
+      "owner": "dev.deathride.core.Course",
+      "heldBy": "dev.deathride.core.Course.lane",
+      "type": "double[]",
+      "count": 1,
+      "bytes": 32984,
+      "MiB": 0.03
+     },
+     {
+      "owner": "dev.deathride.core.Course",
+      "heldBy": "dev.deathride.core.Course.width",
+      "type": "double[]",
+      "count": 1,
+      "bytes": 32984,
+      "MiB": 0.03
+     },
+     {
+      "owner": "dev.deathride.core.Course",
+      "heldBy": "dev.deathride.core.Course.y",
+      "type": "double[]",
+      "count": 1,
+      "bytes": 32984,
+      "MiB": 0.03
+     },
+     {
+      "owner": "dev.deathride.core.Course",
+      "heldBy": "dev.deathride.core.Course.x",
+      "type": "double[]",
+      "count": 1,
+      "bytes": 32984,
+      "MiB": 0.03
+     },
+     {
+      "owner": "dev.deathride.core.Course",
+      "heldBy": "dev.deathride.core.Course.inverseLength2",
+      "type": "double[]",
+      "count": 1,
+      "bytes": 32976,
+      "MiB": 0.03
+     },
+     {
+      "owner": "dev.deathride.core.Course",
+      "heldBy": "dev.deathride.core.Course.dy",
+      "type": "double[]",
+      "count": 1,
+      "bytes": 32976,
+      "MiB": 0.03
+     },
+     {
+      "owner": "dev.deathride.core.Course",
+      "heldBy": "dev.deathride.core.Course.dx",
+      "type": "double[]",
+      "count": 1,
+      "bytes": 32976,
+      "MiB": 0.03
+     },
+     {
+      "owner": "io.ktor.utils.io.pool.DirectByteBufferPool",
+      "heldBy": "java.util.concurrent.atomic.AtomicReferenceArray.array",
+      "type": "java.lang.Object[]",
+      "count": 1,
+      "bytes": 32784,
+      "MiB": 0.03
+     },
+     {
+      "owner": "io.ktor.utils.io.pool.DirectByteBufferPool",
+      "heldBy": "io.ktor.utils.io.pool.DirectByteBufferPool.next",
+      "type": "int[]",
+      "count": 1,
+      "bytes": 32784,
+      "MiB": 0.03
+     },
+     {
+      "owner": "dev.deathride.game.TrackScene",
+      "heldBy": "float[][].[0]",
+      "type": "float[]",
+      "count": 1,
+      "bytes": 28816,
+      "MiB": 0.03
+     },
+     {
+      "owner": "dev.deathride.game.SceneryCanvas",
+      "heldBy": "com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch.triangles",
+      "type": "short[]",
+      "count": 1,
+      "bytes": 24016,
+      "MiB": 0.02
+     },
+     {
+      "owner": "dev.deathride.game.MotionEffects",
+      "heldBy": "dev.deathride.game.MotionEffects.skids",
+      "type": "float[]",
+      "count": 1,
+      "bytes": 17296,
+      "MiB": 0.02
+     },
+     {
+      "owner": "dev.deathride.core.Course",
+      "heldBy": "dev.deathride.core.Course.surfaces",
+      "type": "dev.deathride.core.Surface[]",
+      "count": 1,
+      "bytes": 16496,
+      "MiB": 0.02
+     },
+     {
+      "owner": "io.ktor.utils.io.internal.ObjectPoolKt$BufferObjectPool$1",
+      "heldBy": "java.util.concurrent.atomic.AtomicReferenceArray.array",
+      "type": "java.lang.Object[]",
+      "count": 1,
+      "bytes": 16400,
+      "MiB": 0.02
+     },
+     {
+      "owner": "io.ktor.http.cio.HttpHeadersMapKt$IntArrayPool$1",
+      "heldBy": "java.util.concurrent.atomic.AtomicReferenceArray.array",
+      "type": "java.lang.Object[]",
+      "count": 1,
+      "bytes": 16400,
+      "MiB": 0.02
+     },
+     {
+      "owner": "io.ktor.utils.io.core.DefaultBufferPool",
+      "heldBy": "java.util.concurrent.atomic.AtomicReferenceArray.array",
+      "type": "java.lang.Object[]",
+      "count": 1,
+      "bytes": 16400,
+      "MiB": 0.02
+     },
+     {
+      "owner": "io.ktor.http.cio.HttpHeadersMapKt$IntArrayPool$1",
+      "heldBy": "io.ktor.http.cio.HttpHeadersMapKt$IntArrayPool$1.next",
+      "type": "int[]",
+      "count": 1,
+      "bytes": 16400,
+      "MiB": 0.02
+     },
+     {
+      "owner": null,
+      "heldBy": "com.google.zxing.common.reedsolomon.GenericGF.logTable",
+      "type": "int[]",
+      "count": 1,
+      "bytes": 16400,
+      "MiB": 0.02
+     },
+     {
+      "owner": null,
+      "heldBy": "com.google.zxing.common.reedsolomon.GenericGF.expTable",
+      "type": "int[]",
+      "count": 1,
+      "bytes": 16400,
+      "MiB": 0.02
+     }
+    ],
+    "largest": [
+     {
+      "type": "double[]",
+      "bytes": 1310736,
+      "length": 163840,
+      "heldBy": "dev.deathride.link.PerfTrace.rows",
+      "idomClass": "dev.deathride.link.PerfTrace",
+      "owner": "dev.deathride.link.PerfTrace"
+     },
+     {
+      "type": "long[]",
+      "bytes": 400024,
+      "length": 50001,
+      "heldBy": "dev.deathride.link.Distribution.histogram",
+      "idomClass": "dev.deathride.link.Distribution",
+      "owner": "dev.deathride.link.Distribution"
+     },
+     {
+      "type": "long[]",
+      "bytes": 400024,
+      "length": 50001,
+      "heldBy": "dev.deathride.link.Distribution.histogram",
+      "idomClass": "dev.deathride.link.Distribution",
+      "owner": "dev.deathride.link.Distribution"
+     },
+     {
+      "type": "long[]",
+      "bytes": 400024,
+      "length": 50001,
+      "heldBy": "dev.deathride.link.Distribution.histogram",
+      "idomClass": "dev.deathride.link.Distribution",
+      "owner": "dev.deathride.link.Distribution"
+     },
+     {
+      "type": "long[]",
+      "bytes": 400024,
+      "length": 50001,
+      "heldBy": "dev.deathride.link.Distribution.histogram",
+      "idomClass": "dev.deathride.link.Distribution",
+      "owner": "dev.deathride.link.Distribution"
+     },
+     {
+      "type": "float[]",
+      "bytes": 384016,
+      "length": 96000,
+      "heldBy": "com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20.vertices",
+      "idomClass": "com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20",
+      "owner": "dev.deathride.game.SceneryCanvas"
+     },
+     {
+      "type": "double[]",
+      "bytes": 294928,
+      "length": 36864,
+      "heldBy": "dev.deathride.link.PerfTrace.rows",
+      "idomClass": "dev.deathride.link.PerfTrace",
+      "owner": "dev.deathride.link.PerfTrace"
+     },
+     {
+      "type": "char[]",
+      "bytes": 192136,
+      "length": 96062,
+      "heldBy": "java.lang.StringBuilder.value",
+      "idomClass": "java.lang.StringBuilder",
+      "owner": "dev.deathride.link.RaceServer"
+     },
+     {
+      "type": "float[]",
+      "bytes": 192016,
+      "length": 48000,
+      "heldBy": "dev.deathride.game.RoadMarkMesh.vertices",
+      "idomClass": "dev.deathride.game.RoadMarkMesh",
+      "owner": "dev.deathride.game.RoadMarkMesh"
+     },
+     {
+      "type": "float[]",
+      "bytes": 160016,
+      "length": 40000,
+      "heldBy": "dev.deathride.game.GlyphLayer.vertices",
+      "idomClass": "dev.deathride.game.GlyphLayer",
+      "owner": "dev.deathride.game.GlyphLayer"
+     },
+     {
+      "type": "float[]",
+      "bytes": 160016,
+      "length": 40000,
+      "heldBy": "dev.deathride.game.GlyphLayer.vertices",
+      "idomClass": "dev.deathride.game.GlyphLayer",
+      "owner": "dev.deathride.game.GlyphLayer"
+     },
+     {
+      "type": "float[]",
+      "bytes": 160016,
+      "length": 40000,
+      "heldBy": "dev.deathride.game.GlyphLayer.vertices",
+      "idomClass": "dev.deathride.game.GlyphLayer",
+      "owner": "dev.deathride.game.GlyphLayer"
+     },
+     {
+      "type": "float[]",
+      "bytes": 160016,
+      "length": 40000,
+      "heldBy": "dev.deathride.game.GlyphLayer.vertices",
+      "idomClass": "dev.deathride.game.GlyphLayer",
+      "owner": "dev.deathride.game.GlyphLayer"
+     },
+     {
+      "type": "float[]",
+      "bytes": 160016,
+      "length": 40000,
+      "heldBy": "dev.deathride.game.GlyphLayer.vertices",
+      "idomClass": "dev.deathride.game.GlyphLayer",
+      "owner": "dev.deathride.game.GlyphLayer"
+     },
+     {
+      "type": "float[]",
+      "bytes": 160016,
+      "length": 40000,
+      "heldBy": "com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20.vertices",
+      "idomClass": "com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20",
+      "owner": "dev.deathride.game.RaceGame"
+     },
+     {
+      "type": "float[]",
+      "bytes": 134416,
+      "length": 33600,
+      "heldBy": "dev.deathride.game.RoadMarkMesh.vertices",
+      "idomClass": "dev.deathride.game.RoadMarkMesh",
+      "owner": "dev.deathride.game.RoadMarkMesh"
+     },
+     {
+      "type": "float[]",
+      "bytes": 80016,
+      "length": 20000,
+      "heldBy": "com.badlogic.gdx.graphics.g2d.SpriteBatch.vertices",
+      "idomClass": "com.badlogic.gdx.graphics.g2d.SpriteBatch",
+      "owner": "dev.deathride.game.RaceGame"
+     },
+     {
+      "type": "java.lang.Object[]",
+      "bytes": 65552,
+      "length": 16385,
+      "heldBy": "java.util.concurrent.atomic.AtomicReferenceArray.array",
+      "idomClass": "java.util.concurrent.atomic.AtomicReferenceArray",
+      "owner": "io.ktor.http.cio.internals.CharArrayPoolKt$CharArrayPool$2"
+     },
+     {
+      "type": "int[]",
+      "bytes": 65552,
+      "length": 16385,
+      "heldBy": "io.ktor.http.cio.internals.CharArrayPoolKt$CharArrayPool$2.next",
+      "idomClass": "io.ktor.http.cio.internals.CharArrayPoolKt$CharArrayPool$2",
+      "owner": "io.ktor.http.cio.internals.CharArrayPoolKt$CharArrayPool$2"
+     },
+     {
+      "type": "int[]",
+      "bytes": 65552,
+      "length": 16384,
+      "heldBy": "dev.deathride.core.AiBehaviour.trace",
+      "idomClass": "dev.deathride.core.AiBehaviour",
+      "owner": "dev.deathride.core.AiBehaviour"
+     },
+     {
+      "type": "float[]",
+      "bytes": 65552,
+      "length": 16384,
+      "heldBy": "com.badlogic.gdx.math.MathUtils$Sin.static table",
+      "idomClass": "com.badlogic.gdx.math.MathUtils$Sin",
+      "owner": "com.badlogic.gdx.math.MathUtils$Sin"
+     },
+     {
+      "type": "byte[]",
+      "bytes": 46040,
+      "length": 46028,
+      "heldBy": "dev.deathride.link.Packed.raw",
+      "idomClass": "dev.deathride.link.Packed",
+      "owner": "dev.deathride.link.Packed"
+     },
+     {
+      "type": "float[]",
+      "bytes": 40016,
+      "length": 10000,
+      "heldBy": "com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch.vertices",
+      "idomClass": "com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch",
+      "owner": "dev.deathride.game.SceneryCanvas"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32984,
+      "length": 4121,
+      "heldBy": "dev.deathride.core.Course.curvature",
+      "idomClass": "dev.deathride.core.Course",
+      "owner": "dev.deathride.core.Course"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32984,
+      "length": 4121,
+      "heldBy": "dev.deathride.core.Course.arc",
+      "idomClass": "dev.deathride.core.Course",
+      "owner": "dev.deathride.core.Course"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32984,
+      "length": 4121,
+      "heldBy": "dev.deathride.core.Course.lane",
+      "idomClass": "dev.deathride.core.Course",
+      "owner": "dev.deathride.core.Course"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32984,
+      "length": 4121,
+      "heldBy": "dev.deathride.core.Course.width",
+      "idomClass": "dev.deathride.core.Course",
+      "owner": "dev.deathride.core.Course"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32984,
+      "length": 4121,
+      "heldBy": "dev.deathride.core.Course.y",
+      "idomClass": "dev.deathride.core.Course",
+      "owner": "dev.deathride.core.Course"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32984,
+      "length": 4121,
+      "heldBy": "dev.deathride.core.Course.x",
+      "idomClass": "dev.deathride.core.Course",
+      "owner": "dev.deathride.core.Course"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32976,
+      "length": 4120,
+      "heldBy": "dev.deathride.core.Course.inverseLength2",
+      "idomClass": "dev.deathride.core.Course",
+      "owner": "dev.deathride.core.Course"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32976,
+      "length": 4120,
+      "heldBy": "dev.deathride.core.Course.dy",
+      "idomClass": "dev.deathride.core.Course",
+      "owner": "dev.deathride.core.Course"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32976,
+      "length": 4120,
+      "heldBy": "dev.deathride.core.Course.dx",
+      "idomClass": "dev.deathride.core.Course",
+      "owner": "dev.deathride.core.Course"
+     },
+     {
+      "type": "java.lang.Object[]",
+      "bytes": 32784,
+      "length": 8193,
+      "heldBy": "java.util.concurrent.atomic.AtomicReferenceArray.array",
+      "idomClass": "java.util.concurrent.atomic.AtomicReferenceArray",
+      "owner": "io.ktor.utils.io.pool.DirectByteBufferPool"
+     },
+     {
+      "type": "long[]",
+      "bytes": 32784,
+      "length": 4096,
+      "heldBy": "dev.deathride.link.Counter.value",
+      "idomClass": "dev.deathride.link.Counter",
+      "owner": "dev.deathride.link.Counter"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32784,
+      "length": 4096,
+      "heldBy": "dev.deathride.link.Counter.time",
+      "idomClass": "dev.deathride.link.Counter",
+      "owner": "dev.deathride.link.Counter"
+     },
+     {
+      "type": "long[]",
+      "bytes": 32784,
+      "length": 4096,
+      "heldBy": "dev.deathride.link.Counter.value",
+      "idomClass": "dev.deathride.link.Counter",
+      "owner": "dev.deathride.link.Counter"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32784,
+      "length": 4096,
+      "heldBy": "dev.deathride.link.Counter.time",
+      "idomClass": "dev.deathride.link.Counter",
+      "owner": "dev.deathride.link.Counter"
+     },
+     {
+      "type": "long[]",
+      "bytes": 32784,
+      "length": 4096,
+      "heldBy": "dev.deathride.link.Counter.value",
+      "idomClass": "dev.deathride.link.Counter",
+      "owner": "dev.deathride.link.Counter"
+     },
+     {
+      "type": "double[]",
+      "bytes": 32784,
+      "length": 4096,
+      "heldBy": "dev.deathride.link.Counter.time",
+      "idomClass": "dev.deathride.link.Counter",
+      "owner": "dev.deathride.link.Counter"
+     },
+     {
+      "type": "long[]",
+      "bytes": 32784,
+      "length": 4096,
+      "heldBy": "dev.deathride.link.Counter.value",
+      "idomClass": "dev.deathride.link.Counter",
+      "owner": "dev.deathride.link.Counter"
+     }
+    ]
+   },
+   "bitmaps": {
+    "count": 0,
+    "nativePixelsEstimate": 0,
+    "list": []
+   },
+   "path": "C:/Users/kazda/kiro/deathride-raw-evidence/p21/diag/heap-a.raw.hprof",
+   "reconciliation": {
+    "gc": {
+     "line": "10-09 11:24:51.087 13621 13621 I .deathride.per: Explicit concurrent copying GC freed 66(64KB) AllocSpace objects, 0(0B) LOS objects, 49% free, 12MB/24MB, paused 374us total 48.908ms",
+     "young": false,
+     "explicit": true,
+     "freedMiB": 0.06,
+     "losFreedMiB": 0.0,
+     "freePercent": 49,
+     "usedMB": 12,
+     "footprintMB": 24
+    },
+    "dumpStart": "10-09 11:24:51.088 13621 13621 I .deathride.per: hprof: heap dump \"/data/local/tmp/p20-diag-a.hprof\" starting...",
+    "artSurvivorsMB": 12,
+    "appReachableMiB": 10.37,
+    "appPlusZygoteReachableMiB": 15.21,
+    "appDiffPercent": -13.6,
+    "appPlusZygoteDiffPercent": 26.7,
+    "verdict": "differs by more than 10%: explain before ranking"
+   }
+  }
+ ]
+}

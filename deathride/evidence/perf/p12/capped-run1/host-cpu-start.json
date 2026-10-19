@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T06:32:36.9071373Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "node#27",
+                             "IDProcess":  30636,
+                             "PercentProcessorTime":  131
+                         },
+                         {
+                             "Name":  "svchost#72",
+                             "IDProcess":  15040,
+                             "PercentProcessorTime":  98
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  12836,
+                             "PercentProcessorTime":  98
+                         },
+                         {
+                             "Name":  "rustc",
+                             "IDProcess":  50388,
+                             "PercentProcessorTime":  94
+                         },
+                         {
+                             "Name":  "git#1",
+                             "IDProcess":  5356,
+                             "PercentProcessorTime":  94
+                         },
+                         {
+                             "Name":  "Code - Insiders#7",
+                             "IDProcess":  23724,
+                             "PercentProcessorTime":  89
+                         },
+                         {
+                             "Name":  "com.docker.backend#1",
+                             "IDProcess":  16696,
+                             "PercentProcessorTime":  89
+                         },
+                         {
+                             "Name":  "claude#13",
+                             "IDProcess":  32856,
+                             "PercentProcessorTime":  79
+                         },
+                         {
+                             "Name":  "rustc#1",
+                             "IDProcess":  12644,
+                             "PercentProcessorTime":  79
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  65
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                96,
+                                98,
+                                95
+                            ]
+}

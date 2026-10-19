@@ -1,0 +1,110 @@
+package dev.deathride.game
+
+import dev.deathride.core.*
+
+/**
+ * Read-only mapping from an installed weapon or part to where it is drawn on each car class.
+ *
+ * Data lives in resources `mounts/mount-attachments.csv` (game module), measured on the shipped atlas sprites at desktop scale
+ * with the `--mount-shots` mode. Coordinates are fractions of the drawn body: [Attach.x] of the body LENGTH forward of the car
+ * centre (nose is about +0.5), [Attach.y] of the body WIDTH to the left of the centre line. [Attach.scale] is the mount's own
+ * length as a fraction of the body length; [Attach.rotationDeg] turns the mount away from the car's heading (+90 = points left).
+ * Layers draw low to high: 0 rear, 1 side, 2 front guns, 3 roof turret.
+ *
+ * A (class, kind) pair either has one or more `mount` rows, or exactly one explicit `none` row with the reason. Anything else is
+ * a data error, caught by MountCatalogTest. No art is needed: [Attach.sprite] stays empty until an owner-approved mount sprite exists.
+ */
+enum class MountKind(val weapon: Int,val csv: String) {
+    RIVET(Weapons.RIVET,"Rivet"),HAMMER(Weapons.HAMMER,"Hammer"),SCATTER(Weapons.SCATTER,"Scatter"),MINE(Weapons.MINE,"Mine"),SPIKES(-1,"Spikes"),ARMOR(-1,"Armor");
+    companion object { val all=entries.toTypedArray();fun of(name: String)=all.firstOrNull{it.csv.equals(name,true)} }
+}
+
+class Attach(val kind: MountKind,val x: Float,val y: Float,val rotationDeg: Float,val scale: Float,val layer: Int,val sprite: String,val note: String)
+
+object MountCatalog {
+    private val EMPTY=emptyArray<Attach>()
+    private val rows=HashMap<String,Array<Array<Attach>>>()
+    private val none=HashMap<String,BooleanArray>()
+    private val ordered=HashMap<String,Array<Attach>>()
+    val classes: List<String>
+    init {
+        val text=MountCatalog::class.java.getResourceAsStream("/mounts/mount-attachments.csv")!!.bufferedReader().use{it.readText()}
+        val lines=text.lines().filter{it.isNotBlank()}
+        val head=lines[0].split(',');fun col(n: String)=head.indexOf(n).also{require(it>=0){"mount-attachments.csv missing $n"}}
+        val cc=col("class");val cw=col("weapon");val cm=col("mode");val cx=col("x");val cy=col("y");val cr=col("rotationDeg");val cs=col("scale");val cl=col("layer");val cp=col("sprite");val cn=col("note")
+        val lists=HashMap<String,Array<ArrayList<Attach>>>()
+        for(line in lines.drop(1)) {
+            val f=line.split(',');require(f.size>=head.size){"bad mount row: $line"}
+            val kind=requireNotNull(MountKind.of(f[cw])){"unknown mount weapon ${f[cw]}"}
+            val l=lists.getOrPut(f[cc]){Array(MountKind.all.size){ArrayList()}};val n=none.getOrPut(f[cc]){BooleanArray(MountKind.all.size)}
+            when(f[cm]) {
+                "none"->{require(l[kind.ordinal].isEmpty() && !n[kind.ordinal]){"none must be the only row: $line"};n[kind.ordinal]=true}
+                "mount"->{
+                    require(!n[kind.ordinal]){"mount after none: $line"}
+                    val a=Attach(kind,f[cx].toFloat(),f[cy].toFloat(),f[cr].toFloat(),f[cs].toFloat(),f[cl].toInt(),f[cp],f[cn])
+                    require(a.x in -0.6f..0.6f && a.y in -0.7f..0.7f && a.scale in 0.03f..0.5f && a.layer in 0..3 && a.rotationDeg in -180f..180f){"mount out of range: $line"}
+                    l[kind.ordinal].add(a)
+                }
+                else->error("bad mode: $line")
+            }
+        }
+        for((c,l) in lists) {
+            rows[c]=Array(l.size){i->l[i].toTypedArray()}
+            ordered[c]=l.flatMap{it}.sortedBy{it.layer}.toTypedArray()
+        }
+        classes=rows.keys.sorted()
+    }
+    /** The attachments for an installed [kind] on [classId]; empty when it is an explicit 'none' or the class is unknown. */
+    fun attachments(classId: String,kind: MountKind): Array<Attach> = rows[classId]?.get(kind.ordinal)?:EMPTY
+    fun explicitNone(classId: String,kind: MountKind)=none[classId]?.get(kind.ordinal)==true
+    /** Every pair must be one or the other; false means the data file forgot it. */
+    fun declared(classId: String,kind: MountKind)=attachments(classId,kind).isNotEmpty() || explicitNone(classId,kind)
+    /** All mounts of a class sorted by layer (stable), for single-pass drawing; callers skip kinds that are not installed. */
+    fun layered(classId: String): Array<Attach> = ordered[classId]?:EMPTY
+}
+
+/** Which mount kinds a car currently carries. Bits are [MountKind.ordinal]. Pure read of core state. */
+object MountLoadout {
+    /** The installed armour tier (0..3) rides in bits 8-9 of the mask; the ARMOR kind bit says there is any. */
+    const val TIER_SHIFT=8
+    fun armorTier(mask: Int)=(mask shr TIER_SHIFT) and 3
+    fun armorMask(tier: Int)=if(tier<=0)0 else (1 shl MountKind.ARMOR.ordinal) or (tier.coerceAtMost(3) shl TIER_SHIFT)
+    fun mask(c: Car,combat: Combat): Int {
+        var m=(1 shl MountKind.RIVET.ordinal) or (1 shl MountKind.MINE.ordinal)
+        if(combat.capacity(c.id,Weapons.HAMMER)>0)m=m or (1 shl MountKind.HAMMER.ordinal)
+        if(combat.capacity(c.id,Weapons.SCATTER)>0)m=m or (1 shl MountKind.SCATTER.ordinal)
+        if(c.utilityMask and 1!=0)m=m or (1 shl MountKind.SPIKES.ordinal)
+        if(c.armorTier>0)m=m or (1 shl MountKind.ARMOR.ordinal) or (c.armorTier shl TIER_SHIFT)
+        return m
+    }
+    fun has(mask: Int,kind: MountKind)=mask and (1 shl kind.ordinal)!=0
+    fun maskOf(vararg kinds: MountKind): Int { var m=0;for(k in kinds)m=m or (1 shl k.ordinal);return m }
+}
+
+/**
+ * Where a shot is DRAWN leaving the car: the muzzle tip of the mounted weapon, not the nose. The simulation still resolves hits from
+ * one nose point; only tracers, muzzle flashes and the first metres of a Hammer round start here. Twin Rivets alternate by shot count.
+ */
+object MountMuzzle {
+    private fun tip(kind: MountKind)=when(kind){MountKind.RIVET,MountKind.HAMMER,MountKind.SCATTER->.5f;else->0f}
+    /** Local (forward, left) metres of the muzzle tip of [kind] on [classId], or null when the class carries none. [shot] picks the twin. */
+    fun local(classId: String,kind: MountKind,shot: Int,length: Float,width: Float,out: FloatArray): Boolean {
+        val l=MountCatalog.attachments(classId,kind);if(l.isEmpty())return false
+        val a=l[Math.floorMod(shot,l.size)]
+        out[0]=a.x*length+tip(kind)*a.scale*length;out[1]=a.y*width;return true
+    }
+
+    /** World metres of the muzzle for [world]'s car [i]'s last traced volley into [out] (x,y); false when the class has no such mount. */
+    fun world(world: World,i: Int,out: DoubleArray): Boolean {
+        val combat=world.combat;val weapon=combat.traceWeapon[i]
+        val kind=when(weapon){Weapons.RIVET->MountKind.RIVET;Weapons.SCATTER->MountKind.SCATTER;else->return false}
+        return of(world,i,kind,combat.fireCount(i,weapon),out)
+    }
+    /** World metres of [kind]'s muzzle on car [i]; [shot] picks the twin. */
+    fun of(world: World,i: Int,kind: MountKind,shot: Int,out: DoubleArray): Boolean {
+        val c=world.cars[i];val id=c.carClass?.id?:"Line";val shape=CarShapeCache.of(id)
+        if(!local(id,kind,shot,shape.lengthM.toFloat(),shape.widthM.toFloat(),buf))return false
+        out[0]=c.x+c.cosHeading*buf[0]-c.sinHeading*buf[1];out[1]=c.y+c.sinHeading*buf[0]+c.cosHeading*buf[1];return true
+    }
+    private val buf=FloatArray(2)
+}

@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-08T17:12:43.7594724Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "clippy-driver",
+                             "IDProcess":  4684,
+                             "PercentProcessorTime":  100
+                         },
+                         {
+                             "Name":  "find",
+                             "IDProcess":  48088,
+                             "PercentProcessorTime":  100
+                         },
+                         {
+                             "Name":  "node#7",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  95
+                         },
+                         {
+                             "Name":  "claude#12",
+                             "IDProcess":  34320,
+                             "PercentProcessorTime":  57
+                         },
+                         {
+                             "Name":  "dwm",
+                             "IDProcess":  1856,
+                             "PercentProcessorTime":  47
+                         },
+                         {
+                             "Name":  "firefox#7",
+                             "IDProcess":  53836,
+                             "PercentProcessorTime":  23
+                         },
+                         {
+                             "Name":  "claude#5",
+                             "IDProcess":  15816,
+                             "PercentProcessorTime":  23
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  23
+                         },
+                         {
+                             "Name":  "msedgewebview2#27",
+                             "IDProcess":  43668,
+                             "PercentProcessorTime":  23
+                         },
+                         {
+                             "Name":  "claude#8",
+                             "IDProcess":  53220,
+                             "PercentProcessorTime":  23
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                28,
+                                50,
+                                35
+                            ]
+}

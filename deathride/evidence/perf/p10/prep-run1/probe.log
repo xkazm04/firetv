@@ -1,0 +1,42 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"hostPumpStall":{"second":4.7680131999999995,"lateMs":268.01320000003034,"epochMs":1791341188258.5874,"cpu":{"user":421000,"system":328000},"memory":{"rss":178565120,"heapTotal":66101248,"heapUsed":48088040,"external":54639697,"arrayBuffers":50597857}}}
+{"second":4,"accepted":[145,147],"rejected":[0,0],"hostPumpStalls":1}
+{"second":64,"accepted":[1932,1932],"rejected":[0,0],"hostPumpStalls":1}
+{"second":124,"accepted":[3733,3733],"rejected":[0,0],"hostPumpStalls":1}
+{"second":187,"accepted":[5643,5642],"rejected":[3,4],"hostPumpStalls":1}
+{"second":254,"accepted":[7641,7640],"rejected":[3,4],"hostPumpStalls":1}
+{"second":319,"accepted":[9577,9576],"rejected":[3,4],"hostPumpStalls":1}
+{"second":360,"accepted":[10790,10789],"rejected":[3,4],"hostPumpStalls":1}
+{
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/ae3015cf/deathride/tools/ability-stick-probe.mjs:116:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 360.05610599999994,
+  "rounds": 6,
+  "classUses": {
+    "Needle": 10,
+    "Line": 7,
+    "Bastion": 6,
+    "Comet": 5,
+    "Trail": 7,
+    "Flint": 7,
+    "Quill": 7,
+    "Vandal": 5,
+    "Kestrel": 6,
+    "Bulwark": 5
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 10793,
+      "accepted": 10790,
+      "rejected": 3,
+      "hz": 29.97588381406314
+    },
+    {
+      "slot": 1,
+      "sent": 10793,
+      "accepted": 10789,
+      "rejected": 4,
+      "hz": 29.97588381406314
+    }
+  ]
+}

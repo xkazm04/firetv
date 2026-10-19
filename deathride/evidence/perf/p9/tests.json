@@ -1,0 +1,22 @@
+{
+  "command": "gradlew.bat :core:test :link:test :game:test --console=plain --rerun-tasks",
+  "commit": "7178bf69c953312cb9b52be030cf067ad98bed56",
+  "core": {
+    "tests": 236,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "link": {
+    "tests": 18,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 2
+  },
+  "game": {
+    "tests": 71,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

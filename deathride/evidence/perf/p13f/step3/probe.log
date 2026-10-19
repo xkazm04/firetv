@@ -1,0 +1,41 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[134,133],"rejected":[0,0],"hostPumpStalls":0}
+{"second":71,"accepted":[2134,2134],"rejected":[0,0],"hostPumpStalls":0}
+{"second":138,"accepted":[4144,4144],"rejected":[0,0],"hostPumpStalls":0}
+{"second":205,"accepted":[6149,6149],"rejected":[0,0],"hostPumpStalls":0}
+{"second":272,"accepted":[8172,8172],"rejected":[0,0],"hostPumpStalls":0}
+{"second":337,"accepted":[10117,10117],"rejected":[0,0],"hostPumpStalls":0}
+{"second":360,"accepted":[10804,10804],"rejected":[0,0],"hostPumpStalls":0}
+{
+  "functionalPass": true,
+  "duration": 360.1065896,
+  "rounds": 6,
+  "classUses": {
+    "Needle": 12,
+    "Line": 6,
+    "Bastion": 6,
+    "Comet": 5,
+    "Trail": 2,
+    "Flint": 7,
+    "Quill": 7,
+    "Vandal": 5,
+    "Kestrel": 6,
+    "Bulwark": 5
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 10804,
+      "accepted": 10804,
+      "rejected": 0,
+      "hz": 30.00222798477776
+    },
+    {
+      "slot": 1,
+      "sent": 10804,
+      "accepted": 10804,
+      "rejected": 0,
+      "hz": 30.00222798477776
+    }
+  ]
+}

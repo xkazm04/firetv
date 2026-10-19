@@ -1,0 +1,202 @@
+{
+  "source": "C:/Users/kazda/kiro/deathride-raw-evidence/p12/diag-muted-trace/trace.txt.gz",
+  "glThread": {
+    "tid": 4328,
+    "name": "GLThread 48058"
+  },
+  "frames": 1196,
+  "spanSeconds": 19.982,
+  "intervalsOver": {
+    "16.7": 571,
+    "20": 7,
+    "25": 2,
+    "33": 1,
+    "50": 0
+  },
+  "wholeSpanMs": {
+    "sleepMs": 8183.0,
+    "wakeupLatencyMs": 123.3,
+    "runningMs": 11437.4,
+    "preemptedMs": 238.1
+  },
+  "concurrentGc": {
+    "count": 6,
+    "totalMs": 454.7
+  },
+  "networkStatsPolls": {
+    "count": 4,
+    "seconds": [
+      0.61,
+      6.99,
+      13.13,
+      19.21
+    ],
+    "durationsMs": [
+      575,
+      578,
+      552,
+      555
+    ],
+    "shareOfSpan": 0.113
+  },
+  "slow": {
+    "over20Ms": {
+      "frames": 7,
+      "meanIntervalMs": 24.57,
+      "meanMs": {
+        "runningMs": 13.338,
+        "preemptedMs": 0.987,
+        "wakeupLatencyMs": 1.709,
+        "sleepMs": 8.537
+      },
+      "duringConcurrentGc": 6,
+      "insideNetworkStatsPoll": 0,
+      "preemptedByMs": {
+        "kworker/0:": 2.9,
+        "hif_thread (nice -10)": 2.1,
+        "Binder:424_": 0.6,
+        "TimerDispatch (RT)": 0.3,
+        "swapper/": 0.3,
+        "app (RT)": 0.3,
+        "surfaceflinger": 0.1,
+        "disp_osd2_irq_k (RT)": 0.1,
+        "DeathRideAudio": 0.1,
+        "kworker/u8:": 0.0,
+        "kworker/3:": 0.0,
+        "DefaultDispatch (nice 13)": 0.0
+      },
+      "waitingInSectionMs": {
+        "Lock contention on large object map space lock (owner tid: 4312)": 7.5,
+        "(none)": 4.0,
+        "eglSwapBuffers": 3.2,
+        "queueBuffer": 1.3,
+        "dequeueBuffer": 1.0,
+        "DR.simulation": 0.8,
+        "DR.hud": 0.5,
+        "DR.carsEffects": 0.5,
+        "DR.sceneryDraw": 0.1,
+        "Lock contention on large object map space lock (owner tid: 4521)": 0.0
+      },
+      "sleepBySectionAndWakerMs": {
+        "Lock contention on large object map space lock (owner tid: 4312) <- <...>": 32.7,
+        "(none) <- <...>": 14.9,
+        "DR.telemetry <- DefaultDispatch": 3.6,
+        "Lock contention on a monitor lock (owner tid: 4521) <- DefaultDispatch": 1.7,
+        "DR.hud <- <...>": 1.5,
+        "dequeueBuffer <- Binder:424_": 1.5,
+        "queueBuffer <- Binder:424_": 1.1,
+        "queueBuffer <- <...>": 0.8,
+        "Lock contention on large object map space lock (owner tid: 4521) <- DefaultDispatch": 0.7,
+        "dequeueBuffer <- <...>": 0.4,
+        "DR.carsEffects <- <...>": 0.3,
+        "FullSuspendCheck <- <...>": 0.3
+      },
+      "waitingMs": 18.9,
+      "whileWaitingSomeCpuIdleMs": 9.5,
+      "whileWaitingAnyCpuHeldByMs": {
+        "DefaultDispatch (nice 13)": 23.1,
+        "HeapTaskDaemon (nice 4)": 10.0,
+        "hif_thread (nice -10)": 3.0,
+        "kworker/0:": 2.9,
+        "netd": 1.9,
+        "surfaceflinger (RT)": 1.8,
+        "main_thread (nice -10)": 1.8,
+        "Binder:424_": 1.1,
+        "GLThread": 0.9,
+        "composer@2.1-se (RT)": 0.9,
+        "ksmd (nice 5)": 0.9,
+        "Binder:695_D": 0.7,
+        "kworker/u8:": 0.7,
+        "ksoftirqd/": 0.6
+      }
+    },
+    "over33Ms": {
+      "frames": 1,
+      "meanIntervalMs": 34.199,
+      "meanMs": {
+        "runningMs": 14.829,
+        "preemptedMs": 0.199,
+        "wakeupLatencyMs": 1.077,
+        "sleepMs": 18.094
+      },
+      "duringConcurrentGc": 1,
+      "insideNetworkStatsPoll": 0,
+      "preemptedByMs": {
+        "hif_thread (nice -10)": 0.1,
+        "disp_osd2_irq_k (RT)": 0.1,
+        "swapper/": 0.0
+      },
+      "waitingInSectionMs": {
+        "Lock contention on large object map space lock (owner tid: 4312)": 0.9,
+        "DR.carsEffects": 0.1,
+        "queueBuffer": 0.1,
+        "DR.hud": 0.1,
+        "DR.simulation": 0.1,
+        "dequeueBuffer": 0.0,
+        "DR.telemetry": 0.0
+      },
+      "sleepBySectionAndWakerMs": {
+        "Lock contention on large object map space lock (owner tid: 4312) <- <...>": 12.6,
+        "DR.telemetry <- DefaultDispatch": 3.6,
+        "DR.hud <- <...>": 1.1,
+        "DR.carsEffects <- <...>": 0.3,
+        "queueBuffer <- Binder:424_": 0.3,
+        "dequeueBuffer <- Binder:424_": 0.2,
+        "Lock contention on large object map space lock (owner tid: 4312) <- DefaultDispatch": 0.0
+      },
+      "waitingMs": 1.3,
+      "whileWaitingSomeCpuIdleMs": 1.0,
+      "whileWaitingAnyCpuHeldByMs": {
+        "HeapTaskDaemon (nice 4)": 1.2,
+        "DefaultDispatch (nice 13)": 0.7,
+        "hif_thread (nice -10)": 0.2,
+        "main_thread (nice -10)": 0.1,
+        "Binder:424_": 0.1,
+        "kworker/0:": 0.0,
+        "rx_thread (nice -10)": 0.0,
+        "ksmd_seeker (nice 5)": 0.0,
+        "kworker/2:": 0.0,
+        "disp_osd2_irq_k (RT)": 0.0,
+        "m.amazon.tv.ime (nice -10)": 0.0,
+        "surfaceflinger": 0.0,
+        "disp_osd1_irq_k (RT)": 0.0,
+        "app (RT)": 0.0
+      }
+    }
+  },
+  "highPriorityThreads": [
+    {
+      "thread": "surfaceflinger",
+      "tid": 424,
+      "process": "surfaceflinger",
+      "prio": 97,
+      "cpuPercentOfOneCore": 8.7,
+      "switchInsPerSecond": 242,
+      "meanSliceUs": 358.0
+    }
+  ],
+  "cpuPercentOfOneCoreByProcess": {
+    ".deathride.perf (4297)": 115.0,
+    "surfaceflinger (424)": 18.3,
+    "Binder:695_3 (695)": 11.1,
+    "hif_thread (1099)": 2.8,
+    "composer@2.1-se (366)": 2.7,
+    "main_thread (1098)": 2.0,
+    "kswapd0 (127)": 1.8,
+    "m.amazon.tv.ime (1382)": 1.5,
+    "kworker/0:2 (30417)": 1.4,
+    "pvr_defer_free (168)": 1.3,
+    "rx_thread (1100)": 1.2,
+    "kworker/u8:0 (28250)": 1.1
+  },
+  "cpuPercentOfOneCoreByThread": {
+    "GLThread (4297)": 4.1,
+    "NetworkStats (695)": 10.8,
+    "surfaceflinger (424)": 8.7,
+    "DefaultDispatch (4297)": 2.8,
+    ".deathride.perf (4297)": 2.8,
+    "hif_thread (1099)": 2.8,
+    "composer@2.1-se (366)": 2.7
+  },
+  "limits": "Bounded intrusive trace (atrace with app sections); tracing adds work to every phase. Frames are DR.requests to DR.requests on the GL thread, whatever the phase. Preempted time is charged to the task that took the GL thread's CPU (the GL thread may later run elsewhere); sleep to the section open at switch-out and the task that woke it; wakeup latency is the wait from that wakeup until it runs. Occupancy sums the CPU-ms of every other task on any CPU while the GL thread waited. NetworkStats polls are inferred from that thread's CPU bursts."
+}

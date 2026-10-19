@@ -1,0 +1,181 @@
+{
+  "id": "mechanic.seizure",
+  "cue": "voice.mechanic.seizure",
+  "category": "tts",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:56:42.547009+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\voices\\raw\\mechanic.seizure.mp3.json",
+    "sourceSha256": "498f4e38be24a2798cdf963da1536469d3829dc9f6f77d02444cdf74d5528be3",
+    "generatedAt": "2026-10-02T21:53:17.977Z",
+    "request": {
+      "text": "He took your car? Right. Right... I thought he might. Come round the back.",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.75,
+        "style": 0.25,
+        "use_speaker_boost": true
+      }
+    },
+    "budgetCharge": 74,
+    "providerCredits": 74,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/voices/raw/mechanic.seizure.mp3",
+    "sha256": "498f4e38be24a2798cdf963da1536469d3829dc9f6f77d02444cdf74d5528be3",
+    "bytes": 119998,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": false,
+      "clipping": true
+    },
+    "failures": [
+      "loudness",
+      "silence"
+    ],
+    "durationSeconds": 7.430385487528345,
+    "durationWindowSeconds": [
+      1,
+      20
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 327680,
+    "decodedBytes": 655360,
+    "integratedLufs": -24.67,
+    "truePeakDbtp": -8.01,
+    "loudnessRangeLu": 2.9,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          39863,
+          82158
+        ],
+        [
+          97970,
+          146026
+        ],
+        [
+          160633,
+          201448
+        ],
+        [
+          232081,
+          275917
+        ],
+        [
+          314473,
+          327680
+        ]
+      ],
+      "fraction": 0.5743682861328125,
+      "longestInteriorSeconds": 1.089705215419501
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 1766,
+    "endFrameExclusive": 157154,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 1.1428783347897717,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/voices/edited/mechanic.seizure.wav",
+    "sha256": "bd4c63d0b1e7cc1a9e33ad45f2b98d65d1c5e77e53e31e7981fac760d5deaff4",
+    "bytes": 310854,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": false,
+      "clipping": true
+    },
+    "failures": [
+      "silence"
+    ],
+    "durationSeconds": 7.047074829931973,
+    "durationWindowSeconds": [
+      7.045074829931973,
+      7.049074829931973
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 155388,
+    "decodedBytes": 310776,
+    "integratedLufs": -18.0,
+    "truePeakDbtp": -5.44,
+    "loudnessRangeLu": 3.0,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          18401,
+          39269
+        ],
+        [
+          47553,
+          71219
+        ],
+        [
+          78863,
+          98929
+        ],
+        [
+          114403,
+          136081
+        ]
+      ],
+      "fraction": 0.5552423610574819,
+      "longestInteriorSeconds": 1.0732879818594103
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "fail",
+  "sourceDefects": [
+    "loudness",
+    "silence"
+  ]
+}

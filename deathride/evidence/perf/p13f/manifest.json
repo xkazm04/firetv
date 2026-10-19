@@ -1,0 +1,504 @@
+{
+ "generatedUtc": "2026-10-07T23:22:03.427350+00:00",
+ "committedBytes": 210222,
+ "committed": [
+  {
+   "path": "evidence/perf/p13f/device-state.json",
+   "bytes": 1030,
+   "sha256": "56823d34ecf6a0bb3db016c04a357acae925d7eea62ab5db35fc71f1f24f1a13"
+  },
+  {
+   "path": "evidence/perf/p13f/gc-p13e.json",
+   "bytes": 33092,
+   "sha256": "bbd11260dadc1cf93a147ab78334964f319863cccbc71cc7477100ebb1d9b82b"
+  },
+  {
+   "path": "evidence/perf/p13f/heap-dumps.json",
+   "bytes": 26914,
+   "sha256": "dabe3e887548846978d692cbb3bfcdaac616c8d2d1e09ea9885de686a0e81658"
+  },
+  {
+   "path": "evidence/perf/p13f/run1-not-started/settle-try1.json",
+   "bytes": 1936,
+   "sha256": "7966853354c6a0485f75bad0780cb3a7f8d3979886c751312acf6573f66d1425"
+  },
+  {
+   "path": "evidence/perf/p13f/run1-not-started/settle-try2.json",
+   "bytes": 1912,
+   "sha256": "a60c5aff2f89b22543de26222a514f456ef8ac34f736baecfca8d4d0ce13edc2"
+  },
+  {
+   "path": "evidence/perf/p13f/run1-not-started/settle-try3.json",
+   "bytes": 1937,
+   "sha256": "a0ba2d01a2e2e1fe1c1760a1312a393687c98741c8ce8b6ed12adf3bc057dfb3"
+  },
+  {
+   "path": "evidence/perf/p13f/run1-not-started/settle-try4.json",
+   "bytes": 1929,
+   "sha256": "918dd9f71765270b9c0a44b9561008dbbec9d3cd19926bce41fc106efaf81fb5"
+  },
+  {
+   "path": "evidence/perf/p13f/stats-load-after.json",
+   "bytes": 1939,
+   "sha256": "79f52e53059d9a18c17f295d1580fe41037af4b9e7ee9a6b4cd81077b7f50d7d"
+  },
+  {
+   "path": "evidence/perf/p13f/stats-load-before.json",
+   "bytes": 1948,
+   "sha256": "14b02a473f1337cafee8c41983e6090325c353d95708479efd01e6a5424e5432"
+  },
+  {
+   "path": "evidence/perf/p13f/step3/comparison.json",
+   "bytes": 5862,
+   "sha256": "70da3c20b338465213190ff9b8ff8ca89c75697f094e80d6e954c0be5e1d087b"
+  },
+  {
+   "path": "evidence/perf/p13f/step3/gc.json",
+   "bytes": 6653,
+   "sha256": "688581699b82aa6048e3530f7f6ab587abf823924c640d92abb3f665a58d8ab4"
+  },
+  {
+   "path": "evidence/perf/p13f/step3/host-cpu-end.json",
+   "bytes": 2573,
+   "sha256": "a827497aee87e69b0a29d6545189ea222897a78fc57b62f66abfb623bcb6f32a"
+  },
+  {
+   "path": "evidence/perf/p13f/step3/host-cpu-start.json",
+   "bytes": 2571,
+   "sha256": "614c59f5da50b8cf63e9dc5f9df0612a67842932274d1bc2339352031ad4c010"
+  },
+  {
+   "path": "evidence/perf/p13f/step3/installed.json",
+   "bytes": 376,
+   "sha256": "87c1d98c8769a54b90a7a3e5624eecbda39610e8bca2b7073e76868fdc78e340"
+  },
+  {
+   "path": "evidence/perf/p13f/step3/p10-readings.json",
+   "bytes": 49638,
+   "sha256": "056243b77d7ddaa3f8406e4c7707b59bdb1d3f21792851ea4805f43d7c342a55"
+  },
+  {
+   "path": "evidence/perf/p13f/step3/probe.log",
+   "bytes": 1116,
+   "sha256": "54185227d2a16be699c7ec5bb7bd8e0a83aa00a6c5024a540f857ed489189d4f"
+  },
+  {
+   "path": "evidence/perf/p13f/step3/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "3be45e7d28ac3d9aaa9051b4ffc3ee80650e8001ed0a373384985543118ede9f"
+  },
+  {
+   "path": "evidence/perf/p13f/step3/summary.json",
+   "bytes": 21220,
+   "sha256": "8af6a59366e23e97f2841a4656bdd458a304a32d85ffccaf0278e9bde5a54217"
+  },
+  {
+   "path": "evidence/perf/p13f/step3/switches.json",
+   "bytes": 45970,
+   "sha256": "cd6a5f62448c591e280c6d3e6db28858545acf36508ab5da5b3271aa0e43e03a"
+  },
+  {
+   "path": "evidence/perf/p13f/tests.json",
+   "bytes": 1471,
+   "sha256": "59dbea1da65d1c79e51cf28137999d8de38fad9af9e33c38e5c07451f8a4fbe4"
+  }
+ ],
+ "rawRoot": "C:/Users/kazda/kiro/deathride-raw-evidence (outside git)",
+ "raw": [
+  {
+   "path": "p13f/9d88747c/apk-source-commit.txt",
+   "bytes": 41,
+   "sha256": "f13e9bf09b136207abfc41bc864e7fc9a4363b72e9497ec183b57aba24e2f2f9"
+  },
+  {
+   "path": "p13f/9d88747c/build-perf.log",
+   "bytes": 3565,
+   "sha256": "38217bd0de079c9d52b631391c084cff1005140dceea8970b94ed9bc4d9dd68b"
+  },
+  {
+   "path": "p13f/9d88747c/dump/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p13f/9d88747c/dump/device-counters-end.txt",
+   "bytes": 89389,
+   "sha256": "0a71d0fbc2cdf1fb3ec9a325b6980ac761b8c09b29c997109b546b49b9cbedb0"
+  },
+  {
+   "path": "p13f/9d88747c/dump/device-counters-start.txt",
+   "bytes": 85945,
+   "sha256": "9c60a5b56a08fca5cc51c1f6a4b7ddd2d0663e1a372709f5c1bc81954f258df7"
+  },
+  {
+   "path": "p13f/9d88747c/dump/heap-a-utc.txt",
+   "bytes": 25,
+   "sha256": "fef127895bfb5227de2f3e38d7bf4951cb60b06e7ed0c31efe3204ba99763916"
+  },
+  {
+   "path": "p13f/9d88747c/dump/heap-a.hprof",
+   "bytes": 78873466,
+   "sha256": "8d8dc2fb0413db45e8fea1ed985389feef63bbb24bdabe7e058988527bd24b74"
+  },
+  {
+   "path": "p13f/9d88747c/dump/heap-a.raw.hprof",
+   "bytes": 78945070,
+   "sha256": "183af5f0d01f4ac980c068e06ed1515f93bce162f4baa03215311a57ebcd4263"
+  },
+  {
+   "path": "p13f/9d88747c/dump/heap-b-utc.txt",
+   "bytes": 25,
+   "sha256": "cc62e525745c4d6563eb6f0bcd1a43b7239045ef9e89aa55281dcd971dc0d0fe"
+  },
+  {
+   "path": "p13f/9d88747c/dump/heap-b.hprof",
+   "bytes": 82632616,
+   "sha256": "b81fe6847fbb06f823a5d617a259ff80a5747b4546ec92f6d03fd78d0474df11"
+  },
+  {
+   "path": "p13f/9d88747c/dump/heap-b.raw.hprof",
+   "bytes": 82712005,
+   "sha256": "e1d3a03f18fe7ae849b360574ba5abd5c76dc060cf43718ffba5726ec69bcd2e"
+  },
+  {
+   "path": "p13f/9d88747c/dump/host-cpu-end.json",
+   "bytes": 2588,
+   "sha256": "e184001ff7cfc915b6171f5098ffba6c853248e554a578db6999d89a96fc541a"
+  },
+  {
+   "path": "p13f/9d88747c/dump/host-cpu-start.json",
+   "bytes": 2572,
+   "sha256": "df33c98d4dd8d8591187d0bd22464b1cb747ebb952219f0ecff9b510ef88fee7"
+  },
+  {
+   "path": "p13f/9d88747c/dump/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p13f/9d88747c/dump/installed.json",
+   "bytes": 376,
+   "sha256": "b41429fe96a6608e5214fac041e1ae8a416556c21af68ae1ccca5e1268e1166e"
+  },
+  {
+   "path": "p13f/9d88747c/dump/logcat.txt",
+   "bytes": 125803,
+   "sha256": "7038eb969da027caa3f223c4aa4266ca01705d2ef554fc28c7bd40493f5882df"
+  },
+  {
+   "path": "p13f/9d88747c/dump/probe.log",
+   "bytes": 706,
+   "sha256": "5f8a2f46ffdf3bdf04fb5894f70b33f4289862dee3c5f467ba627f514d4fb276"
+  },
+  {
+   "path": "p13f/9d88747c/dump/raw.json",
+   "bytes": 15126532,
+   "sha256": "05d6fc6ba845f3765f4b6202ca79ddce9be42e74bf086258e57bb60546b2f99c"
+  },
+  {
+   "path": "p13f/9d88747c/dump/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "83461ef1acebe9699eab027371574ce6347e8d1334c8ff00ed0e482b4e9a1068"
+  },
+  {
+   "path": "p13f/9d88747c/dump/startup-logcat.txt",
+   "bytes": 2823,
+   "sha256": "71cc2cff99502db449c365923f602fa044273cda7848cdf40307f7d062a08969"
+  },
+  {
+   "path": "p13f/9d88747c/dump/thread-priorities-before.txt",
+   "bytes": 1363,
+   "sha256": "d3c1f335c6a6834a7696fd13d1620eb2aa2be7d4d54b204f9201c4cc77f782de"
+  },
+  {
+   "path": "p13f/9d88747c/dump-device.out",
+   "bytes": 633,
+   "sha256": "06d95f4f62ec42dcc82bef7ca14f9edbd30f1d262091ddbc293121f73376dd14"
+  },
+  {
+   "path": "p13f/9d88747c/dump-run.out",
+   "bytes": 1598,
+   "sha256": "73b4ba9f45720e4f7ce0e6d0b34c7fd2302e551fa98f989cdb100ab4f5b09764"
+  },
+  {
+   "path": "p13f/9d88747c/dump-run.sh",
+   "bytes": 1022,
+   "sha256": "f17cf2ab6efab6e44730180e5450e8cd8e149c3775ec64a51b1e6a1eb81be26f"
+  },
+  {
+   "path": "p13f/9d88747c/gate-final.log",
+   "bytes": 36402,
+   "sha256": "56cada2c62b58a92fb30f981c67ab297e3fcfdf75154a5cc81c890b68ca69a27"
+  },
+  {
+   "path": "p13f/9d88747c/gate-final2.log",
+   "bytes": 36032,
+   "sha256": "af1c3c11cf5231606609958cdcf835ce099e2a0bfff87795bda7a2540eb99251"
+  },
+  {
+   "path": "p13f/9d88747c/load1/load.json",
+   "bytes": 13581,
+   "sha256": "1e204c64ba4a23b36f057b9d205dc193d3902e4b26819c48942f5e8d1471cced"
+  },
+  {
+   "path": "p13f/9d88747c/load1/load.out",
+   "bytes": 1361,
+   "sha256": "2f5433c63dc4e55e17cdbd2915be74c85f2d0c3f67b7ba17f0ab3e469ecca9fa"
+  },
+  {
+   "path": "p13f/9d88747c/load1/logcat.txt",
+   "bytes": 164519,
+   "sha256": "708168037b3b458680a63a3441616b18bbba9eaf35d962eca84d74ba82ea0131"
+  },
+  {
+   "path": "p13f/9d88747c/load1/pid.txt",
+   "bytes": 6,
+   "sha256": "3ca235c3f393f21696f6d607b37d87073e7df00232ee85070772fd2f29b122ba"
+  },
+  {
+   "path": "p13f/9d88747c/load2/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p13f/9d88747c/load2/load.json",
+   "bytes": 14683,
+   "sha256": "5ebf4321c3f658686e1911b78ac56d1f109bcc157a5ee10f21d419cae4f8f3ae"
+  },
+  {
+   "path": "p13f/9d88747c/load2/load.out",
+   "bytes": 1433,
+   "sha256": "758b41f620985d0a77c523e6a7929b6512bb031c018e12c360e85357f12b0fcd"
+  },
+  {
+   "path": "p13f/9d88747c/load2/logcat.txt",
+   "bytes": 163405,
+   "sha256": "7d3071b964d33c925a32a5a3b8e4b682260c59b6ab5a7e0b514e3d974fd22e7d"
+  },
+  {
+   "path": "p13f/9d88747c/load2/pid.txt",
+   "bytes": 6,
+   "sha256": "7155618021939be688c6952a0ecabd7e8adbd0f5340df7ffaff87d98c0ac16d3"
+  },
+  {
+   "path": "p13f/9d88747c/p13f.apk",
+   "bytes": 41413607,
+   "sha256": "c155e09d30fa1fe3f4a7729a5501627a91143ba4bbc7fbbd0e14f0ae002136c1"
+  },
+  {
+   "path": "p13f/9d88747c/run1-settle-try1.json",
+   "bytes": 1936,
+   "sha256": "7966853354c6a0485f75bad0780cb3a7f8d3979886c751312acf6573f66d1425"
+  },
+  {
+   "path": "p13f/9d88747c/run1-settle-try2.json",
+   "bytes": 1912,
+   "sha256": "a60c5aff2f89b22543de26222a514f456ef8ac34f736baecfca8d4d0ce13edc2"
+  },
+  {
+   "path": "p13f/9d88747c/run1-settle-try3.json",
+   "bytes": 1937,
+   "sha256": "a0ba2d01a2e2e1fe1c1760a1312a393687c98741c8ce8b6ed12adf3bc057dfb3"
+  },
+  {
+   "path": "p13f/9d88747c/run1-settle-try4.json",
+   "bytes": 1929,
+   "sha256": "918dd9f71765270b9c0a44b9561008dbbec9d3cd19926bce41fc106efaf81fb5"
+  },
+  {
+   "path": "p13f/9d88747c/run1-settle.json",
+   "bytes": 1929,
+   "sha256": "918dd9f71765270b9c0a44b9561008dbbec9d3cd19926bce41fc106efaf81fb5"
+  },
+  {
+   "path": "p13f/9d88747c/run1-settle.out",
+   "bytes": 27,
+   "sha256": "46a69a026d3c58ecabe55826ded1a5e753d24952a889d6465f641c226e5733d3"
+  },
+  {
+   "path": "p13f/9d88747c/runs1.out",
+   "bytes": 19,
+   "sha256": "4413d56dcd45036087c3cbe19898e5996ce2caf84361002c6a39fed3c8f550e1"
+  },
+  {
+   "path": "p13f/9d88747c/scripts/compare.py",
+   "bytes": 5028,
+   "sha256": "0f217b040e8d6d0ef265a501db229b8e1bdcfc8254f7fae56a0cba555263f26a"
+  },
+  {
+   "path": "p13f/9d88747c/scripts/evidence.py",
+   "bytes": 4585,
+   "sha256": "956f02d4bf1389646ea83d4c49770a5a2b9ef5ea93925c24774d2f649a52ae63"
+  },
+  {
+   "path": "p13f/9d88747c/scripts/runs-n.sh",
+   "bytes": 1471,
+   "sha256": "ffc6bc7dcebc8fa01d542b91b8ca1423bbb9df23031ef758f0b2dd0eef9e701b"
+  },
+  {
+   "path": "p13f/9d88747c/scripts/settle.ps1",
+   "bytes": 757,
+   "sha256": "b81ca05e25fd1303f5355be8e0a5d9abeee382edd1381c0264aee001cb1f180f"
+  },
+  {
+   "path": "p13f/9d88747c/step3/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p13f/9d88747c/step3/device-counters-end.txt",
+   "bytes": 89976,
+   "sha256": "ea2286558636a2659fe91f0583637a4d97ffdf71a31eb46aa36c1cb7de5ef9f4"
+  },
+  {
+   "path": "p13f/9d88747c/step3/device-counters-start.txt",
+   "bytes": 85973,
+   "sha256": "7928d44fd630a615fce061a2814be698b4cfe405f97c38b556d3faaef8e6f015"
+  },
+  {
+   "path": "p13f/9d88747c/step3/host-cpu-end.json",
+   "bytes": 2573,
+   "sha256": "a827497aee87e69b0a29d6545189ea222897a78fc57b62f66abfb623bcb6f32a"
+  },
+  {
+   "path": "p13f/9d88747c/step3/host-cpu-start.json",
+   "bytes": 2571,
+   "sha256": "614c59f5da50b8cf63e9dc5f9df0612a67842932274d1bc2339352031ad4c010"
+  },
+  {
+   "path": "p13f/9d88747c/step3/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p13f/9d88747c/step3/installed.json",
+   "bytes": 376,
+   "sha256": "87c1d98c8769a54b90a7a3e5624eecbda39610e8bca2b7073e76868fdc78e340"
+  },
+  {
+   "path": "p13f/9d88747c/step3/logcat.txt",
+   "bytes": 160422,
+   "sha256": "0adf7f149df6e53318f629f0766c6986b37d476cd6c59f930b5e5ed3bdde7296"
+  },
+  {
+   "path": "p13f/9d88747c/step3/probe.log",
+   "bytes": 1116,
+   "sha256": "54185227d2a16be699c7ec5bb7bd8e0a83aa00a6c5024a540f857ed489189d4f"
+  },
+  {
+   "path": "p13f/9d88747c/step3/raw.json",
+   "bytes": 32954150,
+   "sha256": "2bbb3d35d215bb6df520c226987f0c98b2bd9fc7574f039379b2e122f602104e"
+  },
+  {
+   "path": "p13f/9d88747c/step3/raw.json.gz",
+   "bytes": 3091928,
+   "sha256": "69f57ef63920d5ddfabfe1019d1f3216ffab21de22b262c9e01f8f962a38785d"
+  },
+  {
+   "path": "p13f/9d88747c/step3/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "3be45e7d28ac3d9aaa9051b4ffc3ee80650e8001ed0a373384985543118ede9f"
+  },
+  {
+   "path": "p13f/9d88747c/step3/startup-logcat.txt",
+   "bytes": 2838,
+   "sha256": "7abea609d69e38f8556a26a4a71d62188b9e20ac056f62a54acd3b1c5a4f8a12"
+  },
+  {
+   "path": "p13f/9d88747c/step3/summary.json",
+   "bytes": 21220,
+   "sha256": "8af6a59366e23e97f2841a4656bdd458a304a32d85ffccaf0278e9bde5a54217"
+  },
+  {
+   "path": "p13f/9d88747c/step3/thread-priorities-before.txt",
+   "bytes": 1430,
+   "sha256": "e12c392e2ce95fe0b7d03ccd7756a7fcf495091985bd82fd4f79b1a97470809d"
+  },
+  {
+   "path": "p13f/9d88747c/step3-device.out",
+   "bytes": 524,
+   "sha256": "b78754b0377c5ca65d2d2325ea105d0209f22b22c003893095bced933bf6266b"
+  },
+  {
+   "path": "p13f/9d88747c/step3-gc.json",
+   "bytes": 6653,
+   "sha256": "688581699b82aa6048e3530f7f6ab587abf823924c640d92abb3f665a58d8ab4"
+  },
+  {
+   "path": "p13f/9d88747c/step3-p10.out",
+   "bytes": 1699,
+   "sha256": "0e7e5e58616e650e26c8e621af91427cc884a8f3776c02a13f0ca9288ff3ff07"
+  },
+  {
+   "path": "p13f/9d88747c/step3-readings.json",
+   "bytes": 49638,
+   "sha256": "056243b77d7ddaa3f8406e4c7707b59bdb1d3f21792851ea4805f43d7c342a55"
+  },
+  {
+   "path": "p13f/9d88747c/step3-started.txt",
+   "bytes": 21,
+   "sha256": "e6a60e9e6c300a0b3c7c2e1c99d67baeaf3212c5568b13c89fbac0229cb42ace"
+  },
+  {
+   "path": "p13f/9d88747c/step3-summary.out",
+   "bytes": 944,
+   "sha256": "8d88ba5f88943a1c06b26fda6d3ab9f35aa7a9f937db3eb6f936d330c5c0dd7f"
+  },
+  {
+   "path": "p13f/9d88747c/step3-switches.json",
+   "bytes": 45970,
+   "sha256": "cd6a5f62448c591e280c6d3e6db28858545acf36508ab5da5b3271aa0e43e03a"
+  },
+  {
+   "path": "p13f/9d88747c/step3-switches.out",
+   "bytes": 3838,
+   "sha256": "afd81936da3c203931af05486fb130a108d789098ff58c1f9285a8af3883f78b"
+  },
+  {
+   "path": "p13f/9d88747c/work/heap.json",
+   "bytes": 46984,
+   "sha256": "713835a589be58f76f11122b7ffd81a22f9a56811ec31893e98e751306dba235"
+  },
+  {
+   "path": "p13f/9d88747c/work/p13e-gc.json",
+   "bytes": 31310,
+   "sha256": "c912c7f02d0b32bf6447c649feec14e115ff811408501243a459b8cf26ef3bec"
+  },
+  {
+   "path": "p13f/9d88747c/work/RaceServer.kt.bak",
+   "bytes": 29669,
+   "sha256": "8a213c1a7d20fb96394717d7b69a96572c16ed91b9896efe521e25d87fca8317"
+  },
+  {
+   "path": "p13f/9d88747c/work/summ1.py",
+   "bytes": 1683,
+   "sha256": "1e9e5e971cc7c6910f0474fa81803cef3c533eca5a52bc39365d7e3128ba7926"
+  },
+  {
+   "path": "p13f/9d88747c/work/summload.py",
+   "bytes": 2094,
+   "sha256": "a2c13f8b0f4dd68bffa8b8cc5dbdf2d142a0cfe55195e19d2a2c0466a5a7378f"
+  },
+  {
+   "path": "p13f/device-at-end-9d88747c.txt",
+   "bytes": 170,
+   "sha256": "1214921a40847c6351d15a2d59735b5a01c579f12d74e5eb0bbf9d489d40f738"
+  },
+  {
+   "path": "p13f/device-at-start-9d88747c.txt",
+   "bytes": 170,
+   "sha256": "2e3932bb513d07b051c17bb5921df28efd891901cafa594bb8f8ebe607daf86b"
+  },
+  {
+   "path": "p13f/device-at-start.txt",
+   "bytes": 170,
+   "sha256": "3b89d210388901853537ca17f7eb823e1b8fba4c19f5d68f7b6fde3c22cd6c20"
+  }
+ ],
+ "apks": {
+  "p13f/9d88747c/p13f.apk": "step 3 run and the lobby after-arm (bb49e716, arms off; only classes4.dex differs from p13e.apk)",
+  "p13e/p13e.apk": "the before-arm: heap dumps and lobby load (5df2a49b, deathride/main code; bound by P13e's manifest)"
+ },
+ "rule": "Operator ruling 2026-10-07: summaries in git, raw files outside, bound here by SHA-256. No committed file over 512 KiB; no .gz, trace, hprof, APK or logcat in git."
+}

@@ -1,0 +1,20 @@
+{
+  "device": "10.0.0.139:5555 (AFTKM, Android 11)",
+  "ownerPackage": "dev.deathride.tv",
+  "atStart": {
+    "utcApprox": "2026-10-07T02:23Z",
+    "resumed": "dev.deathride.tv/.MainActivity task t330",
+    "pid": 14337
+  },
+  "beforeEachRun": {
+    "fix-run1": "mResumedActivity: ActivityRecord{f15d94f u0 dev.deathride.tv/.MainActivity t330}",
+    "fix-run2": "mResumedActivity: ActivityRecord{fa5b13a u0 dev.deathride.perf/dev.deathride.tv.MainActivity t336}",
+    "prep-run1": "mResumedActivity: ActivityRecord{bc84649 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t337}",
+    "prep-run2": "mResumedActivity: ActivityRecord{e42d81 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t338}",
+    "final-run1": "mResumedActivity: ActivityRecord{23b1b8 u0 dev.deathride.tv/.MainActivity t330}"
+  },
+  "afterRuns": "mResumedActivity: ActivityRecord{a1278e6 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t339}\n14337\n15601",
+  "afterRestore": "mResumedActivity: ActivityRecord{23b1b8 u0 dev.deathride.tv/.MainActivity t330}\n14337\n    versionName=0.1-spike\n    lastUpdateTime=2026-10-06 23:44:23",
+  "afterFinalRestore": "mResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}\n14337\n    lastUpdateTime=2026-10-06 23:44:23",
+  "note": "perf-device installs and launches only dev.deathride.perf (aapt identity check); dev.deathride.tv was never installed over (lastUpdateTime 2026-10-06 23:44:23, before this session). After each block of runs dev.deathride.perf was force-stopped and dev.deathride.tv relaunched to the front; its process (14337) and task (t330) survived throughout."
+}

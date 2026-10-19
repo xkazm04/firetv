@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-08T11:09:08.4165531Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "node#9",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  101
+                         },
+                         {
+                             "Name":  "git#1",
+                             "IDProcess":  38964,
+                             "PercentProcessorTime":  101
+                         },
+                         {
+                             "Name":  "svchost#89",
+                             "IDProcess":  3080,
+                             "PercentProcessorTime":  101
+                         },
+                         {
+                             "Name":  "com.docker.backend#1",
+                             "IDProcess":  16696,
+                             "PercentProcessorTime":  101
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  53
+                         },
+                         {
+                             "Name":  "personas-desktop",
+                             "IDProcess":  10004,
+                             "PercentProcessorTime":  24
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  28956,
+                             "PercentProcessorTime":  19
+                         },
+                         {
+                             "Name":  "msedgewebview2#18",
+                             "IDProcess":  37388,
+                             "PercentProcessorTime":  9
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  9
+                         },
+                         {
+                             "Name":  "claude#1",
+                             "IDProcess":  43552,
+                             "PercentProcessorTime":  4
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                26,
+                                26,
+                                36
+                            ]
+}

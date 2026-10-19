@@ -1,0 +1,401 @@
+{
+  "arm": "muted-run2",
+  "apkSha256": "bf6a17bf5bf15b91ec2af52d480cc9cc28ab52f011043dae40da0ebe5eb1856b",
+  "sourceSha256": "c83281b519027412e2b7f812fa6d4f9a759c0073b686c6cf08e0ed1c71478eb3",
+  "durationSeconds": 360.1013468,
+  "rounds": 6,
+  "functionalPass": true,
+  "error": null,
+  "hostCpu": {
+    "host-cpu-start.json": {
+      "utc": "2026-10-07T06:54:02.1018431Z",
+      "totalPercentSamples": [
+        59,
+        98,
+        85
+      ],
+      "logicalProcessors": 16,
+      "top": [
+        [
+          "node#27",
+          112
+        ],
+        [
+          "rustc",
+          103
+        ],
+        [
+          "rustc#1",
+          95
+        ],
+        [
+          "node#30",
+          90
+        ],
+        [
+          "SearchIndexer",
+          86
+        ]
+      ]
+    },
+    "host-cpu-end.json": {
+      "utc": "2026-10-07T07:00:21.3360705Z",
+      "totalPercentSamples": [
+        100,
+        100,
+        100
+      ],
+      "logicalProcessors": 16,
+      "top": [
+        [
+          "chrome-headless-shell#1",
+          94
+        ],
+        [
+          "svchost#72",
+          94
+        ],
+        [
+          "node#44",
+          85
+        ],
+        [
+          "SearchIndexer",
+          85
+        ],
+        [
+          "rustfmt",
+          76
+        ]
+      ]
+    }
+  },
+  "readings": [
+    {
+      "reading": "activeP95WorstMs",
+      "value": 19.451152999999998,
+      "limit": "<= 16.7 ms",
+      "status": "fail",
+      "basis": "I2 frame objective (original ambition); worst 10 s active window"
+    },
+    {
+      "reading": "activeP95WorstVsG1Ms",
+      "value": 19.451152999999998,
+      "limit": "<= 21.60 ms (G1, comparison only)",
+      "status": "pass",
+      "basis": "I2 comparison with G1"
+    },
+    {
+      "reading": "activeMaxMs",
+      "value": 34.912769000000004,
+      "limit": "<= 33 ms",
+      "status": "fail",
+      "basis": "I2 active maximum target"
+    },
+    {
+      "reading": "activeP50RangeMs",
+      "value": [
+        16.666,
+        16.698692
+      ],
+      "limit": "16-18 ms",
+      "status": "pass",
+      "basis": "I2 median objective"
+    },
+    {
+      "reading": "pssRangeMiB",
+      "value": [
+        171.146484375,
+        200.5205078125
+      ],
+      "limit": "< 192 MiB",
+      "status": "fail",
+      "basis": "I2 whole-process PSS (dumpsys meminfo --local)"
+    },
+    {
+      "reading": "warmPssGrowthMiB",
+      "value": -1.9375,
+      "limit": "<= 8 MiB",
+      "status": "pass",
+      "basis": "I2 first/last three warm medians"
+    },
+    {
+      "reading": "rejectedInputs",
+      "value": [
+        0,
+        0
+      ],
+      "limit": "0 per seat",
+      "status": "pass",
+      "basis": "I2 zero-rejection gate"
+    },
+    {
+      "reading": "inputStream",
+      "value": {
+        "hz": [
+          29.999887798253578,
+          29.999887798253578
+        ],
+        "pumpStalls": 0
+      },
+      "limit": "> 29 Hz per seat, no host pump stall",
+      "status": "pass",
+      "basis": "I2 required input throughput"
+    },
+    {
+      "reading": "durationSeconds",
+      "value": 360.1013468,
+      "limit": ">= 900 s for a soak",
+      "status": "fail",
+      "basis": "I2 sustained run"
+    }
+  ],
+  "sampling": {
+    "samples": 8,
+    "withSamplerTiming": 8,
+    "sampleDurationMs": [
+      244.312,
+      1273.75
+    ],
+    "requestToStartMs": [
+      0.167,
+      1.544
+    ],
+    "pumpStalls": [],
+    "heartbeatStalls": 0,
+    "memorySamplerError": null
+  },
+  "profileRows": 23080,
+  "profileGaps": 0,
+  "alignment": {
+    "anchors": 18,
+    "matched": 13,
+    "spreadMs": 0.983,
+    "limit": "Logcat stamps are milliseconds; the anchor is the request line minus its totalMs."
+  },
+  "activePhaseMediansMs": {
+    "requests": 0.059,
+    "prepare": 0.004,
+    "simulation": 1.888,
+    "audio": 0.194,
+    "telemetry": 0.007,
+    "camera": 0.098,
+    "scenery": 1.041,
+    "cars": 3.311,
+    "hud": 1.626,
+    "tail": 0.016,
+    "flushSwap": 8.068
+  },
+  "attribution": {
+    "over16.7Ms": {
+      "frames": 8701,
+      "ofActive": 19272,
+      "byDominantCategory": {
+        "flushSwap": 4257,
+        "cars": 1785,
+        "simulation": 1571,
+        "hud": 659,
+        "telemetry": 275,
+        "scenery": 137,
+        "requests": 10,
+        "audio": 7
+      },
+      "duringGc": 147,
+      "offCpuOver8Ms": 644,
+      "byDominantCategoryOutsideGc": {
+        "flushSwap": 4225,
+        "cars": 1746,
+        "simulation": 1534,
+        "hud": 639,
+        "telemetry": 274,
+        "scenery": 119,
+        "requests": 10,
+        "audio": 7
+      },
+      "meanCategoryMs": {
+        "requests": 0.067,
+        "prepare": 0.005,
+        "simulation": 1.974,
+        "audio": 0.211,
+        "telemetry": 0.133,
+        "camera": 0.103,
+        "scenery": 1.121,
+        "cars": 3.463,
+        "hud": 1.769,
+        "tail": 0.017,
+        "flushSwap": 8.471
+      }
+    },
+    "over20Ms": {
+      "frames": 137,
+      "ofActive": 19272,
+      "byDominantCategory": {
+        "cars": 54,
+        "flushSwap": 37,
+        "scenery": 24,
+        "hud": 18,
+        "simulation": 4
+      },
+      "duringGc": 24,
+      "offCpuOver8Ms": 94,
+      "byDominantCategoryOutsideGc": {
+        "cars": 43,
+        "flushSwap": 36,
+        "scenery": 20,
+        "hud": 12,
+        "simulation": 2
+      },
+      "meanCategoryMs": {
+        "requests": 0.067,
+        "prepare": 0.008,
+        "simulation": 2.514,
+        "audio": 0.233,
+        "telemetry": 0.38,
+        "camera": 0.126,
+        "scenery": 2.871,
+        "cars": 6.366,
+        "hud": 3.482,
+        "tail": 0.02,
+        "flushSwap": 6.802
+      }
+    },
+    "over33Ms": {
+      "frames": 1,
+      "ofActive": 19272,
+      "byDominantCategory": {
+        "hud": 1
+      },
+      "duringGc": 0,
+      "offCpuOver8Ms": 1,
+      "byDominantCategoryOutsideGc": {
+        "hud": 1
+      },
+      "meanCategoryMs": {
+        "requests": 0.073,
+        "prepare": 0.004,
+        "simulation": 10.738,
+        "audio": 0.46,
+        "telemetry": 0.011,
+        "camera": 0.139,
+        "scenery": 1.052,
+        "cars": 5.918,
+        "hud": 14.813,
+        "tail": 0.018,
+        "flushSwap": 1.688
+      }
+    }
+  },
+  "gc": {
+    "lines": 50,
+    "totalMs": [
+      100.122,
+      347.887
+    ],
+    "activeFramesOverlappingGc": 264,
+    "waits": [
+      "27273 27301 I .deathride.per: WaitForGcToComplete blocked ProfileSaver on HeapTrim for 37.995ms"
+    ]
+  },
+  "runtimeAllocation": {
+    "bytesAllocatedPerSecond": 8592832.151906589,
+    "gcCount": 116,
+    "gcTimeMs": 8513,
+    "blockingGcCount": 0,
+    "seconds": 341.0004632,
+    "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+  },
+  "deviceCounters": {
+    "seconds": 394.86,
+    "cpuPercentOfOneCore": {
+      "app GLThread": 60.98,
+      "app DefaultDispatcher (link)": 31.26,
+      "system_server NetworkStats": 8.47,
+      "app other threads": 4.67,
+      "app GC (HeapTaskDaemon)": 2.12,
+      "app JIT": 1.01,
+      "app audio worker": 0.76,
+      "app link threads": 0.06,
+      "audioserver AudioOut_D": 0.0,
+      "audioserver AudioOut_15": 0.0,
+      "audio HAL writer": 0.0
+    },
+    "wlan0BytesPerSecond": {
+      "rx": 20712,
+      "tx": 489253
+    },
+    "limit": "Clock ticks of 10 ms between two reads around the probe (app threads that exited during the run are missing)."
+  },
+  "profileSaves": {
+    "saves": 23,
+    "framesOver33Ms": 23,
+    "framesOver100Ms": 23,
+    "inActiveFrames": 0,
+    "saveMs": [
+      45.245,
+      99.823
+    ]
+  },
+  "activeFramesOver33Ms": [
+    {
+      "startSeconds": 2593231.4459,
+      "intervalMs": 34.913,
+      "workMs": 33.947,
+      "cpuMs": 23.375,
+      "offCpuMs": 10.572,
+      "dominant": "hud",
+      "categoryMs": {
+        "requests": 0.073,
+        "prepare": 0.004,
+        "simulation": 10.738,
+        "audio": 0.46,
+        "telemetry": 0.011,
+        "camera": 0.139,
+        "scenery": 1.052,
+        "cars": 5.918,
+        "hud": 14.813,
+        "tail": 0.018,
+        "flushSwap": 1.688
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 27
+    }
+  ],
+  "activeWindows": {
+    "count": 235,
+    "worstP95Ms": 19.451152999999998,
+    "maxMs": 34.912769000000004,
+    "p50RangeMs": [
+      16.666,
+      16.698692
+    ],
+    "stepWorstP95Ms": 4.853231
+  },
+  "sixLiveWindows": {
+    "count": 65,
+    "worstP95Ms": 19.451152999999998,
+    "maxMs": 34.912769000000004,
+    "p50RangeMs": [
+      16.668846000000002,
+      16.687231
+    ],
+    "stepWorstP95Ms": 4.853231
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 10803,
+      "accepted": 10803,
+      "rejected": 0,
+      "hz": 29.999887798253578
+    },
+    {
+      "slot": 1,
+      "sent": 10803,
+      "accepted": 10803,
+      "rejected": 0,
+      "hz": 29.999887798253578
+    }
+  ],
+  "limits": "Profiled arm (/profile every 10 s). Off-CPU time (work - thread CPU) says the render thread was not running, not why: a scheduler trace separates runnable (preempted) from sleeping (blocked). GC overlap is time overlap, not cause. Not optical latency or owner feel."
+}

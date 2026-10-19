@@ -1,0 +1,30 @@
+{
+ "start": {
+  "source": "first device check of the session, before any install or launch",
+  "resumed": "ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}",
+  "task": "#330 sz=4",
+  "tvPid": 14337,
+  "perfPid": null
+ },
+ "end": {
+  "utc": "2026-10-08T14:26:16Z",
+  "restore": "am start -n dev.deathride.tv/.MainActivity -> \"intent has been delivered to currently running top-most instance\"",
+  "lines": [
+   "    mResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}",
+   "  ResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}",
+   "tv-pid=14337",
+   "perf-pid=",
+   "    versionName=0.1-spike",
+   "    lastUpdateTime=2026-10-06 23:44:23",
+   "Output thread 0xea91a800, name AudioOut_D, tid 683, type 0 (MIXER):",
+   "  Standby: yes",
+   "Output thread 0xea6a3540, name AudioOut_15, tid 689, type 0 (MIXER):",
+   "  Standby: yes",
+   "Exclusive MMAP Endpoints: 0",
+   "Shared Endpoints: 0",
+   "    * Task{37b1d63 #330 visible=true type=standard mode=fullscreen translucent=false A=10272:dev.deathride.tv U=0 StackId=330 sz=4}",
+   "      mBounds=Rect(0, 0 - 0, 0)"
+  ]
+ },
+ "note": "dev.deathride.perf force-stopped at the end; both mixers in standby and no AAudio endpoint open with dev.deathride.tv in front. tools/node_modules/ws (8.18.0, copied for the probe runs) removed."
+}

@@ -1,0 +1,906 @@
+{
+ "rule": "Fixed before the first P17 run. Two profiled 360 s runs of deathride/main plus the perf-only schedstat columns (60456219), audioArm=muted, by P14's procedure (perf-device.py --install --profile --seconds 360 --extra audioArm=muted), with perf-p17-present.py polling SurfaceFlinger every 1.5 s from pairing to the probe's end. Host settle (settle.ps1, unchanged) is tried first with at most two 900 s waits; an unsettled run is kept as research with host CPU at its start and end. Nothing is graded: no arm, no verdict, no I2 pass or fail is claimed from these runs. A run is void, and rerun once, when it fails functionally or its APK is not the built one; rejected inputs are recorded, not voiding. Readings per run: active frames over 16.7, 20 and 33 ms; worst active-window p95, pooled active p95, pooled and window medians, active max; PSS min and max and the meminfo breakdown of the peak and lowest samples; GC count, GC time and allocation rate (ART runtime stats) and logged GCs; the device reclaim and swap counters and the CPU of kswapd0 around the run; the render thread's time off the CPU over active intervals, split into runnable (waiting for a CPU) and asleep; each slow frame's dominant phase (P11). Present: the display period is read from SurfaceFlinger (and dumpsys display); each SF frame is joined to the profile row whose render began last before its queue time. Row r's interval (start r-1 to start r) is frame r-1's, and its present interval is present(r-1) - present(r-2). A slow interval (> 16.7 ms) is class (a), jitter, when its present interval is under 1.5 periods (presented on the next refresh), and class (b), a missed refresh, at 1.5 periods or more. Every present interval of 1.5 periods or more is a class (b) frame whatever its render interval. Windows: the probe's active windows (phase race, raceSeconds >= 10), each rebuilt from the profile rows on the device clock (the frames link's Distribution held at the read) and checked against the window's own count and p95; per window the render-interval p95, the present-interval p95, and the p95 of the window's on-time frames only (class (b) intervals removed). Cause per active frame over 20 ms and per class (b) frame: the interval minus its active medians gives the excess of running (schedRunMs), runnable wait (schedWaitMs) and sleep (the rest); the largest excess names it. running -> \"running:<dominant phase>\"; runnable -> \"preempted\" (CPU held by another thread; who, only in the trace); sleep -> \"sleep:gc\" when a logged GC overlaps the interval, else \"sleep:dequeue\" when the clear plus swap gap's excess is at least half the sleep excess (buffer back-pressure), else \"sleep:other\". A frame with no schedstat or no previous row is \"unattributed\". Load beside it: a /stats build (window uptimeMs) or a /profile read (its end row) inside the interval.",
+ "apk": "be571718543b3981f76f13a60d4697e69a94437f376bfaad03675b994004fe66",
+ "runs": [
+  {
+   "run": "muted-run1",
+   "apkIsBuilt": true,
+   "durationSeconds": 360.2220308,
+   "functionalPass": true,
+   "rejectedInputs": [
+    0,
+    0
+   ],
+   "frames": {
+    "active": 19279,
+    "over16_7": 8832,
+    "over20": 38,
+    "over33": 0,
+    "p11Over20": 38,
+    "p11Over33": 0
+   },
+   "activeWindows": {
+    "count": 240,
+    "worstP95Ms": 19.043616,
+    "maxMs": 27.671615,
+    "p50RangeMs": [
+     16.668229999999998,
+     16.729923
+    ]
+   },
+   "pooledActive": {
+    "p50Ms": 16.679,
+    "p95Ms": 18.175,
+    "maxMs": 27.672
+   },
+   "periodMs": 16.68335,
+   "present": {
+    "source": "dumpsys SurfaceFlinger --latency \"SurfaceView - dev.deathride.perf/dev.deathride.tv.MainActivity#0\"",
+    "pollSeconds": 1.5,
+    "dumps": 269,
+    "gaps": 1,
+    "framesSeen": 24993,
+    "framesJoined": 23624,
+    "joinChecksFailed": 0,
+    "refreshPeriodsNs": [
+     16683350
+    ],
+    "activeIntervalsWithPresent": 19274,
+    "activeIntervals": 19279,
+    "activePresentIntervalsByPeriods": {
+     "0": 94,
+     "1": 19090,
+     "2": 90
+    },
+    "activePresentIntervalsUnderHalfPeriod": 94,
+    "gpuMsP50P95": [
+     6.649,
+     11.324
+    ],
+    "queueToPresentMsP50P95": [
+     17.075,
+     25.178
+    ],
+    "presentGridResidualNsMax": 0,
+    "pollerCpuPercentOfOneCore": 3.57,
+    "surfaceflingerCpuPercentOfOneCore": 15.1
+   },
+   "vsyncLag": {
+    "p5Ms": 0.91,
+    "p50Ms": 9.728,
+    "p95Ms": 15.786,
+    "driftMsPerSecond": -0.1535,
+    "renderVsPresentGridPpm": -153.5,
+    "blockMedianMs": [
+     [
+      0.0,
+      9.4
+     ],
+     [
+      11.7,
+      11.98
+     ],
+     [
+      22.1,
+      10.95
+     ],
+     [
+      32.1,
+      8.78
+     ],
+     [
+      42.2,
+      15.2
+     ],
+     [
+      52.2,
+      13.46
+     ],
+     [
+      62.2,
+      11.22
+     ],
+     [
+      72.2,
+      8.98
+     ],
+     [
+      82.2,
+      6.48
+     ],
+     [
+      92.3,
+      4.02
+     ],
+     [
+      102.3,
+      2.29
+     ],
+     [
+      112.4,
+      15.15
+     ],
+     [
+      122.4,
+      13.75
+     ],
+     [
+      132.4,
+      11.47
+     ],
+     [
+      142.4,
+      9.22
+     ],
+     [
+      152.4,
+      6.67
+     ],
+     [
+      162.5,
+      4.47
+     ],
+     [
+      172.5,
+      2.23
+     ],
+     [
+      182.6,
+      15.18
+     ],
+     [
+      192.6,
+      14.08
+     ],
+     [
+      202.6,
+      11.53
+     ],
+     [
+      212.6,
+      9.52
+     ],
+     [
+      222.6,
+      8.78
+     ],
+     [
+      232.6,
+      10.81
+     ],
+     [
+      242.8,
+      2.43
+     ],
+     [
+      252.8,
+      1.9
+     ],
+     [
+      262.8,
+      14.28
+     ],
+     [
+      272.8,
+      12.24
+     ],
+     [
+      282.8,
+      9.74
+     ],
+     [
+      292.8,
+      7.6
+     ],
+     [
+      302.8,
+      9.8
+     ],
+     [
+      312.9,
+      2.72
+     ],
+     [
+      322.9,
+      1.97
+     ],
+     [
+      332.9,
+      14.62
+     ],
+     [
+      342.9,
+      12.56
+     ],
+     [
+      352.9,
+      9.99
+     ],
+     [
+      362.9,
+      7.65
+     ],
+     [
+      373.0,
+      5.38
+     ],
+     [
+      383.0,
+      3.24
+     ]
+    ],
+    "onTimeIntervalP95Ms": 18.175,
+    "onTimeIntervalP50Ms": 16.68,
+    "onTimeIntervalsOver16_7": 8806,
+    "onTimeIntervals": 19184,
+    "limit": "The phase is the median of SF present times modulo the period; position is a render start's place in its refresh. A negative drift means renders start earlier in each refresh as time goes on."
+   },
+   "windowCheck": {
+    "countMatches": 235,
+    "p95Matches": 235,
+    "windows": 240
+   },
+   "offCpu": {
+    "activeSeconds": 321.6,
+    "workMinusCpuMsPerSecond": 38.71,
+    "runnableMsPerSecond": 15.79,
+    "sleepMsPerSecond": 443.23,
+    "runningMsPerSecond": 540.99,
+    "medianIntervalSplitMs": [
+     8.926,
+     0.125,
+     7.488
+    ],
+    "intervalsWithSched": 19279
+   },
+   "gc": {
+    "gcCount": 35,
+    "gcTimeMs": 2510,
+    "blockingGcCount": 0,
+    "allocMBPerSecond": 2.589,
+    "loggedGcs": 17,
+    "loggedGcKinds": {
+     "Background young concurrent copying": 3,
+     "Background concurrent copying": 14
+    },
+    "activeIntervalsOverlappingLoggedGc": 0.0039
+   },
+   "statsBuildShareOfActiveIntervals": 0.0151,
+   "deviceMemory": {
+    "seconds": 440.1,
+    "kswapdCpuPercentOfOneCore": 1.46,
+    "perSecond": {
+     "workingset_refault_anon": 54.6,
+     "workingset_refault_file": 195.2,
+     "pswpin": 54.6,
+     "pswpout": 130.6,
+     "allocstall_dma32": 0.0,
+     "allocstall_normal": 0.0,
+     "allocstall_movable": 0.5,
+     "pgmajfault": 59.0,
+     "pgsteal_kswapd": 393.4,
+     "pgsteal_direct": 25.8,
+     "pgscan_kswapd": 635.8,
+     "pgscan_direct": 46.2,
+     "pgscan_direct_throttle": 0.0,
+     "pgscan_anon": 353.2,
+     "pgscan_file": 328.8,
+     "pgsteal_anon": 134.8,
+     "pgsteal_file": 284.5
+    },
+    "memAvailableMiB": [
+     367.3,
+     272.0
+    ],
+    "memFreeMiB": [
+     56.0,
+     48.6
+    ]
+   },
+   "pssRangeMiB": [
+    159.93359375,
+    172.134765625
+   ],
+   "pssPeak": {
+    "second": 0,
+    "breakdownMiB": {
+     "Java Heap": 66.67,
+     "Native Heap": 9.57,
+     "Code": 26.37,
+     "Stack": 1.02,
+     "Graphics": 51.95,
+     "Private Other": 7.57,
+     "System": 8.98,
+     "pss Dalvik Heap": 60.73,
+     "pss Dalvik Other": 3.8,
+     "pss GL mtrack": 51.95,
+     "pss Native Heap": 9.65,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.36,
+     "TOTAL PSS": 172.13
+    },
+    "heapUsedMBNearest": 62.4
+   },
+   "over20": {
+    "frames": 38,
+    "byCause": {
+     "sleep:dequeue": 12,
+     "preempted": 11,
+     "running:hud": 5,
+     "running:simulation": 4,
+     "running:cars": 3,
+     "running:flushSwap": 3
+    },
+    "byDominantPhase": {
+     "flushSwap": 23,
+     "hud": 5,
+     "cars": 4,
+     "simulation": 4,
+     "scenery": 2
+    },
+    "byClass": {
+     "a": 38
+    },
+    "withLoggedGc": 4,
+    "withStatsBuild": 3,
+    "withProfileRead": 0,
+    "unattributed": 0,
+    "meanMs": {
+     "intervalMs": 21.803,
+     "workMs": 15.296,
+     "threadCpuMs": 10.276,
+     "offCpuMs": 5.02,
+     "runningMs": 11.101,
+     "runnableMs": 2.349,
+     "sleepMs": 8.353,
+     "flushSwapMs": 10.722
+    }
+   },
+   "classB": {
+    "frames": 90,
+    "byCause": {
+     "sleep:dequeue": 28,
+     "running:simulation": 23,
+     "running:cars": 19,
+     "sleep:other": 8,
+     "running:telemetry": 6,
+     "preempted": 4,
+     "running:hud": 2
+    },
+    "byDominantPhase": {
+     "simulation": 26,
+     "flushSwap": 25,
+     "cars": 24,
+     "telemetry": 11,
+     "hud": 4
+    },
+    "byClass": {
+     "b": 90
+    },
+    "withLoggedGc": 3,
+    "withStatsBuild": 0,
+    "withProfileRead": 1,
+    "unattributed": 0,
+    "meanMs": {
+     "intervalMs": 16.612,
+     "workMs": 9.036,
+     "threadCpuMs": 8.693,
+     "offCpuMs": 0.344,
+     "runningMs": 9.412,
+     "runnableMs": 0.178,
+     "sleepMs": 7.022,
+     "flushSwapMs": 8.243
+    }
+   },
+   "worst3Windows": [
+    {
+     "second": 194.08,
+     "raceSeconds": 57.3,
+     "frames": 599,
+     "statsCount": 599,
+     "renderP95Ms": 18.645,
+     "statsP95Ms": 18.645,
+     "presentP95Ms": 16.683,
+     "presentKnown": 599,
+     "renderMaxMs": 25.227,
+     "over16_7": 308,
+     "classA": 307,
+     "classB": 1,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 18.64,
+     "aloneOverBar": true,
+     "worst3": true
+    },
+    {
+     "second": 195.08,
+     "raceSeconds": 58.3,
+     "frames": 599,
+     "statsCount": 599,
+     "renderP95Ms": 18.832,
+     "statsP95Ms": 18.832,
+     "presentP95Ms": 16.683,
+     "presentKnown": 599,
+     "renderMaxMs": 25.227,
+     "over16_7": 308,
+     "classA": 307,
+     "classB": 1,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 18.821,
+     "aloneOverBar": true,
+     "worst3": true
+    },
+    {
+     "second": 196.08,
+     "raceSeconds": 59.3,
+     "frames": 600,
+     "statsCount": 600,
+     "renderP95Ms": 19.044,
+     "statsP95Ms": 19.044,
+     "presentP95Ms": 16.683,
+     "presentKnown": 600,
+     "renderMaxMs": 25.227,
+     "over16_7": 305,
+     "classA": 304,
+     "classB": 1,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 19.057,
+     "aloneOverBar": true,
+     "worst3": true
+    }
+   ],
+   "windowsAloneOverBar": 240,
+   "windowsCount": 240
+  },
+  {
+   "run": "muted-run2",
+   "apkIsBuilt": true,
+   "durationSeconds": 360.2121441,
+   "functionalPass": false,
+   "rejectedInputs": [
+    4,
+    5
+   ],
+   "frames": {
+    "active": 19269,
+    "over16_7": 8867,
+    "over20": 77,
+    "over33": 0,
+    "p11Over20": 77,
+    "p11Over33": 0
+   },
+   "activeWindows": {
+    "count": 248,
+    "worstP95Ms": 19.387692,
+    "maxMs": 27.141538,
+    "p50RangeMs": [
+     16.607384999999997,
+     16.711153
+    ]
+   },
+   "pooledActive": {
+    "p50Ms": 16.68,
+    "p95Ms": 18.275,
+    "maxMs": 27.142
+   },
+   "periodMs": 16.68335,
+   "present": {
+    "source": "dumpsys SurfaceFlinger --latency \"SurfaceView - dev.deathride.perf/dev.deathride.tv.MainActivity#0\"",
+    "pollSeconds": 1.5,
+    "dumps": 268,
+    "gaps": 0,
+    "framesSeen": 24816,
+    "framesJoined": 23337,
+    "joinChecksFailed": 0,
+    "refreshPeriodsNs": [
+     16683350
+    ],
+    "activeIntervalsWithPresent": 19269,
+    "activeIntervals": 19269,
+    "activePresentIntervalsByPeriods": {
+     "0": 85,
+     "1": 19102,
+     "2": 82
+    },
+    "activePresentIntervalsUnderHalfPeriod": 85,
+    "gpuMsP50P95": [
+     6.216,
+     11.802
+    ],
+    "queueToPresentMsP50P95": [
+     16.758,
+     25.352
+    ],
+    "presentGridResidualNsMax": 0,
+    "pollerCpuPercentOfOneCore": 3.57,
+    "surfaceflingerCpuPercentOfOneCore": 14.8
+   },
+   "vsyncLag": {
+    "p5Ms": 0.701,
+    "p50Ms": 9.327,
+    "p95Ms": 15.986,
+    "driftMsPerSecond": -0.1098,
+    "renderVsPresentGridPpm": -109.8,
+    "blockMedianMs": [
+     [
+      0.0,
+      6.11
+     ],
+     [
+      12.0,
+      14.49
+     ],
+     [
+      22.3,
+      12.74
+     ],
+     [
+      32.3,
+      10.36
+     ],
+     [
+      42.4,
+      8.29
+     ],
+     [
+      52.4,
+      6.0
+     ],
+     [
+      62.5,
+      3.4
+     ],
+     [
+      72.5,
+      1.63
+     ],
+     [
+      82.5,
+      15.12
+     ],
+     [
+      92.5,
+      12.89
+     ],
+     [
+      102.7,
+      1.62
+     ],
+     [
+      112.7,
+      15.34
+     ],
+     [
+      122.7,
+      13.55
+     ],
+     [
+      132.7,
+      10.64
+     ],
+     [
+      142.7,
+      8.71
+     ],
+     [
+      152.7,
+      15.52
+     ],
+     [
+      162.7,
+      13.14
+     ],
+     [
+      172.8,
+      10.82
+     ],
+     [
+      182.8,
+      8.8
+     ],
+     [
+      192.8,
+      13.02
+     ],
+     [
+      202.9,
+      10.55
+     ],
+     [
+      212.9,
+      1.76
+     ],
+     [
+      222.9,
+      15.23
+     ],
+     [
+      232.9,
+      13.31
+     ],
+     [
+      243.0,
+      11.59
+     ],
+     [
+      253.0,
+      9.16
+     ],
+     [
+      263.0,
+      6.69
+     ],
+     [
+      273.1,
+      4.62
+     ],
+     [
+      283.1,
+      2.07
+     ],
+     [
+      293.1,
+      4.9
+     ],
+     [
+      303.2,
+      13.61
+     ],
+     [
+      313.2,
+      11.97
+     ],
+     [
+      323.2,
+      9.45
+     ],
+     [
+      333.2,
+      7.2
+     ],
+     [
+      343.2,
+      4.59
+     ],
+     [
+      353.2,
+      2.41
+     ],
+     [
+      363.3,
+      3.25
+     ],
+     [
+      373.4,
+      14.14
+     ]
+    ],
+    "onTimeIntervalP95Ms": 18.275,
+    "onTimeIntervalP50Ms": 16.681,
+    "onTimeIntervalsOver16_7": 8841,
+    "onTimeIntervals": 19187,
+    "limit": "The phase is the median of SF present times modulo the period; position is a render start's place in its refresh. A negative drift means renders start earlier in each refresh as time goes on."
+   },
+   "windowCheck": {
+    "countMatches": 244,
+    "p95Matches": 245,
+    "windows": 248
+   },
+   "offCpu": {
+    "activeSeconds": 321.4,
+    "workMinusCpuMsPerSecond": 105.56,
+    "runnableMsPerSecond": 13.63,
+    "sleepMsPerSecond": 422.16,
+    "runningMsPerSecond": 564.21,
+    "medianIntervalSplitMs": [
+     9.324,
+     0.114,
+     7.137
+    ],
+    "intervalsWithSched": 19269
+   },
+   "gc": {
+    "gcCount": 38,
+    "gcTimeMs": 2209,
+    "blockingGcCount": 0,
+    "allocMBPerSecond": 2.587,
+    "loggedGcs": 7,
+    "loggedGcKinds": {
+     "Background young concurrent copying": 2,
+     "Background concurrent copying": 5
+    },
+    "activeIntervalsOverlappingLoggedGc": 0.0014
+   },
+   "statsBuildShareOfActiveIntervals": 0.0157,
+   "deviceMemory": {
+    "seconds": 442.4,
+    "kswapdCpuPercentOfOneCore": 0.79,
+    "perSecond": {
+     "workingset_refault_anon": 28.0,
+     "workingset_refault_file": 117.5,
+     "pswpin": 28.0,
+     "pswpout": 58.9,
+     "allocstall_dma32": 0.0,
+     "allocstall_normal": 0.0,
+     "allocstall_movable": 0.0,
+     "pgmajfault": 31.4,
+     "pgsteal_kswapd": 227.2,
+     "pgsteal_direct": 0.9,
+     "pgscan_kswapd": 390.8,
+     "pgscan_direct": 1.0,
+     "pgscan_direct_throttle": 0.0,
+     "pgscan_anon": 196.2,
+     "pgscan_file": 195.6,
+     "pgsteal_anon": 62.3,
+     "pgsteal_file": 165.8
+    },
+    "memAvailableMiB": [
+     290.1,
+     283.3
+    ],
+    "memFreeMiB": [
+     41.0,
+     48.7
+    ]
+   },
+   "pssRangeMiB": [
+    160.23046875,
+    184.796875
+   ],
+   "pssPeak": {
+    "second": 336.4,
+    "breakdownMiB": {
+     "Java Heap": 77.16,
+     "Native Heap": 10.22,
+     "Code": 25.77,
+     "Stack": 1.35,
+     "Graphics": 52.09,
+     "Private Other": 7.86,
+     "System": 10.34,
+     "pss Dalvik Heap": 71.26,
+     "pss Dalvik Other": 5.23,
+     "pss GL mtrack": 52.09,
+     "pss Native Heap": 10.3,
+     "pss Ashmem": 4.88,
+     "pss Unknown": 0.37,
+     "TOTAL PSS": 184.8
+    },
+    "heapUsedMBNearest": 75.8
+   },
+   "over20": {
+    "frames": 77,
+    "byCause": {
+     "running:cars": 30,
+     "sleep:dequeue": 21,
+     "preempted": 11,
+     "running:simulation": 6,
+     "running:hud": 2,
+     "running:scenery": 2,
+     "running:flushSwap": 2,
+     "sleep:gc": 2,
+     "sleep:other": 1
+    },
+    "byDominantPhase": {
+     "cars": 36,
+     "flushSwap": 28,
+     "simulation": 7,
+     "hud": 3,
+     "scenery": 3
+    },
+    "byClass": {
+     "a": 76,
+     "b": 1
+    },
+    "withLoggedGc": 5,
+    "withStatsBuild": 3,
+    "withProfileRead": 1,
+    "unattributed": 0,
+    "meanMs": {
+     "intervalMs": 21.457,
+     "workMs": 19.216,
+     "threadCpuMs": 11.418,
+     "offCpuMs": 7.798,
+     "runningMs": 12.202,
+     "runnableMs": 1.79,
+     "sleepMs": 7.465,
+     "flushSwapMs": 8.485
+    }
+   },
+   "classB": {
+    "frames": 82,
+    "byCause": {
+     "sleep:dequeue": 29,
+     "running:simulation": 14,
+     "running:telemetry": 13,
+     "preempted": 12,
+     "running:cars": 10,
+     "running:scenery": 2,
+     "sleep:other": 1,
+     "running:hud": 1
+    },
+    "byDominantPhase": {
+     "flushSwap": 25,
+     "telemetry": 17,
+     "simulation": 17,
+     "cars": 13,
+     "hud": 6,
+     "scenery": 4
+    },
+    "byClass": {
+     "b": 82
+    },
+    "withLoggedGc": 1,
+    "withStatsBuild": 1,
+    "withProfileRead": 0,
+    "unattributed": 0,
+    "meanMs": {
+     "intervalMs": 16.712,
+     "workMs": 9.189,
+     "threadCpuMs": 8.587,
+     "offCpuMs": 0.602,
+     "runningMs": 9.327,
+     "runnableMs": 0.313,
+     "sleepMs": 7.073,
+     "flushSwapMs": 8.28
+    }
+   },
+   "worst3Windows": [
+    {
+     "second": 175.63,
+     "raceSeconds": 38.4,
+     "frames": 599,
+     "statsCount": 599,
+     "renderP95Ms": 19.388,
+     "statsP95Ms": 19.388,
+     "presentP95Ms": 16.683,
+     "presentKnown": 599,
+     "renderMaxMs": 22.724,
+     "over16_7": 293,
+     "classA": 293,
+     "classB": 0,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 19.388,
+     "aloneOverBar": true,
+     "worst3": true
+    },
+    {
+     "second": 176.63,
+     "raceSeconds": 39.4,
+     "frames": 600,
+     "statsCount": 600,
+     "renderP95Ms": 19.388,
+     "statsP95Ms": 19.388,
+     "presentP95Ms": 16.683,
+     "presentKnown": 600,
+     "renderMaxMs": 22.17,
+     "over16_7": 293,
+     "classA": 293,
+     "classB": 0,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 19.388,
+     "aloneOverBar": true,
+     "worst3": true
+    },
+    {
+     "second": 177.7,
+     "raceSeconds": 40.4,
+     "frames": 600,
+     "statsCount": 600,
+     "renderP95Ms": 19.388,
+     "statsP95Ms": 19.388,
+     "presentP95Ms": 16.683,
+     "presentKnown": 600,
+     "renderMaxMs": 22.17,
+     "over16_7": 298,
+     "classA": 298,
+     "classB": 0,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 19.388,
+     "aloneOverBar": true,
+     "worst3": true
+    }
+   ],
+   "windowsAloneOverBar": 248,
+   "windowsCount": 248
+  }
+ ]
+}

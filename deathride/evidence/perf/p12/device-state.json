@@ -1,0 +1,88 @@
+{
+  "device": "10.0.0.139:5555 (AFTKM, Android 11)",
+  "ownerPackage": "dev.deathride.tv",
+  "atStart": {
+    "utc": "2026-10-07T06:08:54Z",
+    "resumed": "mResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}",
+    "pid": 14337,
+    "lastUpdateTime": "2026-10-06 23:44:23",
+    "audioPairTop": [
+      "783 audioserver   1 -19  83M 4.8M 2.1M S  0.0   0.2 106:51.09 writer          fireos.hardware.audio.service",
+      "683 audioserver   1 -19  76M 5.4M 3.8M S  0.0   0.3 107:43.87 AudioOut_D      audioserver"
+    ]
+  },
+  "beforeEachRun": {
+    "full-run1": {
+      "utc": "2026-10-07T06:17:43Z",
+      "resumed": "mResumedActivity: ActivityRecord{4e5b48c u0 dev.deathride.perf/dev.deathride.tv.MainActivity t348}",
+      "ownerPid": "14337"
+    },
+    "muted-run1": {
+      "utc": "2026-10-07T06:24:48Z",
+      "resumed": "mResumedActivity: ActivityRecord{f5263eb u0 dev.deathride.perf/dev.deathride.tv.MainActivity t349}",
+      "ownerPid": "14337"
+    },
+    "capped-run1": {
+      "utc": "2026-10-07T06:32:00Z",
+      "resumed": "mResumedActivity: ActivityRecord{fa09bf8 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t350}",
+      "ownerPid": "14337"
+    },
+    "still-run1": {
+      "utc": "2026-10-07T06:39:06Z",
+      "resumed": "mResumedActivity: ActivityRecord{4748abf u0 dev.deathride.perf/dev.deathride.tv.MainActivity t351}",
+      "ownerPid": "14337"
+    },
+    "full-run2": {
+      "utc": "2026-10-07T06:46:20Z",
+      "resumed": "mResumedActivity: ActivityRecord{857f662 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t352}",
+      "ownerPid": "14337"
+    },
+    "muted-run2": {
+      "utc": "2026-10-07T06:53:23Z",
+      "resumed": "mResumedActivity: ActivityRecord{70ed158 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t353}",
+      "ownerPid": "14337"
+    },
+    "capped-run2": {
+      "utc": "2026-10-07T07:00:47Z",
+      "resumed": "mResumedActivity: ActivityRecord{9811760 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t354}",
+      "ownerPid": "14337"
+    },
+    "still-run2": {
+      "utc": "2026-10-07T07:08:20Z",
+      "resumed": "mResumedActivity: ActivityRecord{d7a4a8e u0 dev.deathride.perf/dev.deathride.tv.MainActivity t355}",
+      "ownerPid": "14337"
+    },
+    "diag-full": {
+      "utc": "2026-10-07T07:15:41Z",
+      "resumed": "mResumedActivity: ActivityRecord{b701d88 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t356}",
+      "ownerPid": "14337"
+    },
+    "diag-muted": {
+      "utc": "2026-10-07T07:20:06Z",
+      "resumed": "mResumedActivity: ActivityRecord{398a120 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t357}",
+      "ownerPid": "14337"
+    },
+    "diag-capped": {
+      "utc": "2026-10-07T07:24:26Z",
+      "resumed": "mResumedActivity: ActivityRecord{34a354a u0 dev.deathride.perf/dev.deathride.tv.MainActivity t358}",
+      "ownerPid": "14337"
+    },
+    "diag-still": {
+      "utc": "2026-10-07T07:28:58Z",
+      "resumed": "mResumedActivity: ActivityRecord{ed1d7ad u0 dev.deathride.perf/dev.deathride.tv.MainActivity t359}",
+      "ownerPid": "14337"
+    },
+    "still-run3": {
+      "utc": "2026-10-07T07:36:24Z",
+      "resumed": "mResumedActivity: ActivityRecord{3974e31 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t360}",
+      "ownerPid": "14337"
+    }
+  },
+  "afterRuns": "== after runs, before restore 2026-10-07T07:44:09Z\n    mResumedActivity: ActivityRecord{14b5a11 u0 dev.deathride.perf/dev.deathride.tv.MainActivity t361}\n14337\n10658",
+  "afterRestore": "== after restore 2026-10-07T07:44:19Z\n    mResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}\n14337\n    versionName=0.1-spike\n    lastUpdateTime=2026-10-06 23:44:23\n19933 u0_a272      16  -4 1.5G  61M  33M R 39.2   3.6  45:31.42 GLThread 47610  dev.deathride.tv\n13172 u0_a272      16  -4 1.5G  61M  33M S  1.1   3.6   0:00.23 GLThread 47610  dev.deathride.tv\n14371 u0_a272      16  -4 1.5G  61M  33M S  1.1   3.6  75:30.34 GLThread 47312  dev.deathride.tv\n17039 u0_a272      16  -4 1.5G  61M  33M S  0.0   3.6   7:53.74 GLThread 47531  dev.deathride.tv\n 3977 u0_a272      16  -4 1.5G  61M  33M S  0.0   3.6  41:51.68 GLThread 47430  dev.deathride.tv\n  783 audioserver   1 -19  83M 4.7M 2.3M S  0.0   0.2 139:14.15 writer          fireos.hardware.audio.service\n  783 audioserver   1 -19  83M 4.7M 2.3M S  0.0   0.2 139:14.15 writer          fireos.hardware.audio.service\n  683 audioserver   1 -19  77M 5.5M 3.7M S  0.0   0.3 136:53.61 AudioOut_D      audioserver",
+  "smokeRuns": {
+    "smoke-muted-failed-pin": "perf-device asserted \"Listener not ready\": the pairing line had turned over in the Stick's 256 KiB main log before the scenery was ready (fixed in 20189c47).",
+    "smoke-muted": "60 s muted run after the fix: audio arm=muted logged at startup, 240 silent starts, 0 platform starts, audio pair 0.0% (exit 1 on the class-coverage assertion only)."
+  },
+  "note": "perf-device installs and launches only dev.deathride.perf (aapt identity check, installed SHA-256 = arms.apk). dev.deathride.tv was never installed over, cleared or stopped: process 14337 and task t330 (activity record a03c5a7) held throughout. After the runs dev.deathride.perf was force-stopped and the owner app brought back to the front; the intent went to the running instance. With it in front the audio pair used 0.0% CPU. Stale adb forwards on the default adb server (tcp:6666, jdwp) belong to other sessions and were left alone."
+}

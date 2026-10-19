@@ -9,6 +9,8 @@ fun main(args: Array<String>) {
     val config = Lwjgl3ApplicationConfiguration().apply { setTitle("Death Ride"); setInitialVisible(!args.contains("--hidden")); setWindowedMode(if(args.contains("--1080"))1920 else 1280, if(args.contains("--1080"))1080 else 720); useVsync(true); setForegroundFPS(60); setIdleFPS(60) }
     val duration=args.firstOrNull{it.startsWith("--duration=")}?.substringAfter('=')?.toDoubleOrNull() ?: 0.0
     if(args.contains("--drift-lab")){config.setTitle("Death Ride Drift Lab");Lwjgl3Application(DriftLabScreen(args.contains("--drift-lab-check"),duration),config);return}
+    if(args.contains("--wheel-shots")){Lwjgl3Application(WheelShots(),config);return}
+    if(args.contains("--mount-shots")){Lwjgl3Application(MountShots(),config);return}
     if(args.contains("--atlas-check")){Lwjgl3Application(AtlasAudit(),config);return}
     if(args.contains("--story-art-check")){Lwjgl3Application(StoryArtAudit(),config);return}
     if(args.contains("--rework-art-check")){Lwjgl3Application(ReworkArtAudit(),config);return}
@@ -16,6 +18,7 @@ fun main(args: Array<String>) {
     if(args.contains("--audio-check")){Lwjgl3Application(AudioAudit(),config);return}
     if(args.contains("--road-mark-check")){Lwjgl3Application(RoadMarkAudit(),config);return}
     if(args.contains("--region-check")){Lwjgl3Application(RegionAudit(),config);return}
+    if(!File("controller","index.html").isFile){System.err.println("Death Ride: cannot find the controller pages. Start it from the deathride folder (gradlew :desktop:run).");return}
     val port=args.firstOrNull{it.startsWith("--port=")}?.substringAfter('=')?.toIntOrNull()?:8768
     val game=RaceGame({ name -> File("controller", name).readText() }, { println("DeathRide $it") }, args.contains("--smoke"), duration, args.contains("--soak"), args.contains("--keyboard-check"),fontFactory=::nativeFont,proceduralOnly=args.contains("--no-art"),serverPort=port,profilePlatform=if(args.contains("--profile"))DesktopProfile() else null)
     if(args.contains("--region-ui-check")){Lwjgl3Application(RegionUiAudit(game),config);return}

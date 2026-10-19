@@ -1,0 +1,441 @@
+{
+  "trace": {
+    "file": "C:/Users/kazda/kiro/deathride-raw-evidence/p13c/diag-trace/atrace/trace.txt.gz (raw, bound in manifest.json)",
+    "apk": "p13.apk f3804fcd... (P13 code: the gap predates P13c)",
+    "capture": "tools/perf-p13c-trace.py capture --wait switch --seconds 14",
+    "switch": "scrap-1-c -> foundry-1-c (lobby, practice)"
+  },
+  "gapFrame": {
+    "atSecondsInTrace": 1.582,
+    "intervalMs": 100.0,
+    "glThreadMs": {
+      "runningMs": 8.2,
+      "preemptedMs": 0.3,
+      "sleepMs": 91.5,
+      "wakeupLatencyMs": 0.0
+    },
+    "glSectionsMs": {
+      "eglSwapBuffers": 92.2,
+      "  queueBuffer": 91.8,
+      "DR.prepare": 3.8,
+      "DR.hud": 2.4,
+      "DR.clear": 0.7
+    },
+    "sleepBySectionAndWakerMs": {
+      "queueBuffer <- <...>": 91.3,
+      "dequeueBuffer <- <...>": 0.2
+    },
+    "preemptedByMs": {
+      "sf (RT)": 0.2,
+      "disp_osd2_confi (RT)": 0.1
+    },
+    "concurrentGc": [],
+    "otherAppThreadsCpuMs": {
+      "DefaultDispatch": 42.8,
+      ".deathride.perf": 2.6,
+      "Jit thread pool": 2.3,
+      "DefaultExecutor": 0.5,
+      "DeathRideAudio": 0.4,
+      "GLThread": 0.3,
+      "GPU completion": 0.1
+    }
+  },
+  "gpuCompletionFences": {
+    "aroundTheGap": [
+      {
+        "fence": 64,
+        "waitStartSecondsInTrace": 1.312,
+        "ms": 7.5
+      },
+      {
+        "fence": 65,
+        "waitStartSecondsInTrace": 1.362,
+        "ms": 7.7
+      },
+      {
+        "fence": 66,
+        "waitStartSecondsInTrace": 1.443,
+        "ms": 4.3
+      },
+      {
+        "fence": 67,
+        "waitStartSecondsInTrace": 1.457,
+        "ms": 4.1
+      },
+      {
+        "fence": 68,
+        "waitStartSecondsInTrace": 1.468,
+        "ms": 4.5
+      },
+      {
+        "fence": 69,
+        "waitStartSecondsInTrace": 1.477,
+        "ms": 6.5
+      },
+      {
+        "fence": 70,
+        "waitStartSecondsInTrace": 1.492,
+        "ms": 4.6
+      },
+      {
+        "fence": 71,
+        "waitStartSecondsInTrace": 1.508,
+        "ms": 4.8
+      },
+      {
+        "fence": 72,
+        "waitStartSecondsInTrace": 1.523,
+        "ms": 4.6
+      },
+      {
+        "fence": 73,
+        "waitStartSecondsInTrace": 1.54,
+        "ms": 4.7
+      },
+      {
+        "fence": 74,
+        "waitStartSecondsInTrace": 1.557,
+        "ms": 4.6
+      },
+      {
+        "fence": 75,
+        "waitStartSecondsInTrace": 1.573,
+        "ms": 108.0
+      },
+      {
+        "fence": 76,
+        "waitStartSecondsInTrace": 1.682,
+        "ms": 11.4
+      },
+      {
+        "fence": 77,
+        "waitStartSecondsInTrace": 1.709,
+        "ms": 4.5
+      },
+      {
+        "fence": 78,
+        "waitStartSecondsInTrace": 1.721,
+        "ms": 4.3
+      },
+      {
+        "fence": 79,
+        "waitStartSecondsInTrace": 1.73,
+        "ms": 4.7
+      },
+      {
+        "fence": 80,
+        "waitStartSecondsInTrace": 1.744,
+        "ms": 4.0
+      }
+    ],
+    "wholeTrace": {
+      "count": 514,
+      "p50Ms": 4.5,
+      "p99Ms": 11.9,
+      "over30Ms": [
+        {
+          "secondsInTrace": 1.573,
+          "ms": 108.0
+        },
+        {
+          "secondsInTrace": 9.055,
+          "ms": 231.5
+        },
+        {
+          "secondsInTrace": 8.835,
+          "ms": 627.7
+        }
+      ]
+    }
+  },
+  "cpuDuringTheGap": "All four CPUs 43-60 ms idle of the 100 ms; the busiest threads were the audio pair (HAL writer 57.7 ms, AudioOut_D 44.4 ms). SurfaceFlinger loops on !fenceHasSignaled() for the app buffer until the fence signals.",
+  "switchOffsets": {
+    "p13/run1": [
+      {
+        "switchRequestsMs": 72.3,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 1,
+            "intervalMs": 102.6,
+            "gpuFrameCpuPrepareMs": 3.7,
+            "gpuFrameWorkMs": 101.3
+          },
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 108.4,
+            "gpuFrameCpuPrepareMs": 8.5,
+            "gpuFrameWorkMs": 15.2
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 31.0,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 109.1,
+            "gpuFrameCpuPrepareMs": 4.0,
+            "gpuFrameWorkMs": 15.4
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 29.5,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 110.5,
+            "gpuFrameCpuPrepareMs": 3.8,
+            "gpuFrameWorkMs": 15.1
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 28.8,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 112.4,
+            "gpuFrameCpuPrepareMs": 4.1,
+            "gpuFrameWorkMs": 15.4
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 38.5,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 92.3,
+            "gpuFrameCpuPrepareMs": 8.3,
+            "gpuFrameWorkMs": 17.6
+          }
+        ]
+      }
+    ],
+    "p13/run2": [
+      {
+        "switchRequestsMs": 72.2,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 108.5,
+            "gpuFrameCpuPrepareMs": 24.5,
+            "gpuFrameWorkMs": 27.9
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 31.7,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 100.1,
+            "gpuFrameCpuPrepareMs": 3.3,
+            "gpuFrameWorkMs": 5.9
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 29.7,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 100.2,
+            "gpuFrameCpuPrepareMs": 3.4,
+            "gpuFrameWorkMs": 6.7
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 29.2,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 102.7,
+            "gpuFrameCpuPrepareMs": 4.0,
+            "gpuFrameWorkMs": 6.3
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 38.9,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 93.4,
+            "gpuFrameCpuPrepareMs": 5.9,
+            "gpuFrameWorkMs": 14.3
+          }
+        ]
+      }
+    ],
+    "p13c/diag-trace (P13 APK)": [
+      {
+        "switchRequestsMs": 70.1,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 100.0,
+            "gpuFrameCpuPrepareMs": 3.8,
+            "gpuFrameWorkMs": 7.8
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 29.0,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 100.2,
+            "gpuFrameCpuPrepareMs": 7.4,
+            "gpuFrameWorkMs": 12.1
+          }
+        ]
+      }
+    ],
+    "p13c/run1": [
+      {
+        "switchRequestsMs": 72.5,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 101.0,
+            "gpuFrameCpuPrepareMs": 22.4,
+            "gpuFrameWorkMs": 27.9
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 52.2,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 101.7,
+            "gpuFrameCpuPrepareMs": 3.9,
+            "gpuFrameWorkMs": 7.1
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 30.8,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 101.1,
+            "gpuFrameCpuPrepareMs": 3.4,
+            "gpuFrameWorkMs": 6.6
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 41.2,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 102.9,
+            "gpuFrameCpuPrepareMs": 4.4,
+            "gpuFrameWorkMs": 8.7
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 102.9,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 1,
+            "intervalMs": 111.1,
+            "gpuFrameCpuPrepareMs": 3.6,
+            "gpuFrameWorkMs": 110.0
+          },
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 102.2,
+            "gpuFrameCpuPrepareMs": 4.1,
+            "gpuFrameWorkMs": 13.6
+          }
+        ]
+      }
+    ],
+    "p13c/run2": [
+      {
+        "switchRequestsMs": 66.0,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 108.5,
+            "gpuFrameCpuPrepareMs": 3.4,
+            "gpuFrameWorkMs": 7.2
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 34.9,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 109.0,
+            "gpuFrameCpuPrepareMs": 3.1,
+            "gpuFrameWorkMs": 10.7
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 29.4,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 101.0,
+            "gpuFrameCpuPrepareMs": 3.4,
+            "gpuFrameWorkMs": 6.0
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 38.0,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 112.0,
+            "gpuFrameCpuPrepareMs": 3.9,
+            "gpuFrameWorkMs": 16.2
+          }
+        ]
+      },
+      {
+        "switchRequestsMs": 35.3,
+        "uploads": 4,
+        "slowIntervalsAfter": [
+          {
+            "framesAfterSwitch": 11,
+            "intervalMs": 92.1,
+            "gpuFrameCpuPrepareMs": 3.4,
+            "gpuFrameWorkMs": 6.5
+          }
+        ]
+      }
+    ]
+  },
+  "attribution": "The render thread is asleep 91.5 ms inside eglSwapBuffers -> queueBuffer: its buffer cannot be queued until the GPU finishes the previous frame (GPU completion fence 75: 108.0 ms, against 4.1-7.7 ms for the 12 frames before it). It is not a GC (none overlaps), not a lock, not preemption (0.3 ms). The slow GPU job belongs to the 10th frame after the course-switch frame in every switch measured, whatever that frame's CPU work: the switch frame is the only one with texture uploads (4 region tiles, 19.66 MB, replacing the previous region's 4 in AtlasArt.selectRegion). The cost is GPU-driver work on the driver's own schedule, 10 frames after the app replaces the region textures; the trace cannot split it between the 4 deletes and the 4 uploads."
+}

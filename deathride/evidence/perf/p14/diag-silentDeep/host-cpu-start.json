@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-08T11:34:38.6029030Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "git#1",
+                             "IDProcess":  39952,
+                             "PercentProcessorTime":  101
+                         },
+                         {
+                             "Name":  "node#9",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  101
+                         },
+                         {
+                             "Name":  "svchost#89",
+                             "IDProcess":  3080,
+                             "PercentProcessorTime":  96
+                         },
+                         {
+                             "Name":  "vmmemWSL",
+                             "IDProcess":  19584,
+                             "PercentProcessorTime":  29
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  23200,
+                             "PercentProcessorTime":  19
+                         },
+                         {
+                             "Name":  "claude#6",
+                             "IDProcess":  29620,
+                             "PercentProcessorTime":  9
+                         },
+                         {
+                             "Name":  "chrome",
+                             "IDProcess":  44852,
+                             "PercentProcessorTime":  9
+                         },
+                         {
+                             "Name":  "dwm",
+                             "IDProcess":  1856,
+                             "PercentProcessorTime":  4
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  4
+                         },
+                         {
+                             "Name":  "GalaxyClient",
+                             "IDProcess":  25520,
+                             "PercentProcessorTime":  4
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                23,
+                                21,
+                                33
+                            ]
+}

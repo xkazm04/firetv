@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-08T11:15:17.4048573Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "svchost#89",
+                             "IDProcess":  3080,
+                             "PercentProcessorTime":  107
+                         },
+                         {
+                             "Name":  "node#9",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  102
+                         },
+                         {
+                             "Name":  "git#1",
+                             "IDProcess":  14824,
+                             "PercentProcessorTime":  102
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  2812,
+                             "PercentProcessorTime":  24
+                         },
+                         {
+                             "Name":  "GalaxyClient",
+                             "IDProcess":  25520,
+                             "PercentProcessorTime":  19
+                         },
+                         {
+                             "Name":  "logioptionsplus_agent",
+                             "IDProcess":  10956,
+                             "PercentProcessorTime":  19
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  14
+                         },
+                         {
+                             "Name":  "grep#3",
+                             "IDProcess":  7724,
+                             "PercentProcessorTime":  14
+                         },
+                         {
+                             "Name":  "claude#6",
+                             "IDProcess":  29620,
+                             "PercentProcessorTime":  14
+                         },
+                         {
+                             "Name":  "grep#34",
+                             "IDProcess":  25528,
+                             "PercentProcessorTime":  14
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                28,
+                                30,
+                                24
+                            ]
+}

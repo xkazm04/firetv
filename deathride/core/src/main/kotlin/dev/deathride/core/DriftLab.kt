@@ -58,7 +58,7 @@ class DriftExperiment(
         CarCatalog.apply(car,classIndex)
         if(specOverride!=null)car.spec=specOverride
         if(legacy)car.spec=car.spec.copy(driftGeometry=null)
-        car.human=true;car.feel=profile;car.surface=surface
+        car.human=true;car.labCar=true;car.feel=profile;car.surface=surface
         entryMps=min(requestedEntryMps,car.spec.maxSpeedMps);car.vx=entryMps
         if(exercise==DriftExercise.EQUAL_COAST || exercise==DriftExercise.EQUAL_CATCH) {
             car.heading=-DriftLabRules["equalSlipRadians"];car.yaw=DriftLabRules["equalYawRadPerSecond"]

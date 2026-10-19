@@ -1,0 +1,206 @@
+{
+ "what": "P20 step 3: what survives a forced GC (am dumpheap -g), ranked by retained app-heap bytes, with the code that holds each owner of 1 MiB or more",
+ "owners": [
+  {
+   "owner": "dev.deathride.core.Course",
+   "heldAt": "core/src/main/kotlin/dev/deathride/core/Tracks.kt:203-210 (Courses.built keeps every built course; /routes builds all 37 playable through Courses.playable, Tracks.kt:224-227, from RaceServer.kt:401)",
+   "nextFrameOrRound": "Only the selected course: the next frame and round use it alone. A course is rebuilt on demand by Courses.course() (Tracks.kt:210) and prewarmed off the render thread by CoursePrewarm.submit (CoursePrewarm.kt:15).",
+   "releaseChangesWhatAPlayerSeesOrHears": "No, for the 32 playable courses the probe never races (built only for the /routes reply, which no phone requests: the controller fetches /build and /catalog only, controller/index.html:51). Raced courses: their projection bins are the next lever (card 16)."
+  },
+  {
+   "owner": "dev.deathride.link.RoutesReply",
+   "heldAt": "link/src/main/kotlin/dev/deathride/link/RaceServer.kt:401 (companion lazy routesReply, served at :185)",
+   "nextFrameOrRound": "No frame or round reads it. Only a GET /routes reads it: perf-device.py warm-up and the probe at its start (tools/ability-stick-probe.mjs:61).",
+   "releaseChangesWhatAPlayerSeesOrHears": "No: players never request /routes (controller/index.html:51); the bytes on the wire can stay the same."
+  },
+  {
+   "owner": "dev.deathride.link.Distribution",
+   "heldAt": "link/src/main/kotlin/dev/deathride/link/Metrics.kt:9 (LongArray of 50,001 0.1 ms bins) for Metrics.kt:39-41 (frame, two input ages; sim has 50,001 0.001 ms bins)",
+   "nextFrameOrRound": "Yes: every frame and input adds a sample; /stats reads the lifetime histograms.",
+   "releaseChangesWhatAPlayerSeesOrHears": "No, but it is telemetry: shrinking the bins changes a measurement; int counts instead of long would halve the 1.53 MiB of histograms (-0.76 MiB, under the 1 MiB card line)."
+  },
+  {
+   "owner": "dev.deathride.link.PerfTrace",
+   "heldAt": "link/src/main/kotlin/dev/deathride/link/PerfTrace.kt:6 (rows), game/src/main/kotlin/dev/deathride/game/FrameProfiler.kt:35 (frames), RaceServer.kt:79 (inputs)",
+   "nextFrameOrRound": "Yes while profiling: every frame appends a row; /profile reads them.",
+   "releaseChangesWhatAPlayerSeesOrHears": "No, but it is the profiler (exists only when launched with profile=true, RaceGame.kt:20): it is the instrument, not app retention."
+  }
+ ],
+ "dumps": [
+  {
+   "dump": "a1",
+   "appSurvivorsMiB": 43.29,
+   "artUsedMB": 46,
+   "owners": [
+    {
+     "owner": "dev.deathride.core.Course",
+     "MiB": 17.23,
+     "share": 0.398
+    },
+    {
+     "owner": "dev.deathride.link.RoutesReply",
+     "MiB": 16.76,
+     "share": 0.387
+    },
+    {
+     "owner": "dev.deathride.link.Distribution",
+     "MiB": 1.84,
+     "share": 0.0425
+    },
+    {
+     "owner": "dev.deathride.link.PerfTrace",
+     "MiB": 1.53,
+     "share": 0.0354
+    },
+    {
+     "owner": "everything else (no owner class over 0.77 MiB)",
+     "MiB": 5.93,
+     "share": 0.1371
+    }
+   ]
+  },
+  {
+   "dump": "b1",
+   "appSurvivorsMiB": 44.95,
+   "artUsedMB": 48,
+   "owners": [
+    {
+     "owner": "dev.deathride.core.Course",
+     "MiB": 17.23,
+     "share": 0.3834
+    },
+    {
+     "owner": "dev.deathride.link.RoutesReply",
+     "MiB": 16.76,
+     "share": 0.3728
+    },
+    {
+     "owner": "dev.deathride.link.Distribution",
+     "MiB": 1.9,
+     "share": 0.0423
+    },
+    {
+     "owner": "dev.deathride.link.PerfTrace",
+     "MiB": 1.53,
+     "share": 0.0341
+    },
+    {
+     "owner": "everything else (no owner class over 0.77 MiB)",
+     "MiB": 7.53,
+     "share": 0.1675
+    }
+   ]
+  },
+  {
+   "dump": "a2",
+   "appSurvivorsMiB": 43.3,
+   "artUsedMB": 46,
+   "owners": [
+    {
+     "owner": "dev.deathride.core.Course",
+     "MiB": 17.23,
+     "share": 0.398
+    },
+    {
+     "owner": "dev.deathride.link.RoutesReply",
+     "MiB": 16.76,
+     "share": 0.387
+    },
+    {
+     "owner": "dev.deathride.link.Distribution",
+     "MiB": 1.84,
+     "share": 0.0425
+    },
+    {
+     "owner": "dev.deathride.link.PerfTrace",
+     "MiB": 1.53,
+     "share": 0.0354
+    },
+    {
+     "owner": "everything else (no owner class over 0.77 MiB)",
+     "MiB": 5.94,
+     "share": 0.1372
+    }
+   ]
+  },
+  {
+   "dump": "d2",
+   "appSurvivorsMiB": 48.07,
+   "artUsedMB": 51,
+   "owners": [
+    {
+     "owner": "dev.deathride.core.Course",
+     "MiB": 21.03,
+     "share": 0.4374
+    },
+    {
+     "owner": "dev.deathride.link.RoutesReply",
+     "MiB": 16.76,
+     "share": 0.3486
+    },
+    {
+     "owner": "dev.deathride.link.Distribution",
+     "MiB": 1.9,
+     "share": 0.0396
+    },
+    {
+     "owner": "dev.deathride.link.PerfTrace",
+     "MiB": 1.53,
+     "share": 0.0319
+    },
+    {
+     "owner": "everything else (no owner class over 0.77 MiB)",
+     "MiB": 6.85,
+     "share": 0.1426
+    }
+   ]
+  }
+ ],
+ "courses": {
+  "a1": {
+   "built": 39,
+   "probeNeverRaces": {
+    "count": 32,
+    "MiB": 14.76
+   },
+   "raced": [
+    {
+     "id": "scrap-1-c",
+     "MiB": 1.619,
+     "binsMiB": 1.308
+    }
+   ],
+   "binsMiB": 1.31
+  },
+  "d2": {
+   "built": 39,
+   "probeNeverRaces": {
+    "count": 32,
+    "MiB": 14.76
+   },
+   "raced": [
+    {
+     "id": "salt-1-b",
+     "MiB": 2.473,
+     "binsMiB": 2.141
+    },
+    {
+     "id": "foundry-1-c",
+     "MiB": 1.956,
+     "binsMiB": 1.655
+    },
+    {
+     "id": "scrap-1-c",
+     "MiB": 1.619,
+     "binsMiB": 1.308
+    }
+   ],
+   "binsMiB": 5.1
+  }
+ },
+ "growth": {
+  "a1->b1 (round 1, mid-race)": "+1.66 MiB: StatsReply +0.50 (the probe /stats builder), the phones websocket handler +0.46, HudMetadata +0.21, ktor buffers; no Course or RoutesReply change",
+  "a2->d2 (three rounds, lobby)": "+4.77 MiB: Course +3.80 (candidate bins of foundry-1-c 1.66 and salt-1-b 2.14 MiB, int[] +3.82 MiB), StatsReply +0.50",
+  "ART logged full GCs, 7 runs of P18/P19 (survivors.json)": "survivors rise ~2-3 MB a round over rounds 1-5 (48-49 -> 57-59 MB) and stay flat in round 6, the first repeated course: per-course projection bins, not a leak"
+ }
+}
