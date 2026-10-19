@@ -394,6 +394,31 @@ test('PR4: a throw while drawing logs one line and the stream ends, with the pin
  }finally{mock.restoreAll();mock.timers.reset();}
 });
 
+// ---- TL-3: the TV knows a phone is here ----
+test('TL-3: phone.presence is raised by the desk alone: a TV, a phone and a guest posting it get 403 and phonesLive stays',async()=>{
+ const cookie=await phoneCookie();
+ for(const [role,c] of [['tv'],['phone',cookie],['guest']]){const r=await post({type:'phone.presence',live:3},role,c);assert.equal(r.status,403,String(role));}
+ assert.equal(store.getSession().phonesLive,0);
+});
+test('TL-3: a phone stream opened is phonesLive 1 and closed is 0; a second stream of the same phone is no more; a guest changes nothing; only the TV is told',async()=>{
+ const cookie=await phoneCookie();mock.timers.enable({apis:['setInterval']});
+ try{
+  assert.equal(store.getSession().phonesLive,0);
+  const guest=await open('guest');assert.equal(store.getSession().phonesLive,0,'a guest stream changes nothing');
+  const a=await open('phone',cookie),b=await open('phone',cookie);
+  assert.equal(store.getSession().phonesLive,1,'two streams of one phone are one phone');
+  const tv=await open('tv');
+  const seen=async(r)=>JSON.parse(new TextDecoder().decode((await r.read()).value).replace(/^data: /,''));
+  assert.equal((await seen(tv)).phonesLive,1,'the TV is told');
+  assert.equal((await seen(a)).phonesLive,0,'the phone is not');
+  await a.cancel();assert.equal(store.getSession().phonesLive,1,'its other stream is still open');
+  await b.cancel();assert.equal(store.getSession().phonesLive,0,'its last stream closed');
+  await guest.cancel();await tv.cancel();
+  assert.equal(store.getSession().phonesLive,0,'the TV own stream is no phone');
+  assert.equal((await (await get('guest')).json()).phonesLive,0);
+ }finally{mock.timers.reset();}
+});
+
 // ---- PR6: a cap on guest streams, and a reader that stopped reading is let go ----
 const open=async(role,cookie)=>(await streamRoute().GET(req('/api/session/stream',{role,cookie}))).body.getReader();
 const endsSoon=(rd)=>Promise.race([(async()=>{for(;;){const x=await rd.read();if(x.done)return true;}})(),new Promise((r)=>setTimeout(()=>r(false),1500))]);
@@ -898,7 +923,7 @@ const SAMPLES={
  'walk':{type:'walk',ix:1},'practice.clear':{type:'practice.clear'},'practice.second':{type:'practice.second',n:1,verdict:'right'},
  'practice.settle':{type:'practice.settle',n:1,reply:'2',verdict:'right'},
  'job.start':{type:'job.start',kind:'read',id:'j1'},'job.done':{type:'job.done',kind:'read',id:'j1'},'job.failed':{type:'job.failed',kind:'read',id:'j1',error:'x'},
- 'essay.clear':{type:'essay.clear'},'status':{type:'status',text:'hi'},'session.end':{type:'session.end'},'reset':{type:'reset'},'pin.turn':{type:'pin.turn'},
+ 'essay.clear':{type:'essay.clear'},'status':{type:'status',text:'hi'},'session.end':{type:'session.end'},'reset':{type:'reset'},'pin.turn':{type:'pin.turn'},'phone.presence':{type:'phone.presence',live:1},'phones.forget':{type:'phones.forget'},
 };
 // seats a learner, or changes nothing a slot holds: these are not owed a place in NEEDS_LEARNER
 const SEATS_OR_CLEARS=new Set(['learner.set','reset']);

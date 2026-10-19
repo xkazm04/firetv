@@ -151,7 +151,8 @@ export function landingView(s: Session, lastApp: Subject | null = null): Landing
   const atApp = at && ids.includes(at as Subject) ? (at as Subject) : null;
   const world = atApp ?? (lastApp && ids.includes(lastApp) ? lastApp : cont?.app ?? ids[0] ?? null);
   const learner = learnerOf(s), wApp = apps.find((a) => a.id === world) ?? null;
-  const caption: Caption = at === "phone" ? { chip: null, head: "Pair your phone", sub: "Open the address on your phone, then enter the four digits." }
+  const caption: Caption = at === "phone" && s.joined ? { chip: null, head: s.phonesLive > 0 ? "Phone paired" : "No phone here", sub: "Select to pair another phone, or to forget them all." }
+    : at === "phone" ? { chip: null, head: "Pair your phone", sub: "Open the address on your phone, then enter the four digits." }
     : wApp ? wApp.caption : { chip: null, head: "No apps yet", sub: "This profile has no apps on it. Select Someone else to change it." };
   const view: Omit<LandingView, "say"> = {
     stops, at, apps, world, learner, caption,

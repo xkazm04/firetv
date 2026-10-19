@@ -171,3 +171,11 @@ test('GUARD: the landing view-model stays free of the filesystem-backed session 
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);
  model();assert.ok(!Object.keys(require.cache).some(k=>/session[\\/](store|learners)\.ts$/.test(k)),'loading the view-model pulled the store in');
 });
+
+test('TL-3: the phone is a stop paired or not, and the paired stop speaks of the phones that are here',()=>{
+ const {landingView}=model();const {landingStops}=require(src('tv/landingRows.ts'));
+ for(const joined of [true,false]){const s=session({joined});assert.equal(landingStops(s).at(-1),'phone',`joined ${joined}: the phone stop is last`);assert.equal(landingView(s).phone.paired,joined);}
+ const on=(p)=>landingView(session({joined:true,focus:4,...p})).caption;
+ assert.equal(on({phonesLive:0}).head,'No phone here');assert.equal(on({phonesLive:2}).head,'Phone paired');
+ assert.equal(landingView(session({joined:true,focus:-1,practice:null})).at,'maths','paired: the lamp still rests on the apps');
+});

@@ -339,7 +339,11 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (k === "select") { if (!s.learner) { o.nav("learner", 0, "landing"); return; } o.ev({ type: "subject", subject: at }); openWaiting(s, at, o); }
     }
   },
-  pair: (s, k, _, o) => { if (k === "back") { const to = s.back ?? "landing"; o.nav(to, to === "landing" ? landingFocus(s, "phone") : 0); } },
+  pair: (s, k, _, o) => {
+    // paired (TL-3): two buttons under the code - Pair another (stop 0, the code stays up) and Forget every phone (stop 1)
+    if (s.joined) { if (k === "down") o.focus(1); if (k === "up") o.focus(0); if (k === "select" && s.focus === 1) o.ev({ type: "phones.forget" }); }
+    if (k === "back") { const to = s.back ?? "landing"; o.nav(to, to === "landing" ? landingFocus(s, "phone") : 0); }
+  },
   // the desk is home: Select or Back rests the lamp there, as choosing a learner does (store.ts learner.set)
   joined: (_, k, __, o) => { if (k === "select" || k === "back") o.nav("landing", LANDING_REST); },
   tonight: (s, k, _, o) => {

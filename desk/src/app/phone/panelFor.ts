@@ -24,7 +24,6 @@ function cueFor(s: Seen): Cue | null {
   // Linga is one panel that reads its own screens: moving inside Linga is not a new hand-off
   if (lingaOwns(s as Session)) return { panel: "linga", key: "linga" };
   switch (sc) {
-    case "joined": return { panel: "joined", key: sc };
     case "profile": return { panel: "profile", key: sc };
     // "Waiting for the Math Buddy page. Snap it on the phone"
     // (an essay is never snapped: Essay Master takes text, so a wait for an essay page sends the phone to the Essay panel)

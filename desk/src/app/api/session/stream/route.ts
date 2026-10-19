@@ -3,7 +3,7 @@
  * (lib/session/pairing.ts view), asked again for every message, so a phone whose pin has turned over is a guest
  * from the next message on. An in-process call (no x-desk-role) gets the session itself.
  */
-import { getSession, subscribe, type Session } from "@/lib/session/store";
+import { dispatch, getSession, subscribe, type Session } from "@/lib/session/store";
 import { createHash } from "node:crypto";
 import { PHONE_COOKIE, cookiesOf, liveRole, roleFrom, view } from "@/lib/session/pairing";
 
@@ -28,6 +28,8 @@ const guests = () => { const g = globalThis as unknown as { __deskGuestStreams?:
 const devices = () => { const g = globalThis as unknown as { __deskDeviceStreams?: Map<string, (() => void)[]> }; return (g.__deskDeviceStreams ??= new Map()); };
 const deviceKey = (req: Request | undefined, role: string | null) =>
   role === "tv" ? "tv" : role === "phone" ? createHash("sha256").update(cookiesOf(req!).get(PHONE_COOKIE)?.value ?? "").digest("hex") : null;
+/** Tell the session how many phones have a stream open: the device keys but the TV's (TL-3). */
+const presence = () => dispatch({ type: "phone.presence", live: [...devices().keys()].filter((k) => k !== "tv").length });
 // Two signatures: the one Next's generated route types check (a Request) and the in-process one (none).
 export async function GET(): Promise<Response>;
 export async function GET(req: Request): Promise<Response>;
@@ -45,10 +47,10 @@ export async function GET(req?: Request) {
       release = () => {
         ended = true; unsub(); clearInterval(ping);
         const list = guests(), i = list.indexOf(close); if (i >= 0) list.splice(i, 1);
-        if (key !== null) { const own = devices().get(key), j = own ? own.indexOf(close) : -1; if (own && j >= 0) { own.splice(j, 1); if (!own.length) devices().delete(key); } }
+        if (key !== null) { const own = devices().get(key), j = own ? own.indexOf(close) : -1; if (own && j >= 0) { own.splice(j, 1); if (!own.length) { devices().delete(key); if (key !== "tv") presence(); } } }
       };
       if (role === "guest") { const list = guests(); while (list.length >= GUEST_STREAMS) list.shift()!(); list.push(close); }
-      else if (key !== null) { const own = devices().get(key) ?? []; while (own.length >= DEVICE_STREAMS) own.shift()!(); own.push(close); devices().set(key, own); }
+      else if (key !== null) { const own = devices().get(key) ?? []; while (own.length >= DEVICE_STREAMS) own.shift()!(); own.push(close); devices().set(key, own); if (key !== "tv" && own.length === 1) presence(); }
       const send = (s: Session) => {
         // the message is drawn outside the enqueue's catch: a throw here is a fault to name, and the stream ends rather than sit open and silent
         let chunk: Uint8Array;

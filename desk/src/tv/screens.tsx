@@ -48,7 +48,7 @@ export function Joined({ s }: { s: Session }) {
       <img src="/brand/paired.png" alt="" style={{ position: "absolute", right: 0, top: 40, width: 760, height: 520, objectFit: "contain" }} />
       <div style={{ position: "absolute", left: 0, bottom: 216, maxWidth: 900 }}>
         <span className="cap">What now</span>
-        <div className="cap-text">{s.learner ? "Open an app on the desk, or snap the page on the phone." : "Now choose whose desk it is: Down to Choose who on the desk."}</div>
+        <div className="cap-text">{s.learner ? "Select: go to the desk" : "Paired. Select: choose who is studying"}</div>
       </div>
       <div className="actions"><button className="btn" data-focused>The desk</button></div>
     </main>
@@ -64,6 +64,7 @@ export function Pair({ s }: { s: Session }) {
     <div className="content-full" style={{ display: "grid", placeItems: "center", textAlign: "center" }}>
       <div style={{ maxWidth: 1100 }}>
         <div className="eyebrow">Study Desk · pair a phone</div>
+        {s.joined && <div className="body" data-role="phones-here" style={{ marginTop: 16 }}>{s.phonesLive > 0 ? `${s.phonesLive} ${s.phonesLive === 1 ? "phone" : "phones"} here` : "No phone here"}</div>}
         <div className="qr" style={{ margin: "40px auto 28px", width: 300, height: 300, background: "#fff", display: "grid", placeItems: "center" }} dangerouslySetInnerHTML={{ __html: svg }} />
         <div className="lt" style={{ maxWidth: 560, margin: "0 auto" }}>
           <div className="tag">Code</div>
@@ -72,6 +73,7 @@ export function Pair({ s }: { s: Session }) {
         <div className="body" style={{ color: "var(--mute)", marginTop: 24 }}>Scan, or open <span style={{ color: "var(--paper)" }}>{s.phoneUrl.replace(/^https?:\/\//, "")}</span> on your phone and type the code.</div>
       </div>
     </div>
+    {s.joined && <div className="actions" style={{ display: "flex", gap: 24, justifyContent: "center" }}><button className="btn" data-focused={s.focus !== 1}>Pair another</button><button className="btn" data-focused={s.focus === 1}>Forget every phone</button></div>}
     <div className="ticker"><span>Waiting for a phone</span><i>·</i><span>code <b>{s.pin}</b></span><i>·</i><span>same Wi-Fi as the TV</span></div>
   </>);
 }

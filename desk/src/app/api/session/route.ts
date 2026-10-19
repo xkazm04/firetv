@@ -22,6 +22,7 @@ const SERVER_ONLY: Partial<Record<Event["type"], string>> = {
   "essay.progress": "Send the piece to /api/analyse.", "worked.set": "Ask for a lesson on /api/worked.", "workroom.set": "Open the Workroom on /api/twin.",
   "lesson.watched": "A lesson is marked watched by the desk, as it plays.",
   "pin.turn": "The code turns over when a phone joins with it.",
+  "phone.presence": "The desk counts the phones that are here.",
 };
 
 /** One line for a pairing write that failed, in the shape of pairing.ts's last-seen line; the caller answers 500 and changes nothing. */

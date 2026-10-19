@@ -94,7 +94,6 @@ const LINGA={s:session({screen:'linga-talk'}),panel:'linga'};
 const FIXTURES={
  landing:{s:session({joined:false,screen:'landing'}),panel:'join',from:JOINED_FROM,why:'Open the address on your phone (the session ended: back to the code)'},
  pair:{s:session({joined:false,screen:'pair'}),panel:'join',from:JOINED_FROM,why:'Scan, or open ... on your phone and type the code'},
- joined:{s:session({screen:'joined'}),panel:'joined',from:{s:session({joined:false,screen:'pair'}),panel:'join'},why:'Snap the page on the phone - a fresh join lands on the confirmation'},
  profile:{s:session({screen:'profile',draft:{id:'new',name:''}}),panel:'profile',why:"Type the name on the phone's Profile tab"},
  tonight:{s:session({screen:'tonight',awaiting:'maths'}),panel:'capture',why:'Waiting for the Math Buddy page. Snap it on the phone'},
  practice:{s:session({screen:'practice',practice:set(false)}),panel:'practice',why:'snap the whole sheet with the phone'},
@@ -143,6 +142,7 @@ test('case 3: a screen that asks nothing of the phone maps to "stay"',()=>{
  assert.equal(panelFor(session({screen:'tonight'})),'stay','Tonight with no page asked for asks nothing yet');
  assert.equal(panelFor(session({screen:'page',pages:[page]})),'stay','a page that read is the TV\'s to show');
  assert.equal(panelFor(session({screen:'pair'})),'stay','a joined phone is not sent back to the code');
+ assert.equal(panelFor(session({screen:'joined'})),'stay','the Joined screen asks nothing of the phone');
 });
 
 test('case 4: the phone follows every hand-off - N of N',()=>{

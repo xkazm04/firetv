@@ -308,14 +308,27 @@ const talk={id:'c1',learnerId:'jakub',sceneId:'interview',title:'Beyond the rehe
  turns:[{id:'t1',role:'partner',text:'Tell me about a project.'},{id:'t2',role:'learner',text:'I led one.'},{id:'t3',role:'partner',text:'What did you change?'}],coaching:null,moment:null,moments:[],phase:'conversation',pending:null,error:'',paused:true,capture:false,captureAt:0,audioNonce:0,supported:false,cue:'',quizOpen:false,commands:[],evidence:[],startedAt:Date.UTC(2026,8,20)};
 const readIt={at:Date.UTC(2026,8,21),kind:'writing',label:'Argument',detail:'1 of 6 sentences to fix'};
 
-test('landing 1: the stops are the apps on the profile, left to right, then the place card, then the phone while unpaired',()=>{
+test('landing 1: the stops are the apps on the profile, left to right, then the place card, then the phone - always (TL-3)',()=>{
  const {landingStops}=rows();
- assert.deepEqual(landingStops(desk()),['maths','english','essay','place']);
+ assert.deepEqual(landingStops(desk()),['maths','english','essay','place','phone'],'paired: the phone stop stays');
  assert.deepEqual(landingStops(desk({joined:false})),['maths','english','essay','place','phone']);
- assert.deepEqual(landingStops(desk({learner:{id:'jakub',name:'Jakub'}})),['english','essay','place'],'only the apps on Jakub\'s profile');
- assert.deepEqual(landingStops(desk({profiles:[{...EMA,modules:['essay','maths']}]})),['maths','essay','place'],'the desk keeps its left-to-right order whatever order the profile lists');
+ assert.deepEqual(landingStops(desk({learner:{id:'jakub',name:'Jakub'}})),['english','essay','place','phone'],'only the apps on Jakub\'s profile');
+ assert.deepEqual(landingStops(desk({profiles:[{...EMA,modules:['essay','maths']}]})),['maths','essay','place','phone'],'the desk keeps its left-to-right order whatever order the profile lists');
  assert.deepEqual(landingStops(desk({profiles:[{...EMA,modules:[]}],joined:false})),['place','phone']);
  const {LANDING_STOPS}=keys();assert.equal(LANDING_STOPS,undefined,'no fixed stop list with a Continue button is left');
+});
+
+test('TL-3: Select on the paired phone stop opens pair with the landing behind it; on pair, Down then Select forgets every phone',()=>{
+ const {tvKey}=keys();
+ const at=desk({focus:4});
+ assert.deepEqual(tvKey(at,'select',LOCAL).events,[{type:'nav',screen:'pair',focus:0,from:'landing'}],'paired: the phone stop opens pair');
+ const pair=desk({screen:'pair',focus:0,back:'landing'});
+ assert.deepEqual(tvKey(pair,'select',LOCAL).events,[],'Pair another: the code is already up');
+ assert.deepEqual(tvKey(pair,'down',LOCAL).events,[{type:'focus',focus:1}]);
+ assert.deepEqual(tvKey({...pair,focus:1},'select',LOCAL).events,[{type:'phones.forget'}]);
+ assert.deepEqual(tvKey({...pair,focus:1},'up',LOCAL).events,[{type:'focus',focus:0}]);
+ assert.deepEqual(tvKey({...pair,joined:false,focus:1},'select',LOCAL).events,[],'unpaired: no forget');
+ assert.deepEqual(tvKey({...pair,focus:1},'back',LOCAL).events.map(e=>e.screen),['landing'],'Back still leaves');
 });
 
 test('landing 2: the lamp rests on what was left - marked, then resume, then next, then last - and only the learner\'s own',()=>{
@@ -352,7 +365,7 @@ test('landing 3: the D-pad moves the lamp between the objects, and Select opens 
  assert.equal(focusAfter(at(1),tvKey(at(1),'down',LOCAL)),3,'Down is Someone else (the place)');
  assert.equal(focusAfter(at(3),tvKey(at(3),'up',LOCAL)),1,'Up from Someone else is the app above it');
  assert.deepEqual(tvKey(at(3),'left',LOCAL).events,[]);
- assert.deepEqual(tvKey(at(1),'up',LOCAL).events,[],'a paired phone is not a stop');
+ assert.equal(focusAfter(at(1),tvKey(at(1),'up',LOCAL)),4,'a paired phone is a stop too (TL-3)');
  const fresh=(f)=>at(f,{joined:false});
  assert.equal(focusAfter(fresh(0),tvKey(fresh(0),'up',LOCAL)),4,'Up reaches the unpaired phone (top right)');
  assert.equal(focusAfter(fresh(4),tvKey(fresh(4),'down',LOCAL)),2);
@@ -443,7 +456,7 @@ test('landing 5 (S34 T5): with nothing waiting and no phone paired the lamp rest
 test('landing 6 (S34 T4): a desk with no one at it - every app is on it, empty, and any Select asks who is at the desk first',()=>{
  const {landingStops,deskWaiting}=rows();const {tvKey}=keys();
  const none=(patch={})=>desk({learner:null,...patch});
- assert.deepEqual(landingStops(none()),['maths','english','essay','place'],'no profile to read: all three apps lie on the desk');
+ assert.deepEqual(landingStops(none()),['maths','english','essay','place','phone'],'no profile to read: all three apps lie on the desk');
  assert.deepEqual(deskWaiting(none()).map(w=>w.empty),['Not started','Not started','Nothing read'],'no one\'s work: each object says so in two words');
  for(const f of [0,1,2])assert.deepEqual(tvKey(none({focus:f}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'an app opens the learner switcher first, never the app');
  assert.deepEqual(tvKey(none({focus:3}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'the place card opens the switcher');

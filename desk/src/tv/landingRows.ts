@@ -18,7 +18,7 @@ import { summaryLine } from "@/lib/rules/essay";
 export const LANDING_MODULES = ["maths", "english", "essay"] as const satisfies readonly Subject[];
 /**
  * A stop on the desk: an app's object, the place card (whose desk it is: Select hands it to someone else), and the
- * phone while none is paired (Select shows the pairing screen). A paired phone lies on the desk as a status, not a stop.
+ * phone (Select shows the pairing screen; paired, it also says how many phones are here and can forget them all).
  */
 export type LandingStop = Subject | "place" | "phone";
 /**
@@ -33,9 +33,9 @@ export function landingModules(s: Session): Subject[] {
   const on = onModules(s);
   return LANDING_MODULES.filter((m) => on.includes(m));
 }
-/** Every stop: the apps, the place card, then the phone while it is unpaired. */
+/** Every stop: the apps, the place card, then the phone - always (TL-3): paired, Select on it shows who is here and pairs another. */
 export function landingStops(s: Session): LandingStop[] {
-  return [...landingModules(s), "place", ...(s.joined ? [] : ["phone" as const])];
+  return [...landingModules(s), "place", "phone"];
 }
 /** The focus index of a stop, or LANDING_REST when it is not on this desk (the lamp then starts where it rests). */
 export function landingFocus(s: Session, stop: LandingStop): number {

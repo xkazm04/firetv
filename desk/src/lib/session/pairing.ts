@@ -238,7 +238,7 @@ export type LobbyKey = (typeof LOBBY)[number];
  * page reads none of them (its only read of the timer, page.tsx:598, is on the joined Tonight panel).
  */
 export const GUEST_BLANK = {
-  profiles: [], tasks: [], back: undefined,
+  profiles: [], tasks: [], back: undefined, phonesLive: 0,
   focus: 0, view: "band", timer: { left: 25 * 60, running: false, phase: "work" },
   pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
   hint: null, lesson: null, noLesson: false, lessonPaused: false, watch: null,
@@ -273,7 +273,8 @@ export function view(s: Session, role: Role | null): Session {
   // the other learners' Math Buddy work (store.ts MathsSlot) is theirs: no screen is sent it
   const { away: _away, week, ...seen } = s;
   if (role === "tv") return { ...seen, viewer: "tv" };
-  return { ...seen, ...(week !== undefined ? { week } : {}), pin: "", joined: true, viewer: "phone" };
+  // the count of phones is the TV's alone (TL-3)
+  return { ...seen, phonesLive: 0, ...(week !== undefined ? { week } : {}), pin: "", joined: true, viewer: "phone" };
 }
 
 /**

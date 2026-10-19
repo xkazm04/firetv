@@ -295,6 +295,8 @@ export interface AtDesk { id: string; name: string }
 
 export interface Session {
   pin: string; joined: boolean; phoneUrl: string;
+  /** How many listed phones have a stream open now (TL-3); sent to the TV only. */
+  phonesLive: number;
   /** Who is at the desk; null on a fresh desk until someone sits down (the place card asks "Whose desk?"). */
   learner: AtDesk | null;
   profiles: Profile[]; draft: Profile | null;
@@ -390,7 +392,9 @@ export type Event =
   | { type: "practice.second"; n: number; verdict: "right" | "wrong" }
   | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string; slipAt?: SlipAt }
   | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string; by?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string; failure?: JobFailure }
-  | { type: "status"; text: string; essayRefused?: boolean } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" };
+  | { type: "status"; text: string; essayRefused?: boolean } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" }
+  // TL-3: how many phones have a stream open (the stream route raises it), and the TV's forget of every phone (the session route answers it; no reducer change)
+  | { type: "phone.presence"; live: number } | { type: "phones.forget" };
 
 /**
  * The one door for what a screen or phone posts (api/session POST, after the server-only refusals): for each client-postable
@@ -552,7 +556,7 @@ export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry
 const drawPin = () => String(randomInt(1000, 10000));
 export function fresh(): Session {
   return {
-    pin: drawPin(), joined: false, phoneUrl: phoneUrl(), learner: null,
+    pin: drawPin(), joined: false, phonesLive: 0, phoneUrl: phoneUrl(), learner: null,
     // the demo profiles are on the switcher, but a fresh desk seats no one: the place card asks whose desk it is
     profiles: [
       { id: "ema", name: "Ema", type: "high-school", age: 16, modules: ["maths", "english", "essay"] },
@@ -690,6 +694,8 @@ function step(s: Session, e: Event): Session {
       if (waiting && s.screen !== "profile") { n.screen = "joined"; n.focus = 0; } break; }
     // a phone forgetting the desk drops its own cookie (the session route); the desk itself does not change
     case "leave": return s;
+    case "phone.presence": n.phonesLive = Math.max(0, Math.floor(e.live)); break;
+    case "phones.forget": return s;
     // the code on the TV turns over once a phone has joined with it (the session route raises this): a new pin, never the one just used
     case "pin.turn": { let pin = drawPin(); while (pin === s.pin) pin = drawPin(); n.pin = pin; break; }
     // the landing with no stop named: the lamp rests on what was left (tv/landingRows.ts LANDING_REST)
@@ -836,7 +842,7 @@ function step(s: Session, e: Event): Session {
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; n.essayRefused = e.essayRefused ? e.text : undefined; break;
     case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.log = { ...s.log, endedAt: Date.now() }; break;
-    case "reset": return fresh();
+    case "reset": return { ...fresh(), phonesLive: s.phonesLive };
   }
   // a set being written is for the learner who asked: another learner at the desk supersedes it, and its late result is dropped by id
   if (n.learner?.id !== s.learner?.id && s.jobs?.practice?.phase === "running") { n.jobs = { ...n.jobs }; delete n.jobs.practice; if (s.jobs.practice.start !== undefined && n.status === s.jobs.practice.start) n.status = ""; }
@@ -886,7 +892,7 @@ function load(): Session {
   if (bad) return setAside(bad);
   try {
     const log = "log" in j ? keptLog(j.log) : undefined;
-    return settleOwners({ ...fresh(), ...j, ...(log === undefined ? {} : { log }), profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
+    return settleOwners({ ...fresh(), ...j, ...(log === undefined ? {} : { log }), profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phonesLive: 0, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
   } catch (e) { return setAside(`its repair failed (${e instanceof Error ? e.message : e})`); }
 }
 /** The name an unusable session.json still has to be put aside as, when load() could not rename it; the store takes it over at startup. */
