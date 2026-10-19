@@ -67,15 +67,24 @@ export function usesFrame(reply: string, frame: Frame): string | null {
   return null;
 }
 /**
+ * recert-11 (Viktor, "Can you ask a good school question?"): a replay question that asks the learner to ask, or to make up,
+ * a question is a step out of the scene, not a line in it. Read on the words as written: "can/could/will/would you ask",
+ * "ask me", and "ask" with a/an/one/another/some/any ... "question(s)" in the same sentence. No out-of-role classifier.
+ */
+const META = /\b(?:can|could|will|would)\s+you\s+ask\b|\bask\s+me\b|\bask\s+(?:a|an|one|another|some|any)\b[^.!?]*\bquestions?\b/i;
+export const asksForAQuestion = (question: string) => META.test(question.replace(/’/g, "'"));
+/**
  * Why a Back replay is no replay, or null when it holds: its `form` must name some content word of the after form, case
  * apart; its question must not say the after form itself (the partner never supplies the learner's answer), unless that
- * form is one word, which a question can only invite by naming ("Do you often…?" for "often"); and, given the moment's
- * frame (recert-8), the question must invite it.
+ * form is one word, which a question can only invite by naming ("Do you often…?" for "often"); it must ask the learner
+ * something in the scene, never ask them to ask a question (recert-11); and, given the moment's frame (recert-8), the
+ * question must invite it.
  */
 export function replayRefused(question: string, form: unknown, after: string, frame?: Frame): string | null {
   const want = new Set(contentWords(after));
   if (typeof form !== "string" || !wordsOf(form).some(w => want.has(w))) return "The replay question did not call for the coached form.";
   if (wordsOf(after).length > 1 && findPhrase(question, after) !== null) return "The replay question said the coached form itself.";
+  if (asksForAQuestion(question)) return "The replay question asked the learner to ask a question instead of asking them something in the scene.";
   if (frame && !invitesFrame(question, frame)) return "The replay question did not invite the coached frame.";
   return null;
 }

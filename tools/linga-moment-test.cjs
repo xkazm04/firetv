@@ -843,3 +843,40 @@ test('recert-11 (2) rules: replayForm reads the open replay\'s moment, a self-re
   assert.equal(V.replayForm({...c,moments:[{...m,replay:{...m.replay,reply:'x',used:false}}],coaching:{before:'a',after:'b c',note:''}}),'b c','an answered moment gives way to the coaching');
   assert.equal(V.replayForm(null),null);
 });
+
+// ---- recert-11 (3): Viktor's Back replay asked "Can you ask a good school question?", a meta question out of the scene,
+// after his moment "School good?" -> "Is school good?" (recert-11/viktor-67 #15). replay.ts refuses a replay question that
+// asks the learner to ask or make up a question, as it refuses one that does not invite the frame: asked once more, then
+// the conversation. The replay task asks the partner to stay in role (one sentence).
+const R11_VIKTOR={moment:{kind:'fix',said:'School good?',better:'Is school good?',why:'A question starts with \'Is\' here.'},question:'Can you ask a good school question?'};
+test('recert-11 (3) rules: a replay question that asks the learner to ask a question is refused; a question in the scene is not',()=>{
+  const {replayRefused,asksForAQuestion,frameOf}=require(path.join(root,'src/lib/english/replay.ts'));
+  const x=R11_VIKTOR,frame=frameOf(x.moment);
+  assert.equal(replayRefused(x.question,'Is school good',x.moment.better,{...frame,anchors:[]}),replayRefused(x.question,'Is school good',x.moment.better,frame),'refused whatever the frame');
+  assert.match(replayRefused(x.question,'Is school good',x.moment.better,frame),/asked the learner to ask a question/,'Viktor\'s question, recert-11 #15');
+  for(const q of ['Can you ask a good school question?','Could you ask me about my day?','Ask me something about the hotel!','Would you ask one more question about school?','Now ask another short question, please.','Can you ask her a question?'])
+    assert.equal(asksForAQuestion(q),true,q);
+  for(const q of ['Is school good today, Grandpa?','What do you ask for at the front desk?','Do you work every morning?','Where is the breakfast room in your hotel?','Did you ask the teacher?','Do you have any questions about the room?'])
+    assert.equal(asksForAQuestion(q),false,q);
+  assert.equal(replayRefused('Where do you work every morning?','I work','I work'),null,'a replay in the scene still holds');
+  assert.match(C.REPLAY_TASK,/Stay in your role in this scene and ask the learner something they answer; never ask them to ask or make up a question\./);
+});
+test('recert-11 (3) wired: a meta replay question is asked for once more, then a second one is the conversation, never on screen',async()=>{
+  const META='Can you ask me a good question about work?';
+  let n=0;
+  const r=await lg4(()=>({json:{reply:++n===1?META:REPLAY_Q,form:'I work'},provider:'test',ms:1}));
+  try{
+    await r.cmd('moment-done');
+    const c=r.getSession().conversation,calls=replays(r.calls);
+    assert.equal(calls.length,2,'asked once more');assert.match(calls[1].p.refused.why,/asked the learner to ask a question/);assert.equal(calls[1].p.refused.question,META);
+    assert.equal(c.phase,'replay');assert.equal(c.turns.at(-1).text,REPLAY_Q,'the second question is the replay');
+  }finally{r.done();}
+  const twice=await lg4(asked(META));
+  try{
+    await twice.cmd('moment-done');
+    const c=twice.getSession().conversation;
+    assert.equal(replays(twice.calls).length,2);
+    assert.equal(c.phase,'conversation','Back never strands the scene');assert.equal(c.error,'');assert.equal(c.turns.at(-1).text,ON_SCREEN);
+    assert.ok(!c.turns.some(t=>t.text===META),'the meta question never reaches the screen');assert.equal(c.moments[0].replay,undefined);
+  }finally{twice.done();}
+});
