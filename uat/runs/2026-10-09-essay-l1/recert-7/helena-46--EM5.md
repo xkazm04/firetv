@@ -1,0 +1,28 @@
+# helena-46 × EM5 ·  (recert-7)
+
+- Character: helena-46
+- Journey: EM5
+- Cert level: L1 re-walk, code only, no model
+- Head 5096c0ce
+- Recertifies: 2026-10-09-essay-l1/recert-6 at 46db00cc
+- **Verdict now: L1-fail.** 3 fixed, 4 recur; 4 rows open.
+
+## Prior rows
+
+| Finding | Status | Evidence (current code) | Commit |
+| --- | --- | --- | --- |
+| L1-helena-46-EM5-1 Reading a kept email puts every sentence on the TV and its first words on the … (major) | recurs → L1-helena-46-EM5-1 | cited lines re-found at 5096c0ce; essay/EssayTV.tsx changed since 46db00cc (70b7d68d, 6009739d) and the cite moved with it (same line content) | none |
+| L1-helena-46-EM5-2 After the first reading, no remote path leads back to the Workroom (major) | fixed | eabdd019: in Adult mode Back from the lens home opens the Workroom. keys.ts:433 (essaytype handler) pushes the same /api/twin { open: true } call the landing uses (:292) when isAdultHere(s), and goes to the desk only in Family mode; with a reading on the desk the path is landing -> forensic (:292) -> Back to the lens home (forensic Back, :462) -> Back to the Workroom. Executed at 5096c0ce (node --test tools/tv-keys-test.cjs, 57 of 57 green, 'workroom 1 (recert-6/L1-helena-46-EM5-2)'): an Adult session on the landing opens the forensic page; forensic Back -> essaytype; essaytype Back -> no event and the one call /api/twin { open: true }; a Family session on the lens home still goes to the landing with no call. (eabdd019) | eabdd019 |
+| L1-helena-46-EM5-3 A kept piece can be read only from the phone; the PC page cannot ask for a rea… (major) | fixed | 6009739d: OK on a Workroom piece reads it on the TV. keys.ts:456 (workroom handler) sends { kind: "shelf-piece", pieceId } for a piece row when no analyse job is running (the id only, never the text); analyse/route.ts:87 refuses any role but the TV (403, SHELF_PIECE_TV_ONLY), :146-156 looks the piece up on the seated learner's shelf (not there: 400 "That piece is not on your shelf.", no run), reads its latest version through the shared readPiece helper (:59) so the reading opens with essay.set / essay.progress, and answers { pieceId, summary }. The reading writes nothing: ReadingFor.noSave (desk/essay.ts:84) skips record() (:208), and the route adds no piece, version or notice. Executed at 5096c0ce (scratch repro.cjs, engine stubbed): a kept 3-paragraph email read by shelf-piece with the tv role -> 200 { pieceId, summary }, the TV screen "forensic", then the shelf and learners.json compared byte for byte -> identical; the same call as phone -> 403. Pinned by tools/essay-piece-test.cjs ('EM5-3 (recert-6)'; 48 of 48 green) and tools/tv-keys-test.cjs ('workroom 2'). The suggested acceptance allowed either door (OK on a Workroom piece, or a Read button on /drop): the Workroom door is built; /drop still has no read action (it keeps, lists and builds the twin) and the sentences are on the TV (see helena-46-EM5-1). Edge not walked: a shelf whose one-time notice was cleared answers 428 (route.ts:152) and the TV says nothing. (6009739d) | 6009739d |
+| L1-helena-46-EM5-4 On /drop the notice's 'Read without keeping' reads nothing, and the empty shel… (minor) | recurs → L1-helena-46-EM5-2 | cited lines re-found at 5096c0ce; no commit since 46db00cc touched the cited files | none |
+| L1-helena-46-EM5-5 Leaving a piece out of the exemplars still lets its text shape the dims and co… (polish) | recurs → L1-helena-46-EM5-3 | cited lines re-found at 5096c0ce; no commit since 46db00cc touched the cited files | none |
+| L1-helena-46-EM5-6 A piece kept from the phone cannot be named, so the Workroom and shelf show it… (major) | fixed | 9a4b8d43 + 01327bbe: a phone-kept piece can be named. With Keep on and no open piece the Essay tab shows an optional "Name this piece" field (phone/page.tsx:740, state :106, maxLength 80); the keep sends it (:293, { title } only when keepIt and no pieceId), the route hands it to addPiece for a new piece (analyse/route.ts:176, :180; a version keeps the piece's name), and addPiece trims it to 80 characters, else falls back to the numbered "Untitled <format> <n>" (session/texts.ts:119, titleOf :92). A picked file pre-fills the field with its file name without the extension (phone/page.tsx:275). Executed at 5096c0ce (scratch repro.cjs, engine stubbed): a phone keep with title "Late order complaint" -> shelf title "Late order complaint"; the same piece pasted again with another title -> 1 card, 2 versions, the first name kept; a 300-character title -> 80; a blank title -> "Untitled essay 1". Pinned by tools/essay-piece-test.cjs ('L1-helena-46-EM5-6 (recert-6)'), tools/essay-rules-test.cjs ('L1-helena-46-EM5-6') and tools/phone-panel-test.cjs (104 of 104 green). Edge: the field exists only inside the piece panel (2+ paragraphs, Keep on), the only place a phone piece is kept. (9a4b8d43, 01327bbe) | 9a4b8d43, 01327bbe |
+| L1-helena-46-EM5-7 .docx text: table cells become separate paragraphs and a non-breaking hyphen i… (polish) | recurs → L1-helena-46-EM5-4 | cited lines re-found at 5096c0ce; no commit since 46db00cc touched the cited files | none |
+
+## New findings
+
+None.
+
+## Notes
+
+- Evidence check at 5096c0ce: every cited line was re-mapped through `git diff -U0 46db00cc 5096c0ce` per file (a cite inside a changed hunk is re-read by hand; shifted cites were compared line for line with the old content); commits that changed a file a row cites are named in the row. Rows a commit claims to close were executed in scratch repros outside the repo and pinned by the repo's own narrowed suites. Model-dependent behaviour stays with L2.
