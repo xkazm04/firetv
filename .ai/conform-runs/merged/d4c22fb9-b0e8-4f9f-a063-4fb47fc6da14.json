@@ -1,0 +1,95 @@
+{
+ "schema": "conform-run/1",
+ "worker": "d4c22fb9-b0e8-4f9f-a063-4fb47fc6da14",
+ "subject": "model-routing",
+ "evaluatedAt": "2026-10-19T07:09:45.358348+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "linga",
+   "subject": "model-routing",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "desk/src/lib/english/check.ts:91 Linga selects a tier at its call sites without a required closed call class or centralized class-to-tier-and-effort mapping, so its routing does not meet the standard.",
+   "techniques": [
+    {
+     "technique": "candidate-ranking",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/engines/registry.ts:48 Linga's engine retrieves one configured provider by name; it does not order eligible candidates using live measurements."
+    },
+    {
+     "technique": "consumer-overrides",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/engines/text.ts:114 The routing layer reads provider override state from the environment instead of receiving an attributable override from Linga's call edge."
+    },
+    {
+     "technique": "effort-calibration",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/engines/codex.ts:47 When Codex serves Linga, this adapter ignores its measured thinking:false setting and independently selects effort from another parameter, environment state, or medium."
+    },
+    {
+     "technique": "failover-horizon",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/english/check.ts:210 Duplicate choices can pass the engine schema and be booked as successful before this generic Error rejects them; the unusable completion does not enter the typed routing-failure taxonomy."
+    },
+    {
+     "technique": "failover-path-liveness",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/engines/shape.ts:152 The engine's automatic repair calls the same provider p; no incident-triggered alternate-provider transition exists on this path to exercise."
+    },
+    {
+     "technique": "model-identity",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/engines/text.ts:61 The reported identity combines the adapter and configured model alias, without a separate stable logical-model identity and endpoint-member identity."
+    },
+    {
+     "technique": "policy-governance",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/engines/meter.ts:36 Linga's engine ledger records usage and provider but omits selected effort, policy version, deciding rule, and override attribution, preventing reconstruction of the routing decision."
+    },
+    {
+     "technique": "quality-axis-separation",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/english/conversation.ts:568 These observations assess the learner's submitted reply for learning evidence; this path does not feed operational or semantic provider scores into candidate ranking."
+    },
+    {
+     "technique": "routing-policy",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/engines/text.ts:122 Linga's text boundary invokes the configured provider directly; the registry supplies neither validated permission rules nor a decision containing the selecting rule chain."
+    },
+    {
+     "technique": "turn-classification",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/english/check.ts:91 The caller chooses fast directly and supplies a feature usage label; no required semantic class selects a tier-and-effort pair through one authoritative mapping."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-19T07:09:45.358348+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "model-routing"
+   ],
+   "techniques": [
+    "candidate-ranking",
+    "consumer-overrides",
+    "effort-calibration",
+    "failover-horizon",
+    "failover-path-liveness",
+    "model-identity",
+    "policy-governance",
+    "quality-axis-separation",
+    "routing-policy",
+    "turn-classification"
+   ],
+   "deviations": 1,
+   "context": "linga",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}
