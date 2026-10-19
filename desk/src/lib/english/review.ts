@@ -128,12 +128,40 @@ export function reuseOf(reply: string, c: Conversation): string | null {
   if (alreadyShown(c, r.better)) return null;
   return findPhrase(reply, r.better);
 }
-/** The learner's words as the recap shows them: the reply, or the sentence of it that holds the quote. */
+/**
+ * The learner's words as the recap shows them: the reply, or the sentence of it that holds the quote. A quote no sentence
+ * that fits can hold, the whole reply among them, is cut at a sentence or clause end (clauseCut), never mid-sentence.
+ */
 export function usedLine(reply: string, quote: string): string {
   const said = reply.trim();
   if (said.length <= USED_MAX) return said;
   const sentence = said.split(/(?<=[.!?])\s+/).find(x => x.includes(quote));
-  return sentence && sentence.length <= USED_MAX ? sentence : quote.slice(0, USED_MAX);
+  if (sentence && sentence.length <= USED_MAX) return sentence;
+  return quote.trim() === said || quote.length > USED_MAX ? clauseCut(quote) : quote;
+}
+/**
+ * `text` in at most `max` characters (LG-4 recert-8: Adéla's "Tried again" quote ended "it depends on whether "): up to
+ * its last sentence end that fits; else up to its last clause end (a comma, semicolon, colon or dash) and "…"; else up to
+ * its last whole word and "…". Never a cut inside a word.
+ */
+export function clauseCut(text: string, max = USED_MAX): string {
+  const t = text.trim();
+  if (t.length <= max) return t;
+  const last = (re: RegExp) => [...t.matchAll(re)].map(m => m.index! + m[0].length).filter(at => at <= max).at(-1);
+  const sentence = last(/[.!?]["”’)]*(?=\s|$)/g);
+  if (sentence) return t.slice(0, sentence);
+  const clause = last(/[,;:–—](?=\s)/g);
+  if (clause && clause > 1) return `${t.slice(0, clause - 1).trimEnd()}…`;
+  const word = t.lastIndexOf(" ", max - 1);
+  return `${(word > 0 ? t.slice(0, word) : t.slice(0, max - 1)).trimEnd()}…`;
+}
+/**
+ * A "Tried again" quote as the recap shows it, on the TV and the phone alike: one stored before clauseCut, cut at USED_MAX
+ * characters mid-sentence, is cut back to its last sentence or clause end.
+ */
+export function recapQuote(reply: string): string {
+  const said = reply.trim();
+  return reply.length >= USED_MAX && !/[.!?…]["”’)]*$/.test(said) ? clauseCut(said, said.length - 1) : said;
 }
 
 /**

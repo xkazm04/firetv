@@ -562,3 +562,35 @@ test('LG-4 recert-8 wired: a Back replay that does not invite the frame is asked
     assert.equal(c.moments[0].replay.used,false,'"I have tomato" does not use it');
   }finally{answered.done();}
 });
+
+// ---- LG-4 recert-8 (adela-17 J4 #15): the recap's "Tried again" quote ended mid-sentence, "it depends on whether ", on the TV
+// and the phone alike: a reply over USED_MAX that used no form was cut at 180 characters. Fixtures: her reply and its stored cut.
+const ADELA='Usually I don\'t answer straight away, because I\'d rather get enough sleep. Although I sometimes check who wrote to me, I put my phone on silent mode. I think it depends on whether the message is urgent. Was my answer correct?';
+const ADELA_TWO='Usually I don\'t answer straight away, because I\'d rather get enough sleep. Although I sometimes check who wrote to me, I put my phone on silent mode.';
+test('LG-4 recert-8 rules: a long reply is cut at a sentence or clause end, never mid-sentence; a quote stored with the old cut is cut back',()=>{
+  const R=require(path.join(root,'src/lib/english/review.ts')),V=require(path.join(root,'src/lib/english/view.ts'));
+  assert.equal(R.usedLine(ADELA,ADELA),ADELA_TWO,'adela-17 #15: the two sentences that fit');
+  assert.equal(R.usedLine(ADELA,'often'),'often','a found form short of its sentence is kept as before');
+  const stored=ADELA.slice(0,R.USED_MAX);
+  assert.match(stored,/depends on whether $/,'the recert-8 quote as stored');
+  assert.equal(R.recapQuote(stored),ADELA_TWO,'cut back to its last sentence end');
+  assert.equal(V.replayLine(stored,false),`Tried again: “${ADELA_TWO}”`,'the one wording, TV and phone');
+  assert.equal(R.recapQuote('I have tomato and flowers'),'I have tomato and flowers','a short quote is left alone');
+  const long='Well, when my friends message me late at night about homework or games or anything else that happens to come up, I usually wait, because sleep matters more to me than any chat that could easily wait until morning';
+  assert.equal(R.clauseCut(long),'Well, when my friends message me late at night about homework or games or anything else that happens to come up, I usually wait…','no sentence end: the last clause end');
+  const run='a'.repeat(10)+' '+'b'.repeat(200);
+  assert.equal(R.clauseCut(run),'a'.repeat(10)+'…','no clause end: the last whole word');
+  for(const x of [R.usedLine(ADELA,ADELA),R.recapQuote(stored),R.clauseCut(long),R.clauseCut(run)])assert.ok(x.length<=R.USED_MAX,x);
+});
+test('LG-4 recert-8 wired: Adela\'s long replay reply reaches the recap as whole sentences, on the TV and the phone',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts'));
+  const r=await lg4(asked(REPLAY_Q));
+  try{
+    await r.cmd('moment-done');await r.say(ADELA);await r.cmd('finish');
+    const c=r.getSession().conversation,v=V.lingaView(r.getSession(),{});
+    assert.equal(c.moments[0].replay.reply,ADELA_TWO);
+    assert.equal(v.hero.tried,`Tried again: “${ADELA_TWO}”`,'the TV');
+    assert.equal(v.recap.moments[0].tried,ADELA_TWO,'the phone');
+    assert.doesNotMatch(V.viewText(v),/whether/);
+  }finally{r.done();}
+});

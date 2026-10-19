@@ -22,6 +22,7 @@ import { accepts, refusal, turnState } from "./turn";
 import { runningTake, takeSpent } from "./take";
 import { lostLine, type LostTask } from "./lostfound";
 import { showOpen } from "./repair";
+import { recapQuote } from "./review";
 import { slipStands } from "./slip";
 import { beatCaption, beatOf, duetAgain, duetRefuses } from "./duet";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
@@ -214,7 +215,7 @@ const backHelp = (c: Conversation) => c.moment?.repair?.lost || duetRefuses(c, "
 export const replayThinking = (c: Conversation | null | undefined): string | null =>
   c?.pending && c.replayFor === c.pending ? `${c.partner.split(" · ")[0]} is thinking of a new question.` : null;
 /** LG-4: a moment's replay on the recap, one short line: the learner's reply, and whether it said the form (never a count). */
-export const replayLine = (reply: string, used: boolean) => `Tried again: “${reply}”${used ? " · you used it" : ""}`;
+export const replayLine = (reply: string, used: boolean) => `Tried again: “${recapQuote(reply)}”${used ? " · you used it" : ""}`;
 
 /** The caption tag over each rung of the rescue ladder (lib/english/help.ts): the rung names itself. */
 export const RUNG_TAG = { 1: "Said more simply", 2: "What it means", 3: "A way to start" } as const;
