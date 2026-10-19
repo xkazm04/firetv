@@ -3561,3 +3561,31 @@ test('LG-5 recert-9 wired (2) (tomas-9 J4 #6-#7, petra-38 J4 #5-#7): once the la
  assert.equal(v.hero.prompt,'Ms Lee asks: Your room. What is wrong?');
  assert(!JSON.stringify(v).includes(PETRA_QUIZ.question)&&!JSON.stringify(v).includes('Stay quiet and leave'),'never the scene\'s quiz');
 });
+
+// ---- LG-5 recert-10 (docs/uat-insights/2026-10-19-lt-recert-10.md, question 3): the say-back is the line on screen's own. On
+// Lena's "Hi Grandpa! I am happy too." Viktor's first rung was "Hi Lena! Yes, I see you.", a reply to her first line, "Hi
+// Grandpa! Can you see me?" (recert-10/LT-viktor-67-J4-2). A say-back that answers an earlier partner line is no rung.
+const LENA_FIRST='Hi Grandpa! Can you see me?',LENA_NOW='Hi Grandpa! I am happy too.',VIKTOR_STALE='Hi Lena! Yes, I see you.';
+test('LG-5 recert-10 rules (3): a say-back that answers an earlier partner line, not the one on screen, is no rung; one built from the line on screen stays',()=>{
+ const H=require(path.join(root,'src/lib/english/help.ts'));
+ assert.equal(H.sayBackFor(VIKTOR_STALE,LENA_NOW,'A1'),VIKTOR_STALE,'with no earlier line given, the rung reads as before');
+ assert.equal(H.sayBackFor(VIKTOR_STALE,LENA_NOW,'A1',[LENA_FIRST]),'','viktor-67 #8: it answers "Can you see me?", not the line on screen');
+ assert.equal(H.sayBackFor('Me too! Is school good?',LENA_NOW,'A1',[LENA_FIRST]),'Me too! Is school good?','built from the line on screen');
+ assert.equal(H.sayBackFor('Yes, I can see you.',LENA_FIRST,'A1',[]),'Yes, I can see you.','the first line\'s own say-back');
+ assert.equal(H.sayBackFor('Hi Mia! Is school good?',MIA_LINE,'A1',['Hi! Can you see me?']),'Hi Mia! Is school good?','a new topic shares nothing with an earlier line: kept');
+ assert.equal(H.answersEarlier('I see my dog.','Is your dog big?',['Can you see me?']),false,'a word of the line on screen keeps it, whatever else it shares');
+ assert.deepEqual(H.validLadder({sayBack:VIKTOR_STALE,meaning:'happy: glad',starter:'I am …'},LENA_NOW,{band:'A1',earlier:[LENA_FIRST]}),{2:'happy: glad',3:'I am …'},'the ladder drops the stale say-back and keeps its other rungs');
+});
+test('LG-5 recert-10 wired (3) (viktor-67 J4 #8): the first Help press on Lena\'s second line never shows a reply to her first line',async()=>{
+ const V=view();
+ await bandStart('ema','A1',LENA_FIRST,()=>({reply:LENA_NOW,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'',meaning:'happy: glad',starter:'I am …',sayBack:VIKTOR_STALE}}));
+ await reply('Hello Lena. I see you. I am happy.');
+ let c=getSession().conversation;assert.equal(c.turns.at(-1).text,LENA_NOW);
+ await command('cue');c=getSession().conversation;
+ assert.notEqual(c.cue,VIKTOR_STALE,'the earlier line\'s say-back is never the rung');assert.equal(c.cue,'happy: glad');
+ assert.notEqual(V.helpOf(c).tag,'You could say');
+ // the same scene with a say-back built from the line on screen: it is rung 1, tagged as before
+ await bandStart('ema','A1',LENA_FIRST,()=>({reply:LENA_NOW,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'',meaning:'',starter:'',sayBack:'Me too! Is school fun?'}}));
+ await reply('Hello Lena. I see you. I am happy.');await command('cue');c=getSession().conversation;
+ assert.equal(c.cue,'Me too! Is school fun?');assert.equal(V.helpOf(c).tag,'You could say');
+});

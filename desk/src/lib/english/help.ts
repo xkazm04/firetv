@@ -14,6 +14,7 @@
  * answer keys. A ladder lost to a restart gives way to the scene's own cue, as before the ladder.
  */
 import { fitsBand, pastQuestion } from "./gate";
+import { FUNCTION_WORDS } from "./slip";
 import type { Band, ConversationHelp, HelpRung, LineQuiz } from "./types";
 
 /** Any revealed rung is help: a reply after the simpler line, the meaning or the starter is supported practice. */
@@ -44,9 +45,9 @@ const inBand = (text: string, band?: Band) => fitsBand(text.replace(/^Try(?: [a-
 /**
  * How a ladder is held (LG-5 recert-8): `band`, the band the partner line was held to, which every rung must fit too (no
  * past-tense question at A1, at most 8 words); `held`, the line on screen is the band hold's cut of the model's line, so a
- * meaning rung must name a word that is still in it.
+ * meaning rung must name a word that is still in it; `earlier`, the partner lines before it, none of which a say-back may answer.
  */
-export interface LadderHold { band?: Band; held?: boolean }
+export interface LadderHold { band?: Band; held?: boolean; earlier?: readonly string[] }
 /** A meaning rung names its word first ("see: look with your eyes"); that word must be in the line (`same`, its words). */
 const namesLineWord = (meaning: string, same: string) => !meaning.includes(":") || words(meaning.slice(0, meaning.indexOf(":"))).split(" ").every(w => ` ${same} `.includes(` ${w} `));
 /** The bands whose first rung is words to say back (LG-5 recert-9). */
@@ -58,12 +59,26 @@ const sentencesOf = (text: string) => text.trim().split(/(?<=[.!?])\s+/).map(x =
  * past-tense question at either band, says none of the line's sentences again, and answers a question line with at least
  * one sentence that is not a question ("Hi Mia! Is school good?" for "Hi Grandpa! I am home now."). Else "".
  */
-export function sayBackFor(raw: string, partnerLine: string, band: Band | undefined): string {
+export function sayBackFor(raw: string, partnerLine: string, band: Band | undefined, earlier: readonly string[] = []): string {
   const say = raw.replace(/\s+/g, " ").trim();
   if (!say || say.length > SAY_MAX || !inBand(say, band)) return "";
   const parts = say.split(/(?<=[.!?])\s+/), theirs = new Set(sentencesOf(partnerLine));
   if (parts.some(pastQuestion) || sentencesOf(say).some(x => theirs.has(x)) || words(say) === words(partnerLine)) return "";
+  if (answersEarlier(say, partnerLine, earlier)) return "";
   return partnerLine.trim().endsWith("?") && parts.every(x => x.trim().endsWith("?")) ? "" : say;
+}
+/** Words a say-back shares with any line whatever it answers: grammar words, greetings and small reactions. */
+const SAY_LIGHT = new Set([...FUNCTION_WORDS, "hi", "hello", "hey", "bye", "goodbye", "good", "nice", "great", "cool", "fine", "thanks", "thank", "sorry", "wow"]);
+const contentOf = (text: string) => new Set(words(text).split(" ").filter(w => w && !SAY_LIGHT.has(w)));
+/**
+ * Whether a say-back answers an earlier partner line instead of the one on screen (LG-5 recert-10, LT-viktor-67-J4-2): on
+ * Lena's "Hi Grandpa! I am happy too." the rung was "Hi Lena! Yes, I see you.", a reply to her first line, "Can you see
+ * me?". It shares no content word with the line on screen and does share one that only an earlier line said.
+ */
+export function answersEarlier(say: string, partnerLine: string, earlier: readonly string[]): boolean {
+  const mine = contentOf(say), now = contentOf(partnerLine);
+  if ([...mine].some(w => now.has(w))) return false;
+  return earlier.some(line => [...contentOf(line)].some(w => !now.has(w) && mine.has(w)));
 }
 /**
  * The line's own phrase quiz (LG-5 recert-9, LT-viktor-67-J4-1, LT-tomas-9-J4-2, LT-petra-38-J4-2): the scene's static quiz
@@ -88,7 +103,7 @@ export function validLadder(raw: unknown, partnerLine: string, hold: LadderHold 
   // at A1-A2 the line said more simply is never a rung (it gave the partner's line back): the say-back takes its place
   const simpler = says ? "" : fits(plain(o, "simpler")), starter = fits(unfinished(plain(o, "starter")));
   const named = fits(plain(o, "meaning")), meaning = !hold.held || namesLineWord(named, same) ? named : "";
-  const say = says ? sayBackFor(plain(o, "sayBack"), line, hold.band) : "";
+  const say = says ? sayBackFor(plain(o, "sayBack"), line, hold.band, hold.earlier) : "";
   if (say) { out[1] = say; out.say = true; }
   const quiz = quizWordsFor(o, line, hold.band);
   if (quiz) out.quiz = quiz;
