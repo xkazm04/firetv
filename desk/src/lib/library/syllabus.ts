@@ -297,7 +297,9 @@ export const SYSTEM_START: Record<SchoolSystem, number> = { us: 6, uk: 5, cz: 6,
 
 /**
  * The school year a learner of that age is in, in that system's own numbering (a UK 12-year-old is in Year 8, a US one in
- * Grade 7): age - SYSTEM_START + 1. Our own reading, like SYSTEM_START; it ignores the birthday cut-off.
+ * Grade 7): age - SYSTEM_START + 1. Our own reading, like SYSTEM_START; it ignores the birthday cut-off, which the profile
+ * cannot compute (it keeps an age, no birth date). A learner the cut-off puts a year off has the profile's own school year
+ * pick (Profile.year, the Year row), which the desk reads in its place (rules/stretch learnerYear, rules/recovery Reader).
  */
 export function schoolYear(system: SchoolSystem, age: number): number {
   return age - SYSTEM_START[system] + 1;

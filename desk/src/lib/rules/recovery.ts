@@ -166,12 +166,12 @@ export function prereqsOf(id: string): Set<string> {
  * PARTLY links (gcse.ts WHOLE) to a unit more than PAST_MARGIN years below the learner's school year does not send their lost marks to that unit; it
  * is not on the desk. Absent, every touched unit is a destination, as before.
  */
-export interface Reader { system: SchoolSystem; age: number; }
+export interface Reader { system: SchoolSystem; age: number; /** the school year the profile picked (Profile.year); absent, the age-derived one */ year?: number }
 
 /** The Reader of the seated learner; undefined when nobody is seated, the profile is not at school (type other), or it keeps no age or system. */
 export function readerOf(s: Pick<Session, "profiles" | "learner">): Reader | undefined {
   const me = s.profiles.find((p) => p.id === s.learner?.id);
-  return me && me.type !== "other" && me.age !== undefined && me.system !== undefined ? { system: me.system, age: me.age } : undefined;
+  return me && me.type !== "other" && me.age !== undefined && me.system !== undefined ? { system: me.system, age: me.age, ...(me.year !== undefined ? { year: me.year } : {}) } : undefined;
 }
 
 /** A place an item's lost marks can go: a school-path topic, or a statement the path has no topic for. */
@@ -193,7 +193,7 @@ export const CUT_FROM_YEAR = 12;
 
 /** The destinations of one cleaned item's codes, in the item's order; a place reached twice is kept once, at its first place. */
 function destinations(codes: string[], at?: Reader): Dest[] {
-  const year = at ? schoolYear(at.system, at.age) : -Infinity;
+  const year = at ? at.year ?? schoolYear(at.system, at.age) : -Infinity;
   const past = (id: string) => year >= CUT_FROM_YEAR && year - (SCHOOL[AT.get(id)!].year?.[at?.system ?? "uk"] ?? Infinity) > PAST_MARGIN;
   const out: Dest[] = [];
   const put = (kind: Dest["kind"], id: string, code: string) => {

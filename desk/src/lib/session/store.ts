@@ -12,7 +12,7 @@ import { AsyncLocalStorage } from "node:async_hooks";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { lanHost } from "./lan";
 import { dataDir } from "../dataDir";
-import { AGE_RANGE, NAME_FIRST, SYSTEMS } from "@/tv/profileRows";
+import { AGE_RANGE, NAME_FIRST, SYSTEMS, yearRange } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
 import { dayOf } from "@/tv/mathsRows";
@@ -46,7 +46,7 @@ export type SchoolSystem = "us" | "uk" | "cz" | "de";
  * `mode`: the explicit family/adult choice (rules/mode.ts, Family W4; the gate since slice A5). Optional and usually absent:
  * unset means the mode is derived (modeOf). A stored "adult" counts only while rules/mode adultAllowed holds (18+).
  */
-export interface Profile { id: string; name: string; type: StudentType; age?: number; system?: SchoolSystem; modules: Subject[]; mathPath?: MathPath; mode?: Mode; }
+export interface Profile { id: string; name: string; type: StudentType; age?: number; system?: SchoolSystem; /** the school year the learner is in, in their own system, when the age-derived one is off by the birthday cut-off (the TV Year row); absent, the age-derived year */ year?: number; modules: Subject[]; mathPath?: MathPath; mode?: Mode; }
 /** Only a key of PATHS (library/paths isPath) is a path: any other mathPath (a draft patch, an older or hand-edited session.json) is dropped. */
 function pathChecked<T extends { mathPath?: unknown }>(p: T): T {
   if (p.mathPath === undefined || isPath(p.mathPath)) return p;
@@ -767,6 +767,10 @@ function step(s: Session, e: Event): Session {
       // the age first (a type change may clear it), then the Adult gate on what is left
       // Other has no range, so a known age is kept as a fact (UD-1); a school type still drops an age outside its range
       const r = AGE_RANGE[d.type]; if (r && d.age !== undefined && (d.age < r[0] || d.age > r[1])) delete d.age;
+      // the school year pick is dropped when it is not a whole year the type has in the system, and when the type, system or age
+      // changes under a pick the patch did not carry (it was the old one's)
+      if (d.year !== undefined) { const y = yearRange(d.type, d.system), moved = patch.year === undefined && (d.type !== base.type || d.system !== base.system || d.age !== base.age);
+        if (!y || moved || typeof d.year !== "number" || !Number.isInteger(d.year) || d.year < y[0] || d.year > y[1]) delete d.year; }
       // a saved profile's age under 18 still gates Adult when the draft has lost its age to a type walk: only an age of 18+ typed in lifts it
       const saved = s.profiles.find((p) => p.id === d.id);
       n.draft = adultGated(d, s.draft, d.age === undefined && saved?.age !== undefined && saved.age < 18); break; }

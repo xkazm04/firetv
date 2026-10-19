@@ -576,8 +576,8 @@ test('profile system: every blurb names its decimal convention, Save names the s
  assert.match(save({id:'p',name:'P',type:'high-school',age:16,system:'cz',modules:['maths']}),/Czech Republic \(0,5 is a half\)/);
  assert.doesNotMatch(save({id:'p',name:'P',type:'high-school',age:16,system:'cz',modules:['maths']}),/pick a school system/);
  const rows=profileRows({id:'p',name:'P',type:'high-school',age:16,modules:['maths']});
- assert.deepEqual(rows.map((r)=>r.cells.length),[1,3,5,4,3,rows[5].cells.length,2],'row and cell counts (the Name row first, no Mode row under 18)');
- assert.equal(rows.length,7);
+ assert.deepEqual(rows.map((r)=>r.cells.length),[1,3,5,3,4,3,rows[6].cells.length,2],'row and cell counts (the Name row first, the School year row under the age, no Mode row under 18)');
+ assert.equal(rows.length,8);
 });
 
 test('course lessons 3:the landing card for Math Buddy says the same as the profile blurb - no "school maths" on either',()=>{

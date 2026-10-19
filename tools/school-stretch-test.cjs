@@ -372,3 +372,38 @@ test('8: Get ready for school end to end - the keys\' own call writes the usual 
   assert.deepEqual(tiers(p.items),flag?[1,1,2,2,3,3]:[1,1,1,2,2,2]);
  }
 });
+
+// ------------------------------------------------------------------ 9. the school year pick (L1-nela-12-MB5-1)
+test('9: the profile\'s school year pick - none reads the age-derived year, a pick stands in for it in learnerYear and in recovery\'s cut, and the store drops a pick that does not fit',()=>{
+ const {profileRows}=require(src('tv/profileRows.ts'));
+ const REC=require(src('lib/rules/recovery.ts'));const {STATEMENTS}=require(src('lib/library/gcse.ts'));
+ // a cz age-12 profile with no pick still reads year 7; the pick of 6 reads 6, and the age-derived year is untouched by it
+ assert.equal(R.learnerYear({age:12,system:'cz'}),7);
+ assert.equal(R.learnerYear({age:12,system:'cz',year:6}),6);
+ assert.equal(Y.schoolYear('cz',12),7,'schoolYear stays the age-derived rule');
+ for(const bad of [0,-1,6.5,NaN,'6',null])assert.equal(R.learnerYear({age:12,system:'cz',year:bad}),7,`a junk year ${String(bad)} reads as no pick`);
+ assert.equal(R.setMix('frac-add-sub',{age:12,system:'cz'},false),'standard');assert.equal(R.setMix('frac-add-sub',{age:12,system:'cz',year:3},false),'easier','the pick moves the mix');
+ // recovery's cut reads the pick: a UK 17-year-old (Year 13) is cut from a partly-linked unit far below, the same learner picked in Year 11 is not
+ const uncut=(c)=>JSON.stringify(REC.reachOf([c]));
+ const cut=STATEMENTS.map((x)=>x.code).filter((c)=>JSON.stringify(REC.reachOf([c],{system:'uk',age:17}))!==uncut(c));
+ assert.ok(cut.length>0,'the cut applies to some statement at Year 13');
+ for(const c of cut)assert.equal(JSON.stringify(REC.reachOf([c],{system:'uk',age:17,year:11})),uncut(c),`${c} is not cut at a picked Year 11`);
+ const seated=(p)=>({profiles:[{id:'a',name:'A',type:'high-school',modules:[],system:'uk',age:17,...p}],learner:{id:'a'}});
+ assert.equal(REC.readerOf(seated({})).year,undefined);assert.equal(REC.readerOf(seated({year:11})).year,11);
+ // the store: a fit pick is kept, and a pick out of range or of the wrong type is dropped
+ const draft=(s,patch)=>store.reduce(s,{type:'profile.draft',patch});
+ let s=draft({...store.fresh(),learner:null,screen:'profile'},{name:'Nela',type:'elementary',age:12,system:'cz',modules:['maths']});
+ assert.equal(s.draft.year,undefined);
+ assert.equal(draft(s,{year:6}).draft.year,6,'a fit pick is kept');
+ for(const bad of [0,12,2.5,'6',null,{}])assert.equal(draft(s,{year:bad}).draft.year,undefined,`a pick of ${JSON.stringify(bad)} is dropped`);
+ assert.equal(draft(s,{type:'other',year:6}).draft.year,undefined,'a type with no school year takes no pick');
+ const picked=draft(s,{year:6});
+ assert.equal(draft(picked,{system:'uk'}).draft.year,undefined,'a system change clears a pick that no longer fits');
+ assert.equal(draft(picked,{type:'high-school'}).draft.year,undefined,'a type change clears it');
+ assert.equal(draft(picked,{name:'Nela K'}).draft.year,6,'an unrelated edit keeps it');
+ // the TV row: only for a school type with an age, centred on the derived year, the lamp on the pick or the derived year
+ const yr=(d)=>profileRows(d).find((r)=>r.title==='School year');
+ assert.deepEqual(yr(s.draft).cells.map((c)=>c.year),[6,7,8]);
+ assert.equal(yr({id:'x',name:'',type:'other',age:30,modules:[]}),undefined,'no row for Other');
+ assert.equal(yr({id:'x',name:'',type:'elementary',modules:[]}),undefined,'no row with no age to centre on');
+});

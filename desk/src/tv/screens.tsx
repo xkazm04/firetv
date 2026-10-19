@@ -23,7 +23,7 @@ import { ESSAY_FONTS } from "@/essay/fonts";
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
-import { BRAND, TYPE_WORDS, profileRows, locate, onModules } from "@/tv/profileRows";
+import { BRAND, TYPE_WORDS, profileRows, locate, onModules, yearOf } from "@/tv/profileRows";
 import { modeOf } from "@/lib/rules/mode";
 const NAME = BRAND;
 
@@ -479,7 +479,7 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
   const editing = !!d && s.profiles.some((p) => p.id === d.id);
   const name = d?.name.trim() ?? "";
   const rows = profileRows(d), at = locate(rows, focus), cell = rows[at.r].cells[at.c];
-  const chosen = (c: (typeof cell)) => (c.kind === "name" && !!name) || (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "mode" && modeOf(d ?? undefined) === c.mode) || (c.kind === "system" && d?.system === c.system) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub)) || (c.kind === "path" && pathOf(d) === c.path);
+  const chosen = (c: (typeof cell)) => (c.kind === "name" && !!name) || (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "year" && yearOf(d) === c.year) || (c.kind === "mode" && modeOf(d ?? undefined) === c.mode) || (c.kind === "system" && d?.system === c.system) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub)) || (c.kind === "path" && pathOf(d) === c.path);
   return (<>
     <div className="band band-right" />
     <main className="content-full">

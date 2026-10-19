@@ -66,14 +66,16 @@ export function tierCounts(mix: Mix, n = 6, top = false): { tier1: number; tier2
 }
 
 /** Who the set is for, as the profile at the desk says: an age only for a learner at school, a system (UK when none). */
-export interface MixFor { age?: number; system?: SchoolSystem }
+export interface MixFor { age?: number; system?: SchoolSystem; /** the year the profile picked (Profile.year), which stands in for the age-derived one */ year?: number }
 
 /**
- * The learner's school year in their system, or undefined when the desk cannot say (no age, or a system it does not know).
+ * The learner's school year in their system: the year the profile picked when it holds one, else the age-derived one
+ * (library/syllabus schoolYear). Undefined when the desk cannot say (no age, or a system it does not know).
  */
 export function learnerYear(who: MixFor): number | undefined {
   const sys = who.system ?? "uk";
   if (typeof who.age !== "number" || !Number.isFinite(who.age) || !(sys in SYSTEM_START)) return undefined;
+  if (typeof who.year === "number" && Number.isInteger(who.year) && who.year >= 1) return who.year;
   return schoolYear(sys, who.age);
 }
 

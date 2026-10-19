@@ -38,7 +38,7 @@ export async function POST(req: Request) {
   if (!learner) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   // the seated profile's school year sets the mix: an age only for a learner at school (as the SCHOOL tick reads it)
   const me = getSession().profiles.find((p) => p.id === learner);
-  const who = { age: me && me.type !== "other" ? me.age : undefined, system: me?.system };
+  const who = { age: me && me.type !== "other" ? me.age : undefined, system: me?.system, year: me && me.type !== "other" ? me.year : undefined };
   // a set opened from the paper's recovery row (MB-B40): Get ready for school is open on the unit that row carried, and
   // the paper's lost statements on it are the set's aim; read from the session here, never from the body
   const s = getSession();

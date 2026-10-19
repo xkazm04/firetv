@@ -439,13 +439,16 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       o.ev({ type: "profile.draft", patch });
       const d: Profile = { id: "", name: "", type: "high-school", modules: [], ...s.draft, ...patch };
       const r = AGE_RANGE[d.type]; if (r && d.age !== undefined && (d.age < r[0] || d.age > r[1])) delete d.age;
-      const next = profileRows(d), nr = Math.min(at.r + 1, next.length - 1);
+      // the School year row is a correction most learners skip: the lamp passes it (Up from the next row reaches it)
+      const next = profileRows(d); let nr = Math.min(at.r + 1, next.length - 1);
+      while (nr < next.length - 1 && next[nr].cells[0].kind === "year" && at.r < nr) nr++;
       o.focus(flat(next, nr, likelyIx(next[nr], d)));
     };
     if (k === "select") {
       if (cell.kind === "name") { if (s.ask?.kind !== "name") o.ev({ type: "ask.open", kind: "name" }); }
       else if (cell.kind === "type" && cell.type) pick({ type: cell.type });
       else if (cell.kind === "age") pick({ age: cell.age });
+      else if (cell.kind === "year") pick({ year: cell.year });
       else if (cell.kind === "mode" && cell.mode) pick({ mode: cell.mode });
       else if (cell.kind === "system" && cell.system) pick({ system: cell.system });
       else if (cell.kind === "path" && cell.path) o.ev({ type: "profile.draft", patch: { mathPath: cell.path } });
