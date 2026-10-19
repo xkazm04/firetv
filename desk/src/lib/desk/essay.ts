@@ -131,7 +131,7 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
     console.error(`essay ${lens.id} reading: no readable observation for sentence${missing.length === 1 ? "" : "s"} ${missing.join(", ")}`);
     throw new DeskSaid(NOT_EVERY_SENTENCE);
   }
-  const verdicts = focus ? [] : decideVerdicts(lens.id, sentences, judged, seen);
+  const verdicts = focus ? [] : decideVerdicts(lens.id, sentences, judged, seen, voice.band);
   return { verdicts, seen, provider };
 }
 
@@ -201,7 +201,7 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
       const r = await judge(sentences, judged, lens, voice, { para, of }, kind, reader);
       observed.push(...r.seen); judged.forEach((n) => judgedAll.add(n)); provider = r.provider; piece.read.push(para);
     } catch (e) { lastError = e; piece.failed.push(para); }
-    if (para === of - 1 && piece.read.length) { verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed); }
+    if (para === of - 1 && piece.read.length) { verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed, voice.band); }
     onProgress(now());
   }
   if (!piece.read.length) throw lastError ?? new Error(notEnglish.length ? NOT_ENGLISH_LINE : "no paragraph of the piece came back");
@@ -233,7 +233,7 @@ export async function analysePieceAgain(reading: EssayAnalysis, learnerId: strin
   piece.failed = still; piece.read.sort((x, y) => x - y);
   if (still.length) piece.observed = observed; else delete piece.observed;
   const judgedAll = new Set(sentences.filter((s) => piece.read.includes(s.para ?? 0)).map((s) => s.n));
-  const verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed);
+  const verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed, voice.band);
   const summary = summaryLine({ sentences, verdicts, piece });
   try { restatePiece(learnerId, lens.name, reading, { verdicts, piece }); } catch (e) { restateFailed("send-again", PIECE_AGAIN_NOT_SAVED, e, notSaved); }
   return { ...reading, verdicts, summary, provider, piece };
@@ -285,7 +285,7 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   // verdict is never invented. The others come from the first pass, as context for the rule.
   const got = (Array.isArray(json?.observations) ? json.observations : []).find((o) => o?.n === n);
   if (!got || !observationOk(lens.id, got)) throw new Error(`no observation came back for sentence ${n}`);
-  const decided = decideVerdicts(lens.id, next.sentences, new Set([n]), [got, ...contextObservations(lens.id, next.sentences, n, reading.verdicts)]).find((v) => v.n === n);
+  const decided = decideVerdicts(lens.id, next.sentences, new Set([n]), [got, ...contextObservations(lens.id, next.sentences, n, reading.verdicts)], voice.band).find((v) => v.n === n);
   if (!decided) throw new Error(`no verdict could be decided for sentence ${n}`);
   const was = before?.was ?? { text: old.text, verdict: before?.verdict ?? "neutral", ...(before?.fix ? { fix: before.fix } : {}) };
   const verdict: Verdict = { ...decided, was };

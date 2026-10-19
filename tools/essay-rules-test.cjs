@@ -1989,3 +1989,33 @@ test('L1-helena-46-EM5-1: Adult mode with a kept piece draws no sentence text on
  for(const [k,html] of Object.entries(draws(at(school,'p1')))) assert.match(html,/Moonlight|Clients ought/,`School mode ${k} shows the text as ever`);
  for(const [k,html] of Object.entries(draws(at(adult,undefined)))) assert.match(html,/Moonlight|Clients ought/,`an un-kept paragraph ${k} shows the text as ever`);
 });
+
+test('L1-eliska-12-EM1-1: planFit keeps its article, and a young faulty note holds none of the adult words',()=>{
+ const {planSlots,planFit}=PLAN();
+ assert.equal(planFit(planSlots(PARA),1,CLAIM),'That reads as a claim. This slot wants your evidence: something a reader can check.');
+ const ss=RE.splitSentences('It is a bad thing to do.');
+ const FAULTY=[
+  ['structure','Teenagers sleep late.',[{n:1,job:'claim'}]],
+  ['structure','Therefore it holds.',[{n:1,job:'link'}]],
+  ['argument','Teenagers sleep late.',[{n:1,side:'wanders'}]],
+  ['argument','Teenagers sleep late.',[{n:1,side:'against',turnsBack:false}]],
+  ['evidence','Teenagers sleep late.',[{n:1,support:'opinion'}]],
+  ['language','It is a bad thing to do.',[{n:1,issues:[{kind:'vague',word:'bad'}]}]],
+  ['language','It is a good thing to do, a good thing.',[{n:1,issues:[{kind:'repeated',word:'good'}]}]],
+  ['language',Array(37).fill('word').join(' ')+'.',[{n:1,issues:[]}]],
+ ];
+ const ADULT=/assert|checkable|unsupported|evidence|links back|turns? back|turn needs|wanders|split it/i;
+ for(const [lens,text,obs] of FAULTY){
+  const sen=RE.splitSentences(text),all=new Set(sen.map(s=>s.n));
+  const teen=RE.decideVerdicts(lens,sen,all,obs),unknown=RE.decideVerdicts(lens,sen,all,obs,'teen'),young=RE.decideVerdicts(lens,sen,all,obs,'young');
+  assert.equal(young[0].verdict,'faulty',lens+' young is faulty');
+  assert.equal(teen[0].verdict,'faulty');
+  assert.deepEqual(unknown,teen,'an explicit teen band is the default');
+  assert.notEqual(young[0].note,teen[0].note,lens+': young has its own wording');
+  assert.doesNotMatch(young[0].note,ADULT,'no adult word in: '+young[0].note);
+ }
+ const young=RE.decideVerdicts('evidence',RE.splitSentences('Teenagers sleep late.'),new Set([1]),[{n:1,support:'opinion'}],'young');
+ assert.equal(young[0].note,'This says what you think, but gives nothing a reader could check.');
+ const kept=[{n:1,note:young[0].note}];
+ assert.deepEqual(RE.contextObservations('evidence',RE.splitSentences('Teenagers sleep late. Ok.'),2,kept),[{n:1,support:'opinion'}],'a young opinion note still reads as a ruled opinion');
+});

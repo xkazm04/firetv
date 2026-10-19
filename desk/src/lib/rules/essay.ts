@@ -6,6 +6,7 @@
  * measured, and to return verdicts anchored to sentence numbers — so a highlight can only land on
  * a sentence that exists.
  */
+import type { Band } from "./voice";
 export type Role = "claim" | "evidence" | "link" | "context";
 /** `para` (0-based) is set only when the text has more than one paragraph; a one-paragraph text reads as it always did. */
 export interface Sentence { n: number; text: string; words: number; connectors: string[]; role: Role; para?: number; }
@@ -441,7 +442,7 @@ export function unanswered(lens: string, judged: Set<number>, observations: unkn
 }
 
 /** The line a faulty sentence gets as its note: the check that failed, in its own words. */
-const CHECKS = {
+const ADULT_CHECKS = {
   unsupported: "This claim has no evidence after it that a reader can check.",
   floating: "This links back to nothing: no evidence comes before it.",
   noTurn: "It takes the other side but never turns back: a turn needs a word like 'but' or 'although'.",
@@ -451,6 +452,19 @@ const CHECKS = {
   long: (words: number) => `This sentence runs to ${words} words; split it.`,
   word: (word: string) => `'${word}' is doing too little here; say what you mean.`,
   repeated: (word: string) => `'${word}' is used again here; say it once or find another word.`,
+};
+
+/** The same lines for a learner of 13 or less (rules/voice bandOf): plain words, none a 12-year-old would look up. */
+const YOUNG_CHECKS: typeof ADULT_CHECKS = {
+  unsupported: "You say this, but nothing after it shows a reader it is true.",
+  floating: "This points back to something, but nothing before it shows what.",
+  noTurn: "It gives the other side but never comes back to yours: use a word like 'but' or 'although'.",
+  wanders: "This sentence drifts away from the side your paragraph takes.",
+  opinion: "This says what you think, but gives nothing a reader could check.",
+  unbacked: "Nothing here gives a reader a way to check this opinion.",
+  long: (words: number) => `This sentence is ${words} words long; cut it into two.`,
+  word: (word: string) => `'${word}' does not say much here; say what you really mean.`,
+  repeated: (word: string) => `'${word}' is here again; use it once or pick another word.`,
 };
 
 const NOTE_LABEL = /^\s*(?:strong|faulty|neutral|weak|good|great|excellent|solid|fine|ok|okay)\s*(?::|[-–—](?=\s))\s*/i;
@@ -490,7 +504,8 @@ export function cleanNote(note: string): string {
  *    sentence: every opinion is faulty. An accepted link rides on the verdict as `supports`.
  *  language: a vague or repeated word that is really in the sentence is faulty, and so is length over the limit.
  */
-export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<number>, observations: unknown): VerdictLike[] {
+export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<number>, observations: unknown, band: Band = "teen"): VerdictLike[] {
+  const CHECKS = band === "young" ? YOUNG_CHECKS : ADULT_CHECKS;
   const by = new Map<number, Obs>();
   for (const o of Array.isArray(observations) ? observations : []) {
     const n = (o as Obs | null)?.n;
@@ -742,7 +757,7 @@ export function contextObservations(lens: string, sentences: Sentence[], except:
       if (backs !== undefined) return [{ n: s.n, support: "checkable", backs }];
       if (s.role === "evidence") return [{ n: s.n, support: "checkable" }];
       // an opinion the reading ruled (flagged as one, or backed by a kept link) stays an opinion, so a link can resolve to it
-      const ruledOpinion = own?.note === CHECKS.opinion || own?.note === CHECKS.unbacked || kept.some((v) => v.supports === s.n);
+      const ruledOpinion = [ADULT_CHECKS.opinion, ADULT_CHECKS.unbacked, YOUNG_CHECKS.opinion, YOUNG_CHECKS.unbacked].includes(own?.note ?? "") || kept.some((v) => v.supports === s.n);
       return ruledOpinion ? [{ n: s.n, support: "opinion" }] : [];
     }
     const link = kept.find((v) => v.n === s.n)?.supports;
@@ -859,7 +874,7 @@ export function planFit(slots: PlanSlot[], i: number, text: string): string | nu
   const slot = slots[i], first = splitSentences(norm(text))[0];
   if (!slot || !first || first.role === slot.role) return null;
   if (slot.role === "link" && first.role === "claim") return null;
-  return `That reads as ${PLAN_READS[first.role as PlanSlot["role"]].replace(/^a /, "")}. This slot wants ${PLAN_WANTS[slot.role]}.`;
+  return `That reads as ${PLAN_READS[first.role as PlanSlot["role"]]}. This slot wants ${PLAN_WANTS[slot.role]}.`;
 }
 
 /** The learner's sentences, in slot order, joined: never a frame word of the pattern. Splits back into exactly the written slots. */
