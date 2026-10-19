@@ -57,7 +57,7 @@ export function docxText(buf: Buffer): DocxResult {
     else return { ok: false, error: NOT };
     // a table row reads as one line (cells joined by " | "); a non-breaking hyphen reads as "-"
     const body = xml.toString("utf8").replace(/<w:tr(?:\s[^>]*)?>[\s\S]*?<\/w:tr>/g, (row) =>
-      row.split(/<\/w:tc>/).map((c) => c.replace(/<\/w:p>/g, "<w:t> </w:t>")).join("<w:t> | </w:t>") + "</w:p>");
+      row.split(/<\/w:tc>/).slice(0, -1).map((c) => c.replace(/<\/w:p>(?=[\s\S]*<w:p[\s>])/g, "<w:t> </w:t>").replace(/<\/w:p>/g, "")).join("<w:t> | </w:t>") + "</w:p>");
     const paras = body.split(/<\/w:p>/).map((p) =>
       decode(p.replace(/<w:noBreakHyphen\/>/g, "<w:t>-</w:t>").replace(/<w:tab\/>/g, "<w:t>\t</w:t>").replace(/<w:br\/>/g, "<w:t>\n</w:t>").replace(/<w:t(?:\s[^>]*)?>([^<]*)<\/w:t>/g, "\u0000$1\u0000").split("\u0000").filter((_, i) => i % 2 === 1).join("")).trim())
       .filter(Boolean);

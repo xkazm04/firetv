@@ -43,13 +43,7 @@ test('a table row reads as one line, cells separated by " | "', () => {
   const cell = (t) => `<w:tc><w:tcPr/>${para(`<w:t>${t}</w:t>`)}</w:tc>`;
   const tbl = `<w:tbl><w:tblPr/><w:tr><w:trPr/>${cell('Name')}${cell('Age')}${cell('City')}</w:tr><w:tr>${cell('Eva')}${cell('15')}${cell('Brno')}</w:tr></w:tbl>`;
   const r = docxText(zip([['word/document.xml', doc(para('<w:t>Before</w:t>'), tbl, para('<w:t>After</w:t>'))]]));
-  assert.deepEqual(r, { ok: true, text: 'Before
-
-Name | Age | City
-
-Eva | 15 | Brno
-
-After' });
+  assert.deepEqual(r, { ok: true, text: 'Before\n\nName | Age | City\n\nEva | 15 | Brno\n\nAfter' });
 });
 test('refusals come with a sentence: not a zip, no document, encrypted, a zip bomb, no text', () => {
   const no = (buf, re) => { const r = docxText(buf); assert.equal(r.ok, false); assert.match(r.error, re); };
