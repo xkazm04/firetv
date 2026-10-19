@@ -4,7 +4,7 @@
  * title and counts, never shown on the TV. Open loads the latest version into the Essay panel; Delete removes one;
  * "Delete everything I kept" removes all of it (a second press confirms). "Forget tonight's paragraph" is always there and clears
  * only the reading in the session, so a paragraph-only evening can be removed too. The one-time notice (TextNotice) says where
- * the text goes before the first piece is kept.
+ * the text goes before the first piece is kept; until it is accepted the shelf shows that same line (noticed/notice from GET /api/texts).
  */
 import { useCallback, useEffect, useState } from "react";
 
@@ -15,10 +15,11 @@ const when = (at: number) => new Date(at).toLocaleDateString(undefined, { day: "
 
 export function EssayShelf({ learnerId, refresh, onOpen, onGone }: { learnerId: string | undefined; refresh: number; onOpen: (id: string, text: string) => void; onGone?: (id: string | "all") => void }) {
   const [cards, setCards] = useState<ShelfCard[] | null>(null);
+  const [line, setLine] = useState("");
   const [sure, setSure] = useState(false);
   const [say, setSay] = useState("");
   const load = useCallback(async () => {
-    try { const r = await fetch("/api/texts"); if (r.ok) setCards(((await r.json()) as { pieces: ShelfCard[] }).pieces); else setCards(null); }
+    try { const r = await fetch("/api/texts"); if (r.ok) { const j = (await r.json()) as { pieces: ShelfCard[]; noticed?: boolean; notice?: string }; setCards(j.pieces); setLine(j.noticed === false && j.notice ? j.notice : ""); } else setCards(null); }
     catch { setCards(null); }
   }, []);
   useEffect(() => { setSure(false); setSay(""); void load(); }, [load, learnerId, refresh]);
@@ -38,6 +39,7 @@ export function EssayShelf({ learnerId, refresh, onOpen, onGone }: { learnerId: 
   return (
     <div className="pshelf" data-role="essay-shelf">
       <b>Your shelf</b>
+      {line && <p data-role="essay-shelf-notice">{line}</p>}
       {cards.length ? <ul>{cards.map((c) => (
         <li key={c.id} data-role="essay-shelf-piece">
           <span><b>{c.title}</b><small data-role="essay-shelf-format">{FORMAT_LABEL[c.format] ?? c.format} · {c.paragraphs} paragraph{c.paragraphs === 1 ? "" : "s"} · version {c.versions} · {when(c.updated)}</small></span>

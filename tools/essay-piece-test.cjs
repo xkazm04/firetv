@@ -625,6 +625,14 @@ test('EM3-6 (recert-5): a keep that names a deleted pieceId makes a new piece, n
   texts.deleteAll('ema');
 });
 
+test('L1-kristyna-17-EM3-2: the shelf reads noticed and notice from /api/texts and shows the notice line before the first keep', () => {
+  const shelf = fs.readFileSync(path.join(root, 'src/app/phone/EssayShelf.tsx'), 'utf8');
+  assert.match(shelf, /noticed\?: boolean; notice\?: string/, 'reads both fields'); assert.match(shelf, /j\.noticed === false && j\.notice/);
+  assert.match(shelf, /data-role="essay-shelf-notice"/);
+  const route = fs.readFileSync(path.join(root, 'src/app/api/texts/route.ts'), 'utf8');
+  assert.match(route, /noticed: noticed\(who\.id\), notice: TEXT_NOTICE/, 'the route still returns both');
+});
+
 // ---- recert-6 L1-helena-46-EM5-3: the TV's Workroom reads a kept piece; read-only, TV role only ----
 test('EM5-3 (recert-6): the TV reads a kept piece by id (kind shelf-piece): the reading lands through essay.set/essay.progress; phone or no role is 403, an unknown id 400 with no run; the shelf, the notice and learners.json are byte-identical', async () => {
   dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = []; texts.deleteAll('ema'); texts.markNoticed('ema');
