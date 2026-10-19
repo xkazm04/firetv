@@ -802,3 +802,44 @@ test('recert-10 (1): the finish note picks the reply that matters most: a held f
   assert.equal(C.finishCoachOf({...base,coaching:{before:'a',after:'b',note:'c'}}),null,'a note already given');
   assert.equal(C.finishCoachOf({...base,turns:turns.slice(0,1)}),null,'no reply');
 });
+
+// ---- recert-11 (2) (LT-petra-38-J4, Adéla and Petra): the replay's question asked for the form, but the form had left the
+// screen with the coach or moment screen, and both answered with the slip again. The scene keeps the coached after form in
+// view, under "One way to try it", while the replay's question is open, on the TV and the phone (view.ts replayForm).
+test('recert-11 (2): the replay screen carries the moment\'s after form while its question is open, and drops it once answered',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts')),fs=require('node:fs');
+  const r=await lg4(asked(REPLAY_Q));
+  try{
+    assert.equal(V.replayForm(r.getSession().conversation),null,'not before the replay');
+    await r.cmd('moment-done');
+    const c=r.getSession().conversation,v=V.lingaView(r.getSession(),{});
+    assert.equal(c.phase,'replay');assert.equal(c.turns.at(-1).text,REPLAY_Q);
+    assert.equal(V.replayForm(c),'I work','the moment\'s after form, the quote the moment screen showed');
+    assert.equal(v.hero.kind,'scene');assert.equal(v.hero.said,REPLAY_Q);assert.equal(v.hero.tryForm,'I work','the TV');
+    assert.ok(V.viewText(v).includes('One way to try it: "I work"'),'the driver reads it on the TV');
+    await r.say('Every morning I check in the guests.');
+    const after=V.lingaView(r.getSession(),{});
+    assert.equal(V.replayForm(r.getSession().conversation),null,'the replay answered: gone');assert.equal(after.hero.tryForm,undefined);
+  }finally{r.done();}
+  const f=await finishing({replay:p=>({json:{reply:`Is it ${p.frameWords.join(' and ')} you want?`,form:'a room for two nights'},provider:'test',ms:1})});
+  try{
+    await f.cmd('finish');await f.cmd('replay');
+    const v=V.lingaView(f.getSession(),{});
+    assert.equal(f.getSession().conversation.phase,'replay');
+    assert.equal(v.hero.tryForm,ROOM_COACH.after,'a finish note\'s replay shows the note\'s after form, as the coach screen did');
+  }finally{f.done();}
+  assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/h\.tryForm&&<SentenceCard className="lo-compact" label=\{TRY_TAG\} text=\{h\.tryForm\}/,'the TV draws it');
+  assert.match(fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8'),/replayForm\(c\)&&<p data-role="linga-try"><b>\{TRY_TAG\}<\/b>/,'the phone shows the same quote');
+  assert.equal(V.TRY_TAG,'One way to try it','the coach screen\'s words');
+});
+test('recert-11 (2) rules: replayForm reads the open replay\'s moment, a self-repaired fix keeps the learner\'s own try, else the coaching',()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts'));
+  const turns=[{id:'t1',role:'learner',text:'I am work.'},{id:'p1',role:'partner',text:'Where do you work every morning?'}];
+  const m={id:'t1:moment',kind:'fix',said:'I am work',better:'I work',why:'x',turnId:'t1',at:1,replay:{question:'Where do you work every morning?',turnId:'p1'}};
+  const c={phase:'replay',turns,moments:[m],coaching:null};
+  assert.equal(V.replayForm(c),'I work');
+  assert.equal(V.replayForm({...c,moments:[{...m,repair:{rung:0,held:true,selfRepaired:true,tried:'I work there'}}]}),'I work there','the learner\'s own try');
+  assert.equal(V.replayForm({...c,phase:'conversation'}),null,'outside a replay');
+  assert.equal(V.replayForm({...c,moments:[{...m,replay:{...m.replay,reply:'x',used:false}}],coaching:{before:'a',after:'b c',note:''}}),'b c','an answered moment gives way to the coaching');
+  assert.equal(V.replayForm(null),null);
+});

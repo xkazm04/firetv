@@ -14,7 +14,7 @@ import { runningTake } from "@/lib/english/take";
 import { beatOf, COSTAR_MAX } from "@/lib/english/duet";
 import { originLabel } from "@/lib/english/line";
 import { LOST_SCENE } from "@/lib/english/lostfound";
-import { activeCheck, fixedClaim, helpOf, lingaHome, lingaView, offeredActions, phonePanel, quizOnScreen, replayLine, replayThinking, type ViewAction } from "@/lib/english/view";
+import { activeCheck, fixedClaim, helpOf, lingaHome, lingaView, offeredActions, phonePanel, quizOnScreen, replayForm, replayLine, replayThinking, TRY_TAG, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
 import { LostPicture } from "./LostPicture";
 import { useEnglish } from "./useEnglish";
@@ -85,6 +85,8 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
         </>:<>
           {/* L2: in a duet's learner beat the help is the co-star helper, the same rungs and the same cue action, no model call */}
           {c.duet&&beatOf(c)==="learner"?<CoStarHelper c={c} learner={s.learner?.name??""} cue={cue} busy={busy} run={run}/>:c.cue&&<p><b>{helpOf(c).tag}</b><br/>{c.cue}</p>}
+          {/* recert-11: over a replay question, the coached form stays in view, as the TV shows it (replayForm) */}
+          {replayForm(c)&&<p data-role="linga-try"><b>{TRY_TAG}</b><br/>“{replayForm(c)}”</p>}
           {quizNow&&<><p>{quizNow.question}</p>{quizNow.options.map((x,i)=><button className="pbtn" data-secondary="true" key={x} disabled={refused("choice")} onClick={()=>run("choice",{option:i})}>{x}</button>)}</>}
           <ReplyBox key={beatOf(c)} ready={!!currentQuestion} busy={pending} question={c.turns.at(-1)?.id} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
             onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt,...(c.duet?{speaker:beatOf(c)}:{})})} note={c.duet?.beat==="costar"?(c.duet.coStarLearnerId?`${c.duet.coStar}'s line counts on ${c.duet.coStar}'s own map.`:`${c.duet.coStar}'s line keeps the scene going; it is not recorded.`):"Recorded as written practice. It counts toward On your own, as speaking does."}/>

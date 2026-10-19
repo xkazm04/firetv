@@ -129,7 +129,9 @@ export type Hero =
       /** inside Take Two (v2 L4): the subtitle is the noted quote, and the TV's data line reads "Take Two of" */
       take?: boolean;
       /** the lost-property table (L3, lostfound.ts), its public half: the corridor draws it */
-      lost?: LostTask }
+      lost?: LostTask;
+      /** over a replay's question (recert-11): the coached after form to try, the quote the coach or moment screen showed (replayForm) */
+      tryForm?: string }
   | { kind: "track"; kicker: string; title: string; progress: Progress; subtitle: string; illustration: ArtKey;
       /** on the recap: the taught phrase this scene invited and the learner did not use, to take with them */
       sentence?: string;
@@ -219,7 +221,22 @@ export const replayThinking = (c: Conversation | null | undefined): string | nul
  * recert-11 (LT-adela-17-J4-1): a retry that did not use the form says so plainly, never a bare "Tried again" over the slip.
  */
 export const replayLine = (reply: string, used: boolean) => used ? `Tried again: “${recapQuote(reply)}” · you used it` : `Tried again, not with the new form yet: “${recapQuote(reply)}”`;
+/**
+ * recert-11 (LT-petra-38-J4): the replay's question asked for the form, but the form left the screen with the coach or moment
+ * screen, and Adéla and Petra answered with the slip again. While the replay's question is open the scene keeps the same
+ * quote in view: the moment's after form for Back's replay (the moment whose replay question is the line on screen), else
+ * the coaching's. A fix the learner repaired themselves (K2) keeps their own try, as the moment screen showed it, so a copy
+ * of a form they never saw from Linga is not shown to them now. Null outside a replay.
+ */
+export const replayForm = (c: Conversation | null | undefined): string | null => {
+  if (!c || c.phase !== "replay") return null;
+  const last = c.turns.at(-1), m = (c.moments ?? []).find(x => x.replay && x.replay.reply === undefined && x.replay.turnId === last?.id);
+  if (m) return (m.kind === "fix" && m.repair?.held ? m.repair.tried : m.better) || null;
+  return c.coaching?.after || null;
+};
 
+/** The label over the coached form while a replay question is open (replayForm): the coach screen's own words. */
+export const TRY_TAG = "One way to try it";
 /** The caption tag over each rung of the rescue ladder (lib/english/help.ts): the rung names itself. */
 export const RUNG_TAG = { 1: "Said more simply", 2: "What it means", 3: "A way to start" } as const;
 /** LG-5 recert-9: rung 1 at A1-A2 is words the learner could say back (help.ts sayBackFor), and names itself so. */
@@ -626,10 +643,11 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       hero = { kind: "choices", kicker: "A little support · recognition practice", prompt: onScreen.question, options: [...onScreen.options], small: true };
       actions = onScreen.options.map((x, i) => act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") }));
     } else {
+      const tryForm = replayForm(c);
       // the Now row over the replay's question reads the replay, never "Mission done" (LG-4 recert-7, adela-17 J4 #12), as the banner below
       hero = { kind: "scene", kicker: `${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: said ? (c.mission ? currentStep(c.mission) ?? (c.phase === "replay" ? "Try it again" : "Mission done") : c.goal) : "", art: c.sceneId, small: true,
         ...(c.mission ? { steps: c.mission.steps.map((text, i) => ({ text, state: (i < c.mission!.reached.length ? "done" : i === c.mission!.reached.length ? "current" : "open") as Dot })) } : {}),
-        partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes, ...(c.lost ? { lost: c.lost } : {}) };
+        partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes, ...(c.lost ? { lost: c.lost } : {}), ...(tryForm && said ? { tryForm } : {}) };
       // LG-5 recert-9: offered only for a line with its own quiz
       const quiz = quizOffered(c) ? act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") }) : null;
       const second = hasReply ? act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting || refused("coach") }) : quiz;
@@ -815,7 +833,7 @@ export function viewText(v: LingaView): string {
     case "heading": out.push(h.kicker, h.title); break;
     case "choices": out.push(h.kicker, h.prompt, ...h.options.map((x, i) => `  option ${i}: ${x}`)); break;
     case "topics": out.push(h.kicker, ...h.topics.map(t => `  [${t.id}] ${t.title} — ${t.skill}\n      why: ${t.why}`)); break;
-    case "scene": out.push(...(h.own ? ["Your own scene"] : []), h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : []), ...(h.lost ? [lostLine(h.lost)] : [])); break;
+    case "scene": out.push(...(h.own ? ["Your own scene"] : []), h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : []), ...(h.lost ? [lostLine(h.lost)] : []), ...(h.tryForm ? [`${TRY_TAG}: "${h.tryForm}"`] : [])); break;
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`${h.label ?? "A sentence for you"}: "${h.sentence}"`] : [])); break;
     case "comparison": out.push(...(h.kicker ? [h.kicker] : []), `${h.before.kicker}: "${h.before.quote}"${h.before.struck ? `, "${h.before.struck}" struck through` : ""}`, h.open ? `${h.after.kicker}: an empty frame, waiting for your line` : `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.tried ? [h.tried] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
