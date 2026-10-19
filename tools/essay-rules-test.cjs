@@ -758,7 +758,7 @@ test('paragraphsOf: a markdown heading is its own item; that is the whole rule f
  assert.deepEqual(paragraphsOf('# Later school starts\n\n'+P1),['# Later school starts',P1],'a title, a blank line, a paragraph');
  assert.deepEqual(paragraphsOf('## Why\n'+P1+'\n\n'+P2),['## Why',P1,P2],'a heading never fuses with the lines under it');
  assert.deepEqual(paragraphsOf(P1+'\n### Next part\n'+P2),[P1,'### Next part',P2],'nor with the lines above it');
- assert.deepEqual(paragraphsOf('Later school starts\n\n'+P1),['Later school starts',P1],'a title-only first line before a blank line is an item of its own');
+ assert.deepEqual(paragraphsOf('Later school starts\n\n'+P1),[P1],'a title-only first line before a blank line is a title (titleOf), kept out of the paragraphs (EM3-1)');
  assert.deepEqual(paragraphsOf('#hashtag is not a heading. It is one paragraph.'),['#hashtag is not a heading. It is one paragraph.']);
 });
 
@@ -970,7 +970,8 @@ test('D1: a piece keeps its paragraphs; numbering runs on; no sentence crosses a
  const lines=R.numberedLines(s);
  assert.match(lines,/^Paragraph 1:\n1\. # Sleep/);assert.match(lines,/\n\nParagraph 2:\n2\. The school day/);assert.match(lines,/\nParagraph 4:\n6\. In conclusion/);
  // before D1, a paragraph that ended with no full stop ran into the next one
- assert.deepEqual(splitSentences('No full stop here\n\nNext paragraph starts.').map(x=>x.text),['No full stop here','Next paragraph starts.']);
+ assert.deepEqual(splitSentences('No full stop here\n\nNext paragraph starts.').map(x=>x.text),['Next paragraph starts.'],'a title line is no sentence (EM3-2)');
+ assert.deepEqual(splitSentences('No full stop here\n\nNext one\n\nLast paragraph starts.').map(x=>x.text),['Next one','Last paragraph starts.'],'only the first line can be a title');
 });
 test('D1: three paragraphs keep their breaks through a rewrite; a rewrite still must stay one sentence',()=>{
  const reading={text:PIECE,type:'structure',sentences:splitSentences(PIECE),stats:{},verdicts:[],summary:''};
@@ -1919,4 +1920,32 @@ test('E3-d round 3: the recert-9 freshProbe leaks (plain-letter Czech, short Cze
  const R=require(path.join(root,'src/lib/rules/essay.ts'));
  for(const t of R3_FOREIGN)assert.equal(R.paragraphIsEnglish(t),false,t);
  for(const t of R3_ENGLISH)assert.equal(R.paragraphIsEnglish(t),true,t);
+});
+
+test('EM3-1/EM3-2 (recert-9): a title line is kept apart from the paragraphs and the sentences',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const p1='Phones distract students. They check them in class.',p2='Some teachers disagree. They allow phones.';
+ for(const sep of ['\n\n','\n']){
+  const t='Phones in School'+sep+p1+'\n\n'+p2;
+  assert.deepEqual(R.paragraphsOf(t),[p1,p2],JSON.stringify(sep));
+  assert.equal(R.titleOf(t),'Phones in School');
+  const ss=R.splitSentences(t);
+  assert.equal(ss.length,4);assert.equal(ss[0].text,'Phones distract students.');assert.equal(ss[0].n,1);
+ }
+ // a title above a single paragraph: one paragraph, sentence 1 is not the title
+ assert.deepEqual(R.paragraphsOf('My Dog\nMy dog is old. He runs.'),['My dog is old. He runs.'.replace('My dog','My dog')]);
+ assert.equal(R.splitSentences('My Dog\nMy dog is old. He runs.')[0].text,'My dog is old.');
+ // not titles
+ assert.equal(R.titleOf('Phones distract students.\n\nThey check them in class.'),null);
+ assert.equal(R.titleOf('Phones should be banned'),null);
+ assert.equal(R.titleOf('Should phones be banned?\n\nPhones distract.'),null);
+ assert.deepEqual(R.paragraphsOf('Should phones be banned?\n\nPhones distract.'),['Should phones be banned?','Phones distract.']);
+ assert.equal(R.titleOf('# Phones\n\nPhones distract.'),null);
+ assert.equal(R.titleOf('one two three four five six seven eight nine ten eleven twelve thirteen\n\nPhones distract.'),null);
+ // a hard-wrapped paragraph is not cut in two
+ assert.equal(R.titleOf('I think that phones in school are a problem for\nmany students because they distract.'),null);
+ // no-title texts are unchanged
+ assert.deepEqual(R.paragraphsOf('A. b\n\nC d.'),['A. b','C d.']);
+ assert.deepEqual(R.paragraphsOf('One line.\nTwo line.'),['One line. Two line.']);
+ assert.deepEqual(R.paragraphsOf(''),[]);assert.deepEqual(R.paragraphsOf(5),[]);
 });

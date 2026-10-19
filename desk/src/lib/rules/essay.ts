@@ -25,8 +25,10 @@ const ABBREVIATION = /\b(?:Dr|Mr|Mrs|Ms|Prof|St|etc|eg|ie|e\.g|i\.e|vs)\.$/i;
 export function splitSentences(text: string): Sentence[] {
   // Paragraphs first (paragraphsOf: a blank line ends one), so a sentence never runs across a paragraph break.
   // Numbering runs on through the piece, so a highlight still lands by number alone.
-  const paras = paragraphsOf(text);
-  if (paras.length <= 1) return splitParagraph(text, 0);
+  // A title line (titleOf) is kept apart: it is never a sentence, and never fuses into sentence 1.
+  const body = readTitle(text).body;
+  const paras = rawParagraphs(body);
+  if (paras.length <= 1) return splitParagraph(body, 0);
   const out: Sentence[] = [];
   paras.forEach((p, para) => { for (const sn of splitParagraph(p, out.length)) out.push({ ...sn, para }); });
   return out;
@@ -77,10 +79,13 @@ export function numberedLines(sentences: Sentence[]): string {
  * deliberately plain: a blank line (any run of two or more line breaks, CRLF included, a line of only spaces counts
  * as blank) ends a paragraph; the line breaks inside one become single spaces; empties are dropped. A markdown
  * heading line (starts with 1-6 # and a space) is its own item, so a title never fuses with the first paragraph
- * under it; the learner steps past it with Next. Nothing cleverer than that is tried. No blank line means one
+ * under it; the learner steps past it with Next. A plain title line (titleOf) is left out entirely. Nothing cleverer than that is tried. No blank line means one
  * paragraph, and that one reads exactly as it did before this existed. Never throws; a non-string gives [].
  */
 export function paragraphsOf(text: unknown): string[] {
+  return rawParagraphs(readTitle(text).body);
+}
+function rawParagraphs(text: unknown): string[] {
   if (typeof text !== "string") return [];
   const out: string[] = [];
   let cur: string[] = [];
@@ -94,6 +99,36 @@ export function paragraphsOf(text: unknown): string[] {
   flush();
   return out;
 }
+
+/** The longest a title line may be, in words. Not measured: a school-essay title is a phrase, and a longer line is read as writing. */
+export const TITLE_MAX_WORDS = 12;
+
+/**
+ * A leading title line (recert-9 EM3-1, EM3-2). The first non-blank line is a title when it is at most TITLE_MAX_WORDS
+ * words, starts with a letter or digit, ends on a letter, digit or closing quote or bracket (so no . ! ? : ; , or
+ * ellipsis, and no stop inside: a question-mark heading is NOT a title and stays a paragraph, exactly as before), is not a markdown
+ * "#" heading (those stay their own item in paragraphsOf), and is followed by more text. When the very next line
+ * follows with no blank line between, that line must start with a capital, a digit or an opening quote, so a
+ * hard-wrapped paragraph whose first line has no stop is not cut in two. A title is kept out of paragraphsOf and
+ * splitSentences, so it is never sent for a reading and never fused into sentence 1. A non-string, or a text with no
+ * title, gives { title: null, body: text } unchanged.
+ */
+export function readTitle(text: unknown): { title: string | null; body: string } {
+  if (typeof text !== "string") return { title: null, body: "" };
+  const lines = text.replace(/\r\n?|\u2028|\u2029/g, "\n").split("\n");
+  const at = lines.findIndex((l) => l.trim());
+  if (at < 0) return { title: null, body: text };
+  const title = lines[at].trim();
+  if (/[.!?](\s|$)/.test(title)) return { title: null, body: text };
+  if (title.split(/\s+/).length > TITLE_MAX_WORDS || !/^[\p{L}\p{N}]/u.test(title) || !/[\p{L}\p{N}"'”’)\]]$/u.test(title)) return { title: null, body: text };
+  const next = lines.findIndex((l, i) => i > at && l.trim());
+  if (next < 0) return { title: null, body: text };
+  if (next === at + 1 && !/^[\p{Lu}\p{N}"“„]/u.test(lines[next].trim())) return { title: null, body: text };
+  return { title, body: lines.slice(at + 1).join("\n") };
+}
+
+/** The title line of a text, or null (see readTitle). paragraphsOf leaves it out; a caller that shows or keeps the piece reads it here. */
+export const titleOf = (text: unknown): string | null => readTitle(text).title;
 
 /**
  * Two limits on what the phone may send. Neither is measured: they are set conservatively (a file of a few pages
