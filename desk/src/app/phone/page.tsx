@@ -25,6 +25,7 @@ import { PaperPanel } from "./PaperPanel";
 import { ExplainTalk } from "./ExplainTalk";
 import { recogniserLang } from "./recogniserLang";
 import { blankRow, type DraftRow } from "@/lib/rules/paperEntry";
+import { draftKey, parseDraft, serialiseDraft } from "@/lib/rules/paperDraft";
 import { WEEK_EMPTY, type WeekLine } from "@/lib/rules/week";
 
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
@@ -446,10 +447,29 @@ export default function Phone() {
   useEffect(() => {
     const id = s?.learner?.id;
     if (!id) return;
-    if (lastSeated.current && lastSeated.current !== id) clearLastLearnersWork();
+    if (lastSeated.current && lastSeated.current !== id) { keepDraft(lastSeated.current, [blankRow()]); clearLastLearnersWork(); }
     lastSeated.current = id;
   }, [s?.learner?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   // P17 (i) end
+
+  // the Paper draft survives a reload or a discarded tab: kept in this browser per seated learner, restored when one is seated.
+  // Every storage call is guarded, so blocked storage falls back to the blank row silently.
+  const keepDraft = (learnerId: string | undefined, rows: DraftRow[]) => {
+    const key = draftKey(learnerId);
+    if (!key) return;
+    try {
+      const text = serialiseDraft(rows);
+      if (text) localStorage.setItem(key, text); else localStorage.removeItem(key);
+    } catch { /* storage is blocked or full, so the draft lives in memory only */ }
+  };
+  const editPaperRows = (rows: DraftRow[]) => { setPaperRows(rows); keepDraft(s?.learner?.id, rows); };
+  useEffect(() => {
+    const key = draftKey(s?.learner?.id);
+    if (!key) return;
+    let rows: DraftRow[] | null = null;
+    try { rows = parseDraft(localStorage.getItem(key)); } catch { /* storage is blocked, so the draft starts blank */ }
+    if (rows) setPaperRows(rows);
+  }, [s?.learner?.id]);
 
   const rec = useRef<{ stop: () => void } | null>(null);
   const holdStart = () => { setReply(""); setHeard(""); const r = listen((t) => { setHeard(t); setMsg(""); }); if (r) { rec.current = r; setHolding(true); } else setMicOk(false); };
@@ -559,7 +579,7 @@ export default function Phone() {
               <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 
-        {screen === "paper" && <PaperPanel rows={paperRows} setRows={setPaperRows} post={post} seated={!!s?.learner} status={s?.status ?? ""} kept={!!s?.paper} name={s?.learner?.name} system={s?.learner ? s.profiles?.find((p) => p.id === s.learner?.id)?.system : undefined} />}
+        {screen === "paper" && <PaperPanel rows={paperRows} setRows={editPaperRows} post={post} seated={!!s?.learner} status={s?.status ?? ""} kept={!!s?.paper} name={s?.learner?.name} system={s?.learner ? s.profiles?.find((p) => p.id === s.learner?.id)?.system : undefined} />}
 
         {screen === "capture" && (() => {
           const reading = phase === "sending" || (phase === "sent" && !!s?.reading);
