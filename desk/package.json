@@ -15,6 +15,7 @@
     "test:rules": "node ../tools/run-rules.cjs"
   },
   "rulesSuites": [
+    "session-link-test.cjs",
     "linga-rules-test.cjs",
     "linga-moment-test.cjs",
     "maths-rules-test.cjs",

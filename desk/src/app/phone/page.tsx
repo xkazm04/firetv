@@ -114,7 +114,9 @@ export default function Phone() {
   const [shelfTick, setShelfTick] = useState(0);
   const [pname, setPname] = useState("");
   const [ring, setRing] = useState<{ x: number; y: number } | null>(null);
-  const [busy, setBusy] = useState(false);
+  const [working, setBusy] = useState(false);
+  // a dropped link also holds every Send: the post would go into a dead stream
+  const busy = working || !connected;
   const ending = useRef(false);
   /** The profile name's posts, in the order typed (inOrder). */
   const [nameQueue] = useState(inOrder);
@@ -557,7 +559,7 @@ export default function Phone() {
     <div className="phone">
       <div className="ptop">
         <div className="who"><button aria-pressed={role === "student"} onClick={() => { setRole("student"); }}>Student</button><button aria-pressed={role === "parent"} onClick={() => { setRole("parent"); setScreen("parent"); }}>Parent</button></div>
-        <div className="link">{s?.joined ? <><b>joined</b>{s.learner && <> · {s.learner.name}</>}</> : connected ? "not joined" : "connecting…"}{s && <small>TV · {TV_WORDS[s.screen] ?? s.screen}</small>}</div>
+        <div className="link">{!connected ? "Lost the desk link. Reconnecting…" : s?.joined ? <><b>joined</b>{s.learner && <> · {s.learner.name}</>}</> : "not joined"}{s && <small>TV · {TV_WORDS[s.screen] ?? s.screen}</small>}</div>
       </div>
       <div className="pbody">
         {screen === "linga" && s && <LingaPhone key={`${s.learner?.id ?? ""}:${s.conversation?.id??"setup"}:${s.check?.id??""}`} s={s} post={postOnly} onSentence={()=>setScreen("say")}/>}
