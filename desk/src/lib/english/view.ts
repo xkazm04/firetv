@@ -594,7 +594,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       // A stop's moment comes before a fix held for the end (LG-23); a held fix is on screen only now, the scene over.
       const m = moments.at(-1) ?? held.at(-1), co = c.coaching, rp = moments.at(-1)?.replay;
       hero = co
-        ? { kind: "comparison", before: { kicker: "You said", quote: co.before }, after: { kicker: "One way to try it", quote: co.after }, note: co.note, art: "done", data: counts }
+        ? { kind: "comparison", before: { kicker: "You said", quote: co.before }, after: { kicker: "One way to try it", quote: co.after }, note: co.note, art: "done", data: counts, ...(co.replay?.reply !== undefined ? { tried: replayLine(co.replay.reply, !!co.replay.used) } : {}) }
         : { kind: "comparison", before: { kicker: m!.kind === "fix" ? "You said" : "You wanted to say", quote: m!.said }, after: { kicker: m!.kind === "fix" ? "Try" : "In English", quote: m!.better }, note: m!.why, art: "done", data: counts, ...(rp?.reply !== undefined ? { tried: replayLine(rp.reply, !!rp.used) } : {}) };
     } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better, from: rv.fromTitle.slice(0, 40), label: originLabel({ review: rv }) } : ln && !ln.found ? { sentence: ln.text!, label: originLabel({ line: ln }), ...(ln.source === "check" ? { from: CHECK_TITLE.toLowerCase() } : {}) } : {}) };
     // a line the hero does not carry is still the learner's to take, on the phone

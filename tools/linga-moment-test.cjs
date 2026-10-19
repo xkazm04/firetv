@@ -218,13 +218,19 @@ async function replayOndrej(correction){
     }
     const live=getSession().conversation;
     await cmd('finish');
-    return {prompts,screens,live,done:getSession(),learning:getLearner('ema').english};
+    // recert-10 revised this replay on purpose: a scene that holds a clear error ends with one coaching note first (the
+    // coach screen, no model call for a held fix); Finish again reaches the recap
+    const coached=getSession().screen==='linga-coach'?getSession().conversation.coaching:null;
+    if(coached)await cmd('finish');
+    return {prompts,screens,live,coached,done:getSession(),learning:getLearner('ema').english};
   }finally{engine.text=real;}
 }
 
 test('LG-23 wired (ondrej-16 J3, rows 6 and 7): one stop as before, the two gap-blocked fixes held, on no screen until the recap, which lists them apart',async()=>{
   const V=require(path.join(root,'src/lib/english/view.ts'));
-  const {prompts,screens,live,done,learning}=await replayOndrej('as-needed');
+  const {prompts,screens,live,coached,done,learning}=await replayOndrej('as-needed');
+  assert.deepEqual(coached,{before:'is ok for you?',after:'is that ok for you?',note:'A question needs its subject.',atFinish:true},'recert-10: the latest held fix is the finish coaching');
+  assert.equal(prompts.length,5,'the held fix is the note as it is: no coach call (the opening and four turns)');
   assert.deepEqual(screens,['linga-talk','linga-moment','linga-talk','linga-talk'],'the stop is on L2 only, as in the run');
   assert.match(prompts[3].task,/does not stop the scene/,'L3: the gate shut, the fix is still asked for');assert.match(prompts[4].task,/does not stop the scene/);
   assert.doesNotMatch(prompts[2].task,/does not stop the scene/,'L2: the stop task as before');
@@ -253,6 +259,7 @@ test('LG-23 wired: during the scene no view lists a held fix; with correction of
   assert.doesNotMatch(shown,/play longer|is that ok for you/,'the talk screen shows no held fix');
   assert.equal(V.lingaView(talking,{}).recap,null);
   const off=await replayOndrej('pauses');
+  assert.equal(off.coached,null,'recert-10: no help, no error: Finish goes to the recap with no note');
   assert.equal(off.live.heldFixes,undefined);assert.equal(off.live.moments.length,0);
   assert.ok(off.prompts.slice(1).every(p=>/moment: kind none with empty fields/.test(p.task)&&!/hold true/.test(p.task)),'no fix is asked for');
   assert.equal(off.learning.sessions.at(-1).held,undefined);
@@ -660,4 +667,119 @@ test('recert-10: "I am tired and I want sleep" at A2, passed by the tutor as kin
   // the stop rules are untouched; the open-hold text names the case
   assert.match(C.momentTaskFor(true),/never on a goodbye, a thanks or a closing line/);assert.match(C.momentTaskFor(true),/Never stop for a valid alternative, a style or register choice/);
   assert.match(C.OPEN_HOLD,/kind none is only for a reply with no clear error/);assert.match(C.OPEN_HOLD,/I want sleep/);
+});
+
+// ---- recert-10 (docs/uat-insights/2026-10-19-lt-recert-10.md, question 2, answered by reach): coaching was null for all four
+// pairs, and three had moments [], so Finish went straight to the recap with no note and no replay (LT-adela-17-J4-1,
+// LT-petra-38-J4-1, LT-viktor-67-J4-1, LT-tomas-9-J4-6). A scene where help was used, or a clear error is held, now ends with
+// one coaching note (the coach contract) and the coach screen's replay (REPLAY_TASK, held to the frame as Back's is).
+const ROOM='I need room for two night.',ROOM_COACH={before:'room for two night',after:'a room for two nights',note:'Clear and polite. Say a room, and nights for more than one.'};
+/** A B1 scene with no moment: `helped` presses Help before the reply; `coach` and `replay` answer those calls (or throw). */
+async function finishing({helped=true,reply=ROOM,coach=()=>({json:ROOM_COACH,provider:'test',ms:1}),replay}={}){
+  const engine=require(path.join(root,'src/lib/engines/text.ts')),real=engine.text,calls=[];
+  const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
+  const {saveEnglish,getLearner}=require(path.join(root,'src/lib/session/learners.ts'));
+  const {emptyEnglish}=require(path.join(root,'src/lib/english/types.ts')),{defaultPreferences}=require(path.join(root,'src/lib/english/curriculum.ts'));
+  dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});dispatch({type:'subject',subject:'english'});
+  const profile=getSession().profiles.find(p=>p.id==='ema');
+  saveEnglish('ema',{...emptyEnglish(),preferences:{...defaultPreferences(profile),level:'B1',correction:'as-needed'}});
+  const help={simpler:'What room do you need?',meaning:'room: a place to sleep in a hotel',starter:'I need …'};
+  engine.text=async req=>{
+    const p=JSON.parse(req.prompt);calls.push({req,p});
+    if(p.task===C.FINISH_COACH_TASK)return coach(p);
+    if(p.task===C.REPLAY_TASK)return replay(p);
+    if(!p.submittedReply)return {json:{title:'Front desk',goal:'Book a room.',opening:'Hello! What do you need tonight?',help},provider:'test',ms:1};
+    return {json:{reply:'Nice. Tell me more.',observations:[],moment:NONE,help},provider:'test',ms:1};
+  };
+  let n=0;
+  const cmd=(action,extra={})=>{const s=getSession();return C.englishCommand({action,learnerId:'ema',episodeId:s.conversation?.id,commandId:`r10-${Date.now()}-${++n}`,...extra});};
+  const say=text=>cmd('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+  await cmd('start',{sceneId:'booking',replace:true});
+  if(helped)await cmd('cue');
+  await say(reply);
+  return {calls,cmd,say,getSession,getLearner,done:()=>{engine.text=real;}};
+}
+const coachCalls=r=>r.calls.filter(x=>x.p.task===C.FINISH_COACH_TASK);
+test('recert-10 (1): a finished scene with help used and moments [] yields a non-null coaching note and a replay offer before the recap',async()=>{
+  const V=require(path.join(root,'src/lib/english/view.ts')),T=require(path.join(root,'src/lib/english/turn.ts'));
+  const r=await finishing({replay:p=>({json:{reply:`Is it ${p.frameWords.join(' and ')} you want?`,form:'a room for two nights'},provider:'test',ms:1})});
+  try{
+    const before=r.getSession().conversation;
+    assert.equal(before.moments.length,0);assert.equal(before.turns.at(-2).supported,true,'the reply was given with help');
+    await r.cmd('finish');
+    const c=r.getSession().conversation,[call]=coachCalls(r);
+    assert.ok(call,'one coach call on finish');assert.equal(call.p.submittedReply,ROOM,'on the reply given with help');assert.equal(call.req.use,'linga-coach');
+    assert.match(call.p.task,/do not invent an error/);assert.match(call.p.task,/note says what worked and gives that one way to say more/);
+    assert.deepEqual(c.coaching,{...ROOM_COACH,atFinish:true},'a non-null coaching note, before an exact excerpt of the reply');
+    assert.ok(ROOM.includes(c.coaching.before));assert.ok(c.coaching.note.length<=220);
+    assert.equal(r.getSession().screen,'linga-coach','not the recap yet');assert.equal(c.phase,'coaching');
+    assert.equal(r.getLearner('ema').english.sessions.length,0,'the take has not ended: no sessions entry');
+    assert.equal(T.accepts(c,'replay'),true,'the replay is offered');assert.equal(T.accepts(c,'finish'),true);
+    const v=V.lingaView(r.getSession(),{}),offer=v.actions.find(a=>a.id==='replay');
+    assert.ok(offer&&!offer.disabled,'the coach screen offers Replay');assert.equal(v.hero.before.quote,ROOM_COACH.before);
+    // the replay: REPLAY_TASK with the note as its coaching and its frame's words, replacing the line pending under the note
+    const pending=c.turns.length;
+    await r.cmd('replay');
+    const [rp]=r.calls.filter(x=>x.p.task===C.REPLAY_TASK),after=r.getSession().conversation;
+    assert.deepEqual(rp.p.coaching,ROOM_COACH,'the existing replay contract, the note as its coaching');assert.equal(rp.p.afterForm,ROOM_COACH.after);assert.ok(rp.p.frameWords.length,'frameWords given');
+    assert.equal(after.phase,'replay');assert.equal(after.turns.length,pending,'the replay question replaces the pending partner line');
+    assert.equal(after.turns.at(-1).text,after.coaching.replay.question);
+    await r.say('I need a room for two nights.');
+    assert.deepEqual(r.getSession().conversation.coaching.replay,{question:after.coaching.replay.question,turnId:after.turns.at(-1).id,reply:'I need a room for two nights.',used:true},'the answer and whether it used the form, decided in code');
+    await r.cmd('finish');
+    assert.equal(r.getSession().screen,'linga-recap','Finish again reaches the recap');
+    assert.equal(coachCalls(r).length,1,'exactly one note');
+    const recap=V.lingaView(r.getSession(),{});
+    assert.equal(recap.hero.before.quote,ROOM_COACH.before);assert.equal(recap.hero.tried,'Tried again: “I need a room for two nights.” · you used it');
+  }finally{r.done();}
+});
+test('recert-10 (1): the replay after the finish note may be declined: Finish on the coach screen is the recap with the note',async()=>{
+  const r=await finishing({replay:()=>{throw new Error('not asked');}});
+  try{
+    await r.cmd('finish');assert.equal(r.getSession().screen,'linga-coach');
+    await r.cmd('finish');
+    const c=r.getSession().conversation;
+    assert.equal(r.getSession().screen,'linga-recap');assert.equal(c.phase,'finished');assert.deepEqual(c.coaching,{...ROOM_COACH,atFinish:true});
+    assert.equal(r.getLearner('ema').english.sessions.length,1);
+  }finally{r.done();}
+});
+test('recert-10 (1): a held fix is the finish note as it is, with no call; no help and no error ends as before; a failed note or replay is the recap, never an error',async()=>{
+  const tired=await finishing({helped:false,reply:PETRA_TIRED,coach:()=>{throw new Error('no call for a held fix');}});
+  try{
+    assert.equal(tired.getSession().conversation.heldFixes.length,1,'item 2: held by code');
+    await tired.cmd('finish');
+    assert.deepEqual(tired.getSession().conversation.coaching,{before:PETRA_TIRED,after:'I am tired and I want to sleep',note:'After "want", say "to" before the verb: "want to sleep".',atFinish:true});
+    assert.equal(tired.getSession().screen,'linga-coach');assert.equal(coachCalls(tired).length,0);
+  }finally{tired.done();}
+  const plain=await finishing({helped:false,reply:'I need a room for two nights.',coach:()=>{throw new Error('no note owed');}});
+  try{
+    await plain.cmd('finish');
+    assert.equal(plain.getSession().screen,'linga-recap','no help, no error: the recap as before');assert.equal(plain.getSession().conversation.coaching,null);
+    assert.equal(coachCalls(plain).length,0);
+  }finally{plain.done();}
+  for(const coach of [()=>{throw new Error('timed out');},()=>({json:{before:'not in the reply',after:'x',note:'y'},provider:'test',ms:1})]){
+    const f=await finishing({coach});
+    try{
+      await f.cmd('finish');
+      const s=f.getSession();
+      assert.equal(s.screen,'linga-recap','a failed note never strands Finish');assert.equal(s.conversation.error,'');assert.equal(s.conversation.coaching,null);
+      assert.equal(f.getLearner('ema').english.sessions.length,1);
+    }finally{f.done();}
+  }
+  const failed=await finishing({replay:()=>{throw new Error('timed out');}});
+  try{
+    await failed.cmd('finish');await failed.cmd('replay');
+    assert.equal(failed.getSession().screen,'linga-recap','a failed replay after the finish note is the recap with the note');
+    assert.deepEqual(failed.getSession().conversation.coaching,{...ROOM_COACH,atFinish:true});
+  }finally{failed.done();}
+});
+test('recert-10 (1): the finish note picks the reply that matters most: a held fix, else the latest reply with help; never a scene with a note already',()=>{
+  const turns=[{id:'p0',role:'partner',text:'Hi.'},{id:'t1',role:'learner',text:'I go home.',supported:true},{id:'p1',role:'partner',text:'Ok.'},{id:'t2',role:'learner',text:'Fine.'},{id:'p2',role:'partner',text:'Bye?'}];
+  const base={turns,coaching:null,supported:false,moments:[],preferences:{correction:'as-needed',level:'A2'}};
+  assert.equal(C.finishCoachOf(base).turn.id,'t1');assert.equal(C.finishCoachOf(base).coaching,null);
+  assert.equal(C.finishCoachOf({...base,turns:turns.map(t=>({...t,supported:false}))}),null,'no help, no error');
+  const held={id:'t2:held',kind:'fix',said:'Fine.',better:'I am fine.',why:'A whole sentence.',turnId:'t2',at:1};
+  assert.deepEqual(C.finishCoachOf({...base,heldFixes:[held]}),{turn:turns[3],coaching:{before:'Fine.',after:'I am fine.',note:'A whole sentence.',atFinish:true}});
+  assert.equal(C.finishCoachOf({...base,coaching:{before:'a',after:'b',note:'c'}}),null,'a note already given');
+  assert.equal(C.finishCoachOf({...base,turns:turns.slice(0,1)}),null,'no reply');
 });

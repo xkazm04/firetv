@@ -207,7 +207,12 @@ export interface ConversationTurn { id: string; role: "partner" | "learner" | "c
  * whose line comes next; `held` is the learner's line of this pair, kept until the co-star's arrives.
  */
 export interface Duet { coStar: string; coStarLearnerId?: string; beat: "learner" | "costar"; held?: ConversationTurn }
-export interface Coaching { before: string; after: string; note: string; }
+/**
+ * A coaching note: before, an exact excerpt of the learner's reply; after, one alternative; note, at most 220 characters.
+ * `atFinish` (recert-10): the note the finish path gave before the recap; its replay is held to the coached frame as Back's
+ * is, and `replay` keeps that replay's question and the learner's answer to it, as a moment's does.
+ */
+export interface Coaching { before: string; after: string; note: string; atFinish?: true; replay?: MomentReplay; }
 /** A rung of the rescue ladder: 1 said more simply (at A1-A2, words to say back), 2 what it means, 3 a way to start. */
 export type HelpRung = 1 | 2 | 3;
 /**
