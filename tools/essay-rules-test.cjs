@@ -611,7 +611,7 @@ test('rewrite case 3: reviseSentence re-judges sentence n alone, in its paragrap
 
 test('rewrite case 4: a rewrite judged still faulty keeps a fix only when it passes cleanFix against the NEW sentence',async()=>{
  const {reviseSentence}=deskEssay();
- const COPY={move:'Name the source',pattern:'[Who] says teenagers fall asleep two hours later.'};
+ const COPY={move:'Name the source',pattern:'According to a 2019 [source], [what they found].'};
  answer=reply({verdicts:[{n:2,verdict:'faulty',note:'Which study?',fix:COPY}]});
  const a=await reviseSentence(R3(),2,STUDY);
  const v=a.verdicts.find(x=>x.n===2);
@@ -2027,4 +2027,12 @@ test('L1-eliska-12-EM1-5: an Explain with no connector after marked evidence is 
  assert.equal(v.some(x=>x.verdict==='faulty'),false,'a well-formed PEEL paragraph has no faulty mark');
  const bare=evRule('Cars should be banned near schools. Cleaner air helps pupils concentrate in lessons.',[{n:1,support:'opinion'},{n:2,support:'opinion'}]);
  assert.equal(bare.find(x=>x.n===2).verdict,'faulty','an opinion with no evidence before it stays faulty');
+});
+test('L1-eliska-12-EM1-6: cleanFix refuses a frame whose literal words state content, whatever the verb',()=>{
+ const {cleanFix}=require(path.join(root,'src/lib/rules/essay.ts'));
+ const fix=(pattern)=>cleanFix({move:'Name the source',pattern});
+ assert.equal(fix('Teenagers sleep [how many] hours.'),undefined);
+ assert.equal(fix('Councils ban cars outside schools [where].'),undefined);
+ assert.equal(fix('Schools start early in the [time]'),undefined);
+ assert.deepEqual(fix('Because [reason], [claim].'),{move:'Name the source',pattern:'Because [reason], [claim].'});
 });

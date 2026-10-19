@@ -316,7 +316,7 @@ export type AnalysisType = (typeof ANALYSIS_TYPES)[number]["id"];
  */
 export interface Fix { move: string; pattern: string; }
 const SLOT = /\[[^[\]]{1,60}\]/g;
-export const FIX_LIMITS = { moveWords: [2, 6], moveChars: 48, patternChars: 160, literalWords: 10, copiedRun: 4 } as const;
+export const FIX_LIMITS = { moveWords: [2, 6], moveChars: 48, patternChars: 160, literalWords: 10, contentWords: 2, copiedRun: 4 } as const;
 const wordsOf = (t: string) => t.toLowerCase().match(/[a-z0-9']+/g) ?? [];
 
 /** The model's `fix`, cleaned, or undefined when it is not a move and a slotted pattern. Never throws. */
@@ -341,6 +341,8 @@ export function cleanFix(raw: unknown, sentences: string | readonly string[] = [
   if (slots.some((x) => sentenceShaped(x) || copiesRun(own, wordsOf(x)))) return undefined;
   // the frame's own words may scaffold (a connector, a move) but not state a clause that adds content
   if (addsContent(p)) return undefined;
+  // and no verb list can name every clause that states content: a frame keeps few words of its own beyond scaffold
+  if (lit.filter((w) => !SCAFFOLD.has(w)).length > FIX_LIMITS.contentWords) return undefined;
   return { move: m, pattern: p };
 }
 
