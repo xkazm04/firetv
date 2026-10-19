@@ -399,9 +399,9 @@ Landed: 1ce6815f, 5752d598 (Select retries a failed read, Down on Tonight opens 
 - Medium: `/api/session/retry` dropped `x-desk-role`, so a phone's retry bypassed the door. It now forwards the role and the body's askId; the TV and an in-process retry are as before.
 - Medium: a refused answer spent the ask. The ask is marked sent only once the work begins (the first run started inside the answer, `answerAsk` in store.ts) and closes on a real result or a failure of the work; a 4xx before any work leaves it open. `ask.sent` stays server only for every role.
 - Medium: the paper answer carried no askId. PaperPanel sends the open paper ask's id with `paper.enter`.
-- Not in this run: `/api/english`'s door (TL-12's english route still takes a phone post with no askId) is closed by a sibling run, whose Landed line follows on its merge.
+- Landed (TL-12 H3): /api/english now answers a phone only through desk/src/lib/english/phoneDoor.ts. A phone command is taken when it carries the askId of an open ask of the kind that answers it: reply (turn, check-answer, check-task, moment-try, capture start), words (plan-goal, plan-add, pitch), prefs (preferences). Anything else from a phone is 409 'The TV is not asking for that now.' before any work. Capture stop and lost-picture stay open. The TV and in-process callers are unchanged. An accepted answer marks the ask sent as the work begins (the TV closes reply, the phone closes words and prefs, as TL-12 set it) and no client cancels a sent ask before its result. A failed answer reopens the ask for the phone. Commit 8060bedb on main (rework ded8eb4e); tests in tools/linga-rules-test.cjs.
 - Tests: `tools/handoff-test.cjs`, 12 new cases red on ff681a01 and green after.
-- Landed: 59126717 (repro cases), ce266f4e (H1), 5523a321 (a refusal does not spend the ask), ff14e40e (H2), 388063f2 (paper.enter's askId shape), 3c054089 (retry), 771e5686 (PaperPanel askId), on branch autopilot/accepted-idea-delivery-8cf8ece7. Stick check not run.
+- Landed: 3f7ecb09 (repro cases), 1601ce3b (H1), 51c5a406 (a refusal does not spend the ask), 67908789 (H2), 2cfcc0b5 (paper.enter's askId shape), bcb165e3 (retry), 2ba0e400 (PaperPanel askId), 17caa213 (this doc entry), on main (rework 8cf8ece7). Stick check not run.
 
 ### After the slices: the council
 
