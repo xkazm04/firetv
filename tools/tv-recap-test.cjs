@@ -93,6 +93,22 @@ test('case 2: only the apps on the learner\'s profile, in the desk\'s order; an 
  assert.equal(words('Not tonight').length,2);
 });
 
+test('L1-radka-41-MB5-2: learnerRecaps gives one block per learner with work tonight, in profile order, and omits a learner with none',()=>{
+ const {learnerRecaps,recapRows}=recap();
+ const slot=(o={})=>({pages:[],pageIx:0,itemIx:0,reading:false,hint:null,lesson:null,noLesson:false,lessonPaused:false,topic:null,practice:null,walkIx:0,log:{problems:[],hints:0,hard:[]},tasks:[],...o});
+ const LIAM={id:'liam',name:'Liam',type:'high-school',age:15,system:'uk',modules:['maths']};
+ const s=evening({profiles:[EMA,JAKUB,LIAM],away:{liam:slot({log:{problems:['k9'],hints:2,hard:[]}}),jakub:slot()}});
+ const two=learnerRecaps(s,NOW);
+ assert.deepEqual(two.map((b)=>[b.id,b.name]),[['ema','Ema'],['liam','Liam']],'two learners with work tonight -> two blocks, in profile order');
+ assert.deepEqual(two[0].tiles,recapRows(s,NOW),'the seated learner block is recapRows, unchanged');
+ assert.equal(two[1].tiles[0].hints,2,'Liam block is read off his own slot');
+ const idle=learnerRecaps(evening({away:{jakub:slot()}}),NOW);
+ assert.deepEqual(idle.map((b)=>b.id),['ema'],'a learner with nothing tonight is omitted');
+ const jk=learnerRecaps(session({learner:{id:'jakub',name:'Jakub'},away:{ema:slot({log:{problems:['k1'],hints:1,hard:[]},practice:marked})}}),NOW);
+ assert.deepEqual(jk.map((b)=>b.id),['ema'],'the seated one with none is omitted, the away one is read off her slot');
+ assert.equal(jk[0].tiles[0].hints,1);
+});
+
 // the static words a screen's JSX can show: text nodes with each {...} removed, and a string or template literal that is a whole child with each ${...} removed; '=>' starts no text node
 function staticText(src){
  const strip=(t)=>{let o;do{o=t;t=t.replace(/\{[^{}]*\}/g,' ');}while(t!==o);return t.replace(/{[^{}]*$/,' ');};
@@ -210,7 +226,7 @@ test('case 6: Back, and Select on the desk, go to the landing at rest - for Ema 
 
 test('GUARD: the phone still receives the recap, and posts no session.end (TL-11: the evening is ended on the TV)',()=>{
  const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
- assert.match(phone,/tiles\.some\(\(t\) => !t\.empty\) \|\| \(s\.log\.endedAt \?\? 0\) >= startOfDay\(now\)/,'M7: the phone\'s Recap shows for a tile with work or an evening ended since local midnight, whatever the TV shows');
+ assert.match(phone,/blocks\.length \|\| \(s\.log\.endedAt \?\? 0\) >= startOfDay\(now\)/,'M7: the phone\'s Recap shows for a tile with work or an evening ended since local midnight, whatever the TV shows');
  assert.doesNotMatch(phone,/s\.screen === "recap" \|\| s\.log\.problems\.length/,'M7: not tied to the TV\'s screen or the log');
  assert.match(phone,/t\.app === "maths" && !t\.empty \? <ul key="hinted"><li data-role="phone-hinted">\{hintedLine\(t\)\}/,'M7 (MB-B23): the hinted-problems line only when the maths tile is not empty');
  assert.doesNotMatch(phone,/session\.end/,'TL-11: the phone posts no session.end');assert.doesNotMatch(phone,/End session/,'TL-11: the phone has no End session button');

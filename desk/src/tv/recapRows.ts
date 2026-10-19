@@ -103,6 +103,32 @@ export function recapRows(session: Session, now: number): RecapTile[] {
   });
 }
 
+/** One learner's evening on the phone's Recap: their name and the tiles that have work in them. */
+export interface LearnerRecap { id: string; name: string; tiles: RecapTile[] }
+
+/**
+ * Every learner with work tonight, one entry each, in the profiles' order (C5). The seated learner is read as recapRows
+ * reads them; one away from the desk is read off their slot (log, pages, practice), since the session holds no history
+ * or conversations for them. A learner whose tiles are all empty gets no entry. Pure; recapRows itself is untouched.
+ */
+export function learnerRecaps(session: Session, now: number): LearnerRecap[] {
+  const out: LearnerRecap[] = [];
+  const seated = session.learner;
+  for (const p of session.profiles ?? []) {
+    let s: Session | null = null;
+    if (seated?.id === p.id) s = session;
+    else if (session.away?.[p.id]) {
+      const x = session.away[p.id];
+      s = { ...session, learner: { id: p.id, name: p.name }, pages: x.pages, practice: x.practice, tasks: x.tasks ?? [], essay: x.essay ?? null,
+        log: { ...x.log, minutes: 0, started: null, day: session.log?.day }, history: [], englishLearning: { ...session.englishLearning, sessions: [] } };
+    }
+    if (!s) continue;
+    const tiles = recapRows(s, now);
+    if (tiles.some((t) => !t.empty)) out.push({ id: p.id, name: seated?.id === p.id ? seated.name : p.name, tiles });
+  }
+  return out;
+}
+
 /**
  * A problem's name as the learner knows it from the paper: the printed number, or a lettered part with its number
  * ('a)' on 5 is "5a"; '3b' stays "3b"). A label too long to be a part's letter is not trusted: the number.
