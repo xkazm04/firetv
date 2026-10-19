@@ -723,6 +723,26 @@ test('essay icons: every svg in EssayTV is hidden from the accessibility tree',(
  assert.ok(tags.length>=18,'the icon set and the drawn marks are all in this file');
 });
 
+test('EssayTV EM1/EM3 rows: provider, connectors, not-checked line, piece wait line, x-ray topic',()=>{
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ assert.ok(/data-role="essay-provider"[^]*?read by/.test(tv),'the table figures say which engine read the text');
+ assert.ok(/x.connectors??.join\(", "\)/.test(tv)&&/data-role="essay-connectors"/.test(tv),'each table row draws its connectors');
+ assert.ok(tv.includes('The desk reads structure, argument, evidence and word choice, not grammar or spelling.')&&/data-role="essay-not-checked"/.test(tv),'the table says what is not checked');
+ assert.ok(tv.includes('Verdicts land when the whole piece is read.${piece ? ` ${pieceReadingLine(piece)}`'),'the piece wait line says verdicts wait, and how far it is');
+ assert.ok(/pieceReadingLine/.test(tv.match(/import \{[^}]*\} from "@\/lib\/rules\/essay"/)[0]),'the wait line uses rules/essay pieceReadingLine');
+ // the x-ray model paragraph never shares a topic with the phone's sample paragraph
+ const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ const ph=phone.match(/const ESSAY_PLACEHOLDER = "([^"]*)"/)[1].toLowerCase();
+ const stripped=tv.replace(/\/\*[\s\S]*?\*\//g,'');
+ const x=stripped.slice(stripped.indexOf('const XRAY:'),stripped.indexOf('export function Xray'));
+ const xt=[...x.matchAll(/\["([^"]*)"/g)].map(m=>m[1]).join('').toLowerCase();
+ assert.ok(/octopus/.test(xt),'the x-ray sample is on octopuses, a topic no school sets');
+ const words=w=>new Set(w.match(/[a-z]{5,}/g)||[]);
+ const shared=[...words(xt)].filter(w=>words(ph).has(w));
+ assert.deepEqual(shared,[],'the x-ray shares no content word with the phone placeholder');
+ assert.ok(!/sleep|school|student|teen|tired|exhaust/.test(xt),'the x-ray is not on the phone sample topic');
+});
+
 test('x-ray rows: every playbook structure names rows the model paragraph actually has',()=>{
  const {PLAYBOOK}=require(path.join(root,'src/lib/library/lessons.data.ts'));
  const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');

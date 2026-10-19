@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { paragraphCount, paragraphPending, paragraphState, pieceBeingRead, readingAPiece, forensicPlace, forensicLead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
+import { paragraphCount, paragraphPending, paragraphState, pieceBeingRead, pieceReadingLine, readingAPiece, forensicPlace, forensicLead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, forensicStops, rewriteStatus, planStops, essayHandoffOf, essayHandoffLine, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS, curtainOn, type ForensicStop } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -18,7 +18,7 @@ import { CIT, BONE, EssayBrand as Brand, EssayArrow as Arrow } from "@/tv/marks"
 import { ESSAY_FONTS } from "./fonts";
 import { EssayCabinet } from "./EssayCabinet";
 import { WorkroomScreen } from "./Workroom";
-import { NOT_READ_LABEL, READING_LABEL, READING_PIECE } from "./captions";
+import { NOT_READ_LABEL, READING_LABEL } from "./captions";
 import { afterFonts } from "@/lib/afterFonts";
 
 const MUTE = "rgba(238,233,224,.5)";
@@ -146,7 +146,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const chosen = lens && s.essayType === lens.id;
   const refused = refusalCaption(s);
-  const cap = job?.phase === "running" ? { label: READING_LABEL, text: readingAPiece(a?.piece, job.start) ? READING_PIECE : "The desk is reading your paragraph. It lands here." }
+  const cap = job?.phase === "running" ? { label: READING_LABEL, text: readingAPiece(a?.piece, job.start) ? PIECE_WAIT(a?.piece) : "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
     : refused ? refused
     : essayHandoffLine(s) ? { label: "On your phone", text: essayHandoffLine(s) as string }
@@ -293,6 +293,11 @@ function LastParagraph({ a, focused, curtain }: { a: NonNullable<Session["essay"
     </div>
   );
 }
+
+/** The wait line of a piece being read: verdicts land when the whole piece is read, and how far it has got (L1-daniel-15-EM3-5). */
+const PIECE_WAIT = (piece?: Parameters<typeof pieceReadingLine>[0]) => `Verdicts land when the whole piece is read.${piece ? ` ${pieceReadingLine(piece)}` : " The desk is starting on it."}`;
+/** What the desk's reading does not check, said once on the table (L1-daniel-15-EM3-3). */
+const NOT_CHECKED = "The desk reads structure, argument, evidence and word choice, not grammar or spelling.";
 
 /** The lens just chosen on this TV, for the flood of citron that acknowledges Select. */
 function useCommit(status: string): string | null {
@@ -486,7 +491,8 @@ function Table({ s, a, cur, verdicts, curtain }: { s: Session; a: Reading; cur: 
     <Brand /><Top s={s} menu="Sentence" />
     <section className="em-table">
       <div className="em-lbl">Paragraph · table · {ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? ""} lens</div>
-      <div className="em-figs">{figs.map(([n, w]) => <div key={w}><b>{n}</b><span className="em-lbl">{w}</span></div>)}</div>
+      <div className="em-figs">{figs.map(([n, w]) => <div key={w}><b>{n}</b><span className="em-lbl">{w}</span></div>)}{a.provider && <div data-role="essay-provider"><b>{a.provider}</b><span className="em-lbl">read by</span></div>}</div>
+      <div className="em-lbl" data-role="essay-not-checked">{NOT_CHECKED}</div>
       <div className="em-thead em-lbl"><span /><span>#</span><span>Sentence</span><span>Role</span><span>Length</span><span>Reads</span></div>
       {rows.map((x) => {
         const j = a.sentences.indexOf(x), vd = verdictOf(verdicts, x.n), on = j === cur;
@@ -495,7 +501,7 @@ function Table({ s, a, cur, verdicts, curtain }: { s: Session; a: Reading; cur: 
             <span className="em-caret" />
             <span />
             <span className="em-n">{x.n}</span>
-            <span className="em-tx">{curtain ? `Sentence ${x.n}` : x.text}</span>
+            <span className="em-tx">{curtain ? `Sentence ${x.n}` : x.text}{!curtain && (x.connectors?.length ?? 0) > 0 && <i data-role="essay-connectors"> · {x.connectors.join(", ")}</i>}</span>
             <span className="em-chip" data-r={x.role}>{x.role}</span>
             <span className="em-len"><i style={{ width: Math.round(24 + (196 * x.words) / maxW) }} /><b>{x.words}</b></span>
             <span><Arrow len={72} against={vd === "faulty"} color={vd === "faulty" ? CIT : vd === "strong" ? BONE : MUTE} /></span>
@@ -546,9 +552,9 @@ export function Playbook({ s, focus }: { s: Session; focus: number }) {
 /** Which parts of the x-rayed paragraph each structure points at; the rest dims. */
 const XRAY_ROWS: Record<string, number[]> = { thesis: [0], para: [0, 1, 2], order: [0, 1, 2], concl: [2] };
 const XRAY: Array<{ role: string; parts: Array<[string, boolean?]> }> = [
-  { role: "claim", parts: [["Many students arrive at school exhausted, and the reason is "], ["not laziness but biology", true], ["."]] },
-  { role: "evidence", parts: [["During adolescence "], ["the body's internal clock shifts later", true], [", which means a teenager who goes to bed at eleven is often not sleepy until well after midnight."]] },
-  { role: "link", parts: [["An early start "], ["therefore", true], [" cuts into sleep that the brain still needs."]] },
+  { role: "claim", parts: [["Octopuses escape from aquarium tanks more often than any other animal, and the reason is "], ["not strength but shape", true], ["."]] },
+  { role: "evidence", parts: [["A body with no bones "], ["can squeeze through any gap as wide as its beak", true], [", which means a lid with a hole the size of a coin is an open door."]] },
+  { role: "link", parts: [["A tight lid "], ["therefore", true], [" matters more than a strong one."]] },
 ];
 /**
  * The x-ray: a model paragraph, each sentence under the giant name of its job. The accent marks what does
