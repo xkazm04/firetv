@@ -1,0 +1,749 @@
+{
+  "purpose": "Held-out measure of the Essay language check (paragraphIsEnglish, desk/src/lib/rules/essay.ts) at ee7d6ac770ff1f6f4a10e03c5410aba688a423d7 (ee7d6ac7), for L1-helena-46-EM1-4, L1-kristyna-17-EM1-1 and L1-kristyna-17-EM1-3",
+  "note": "A FRESH probe written for recert-12 on 2026-10-20 by the walker, after reading the rule and the three acceptances, and NOT reusing a single item of recert-11/heldout.json (checked by letter-normalised string match, 0 of 92 items in it). 36 Czech paragraphs of 11-24 words written with diacritics and folded to plain letters, 12 other Czech paragraphs with diacritics (14-26 words, essay register), 6 short Czech lines (with diacritics and folded), 5 German and 3 Polish paragraphs, 31 English paragraphs and 1 short English line (some built to collide: Vespa, Roma, Praha Castle, 5k, Skype, Pilsner Urquell, Brown v Board, Tesco, martini, Zlatan, spaghetti, learner-grammar English). Checked by letter-normalised string match: none is in tools/, uat/ (outside recert-12/) or desk/src. The probe is the walker's own, so it is held out from the fix, not from the walker, and it is cleaner Czech than the learner text of the earlier probes (every item is a grammatical sentence); a pass here is weaker evidence than the recert-11 pass. English is checked on 32 items only.",
+  "method": "scratch scripts outside the repo (/tmp/rc12), tools/ts-load.cjs, no model call; paragraphIsEnglish(text) per item at ee7d6ac7. The rule is byte for byte what it was at ffa91a49 (git diff -U0 ffa91a49 ee7d6ac7 -- desk/src/lib/rules/essay.ts has hunks at :282, :320, :345 and :556 only; paragraphIsEnglish :261-268, englishReading and czechShape :231-246 are outside them), so the ffa91a49 column equals the ee7d6ac7 column by construction.",
+  "acceptance": "L1-kristyna-17-EM1-1: every Czech paragraph is refused, and the verdict rules take the text language; L1-helena-46-EM1-4: short Czech, Czech without diacritics and German are refused or answered in Czech; L1-kristyna-17-EM1-3: notes in the language the prompt names",
+  "atEe7d6ac7": {
+    "fresh": {
+      "czPlainLetter": {
+        "total": 36,
+        "refused": 36
+      },
+      "czDiacritics": {
+        "total": 12,
+        "refused": 12
+      },
+      "czShortDiacritics": {
+        "total": 6,
+        "refused": 6
+      },
+      "czShortPlainLetter": {
+        "total": 6,
+        "refused": 4
+      },
+      "de": {
+        "total": 5,
+        "refused": 5
+      },
+      "pl": {
+        "total": 3,
+        "refused": 3
+      },
+      "english": {
+        "total": 32,
+        "refused": 0
+      }
+    }
+  },
+  "summary": {
+    "freshCzechPlainLetter": "36 of 36 refused",
+    "freshCzechDiacritics": "12 of 12 refused",
+    "freshCzechParagraphsAll": "48 of 48 refused",
+    "freshCzechShort": "diacritics 6 of 6, plain-letter 4 of 6 refused",
+    "freshGermanPolish": "German 5 of 5, Polish 3 of 3 refused",
+    "freshEnglishRefused": "0 of 32",
+    "withRecert11Probe": "Czech paragraphs refused over recert-11/heldout.json fresh probe (59 of 60) and this one (48 of 48): 107 of 108"
+  },
+  "items": [
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Minuly tyden jsme jeli s tatou autem do Brna a cestou jsme se zastavili na obede v male hospode.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Moje sestra rada maluje obrazy, ale doma na ne nema dost mista, a tak je schovava pod posteli.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Kdyz prsi, nejradeji zustavam doma, ctu si knizku a piju horky caj s citronem.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Ucitelka nam zadala domaci ukol, ktery musime odevzdat do patku, jinak dostaneme spatnou znamku.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Vcera vecer jsem hral s bratrem fotbal na hristi za skolou, dokud se uplne nesetmelo.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Nevim, jestli na vylet pojedeme vlakem nebo autobusem, protoze mamka jeste nezjistila, kdy to jede.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Ten film se mi libil mnohem vic nez kniha, podle ktere ho natocili, i kdyz konec byl trochu smutny.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Po skole jdu obvykle rovnou domu, udelam si ukoly a potom si pujdu zahrat na pocitaci.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Na prazdniny bych chtela jet k mori, ale rodice rikaji, ze je to prilis drahe a pojedeme na chalupu.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Moje babicka pece nejlepsi kolace na svete a vzdycky nam jich par zabali s sebou domu.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Dnes rano jsem zaspal, takze jsem musel bezet na autobus a do skoly jsem prisel cely udychany.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Kdyby bylo hezky, sli bychom se po obede projit k rece a mozna bychom si tam i opekali burty.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Kazdy den se ucim nova anglicka slovicka, ale porad si nepamatuju, jak se spravne vyslovuji.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "V sobotu mam narozeniny a pozvala jsem vsechny kamarady z tridy na oslavu do pizzerie.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Pes sousedu celou noc stekal, takze jsem skoro vubec nespal a ve skole jsem pak usinal v lavici.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Chtel bych se stat lekarem, protoze me bavi pomahat lidem a zajima me, jak funguje lidske telo.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Tenhle tyden mame ve skole projektovy den a nase trida bude vyrabet model slunecni soustavy.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Mam rad zimu, protoze muzeme jezdit na lyzich, a hlavne mam rad Vanoce, kdy se cela rodina sejde.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Bylo by fajn, kdybychom meli ve tride vic pocitacu, aby si na ne mohl sednout kazdy zak.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Po obede jsme s kamarady sli do parku, kde jsme pozorovali kachny a hodili jim kousek rohliku.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Tatinek dnes vecer vari svickovou, a tak se tesim, az se vsichni sejdeme u stolu a budeme si povidat.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Zitra piseme pisemku z matematiky, a i kdyz jsem se ucila cele odpoledne, porad se ji trochu bojim.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Dostal jsem k Vanocum nove kolo a hned po svatcich jsem na nem vyrazil na dlouhou projizdku lesem.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Myslim si, ze deti by mely travit mene casu u telefonu a vic se pohybovat venku na cerstvem vzduchu.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Hodne lidi si mysli, ze byt ucitelem je snadne, ale ja vim, ze je to velmi narocna prace.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Moje oblibene jidlo jsou spagety s rajcatovou omackou, ktere mi vari maminka kazdou nedeli.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Vcera jsme se v hodine dejepisu ucili o Karlu Ctvrtem a o tom, jak nechal postavit Karluv most.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Kdyz jsem byl maly, bal jsem se tmy, ale ted uz spim bez svetla a vubec mi to nevadi.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Chceme-li zlepsit zivotni prostredi, musime tridit odpad, setrit vodou a mene jezdit autem.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Cely vikend jsem uklizel pokoj, protoze jsem nasel veci, o kterych jsem uz davno zapomnel.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Ja ti to ale prece rikal, ze to tak nebude, a ty jsi mi to stejne neveril.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "To je presne to, co jsem chtela, ale nevedela jsem, kde to mam hledat a koho se zeptat.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Ve meste, kde bydlim, je jedna stara knihovna, do ktere chodim uz od svych sesti let.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Na konci skolniho roku nas ceka vylet na hrad, o kterem jsme se v dejepisu hodne ucili.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Dedecek mi vypravel, jak se driv bez mobilu domlouvali s kamarady, a mne to prislo skoro neuveritelne.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Moje nejlepsi kamaradka se prestehovala do jineho mesta, a tak si ted piseme kazdy den dlouhe zpravy.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Podle mého názoru by měla škola začínat později, protože dospívající potřebují víc spánku, než dostávají.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Mnoho žáků si stěžuje na příliš těžké tašky, ale málokdo z nich přemýšlí, co všechno do školy zbytečně nosí.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "V posledních letech roste počet lidí, kteří si kupují elektrická auta, protože chtějí ušetřit za benzín i pomoci přírodě.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Myslím, že by každý člověk měl umět alespoň jeden cizí jazyk, neboť mu to otevírá dveře do světa.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Sportování nám nejen pomáhá udržet se ve formě, ale také zlepšuje náladu a učí nás pracovat v týmu.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Pokud chceme, aby se naše město stalo příjemnějším místem k životu, měli bychom vysadit víc stromů a zpřísnit pravidla pro dopravu.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Sociální sítě mají své výhody, například rychlé spojení s přáteli, ale mohou také způsobit závislost a pocit osamění.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Přestože je zdravá strava dražší než rychlé občerstvení, dlouhodobě se vyplatí, protože člověk méně marodí.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Čtení knih rozvíjí fantazii a slovní zásobu, a proto bych si přála, aby se ve škole četlo mnohem víc.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Většina mých spolužáků tráví večery u obrazovky, zatímco já raději chodím běhat nebo si povídám s rodiči.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Když jsem poprvé přišel do nové třídy, byl jsem nervózní, ale spolužáci mě přijali mnohem líp, než jsem čekal.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Domácí úkoly jsou užitečné jen tehdy, když mají smysl, jinak žáky jenom unavují a berou jim chuť do učení.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-short-diacritics",
+      "kind": "short",
+      "text": "Dnes je hezky.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-short-diacritics",
+      "kind": "short",
+      "text": "Kolik je hodin?",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-short-diacritics",
+      "kind": "short",
+      "text": "Přeji hezký den.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-short-diacritics",
+      "kind": "short",
+      "text": "Co budeme jíst?",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-short-diacritics",
+      "kind": "short",
+      "text": "Jedu domů.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-short-diacritics",
+      "kind": "short",
+      "text": "Venku fouká vítr.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-short-plain-letter",
+      "kind": "short",
+      "text": "Dnes je hezky.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-short-plain-letter",
+      "kind": "short",
+      "text": "Kolik je hodin?",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-short-plain-letter",
+      "kind": "short",
+      "text": "Preji hezky den.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "cs-short-plain-letter",
+      "kind": "short",
+      "text": "Co budeme jist?",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-short-plain-letter",
+      "kind": "short",
+      "text": "Jedu domu.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "cs-short-plain-letter",
+      "kind": "short",
+      "text": "Venku fouka vitr.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "de",
+      "kind": "paragraph",
+      "text": "Ich gehe jeden Tag zu Fuß in die Schule, weil sie nicht weit von unserem Haus entfernt ist.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "de",
+      "kind": "paragraph",
+      "text": "Am Wochenende besuchen wir meine Großeltern, die auf dem Land wohnen und einen großen Garten haben.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "de",
+      "kind": "paragraph",
+      "text": "Meiner Meinung nach sollten Kinder weniger Zeit am Handy verbringen und mehr draußen spielen.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "de",
+      "kind": "paragraph",
+      "text": "Gestern habe ich im Supermarkt Brot und Käse gekauft, aber ich habe das Geld zu Hause vergessen.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "de",
+      "kind": "paragraph",
+      "text": "Wenn das Wetter schön ist, fahren wir mit dem Fahrrad zum See und gehen dort schwimmen.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "pl",
+      "kind": "paragraph",
+      "text": "Wczoraj poszliśmy z klasą do muzeum i dowiedzieliśmy się wielu ciekawych rzeczy o historii naszego miasta.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "pl",
+      "kind": "paragraph",
+      "text": "Moja siostra lubi czytać książki, ale ja wolę grać z kolegami w piłkę na boisku za szkołą.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "pl",
+      "kind": "paragraph",
+      "text": "Uważam, że dzieci powinny spędzać mniej czasu przed telewizorem i więcej czasu na świeżym powietrzu.",
+      "passedAtEe7d6ac7": false,
+      "passedAtFfa91a49": false
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "I think schools should start later because teenagers are tired in the morning and cannot concentrate.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Last summer my family drove to the coast, and we spent a week swimming and eating ice cream.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "My brother has a Vespa and he promised to drive me to the gym after school on Friday.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "We ate pizza and gelato in Roma, and then we walked to the Colosseum before it got dark.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Our class visited Praha Castle last week, and the guide told us a lot about the old kings.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Ahoj Max, see you at the 5k run tomorrow, and please bring a bottle of water for me.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "My Skype name is dan_05, but I mostly use it to talk to my cousin who lives in Brno.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "The Pilsner Urquell brewery tour was interesting, although I was too young to taste anything.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Many people believe that homework helps students learn, but I think it often just makes them tired.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "There are three reasons why I like football: it is fun, it keeps me fit, and I can play with friends.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "I has two brother and one sister, they is very nice and we always play together after dinner.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Yesterday I go to the shop and buyed some milk, but it was too much expensive for me.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "In my opinion, cities need more parks, because people who live there want to relax and breathe fresh air.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Brown v Board of Education was a famous court case that changed schools in America forever.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "The Tesco near our house sells fresh bread, and my dad goes there every morning before work.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "She said that she would come at six, but she arrived at eight and did not even say sorry.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "A good teacher explains things clearly, listens to the pupils, and does not shout when somebody makes a mistake.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "On Saturday we are going to a safari park, where we will see lions, giraffes and a very big elephant.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "My favourite martini bar closed last year, so now I just drink orange juice with my friends.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Zlatan scored twice in the second half, and the whole stadium stood up to applaud him.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Environmental problems such as plastic waste and pollution should be solved by governments and ordinary people together.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "It is raining again, so we stay at home, play board games and drink hot chocolate.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Dear Mr Novak, I am writing to ask whether I can have an extra day to finish my project.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "The spaghetti was cold, the soup was salty, and the waiter forgot to bring us any water at all.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Please send me the homework for Monday; I was ill and I could not come to school this week.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Learning a second language is hard at the beginning, but after a few months you start to understand films.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Pavel and Jana play in a band called Kolo, and their first concert will be in the school hall.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "He asked me if I wanted to join the chess club, and I said yes without thinking about it.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Thanks a lot for lending me your notes.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "See you at the park at noon.",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "What time does the train leave?",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    },
+    {
+      "lang": "en",
+      "kind": "short",
+      "text": "Where is my umbrella?",
+      "passedAtEe7d6ac7": true,
+      "passedAtFfa91a49": true
+    }
+  ]
+}
