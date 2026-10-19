@@ -1223,7 +1223,7 @@ test('MB-B1 TV: the Sheet, the Walk and the Continue card draw a skipped item as
  assert.deepEqual(tags(none,'mb-tm').map((t)=>/data-v="(\w+)"/.exec(t)[1]),['skipped','skipped']);assert.doesNotMatch(none,/class="nr"/);
 });
 
-test('paper 9 (L1-vojtech-18-MB4-1): each recovery topic row names the statement codes that led the questions to it',()=>{
+test('paper 9 (L1-vojtech-18-MB4-1): each recovery topic row names, in the learner own words, the statements that led the questions to it',()=>{
  const {paperView}=PAPER(),{recovery}=REC();
  const raw=[it('7',0,2,['N12']),it('9',0,2,['A1'])],s=paperSession(raw);
  const v=paperView(s),r=recovery(raw);
@@ -1234,7 +1234,17 @@ test('paper 9 (L1-vojtech-18-MB4-1): each recovery topic row names the statement
  }
  const row=drawMaths('PaperScreen',s).match(/<div class="mb-prow"[^>]*data-id="pct-of-amount"[^>]*>.*?<\/div>/s);
  assert.ok(row,'the pct-of-amount row is drawn');
- assert.match(row[0].replace(/<[^>]*>/g,' '),/led by N12/,'the row says which statement led there');
+ assert.match(row[0].replace(/<[^>]*>/g,' '),/led by /,'the row says which statement led there');
+ const {canOf}=require(path.join(root,'src/lib/rules/paperEntry.ts'));
+ for(const t of v.topics)assert.deepEqual(t.said,t.codes.map(c=>canOf(c)),t.id+' carries the statement words');
+ const text=row[0].replace(/<[^>]*>/g,' ').replace(/&#x27;/g,"'"),said=v.topics.find(t=>t.id==='pct-of-amount').said;
+ assert.ok(said.length>0&&text.includes('led by '+said.join('; ')),'the row names the words, not the bare code');
+ assert.doesNotMatch(text,/led by N12/);
+ // a cz learner reads the Czech words of the statement that led there
+ const cz={...s,profiles:[{id:'ema',name:'Ema',type:'high-school',age:15,system:'cz',modules:['maths']}],learner:{id:'ema',name:'Ema'}};
+ const vc=paperView(cz).topics.find(t=>t.id==='pct-of-amount');
+ assert.deepEqual(vc.said,vc.codes.map(c=>canOf(c,'cz')));
+ assert.notDeepEqual(vc.said,v.topics.find(t=>t.id==='pct-of-amount').said,'Czech differs from the English line');
 });
 
 test('paper 10 (L1-radka-41-MB4-1): a cz learner reads the off-desk statement, its harder-statement flag and the aim line in Czech; a uk learner reads the same lines as before',()=>{
