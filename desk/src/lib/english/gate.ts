@@ -113,19 +113,38 @@ export function partnerLine(reply: string, adult: boolean, hold?: BandHoldFor): 
  * LG-56: the band a beginner's partner line is held to (council-lite r2 value-1; LT-tomas-9-J4-1, LT-viktor-67-J3-1,
  * LT-petra-38-J4-1). The prompt asks an A1-A2 partner for short lines, and on the claude engine it still talked above
  * the band in every run. Code now counts what it can count: at most `sentences` sentences, at most `words` words in
- * each, at most one question. Word frequency is not counted: "the most common words" stays on the prompt.
+ * each, at most one question, and at A1 no question in the past tense. Word frequency is not counted: "the most common
+ * words" stays on the prompt.
  */
-export const BAND_HOLD: Partial<Record<Band, { words: number; sentences: number }>> = { A1: { words: 8, sentences: 2 }, A2: { words: 12, sentences: 2 } };
+export const BAND_HOLD: Partial<Record<Band, BandHold>> = { A1: { words: 8, sentences: 2, present: true }, A2: { words: 12, sentences: 2 } };
+/** `present` (LG-5, recert-7 LT-viktor-67-J4-5): a question in the past tense ('What did you do at school?') is over the band. */
+interface BandHold { words: number; sentences: number; present?: boolean }
 /** What partnerLine needs to hold a line to a band: the band, and the line's own simpler rung when the model gave one. */
 export interface BandHoldFor { band: Band; simpler?: string }
 
 const WORDS = /[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu;
 const sentencesOf = (text: string) => text.trim().split(/(?<=[.!?])\s+/).map(x => x.trim()).filter(Boolean);
 const wordsIn = (text: string) => text.match(WORDS)?.length ?? 0;
-/** How far a line is over its band: 0 when it fits. Each sentence, word and question past the limit counts one. */
-function overBand(text: string, hold: { words: number; sentences: number }): number {
+const WH = new Set(["what", "where", "when", "who", "why", "how", "which"]);
+const PAST_AUX = /\b(?:did|didn['’]t|was|wasn['’]t|were|weren['’]t)\b/i;
+const PAST_IRREGULAR = new Set("went saw ate had made got took came said won ran found gave told thought bought left felt lost met drank swam wrote sang built caught brought began broke chose drove fell flew forgot heard kept knew sat slept spent stood taught threw wore".split(" "));
+const NOT_PAST = new Set(["need", "feed", "speed", "bleed", "breed", "seed", "weed", "shed", "hundred", "naked", "wicked", "sacred"]);
+const pastVerb = (w: string) => PAST_IRREGULAR.has(w) || (/^[a-z]{2,}ed$/.test(w) && !NOT_PAST.has(w));
+/**
+ * A question in the past tense, as code can tell it: a did/was/were question anywhere in it, or a wh-question whose verb,
+ * in the first three words after the wh-word, is a past form ('What happened?', 'Who won?'). Statements are not read.
+ */
+export function pastQuestion(sentence: string): boolean {
+  if (!sentence.trim().endsWith("?")) return false;
+  if (PAST_AUX.test(sentence)) return true;
+  const w = (sentence.toLowerCase().match(WORDS) ?? []), at = w.slice(0, 2).findIndex(x => WH.has(x));
+  return at >= 0 && w.slice(at + 1, at + 4).some(pastVerb);
+}
+/** How far a line is over its band: 0 when it fits. Each sentence, word and question past the limit counts one, and at A1 each past-tense question. */
+function overBand(text: string, hold: BandHold): number {
   const s = sentencesOf(text), questions = (text.match(/\?/g) ?? []).length;
-  return Math.max(0, s.length - hold.sentences) + Math.max(0, questions - 1) + s.reduce((n, x) => n + Math.max(0, wordsIn(x) - hold.words), 0);
+  return Math.max(0, s.length - hold.sentences) + Math.max(0, questions - 1) + s.reduce((n, x) => n + Math.max(0, wordsIn(x) - hold.words), 0)
+    + (hold.present ? s.filter(pastQuestion).length : 0);
 }
 /**
  * A partner line as a learner at `band` may hear it. B1 and up, or a line that fits: unchanged. Over the band: the line's

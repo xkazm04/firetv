@@ -3125,6 +3125,22 @@ test('LG-56: no band hold for an unplaced learner with no level set',async()=>{
  await reply('I keep my bike in it.');
  assert.notEqual(partnerSaid().at(-1),long,'an explicit A1 is held');
 });
+test('LG-5: at A1 a past-tense partner question fails the band hold, the line\'s own simpler rung is taken when it passes, and the A1 prompt names present tense (recert-7 LT-viktor-67-J4-5)',async()=>{
+ const {bandLine,pastQuestion}=require(path.join(root,'src/lib/english/gate.ts'));
+ for(const q of ['What did you do at school?','Did you play at school?','How was school today?','Were you happy?','What happened at the end?','Who won?','So, where did you go?'])assert(pastQuestion(q),q);
+ for(const q of ['What do you do at school?','Do you play at school?','What do you need?','Is it red?','Where is your bed?','Biscuit loved the splash!'])assert(!pastQuestion(q),q);
+ assert.equal(bandLine('What did you do at school?','A1','What do you do at school?'),'What do you do at school?','LT-viktor-67-J4-5: the present-tense rung');
+ assert.equal(bandLine('Nice! How was school today?','A1','Is school good?'),'Is school good?');
+ assert.equal(bandLine('Did you play at school?','A1','Did you play?'),'Did you play at school?','a rung still in the past is no better: the line stays, code adds no words');
+ assert.equal(bandLine('What did you do at school?','A2','What do you do?'),'What did you do at school?','A2 may hear the past');
+ assert.equal(bandLine('Do you play at school?','A1','Play?'),'Do you play at school?','a present line in band is unchanged');
+ const seen=await bandStart('ema','A1','Hello! What do you like?',()=>({reply:'Cool! What did you do at school?',observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'What do you do at school?',meaning:'',starter:''}}));
+ assert.match(seen[0].system,/Speak in the present tense, and ask one short question in the present tense/);
+ await reply('I like dogs.');
+ assert.equal(partnerSaid().at(-1),'What do you do at school?','held through partnerSays');
+ const a2=await bandStart('ema','A2','Hello! What do you like?',()=>({reply:'Cool! What did you do at school?',observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
+ assert.doesNotMatch(a2[0].system,/present tense/);
+});
 test('LG-57: a martin-45-like error said twice in one scene stops the scene with a code-made moment; the partner is told to leave the fix to it',async()=>{
  const {FOSSIL_TASK,FOSSIL_WHY}=review();
  const seen=await bandStart('jakub','B1','Hello, how can I help?',()=>({reply:'I see. When do you need them?',observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
