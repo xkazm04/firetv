@@ -35,6 +35,22 @@ test('a .docx reads back as paragraphs: runs joined, tabs and breaks kept, entit
   assert.deepEqual(r, { ok: true, text: 'Why we sleep\n\nTeens fall asleep later & wake "late".\n\nA\tB\nC éš' });
   assert.deepEqual(docxText(zip([['word/document.xml', DOC]], { method: 0 })), r, 'a stored entry reads the same');
 });
+test('a non-breaking hyphen reads as "-"', () => {
+  const r = docxText(zip([['word/document.xml', doc(para('<w:t>e</w:t>', '<w:noBreakHyphen/>', '<w:t>mail</w:t>'))]]));
+  assert.deepEqual(r, { ok: true, text: 'e-mail' });
+});
+test('a table row reads as one line, cells separated by " | "', () => {
+  const cell = (t) => `<w:tc><w:tcPr/>${para(`<w:t>${t}</w:t>`)}</w:tc>`;
+  const tbl = `<w:tbl><w:tblPr/><w:tr><w:trPr/>${cell('Name')}${cell('Age')}${cell('City')}</w:tr><w:tr>${cell('Eva')}${cell('15')}${cell('Brno')}</w:tr></w:tbl>`;
+  const r = docxText(zip([['word/document.xml', doc(para('<w:t>Before</w:t>'), tbl, para('<w:t>After</w:t>'))]]));
+  assert.deepEqual(r, { ok: true, text: 'Before
+
+Name | Age | City
+
+Eva | 15 | Brno
+
+After' });
+});
 test('refusals come with a sentence: not a zip, no document, encrypted, a zip bomb, no text', () => {
   const no = (buf, re) => { const r = docxText(buf); assert.equal(r.ok, false); assert.match(r.error, re); };
   no(Buffer.from('Just some text, not a zip at all.'), /does not open as a Word document/);
