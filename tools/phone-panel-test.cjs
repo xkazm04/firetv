@@ -1,12 +1,12 @@
 /**
- * The phone follows the TV. Every TV screen whose copy asks the learner to do something on the phone (snap,
- * type, paste, dictate, tell, answer, open...) moves the phone to the panel that does it - when the TV's screen
- * CHANGES into that hand-off, never on a same-screen update, so a tab the learner picked stays picked.
+ * The phone follows the TV's hand-off (TL-9). The session's `ask` names what the TV wants of the phone; the phone
+ * moves to that ask's panel when a NEW ask id arrives - on the same TV screen too - and never on a same-ask update, so
+ * a tab the learner picked stays picked. Busy hands defer the move without spending it; a Parent phone is told by a
+ * banner, not moved; a reopened stream goes to the open ask.
  *
- * The hand-off screens are DERIVED from the TV source, not listed: the TV's dispatchers (app/tv/page.tsx,
- * maths/MathsTV.tsx, essay/EssayTV.tsx; Linga's screens through lingaOwns) name the component that draws each
- * screen, and a screen is a hand-off when that component - or a top-level helper of its file it reaches - asks
- * for a phone action in its (comment-stripped) copy, or carries Linga's on-your-phone badge.
+ * The rule is DERIVED from the sources, not listed: every AskKind of the store has exactly one panel, and a TV screen
+ * whose (comment-stripped) copy asks for the phone opens an ask (its KEYMAP entry in tv/keys.ts holds an ask.open)
+ * unless it is on the named legacy ledger below, where a later slice (TL-12, TL-13) still owes it.
  *
  * Pure: panelFor/follow from desk/src/app/phone/panelFor.ts over plain session objects. Run with npm test in
  * desk/ (directly: node tools/phone-panel-test.cjs). No store, no route, no model.
@@ -73,6 +73,17 @@ function drawers(){
 }
 /** The derived hand-off screens: a screen at least one of whose drawers asks for the phone. */
 const HANDOFF_SCREENS=(()=>{const d=drawers();return SCREENS.filter(sc=>(d.get(sc)??[]).some(x=>asks(x.file,x.name)));})();
+/** Every AskKind, read from the store's union type. */
+const ASK_KINDS=(()=>{const m=code(path.join(SRC,'lib/session/store.ts')).match(/export type AskKind =([^;]+);/);return [...m[1].matchAll(/"([^"]+)"/g)].map(x=>x[1]);})();
+/** The screens whose KEYMAP entry in the TV's keys opens an ask: an entry is `    name: ` at four spaces (the printer's indent), up to the next one. */
+const OPENS_ASK=(()=>{const src=code(path.join(SRC,'tv/keys.ts')),at=src.indexOf('const KEYMAP');const body=src.slice(at,src.indexOf('\n};',at));
+ const heads=[...body.matchAll(/^    ([a-z-]+): /gm)];return heads.filter((h,i)=>body.slice(h.index,i+1<heads.length?heads[i+1].index:body.length).includes('"ask.open"')).map(h=>h[1]);})();
+/**
+ * The screens whose copy says "on the phone" and that still open no ask, each with the slice that owes it. An entry
+ * leaves this ledger in that slice; one that opens an ask by then must not stay.
+ */
+const LEGACY={landing:'pairing: the code is typed on the phone, no ask',pair:'pairing: the code is typed on the phone, no ask',paper:'TL-13: Type a paper opens ask paper',sheet:'the sheet card points at the walk, whose Tell the desk how and Type my second go stops open explain and second (TL-6); the copy is MathsTV, not this slice'};
+for(const sc of SCREENS)if(sc.startsWith('linga'))LEGACY[sc]='TL-12: Linga opens reply and words';
 
 // ---------------------------------------------------------------- sessions
 
@@ -82,6 +93,8 @@ function session(patch={}){
  return {joined:true,subject:'maths',screen:'units',awaiting:null,pages:[],pageIx:0,practice:null,jobs:{},conversation:null,draft:null,essayType:null,
   timer:{running:false,left:1500,phase:'work'},...patch};
 }
+/** The TV's open hand-off, as the session holds it. */
+const askOf=(kind,detail,id='a1',phase='open')=>({id,kind,learner:null,screen:'tonight',at:0,phase,...(detail?{detail}:{})});
 /** The phone: where it is and whether the learner's hands are on it (typing, a shot held, recording). */
 const at=(panel='tonight',patch={})=>({panel,role:'student',busy:false,...patch});
 
@@ -94,17 +107,17 @@ const LINGA={s:session({screen:'linga-talk'}),panel:'linga'};
 const FIXTURES={
  landing:{s:session({joined:false,screen:'landing'}),panel:'join',from:JOINED_FROM,why:'Open the address on your phone (the session ended: back to the code)'},
  pair:{s:session({joined:false,screen:'pair'}),panel:'join',from:JOINED_FROM,why:'Scan, or open ... on your phone and type the code'},
- profile:{s:session({screen:'profile',draft:{id:'new',name:''}}),panel:'profile',why:"Type the name on the phone's Profile tab"},
- tonight:{s:session({screen:'tonight',awaiting:'maths'}),panel:'capture',why:'Waiting for the Math Buddy page. Snap it on the phone'},
- practice:{s:session({screen:'practice',practice:set(false)}),panel:'practice',why:'snap the whole sheet with the phone'},
- sheet:{s:session({screen:'sheet',practice:set(true)}),panel:'practice',why:'Tell the desk on the phone how you got there'},
- walk:{s:session({screen:'walk',practice:set(true)}),panel:'practice',why:'Tell the desk on the phone how you got there'},
+ profile:{s:session({screen:'profile',draft:{id:'new',name:''},ask:askOf('name')}),panel:'profile',why:"Type the name on the phone's Profile tab"},
+ tonight:{s:session({screen:'tonight',awaiting:'maths',ask:askOf('page',{subject:'maths'})}),panel:'capture',why:'Waiting for the Math Buddy page. Snap it on the phone'},
+ practice:{s:session({screen:'practice',practice:set(false),ask:askOf('sheet')}),panel:'practice',why:'snap the whole sheet with the phone'},
+ sheet:{s:session({screen:'sheet',practice:set(true),ask:askOf('explain',{walkIx:0})}),panel:'practice',why:'Tell the desk on the phone how you got there'},
+ walk:{s:session({screen:'walk',practice:set(true),ask:askOf('second',{walkIx:0})}),panel:'practice',why:'Type the second go on the phone'},
  page:{s:session({screen:'page',pages:[page],jobs:{read:{id:'j1',kind:'read',phase:'failed',key:'p1',error:'x',startedAt:0}}}),panel:'capture',why:'The desk could not read this page. Open Try again on the phone'},
- essaytype:{s:session({screen:'essaytype',subject:'essay'}),panel:'paste',why:'Paste, type or dictate one paragraph on the phone'},
- sentence:{s:session({screen:'sentence',subject:'english',english:null}),panel:'say',why:'Say one sentence on your phone (nothing checked yet)'},
- forensic:{s:session({screen:'forensic',subject:'essay'}),panel:'paste',why:'Rewrite on my phone'},
+ essaytype:{s:session({screen:'essaytype',subject:'essay',ask:askOf('paragraph')}),panel:'paste',why:'Paste, type or dictate one paragraph on the phone'},
+ sentence:{s:session({screen:'sentence',subject:'english',english:null,ask:askOf('sentence')}),panel:'say',why:'Say one sentence on your phone (nothing checked yet)'},
+ forensic:{s:session({screen:'forensic',subject:'essay',ask:askOf('rewrite',{n:1})}),panel:'paste',why:'Rewrite on my phone'},
  paper:{s:session({screen:'paper'}),panel:'paper',why:'Type the marks of a paper you sat on the phone'},
- essayplan:{s:session({screen:'essayplan',subject:'essay'}),panel:'paste',why:'Say it on the phone: the plan slot is sent from the Essay tab'},
+ essayplan:{s:session({screen:'essayplan',subject:'essay',ask:askOf('slot',{i:0})}),panel:'paste',why:'Say it on the phone: the plan slot is sent from the Essay tab'},
 };
 for(const sc of SCREENS)if(sc.startsWith('linga'))FIXTURES[sc]={s:session({screen:sc,subject:'english'}),panel:'linga',why:'Linga: answer on your phone',linga:true};
 /** Hand-offs the TV makes that no phone panel does: the phone stays, and the gap is named. */
@@ -121,12 +134,16 @@ const ROWS=()=>{const r=Object.entries(FIXTURES).filter(([,f])=>!f.linga);const 
 
 // ---------------------------------------------------------------- cases
 
-test('case 1: the hand-off screens are derived from the TV source, and every one is decided',()=>{
- console.log(`# derived hand-off screens (${HANDOFF_SCREENS.length}): ${HANDOFF_SCREENS.join(', ')}`);
- assert.ok(HANDOFF_SCREENS.length>=10,'the scan finds the TV\'s phone asks');
- const decided=new Set([...Object.keys(FIXTURES),...Object.keys(NO_PANEL)]);
- assert.deepEqual(HANDOFF_SCREENS.filter(sc=>!decided.has(sc)),[],'a TV screen that asks for the phone must be given its panel here');
- assert.deepEqual([...decided].filter(sc=>!HANDOFF_SCREENS.includes(sc)),[],'no hand-written hand-off the TV source does not make');
+test('case 1 (TL-9, replaces the old case 1 "the hand-off screens are derived from the TV source, and every one is decided"): every AskKind has exactly one panel',()=>{
+ const {ASK_PANEL,panelFor}=P();
+ console.log(`# ask kinds (${ASK_KINDS.length}): ${ASK_KINDS.join(', ')}`);
+ assert.ok(ASK_KINDS.length>=16,'the scan finds the store ask kinds');
+ assert.deepEqual(Object.keys(ASK_PANEL).sort(),[...ASK_KINDS].sort(),'one entry per kind: none missing, none extra');
+ const PANELS=['join','joined','capture','practice','point','say','paste','tonight','parent','profile','linga','paper'];
+ for(const k of ASK_KINDS){
+  assert.ok(PANELS.includes(ASK_PANEL[k]),`${k} has a panel the phone draws`);
+  assert.equal(panelFor(session({screen:'units',ask:askOf(k)})),ASK_PANEL[k],`${k}: whatever the TV screen, the ask picks the panel`);
+ }
 });
 
 test('case 2: every hand-off screen maps to the panel that does what it asks',()=>{
@@ -136,13 +153,20 @@ test('case 2: every hand-off screen maps to the panel that does what it asks',()
  assert.equal(panelFor(session({screen:'tonight',subject:'english'})),'linga','Linga\'s Tonight is Linga\'s (lingaOwns)');
 });
 
-test('case 3: a screen that asks nothing of the phone maps to "stay"',()=>{
+test('case 3 (TL-9, replaces the old case 3 "a screen that asks nothing of the phone maps to stay"): no TV copy says "on the phone" on a screen that opens no ask, but the named legacy ones',()=>{
  const {panelFor}=P();
- for(const sc of SCREENS.filter(x=>!HANDOFF_SCREENS.includes(x)))assert.equal(panelFor(session({screen:sc})),'stay',sc);
- assert.equal(panelFor(session({screen:'tonight'})),'stay','Tonight with no page asked for asks nothing yet');
- assert.equal(panelFor(session({screen:'page',pages:[page]})),'stay','a page that read is the TV\'s to show');
+ console.log(`# screens that open an ask (${OPENS_ASK.length}): ${OPENS_ASK.join(', ')}`);
+ assert.ok(OPENS_ASK.length>=8,'the scan finds the keys that open asks');
+ const noAsk=HANDOFF_SCREENS.filter(sc=>!OPENS_ASK.includes(sc));
+ assert.deepEqual(noAsk.filter(sc=>!(sc in LEGACY)),[],'a screen whose copy asks for the phone must open an ask (or be named on the ledger with its slice)');
+ assert.deepEqual(Object.keys(LEGACY).filter(sc=>!noAsk.includes(sc)),[],'a ledger entry whose screen now opens an ask, or no longer asks, leaves the ledger');
+ // with no ask open, a screen outside the ledger asks nothing of the phone, whatever the TV is showing
+ for(const sc of SCREENS.filter(x=>!(x in LEGACY)))assert.equal(panelFor(session({screen:sc})),'stay',sc);
+ assert.equal(panelFor(session({screen:'tonight',awaiting:'maths'})),'stay','a status that names the phone is a caption, not the signal');
+ assert.equal(panelFor(session({screen:'page',pages:[page]})),'stay','a page that read is the TV to show');
  assert.equal(panelFor(session({screen:'pair'})),'stay','a joined phone is not sent back to the code');
  assert.equal(panelFor(session({screen:'joined'})),'stay','the Joined screen asks nothing of the phone');
+ assert.equal(panelFor(session({screen:'forensic',ask:askOf('rewrite',{n:2},'a2','sent')})),'stay','a sent ask is the desk to finish: the phone is not moved');
 });
 
 test('case 4: the phone follows every hand-off - N of N',()=>{
@@ -155,7 +179,7 @@ test('case 4: the phone follows every hand-off - N of N',()=>{
  assert.equal(n,rows.length,`not followed:\n${miss.join('\n')}`);
 });
 
-test('case 5 GUARD: a tab the learner picks survives every same-screen update',()=>{
+test('case 5 GUARD: a tab the learner picks survives every same-ask update',()=>{
  const {follow}=P();
  for(const [sc,f] of Object.entries(FIXTURES)){
   const k=follow(undefined,(f.from??JOINED_FROM).s,at((f.from??JOINED_FROM).panel)).key;
@@ -169,9 +193,9 @@ test('case 5 GUARD: a tab the learner picks survives every same-screen update',(
  // Linga moving inside itself is not a new hand-off: Say it, opened from Linga, stays open
  const k=follow(undefined,LINGA.s,at('linga')).key;
  assert.equal(follow(k,session({screen:'linga-coach',subject:'english'}),at('say')).to,null,'linga-talk -> linga-coach leaves Say it alone');
- // walking the marked set is one hand-off: sheet -> walk does not pull the learner back
+ // the same ask carried from the sheet to the walk is one hand-off: it does not pull the learner back
  const k2=follow(undefined,FIXTURES.sheet.s,at('practice')).key;
- assert.equal(follow(k2,FIXTURES.walk.s,at('tonight')).to,null,'sheet -> walk leaves the learner where they went');
+ assert.equal(follow(k2,{...FIXTURES.walk.s,ask:FIXTURES.sheet.s.ask},at('tonight')).to,null,'the same ask on another screen leaves the learner where they went');
  // a non-hand-off screen change moves nothing
  assert.equal(follow(undefined,session({screen:'units'}),at('say')).to,null,'units asks nothing');
  assert.equal(follow(null,session({screen:'calendar'}),at('say')).to,null,'calendar asks nothing');
@@ -188,18 +212,33 @@ test('case 6: the hand-off follows a CHANGE - leave it, come back, and it is fol
  assert.equal(follow(k,FIXTURES.tonight.s,at('tonight')).to,'capture','I have homework: the phone opens the camera');
 });
 
-test('case 7 GUARD: typing, a shot held unsent or a recording is never taken away; the hand-off is spent',()=>{
+test('case 7 GUARD (TL-9, re-pinned: the old row said the hand-off is spent): typing, a shot held unsent or a recording is never taken away - the move is deferred, not spent',()=>{
  const {follow}=P();
  const k=follow(undefined,session({screen:'units'}),at('say')).key;
  const s1=follow(k,FIXTURES.essaytype.s,at('say',{busy:true}));
  assert.equal(s1.to,null,'busy on Say it: the phone stays');
- assert.equal(follow(s1.key,FIXTURES.essaytype.s,at('say')).to,null,'hands free again, same screen: not pulled away later');
+ assert.equal(s1.key,k,'and the ask is not spent');
+ assert.equal(follow(s1.key,FIXTURES.essaytype.s,at('say',{busy:true})).to,null,'still busy: still not moved');
+ assert.equal(follow(s1.key,FIXTURES.essaytype.s,at('say')).to,'paste','hands free, same ask: the phone moves as soon as it can');
+ // the deferred ask closed before the hands were free: nothing to move to
+ assert.equal(follow(s1.key,session({screen:'essaytype',subject:'essay'}),at('say')).to,null,'the ask closed while the hands were busy: no move');
+ // busy hands on the very panel the ask wants lose nothing: the ask is simply taken
+ const same=follow(k,FIXTURES.essaytype.s,at('paste',{busy:true}));
+ assert.equal(same.to,null);assert.equal(same.key,'ask:a1','an ask for the panel the hands are on is spent at once');
 });
 
-test('case 8: the Parent role is never moved; arrival never opens the camera unasked',()=>{
- const {follow}=P();
+test('case 8 (TL-9, re-pinned: the old row only asserted no move): the Parent role is never moved and gets the banner; arrival never opens the camera unasked',()=>{
+ const {follow,BANNER}=P();
  const k=follow(undefined,session({screen:'units'}),at('parent',{role:'parent'})).key;
- for(const [sc,f] of Object.entries(FIXTURES))if(f.s.joined)assert.equal(follow(k,f.s,at('parent',{role:'parent'})).to,null,sc);
+ for(const [sc,f] of Object.entries(FIXTURES))if(f.s.joined){
+  const st=follow(k,f.s,at('parent',{role:'parent'}));
+  assert.equal(st.to,null,sc);
+  assert.equal(st.banner,f.panel,`${sc}: the Parent phone is told which panel the TV wants`);
+  assert.ok(BANNER[st.banner].length>8,`${sc}: and the banner has words`);
+  assert.equal(st.key,k,`${sc}: the ask is not spent on a phone that was not moved`);
+ }
+ assert.equal(follow(k,FIXTURES.essaytype.s,at('paste',{role:'parent'})).banner,null,'a Parent phone already on the panel needs no banner');
+ assert.equal(follow(k,session({screen:'units'}),at('parent',{role:'parent'})).banner,null,'no ask, no banner');
  assert.equal(follow(undefined,FIXTURES.tonight.s,at('join')).to,'joined','a join while the TV waits for a page: the confirmation, whose one button is Snap');
  assert.equal(follow(undefined,FIXTURES.practice.s,at('join')).to,'joined');
  assert.equal(follow(undefined,FIXTURES.essaytype.s,at('join')).to,'paste','a join during Essay Master goes to the paragraph');
@@ -209,6 +248,25 @@ test('case 8: the Parent role is never moved; arrival never opens the camera una
  assert.equal(follow(undefined,session({screen:'page'}),at('join')).to,'joined','a join while the TV is on a page: the confirmation, which names the TV screen');
  assert.equal(follow(undefined,session({screen:'recap'}),at('join',{role:'parent'})).to,'joined','a parent joining at the recap lands on the confirmation too');
  assert.equal(follow(undefined,session({joined:false,screen:'landing'}),at('profile')).to,null,'an unjoined phone may name a learner');
+});
+
+test('case 8b (TL-9): a new ask id moves a Student phone on the same TV screen; a reopened stream goes to the open ask',()=>{
+ const {follow}=P();
+ const first=session({screen:'forensic',subject:'essay',ask:askOf('rewrite',{n:1},'r1')});
+ const a=follow(undefined,first,at('tonight'));assert.equal(a.to,'paste');
+ // the learner opens another tab; the same ask, ticking on: left alone
+ assert.equal(follow(a.key,{...first,timer:{running:true,left:1,phase:'work'}},at('point')).to,null);
+ // Back closes the ask; Rewrite again is a NEW id on the SAME screen: the phone goes there again
+ const closed=follow(a.key,session({screen:'forensic',subject:'essay'}),at('point'));assert.equal(closed.to,null);
+ const second=follow(closed.key,{...first,ask:askOf('rewrite',{n:1},'r2')},at('point'));
+ assert.equal(second.to,'paste','the second ask on the same screen moves the phone');
+ // and replaced without a close in between
+ assert.equal(follow(a.key,{...first,ask:askOf('rewrite',{n:2},'r3')},at('point')).to,'paste','an ask replaced by another id moves it');
+ // a reopened stream: the page forgets what it saw, and goes to the open ask wherever it is
+ assert.equal(follow(undefined,first,at('point')).to,'paste','after a reopen the phone goes to the open ask');
+ // a different kind of ask is the other panel, on the same screen
+ assert.equal(follow(a.key,{...first,ask:askOf('private',{n:1},'p1')},at('point')).to,'paste');
+ assert.equal(follow(a.key,{...first,ask:askOf('question',{n:1},'q1')},at('paste')).to,'point');
 });
 
 test('case 9: the phone page follows through panelFor, with no screen switch of its own',()=>{
@@ -222,13 +280,14 @@ test('case 9: the phone page follows through panelFor, with no screen switch of 
 test('case 10 (W3): an essay is never snapped - a wait for an essay page, or an essay page that would not read, sends the phone to the Essay panel',()=>{
  const {panelFor,follow}=P();
  // the maths versions keep going to the camera
- assert.equal(panelFor(session({screen:'tonight',awaiting:'maths'})),'capture');
- assert.equal(panelFor(session({screen:'tonight',awaiting:'english'})),'capture');
- // an essay wait: the Essay panel, from a phone that has joined, and from one on another tab
- const waiting=session({screen:'tonight',subject:'essay',awaiting:'essay'});
- assert.equal(panelFor(waiting),'paste','the TV waiting for an essay page: Essay panel, not Capture');
+ assert.equal(panelFor(session({screen:'tonight',awaiting:'maths',ask:askOf('page',{subject:'maths'})})),'capture');
+ assert.equal(panelFor(session({screen:'tonight',awaiting:'english',ask:askOf('page',{subject:'english'})})),'capture');
+ // an essay wait is the paragraph ask: the Essay panel, from a phone that has joined, and from one on another tab
+ const waiting=session({screen:'tonight',subject:'essay',awaiting:'essay',ask:askOf('paragraph')});
+ assert.equal(panelFor(waiting),'paste','the TV asking for an essay: Essay panel, not Capture');
+ assert.equal(panelFor({...waiting,ask:null}),'stay','the awaiting status alone asks nothing (TL-9: the ask is the signal)');
  assert.equal(walk(JOINED_FROM,waiting),'paste');
- assert.equal(follow(undefined,waiting,at('join')).to,'paste','a join while the TV waits for an essay lands on the Essay panel (no camera to open)');
+ assert.equal(follow(undefined,waiting,at('join')).to,'paste','a join while the TV asks for an essay lands on the Essay panel (no camera to open)');
  // an essay page whose read failed (a page from before this change) is not asked for again by camera
  const epage={...page,id:'e1',subject:'essay'};
  const unread=session({screen:'page',subject:'essay',pages:[epage],jobs:{read:{id:'j2',kind:'read',phase:'failed',key:'e1',error:'x',startedAt:0}}});
@@ -238,11 +297,12 @@ test('case 10 (W3): an essay is never snapped - a wait for an essay page, or an 
  assert.ok(!['capture'].includes(panelFor(session({screen:'essaytype',subject:'essay'}))),'the lens home is the Essay panel');
 });
 
-test('case 11 (W3): the capture panel no longer offers Essay Master - not in the subject list, not among the samples',()=>{
+test('case 11 (W3, re-pinned by TL-9: the subject list is gone, the ask names the module): the capture panel no longer offers Essay Master - no subject select, not among the samples',()=>{
  const src=code(PAGE);
  const capture=src.slice(src.indexOf('{screen === "capture" && ('),src.indexOf('{screen === "practice" && s'));
- const options=[...capture.matchAll(/<option value="(\w+)">/g)].map(m=>m[1]);
- assert.deepEqual(options,['maths','english'],'the capture subject list is Math Buddy and Linga');
+ assert.doesNotMatch(capture,/<select|<option/,'the capture panel offers no subject select: the TV named the module');
+ assert.match(capture,/data-role="capture-subject"/,'it draws the TV choice as a line');
+ assert.match(src,/s\?\.ask\?\.kind === "page" && s\.ask\.detail\?\.subject \? s\.ask\.detail\.subject/,'the subject is read from the ask');
  const samples=src.slice(src.indexOf('const SAMPLES'),src.indexOf('];',src.indexOf('const SAMPLES')));
  assert.deepEqual([...samples.matchAll(/id: "(\w+)"/g)].map(m=>m[1]),['maths','english'],'no essay sample page');
  assert.doesNotMatch(capture,/Essay Master/);
@@ -324,7 +384,8 @@ test('case 14 (W6): the TV\'s Practice card is not made false by the typed route
 
 test('plan case 7 (panel): the plan screen hands the phone to the Essay panel',()=>{
  const {panelFor}=P();
- assert.equal(panelFor(session({screen:'essayplan',subject:'essay'})),'paste');
+ assert.equal(panelFor(session({screen:'essayplan',subject:'essay',ask:askOf('slot',{i:1})})),'paste');
+ assert.equal(panelFor(session({screen:'essayplan',subject:'essay'})),'stay','the plan with no slot asked asks nothing of the phone');
  assert.equal(panelFor(session({joined:false,screen:'essayplan',subject:'essay'})),'join','an unjoined phone is still asked for the code first');
 });
 
@@ -471,7 +532,9 @@ test('paper 5: a paper kept can be shown on the TV from the panel - the TV has n
  const src=code(PAPER_PANEL);
  assert.match(src,/seated && kept && <button[^>]*onClick=\{\(\) => void post\(\{ type: "nav", screen: "paper" \}\)\}/);
  const {panelFor}=P();
- assert.equal(panelFor(session({screen:'paper'})),'paper','the TV on the list hands the phone to the panel');
+ // TL-9 re-pin: the ask is read first; the paper screen alone still hands off until TL-13 opens ask paper
+ assert.equal(panelFor(session({screen:'units',ask:askOf('paper')})),'paper','ask paper hands the phone to the panel, whatever the screen');
+ assert.equal(panelFor(session({screen:'paper'})),'paper','the TV on the list hands the phone to the panel (legacy, until TL-13)');
  assert.equal(panelFor(session({joined:false,screen:'paper'})),'join','an unjoined phone is still asked for the code first');
 });
 
@@ -878,7 +941,7 @@ test('deskLine: a run that failed on the desk (its body says failure) adds no li
  for(const b of [null,undefined,{},{error:''},{error:3}])assert.equal(deskLine(b,F),F,JSON.stringify(b));
 });
 test("the profile queue hands each post's failure to its caller: Done that never lands says so, and the queue goes on (TL-8: Save moved to the TV)",async()=>{
- const raw=fs.readFileSync(PAGE,'utf8');
+ const raw=fs.readFileSync(PAGE,'utf8').replace(/\r\n/g,'\n'); // a Windows checkout has CRLF; the slice below ends at a bare newline
  assert.match(raw,/post\(\{ type: "ask\.cancel", id: handoff\.id \}\)\)\.catch\(\(\) => setMsg\("That did not reach the desk\."\)\)/,'Done says when it did not land');
  assert.doesNotMatch(raw,/type: "profile\.(save|discard)"/,'the phone posts neither profile.save nor profile.discard');
  const at=raw.indexOf('function inOrder()'),body=raw.slice(at,raw.indexOf('\n}\n',at)+2);
@@ -1035,4 +1098,50 @@ test('TL-2 pins: one join in flight, the field and Join disabled while it runs; 
  assert.match(src,/if \(refusal\.forget\) \{ try \{ localStorage\.setItem\(REFUSED_QR, code\)/,'the refused QR code is remembered');
  assert.match(src,/localStorage\.getItem\(REFUSED_QR\) === q/);
  assert.match(src,/if \(!refusedBefore\) void join\(q, "qr"\)/,'a remembered code is not posted again');
+});
+
+// ---------------------------------------------------------------- TL-9: the page reads the ask, answers it, and says what http cannot do
+
+test('TL-9: the phone page follows the ask - busy hands are re-checked, a reopened stream forgets what it saw, a Parent phone gets the banner',()=>{
+ const src=code(PAGE);
+ assert.match(src,/BANNER\[banner\]/,'the banner draws the panel words');
+ assert.match(src,/data-role": "phone-banner"|data-role="phone-banner"/,'and is findable');
+ assert.match(src,/setBanner\(step\.banner\)/,'the follow step sets it');
+ assert.match(src,/if \(!connected\)\s*\{?\s*seen\.current = undefined/,'a stream that dropped goes to the open ask when it is back (D5)');
+ assert.match(src,/\[s, role, screen, typingNow, shot, phase, holding\]/,'the follow effect runs again when the hands become free, so a deferred move is not waiting for the next session update');
+ assert.match(src,/addEventListener\("focusout", look\)/,'a field let go is seen');
+});
+
+test('TL-9: every answer carries askId of the open ask, and a page with no ask sends what it always did',()=>{
+ const src=code(PAGE);
+ assert.match(src,/import \{ useSession, call as rawCall \} from "@\/tv\/useSession"/,'the raw call is wrapped on this page');
+ assert.match(src,/const askId = s\?\.ask\?\.phase === "open" \? s\.ask\.id : undefined/);
+ assert.match(src,/rawCall\(url, askId && body && typeof body === "object" \? \{ \.\.\.body, askId \} : body\)/,'the id rides in the body of every call');
+ // behaviour: cut the wrapper out and run it against a stub
+ const a=src.indexOf('const askId ='),b=src.indexOf('[askId]);',a)+'[askId]);'.length-1;
+ const js=ts.transpileModule(src.slice(a,b+1).replace(/: unknown/g,''),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const make=(s)=>{const sent=[];const f=new Function('s','useCallback','rawCall',`${js}\nreturn call;`);return {call:f(s,(fn)=>fn,(u,b)=>{sent.push([u,b]);}),sent};};
+ const m=make({ask:{id:'a7',phase:'open'}});m.call('/api/read',{image:'x'});m.call('/api/texts',null);
+ assert.deepEqual(m.sent[0],['/api/read',{image:'x',askId:'a7'}]);assert.deepEqual(m.sent[1],['/api/texts',null],'a body that is not an object goes as it is');
+ const none=make({ask:null});none.call('/api/read',{image:'x'});assert.deepEqual(none.sent[0],['/api/read',{image:'x'}],'no ask open: no askId');
+ const sent=make({ask:{id:'a7',phase:'sent'}});sent.call('/api/read',{image:'x'});assert.deepEqual(sent.sent[0],['/api/read',{image:'x'}],'a sent ask is answered: nothing more to attach');
+});
+
+test('TL-9: no panel offers a subject select or a lens radio - the capture subject and the essay lens are lines read from the ask and the session',()=>{
+ const src=code(PAGE);
+ assert.doesNotMatch(src,/<select value=\{subject\}/,'no subject select');
+ assert.doesNotMatch(src,/setSubject\b|setEtype\b/,'and no state to change them');
+ assert.doesNotMatch(src,/name="etype"/,'no lens radio');
+ assert.match(src,/const etype = s\?\.essayType \?\? "structure"/,'the lens is the session\'s');
+ assert.match(src,/data-role="essay-lens">The TV chose the lens:/,'drawn as a line');
+ assert.match(src,/data-role="capture-subject">The TV is waiting for a page of/);
+});
+
+test('TL-9 (D15): the camera and voice panels say the http limit; the words are one pair of constants',()=>{
+ const src=code(PAGE),{HTTP_LIMIT}=P();
+ assert.match(HTTP_LIMIT.camera,/http/);assert.match(HTTP_LIMIT.camera,/no camera/);assert.match(HTTP_LIMIT.voice,/http/);assert.match(HTTP_LIMIT.voice,/no microphone/);
+ for(const s of Object.values(HTTP_LIMIT))assert.doesNotMatch(s,/[\u2014\u2013]/,'no dash in the words');
+ assert.match(src,/setInsecure\(!window\.isSecureContext\)/,'the page asks the browser, once');
+ const cam=(src.match(/\{HTTP_LIMIT\.camera\}/g)||[]).length,voice=(src.match(/\{HTTP_LIMIT\.voice\}/g)||[]).length;
+ assert.ok(cam>=2,`the capture panel and the sheet snap say it (${cam})`);assert.ok(voice>=2,`the explain talk and the essay panel say it (${voice})`);
 });

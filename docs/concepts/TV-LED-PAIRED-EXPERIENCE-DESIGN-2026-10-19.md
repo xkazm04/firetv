@@ -342,7 +342,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: Add a learner emits `profile.draft` then `ask.open name`; Save with no name leaves the draft and sets the line; the phone source has no `profile.save` and no `profile.discard` post.
 - Tests: `tools/tv-keys-test.cjs` (the row, the ask, focus after a pick unchanged below the new row), `tools/learner-switch-test.cjs` (Save with no name).
 - Stick check: Add a learner with the remote and type the name on the phone; the TV's title follows each letter; Save on the TV seats them.
-- Landed: TL-8 commit on branch autopilot/accepted-idea-delivery-2137c3ad (OD1 b: the name stays a phone job; the phone's Done only closes its end of the ask). Stick check not run.
+- Landed: d2b8812e (OD1 b: the name stays a phone job; the phone's Done only closes its end of the ask). Stick check not run.
 
 ### TL-9. The phone follows the hand-off, not the screen
 - Files: `desk/src/app/phone/panelFor.ts`, `desk/src/app/phone/page.tsx`, `tools/phone-panel-test.cjs`.
@@ -350,6 +350,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Acceptance: a new ask id moves a Student phone on the same TV screen; busy hands move as soon as they are free; a Parent phone does not move and gets the banner; no panel offers a subject select or a lens radio.
 - Tests: `tools/phone-panel-test.cjs`. Its derivation changes from "screens whose copy asks for the phone" to "every `AskKind` has exactly one panel, and no TV copy says 'on the phone' on a screen that opens no ask". The two old rows this replaces are named in the commit.
 - Stick check: on the forensic page, open the phone's More, then press Rewrite on the TV. The phone goes to the rewrite panel. Press Rewrite again after Back, and the phone goes there again.
+- Landed: TL-9 commit on branch autopilot/accepted-idea-delivery-788c905d (panelFor reads s.ask first and keys on ask.id, one panel per AskKind; busy hands defer the move unspent; the Parent role gets the banner; a reopened stream goes to the open ask; answers carry askId; the capture subject and the essay lens are lines, not controls; the camera and voice panels state the http limit). The Linga, failed-read and paper cues stay screen-keyed until TL-12 and TL-13. Stick check not run.
 
 ### TL-10. The phone shell fits 360-414 px
 - Files: `desk/src/app/phone/page.tsx`, `desk/src/app/globals.css`, `tools/phone-shell-test.cjs` (new), `desk/package.json`.

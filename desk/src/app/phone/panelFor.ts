@@ -1,53 +1,46 @@
 /**
- * Where the phone should be. The TV derives its screen from the session; the phone derives, from the same
- * session, the panel that does what that screen asks of the phone - and goes there by itself when the TV's
- * screen CHANGES into such a hand-off. A tab the learner picked stays picked while the screen stays the same.
- * Pure; the phone page calls follow() on every session change. Tested by tools/phone-panel-test.cjs, which
- * derives the hand-off screens from the TV source and holds this mapping to them.
+ * Where the phone should be. The TV opens a hand-off (the session's `ask`); the phone shows that hand-off's panel and
+ * goes there by itself when a NEW ask id arrives - on the same TV screen too, and again after a reopened stream. A tab
+ * the learner picked stays picked while the same ask stays open. The few screens that still ask the phone without
+ * opening an ask (Linga's, a failed read's Try again, the paper list) keep the old screen-keyed cue until their slices
+ * (TL-12, TL-13) open asks. Pure; the phone page calls follow() on every session change. Tested by
+ * tools/phone-panel-test.cjs.
  */
-import type { Session } from "@/lib/session/store";
+import type { AskKind, Session } from "@/lib/session/store";
 import { lingaOwns } from "@/tv/keys";
 
 /** The phone's panels. */
 export type PScreen = "join" | "joined" | "capture" | "practice" | "point" | "say" | "paste" | "tonight" | "parent" | "profile" | "linga" | "paper";
 
-type Seen = Pick<Session, "joined" | "screen" | "subject" | "awaiting" | "practice" | "pages" | "pageIx" | "jobs"> & Partial<Pick<Session, "english">>;
+type Seen = Pick<Session, "joined" | "screen" | "subject" | "awaiting" | "practice" | "pages" | "pageIx" | "jobs"> & Partial<Pick<Session, "english" | "ask">>;
+
+/** The one panel each kind of hand-off is done on. The camera panels, the typing panels, Linga's three: no kind has two. */
+export const ASK_PANEL: Readonly<Record<AskKind, PScreen>> = {
+  name: "profile", page: "capture", sheet: "practice", answers: "practice", question: "point", explain: "practice", second: "practice", paper: "paper",
+  paragraph: "paste", rewrite: "paste", slot: "paste", sentence: "say", reply: "linga", words: "linga", prefs: "linga", private: "paste",
+};
 
 /** A hand-off: the panel it wants, and a key that changes only when the TV asks for something new. */
 interface Cue { panel: PScreen; key: string }
 
-/** The hand-off the TV's screen makes to the phone, or null where it asks nothing the phone can do. */
+/** The hand-off the TV makes to the phone, or null where it asks nothing the phone can do. */
 function cueFor(s: Seen): Cue | null {
-  const sc = s.screen;
-  // an unjoined phone is asked for the code - or, on the TV's Profile, for the new learner's name
-  if (!s.joined) return sc === "profile" ? { panel: "profile", key: "profile" } : { panel: "join", key: "join" };
-  // Linga is one panel that reads its own screens: moving inside Linga is not a new hand-off
+  const a = s.ask;
+  // the open ask first, and keyed on its id: a second ask on the same screen is a new hand-off. A sent ask is the desk's to finish
+  if (a) return a.phase === "open" ? { panel: ASK_PANEL[a.kind], key: `ask:${a.id}` } : null;
+  // an unjoined phone with nothing else asked is asked for the code
+  if (!s.joined) return { panel: "join", key: "join" };
+  // Linga is one panel that reads its own screens (TL-12 moves it onto asks)
   if (lingaOwns(s as Session)) return { panel: "linga", key: "linga" };
-  switch (sc) {
-    case "profile": return { panel: "profile", key: sc };
-    // "Waiting for the Math Buddy page. Snap it on the phone"
-    // (an essay is never snapped: Essay Master takes text, so a wait for an essay page sends the phone to the Essay panel)
-    case "tonight": return s.awaiting ? { panel: s.awaiting === "essay" ? "paste" : "capture", key: `tonight:${s.awaiting}` } : null;
-    // "snap the whole sheet with the phone"
-    case "practice": return { panel: "practice", key: sc };
-    // "Tell the desk on the phone how you got there": the marked set and its walk are one hand-off
-    case "sheet": case "walk": return { panel: "practice", key: "sheet" };
-    // "The desk could not read this page. Press Try again on the phone": the capture panel holds that read's Try again, so the camera stays off
-    case "page": {
-      const p = s.pages[s.pageIx];
-      return p && (readFailed(s) || (p.subject === "essay" && s.jobs?.read?.phase === "failed" && s.jobs.read.key === p.id)) ? { panel: p.subject === "essay" ? "paste" : "capture", key: `page:retry:${p.id}` } : null;
-    }
-    // "Paste, type or dictate one paragraph on the phone" / "Rewrite on my phone"
-    case "essaytype": case "forensic": return { panel: "paste", key: sc };
-    // "Type the marks of a paper you sat on the phone" (v2 M5b): the recovery list's screen, whose paper is typed on the Paper panel
-    case "paper": return { panel: "paper", key: sc };
-    // "Say it on the phone": one sentence per slot of the plan, written on the Essay tab
-    case "essayplan": return { panel: "paste", key: sc };
-    // "Say one sentence on your phone": the sentence screen with nothing to check yet (Linga's Sentence help)
-    case "sentence": return s.english ? null : { panel: "say", key: "sentence:empty" };
-    // "circle on the phone" (a paused lesson): no phone panel circles a lesson frame, so the phone stays
-    default: return null;
+  const sc = s.screen;
+  // "The desk could not read this page. Press Try again on the phone" (TL-13 moves the retry to the TV)
+  if (sc === "page") {
+    const p = s.pages[s.pageIx];
+    return p && (readFailed(s) || (p.subject === "essay" && s.jobs?.read?.phase === "failed" && s.jobs.read.key === p.id)) ? { panel: p.subject === "essay" ? "paste" : "capture", key: `page:retry:${p.id}` } : null;
   }
+  // "Type the marks of a paper you sat on the phone" (TL-13 opens ask paper)
+  if (sc === "paper") return { panel: "paper", key: sc };
+  return null;
 }
 
 /** The panel the TV's screen hands off to, or "stay" where it asks nothing of the phone. */
@@ -57,32 +50,50 @@ export const panelFor = (s: Seen): PScreen | "stay" => cueFor(s)?.panel ?? "stay
 export const readFailed = (s: Pick<Seen, "screen" | "pages" | "pageIx" | "jobs">) => { const p = s.pages[s.pageIx], read = s.jobs?.read; return s.screen === "page" && !!p && p.subject !== "essay" && read?.phase === "failed" && read.key === p.id; };
 
 /** A panel that turns the camera on as it opens. */
-const opensCamera = (panel: PScreen, s: Seen) => (panel === "capture" && !readFailed(s)) || (panel === "practice" && s.screen === "practice" && !s.practice?.marked);
+const opensCamera = (panel: PScreen, s: Seen) => (panel === "capture" && !readFailed(s)) || (panel === "practice" && s.ask?.kind === "sheet" && !s.practice?.marked);
 
 /** Where the phone is, who holds it, and whether the learner's hands are on it (typing, a shot held unsent, recording). */
 export interface At { panel: PScreen; role: "student" | "parent"; busy: boolean }
-/** The key to remember for next time, and the panel to move to (null: stay). */
-export interface Step { key: string | null; to: PScreen | null }
+/** The key to remember for next time, the panel to move to (null: stay), and the panel a Parent phone is told about (null: none). */
+export interface Step { key: string | null; to: PScreen | null; banner: PScreen | null }
+
+/** The Parent phone's banner: what the TV is asking for, in the words of its panel. One tap on it moves the phone. */
+export const BANNER: Readonly<Record<PScreen, string>> = {
+  join: "The TV is asking for the code. Type it", joined: "", capture: "The TV is asking for a photo. Take it", practice: "The TV is asking for your working. Send it",
+  point: "The TV is asking for your question. Type it", say: "The TV is asking for a sentence. Say it", paste: "The TV is asking for your words. Write them",
+  tonight: "", parent: "", profile: "The TV is asking for a name. Type it", linga: "The TV is asking for your answer. Say it", paper: "The TV is asking for the marks of a paper. Type them",
+};
+
+/** What the phone says on a panel that needs the camera or the microphone when it was served over http (D15; OD6 decides https on the LAN). */
+export const HTTP_LIMIT = {
+  camera: "This page came over http, so the phone gives no camera here. Type instead where the TV allows it, or use a sample page.",
+  voice: "This page came over http, so the phone gives no microphone here. Type your words instead.",
+} as const;
 
 /**
- * The phone follows a hand-off once, when it changes (prev: the last key seen; undefined: none yet). A same-screen
- * update is the same key, so a tab the learner picked is left alone. It never moves the Parent role, never takes a
- * panel away from busy hands - that hand-off is then spent, not replayed - and a phone arriving on the join panel
- * never lands in the camera unasked: it gets the confirmation, whose one button is Snap.
+ * The phone follows a hand-off once per ask id (prev: the last key seen; undefined: none yet, as on a reopened stream, so
+ * the open ask is gone to whatever was seen before). A same-ask update is the same key, so a tab the learner picked is
+ * left alone. Busy hands defer the move: the key is NOT spent, so the move comes as soon as the hands are free. The Parent
+ * role is never moved and gets the banner instead. A phone arriving on the join panel never lands in the camera unasked:
+ * it gets the confirmation, whose one button is Snap.
  */
 export function follow(prev: string | null | undefined, s: Seen, at: At): Step {
   const cue = cueFor(s);
   const key = cue?.key ?? null;
+  const banner = at.role === "parent" && s.joined && cue && cue.panel !== at.panel ? cue.panel : null;
   if (!s.joined) {
     // an unjoined phone can only join, or name a learner
-    const to: PScreen | null = cue?.panel === "profile" && key !== prev && at.role === "student" && !at.busy ? "profile"
-      : at.panel === "join" || at.panel === "profile" ? null : "join";
-    return { key, to: to === at.panel ? null : to };
+    const fresh = cue?.panel === "profile" && key !== prev && at.role === "student";
+    const to: PScreen | null = fresh && !at.busy ? "profile" : at.panel === "join" || at.panel === "profile" ? null : "join";
+    return { key: fresh && at.busy && at.panel !== "profile" ? prev ?? null : key, to: to === at.panel ? null : to, banner: null };
   }
-  let to: PScreen | null = null;
+  let to: PScreen | null = null, spent = key;
   if (at.panel === "join") to = cue && !opensCamera(cue.panel, s) ? cue.panel : "joined"; // the code is typed and done: arrival
-  else if (cue && key !== prev && at.role === "student" && !at.busy) to = cue.panel;
-  return { key, to: to === at.panel ? null : to };
+  else if (cue && key !== prev && at.role === "student") {
+    if (!at.busy || cue.panel === at.panel) to = cue.panel;
+    else spent = prev ?? null; // busy hands: the move waits, unspent
+  } else if (cue && at.role === "parent") spent = prev ?? null; // a Parent phone is told, not moved; the ask stays unspent
+  return { key: spent, to: to === at.panel ? null : to, banner };
 }
 
 /** How a code reached the join: typed on the panel, or carried by the TV's QR. */

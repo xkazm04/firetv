@@ -4,7 +4,7 @@
  * The TV leads (TV-led design): a strip, one body, a bar of at most three items. Recap and the rest live under More.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useSession, call } from "@/tv/useSession";
+import { useSession, call as rawCall } from "@/tv/useSession";
 import { ESSAY_TYPES, PLAYBOOK } from "@/lib/library/lessons.data";
 import { essayFileProblem, essayTooLong, REWRITE_WHILE_READING, paragraphsOf, pieceAgainOffered, pieceBeingRead, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
 import { EssayShelf, TextNotice } from "./EssayShelf";
@@ -14,7 +14,7 @@ import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
 import { barItems, moreRows, type MoreId } from "./phoneBar";
-import { deskLine, follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
+import { BANNER, HTTP_LIMIT, deskLine, follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
 import { forensicAt, planAt, switchEndsLine } from "@/tv/keys";
 import { dayOf } from "@/tv/mathsRows";
 import { counted, hintedLine, recapCaption, recapLine, recapRows, slippedLine, startOfDay, tasksLine, tonightsLog } from "@/tv/recapRows";
@@ -69,6 +69,9 @@ export default function Phone() {
   const { s, connected, post, reconnect } = useSession();
   /** Linga's panel posts and moves on; only the join reads the answer. */
   const postOnly = useCallback(async (e: Event) => { await post(e); }, [post]);
+  /** Every answer names the hand-off it answers (TL-11's routes refuse an answer with no matching ask); with none open it goes as it always did. */
+  const askId = s?.ask?.phase === "open" ? s.ask.id : undefined;
+  const call = useCallback((url: string, body: unknown) => rawCall(url, askId && body && typeof body === "object" ? { ...body, askId } : body), [askId]);
   /** The Parent role is gone from the page (TL-10): Recap and This week are read-only views under More. follow() still takes a role. */
   const [role] = useState<"student" | "parent">("student");
   /** A view opened from More that has no panel of its own: This week, and how the TV and phone work together. */
@@ -81,7 +84,8 @@ export default function Phone() {
   const [paperRows, setPaperRows] = useState<DraftRow[]>(() => [blankRow()]);
   const [pin, setPin] = useState("");
   const [msg, setMsg] = useState("");
-  const [subject, setSubject] = useState<Subject>("maths");
+  /** What the TV asked a photo of: the ask names it (the phone shows a line, not a picker); the old awaiting is the fallback for a TV that has not asked. */
+  const subject: Subject = s?.ask?.kind === "page" && s.ask.detail?.subject ? s.ask.detail.subject : s?.awaiting && s.awaiting !== "essay" ? s.awaiting : "maths";
   const [q, setQ] = useState("");
   // the typed way of explaining has its own text: Point & ask keeps q
   const [typedExplain, setTypedExplain] = useState(""), [typing, setTyping] = useState(false);
@@ -102,7 +106,8 @@ export default function Phone() {
   const [info, setInfo] = useState("");
   const essay = paras[pix] ?? "";
   const setEssay = (f: (v: string) => string) => setParas((ps) => ps.map((p, i) => (i === pix ? f(p) : p)));
-  const [etype, setEtype] = useState("structure");
+  /** The lens is the TV's: the phone reads it and sends it back, and offers no choice of its own. */
+  const etype = s?.essayType ?? "structure";
   /**
    * A whole piece (v2 E1, P3): where the text came from, the shelf id once kept (a new version then goes to the same
    * piece), whether to keep it, the one-time notice's words while it is showing, and a tick that reloads the shelf.
@@ -133,8 +138,9 @@ export default function Phone() {
   const [shot, setShot] = useState<{ url: string; w: number; h: number; sub: Subject; title: string } | null>(null);
   /** The hand-off, as the phone knows it: nothing sent, in flight, gone, or refused. */
   const [phase, setPhase] = useState<"idle" | "sending" | "sent" | "failed">("idle");
-  /** The TV asked for a module; the picker stays out of the way until the user asks for it. */
-  const [picking, setPicking] = useState(false);
+  /** The page came over http: the browser gives a phone no camera and no microphone there (D15). Said plainly on the panels that need them. */
+  const [insecure, setInsecure] = useState(false);
+  useEffect(() => { setInsecure(!window.isSecureContext); }, []);
   /** What the mic caught, held on the phone until the learner has read it back. Nothing is sent unseen. */
   const [heard, setHeard] = useState("");
   const [holding, setHolding] = useState(false);
@@ -174,9 +180,6 @@ export default function Phone() {
   }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the input mirrors the draft; a new draft (or none) resets what is typed here
   useEffect(() => { setPname(s?.draft?.name ?? ""); }, [s?.draft?.id]); // eslint-disable-line react-hooks/exhaustive-deps
-  // the TV asked for a page: the capture tab follows what it is waiting for
-  useEffect(() => { if (s?.awaiting && s.awaiting !== "essay") setSubject(s.awaiting); }, [s?.awaiting]);
-  useEffect(() => { if (s?.essayType && role === "student" && screen !== "paste" && s.screen === "essaytype") { setEtype(s.essayType); } }, [s?.essayType, s?.screen, role, screen]);
 
   // camera on when a screen is asking for a photo: capture, or practice with a set still to mark
   // (a read that failed and can be asked again offers Try again on this panel, not a camera: the same test as `failed("read")` below)
@@ -549,16 +552,27 @@ export default function Phone() {
   // the panel that does it. A same-screen update moves nothing, so a tab the learner picked stays picked; busy hands
   // (typing, a shot held unsent, a recording) are never interrupted; a fresh join lands on the confirmation.
   const seen = useRef<string | null | undefined>(undefined);
+  /** The panel a Parent phone is told the TV is asking for; it is not moved there. */
+  const [banner, setBanner] = useState<PScreen | null>(null);
+  /** Typing hands change with the focus, not with the session: the deferred move runs as soon as they are free. */
+  const [typingNow, setTypingNow] = useState(false);
+  useEffect(() => {
+    const look = () => { const el = document.activeElement; setTypingNow(el instanceof HTMLTextAreaElement || (el instanceof HTMLInputElement && !["checkbox", "radio", "button", "submit"].includes(el.type)) || (el instanceof HTMLElement && el.isContentEditable)); };
+    document.addEventListener("focusin", look); document.addEventListener("focusout", look);
+    return () => { document.removeEventListener("focusin", look); document.removeEventListener("focusout", look); };
+  }, []);
   useEffect(() => {
     if (!s) return;
-    const el = document.activeElement;
-    const typing = el instanceof HTMLTextAreaElement || (el instanceof HTMLInputElement && !["checkbox", "radio", "button", "submit"].includes(el.type)) || (el instanceof HTMLElement && el.isContentEditable);
+    const typing = typingNow;
     const held = (screen === "capture" || screen === "practice") && !!shot && phase !== "sent";
     const busyHands = typing || held || holding || hearing.current || !!s.conversation?.capture;
     const step = follow(seen.current, s, { panel: screen, role, busy: busyHands });
     seen.current = step.key;
+    setBanner(step.banner);
     if (step.to) setScreen(step.to);
-  }, [s, role, screen]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [s, role, screen, typingNow, shot, phase, holding]); // eslint-disable-line react-hooks/exhaustive-deps
+  // a stream that dropped and came back goes to the open ask, whatever was seen before (D5)
+  useEffect(() => { if (!connected) seen.current = undefined; }, [connected]);
 
   // The nav waits for a joined phone — except Profile, which a first arrival needs before joining.
   const nav = (n: PScreen) => { if (!s?.joined && n !== "profile") return; setScreen(n); };
@@ -641,6 +655,7 @@ export default function Phone() {
         <div className="link">{!connected ? "Lost the desk link. Reconnecting…" : s?.joined ? <>{s.learner ? s.learner.name : "Joined"}{s && <> · TV: {TV_WORDS[s.screen] ?? s.screen}</>}</> : <>Not joined{s && <> · TV: {TV_WORDS[s.screen] ?? s.screen}</>}</>}</div>
       </div>
       <div className="pbody">
+        {banner && <button className="pbtn" data-secondary="true" data-role="phone-banner" onClick={() => setScreen(banner)}>{BANNER[banner]}</button>}
         {showPanels && <>
         {screen === "linga" && s && <LingaPhone key={`${s.learner?.id ?? ""}:${s.conversation?.id??"setup"}:${s.check?.id??""}`} s={s} post={postOnly} onSentence={()=>setScreen("say")}/>}
         {!s?.joined && screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
@@ -687,9 +702,8 @@ export default function Phone() {
           // a read that failed: the page is already on the desk, so it is read again there, not sent twice
           const again = !reading ? failed("read") : null;
           return <div className="pscreen"><h3>Capture a page</h3>
-            {s?.awaiting && s.awaiting !== "essay" && !picking
-              ? <p><b>{MODULE[s.awaiting]}</b> — the TV is waiting for this page. <button className="plink" onClick={() => setPicking(true)}>change</button></p>
-              : <div className="field"><select value={subject} onChange={(e) => setSubject(e.target.value as Subject)}><option value="maths">Math Buddy</option><option value="english">Linga</option></select></div>}
+            <p data-role="capture-subject">The TV is waiting for a page of <b>{MODULE[subject]}</b>.</p>
+            {insecure && <p data-role="http-limit" role="note">{HTTP_LIMIT.camera}</p>}
             {phase === "idle" && !shot && n >= 1 && <p>Page {n + 1} of the {MODULE[subject]} sheet</p>}
             <div className="cam">
               {cam ? <video ref={video} autoPlay playsInline muted /> : !shot && <span>camera</span>}
@@ -769,6 +783,7 @@ export default function Phone() {
                 {cam && !shot && <div className="guide"><i /><i /><i /><i /></div>}
               </div>
               {!shot && <p>Fill the frame with the sheet, all four corners inside.</p>}
+              {insecure && !shot && <p data-role="http-limit" role="note">{HTTP_LIMIT.camera}</p>}
               {phase === "sending" ? <><p>Sent. The desk is marking the set…</p><button className="pbtn" disabled>Marking the set…</button></>
                 : shot ? <div className="field">
                     <button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={sendWorking} disabled={busy}>Send my working</button>
@@ -800,6 +815,7 @@ export default function Phone() {
                     <button className="pbtn" data-signal="true" onClick={sendSecond} disabled={busy || !again.trim()}>Send</button>
                   </div>
                 </div>)}
+            {asking && insecure && <p data-role="http-limit" role="note">{HTTP_LIMIT.voice}</p>}
             {asking && <ExplainTalk micOk={micOk} holding={holding} heard={heard} reply={reply} busy={busy} typed={typedExplain} typing={typing}
               onHoldStart={holdStart} onHoldEnd={holdEnd} onSendHeard={() => explain(heard)} onTryAgain={() => { setHeard(""); setReply(""); }}
               onTyped={setTypedExplain} onOpenTyping={() => setTyping(true)} onCloseTyping={() => setTyping(false)}
@@ -840,9 +856,9 @@ export default function Phone() {
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !slotText.trim()} onClick={sendSlot}>Send</button></div></div>}
 
         {screen === "paste" && !onSentence && !onPlan && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
-          <p>Send a .txt or .md file, or type, paste or dictate a message. The desk reads a whole piece, or one paragraph at a time. Pick the lens, or pick it on the TV.</p>
-          <div className="types" data-compact="true">{ESSAY_TYPES.map((t) => <label key={t.id}><input type="radio" name="etype" checked={etype === t.id} onChange={() => setEtype(t.id)} /><span><b>{t.name}</b></span></label>)}</div>
-          <p style={{ fontSize: 14 }}>{ESSAY_TYPES.find((t) => t.id === etype)?.promise}</p>
+          <p>Send a .txt or .md file, or type, paste or dictate a message. The desk reads a whole piece, or one paragraph at a time.</p>
+          <p data-role="essay-lens">The TV chose the lens: <b>{ESSAY_TYPES.find((t) => t.id === etype)?.name ?? etype}</b>. {ESSAY_TYPES.find((t) => t.id === etype)?.promise}</p>
+          {insecure && <p data-role="http-limit" role="note">{HTTP_LIMIT.voice}</p>}
           <label className="pbtn pfile" data-secondary="true">Choose a file (.txt or .md)<input type="file" accept=".txt,.md,text/plain,text/markdown" data-role="essay-file" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void pickFile(f); }} /></label>
           {paras.length > 1 && <div className="pparas" data-role="essay-paras">
             <button className="pbtn" data-secondary="true" aria-label="Previous paragraph" disabled={pix === 0} onClick={() => goPara(pix - 1)}>Previous</button>
