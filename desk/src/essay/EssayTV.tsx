@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { paragraphCount, paragraphPending, paragraphState, pieceBeingRead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
+import { paragraphCount, paragraphPending, paragraphState, pieceBeingRead, readingAPiece, forensicPlace, forensicLead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, rewriteStatus, planStops, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -142,9 +142,8 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
 
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const chosen = lens && s.essayType === lens.id;
-  const reading = pieceBeingRead(a?.piece);
   const refused = refusalCaption(s);
-  const cap = job?.phase === "running" ? { label: READING_LABEL, text: reading ? READING_PIECE : "The desk is reading your paragraph. It lands here." }
+  const cap = job?.phase === "running" ? { label: READING_LABEL, text: readingAPiece(a?.piece, job.start) ? READING_PIECE : "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
     : refused ? refused
     : at === "plan" ? { label: "Start from the pattern", text: "Write the paragraph yourself: one sentence for each slot, on the phone." }
@@ -340,7 +339,7 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
   return (<>
     <Brand /><Top s={s} menu="Table" lit={lit} />
     <Rail a={a} cur={i} verdicts={verdicts} />
-    <Page key={sn.n} sn={sn} n={N} v={v} lens={lens} type={a.type} inked={holds} job={job} unruled={unruledCaption(a.piece, sn.para ?? 0)} pending={paragraphPending(a.piece, sn.para ?? 0)} />
+    <Page key={sn.n} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} unruled={unruledCaption(a.piece, sn.para ?? 0)} pending={paragraphPending(a.piece, sn.para ?? 0)} />
     <nav className="em-acts">
       {FORENSIC_STOPS.map((k, j) => (
         <div key={k} className={`em-pill em-act${j === 0 ? " prim" : ""}${stopAt(FORENSIC_STOPS, s.focus) === k ? " is-focused" : ""}`} data-focused={stopAt(FORENSIC_STOPS, s.focus) === k} {...(j === 0 ? { "data-role": "essay-primary" } : {})}>
@@ -383,7 +382,7 @@ function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<num
 }
 
 /** The one sentence the page is about. Keyed by sentence, so moving along the paragraph remounts it (and its fit). */
-function Page({ sn, n, v, lens, type, inked, job, unruled, pending }: { sn: Sent; n: number; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean; job?: Job; unruled?: { label: string; text: string } | null; pending?: boolean }) {
+function Page({ sn, n, place, lead, v, lens, type, inked, job, unruled, pending }: { sn: Sent; n: number; place: string; lead: string; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean; job?: Job; unruled?: { label: string; text: string } | null; pending?: boolean }) {
   const main = useRef<HTMLElement>(null);
   const t = teaching(v, type);
   const vd = v?.verdict ?? "neutral", state = rewriteState(v);
@@ -421,7 +420,8 @@ function Page({ sn, n, v, lens, type, inked, job, unruled, pending }: { sn: Sent
     : { label: "Neutral", text: note || "Nothing flagged." };
   return (
     <section className="em-main em-rise" ref={main}>
-      <div className="em-crumb em-lbl">{ICON[lens.id]}<span className="em-ln">{lens.name}</span><span>· Sentence {sn.n} of {n} · {sn.role}</span></div>
+      <div className="em-crumb em-lbl">{ICON[lens.id]}<span className="em-ln">{lens.name}</span><span>· {place} · {sn.role}</span></div>
+      {lead && <div className="em-lbl" data-role="essay-lead">{lead}</div>}
       <div className="em-sent" data-role="essay-sentence"><span className="em-q" aria-hidden="true">“</span><SentenceText text={sn.text} faulty={vd === "faulty"} /></div>
       <div className="em-note" data-role="essay-problem" data-verdict={vd}><Caption label={noteCap.label} text={noteCap.text} /></div>
       {t ? <>

@@ -1793,3 +1793,23 @@ test('L1-helena-46-EM5-6: phone-kept pieces with different typed titles and a pi
  const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
  assert.match(phone,/setSource\("file"\);[^\n]*setPieceTitle\(f\.name\.replace\(/,'a picked file names the piece by its file name without the extension');
 });
+test('EM3-1: the forensic page names the paragraph it is on and leads with where to start, naming what "start" means',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const sen=[{n:1,para:0},{n:2,para:0},{n:3,para:1},{n:4,para:1}],piece={paragraphs:2,read:[0,1],failed:[]};
+ assert.equal(R.forensicPlace(sen,2,piece),'Paragraph 2 of 2 · Sentence 3 of 4');
+ assert.equal(R.forensicPlace([{n:1},{n:2}],1),'Sentence 2 of 2','one paragraph keeps the plain crumb');
+ const v=[{n:4,verdict:'faulty',note:'x'},{n:3,verdict:'faulty',note:'y'}];
+ assert.equal(R.forensicLead({sentences:sen,verdicts:v,piece}),'Start with paragraph 2, sentence 3: the earliest to fix.');
+ assert.equal(R.forensicLead({sentences:sen,verdicts:[],piece}),'');
+ assert.equal(R.forensicLead({sentences:sen,verdicts:v,piece:{paragraphs:3,read:[0],failed:[]}}),'Reading paragraph 2 of 3.','while the piece is read the page says how far it has got');
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ assert.match(tv,/place=\{forensicPlace\(/);assert.match(tv,/data-role="essay-lead"/);
+});
+test('EM3-3: a run that starts "reading your piece" is a piece from the first second, a paragraph run is not',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ assert.equal(R.readingAPiece(undefined,'reading your piece, 4 paragraphs — structure lens…'),true);
+ assert.equal(R.readingAPiece(undefined,'reading your paragraph — structure lens…'),false);
+ assert.equal(R.readingAPiece({paragraphs:2,read:[],failed:[]},undefined),true);
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ assert.match(tv,/readingAPiece\(a\?\.piece, job\.start\)/);
+});

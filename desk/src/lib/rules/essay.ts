@@ -554,6 +554,31 @@ export function summaryLine(a: { sentences?: Pick<Sentence, "n" | "para">[]; ver
   return first ? `${head} Start with sentence ${first.n}${note ? `: ${note}` : "."}` : head;
 }
 
+/** Whether the run on the desk reads a piece, from what the piece says (still being read) or the run's own start line (EM3-3: the first paragraph of a first piece has no piece on screen yet). */
+export function readingAPiece(piece: PieceLike | undefined, start?: string): boolean {
+  return pieceBeingRead(piece) || /^reading your piece/.test(start ?? "");
+}
+
+/** Where the forensic page is, in the crumb: "Paragraph p of P · Sentence n of N" for a piece, "Sentence n of N" for one paragraph (EM3-1). */
+export function forensicPlace(sentences: Pick<Sentence, "n" | "para">[], at: number, piece?: PieceLike): string {
+  const here = `Sentence ${sentences[at]?.n} of ${sentences.length}`;
+  return piece ? `Paragraph ${(sentences[at]?.para ?? 0) + 1} of ${piece.paragraphs} · ${here}` : here;
+}
+
+/**
+ * The line the forensic page carries under the crumb (EM3-1): how far a piece has got while it is read, then the sentence to
+ * start with once it is ruled, and what "start" means (the earliest faulty one, in reading order). Empty with nothing to fix.
+ */
+export function forensicLead(a: Parameters<typeof summaryLine>[0]): string {
+  const sentences = a.sentences ?? [];
+  if (a.piece && pieceBeingRead(a.piece)) return pieceReadingLine(a.piece);
+  const faulty = (a.verdicts ?? []).filter((v) => v.verdict === "faulty");
+  const first = sentences.map((s) => faulty.find((v) => v.n === s.n)).find((v) => v);
+  const at = first ? sentences.find((s) => s.n === first.n) : undefined;
+  if (!first || !at) return "";
+  return a.piece ? `Start with paragraph ${(at.para ?? 0) + 1}, sentence ${first.n}: the earliest to fix.` : `Start with sentence ${first.n}: the earliest to fix.`;
+}
+
 /** Why a sentence cannot be rewritten while the piece it is in is still being read. */
 export const REWRITE_WHILE_READING = "The desk is still reading your piece. Rewrite a sentence once every paragraph is read.";
 
