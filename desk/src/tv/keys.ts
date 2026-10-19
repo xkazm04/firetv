@@ -181,10 +181,20 @@ export function forensicAt(s: Session): number {
 /**
  * Where the forensic page's focus lands when a rewrite of sentence `n` comes back (essay.revised), from `focus`:
  * on Next sentence when the rewrite holds and another sentence is still faulty - this one is done; else it stays.
+ * Next sentence then goes to that next faulty sentence (nextFaultyAt), not to sentence n+1.
  */
 export function focusAfterRewrite(a: EssayAnalysis, n: number, focus: number): number {
   const more = a.verdicts.some((v) => v.n !== n && v.verdict === "faulty");
   return rewriteState(a.verdicts.find((v) => v.n === n)) === "holds" && more ? FORENSIC_STOPS.indexOf("next") : focus;
+}
+/** The index Next sentence goes to from index `i`: the next sentence after it, wrapping, whose verdict is faulty and that is not `i`; with no other faulty sentence, the one after (i+1, wrapping). */
+export function nextFaultyAt(a: EssayAnalysis, i: number): number {
+  const n = a.sentences.length;
+  for (let d = 1; d < n; d++) {
+    const j = (i + d) % n;
+    if (a.verdicts.some((v) => v.n === a.sentences[j].n && v.verdict === "faulty")) return j;
+  }
+  return (i + 1) % n;
 }
 /** What Rewrite on my phone puts on the status line; the page inks the move while it is the status. */
 export const rewriteStatus = (n: number) => `sentence ${n}: rewrite it in your own words on the phone's Essay tab, then analyse again`;
@@ -470,7 +480,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     const at = stopAt(FORENSIC_STOPS, s.focus);
     if (at === "rewrite") o.ev({ type: "status", text: rewriteUnruledLine(a, a.sentences[i].n) ?? rewriteStatus(a.sentences[i].n) });
     if (at === "why") o.nav("playbook", Math.max(0, PLAYBOOK_STOPS.findIndex((p) => p === playFor(a.type))), "forensic");
-    if (at === "next") go((i + 1) % n);
+    if (at === "next") go(nextFaultyAt(a, i));
     if (at === "back") o.nav("essaytype", readingLens(s));
   },
   // the four structures top to bottom; Back (or Menu) returns to where the playbook was opened from

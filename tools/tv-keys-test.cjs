@@ -212,8 +212,8 @@ test('essay 4: Left/Right walk the four actions, and each action does its one th
  const why=tvKey(f(1),'select',LOCAL).events;
  assert.deepEqual(why,[{type:'nav',screen:'playbook',focus:PLAYBOOK_STOPS.findIndex(p=>p.id==='thesis'),from:'forensic'}],'Why this matters opens the lesson the lens teaches through');
  assert.deepEqual(tvKey(f(1,{essay:reading(SIXV,'structure')}),'select',LOCAL).events[0].focus,PLAYBOOK.findIndex(p=>p.id==='para'));
- assert.equal(at(f(2),tvKey(f(2),'select',LOCAL)),5,'Next sentence');
- assert.equal(at(f(2,{essayAt:6}),tvKey(f(2,{essayAt:6}),'select',LOCAL)),1,'Next sentence from the last goes round to the first');
+ assert.equal(at(f(2),tvKey(f(2),'select',LOCAL)),6,'Next sentence: from 4 to the next faulty one, 6');
+ assert.equal(at(f(2,{essayAt:6}),tvKey(f(2,{essayAt:6}),'select',LOCAL)),4,'Next sentence from the last faulty one goes round to the first faulty one');
  assert.deepEqual(tvKey(f(3),'select',LOCAL).events,[{type:'nav',screen:'essaytype',focus:1}],'Back to the paragraph returns to the lens home, on the lens it was read through');
  assert.deepEqual(tvKey(f(2),'back',LOCAL).events,[{type:'nav',screen:'essaytype',focus:1}]);
 });
@@ -232,6 +232,20 @@ test('essay 4b: a rewrite that holds hands focus to Next sentence while another 
  assert.equal(focusAfterRewrite(reading(SIXV),4,1),1,'no rewrite yet (no was): unchanged');
  const store=fs.readFileSync(path.join(root,'src/lib/session/store.ts'),'utf8');
  assert.match(store,/case "essay\.revised":[^\n]*\n\s+n\.focus = focusAfterRewrite\(e\.analysis, e\.n, s\.screen === "forensic" \? s\.focus : 0\)/,'the essay.revised reducer moves focus through the keymap\'s rule');
+});
+
+test('essay 4c (L1-eliska-12-EM2-2): Next sentence goes to the next faulty sentence, wrapping; with no other faulty one it steps to n+1',()=>{
+ const {tvKey}=keys();
+ const two=reading([{n:2,verdict:'faulty',note:'x'},{n:5,verdict:'faulty',note:'x'}]);
+ const f=(essayAt,e)=>essay({screen:'forensic',focus:2,essayAt,essay:e});
+ assert.equal(at(f(1,two),tvKey(f(1,two),'select',LOCAL)),2,'from 1 to 2');
+ assert.equal(at(f(2,two),tvKey(f(2,two),'select',LOCAL)),5,'from 2 to 5, skipping 3 and 4');
+ assert.equal(at(f(5,two),tvKey(f(5,two),'select',LOCAL)),2,'from 5 wraps to 2');
+ const one=reading([{n:3,verdict:'faulty',note:'x'}]);
+ assert.equal(at(f(3,one),tvKey(f(3,one),'select',LOCAL)),4,'no other faulty sentence: n+1 as before');
+ assert.equal(at(f(6,one),tvKey(f(6,one),'select',LOCAL)),3,'... wrapping: 6 goes to 3 as the only faulty one');
+ const none=reading([{n:1,verdict:'strong',note:'x'}]);
+ assert.equal(at(f(6,none),tvKey(f(6,none),'select',LOCAL)),1,'none faulty: n+1 wraps');
 });
 
 test('essay 5: Menu is the table; there Up/Down still walk, Select or Back close it, Left/Right do nothing',()=>{
