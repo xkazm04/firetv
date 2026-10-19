@@ -3078,7 +3078,10 @@ async function bandStart(id,level,opening,turn){
 }
 test('LG-56: bandLine holds an A1-A2 line to two short sentences and one question, prefers a fitting simpler rung, and leaves B1 up alone',()=>{
  const {bandLine}=require(path.join(root,'src/lib/english/gate.ts'));
- assert.equal(bandLine(LENKA,'A1'),"Hi, I'm Lenka from school! How many diamonds are in your chest?",'LT-tomas-9-J4-1: the reaction and the one question, in their order');
+ // LG-5 (recert-6 LT-tomas-9-J4-3) revised this row on purpose: the reaction and the question are 12 words, over A1's
+ // whole-line budget of 8, so the question alone is kept; at A2 the reaction and the question in their order still are
+ assert.equal(bandLine(LENKA,'A1'),'How many diamonds are in your chest?','LT-tomas-9-J4-1: the one question');
+ assert.equal(bandLine(LENKA,'A2'),"Hi, I'm Lenka from school! How many diamonds are in your chest?",'the reaction and the one question, in their order');
  assert.equal(bandLine(LENKA,'A1','Hi! How many diamonds do you have?'),'Hi! How many diamonds do you have?','a simpler rung that fits wins');
  assert.equal(bandLine('Do you like it? Is it big?','A1'),'Is it big?','one question: the last');
  assert.equal(bandLine('Hello! What do you like?','A1'),'Hello! What do you like?','a line in band is unchanged');
@@ -3089,7 +3092,7 @@ test('LG-56: a tomas-9-like A1 partner is held at the opening and on a turn thro
  const long='Wow, that is a really big and beautiful house you built for all your friends and pets! What do you keep in it?';
  let seen=await bandStart('ema','A1',LENKA,()=>({reply:long,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'Wow, a big house! What is in it?',meaning:'',starter:''}}));
  assert.match(seen[0].system,/This learner plays at A1: every sentence you say has at most 8 words/);
- assert.equal(partnerSaid()[0],"Hi, I'm Lenka from school! How many diamonds are in your chest?");
+ assert.equal(partnerSaid()[0],'How many diamonds are in your chest?','LG-5: the question alone, inside the whole-line budget');
  await reply('Many diamonds. I have a house.');
  assert.equal(partnerSaid().at(-1),'Wow, a big house! What is in it?','the simpler rung that fits');
  const {BAND_HOLD}=require(path.join(root,'src/lib/english/gate.ts'));
@@ -3140,6 +3143,21 @@ test('LG-5: at A1 a past-tense partner question fails the band hold, the line\'s
  assert.equal(partnerSaid().at(-1),'What do you do at school?','held through partnerSays');
  const a2=await bandStart('ema','A2','Hello! What do you like?',()=>({reply:'Cool! What did you do at school?',observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
  assert.doesNotMatch(a2[0].system,/present tense/);
+});
+test('LG-5: at A1 a reaction and a question over 8 words in all is cut to the question; a correctness answer or a slip recast keeps both; the prompt names the budget (recert-6 LT-tomas-9-J4-3)',async()=>{
+ const {bandLine}=require(path.join(root,'src/lib/english/gate.ts'));
+ assert.equal(bandLine('Sleeping is nice! Where does he sleep at night?','A1'),'Where does he sleep at night?','LT-tomas-9-J4-3: two sentences, 9 words');
+ assert.equal(bandLine('Sleeping is nice! Where does he sleep at night?','A1','Where does he sleep?'),'Where does he sleep?','a fitting rung still wins');
+ assert.equal(bandLine('Cool! What is his name?','A1'),'Cool! What is his name?','a short reaction and question fit');
+ assert.equal(bandLine('Sleeping is nice! Where does he sleep at night?','A2'),'Sleeping is nice! Where does he sleep at night?','A2 has no whole-line budget');
+ assert.equal(bandLine("No, say 'I have a dog'. What is his name?",'A1',undefined,true),"No, say 'I have a dog'. What is his name?",'an answer keeps its verdict');
+ const seen=await bandStart('ema','A1','Hello! What do you like?',()=>({reply:'Sleeping is nice! Where does he sleep at night?',observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
+ assert.match(seen[0].system,/Your whole reply has at most 8 words/);
+ await reply('My dog sleep.');
+ assert.equal(partnerSaid().at(-1),'Where does he sleep at night?','held through partnerSays');
+ answer=async req=>{const p=JSON.parse(req.prompt);return {json:{reply:p.askedAbout?"Yes, 'I like dogs' is right. What is his name?":'x',observations:[],moment:{kind:'none',said:'',better:'',why:''}},provider:'test',ms:1};};
+ await reply('I like dogs. Is that right?');
+ assert.equal(partnerSaid().at(-1),"Yes, 'I like dogs' is right. What is his name?",'a correctness answer is not cut to its question');
 });
 test('LG-57: a martin-45-like error said twice in one scene stops the scene with a code-made moment; the partner is told to leave the fix to it',async()=>{
  const {FOSSIL_TASK,FOSSIL_WHY}=review();

@@ -103,7 +103,7 @@ export const REDIRECT_LINE = "Let's keep to our practice here, so tell me more a
  * (bandLine); for a learner who is not an adult the line as written and the held line must both pass.
  */
 export function partnerLine(reply: string, adult: boolean, hold?: BandHoldFor): string {
-  const held = hold ? bandLine(reply, hold.band, hold.simpler) : reply;
+  const held = hold ? bandLine(reply, hold.band, hold.simpler, hold.answer) : reply;
   if (adult) return held;
   // the line as the model wrote it is judged first: a held line, or its simpler rung, never launders a stopped one
   return [reply, held].some(x => { const audience = keywordAudience(x); return audience === null || audience === "adult"; }) ? REDIRECT_LINE : held;
@@ -116,11 +116,19 @@ export function partnerLine(reply: string, adult: boolean, hold?: BandHoldFor): 
  * each, at most one question, and at A1 no question in the past tense. Word frequency is not counted: "the most common
  * words" stays on the prompt.
  */
-export const BAND_HOLD: Partial<Record<Band, BandHold>> = { A1: { words: 8, sentences: 2, present: true }, A2: { words: 12, sentences: 2 } };
-/** `present` (LG-5, recert-7 LT-viktor-67-J4-5): a question in the past tense ('What did you do at school?') is over the band. */
-interface BandHold { words: number; sentences: number; present?: boolean }
-/** What partnerLine needs to hold a line to a band: the band, and the line's own simpler rung when the model gave one. */
-export interface BandHoldFor { band: Band; simpler?: string }
+export const BAND_HOLD: Partial<Record<Band, BandHold>> = { A1: { words: 8, sentences: 2, turn: 8, present: true }, A2: { words: 12, sentences: 2 } };
+/**
+ * `present` (LG-5, recert-7 LT-viktor-67-J4-5): a question in the past tense ('What did you do at school?') is over the band.
+ * `turn` (LG-5, recert-6 LT-tomas-9-J4-3): the whole line's words, so a reaction and a question ('Sleeping is nice! Where
+ * does he sleep at night?') is over where each sentence alone fits; a line that answers the learner is not counted (`answer`).
+ */
+interface BandHold { words: number; sentences: number; turn?: number; present?: boolean }
+/**
+ * What partnerLine needs to hold a line to a band: the band, and the line's own simpler rung when the model gave one.
+ * `answer`: the line answers the learner's own correctness question, or carries the recast of a slip said again, so its
+ * statement is the point and the whole-line `turn` budget does not cut it away.
+ */
+export interface BandHoldFor { band: Band; simpler?: string; answer?: boolean }
 
 const WORDS = /[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu;
 const sentencesOf = (text: string) => text.trim().split(/(?<=[.!?])\s+/).map(x => x.trim()).filter(Boolean);
@@ -140,25 +148,30 @@ export function pastQuestion(sentence: string): boolean {
   const w = (sentence.toLowerCase().match(WORDS) ?? []), at = w.slice(0, 2).findIndex(x => WH.has(x));
   return at >= 0 && w.slice(at + 1, at + 4).some(pastVerb);
 }
-/** How far a line is over its band: 0 when it fits. Each sentence, word and question past the limit counts one, and at A1 each past-tense question. */
-function overBand(text: string, hold: BandHold): number {
+/**
+ * How far a line is over its band: 0 when it fits. Each sentence, word and question past the limit counts one, at A1 each
+ * past-tense question, and each word of the whole line past `turn` unless the line is an answer.
+ */
+function overBand(text: string, hold: BandHold, answer = false): number {
   const s = sentencesOf(text), questions = (text.match(/\?/g) ?? []).length;
   return Math.max(0, s.length - hold.sentences) + Math.max(0, questions - 1) + s.reduce((n, x) => n + Math.max(0, wordsIn(x) - hold.words), 0)
-    + (hold.present ? s.filter(pastQuestion).length : 0);
+    + (hold.present ? s.filter(pastQuestion).length : 0) + (hold.turn && !answer ? Math.max(0, wordsIn(text) - hold.turn) : 0);
 }
 /**
  * A partner line as a learner at `band` may hear it. B1 and up, or a line that fits: unchanged. Over the band: the line's
  * simpler rung (help.ts) when that fits; else the line cut to its first statement and its last question, in their
- * order, which keeps the reaction and the one question the scene needs; else whichever of the cut and the rung is
- * least over. Code never writes a word of its own here: every kept sentence is the model's.
+ * order, which keeps the reaction and the one question the scene needs, or the question alone when the pair is over the
+ * whole-line budget and the question fits; else whichever of the cut and the rung is least over. Code never writes a
+ * word of its own here: every kept sentence is the model's.
  */
-export function bandLine(reply: string, band: Band, simpler?: string): string {
-  const hold = BAND_HOLD[band];
-  if (!hold || overBand(reply, hold) === 0) return reply;
+export function bandLine(reply: string, band: Band, simpler?: string, answer = false): string {
+  const hold = BAND_HOLD[band], over = (x: string) => overBand(x, hold!, answer);
+  if (!hold || over(reply) === 0) return reply;
   const rung = simpler?.trim() ?? "";
-  if (rung && overBand(rung, hold) === 0) return rung;
+  if (rung && over(rung) === 0) return rung;
   const s = sentencesOf(reply), question = [...s].reverse().find(x => x.endsWith("?")), statement = s.find(x => !x.endsWith("?"));
   const keep = s.filter(x => x === statement || x === question).filter(x => wordsIn(x) <= hold.words);
-  const cut = keep.length ? keep.join(" ") : question ?? s[0] ?? reply;
-  return rung && overBand(rung, hold) < overBand(cut, hold) ? rung : cut;
+  const pair = keep.length ? keep.join(" ") : question ?? s[0] ?? reply;
+  const cut = over(pair) > 0 && question && over(question) === 0 ? question : pair;
+  return rung && over(rung) < over(cut) ? rung : cut;
 }
