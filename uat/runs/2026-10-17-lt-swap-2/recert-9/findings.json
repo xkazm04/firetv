@@ -89,13 +89,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 13,
+    "recurrence": 14,
     "recurs": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-1",
     "suggested_acceptance": "The first press offers a B2 starter such as 'I see your point, but…' with a slot.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-10",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
     "recertify_status": "recurs",
-    "recertify_evidence": "#3 simplified question first, #4 gloss, #5 'I think social media…'."
+    "recertify_evidence": "#3 'Said more simply: Do you agree that phones connect people?' then #4 a gloss only.",
+    "recurred_as": "LT-adela-17-J4-3"
   },
   {
     "id": "LT-viktor-67-J4-3",
@@ -155,13 +156,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "recurs": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-4",
     "suggested_acceptance": "Finish should not close an unanswered replay without a nudge; the replay answer should be recorded.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-10",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "No replay offered; moments [] (#11 ends mission)."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#20 'Replay the moment' offered, he finished; replay.used false.",
+    "recurred_as": "LT-viktor-67-J4-1"
   },
   {
     "id": "LT-tomas-9-J4-1",
@@ -253,13 +255,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "After a supported reply, offer a replay with a fresh question and quote her words in the coaching note.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-10",
-    "recertify_status": "recurs",
-    "recertify_evidence": "coaching null, moments [], recap #12 only 'The line hidden in this room'."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#7 moment, #10 coaching note and a Replay offer are present; moments are not empty."
   },
   {
     "id": "LT-petra-38-J4-1",
@@ -285,13 +287,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "When help was used, the recap or scene offers 'Try that moment again' with a new question; used is recorded.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-10",
-    "recertify_status": "recurs",
-    "recertify_evidence": "moments [] and #11 recap has only 'Another situation' and 'Learning map'; no replay.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#10 'You said the room on the quiet side of hotel' and #18 coach screen: moments and a replay offer exist this time.",
     "recurred_as": "LT-petra-38-J4-1"
   },
   {
@@ -355,9 +357,9 @@
     "recurrence": 2,
     "suggested_acceptance": "Give a frame with slots, not a near-complete sentence.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-10",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#6 recognition quiz with 'I usually use it at night.' and 'Try: I see your point, but I think the problem is...'",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_status": "not-evaluable",
+    "recertify_evidence": "She never opened 'Choose a phrase', so the phrase quiz did not appear.",
     "recurred_as": "LT-adela-17-J4-3"
   },
   {
@@ -480,13 +482,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "Coach note quotes learner exact words.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-10",
-    "recertify_status": "recurs",
-    "recertify_evidence": "facts coaching: null; Pause & coach never used (#7–#15).",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#11 Pause & coach used; #12 coaching note 'You said creeper'.",
     "recurred_as": "LT-tomas-9-J4-6"
   },
   {
@@ -546,14 +548,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 13,
+    "recurrence": 14,
     "recurs": "2026-10-17-lt-swap-2/recert-8/LT-tomas-9-J4-2",
     "suggested_acceptance": "Child profile lists only child-fit situations.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-10",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
     "recertify_status": "recurs",
-    "recertify_evidence": "#1 and #16 list of 20 incl. 'A booking that is missing', 'Our group project'.",
-    "recurred_as": "LT-tomas-9-J4-5"
+    "recertify_evidence": "#1 list has 20 entries incl. 'A booking that is missing | Our group project'.",
+    "recurred_as": "LT-tomas-9-J4-4"
   },
   {
     "id": "LT-adela-17-J4-4",
@@ -643,13 +645,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 1,
     "suggested_acceptance": "Replay question follows the last partner turn and answers the learner's question first.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-10",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "No replay; partner turns alternate single turns (#7, #9, #11)."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-11",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Partner turns alternate one per learner reply; #17 'Yes, good day! What do you draw?' single question."
   },
   {
     "id": "LT-adela-17-J4-6",

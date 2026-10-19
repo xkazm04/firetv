@@ -1,0 +1,733 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to B2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nPriya · debate club partner\nB2Comfortable · self-chosen\nIs Technology Good for Society?\nYour mission\nGive a clear opinion on technology, support it with a reason and example, and disagree politely.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nIs Technology Good for Society?\nGive a clear opinion on technology, support it with a reason and example, and disagree politely.\n[button: Start talking]\nOr choose a situation [list: Is Technology Good for Society? [plan-d46b2b59] | My Plans Mock Interview [plan-d70c866e] | Compare Two Ways to Travel [plan-5f0e2102] | Ask About an English Course [plan-fec9813f] | Tell Me About a Trip [plan-cacc7006] | Say That Again, Please [plan-1e98ae43] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The technology topic fits my exam practice, so I'll start there.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7345
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPriya · debate club partner\nIs Technology Good for Society?\nPriya says\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\nYour turn\nAnswer on your phone: speak or type.\nNowState a clear opinion on phones and society\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs Technology Good for Society?\nGive a clear opinion on technology, support it with a reason and example, and disagree politely.\nNow: State a clear opinion on phones and society\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · debate club partner\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPriya · debate club partner\nIs Technology Good for Society?\nPriya says\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\nSaid more simply\nDo you agree that phones connect people?\nNowState a clear opinion on phones and society\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs Technology Good for Society?\nGive a clear opinion on technology, support it with a reason and example, and disagree politely.\nNow: State a clear opinion on phones and society\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\nSaid more simply\nDo you agree that phones connect people?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · debate club partner\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I know what I think, but I'm not sure how to say it politely in English, so I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPriya · debate club partner\nIs Technology Good for Society?\nPriya says\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\nWhat it means\nconnected: linked to each other, in touch with each other\nNowState a clear opinion on phones and society\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs Technology Good for Society?\nGive a clear opinion on technology, support it with a reason and example, and disagree politely.\nNow: State a clear opinion on phones and society\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\nWhat it means\nconnected: linked to each other, in touch with each other\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · debate club partner\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Okay, I have the help now, let me answer in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "I partly agree with you. Phones make people more connected, for example I can talk to my grandmother abroad every day. However, I think they can also make us less connected in real life, because many people are interested about their screens more than about the person next to them. Was my sentence correct?"
+          },
+          "result": "ok",
+          "ms": 15769
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPriya · debate club partner\nIs Technology Good for Society?\nPriya says\nNo, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?\nYour turn\nAnswer on your phone: speak or type.\nNowGive one reason and one example\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs Technology Good for Society?\nGive a clear opinion on technology, support it with a reason and example, and disagree politely.\nNow: Give one reason and one example\nNo, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · debate club partner\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\nYou · spoken\nI partly agree with you. Phones make people more connected, for example I can talk to my grandmother abroad every day. However, I think they can also make us less connected in real life, because many people are interested about their screens more than about the person next to them. Was my sentence correct?\nPriya · debate club partner\nNo, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"No, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to explain why, so I'll try the help button.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPriya · debate club partner\nIs Technology Good for Society?\nPriya says\nNo, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?\nSaid more simply\nWhy do people look at screens so much?\nNowGive one reason and one example\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs Technology Good for Society?\nGive a clear opinion on technology, support it with a reason and example, and disagree politely.\nNow: Give one reason and one example\nNo, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?\nSaid more simply\nWhy do people look at screens so much?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · debate club partner\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\nYou · spoken\nI partly agree with you. Phones make people more connected, for example I can talk to my grandmother abroad every day. However, I think they can also make us less connected in real life, because many people are interested about their screens more than about the person next to them. Was my sentence correct?\nPriya · debate club partner\nNo, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"No, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand the question now, so I'll try answering in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "I think people look at their screens so much because social media is designed to keep them interested. For example, when I get a notification, I feel I must check it immediately. Also, many people are used to fill every quiet moment with their phone, so they are afraid of being bored. Is that sentence correct?"
+          },
+          "result": "ok",
+          "ms": 18687
+        },
+        {
+          "n": 7,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said are used to fill\nTry\nare used to filling\nAfter 'be used to', the verb takes the -ing form.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “are used to fill”\nTry “are used to filling”\nAfter 'be used to', the verb takes the -ing form.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good correction, I see my mistake; back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 8650
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPriya · debate club partner\nIs Technology Good for Society?\nPriya says\nNotifications are a fair point, but I still think real conversation matters more. How do you feel about filling your spare minutes with your phone?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs Technology Good for Society?\nGive a clear opinion on technology, support it with a reason and example, and disagree politely.\nNow: Disagree politely and ask a follow-up\nNotifications are a fair point, but I still think real conversation matters more. How do you feel about filling your spare minutes with your phone?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · debate club partner\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\nYou · spoken\nI partly agree with you. Phones make people more connected, for example I can talk to my grandmother abroad every day. However, I think they can also make us less connected in real life, because many people are interested about their screens more than about the person next to them. Was my sentence correct?\nPriya · debate club partner\nNo, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?\nYou · spoken\nI think people look at their screens so much because social media is designed to keep them interested. For example, when I get a notification, I feel I must check it immediately. Also, many people are used to fill every quiet moment with their phone, so they are afraid of being bored. Is that sentence correct?\nPriya · debate club partner\nNotifications are a fair point, but I still think real conversation matters more. How do you feel about filling your spare minutes with your phone?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Notifications are a fair point, but I still think real conversation matters more. How do you feel about filling your spare minutes with your phone?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'll answer in my own words now, and ask if it was correct.",
+          "action": "answer",
+          "args": {
+            "text": "Honestly, I think it depends on the situation. Although I sometimes use my phone in spare minutes, for example to read news, I'd rather talk to a friend if somebody is with me. Do you think it is wrong to check the phone while waiting for a bus? Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 19156
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nPriya · debate club partner\nIs Technology Good for Society?\nPriya says\nYes, 'I'd rather talk to a friend if somebody is with me' is correct. Do you ever feel distracted when your phone buzzes during a chat?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs Technology Good for Society?\nGive a clear opinion on technology, support it with a reason and example, and disagree politely.\nYes, 'I'd rather talk to a friend if somebody is with me' is correct. Do you ever feel distracted when your phone buzzes during a chat?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · debate club partner\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\nYou · spoken\nI partly agree with you. Phones make people more connected, for example I can talk to my grandmother abroad every day. However, I think they can also make us less connected in real life, because many people are interested about their screens more than about the person next to them. Was my sentence correct?\nPriya · debate club partner\nNo, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?\nYou · spoken\nI think people look at their screens so much because social media is designed to keep them interested. For example, when I get a notification, I feel I must check it immediately. Also, many people are used to fill every quiet moment with their phone, so they are afraid of being bored. Is that sentence correct?\nPriya · debate club partner\nNotifications are a fair point, but I still think real conversation matters more. How do you feel about filling your spare minutes with your phone?\nYou · spoken\nHonestly, I think it depends on the situation. Although I sometimes use my phone in spare minutes, for example to read news, I'd rather talk to a friend if somebody is with me. Do you think it is wrong to check the phone while waiting for a bus? Was my answer correct?\nPriya · debate club partner\nYes, 'I'd rather talk to a friend if somebody is with me' is correct. Do you ever feel distracted when your phone buzzes during a chat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'I'd rather talk to a friend if somebody is with me' is correct. Do you ever feel distracted when your phone buzzes during a chat?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I managed the mission and used help twice, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 10,
+          "screen": "linga-coach",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nOne useful change\nYou said use my phone in spare minutes\nOne way to try it\nuse my phone in my spare minutes\nSpare minutes needs a possessive or article here, as in 'my spare minutes'.\nCoach\nReplay the moment with a new question, or finish for today.\n[button: Replay the moment] [button: Finish for today]\nOne useful change\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs Technology Good for Society?\nGive a clear opinion on technology, support it with a reason and example, and disagree politely.\nSpare minutes needs a possessive or article here, as in 'my spare minutes'.\nOne way to try it: “use my phone in my spare minutes”\n[button: Replay with a new question]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nPriya · debate club partner\nHi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?\nYou · spoken\nI partly agree with you. Phones make people more connected, for example I can talk to my grandmother abroad every day. However, I think they can also make us less connected in real life, because many people are interested about their screens more than about the person next to them. Was my sentence correct?\nPriya · debate club partner\nNo, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?\nYou · spoken\nI think people look at their screens so much because social media is designed to keep them interested. For example, when I get a notification, I feel I must check it immediately. Also, many people are used to fill every quiet moment with their phone, so they are afraid of being bored. Is that sentence correct?\nPriya · debate club partner\nNotifications are a fair point, but I still think real conversation matters more. How do you feel about filling your spare minutes with your phone?\nYou · spoken\nHonestly, I think it depends on the situation. Although I sometimes use my phone in spare minutes, for example to read news, I'd rather talk to a friend if somebody is with me. Do you think it is wrong to check the phone while waiting for a bus? Was my answer correct?\nPriya · debate club partner\nYes, 'I'd rather talk to a friend if somebody is with me' is correct. Do you ever feel distracted when your phone buzzes during a chat?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Spare minutes needs a possessive or article here, as in 'my spare minutes'.\"",
+          "offered": [
+            "replay",
+            "finish",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I got useful feedback and managed a decent discussion, so I'll finish.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 11,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said use my phone in spare minutes\nOne way to try it\nuse my phone in my spare minutes\nSpare minutes needs a possessive or article here, as in 'my spare minutes'.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 1 on your own · 2 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“That's a fair point, but I'd argue otherwise.”\nFrom this rehearsal\n“are used to fill” → “are used to filling”\nAfter 'be used to', the verb takes the -ing form.\nTried again: “Honestly, I think it depends on the situation. Although I sometimes use my phone in spare minutes, for example to read news, I'd rather talk to a friend if somebody is with me.”\nSaved for the end\n“interested about their screens” → “interested in their screens”\n'Interested' is followed by 'in' in this meaning.\n“use my phone in spare minutes” → “use my phone in my spare minutes”\nSpare minutes needs a possessive or article here, as in 'my spare minutes'.\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nMy Plans Mock Interview\nExplain your study and career plans clearly, with reasons and a short example.\n[button: Start talking]\nOr choose a situation [list: Is Technology Good for Society? [plan-d46b2b59] | My Plans Mock Interview [plan-d70c866e] | Compare Two Ways to Travel [plan-5f0e2102] | Ask About an English Course [plan-fec9813f] | Tell Me About a Trip [plan-cacc7006] | Say That Again, Please [plan-1e98ae43] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed a decent rehearsal and got useful corrections, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Is Technology Good for Society?",
+          "goal": "Give a clear opinion on technology, support it with a reason and example, and disagree politely.",
+          "partner": "Priya · debate club partner",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, I'm Priya from debate club. I think phones make our society more connected. Do you agree with me?"
+            },
+            {
+              "role": "learner",
+              "text": "I partly agree with you. Phones make people more connected, for example I can talk to my grandmother abroad every day. However, I think they can also make us less connected in real life, because many people are interested about their screens more than about the person next to them. Was my sentence correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "No, 'interested about' should be 'interested in', but your view is clear. Why do you think people look at their screens so much?"
+            },
+            {
+              "role": "learner",
+              "text": "I think people look at their screens so much because social media is designed to keep them interested. For example, when I get a notification, I feel I must check it immediately. Also, many people are used to fill every quiet moment with their phone, so they are afraid of being bored. Is that sentence correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Notifications are a fair point, but I still think real conversation matters more. How do you feel about filling your spare minutes with your phone?"
+            },
+            {
+              "role": "learner",
+              "text": "Honestly, I think it depends on the situation. Although I sometimes use my phone in spare minutes, for example to read news, I'd rather talk to a friend if somebody is with me. Do you think it is wrong to check the phone while waiting for a bus? Was my answer correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'I'd rather talk to a friend if somebody is with me' is correct. Do you ever feel distracted when your phone buzzes during a chat?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "cbbd768b-5467-41c2-9797-7d81a1adb333:uat-11:moment",
+              "kind": "fix",
+              "said": "are used to fill",
+              "better": "are used to filling",
+              "why": "After 'be used to', the verb takes the -ing form.",
+              "turnId": "cbbd768b-5467-41c2-9797-7d81a1adb333:uat-11",
+              "at": 1792409792119,
+              "slip": "to fill",
+              "fix": "to filling",
+              "replay": {
+                "question": "Notifications are a fair point, but I still think real conversation matters more. How do you feel about filling your spare minutes with your phone?",
+                "turnId": "ecfec91e-9392-40c7-9172-aca127bf54dc",
+                "reply": "Honestly, I think it depends on the situation. Although I sometimes use my phone in spare minutes, for example to read news, I'd rather talk to a friend if somebody is with me.",
+                "used": false
+              }
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "cbbd768b-5467-41c2-9797-7d81a1adb333:uat-9:held",
+              "kind": "fix",
+              "said": "interested about their screens",
+              "better": "interested in their screens",
+              "why": "'Interested' is followed by 'in' in this meaning.",
+              "turnId": "cbbd768b-5467-41c2-9797-7d81a1adb333:uat-9",
+              "at": 1792409750142
+            },
+            {
+              "id": "cbbd768b-5467-41c2-9797-7d81a1adb333:uat-13:held",
+              "kind": "fix",
+              "said": "use my phone in spare minutes",
+              "better": "use my phone in my spare minutes",
+              "why": "Spare minutes needs a possessive or article here, as in 'my spare minutes'.",
+              "turnId": "cbbd768b-5467-41c2-9797-7d81a1adb333:uat-13",
+              "at": 1792409840537
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "I partly agree with you. Phones make people more connected, for example I can talk to my grandmother abroad every day. However, I think they can also make us less connected in real life, because many people are interested about their screens more than about the person next to them. Was my sentence correct?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "interested about their screens",
+                "better": "interested in their screens",
+                "why": "'Interested' is followed by 'in' in this meaning."
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "I think people look at their screens so much because social media is designed to keep them interested. For example, when I get a notification, I feel I must check it immediately. Also, many people are used to fill every quiet moment with their phone, so they are afraid of being bored. Is that sentence correct?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "are used to fill",
+                "better": "are used to filling",
+                "why": "After 'be used to', the verb takes the -ing form."
+              },
+              "shown": true
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Honestly, I think it depends on the situation. Although I sometimes use my phone in spare minutes, for example to read news, I'd rather talk to a friend if somebody is with me. Do you think it is wrong to check the phone while waiting for a bus? Was my answer correct?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "use my phone in spare minutes",
+                "better": "use my phone in my spare minutes",
+                "why": "Spare minutes needs a possessive or article here, as in 'my spare minutes'."
+              },
+              "shown": false
+            }
+          ],
+          "coaching": {
+            "before": "use my phone in spare minutes",
+            "after": "use my phone in my spare minutes",
+            "note": "Spare minutes needs a possessive or article here, as in 'my spare minutes'.",
+            "atFinish": true
+          },
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "However, I think they can also make us less connected in real life"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I think people look at their screens so much because social media is designed to keep them interested."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Do you think it is wrong to check the phone while waiting for a bus?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 212675,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Clear error 'not used to go' got no moment or coaching",
+          "expected": "Note: 'be used to + -ing': 'not used to going'",
+          "got": "Only 'eventually' flagged; 'not used to go to bed' passed silently and coaching is null",
+          "evidence": [
+            "#8 'they are not used to go to bed early'; facts.conversation.coaching null",
+            "moment prompt / LG-23 held fix"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue gives a simplified question first; B2 frame arrives on press three and is thin",
+          "expected": "A B2 answer frame on the first help press",
+          "got": "'Said more simply', then a gloss of 'full ban', then 'I agree that phones can…'",
+          "evidence": [
+            "#3 'Phones can help, but I think a full ban is safer. What do you think?'; #4 'full ban: a rule that stops all phone use'; #5 'I agree that phones can…'",
+            "cue prompt"
+          ],
+          "recurrence": 13
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-9",
+          "type": "missing-feature",
+          "dimension": "missing",
+          "title": "No coaching note and no replay after getting help",
+          "expected": "A coaching note quoting what she said, and a replay with a fresh question",
+          "got": "moments:[], coaching:null. The recap shows only 'The line hidden in this room'",
+          "evidence": [
+            "#10 recap has no replay or coaching. rawMoments kind 'none' for all 3 turns. The journey's promise to 'let me try again on my own' was not delivered.",
+            "moment prompt / replay builder"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-10/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-10",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "No coaching note and no replay after getting help",
+          "expected": "A coaching note quoting what she said, then a replay with a fresh question",
+          "got": "moments [], coaching null; recap has no retry",
+          "evidence": [
+            "#12 recap shows only 'The line hidden in this room'; rawMoments kind 'none' for all 3 turns.",
+            "moment prompt / replay builder"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-10/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-10",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue opens with a simplified question and a thin frame",
+          "expected": "A B2 answer frame on the first press",
+          "got": "'Said more simply' restates the question, then a gloss of 'small businesses', then 'I think social media…' on press three",
+          "evidence": [
+            "#3 'Social media helps people connect. What do you think?'; #4 gloss; #5 'I think social media…'",
+            "cue prompt"
+          ],
+          "recurrence": 12
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-10/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-10",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Phrase choice is a recognition quiz with a weak distractor",
+          "expected": "A scaffold for her own words",
+          "got": "Options 'I think it helps people connect.' vs 'I usually use it at night.', plus 'Try: I see your point, but I think the problem is...' which does not fit the question",
+          "evidence": [
+            "#6",
+            "phrase help / quiz prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-10/LT-adela-17-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-10",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Correctness answer only restates her clause; no examiner-level note",
+          "expected": "Confirm and add one concrete point, such as noting 'big companies benefit much more' as good comparison",
+          "got": "'Yes, your sentence is correct' plus a quote of one clause, then back to the debate",
+          "evidence": [
+            "#10",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'B2 Comfortable · self-chosen' matches trueBand B2 (fixture-set)."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#10 'Spare minutes needs a possessive or article here' is overstated: 'in spare minutes' is acceptable, and the rule is presented as a fix. 'read news' (needs 'the news') went unflagged while a weaker point was coached."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 'Do you agree with me?', #5 'Why do you think people look at their screens so much?', #8 'How do you feel about filling your spare minutes...'"
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 list: technology and society, My Plans Mock Interview, Compare Two Ways to Travel, Tell Me About a Trip: at least four exam-relevant."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#5 'No, 'interested about' should be 'interested in''; #9 confirmed the clause. #6 'Is that sentence correct?' was answered only by the later moment (#7), not by the partner."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#3 'Help me answer' gave 'Said more simply', #4 'What it means' gloss, all inside the scene."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#4 and #6 replies followed help; #10 coaching 'You said use my phone in spare minutes' quotes her words exactly."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#8 'Try it again' gave a fresh question, but her answer repeated 'in spare minutes' unchanged and did not use the -ing fix; at #10 she skipped 'Replay the moment'. Recap #11 labels this 'Tried again' with no improvement."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#11 '3 spoken · 1 on your own · 2 with help'; facts show supported:true for the two helped turns, false for the third."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 4,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive-data request or humiliating line seen. Held fixes were shown at the recap."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Retry does not show she answers better; unfixed slip is labelled 'Tried again'",
+            "expected": "A fresh question after the fix, then an answer that uses the fix; the recap states whether it held",
+            "got": "#8 'Try it again' answer repeats 'in spare minutes' and does not use 'filling'; #11 shows it as 'Tried again'. She skipped the Replay at #10",
+            "evidence": "#8 'use my phone in spare minutes'; #10 buttons 'Replay the moment' / 'Finish for today'; facts replay used:false",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After a moment, the retry turn is checked against the fix. The recap says whether the fix was used, and does not call a repeat of the slip an improvement.",
+            "code_hint": "replay builder / recap"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Coaching on 'spare minutes' overstated while 'read news' missed",
+            "expected": "Only fixes an examiner would insist on; flag 'read the news'",
+            "got": "#10 'Spare minutes needs a possessive or article here' stated as a rule",
+            "evidence": "#10 coaching; #8 'to read news' unflagged",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Corrections are checked against examiner acceptability, and the choice of held fix is by importance.",
+            "code_hint": "moment prompt / LG-23 held-fix choice"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Cue opens with a simplified question and a thin gloss (recurs)",
+            "expected": "A B2 answer frame on the first press",
+            "got": "#3 'Said more simply: Do you agree that phones connect people?', #4 gloss of 'connected', no frame",
+            "evidence": "#3, #4",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The first help press gives a B2 sentence starter for her stance.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Correctness answers thin, and one question skipped",
+            "expected": "Answer 'Is that sentence correct?' with the specific point, in the partner turn",
+            "got": "#9 'Yes, ... is correct' quotes one clause only; at #6 the partner replied 'Notifications are a fair point' and ignored her question",
+            "evidence": "#9; #6 -> #8 partner text",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Every direct correctness question gets an accurate answer in the next partner turn, with one concrete note.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Coaching quotes her exact words; supported replies counted honestly",
+            "expected": "",
+            "got": "#7 'You said are used to fill', #10 'You said use my phone in spare minutes', #11 '1 on your own · 2 with help'",
+            "evidence": "#7, #10, #11; the 'used to + -ing' fix is correct and appeared in-scene",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact quotes and the supported/independent split.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "I liked that it caught 'used to fill' and told me the rule straight away. It quoted my exact words and the partner answered my 'was that correct?' questions. Help appeared without leaving the conversation. But the help was babyish for me: 'Said more simply', then a gloss of 'connected', and no real B2 starter. When I got the 'try it again' question I repeated my slip, and the recap still called it 'Tried again', which is not honest. The 'spare minutes' rule felt overstated, and 'read news' went unflagged, so I would re-check things myself. I'd use it for opinion questions, but I wouldn't yet trust it to replace my tutor.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-3",
+            "status": "not-seen",
+            "evidence": "#7 'are used to fill' got a moment, 'are used to filling', so be-used-to + -ing was caught this time.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-2",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply: Do you agree that phones connect people?' then #4 a gloss only.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-9/LT-adela-17-J4-1",
+            "status": "not-seen",
+            "evidence": "#7 moment, #10 coaching note and a Replay offer are present; moments are not empty.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-10/LT-adela-17-J4-1",
+            "status": "not-seen",
+            "evidence": "#10 'You said use my phone in spare minutes' with 'Replay the moment'; #11 recap shows moments and held fixes.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-10/LT-adela-17-J4-2",
+            "status": "recurs",
+            "evidence": "#6 'Said more simply: Why do people look at screens so much?' with no answer frame.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-10/LT-adela-17-J4-3",
+            "status": "not-evaluable",
+            "evidence": "She never opened 'Choose a phrase', so the phrase quiz did not appear.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-10/LT-adela-17-J4-4",
+            "status": "recurs",
+            "evidence": "#9 'Yes, 'I'd rather talk to a friend if somebody is with me' is correct.' It restates one clause with no examiner note.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #8 'Try it again' gave a fresh question, but her answer repeated 'in spare minutes' unchanged and did not use the -ing fix; at #10 she skipped 'Replay the moment'. Recap #11 labels this 'Tried again' with no improvement.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #10 'Spare minutes needs a possessive or article here' is overstated: 'in spare minutes' is acceptable, and the rule is presented as a fix. 'read news' (needs 'the news') went unflagged while a weaker point was coached."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 6,
+      "fail": 0,
+      "ms": 90678
+    },
+    "character": {
+      "n": 11,
+      "fail": 0,
+      "ms": 121580
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 44303
+    }
+  }
+}
