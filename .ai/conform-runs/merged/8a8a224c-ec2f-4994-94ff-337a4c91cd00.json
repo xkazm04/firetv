@@ -1,0 +1,78 @@
+{
+ "schema": "conform-run/1",
+ "worker": "8a8a224c-ec2f-4994-94ff-337a4c91cd00",
+ "subject": "native-guest-interop",
+ "evaluatedAt": "2026-10-19T09:00:54.585647+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "session",
+   "subject": "native-guest-interop",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "desk/src/app/api/session/route.ts:37 The session exposes HTTP/JSON handlers, and searches of its files and the repository found none of the listed interop identifiers, so no embedded host\u2013guest runtime boundary was identified.",
+   "techniques": [
+    {
+     "technique": "aligned-native-data-cell",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:966 State is an ordinary JavaScript object; no native payload cell with an erased collector header was identified."
+    },
+    {
+     "technique": "async-native-as-promise",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/pairing.ts:51 This is a JavaScript timer promise, without a host future converted through an embedded runtime job."
+    },
+    {
+     "technique": "class-from-impl-with-borrow-warning",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/app/api/session/route.ts:96 The endpoint returns serialized session data; it does not expose host methods as a guest class."
+    },
+    {
+     "technique": "copy-closure-safe-api",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:1149 Subscribers are JavaScript callbacks stored in a JavaScript Set, without an opaque native closure registered in a guest heap."
+    },
+    {
+     "technique": "explicit-lossy-conversion",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/learners.ts:196 This normalizes application data within JavaScript; it is not a conversion between guest values and host numeric widths."
+    },
+    {
+     "technique": "typed-downcast-access",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:990 Session access returns a JavaScript object directly, without recovering an erased native payload or type-keyed runtime state."
+    }
+   ],
+   "absenceTerms": [
+    "NativeFunction",
+    "JsValue",
+    "boa_engine",
+    "rquickjs",
+    "downcast"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-19T09:00:54.585647+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "native-guest-interop"
+   ],
+   "techniques": [
+    "aligned-native-data-cell",
+    "async-native-as-promise",
+    "class-from-impl-with-borrow-warning",
+    "copy-closure-safe-api",
+    "explicit-lossy-conversion",
+    "typed-downcast-access"
+   ],
+   "deviations": 0,
+   "context": "session",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

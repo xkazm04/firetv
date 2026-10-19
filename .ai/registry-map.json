@@ -1986,7 +1986,11 @@
           "revision": 2,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/app/api/session/route.ts:37 The session exposes HTTP/JSON handlers, and searches of its files and the repository found none of the listed interop identifiers, so no embedded host–guest runtime boundary was identified.",
+          "evaluatedAt": "2026-10-19",
+          "evaluatedAgainst": "sha256-b2:2f33f632688cd73a",
+          "evaluatedRevision": 2
         },
         {
           "subject": "agent-instruction-files",
