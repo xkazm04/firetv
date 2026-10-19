@@ -243,13 +243,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 4,
+    "recurrence": 5,
     "suggested_acceptance": "After supported practice, provide an explicit unaided attempt and verify improvement before treating the replay goal as achieved.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "the journey ended character-stopped, so not seeing it proves nothing; judge: The quiz did not invent a question for Mia; it was off-scene but not misattributed (#5, #11).",
-    "recurred_as": "LT-viktor-67-J4-2"
+    "recertify_run": "2026-10-17-lt-swap-2/recert-9",
+    "recertify_status": "recurs",
+    "recertify_evidence": "#5/#10 quiz says \"Mia says: School was good. I had maths and art.\" which she never said.",
+    "recurred_as": "LT-viktor-67-J4-1"
   },
   {
     "id": "LT-viktor-67-J3-4",

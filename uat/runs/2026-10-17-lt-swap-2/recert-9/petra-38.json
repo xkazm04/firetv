@@ -1,0 +1,825 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nA2Everyday basics · self-chosen\nComplain about a hotel room\nYour mission\nTell the hotel about a problem, say how it affects you, and agree on a fix or next step.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nComplain about a hotel room\nTell the hotel about a problem, say how it affects you, and agree on a fix or next step.\n[button: Start talking]\nOr choose a situation [list: Complain about a hotel room [plan-50edeb6d] | Fix a lost hotel booking [plan-9833b0ce] | Ask and understand directions [plan-0f9a504c] | Recommend a good restaurant [plan-39aea40c] | Answer a travel agency phone call [plan-c92bffcc] | Talk to your child's teacher [plan-697991a1] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The hotel complaint is my work, so I'll start there.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6459
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nAt the Hotel: A Cold Room\nMs Lee says\nYour room. What is wrong?\nYour turn\nAnswer on your phone: speak or type.\nNowExplain what is wrong in the room\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Explain what is wrong in the room\nYour room. What is wrong?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your room. What is wrong?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say this in English, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nAt the Hotel: A Cold Room\nMs Lee says\nYour room. What is wrong?\nWhat it means\nwrong: not good, not how it should be\nNowExplain what is wrong in the room\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Explain what is wrong in the room\nYour room. What is wrong?\nWhat it means\nwrong: not good, not how it should be\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your room. What is wrong?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nAt the Hotel: A Cold Room\nMs Lee says\nYour room. What is wrong?\nA way to start\nThe room is…\nNowExplain what is wrong in the room\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Explain what is wrong in the room\nYour room. What is wrong?\nA way to start\nThe room is…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your room. What is wrong?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, I need help with the phrase.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nA little support · recognition practice\nWhat is the best first step?\n01\nName the problem clearly\n02\nStay quiet and leave\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Explain what is wrong in the room\nYour room. What is wrong?\nWhat is the best first step?\n[button: Name the problem clearly] [button: Stay quiet and leave]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your room. What is wrong?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say this, I need help with the phrases.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nA little support · recognition practice\nWhat is the best first step?\n01\nName the problem clearly\n02\nStay quiet and leave\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Explain what is wrong in the room\nYour room. What is wrong?\nWhat is the best first step?\n[button: Name the problem clearly] [button: Stay quiet and leave]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your room. What is wrong?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, so I'll try the help with phrases.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nA little support · recognition practice\nWhat is the best first step?\n01\nName the problem clearly\n02\nStay quiet and leave\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Explain what is wrong in the room\nYour room. What is wrong?\nWhat is the best first step?\n[button: Name the problem clearly] [button: Stay quiet and leave]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your room. What is wrong?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, maybe I try my own words: the room is cold.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry, the room is very cold and the heating is not work."
+          },
+          "result": "ok",
+          "ms": 8368
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nAt the Hotel: A Cold Room\nMs Lee says\nI am sorry. Would you like another room or a heater?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk for one fix you want\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Ask for one fix you want\nI am sorry. Would you like another room or a heater?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\nYou · spoken\nSorry, the room is very cold and the heating is not work.\nMs Lee · hotel receptionist\nI am sorry. Would you like another room or a heater?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I am sorry. Would you like another room or a heater?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I want a heater or another room, I'll answer in my own words now.",
+          "action": "answer",
+          "args": {
+            "text": "I would like another room please, because the heater is not enough."
+          },
+          "result": "ok",
+          "ms": 11326
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nAt the Hotel: A Cold Room\nMs Lee says\nOf course. Is that OK?\nYour turn\nAnswer on your phone: speak or type.\nNowCheck the plan before you leave\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Check the plan before you leave\nOf course. Is that OK?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\nYou · spoken\nSorry, the room is very cold and the heating is not work.\nMs Lee · hotel receptionist\nI am sorry. Would you like another room or a heater?\nYou · spoken\nI would like another room please, because the heater is not enough.\nMs Lee · hotel receptionist\nOf course. Is that OK?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Of course. Is that OK?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Is that OK? I should say yes, but I'm not sure how, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nAt the Hotel: A Cold Room\nMs Lee says\nOf course. Is that OK?\nA way to start\nYes, room twelve is good…\nNowCheck the plan before you leave\n[button: Choose a phrase] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Check the plan before you leave\nOf course. Is that OK?\nA way to start\nYes, room twelve is good…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\nYou · spoken\nSorry, the room is very cold and the heating is not work.\nMs Lee · hotel receptionist\nI am sorry. Would you like another room or a heater?\nYou · spoken\nI would like another room please, because the heater is not enough.\nMs Lee · hotel receptionist\nOf course. Is that OK?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Of course. Is that OK?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "coach",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Yes, that is OK, but I should answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, it is OK. Thank you very much."
+          },
+          "result": "ok",
+          "ms": 9993
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nAt the Hotel: A Cold Room\nMs Lee says\nGood, your new room is 214. Can you tell me the room number?\nYour turn\nAnswer on your phone: speak or type.\nNowCheck the plan before you leave\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Check the plan before you leave\nGood, your new room is 214. Can you tell me the room number?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\nYou · spoken\nSorry, the room is very cold and the heating is not work.\nMs Lee · hotel receptionist\nI am sorry. Would you like another room or a heater?\nYou · spoken\nI would like another room please, because the heater is not enough.\nMs Lee · hotel receptionist\nOf course. Is that OK?\nYou · spoken\nYes, it is OK. Thank you very much.\nMs Lee · hotel receptionist\nGood, your new room is 214. Can you tell me the room number?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good, your new room is 214. Can you tell me the room number?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Room number is 214, I can say it, I feel I managed it.",
+          "action": "answer",
+          "args": {
+            "text": "The room number is two one four. Thank you."
+          },
+          "result": "ok",
+          "ms": 11793
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nAt the Hotel: A Cold Room\nMs Lee says\nYes, room 214 is ready for you. Can you tell me what you will do next?\nYour turn\nAnswer on your phone: speak or type.\nNowCheck the plan before you leave\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Check the plan before you leave\nYes, room 214 is ready for you. Can you tell me what you will do next?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\nYou · spoken\nSorry, the room is very cold and the heating is not work.\nMs Lee · hotel receptionist\nI am sorry. Would you like another room or a heater?\nYou · spoken\nI would like another room please, because the heater is not enough.\nMs Lee · hotel receptionist\nOf course. Is that OK?\nYou · spoken\nYes, it is OK. Thank you very much.\nMs Lee · hotel receptionist\nGood, your new room is 214. Can you tell me the room number?\nYou · spoken\nThe room number is two one four. Thank you.\nMs Lee · hotel receptionist\nYes, room 214 is ready for you. Can you tell me what you will do next?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, room 214 is ready for you. Can you tell me what you will do next?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed the conversation; now I answer simply about what I do next.",
+          "action": "answer",
+          "args": {
+            "text": "I will go to the room and check the heating. Thank you, sorry for the problem."
+          },
+          "result": "ok",
+          "ms": 7819
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nAt the Hotel: A Cold Room\nMs Lee says\nYou go to room 214 now. Right?\nYour turn\nAnswer on your phone: speak or type.\nNowCheck the plan before you leave\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nNow: Check the plan before you leave\nYou go to room 214 now. Right?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\nYou · spoken\nSorry, the room is very cold and the heating is not work.\nMs Lee · hotel receptionist\nI am sorry. Would you like another room or a heater?\nYou · spoken\nI would like another room please, because the heater is not enough.\nMs Lee · hotel receptionist\nOf course. Is that OK?\nYou · spoken\nYes, it is OK. Thank you very much.\nMs Lee · hotel receptionist\nGood, your new room is 214. Can you tell me the room number?\nYou · spoken\nThe room number is two one four. Thank you.\nMs Lee · hotel receptionist\nYes, room 214 is ready for you. Can you tell me what you will do next?\nYou · spoken\nI will go to the room and check the heating. Thank you, sorry for the problem.\nMs Lee · hotel receptionist\nYou go to room 214 now. Right?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"You go to room 214 now. Right?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed the conversation, so I answer yes and finish.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I go to room two one four now. Thank you very much."
+          },
+          "result": "ok",
+          "ms": 10618
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMs Lee · hotel receptionist\nAt the Hotel: A Cold Room\nMs Lee says\nGood, that is the plan. Room 214 is ready now.\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAt the Hotel: A Cold Room\nTell the receptionist about a room problem and agree on one fix.\nGood, that is the plan. Room 214 is ready now.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMs Lee · hotel receptionist\nYour room. What is wrong?\nYou · spoken\nSorry, the room is very cold and the heating is not work.\nMs Lee · hotel receptionist\nI am sorry. Would you like another room or a heater?\nYou · spoken\nI would like another room please, because the heater is not enough.\nMs Lee · hotel receptionist\nOf course. Is that OK?\nYou · spoken\nYes, it is OK. Thank you very much.\nMs Lee · hotel receptionist\nGood, your new room is 214. Can you tell me the room number?\nYou · spoken\nThe room number is two one four. Thank you.\nMs Lee · hotel receptionist\nYes, room 214 is ready for you. Can you tell me what you will do next?\nYou · spoken\nI will go to the room and check the heating. Thank you, sorry for the problem.\nMs Lee · hotel receptionist\nYou go to room 214 now. Right?\nYou · spoken\nYes, I go to room two one four now. Thank you very much.\nMs Lee · hotel receptionist\nGood, that is the plan. Room 214 is ready now.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good, that is the plan. Room 214 is ready now.\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I managed to finish the conversation, I want to see what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 15,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said I go to room two one four now\nTry\nI am going to room 214 now\nUse 'am going' to talk about a plan for right now.\nYour mission\nChoose a fresh context for your next conversation.\n6 spoken · 0 written replies · 4 on your own · 2 with help\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Name the problem clearly”\nSaved for the end\n“the heating is not work” → “the heating is not working”\nAfter 'is', use the -ing form for something happening now.\n“I go to room two one four now” → “I am going to room 214 now”\nUse 'am going' to talk about a plan for right now.\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nFix a lost hotel booking\nExplain what happened to your booking and get it found or made again.\n[button: Start talking]\nOr choose a situation [list: Complain about a hotel room [plan-50edeb6d] | Fix a lost hotel booking [plan-9833b0ce] | Ask and understand directions [plan-0f9a504c] | Recommend a good restaurant [plan-39aea40c] | Answer a travel agency phone call [plan-c92bffcc] | Talk to your child's teacher [plan-697991a1] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed a conversation, so I'm happy and will stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "At the Hotel: A Cold Room",
+          "goal": "Tell the receptionist about a room problem and agree on one fix.",
+          "partner": "Ms Lee · hotel receptionist",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Your room. What is wrong?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry, the room is very cold and the heating is not work.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I am sorry. Would you like another room or a heater?"
+            },
+            {
+              "role": "learner",
+              "text": "I would like another room please, because the heater is not enough.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Of course. Is that OK?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, it is OK. Thank you very much.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Good, your new room is 214. Can you tell me the room number?"
+            },
+            {
+              "role": "learner",
+              "text": "The room number is two one four. Thank you.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, room 214 is ready for you. Can you tell me what you will do next?"
+            },
+            {
+              "role": "learner",
+              "text": "I will go to the room and check the heating. Thank you, sorry for the problem.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "You go to room 214 now. Right?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I go to room two one four now. Thank you very much.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Good, that is the plan. Room 214 is ready now."
+            }
+          ],
+          "moments": [],
+          "heldFixes": [
+            {
+              "id": "77870fcf-2f35-426b-ae6d-e1b2f8bd4e28:uat-12:held",
+              "kind": "fix",
+              "said": "the heating is not work",
+              "better": "the heating is not working",
+              "why": "After 'is', use the -ing form for something happening now.",
+              "turnId": "77870fcf-2f35-426b-ae6d-e1b2f8bd4e28:uat-12",
+              "at": 1792399494465
+            },
+            {
+              "id": "77870fcf-2f35-426b-ae6d-e1b2f8bd4e28:uat-18:held",
+              "kind": "fix",
+              "said": "I go to room two one four now",
+              "better": "I am going to room 214 now",
+              "why": "Use 'am going' to talk about a plan for right now.",
+              "turnId": "77870fcf-2f35-426b-ae6d-e1b2f8bd4e28:uat-18",
+              "at": 1792399695979
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Sorry, the room is very cold and the heating is not work.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "the heating is not work",
+                "better": "the heating is not working",
+                "why": "After 'is', use the -ing form for something happening now."
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "I would like another room please, because the heater is not enough.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Yes, it is OK. Thank you very much.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "The room number is two one four. Thank you.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 5,
+              "reply": "I will go to the room and check the heating. Thank you, sorry for the problem.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 11,
+              "n": 6,
+              "reply": "Yes, I go to room two one four now. Thank you very much.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I go to room two one four now",
+                "better": "I am going to room 214 now",
+                "why": "Use 'am going' to talk about a plan for right now."
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I will go to the room and check the heating."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, I go to room two one four now."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 358727,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-petra-38-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Replay does not make her practise the coached phrase",
+          "expected": "Replay gives a fresh question, she uses the coached form, and the replay is marked used.",
+          "got": "Replay question was 'What should we do about it?'. Her reply kept 'I want other room'. replay.used is false.",
+          "evidence": [
+            "#9 'I want other room please'; moment replay used:false; recap shows 'Tried again' with a different reply.",
+            "replay prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-petra-38-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Clear learner errors got no moment or held fix",
+          "expected": "Fix for 'I want other room', 'want to sleep' and similar errors, shown or held for the recap.",
+          "got": "One moment. heldFixes is empty. Turns 4, 7 and 9 have clear errors; the missed ones are 'other room' and 'I think is not repair'.",
+          "evidence": [
+            "rawMoments turns 1, 7, 9 kind none; '#9 I want other room please' got no fix for 'other room'.",
+            "moment detection prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-petra-38-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Recap coaching quotes the first turn, not the stuck point",
+          "expected": "Coaching tied to where she needed help and to the moment she fixed.",
+          "got": "Recap coaching still quotes 'Can you help me please?' while the kept moment is another sentence.",
+          "evidence": [
+            "#16 recap 'You said Can you help me please?' next to the 'From this rehearsal' moment about 'repair'.",
+            "coach prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-petra-38-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Cue repeated three times with no new help",
+          "expected": "Help escalates or changes on repeated presses.",
+          "got": "The same 'Try: Excuse me...' cue at #3, #4, #5.",
+          "evidence": [
+            "#4 and #5 show an identical 'A little support' line.",
+            "cue ladder"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Level A2 shown at #1 and #15, matching trueBand A2 (exact)."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'Your room. What is wrong?' is simple A2; #3 gloss 'wrong: not good, not how it should be' needs no translation."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "Repeated help presses (#3–#7) met with more help, never a failure message; no humiliating line."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 list: five of the first six situations are hotel/work (complaint, lost booking, directions, restaurant, travel agency); teacher talk is her stated small talk."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#15 recap: 'the heating is not work' → 'the heating is not working'; 'I am going to room 214 now' — correct, usable at the desk."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing unsuitable shown; scene is a cold hotel room (#2–#14); quiz options neutral (#5)."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2–#7 she used 'Help me answer', 'More help', 'Choose a phrase' without leaving the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Help gave a gloss, 'The room is…' and an unrelated quiz (#5 'Stay quiet and leave'); she typed her own sentence at #7. Pause & coach never used; coaching is null, so no coaching note."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "No replay was offered or taken; moments is [] and the journey ended at the recap #15 with no fresh question."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#15 '6 spoken · 0 written replies · 4 on your own · 2 with help'; turns 1 and 3 are supported:true, others false."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 7,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal-data request or humiliating line. Stops: 0. Held fixes: 2, both shown on the recap (#15)."
+          }
+        },
+        "findings": [
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "No replay of the stuck moment offered",
+            "expected": "After help, a replay with a fresh question to try again on her own.",
+            "got": "No moment was shown, so no replay; the session went straight to the recap.",
+            "evidence": "moments is []; #15 recap has only 'Another situation' and 'Learning map'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "When help was used, the recap or scene offers 'Try that moment again' with a new question; used is recorded.",
+            "code_hint": "replay prompt / moment gating"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Same quiz screen repeated on three presses",
+            "expected": "Help escalates or changes each time she asks.",
+            "got": "#5, #6 and #7 show the identical 'What is the best first step?' quiz.",
+            "evidence": "#5–#7 'A little support · recognition practice … Name the problem clearly / Stay quiet and leave'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each repeat press gives a different, more concrete aid, such as a full sentence frame.",
+            "code_hint": "cue ladder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Help did not give a sentence she could say",
+            "expected": "A usable frame such as 'The room is cold and…' for an A2 speaker.",
+            "got": "Only 'The room is…', a word gloss and a yes/no quiz; at #10 the starter was 'Yes, room twelve is good…' before any room was named.",
+            "evidence": "#4 'The room is…'; #10 'Yes, room twelve is good…'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Starters match the scene facts and give a full sayable sentence.",
+            "code_hint": "cue/phrase generator"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Recap shows an odd 'line hidden in this room'",
+            "expected": "A recap tied to what she said and where she needed help.",
+            "got": "The recap shows 'Name the problem clearly' as the 'line hidden in this room'. That is a quiz option, not a line from the scene.",
+            "evidence": "#15 'The line hidden in this room “Name the problem clearly”'.",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Recap lists the phrase she was helped with, or her own coached sentence.",
+            "code_hint": "recap builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Supported replies kept apart from independent ones",
+            "expected": "Progress picture stays honest.",
+            "got": "Recap says '4 on your own · 2 with help' and the two helped turns are marked supported.",
+            "evidence": "#15 '6 spoken · 0 written replies · 4 on your own · 2 with help'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep supported flags and the split in the recap.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Held fixes are accurate and quote the learner exactly",
+            "expected": "Quote what she said and give a correct fix.",
+            "got": "Both fixes quote her words exactly and are correct.",
+            "evidence": "#15 'the heating is not work' → 'the heating is not working'; 'I go to room two one four now' → 'I am going to room 214 now'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact quoting.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Patient, in-scene help ladder with simple partner English",
+            "expected": "Calm help at A2 pitch.",
+            "got": "The ladder runs gloss, then starter, then quiz without leaving the scene. Partner turns stay short.",
+            "evidence": "#2–#5 buttons 'Help me answer', 'More help', 'Choose a phrase'; partner 'Of course. Is that OK?'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep short partner turns and help in the scene.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "I liked that the hotel scene felt like my work, and nobody made me feel stupid when I pressed help again and again. The little hints were calm. But the help was thin. \"The room is…\" is not much, and the quiz about \"stay quiet and leave\" felt like a test, which I hate. Then I just said my own sentence anyway. The corrections at the end were right and I can use \"I am going to room 214 now\" at the desk, though I did not get to try it again. I wanted a second go with a new question, and it never came. I also like that it says honestly which answers had help. For my kids it looked safe. I would use it again for 15 minutes in the evening, but I would want that replay first.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-petra-38-J4-1",
+            "status": "not-evaluable",
+            "evidence": "No moment and no replay in this run (#15); the gap's moment was never reached.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-petra-38-J4-2",
+            "status": "not-seen",
+            "evidence": "Both clear errors ('is not work', 'I go to room … now') were held and shown in the #15 recap.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-petra-38-J4-4",
+            "status": "not-seen",
+            "evidence": "#15 recap quotes 'I go to room two one four now', a real learner error, with a matching fix, not an unrelated first turn.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-petra-38-J4-3",
+            "status": "recurs",
+            "evidence": "#5, #6 and #7 show the identical quiz 'What is the best first step?' on repeated presses.",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Help gave a gloss, 'The room is…' and an unrelated quiz (#5 'Stay quiet and leave'); she typed her own sentence at #7. Pause & coach never used; coaching is null, so no coaching note.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: No replay was offered or taken; moments is [] and the journey ended at the recap #15 with no fresh question.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 8,
+      "fail": 0,
+      "ms": 88639
+    },
+    "character": {
+      "n": 15,
+      "fail": 0,
+      "ms": 269413
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 61841
+    }
+  }
+}

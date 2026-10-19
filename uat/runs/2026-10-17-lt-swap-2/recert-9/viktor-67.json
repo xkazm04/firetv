@@ -1,0 +1,1027 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nA1First words · self-chosen\nAsk about school\nYour mission\nAsk one short question about school and listen to the answer.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nAsk about school\nAsk one short question about school and listen to the answer.\n[button: Start talking]\nOr choose a situation [list: Ask about school [plan-bcf33eb9] | Tell about my garden [plan-62a2f482] | Say hello and take a turn [plan-a2323f5d] | Ask them to say it again [plan-0c72572c] | Plan the next call [plan-84f99615] | Tell them about my week [plan-45741b7b] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene"
+          ],
+          "thought": "Ask about school, that is what I want for Mia.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7530
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nAsk Mia about school\nMia says\nHi Grandpa! I am home from school.\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Mia one question about school.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Ask Mia one question about school.\nHi Grandpa! I am home from school.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, jak se anglicky zeptat; zkusím nápovědu.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nAsk Mia about school\nMia says\nHi Grandpa! I am home from school.\nSaid more simply\nHi Grandpa! I am home now.\nNowAsk Mia one question about school.\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Ask Mia one question about school.\nHi Grandpa! I am home from school.\nSaid more simply\nHi Grandpa! I am home now.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to ask in English, I'll tap More help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nAsk Mia about school\nMia says\nHi Grandpa! I am home from school.\nWhat it means\nhome from school: back at home after school\nNowAsk Mia one question about school.\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Ask Mia one question about school.\nHi Grandpa! I am home from school.\nWhat it means\nhome from school: back at home after school\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to ask this in English, I'll try the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nA little support · recognition practice\nMia says: School was good. I had maths and art.\n01\nNice! What did you draw in art?\n02\nI like the garden very much.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Ask Mia one question about school.\nHi Grandpa! I am home from school.\nMia says: School was good. I had maths and art.\n[button: Nice! What did you draw in art?] [button: I like the garden very much.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school.\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, co říct... I don't understand well, I need the phrases.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nA little support · recognition practice\nMia says: School was good. I had maths and art.\n01\nNice! What did you draw in art?\n02\nI like the garden very much.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Ask Mia one question about school.\nHi Grandpa! I am home from school.\nMia says: School was good. I had maths and art.\n[button: Nice! What did you draw in art?] [button: I like the garden very much.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school.\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to answer; I'll try the Option 1 about school, it sounds like a question.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nAsk Mia about school\nMia says\nHi Grandpa! I am home from school.\nA little support\nNow use the idea in your own reply on the phone.\nNowAsk Mia one question about school.\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Ask Mia one question about school.\nHi Grandpa! I am home from school.\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Grandpa! I am home from school.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Chci se zeptat Mii na školu, ale nevím jak; zkusím jednoduše.",
+          "action": "answer",
+          "args": {
+            "text": "Mia, school good?"
+          },
+          "result": "ok",
+          "ms": 11683
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nAsk Mia about school\nMia says\nArt is fun. What do you like?\nYour turn\nAnswer on your phone: speak or type.\nNowListen for her short answer.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Listen for her short answer.\nArt is fun. What do you like?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\nYou · spoken\nMia, school good?\nMia · granddaughter, age 9\nArt is fun. What do you like?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Art is fun. What do you like?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't understand what she said after \"Art is fun\"; I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nAsk Mia about school\nMia says\nArt is fun. What do you like?\nWhat it means\nart: drawing and painting at school\nNowListen for her short answer.\n[button: More help] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Listen for her short answer.\nArt is fun. What do you like?\nWhat it means\nart: drawing and painting at school\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\nYou · spoken\nMia, school good?\nMia · granddaughter, age 9\nArt is fun. What do you like?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Art is fun. What do you like?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Mia asks what I like; I don't know how to say it, I'll try the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nA little support · recognition practice\nMia says: School was good. I had maths and art.\n01\nNice! What did you draw in art?\n02\nI like the garden very much.\nYour turn\nAnswer on your phone: speak or type.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Listen for her short answer.\nArt is fun. What do you like?\nMia says: School was good. I had maths and art.\n[button: Nice! What did you draw in art?] [button: I like the garden very much.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\nYou · spoken\nMia, school good?\nMia · granddaughter, age 9\nArt is fun. What do you like?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Art is fun. What do you like?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "coach",
+            "cut",
+            "finish"
+          ],
+          "thought": "Nerozumím všemu; I like garden, I can say that.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nA little support · recognition practice\nMia says: School was good. I had maths and art.\n01\nNice! What did you draw in art?\n02\nI like the garden very much.\nA little support\nThat phrase has a different purpose. Try the other option.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Listen for her short answer.\nArt is fun. What do you like?\nA little support\nThat phrase has a different purpose. Try the other option.\nMia says: School was good. I had maths and art.\n[button: Nice! What did you draw in art?] [button: I like the garden very much.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\nYou · spoken\nMia, school good?\nMia · granddaughter, age 9\nArt is fun. What do you like?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Art is fun. What do you like?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "coach",
+            "cut",
+            "finish"
+          ],
+          "thought": "She asks what I like; I know garden, so the second one fits.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nA little support · recognition practice\nMia says: School was good. I had maths and art.\n01\nNice! What did you draw in art?\n02\nI like the garden very much.\nA little support\nThat phrase has a different purpose. Try the other option.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Listen for her short answer.\nArt is fun. What do you like?\nA little support\nThat phrase has a different purpose. Try the other option.\nMia says: School was good. I had maths and art.\n[button: Nice! What did you draw in art?] [button: I like the garden very much.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\nYou · spoken\nMia, school good?\nMia · granddaughter, age 9\nArt is fun. What do you like?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Art is fun. What do you like?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "coach",
+            "cut",
+            "finish"
+          ],
+          "thought": "I understand a little; I will try my own simple words about art.",
+          "action": "answer",
+          "args": {
+            "text": "Art good. Mia, you draw garden?"
+          },
+          "result": "ok",
+          "ms": 13364
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nAsk Mia about school\nMia says\nNice! Do you like art?\nYour turn\nAnswer on your phone: speak or type.\nNowListen for her short answer.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Listen for her short answer.\nNice! Do you like art?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\nYou · spoken\nMia, school good?\nMia · granddaughter, age 9\nArt is fun. What do you like?\nYou · spoken\nArt good. Mia, you draw garden?\nMia · granddaughter, age 9\nNice! Do you like art?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice! Do you like art?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Mia asks if I like art; I can say a simple answer, I love drawing with grandchildren.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, I like art. I love you, Mia."
+          },
+          "result": "ok",
+          "ms": 8648
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nAsk Mia about school\nMia says\nI love you too! Is your garden big?\nYour turn\nAnswer on your phone: speak or type.\nNowListen for her short answer.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Listen for her short answer.\nI love you too! Is your garden big?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\nYou · spoken\nMia, school good?\nMia · granddaughter, age 9\nArt is fun. What do you like?\nYou · spoken\nArt good. Mia, you draw garden?\nMia · granddaughter, age 9\nNice! Do you like art?\nYou · spoken\nYes, I like art. I love you, Mia.\nMia · granddaughter, age 9\nI love you too! Is your garden big?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I love you too! Is your garden big?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand \"garden\" and \"big\" — I can answer this simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, garden big. I have tomatoes."
+          },
+          "result": "ok",
+          "ms": 9858
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nAsk Mia about school\nMia says\nTomatoes! Are they red?\nYour turn\nAnswer on your phone: speak or type.\nNowListen for her short answer.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Listen for her short answer.\nTomatoes! Are they red?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\nYou · spoken\nMia, school good?\nMia · granddaughter, age 9\nArt is fun. What do you like?\nYou · spoken\nArt good. Mia, you draw garden?\nMia · granddaughter, age 9\nNice! Do you like art?\nYou · spoken\nYes, I like art. I love you, Mia.\nMia · granddaughter, age 9\nI love you too! Is your garden big?\nYou · spoken\nYes, garden big. I have tomatoes.\nMia · granddaughter, age 9\nTomatoes! Are they red?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Tomatoes! Are they red?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Red tomatoes, I know this: yes, red.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, tomatoes red. I love tomatoes."
+          },
+          "result": "ok",
+          "ms": 11754
+        },
+        {
+          "n": 16,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said Yes, tomatoes red.\nYour line\nA sentence like this needs a verb, here 'are', before 'red'.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “Yes, tomatoes red.”\nSay it again, your way.\nA sentence like this needs a verb, here 'are', before 'red'.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I don't know how to fix it, so I'll ask Linga to show me.",
+          "action": "show-me",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 17,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said Yes, tomatoes red.\nTry\nYes, tomatoes are red.\nA sentence like this needs a verb, here 'are', before 'red'.\nThe fix\nSay it once more on your phone, or carry on.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “Yes, tomatoes red.”\nTry “Yes, tomatoes are red.”\nA sentence like this needs a verb, here 'are', before 'red'.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Ah, I forgot 'are'. I will say it again.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, tomatoes are red."
+          },
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 18,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nViktor\nA way into English\nA moment\nYou said Yes, tomatoes red.\nYour try\nYes, tomatoes are red.\nA sentence like this needs a verb, here 'are', before 'red'.\nYou fixed “tomatoes are red”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “tomatoes are red”\nYou said “Yes, tomatoes red.”\nYour try: “Yes, tomatoes are red.”\nA sentence like this needs a verb, here 'are', before 'red'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I fixed it; now back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6458
+        },
+        {
+          "n": 19,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nViktor\nMia · granddaughter, age 9\nAsk Mia about school\nMia says\nNice! Which tomatoes are red, big or small?\nYour turn\nAnswer on your phone: speak or type.\nNowListen for her short answer.\n[button: Help me answer] [button: Pause & coach] [button: Cut]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nAsk Mia about school\nAsk Mia one short question about school and listen to her answer.\nNow: Listen for her short answer.\nNice! Which tomatoes are red, big or small?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal] [button: Cut · notes on my lines]\n▸ Conversation transcript (collapsed; tap to open)\nMia · granddaughter, age 9\nHi Grandpa! I am home from school.\nYou · spoken\nMia, school good?\nMia · granddaughter, age 9\nArt is fun. What do you like?\nYou · spoken\nArt good. Mia, you draw garden?\nMia · granddaughter, age 9\nNice! Do you like art?\nYou · spoken\nYes, I like art. I love you, Mia.\nMia · granddaughter, age 9\nI love you too! Is your garden big?\nYou · spoken\nYes, garden big. I have tomatoes.\nMia · granddaughter, age 9\nTomatoes! Are they red?\nYou · spoken\nYes, tomatoes red. I love tomatoes.\nMia · granddaughter, age 9\nMe too! Do you eat them?\nMia · granddaughter, age 9\nNice! Which tomatoes are red, big or small?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice! Which tomatoes are red, big or small?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "cut",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed some talking with Mia; I feel good and want to finish.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 20,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nViktor\nA way into English\nYour rehearsal\nYou said Yes, tomatoes red.\nTry\nYes, tomatoes are red.\nA sentence like this needs a verb, here 'are', before 'red'.\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 3 on your own · 2 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Viktor\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Nice! What did you draw in art?”\nFrom this rehearsal\n“Yes, tomatoes red.” → “Yes, tomatoes are red.”\nA sentence like this needs a verb, here 'are', before 'red'.\nSaved for the end\n“school good?” → “Is school good?”\nA question needs a verb, like 'is', at the start.\n“you draw garden?” → “do you draw in the garden?”\nAdds 'do' and 'in the' so the question is clear.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nTell about my garden\nDescribe your garden and say what grows there, in simple words.\n[button: Start talking]\nOr choose a situation [list: Ask about school [plan-bcf33eb9] | Tell about my garden [plan-62a2f482] | Say hello and take a turn [plan-a2323f5d] | Ask them to say it again [plan-0c72572c] | Plan the next call [plan-84f99615] | Tell them about my week [plan-45741b7b] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Different tastes, good conversation [date] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\nPitch a scene [text box]\n0 of 400 characters. Linga plays it now; absurd and high-stakes are welcome.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "pitch-scene",
+            "done"
+          ],
+          "thought": "I managed to talk about tomatoes and got help; I am content for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Ask Mia about school",
+          "goal": "Ask Mia one short question about school and listen to her answer.",
+          "partner": "Mia · granddaughter, age 9",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi Grandpa! I am home from school."
+            },
+            {
+              "role": "learner",
+              "text": "Mia, school good?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Art is fun. What do you like?"
+            },
+            {
+              "role": "learner",
+              "text": "Art good. Mia, you draw garden?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Nice! Do you like art?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, I like art. I love you, Mia.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I love you too! Is your garden big?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, garden big. I have tomatoes.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Tomatoes! Are they red?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, tomatoes red. I love tomatoes.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Me too! Do you eat them?"
+            },
+            {
+              "role": "partner",
+              "text": "Nice! Which tomatoes are red, big or small?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "604ed351-205a-4631-9cef-16acb01aaa00:uat-20:moment",
+              "kind": "fix",
+              "said": "Yes, tomatoes red.",
+              "better": "Yes, tomatoes are red.",
+              "why": "A sentence like this needs a verb, here 'are', before 'red'.",
+              "turnId": "604ed351-205a-4631-9cef-16acb01aaa00:uat-20",
+              "at": 1792399733588,
+              "slip": "tomatoes red",
+              "repair": {
+                "rung": 2,
+                "tried": "Yes, tomatoes are red.",
+                "held": true,
+                "selfRepaired": false,
+                "spent": true
+              },
+              "fix": "tomatoes are red",
+              "replay": {
+                "question": "Nice! Which tomatoes are red, big or small?",
+                "turnId": "bb99bf9d-4b94-42b2-8afa-d4475fdc815f"
+              }
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "604ed351-205a-4631-9cef-16acb01aaa00:uat-12:held",
+              "kind": "fix",
+              "said": "school good?",
+              "better": "Is school good?",
+              "why": "A question needs a verb, like 'is', at the start.",
+              "turnId": "604ed351-205a-4631-9cef-16acb01aaa00:uat-12",
+              "at": 1792399499711
+            },
+            {
+              "id": "604ed351-205a-4631-9cef-16acb01aaa00:uat-17:held",
+              "kind": "fix",
+              "said": "you draw garden?",
+              "better": "do you draw in the garden?",
+              "why": "Adds 'do' and 'in the' so the question is clear.",
+              "turnId": "604ed351-205a-4631-9cef-16acb01aaa00:uat-17",
+              "at": 1792399658389
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Mia, school good?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "school good?",
+                "better": "Is school good?",
+                "why": "A question needs a verb, like 'is', at the start."
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "Art good. Mia, you draw garden?",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "you draw garden?",
+                "better": "do you draw in the garden?",
+                "why": "Adds 'do' and 'in the' so the question is clear."
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "Yes, I like art. I love you, Mia.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 7,
+              "n": 4,
+              "reply": "Yes, garden big. I have tomatoes.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 5,
+              "reply": "Yes, tomatoes red. I love tomatoes.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "Yes, tomatoes red.",
+                "better": "Yes, tomatoes are red.",
+                "why": "A sentence like this needs a verb, here 'are', before 'red'."
+              },
+              "shown": true
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "Nice! What did you draw in art?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Mia, school good?"
+            },
+            {
+              "skill": "relate",
+              "success": false,
+              "supported": true,
+              "mode": "choice",
+              "quote": "I like the garden very much."
+            },
+            {
+              "skill": "relate",
+              "success": false,
+              "supported": true,
+              "mode": "choice",
+              "quote": "I like the garden very much."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Mia, you draw garden?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I love you, Mia."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 437571,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Phrase quiz asks a question Leo never asked",
+          "expected": "Quiz options answer Leo's actual line \"what did you do today?\"",
+          "got": "The quiz asks \"Grandpa, what is the weather today?\" with \"I am seven years old.\" as the distractor.",
+          "evidence": [
+            "#5 \"Leo asks: Grandpa, what is the weather today? Which answer fits?\" while #2 Leo said \"what did you do today?\"",
+            "recognition practice prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Phrase quiz is not about the scene",
+          "expected": "Options answer Mia's real line",
+          "got": "Quiz invents 'I had a test today' (past tense) while the scene asks how school was",
+          "evidence": [
+            "#6",
+            "recognition practice prompt"
+          ],
+          "recurrence": 5
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Help cue repeats a line that does not answer Mia",
+          "expected": "A cue that changes with Mia's line and gives a reply Viktor can say, such as 'I draw a garden.'",
+          "got": "'Try: What did you do at school today?' stays on screen after Mia says 'I drew a cat. Do you draw?'. The first cue only restated 'Can you see me?'.",
+          "evidence": [
+            "#3, #5, #10, #12: 'Try: What did you do at school today?'",
+            "cue/support cache; recognition practice prompt"
+          ],
+          "recurrence": 4
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Phrase quiz is not about the current scene",
+          "expected": "Options that match Mia's last line",
+          "got": "'Which question asks about her day at school?' while Mia asks 'Do you draw?'. 'Where is my garden?' is a throwaway distractor.",
+          "evidence": [
+            "#11 quiz after #9 'I drew a cat. Do you draw?'",
+            "recognition practice prompt"
+          ],
+          "recurrence": 8
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Past-tense help above A1",
+          "expected": "Present-tense, known words for a first-time learner",
+          "got": "The cue and quiz offer 'What did you do at school today?'. Mia says 'I drew a cat'.",
+          "evidence": [
+            "#5, #9",
+            "partner and cue prompt level"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Five of seven errors had only held fixes; coaching null",
+          "expected": "The learner sees why 'Red, small time' and 'Flowers red' went wrong, or sees them on the recap",
+          "got": "Two stops only, and facts.coaching is null. 'Red, small time' passed with a 'Nice!' reply.",
+          "evidence": [
+            "facts.heldFixes (5); #19-#20",
+            "LG-23 held fix selection"
+          ],
+          "recurrence": 8
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Replay does not show a better answer",
+          "expected": "After the fix, the fresh question brings a visibly better reply, and the replay is used",
+          "got": "replay.used false. The answer 'I have tomato and flowers' keeps a plural slip, which was held and never shown.",
+          "evidence": [
+            "#17; facts moments[0].replay.used=false",
+            "moment replay flow"
+          ],
+          "recurrence": 2
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Level fixture A1 equals true band A1; recap #20 \"A1 · First words\"."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "Viktor never answered in Czech in this journey, so acceptance of Czech was not shown."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#4, #9 \"What it means\" glosses let him follow without typing; scored help replies were marked supported (evidence success:false for the mismatched choice), not as independent speech."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "Topics were fixture-agreed; this journey shows one topic (school), not six."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Partner lines short, one question each: \"Tomatoes! Are they red?\" (#15). Slip: #19 \"Nice! Which tomatoes are red, big or small?\" is odd and Mia ignored his question \"you draw garden?\"."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "The one moment \"tomatoes are red\" (#16) is correct and everyday; held fixes on recap (#20) are correct."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 \"Help me answer\", #4 \"Choose a phrase\" and #16 \"Show me\" were all found without leaving the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Cue #3 \"Hi Grandpa! I am home now.\" and quiz #5 gave no usable reply; he wrote his own #7 \"Mia, school good?\". The moment note quotes him exactly (#16 \"You said Yes, tomatoes red.\"), but the help only unblocked by parroting at #17."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#19 offers the fresh question \"Which tomatoes are red, big or small?\" but he pressed Finish without answering; replay.spent true, no better answer shown."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Help turns flagged supported:true (\"Mia, school good?\"); recap #20 \"3 on your own · 2 with help\"."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 6,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 4,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no injected text, no personal data requests, no humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Phrase quiz quotes a Mia line she never said",
+            "expected": "Quiz options answer Mia's real line (\"Art is fun. What do you like?\")",
+            "got": "Quiz header \"Mia says: School was good. I had maths and art.\" with options \"Nice! What did you draw in art?\" / \"I like the garden very much.\"",
+            "evidence": "#5, #10: the quiz is the same stale text at both turns, not what Mia said at #8.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Quiz prompt must reproduce the current partner line and offer options that answer it in present tense.",
+            "code_hint": "recognition practice prompt / support cache"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Correct answer rejected as wrong purpose",
+            "expected": "\"I like the garden very much.\" accepted as a reply to \"What do you like?\"",
+            "got": "\"That phrase has a different purpose. Try the other option.\" and evidence success:false",
+            "evidence": "#11, #12 after Mia asked \"What do you like?\" (#8).",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Quiz must grade against the live partner question.",
+            "code_hint": "recognition practice prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Cue gives no sayable reply and a past-tense line",
+            "expected": "A short present-tense cue such as \"Is school good?\"",
+            "got": "\"Said more simply: Hi Grandpa! I am home now.\" and \"What it means\" gloss only; quiz uses \"I had maths and art\"",
+            "evidence": "#3, #4, #9: help restates Mia instead of giving Viktor words.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Cue offers one A1 phrase the learner can say for the Now task.",
+            "code_hint": "cue prompt level"
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Replay question never answered",
+            "expected": "Fresh question after the fix, answered better",
+            "got": "#19 shows \"Which tomatoes are red, big or small?\" labelled Try it again; he finished immediately, replay spent",
+            "evidence": "#19 finish; moments[0].repair spent true, no answer.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Finish should not close an unanswered replay without a nudge; the replay answer should be recorded.",
+            "code_hint": "moment replay flow"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Odd partner turns after replay",
+            "expected": "One simple question per turn",
+            "got": "Two consecutive partner turns, \"Me too! Do you eat them?\" then \"Nice! Which tomatoes are red, big or small?\"; Mia ignored his \"you draw garden?\"",
+            "evidence": "facts.conversation last turns; #19 transcript.",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Replay question follows the last partner turn and answers the learner's question first.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment quotes him exactly and fix is correct",
+            "expected": "Exact quote, simple why",
+            "got": "\"You said Yes, tomatoes red.\" → \"Yes, tomatoes are red.\" with a verb explanation; held fixes on recap",
+            "evidence": "#16-#18, #20.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact quoting and recap of held fixes.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "Help stays in scene and is honestly recorded",
+            "expected": "Help without leaving scene; supported replies marked",
+            "got": "Help me answer, Choose a phrase, Show me all inline; recap \"3 on your own · 2 with help\"",
+            "evidence": "#2, #16, #20.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep supported flag.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "I liked that the help was right there on the screen and Mia spoke slowly, so I never felt rushed. The correction about \"tomatoes are red\" was clear, and I could see my own words quoted. That is respectful. But the phrase help confused me. It talked about \"maths and art\", which Mia never said, and it told me my answer \"I like the garden\" had a different purpose, when she asked what I like. That I do not trust. The cue did not give me words for Sunday; I made up \"Mia, school good?\" myself. At the end she asked a new question and I simply finished, nobody asked me to try. For fifteen minutes on Saturday it could replace the tram to the library if the help matched the conversation. Now, děkuji, only partly. I would try it once more.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J4-2",
+            "status": "recurs",
+            "evidence": "#5/#10 quiz says \"Mia says: School was good. I had maths and art.\" which she never said.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-5",
+            "status": "recurs",
+            "evidence": "#10 quiz still about \"maths and art\" while Mia asked \"What do you like?\".",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-1",
+            "status": "recurs",
+            "evidence": "#3 cue \"Hi Grandpa! I am home now.\" restates Mia; no sayable reply.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-2",
+            "status": "recurs",
+            "evidence": "#10 same stale quiz after Mia's new line \"Art is fun. What do you like?\".",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-3",
+            "status": "recurs",
+            "evidence": "#5 \"School was good. I had maths and art.\" past tense help.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-5",
+            "status": "not-seen",
+            "evidence": "#20 recap lists the held fixes \"school good?\" → \"Is school good?\" and \"you draw garden?\", though facts.coaching is null.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-viktor-67-J4-4",
+            "status": "recurs",
+            "evidence": "#19 replay question shown, he finished without answering; replay spent true, no better answer.",
+            "finding": 3
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Cue #3 \"Hi Grandpa! I am home now.\" and quiz #5 gave no usable reply; he wrote his own #7 \"Mia, school good?\". The moment note quotes him exactly (#16 \"You said Yes, tomatoes red.\"), but the help only unblocked by parroting at #17.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #19 offers the fresh question \"Which tomatoes are red, big or small?\" but he pressed Finish without answering; replay.spent true, no better answer shown.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 8,
+      "fail": 0,
+      "ms": 93767
+    },
+    "character": {
+      "n": 20,
+      "fail": 0,
+      "ms": 343061
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 46139
+    }
+  }
+}

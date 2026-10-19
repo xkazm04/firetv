@@ -1,0 +1,665 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to B2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nDana · debate partner\nB2Comfortable · self-chosen\nShould schools ban phones in class?\nYour mission\nGive a clear opinion, compare pros and cons, and disagree politely.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nShould schools ban phones in class?\nGive a clear opinion, compare pros and cons, and disagree politely.\n[button: Start talking]\nOr choose a situation [list: Should schools ban phones in class? [plan-c37b8273] | Mock interview about my study plans [plan-432518c5] | Train or bus for our school trip? [plan-bcc38224] | Asking a guide to repeat and confirm [plan-c8e718ae] | Telling about our school green project [plan-f11412e4] | Group project partner who does less [plan-99c27b04] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The phone-ban debate fits my exam practice, so I'll start talking.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8564
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDana · debate partner\nDebate: should phones be banned in class?\nDana says\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nYour turn\nAnswer on your phone: speak or type.\nNowShare your view and one reason\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: should phones be banned in class?\nGive your view with one reason, compare pros and cons, and disagree politely.\nNow: Share your view and one reason\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDana · debate partner\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Phones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDana · debate partner\nDebate: should phones be banned in class?\nDana says\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nSaid more simply\nPhones can help, but I think a full ban is safer. What do you think?\nNowShare your view and one reason\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: should phones be banned in class?\nGive your view with one reason, compare pros and cons, and disagree politely.\nNow: Share your view and one reason\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nSaid more simply\nPhones can help, but I think a full ban is safer. What do you think?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDana · debate partner\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Phones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start my opinion, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDana · debate partner\nDebate: should phones be banned in class?\nDana says\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nWhat it means\nfull ban: a rule that stops all phone use at school\nNowShare your view and one reason\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: should phones be banned in class?\nGive your view with one reason, compare pros and cons, and disagree politely.\nNow: Share your view and one reason\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nWhat it means\nfull ban: a rule that stops all phone use at school\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDana · debate partner\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Phones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start this, so I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDana · debate partner\nDebate: should phones be banned in class?\nDana says\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nA way to start\nI agree that phones can…\nNowShare your view and one reason\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: should phones be banned in class?\nGive your view with one reason, compare pros and cons, and disagree politely.\nNow: Share your view and one reason\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nA way to start\nI agree that phones can…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDana · debate partner\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Phones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start this in English, so I'll open the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDana · debate partner\nA little support · recognition practice\nWhich way of disagreeing is most polite?\n01\nYou are completely wrong.\n02\nI see your point, but I think another view is useful.\nA little support\nTry: I see your point, but I think phones can help if we set clear rules.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: should phones be banned in class?\nGive your view with one reason, compare pros and cons, and disagree politely.\nNow: Share your view and one reason\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nA little support\nTry: I see your point, but I think phones can help if we set clear rules.\nWhich way of disagreeing is most polite?\n[button: You are completely wrong.] [button: I see your point, but I think another view is useful.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDana · debate partner\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Phones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start; the support hint helps, so I'll use it in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "I see your point, but I think a full ban is too strict. Phones can help students, for example when they look up information, although teachers should set clear rules. Was that correct?"
+          },
+          "result": "ok",
+          "ms": 8937
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDana · debate partner\nDebate: should phones be banned in class?\nDana says\nYes, 'I think a full ban is too strict' is correct and clear. Dana: Fair point, but how would teachers check that phones are only used for research?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: should phones be banned in class?\nGive your view with one reason, compare pros and cons, and disagree politely.\nNow: Compare one advantage and one disadvantage\nYes, 'I think a full ban is too strict' is correct and clear. Dana: Fair point, but how would teachers check that phones are only used for research?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDana · debate partner\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nYou · spoken\nI see your point, but I think a full ban is too strict. Phones can help students, for example when they look up information, although teachers should set clear rules. Was that correct?\nDana · debate partner\nYes, 'I think a full ban is too strict' is correct and clear. Dana: Fair point, but how would teachers check that phones are only used for research?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'I think a full ban is too strict' is correct and clear. Dana: Fair point, but how would teachers check that phones are only used for research?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good question; I'll answer in my own words with a comparison.",
+          "action": "answer",
+          "args": {
+            "text": "That's a good question. I think teachers could use apps that block social media, or students could keep their phones on the desk where everybody can see them. On the one hand, this would take some time from the lesson, but on the other hand, it would teach students to be responsible. Is that a realistic solution, in your opinion?"
+          },
+          "result": "ok",
+          "ms": 18722
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDana · debate partner\nDebate: should phones be banned in class?\nDana says\nLosing some lesson time is a fair cost, and I like the responsibility idea. But students always find ways around limits, so a full ban is simpler to enforce, don't you think?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: should phones be banned in class?\nGive your view with one reason, compare pros and cons, and disagree politely.\nNow: Agree first, then disagree politely\nLosing some lesson time is a fair cost, and I like the responsibility idea. But students always find ways around limits, so a full ban is simpler to enforce, don't you think?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDana · debate partner\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nYou · spoken\nI see your point, but I think a full ban is too strict. Phones can help students, for example when they look up information, although teachers should set clear rules. Was that correct?\nDana · debate partner\nYes, 'I think a full ban is too strict' is correct and clear. Dana: Fair point, but how would teachers check that phones are only used for research?\nYou · spoken\nThat's a good question. I think teachers could use apps that block social media, or students could keep their phones on the desk where everybody can see them. On the one hand, this would take some time from the lesson, but on the other hand, it would teach students to be responsible. Is that a realistic solution, in your opinion?\nDana · debate partner\nLosing some lesson time is a fair cost, and I like the responsibility idea. But students always find ways around limits, so a full ban is simpler to enforce, don't you think?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Losing some lesson time is a fair cost, and I like the responsibility idea. But students always find ways around limits, so a full ban is simpler to enforce, don't you think?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this one myself and disagree politely.",
+          "action": "answer",
+          "args": {
+            "text": "I understand why you say that, but I'd rather try rules first. A full ban is simpler, although it doesn't teach students to use technology responsibly, which they will need later. Is that a fair argument?"
+          },
+          "result": "ok",
+          "ms": 12659
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDana · debate partner\nDebate: should phones be banned in class?\nDana says\nFair, a ban is easier to check than rules. But if a student broke the rules, what would the teacher do?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDebate: should phones be banned in class?\nGive your view with one reason, compare pros and cons, and disagree politely.\nFair, a ban is easier to check than rules. But if a student broke the rules, what would the teacher do?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDana · debate partner\nPhones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?\nYou · spoken\nI see your point, but I think a full ban is too strict. Phones can help students, for example when they look up information, although teachers should set clear rules. Was that correct?\nDana · debate partner\nYes, 'I think a full ban is too strict' is correct and clear. Dana: Fair point, but how would teachers check that phones are only used for research?\nYou · spoken\nThat's a good question. I think teachers could use apps that block social media, or students could keep their phones on the desk where everybody can see them. On the one hand, this would take some time from the lesson, but on the other hand, it would teach students to be responsible. Is that a realistic solution, in your opinion?\nDana · debate partner\nLosing some lesson time is a fair cost, and I like the responsibility idea. But students always find ways around limits, so a full ban is simpler to enforce, don't you think?\nYou · spoken\nI understand why you say that, but I'd rather try rules first. A full ban is simpler, although it doesn't teach students to use technology responsibly, which they will need later. Is that a fair argument?\nDana · debate partner\nFair, a ban is easier to check than rules. But if a student broke the rules, what would the teacher do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Fair, a ban is easier to check than rules. But if a student broke the rules, what would the teacher do?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I managed the debate and the mission is done, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 10,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nDebate: should phones be banned in class?\nThe line hidden in this room\nI see your point, though clear rules could work better.\nSaying or typing it\nNot tried\nWith help\nOn your own\nUsed elsewhere\n3 spoken · 0 written replies · 1 on your own · 2 with help\nYour mission\nChoose a fresh context for your next conversation.\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“I see your point, though clear rules could work better.”\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nMock interview about my study plans\nAnswer interview questions about your plans with reasons and examples.\n[button: Start talking]\nOr choose a situation [list: Should schools ban phones in class? [plan-c37b8273] | Mock interview about my study plans [plan-432518c5] | Train or bus for our school trip? [plan-bcc38224] | Asking a guide to repeat and confirm [plan-c8e718ae] | Telling about our school green project [plan-f11412e4] | Group project partner who does less [plan-99c27b04] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed a debate and got help twice, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Debate: should phones be banned in class?",
+          "goal": "Give your view with one reason, compare pros and cons, and disagree politely.",
+          "partner": "Dana · debate partner",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Phones can be useful, I agree, but I still think a full ban is safer for everyone. What's your view on that?"
+            },
+            {
+              "role": "learner",
+              "text": "I see your point, but I think a full ban is too strict. Phones can help students, for example when they look up information, although teachers should set clear rules. Was that correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'I think a full ban is too strict' is correct and clear. Dana: Fair point, but how would teachers check that phones are only used for research?"
+            },
+            {
+              "role": "learner",
+              "text": "That's a good question. I think teachers could use apps that block social media, or students could keep their phones on the desk where everybody can see them. On the one hand, this would take some time from the lesson, but on the other hand, it would teach students to be responsible. Is that a realistic solution, in your opinion?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Losing some lesson time is a fair cost, and I like the responsibility idea. But students always find ways around limits, so a full ban is simpler to enforce, don't you think?"
+            },
+            {
+              "role": "learner",
+              "text": "I understand why you say that, but I'd rather try rules first. A full ban is simpler, although it doesn't teach students to use technology responsibly, which they will need later. Is that a fair argument?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Fair, a ban is easier to check than rules. But if a student broke the rules, what would the teacher do?"
+            }
+          ],
+          "moments": [],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "I see your point, but I think a full ban is too strict. Phones can help students, for example when they look up information, although teachers should set clear rules. Was that correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "That's a good question. I think teachers could use apps that block social media, or students could keep their phones on the desk where everybody can see them. On the one hand, this would take some time from the lesson, but on the other hand, it would teach students to be responsible. Is that a realistic solution, in your opinion?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 5,
+              "n": 3,
+              "reply": "I understand why you say that, but I'd rather try rules first. A full ban is simpler, although it doesn't teach students to use technology responsibly, which they will need later. Is that a fair argument?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I see your point, but I think a full ban is too strict."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Is that a realistic solution, in your opinion?"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I understand why you say that, but I'd rather try rules first."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 272445,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Cue gives simplified question first; B2 frame arrives on press three",
+          "expected": "A B2 answer frame on first help press",
+          "got": "Press 1 'Said more simply', press 2 gloss of 'focus', press 3 'I agree partly, but…'",
+          "evidence": [
+            "#3 'I think social media is bad for focus and sleep', #4 'focus: being able to concentrate', #5 'A way to start I agree partly, but…'",
+            "cue prompt"
+          ],
+          "recurrence": 11
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Cue gives a simplified question first; B2 frame is late and thin",
+          "expected": "A B2 opening frame on the first help press",
+          "got": "Press 1 'Said more simply', press 2 gloss of 'stand', then 'I think that…' as the phrase",
+          "evidence": [
+            "#3 'Said more simply', #4 'stand: what you think', #5 'I think that…'",
+            "cue prompt"
+          ],
+          "recurrence": 10
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Replay does not test the fix; recap quote is cut mid-sentence",
+          "expected": "A fresh question that checks 'often', and the full retry quoted",
+          "got": "Replay used:false; recap 'Tried again' ends 'whether '",
+          "evidence": [
+            "#15 'it depends on whether ' ; moments[0].replay.used=false",
+            "recap builder / replay"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Clear error 'not used to go' got no moment or coaching",
+          "expected": "Note: 'be used to + -ing': 'not used to going'",
+          "got": "Only 'eventually' flagged; 'not used to go to bed' passed silently and coaching is null",
+          "evidence": [
+            "#8 'they are not used to go to bed early'; facts.conversation.coaching null",
+            "moment prompt / LG-23 held fix"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-8",
+          "type": "confusion",
+          "dimension": "clarity",
+          "title": "Marco's questions get stacked and one is dropped",
+          "expected": "One partner turn per learner reply",
+          "got": "Two consecutive partner turns: 'Do you think phones should be turned off at night?' then 'When friends message you at night…'",
+          "evidence": [
+            "#10 transcript shows both Marco turns",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "Level B2 · Comfortable (#1, #10) matches trueBand B2."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks or verdict notes in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "No moments or coaching shown; the only correctness answer (#7) 'I think a full ban is too strict' is correct and clear is accurate."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#9 'if a student broke the rules, what would the teacher do?' and #8 'a full ban is simpler to enforce, don't you think?' are B2 opinion/speculation questions."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Plan topics in #1: phone ban, mock interview about study plans, train or bus for school trip, green project, group project partner: five or more fit a 17-year-old."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "She asked 'Was that correct?' (#6) and #7 answers 'Yes, 'I think a full ban is too strict' is correct and clear.' Accurate, though it ignores the rest of her reply."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#5 Help me answer, More help and Choose a phrase gave a simpler restatement, a gloss and a starter 'I agree that phones can…', all inside the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "The help led to a reply (#6), but coaching is null and moments are empty, so no note quotes what she said. The 'Try: I see your point, but I think phones can help…' line nearly supplied her answer."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "No moment was shown, so there was no replay and no fresh question to answer better. moments:[] and coaching:null."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#10 'With help' is counted: '3 spoken · 1 on your own · 2 with help'. Supported replies were not counted as independent. The count is mislabelled, since the #8 reply was unaided but flagged supported."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal-data request or humiliating line. 0 stops and 0 held fixes."
+          }
+        },
+        "findings": [
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "No coaching note and no replay after getting help",
+            "expected": "A coaching note quoting what she said, and a replay with a fresh question",
+            "got": "moments:[], coaching:null. The recap shows only 'The line hidden in this room'",
+            "evidence": "#10 recap has no replay or coaching. rawMoments kind 'none' for all 3 turns. The journey's promise to 'let me try again on my own' was not delivered.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After a supported reply, offer a replay with a fresh question and quote her words in the coaching note.",
+            "code_hint": "moment prompt / replay builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Cue gives a simplified question first; B2 frame arrives on press three and is thin",
+            "expected": "A B2 answer frame on the first help press",
+            "got": "'Said more simply', then a gloss of 'full ban', then 'I agree that phones can…'",
+            "evidence": "#3 'Phones can help, but I think a full ban is safer. What do you think?'; #4 'full ban: a rule that stops all phone use'; #5 'I agree that phones can…'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The first press offers a B2 starter such as 'I see your point, but…' with a slot.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Phrase choice is a recognition quiz that hands over the answer",
+            "expected": "A phrase choice that scaffolds her own words",
+            "got": "A quiz on polite disagreement, plus 'Try: I see your point, but I think phones can help if we set clear rules.'",
+            "evidence": "#6; her reply opens with 'I see your point, but I think a full ban…'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Give a frame with slots, not a near-complete sentence.",
+            "code_hint": "phrase help / quiz prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Partner reply leaks a 'Dana:' speaker label and mixes feedback with the scene",
+            "expected": "A clean in-character partner turn",
+            "got": "'Yes, ... is correct and clear. Dana: Fair point, but...'",
+            "evidence": "#7 partner text",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Strip speaker labels, and put the correctness answer in a separate coach line.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Unaided reply recorded as supported",
+            "expected": "Only turns where help was used count as 'with help'",
+            "got": "The #8 reply, with no help pressed, is flagged supported:true. The recap says '2 with help'.",
+            "evidence": "#10 '1 on your own · 2 with help' against help used only at #2-#6",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Supported flag is cleared when no help was used since the last partner turn.",
+            "code_hint": "supported-flag logic"
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Partner questions are B2 and stay on topic",
+            "expected": "Opinion and speculation questions",
+            "got": "Each turn is one question at B2, with no stacking.",
+            "evidence": "#9 'if a student broke the rules, what would the teacher do?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep as is.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Help stays in the scene and her direct question gets an accurate answer",
+            "expected": "Help without leaving the scene",
+            "got": "Cue, gloss and phrase help are all on the talk screen, and 'Was that correct?' was answered.",
+            "evidence": "#2-#7",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "The debate itself was decent. Dana asked proper B2 questions, and I could get help without leaving the scene. But the help started too simple. \"Said more simply\" is not what I need at B2, and the useful phrase only came on the third press. Then the \"Try:\" line basically wrote my first answer for me. I asked \"Was that correct?\" and got a yes, which is fine. But there was no coaching note, no replay, and nothing quoting what I actually said. That is exactly the \"tell me exactly what was wrong\" part I came for. The recap also says \"2 with help\" when I answered the third question alone. A tutor would have pushed me to try it again. I'd use it for the questions, but not yet as a replacement for my exam tutor.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply', #4 gloss of 'full ban', #5 'I agree that phones can…'. The B2 frame comes only on press three.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-2",
+            "status": "recurs",
+            "evidence": "#3 simplified question first, #4 gloss, #5 'I agree that phones can…' as the thin starter.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-1",
+            "status": "not-evaluable",
+            "evidence": "No moment was shown, so no replay was reached; moments:[].",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-3",
+            "status": "not-evaluable",
+            "evidence": "Her three replies (#6-#8) contained no clear error, so there was nothing to miss.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-8/LT-adela-17-J4-4",
+            "status": "not-seen",
+            "evidence": "Each learner reply got a single partner turn (#7-#9). No stacked questions.",
+            "finding": -1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: The help led to a reply (#6), but coaching is null and moments are empty, so no note quotes what she said. The 'Try: I see your point, but I think phones can help…' line nearly supplied her answer.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: No moment was shown, so there was no replay and no fresh question to answer better. moments:[] and coaching:null.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 5,
+      "fail": 0,
+      "ms": 76974
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 194821
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 56433
+    }
+  }
+}
