@@ -1,0 +1,805 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to B2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nB2Comfortable · self-chosen\nIs social media good for society?\nYour mission\nGive a clear opinion on technology and society, support it with one example, and respond to a different view.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nIs social media good for society?\nGive a clear opinion on technology and society, support it with one example, and respond to a different view.\n[button: Start talking]\nOr choose a situation [list: Is social media good for society? [plan-e6443e98] | Mock interview: my plans after school [plan-30fd9026] | Choosing a trip for our group [plan-2c2b646b] | A school environment project [plan-d6e6318f] | Asking about a summer course [plan-2ae2b4ee] | Can you say that again, please? [plan-63a9bec3] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The social media topic fits exam practice, so I'll start talking.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6252
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nIs social media good for society?\nMarco says\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nYour turn\nAnswer on your phone: speak or type.\nNowGive a clear opinion\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nNow: Give a clear opinion\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Honestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to put my opinion in English, so I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nIs social media good for society?\nMarco says\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nSaid more simply\nSocial media connects people, but it can hurt sleep and friendships. What is your opinion?\nNowGive a clear opinion\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nNow: Give a clear opinion\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nSaid more simply\nSocial media connects people, but it can hurt sleep and friendships. What is your opinion?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Honestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start my opinion, so I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nIs social media good for society?\nMarco says\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nWhat it means\nstand: what you think about something\nNowGive a clear opinion\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nNow: Give a clear opinion\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nWhat it means\nstand: what you think about something\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Honestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I know what I think, but I'm not sure how to start in English; let me see the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nIs social media good for society?\nMarco says\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nA way to start\nI think that…\nNowGive a clear opinion\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nNow: Give a clear opinion\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nA way to start\nI think that…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Honestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I know what I think, but I'm not sure how to say it well; let me look at the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nA little support · recognition practice\nWhich reply disagrees politely?\n01\nYou are wrong, that is stupid.\n02\nI see your point, but I think the risks are bigger.\nA little support\nTry: I see your point, but I would argue that...\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nNow: Give a clear opinion\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nA little support\nTry: I see your point, but I would argue that...\nWhich reply disagrees politely?\n[button: You are wrong, that is stupid.] [button: I see your point, but I think the risks are bigger.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Honestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can answer this myself now; the help showed me a useful phrase.",
+          "action": "answer",
+          "args": {
+            "text": "I see your point, but I would argue that social media does more good than harm, although it depends on how people use it. For example, many students in my class use it to share notes and organise projects. Was my sentence correct?"
+          },
+          "result": "ok",
+          "ms": 9203
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nIs social media good for society?\nMarco says\nYes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nNow: Add one reason and one example\nYes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nYou · spoken\nI see your point, but I would argue that social media does more good than harm, although it depends on how people use it. For example, many students in my class use it to share notes and organise projects. Was my sentence correct?\nMarco · Debate club member\nYes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to answer about sleep, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nIs social media good for society?\nMarco says\nYes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\nSaid more simply\nYes, your sentence is correct. Do you think sleep is affected the same for everyone?\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nNow: Add one reason and one example\nYes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\nSaid more simply\nYes, your sentence is correct. Do you think sleep is affected the same for everyone?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nYou · spoken\nI see your point, but I would argue that social media does more good than harm, although it depends on how people use it. For example, many students in my class use it to share notes and organise projects. Was my sentence correct?\nMarco · Debate club member\nYes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I've had some help, so now I'll answer in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "I don't think so. Whereas some people can easily fall asleep after using their phone, others are much more sensitive to the blue light. I'd say it depends on age too, because teenagers eventually stay up late scrolling, and they are not used to go to bed early."
+          },
+          "result": "ok",
+          "ms": 14888
+        },
+        {
+          "n": 9,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou wanted to say eventually\nIn English\noften\n'Eventually' means 'in the end'; here you mean 'regularly, many times'.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “eventually”\nIn English: “often”\n'Eventually' means 'in the end'; here you mean 'regularly, many times'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, that explains my slip: I meant \"often\". Back to the conversation.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 7113
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nIs social media good for society?\nMarco says\nStaying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?\nYour turn\nAnswer on your phone: speak or type.\nNowPolitely disagree with one point\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nNow: Politely disagree with one point\nStaying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nYou · spoken\nI see your point, but I would argue that social media does more good than harm, although it depends on how people use it. For example, many students in my class use it to share notes and organise projects. Was my sentence correct?\nMarco · Debate club member\nYes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\nYou · spoken\nI don't think so. Whereas some people can easily fall asleep after using their phone, others are much more sensitive to the blue light. I'd say it depends on age too, because teenagers eventually stay up late scrolling, and they are not used to go to bed early.\nMarco · Debate club member\nThat is an interesting point about teenagers and late nights. Do you think phones should be turned off at night?\nMarco · Debate club member\nStaying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Staying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to disagree politely about this, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nIs social media good for society?\nMarco says\nStaying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?\nSaid more simply\nWhen friends message you at night, what do you do?\nNowPolitely disagree with one point\n[button: More help] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nNow: Politely disagree with one point\nStaying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?\nSaid more simply\nWhen friends message you at night, what do you do?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nYou · spoken\nI see your point, but I would argue that social media does more good than harm, although it depends on how people use it. For example, many students in my class use it to share notes and organise projects. Was my sentence correct?\nMarco · Debate club member\nYes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\nYou · spoken\nI don't think so. Whereas some people can easily fall asleep after using their phone, others are much more sensitive to the blue light. I'd say it depends on age too, because teenagers eventually stay up late scrolling, and they are not used to go to bed early.\nMarco · Debate club member\nThat is an interesting point about teenagers and late nights. Do you think phones should be turned off at night?\nMarco · Debate club member\nStaying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Staying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I usually mute notifications at night, so I'll answer and ask if it was correct.",
+          "action": "answer",
+          "args": {
+            "text": "Usually I don't answer straight away, because I'd rather get enough sleep. Although I sometimes check who wrote to me, I put my phone on silent mode. I think it depends on whether the message is urgent. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 9603
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nIs social media good for society?\nMarco says\nYes, 'I put my phone on silent mode' is correct and clear. Do you check your messages at night?\nYour turn\nAnswer on your phone: speak or type.\nNowPolitely disagree with one point\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nNow: Politely disagree with one point\nYes, 'I put my phone on silent mode' is correct and clear. Do you check your messages at night?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nYou · spoken\nI see your point, but I would argue that social media does more good than harm, although it depends on how people use it. For example, many students in my class use it to share notes and organise projects. Was my sentence correct?\nMarco · Debate club member\nYes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\nYou · spoken\nI don't think so. Whereas some people can easily fall asleep after using their phone, others are much more sensitive to the blue light. I'd say it depends on age too, because teenagers eventually stay up late scrolling, and they are not used to go to bed early.\nMarco · Debate club member\nThat is an interesting point about teenagers and late nights. Do you think phones should be turned off at night?\nMarco · Debate club member\nStaying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?\nYou · spoken\nUsually I don't answer straight away, because I'd rather get enough sleep. Although I sometimes check who wrote to me, I put my phone on silent mode. I think it depends on whether the message is urgent. Was my answer correct?\nMarco · Debate club member\nYes, 'I put my phone on silent mode' is correct and clear. Do you check your messages at night?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, 'I put my phone on silent mode' is correct and clear. Do you check your messages at night?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Marco's question is simple; I'd like to disagree politely but don't know how to phrase it, so I'll try the help.",
+          "action": "answer",
+          "args": {
+            "text": "Not usually, but I see your point about messages. Although some people think it's rude to ignore friends, I would argue that sleep is more important than replying immediately. Is that sentence correct?"
+          },
+          "result": "ok",
+          "ms": 9783
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nIs social media good for society?\nMarco says\nYes, your sentence is correct: 'I would argue that sleep is more important than replying immediately' is clear. Do you think friendships suffer if you reply later?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nNow: Politely disagree with one point\nYes, your sentence is correct: 'I would argue that sleep is more important than replying immediately' is clear. Do you think friendships suffer if you reply later?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nYou · spoken\nI see your point, but I would argue that social media does more good than harm, although it depends on how people use it. For example, many students in my class use it to share notes and organise projects. Was my sentence correct?\nMarco · Debate club member\nYes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\nYou · spoken\nI don't think so. Whereas some people can easily fall asleep after using their phone, others are much more sensitive to the blue light. I'd say it depends on age too, because teenagers eventually stay up late scrolling, and they are not used to go to bed early.\nMarco · Debate club member\nThat is an interesting point about teenagers and late nights. Do you think phones should be turned off at night?\nMarco · Debate club member\nStaying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?\nYou · spoken\nUsually I don't answer straight away, because I'd rather get enough sleep. Although I sometimes check who wrote to me, I put my phone on silent mode. I think it depends on whether the message is urgent. Was my answer correct?\nMarco · Debate club member\nYes, 'I put my phone on silent mode' is correct and clear. Do you check your messages at night?\nYou · spoken\nNot usually, but I see your point about messages. Although some people think it's rude to ignore friends, I would argue that sleep is more important than replying immediately. Is that sentence correct?\nMarco · Debate club member\nYes, your sentence is correct: 'I would argue that sleep is more important than replying immediately' is clear. Do you think friendships suffer if you reply later?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, your sentence is correct: 'I would argue that sleep is more important than replying immediately' is clear. Do you think friendships suffer if you reply later?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I've practised enough, so I'll answer in my own words and then finish.",
+          "action": "answer",
+          "args": {
+            "text": "I don't think real friendships suffer, because true friends understand that people need to sleep. However, it depends on the situation. If a friend has a serious problem, I would reply immediately, whereas a casual joke can wait until the morning."
+          },
+          "result": "ok",
+          "ms": 8592
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nMarco · Debate club member\nIs social media good for society?\nMarco says\nThat is a fair point when a friend really needs you. Do you think it is the same for everyone, or does it depend on the friendship?\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nIs social media good for society?\nGive your opinion, one reason and one example, and politely respond to Marco.\nThat is a fair point when a friend really needs you. Do you think it is the same for everyone, or does it depend on the friendship?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMarco · Debate club member\nHonestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?\nYou · spoken\nI see your point, but I would argue that social media does more good than harm, although it depends on how people use it. For example, many students in my class use it to share notes and organise projects. Was my sentence correct?\nMarco · Debate club member\nYes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?\nYou · spoken\nI don't think so. Whereas some people can easily fall asleep after using their phone, others are much more sensitive to the blue light. I'd say it depends on age too, because teenagers eventually stay up late scrolling, and they are not used to go to bed early.\nMarco · Debate club member\nThat is an interesting point about teenagers and late nights. Do you think phones should be turned off at night?\nMarco · Debate club member\nStaying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?\nYou · spoken\nUsually I don't answer straight away, because I'd rather get enough sleep. Although I sometimes check who wrote to me, I put my phone on silent mode. I think it depends on whether the message is urgent. Was my answer correct?\nMarco · Debate club member\nYes, 'I put my phone on silent mode' is correct and clear. Do you check your messages at night?\nYou · spoken\nNot usually, but I see your point about messages. Although some people think it's rude to ignore friends, I would argue that sleep is more important than replying immediately. Is that sentence correct?\nMarco · Debate club member\nYes, your sentence is correct: 'I would argue that sleep is more important than replying immediately' is clear. Do you think friendships suffer if you reply later?\nYou · spoken\nI don't think real friendships suffer, because true friends understand that people need to sleep. However, it depends on the situation. If a friend has a serious problem, I would reply immediately, whereas a casual joke can wait until the morning.\nMarco · Debate club member\nThat is a fair point when a friend really needs you. Do you think it is the same for everyone, or does it depend on the friendship?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That is a fair point when a friend really needs you. Do you think it is the same for everyone, or does it depend on the friendship?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I managed several answers and used help; time to see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 15,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou wanted to say eventually\nIn English\noften\n'Eventually' means 'in the end'; here you mean 'regularly, many times'.\nTried again: “Usually I don't answer straight away, because I'd rather get enough sleep. Although I sometimes check who wrote to me, I put my phone on silent mode. I think it depends on whether ”\nYour mission\nChoose a fresh context for your next conversation.\n5 spoken · 0 written replies · 2 on your own · 3 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Try 'to a large extent' to sound more measured and balanced.”\nFrom this rehearsal\n“eventually”: often\n'Eventually' means 'in the end'; here you mean 'regularly, many times'.\nTried again: “Usually I don't answer straight away, because I'd rather get enough sleep. Although I sometimes check who wrote to me, I put my phone on silent mode. I think it depends on whether ”\nYour level:\nB2 · Comfortable\n· self-chosen\nNext topic:\nMock interview: my plans after school\nAnswer questions about your studies and future plans in full sentences, with reasons and examples.\n[button: Start talking]\nOr choose a situation [list: Is social media good for society? [plan-e6443e98] | Mock interview: my plans after school [plan-30fd9026] | Choosing a trip for our group [plan-2c2b646b] | A school environment project [plan-d6e6318f] | Asking about a summer course [plan-2ae2b4ee] | Can you say that again, please? [plan-63a9bec3] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed a few answers and got help with eventually, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Is social media good for society?",
+          "goal": "Give your opinion, one reason and one example, and politely respond to Marco.",
+          "partner": "Marco · Debate club member",
+          "band": "B2",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Honestly, I think social media connects people, but it may hurt our sleep and friendships. Where do you stand on it?"
+            },
+            {
+              "role": "learner",
+              "text": "I see your point, but I would argue that social media does more good than harm, although it depends on how people use it. For example, many students in my class use it to share notes and organise projects. Was my sentence correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, your sentence is correct: 'I would argue that social media does more good than harm' is clear. Do you think sleep is affected the same way for everyone?"
+            },
+            {
+              "role": "learner",
+              "text": "I don't think so. Whereas some people can easily fall asleep after using their phone, others are much more sensitive to the blue light. I'd say it depends on age too, because teenagers eventually stay up late scrolling, and they are not used to go to bed early.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "That is an interesting point about teenagers and late nights. Do you think phones should be turned off at night?"
+            },
+            {
+              "role": "partner",
+              "text": "Staying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?"
+            },
+            {
+              "role": "learner",
+              "text": "Usually I don't answer straight away, because I'd rather get enough sleep. Although I sometimes check who wrote to me, I put my phone on silent mode. I think it depends on whether the message is urgent. Was my answer correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, 'I put my phone on silent mode' is correct and clear. Do you check your messages at night?"
+            },
+            {
+              "role": "learner",
+              "text": "Not usually, but I see your point about messages. Although some people think it's rude to ignore friends, I would argue that sleep is more important than replying immediately. Is that sentence correct?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, your sentence is correct: 'I would argue that sleep is more important than replying immediately' is clear. Do you think friendships suffer if you reply later?"
+            },
+            {
+              "role": "learner",
+              "text": "I don't think real friendships suffer, because true friends understand that people need to sleep. However, it depends on the situation. If a friend has a serious problem, I would reply immediately, whereas a casual joke can wait until the morning.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "That is a fair point when a friend really needs you. Do you think it is the same for everyone, or does it depend on the friendship?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "c4c96afa-b5d1-4948-85e8-3c28b0c1e9f6:uat-13:moment",
+              "kind": "word",
+              "said": "eventually",
+              "better": "often",
+              "why": "'Eventually' means 'in the end'; here you mean 'regularly, many times'.",
+              "turnId": "c4c96afa-b5d1-4948-85e8-3c28b0c1e9f6:uat-13",
+              "at": 1792395171382,
+              "replay": {
+                "question": "Staying up late on your phone does affect many teens, I agree. When friends message you at night, what do you usually do?",
+                "turnId": "eebc0c2d-a40f-46d1-94c9-e7dfbff22a5a",
+                "reply": "Usually I don't answer straight away, because I'd rather get enough sleep. Although I sometimes check who wrote to me, I put my phone on silent mode. I think it depends on whether ",
+                "used": false
+              }
+            }
+          ],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "I see your point, but I would argue that social media does more good than harm, although it depends on how people use it. For example, many students in my class use it to share notes and organise projects. Was my sentence correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "I don't think so. Whereas some people can easily fall asleep after using their phone, others are much more sensitive to the blue light. I'd say it depends on age too, because teenagers eventually stay up late scrolling, and they are not used to go to bed early.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "eventually",
+                "better": "often",
+                "why": "'Eventually' means 'in the end'; here you mean 'regularly, many times'."
+              },
+              "shown": true
+            },
+            {
+              "turn": 6,
+              "n": 3,
+              "reply": "Usually I don't answer straight away, because I'd rather get enough sleep. Although I sometimes check who wrote to me, I put my phone on silent mode. I think it depends on whether the message is urgent. Was my answer correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 8,
+              "n": 4,
+              "reply": "Not usually, but I see your point about messages. Although some people think it's rude to ignore friends, I would argue that sleep is more important than replying immediately. Is that sentence correct?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 10,
+              "n": 5,
+              "reply": "I don't think real friendships suffer, because true friends understand that people need to sleep. However, it depends on the situation. If a friend has a serious problem, I would reply immediately, whereas a casual joke can wait until the morning.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I see your point, but I would argue that social media does more good than harm"
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I don't think so. Whereas some people can easily fall asleep after using their phone, others are much more sensitive to the blue light."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I don't think real friendships suffer, because true friends understand that people need to sleep."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 263503,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Cue gives a simplified question and a gloss; the B2 frame came on the third press",
+          "expected": "A B2 answer frame on the first help press, e.g. 'I'd like to study… because… although…'.",
+          "got": "'Said more simply: What do you want to do after school? Why?', then 'after school: when you finish school'. The frame 'I would like to study…' arrived only on the third press.",
+          "evidence": [
+            "#3 'Said more simply', #4 'What it means', #5 'A way to start I would like to study…'. Adéla pressed cue three times before she could answer.",
+            "cue prompt"
+          ],
+          "recurrence": 9
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Cue gives simplified question first; B2 frame arrives on press three",
+          "expected": "A B2 answer frame on first help press",
+          "got": "Press 1 'Said more simply', press 2 gloss of 'focus', press 3 'I agree partly, but…'",
+          "evidence": [
+            "#3 'I think social media is bad for focus and sleep', #4 'focus: being able to concentrate', #5 'A way to start I agree partly, but…'",
+            "cue prompt"
+          ],
+          "recurrence": 10
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Partner addresses itself as 'Ana' in its own turns",
+          "expected": "Partner speaks to the learner naturally",
+          "got": "'Do you use group chats too, Ana?' and 'Ana might say…' from Ana herself",
+          "evidence": [
+            "#13 'Do you use group chats too, Ana?'; #8 'Ana might say late-night scrolling is still the real problem.'",
+            "partner prompt"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Rule for the fix is a bare collocation statement, no rule or why",
+          "expected": "Named rule/collocation with a contrast, e.g. interested in + noun/-ing",
+          "got": "'interested' is followed by 'in' here, not 'about'.",
+          "evidence": [
+            "#11 moment note",
+            "moment prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Replay quote truncated and fix not tested",
+          "expected": "Replay shows the full reply and checks use of the fix",
+          "got": "Recap 'Tried again: ...discuss current' cut mid-sentence; replay used:false",
+          "evidence": [
+            "#14 'they also let us share news and discuss current'",
+            "recap builder"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement in J4; level fixtured to B2."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks or verdict notes in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#9 'eventually' → 'often', 'means in the end; here you mean regularly' is correct. Marco's 'Yes… correct' (#7, #13) are accurate. The missed 'not used to go' (#8) is a recall gap, not a wrong correction."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "Mostly opinion and speculation: 'Do you think sleep is affected the same way for everyone?' (#7), 'Do you think friendships suffer if you reply later?' (#13). 'Do you check your messages at night?' (#12) is simpler."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 topic list: social media, mock interview on plans, trip choice, school environment project and summer course all fit. 5 of the first 6 fit."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "She asked 'Was my sentence correct?' (#6) and got 'Yes, your sentence is correct… clear' (#7). Same at #12 and #13. Accurate, but only a quoted fragment is confirmed."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#5 she pressed 'Help me answer' and 'Choose a phrase' without leaving the scene. She used cue again at #7 and #10."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "She answered after help at #6, #8 and #11. The moment at #9 quotes her word exactly: 'You wanted to say eventually'. The help itself was weak: 'Said more simply' (#8) just repeated the question."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#15 replay: 'used':false. 'Try it again' (#10) re-asked Marco's next question. Her retry (#11) never used 'often' and the recap quote is cut: 'it depends on whether '. No evidence she improved."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#15 '2 on your own · 3 with help'. Evidence shows the supported flags true, true, false and the help turns marked supported. Replies #12 and #13 were unaided and counted as independent."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 5,
+            "below": 2,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, sensitive data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Replay does not test the fix; recap quote is cut mid-sentence",
+            "expected": "A fresh question that checks 'often', and the full retry quoted",
+            "got": "Replay used:false; recap 'Tried again' ends 'whether '",
+            "evidence": "#15 'it depends on whether ' ; moments[0].replay.used=false",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Replay asks a fresh question; recap quotes the complete retry and shows whether the fix was used.",
+            "code_hint": "recap builder / replay"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Cue gives a simplified question first; B2 frame is late and thin",
+            "expected": "A B2 opening frame on the first help press",
+            "got": "Press 1 'Said more simply', press 2 gloss of 'stand', then 'I think that…' as the phrase",
+            "evidence": "#3 'Said more simply', #4 'stand: what you think', #5 'I think that…'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "First help press offers a B2 frame such as 'I'd argue that… although…'.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Clear error 'not used to go' got no moment or coaching",
+            "expected": "Note: 'be used to + -ing': 'not used to going'",
+            "got": "Only 'eventually' flagged; 'not used to go to bed' passed silently and coaching is null",
+            "evidence": "#8 'they are not used to go to bed early'; facts.conversation.coaching null",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "When the cap allows one fix, held fixes appear on the recap.",
+            "code_hint": "moment prompt / LG-23 held fix"
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Marco's questions get stacked and one is dropped",
+            "expected": "One partner turn per learner reply",
+            "got": "Two consecutive partner turns: 'Do you think phones should be turned off at night?' then 'When friends message you at night…'",
+            "evidence": "#10 transcript shows both Marco turns",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Each learner reply gets exactly one partner reply.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Moment is exact and explains the false friend",
+            "expected": "Concrete correction that quotes her word",
+            "got": "'eventually' → 'often' with meaning contrast",
+            "evidence": "#9 'Eventually means in the end; here you mean regularly, many times.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep one exact quoted correction per moment with the meaning contrast.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Support honestly recorded as supported",
+            "expected": "Progress counts show supported vs independent",
+            "got": "'2 on your own · 3 with help'",
+            "evidence": "#15 recap line",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep supported replies out of independent evidence.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "low"
+        },
+        "voice": "The scene was on topic: Marco asked real opinion questions and the 'eventually' correction was exact. I'd use that. But help meant pressing three times for a simplified question and a gloss before I got 'I think that…', which is not B2. The retry didn't test anything: the recap cut my sentence off and the fix was never used. I also said 'not used to go to bed' and nothing flagged it, though that is exactly my kind of slip. Yes, I was told 'correct' twice, but I'd have to re-check everything myself. The 'with help' count is honest, which I like. I'd try again, but I wouldn't yet replace my tutor.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply', #4 gloss, #5 'I think that…'. Again several presses to get a frame.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-1",
+            "status": "recurs",
+            "evidence": "#3 'Said more simply: Social media connects people…', #4 'stand: what you think', frame only at #5.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-3",
+            "status": "not-seen",
+            "evidence": "Marco never names or addresses the learner by name in #7-#14.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-2",
+            "status": "not-seen",
+            "evidence": "#9 note gives a meaning contrast: 'Eventually means in the end; here you mean regularly'. This is not a bare statement.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-4",
+            "status": "recurs",
+            "evidence": "#15 'Tried again: … it depends on whether ' is cut off; replay used:false.",
+            "finding": 0
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #15 replay: 'used':false. 'Try it again' (#10) re-asked Marco's next question. Her retry (#11) never used 'often' and the recap quote is cut: 'it depends on whether '. No evidence she improved.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 8,
+      "fail": 0,
+      "ms": 103628
+    },
+    "character": {
+      "n": 15,
+      "fail": 0,
+      "ms": 159361
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 47372
+    }
+  }
+}

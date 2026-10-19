@@ -125,13 +125,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "Cue and phrase choice must relate to the partner's current question and change on each press.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
-    "recertify_evidence": "#3-#6 identical 'Try: I build a ___. It is ___.'",
-    "recurred_as": "LT-tomas-9-J4-3"
+    "recertify_evidence": "#2-#4 Help pressed 3 times, identical 'Try: I like to build. My favourite block is...'",
+    "recurred_as": "LT-tomas-9-J4-1"
   },
   {
     "id": "LT-adela-17-J4-1",
@@ -158,13 +158,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 10,
+    "recurrence": 11,
     "recurs": "2026-10-17-lt-swap-2/recert-1/LT-adela-17-J4-1",
     "suggested_acceptance": "The first cue offers a B2 frame tied to the current question.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
-    "recertify_evidence": "#3 'Said more simply: I think social media is bad for focus and sleep', frame only at #5.",
+    "recertify_evidence": "#3 'Said more simply: Social media connects people…', #4 'stand: what you think', frame only at #5.",
     "recurred_as": "LT-adela-17-J4-1"
   },
   {
@@ -225,14 +225,14 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 9,
     "recurs": "2026-10-14-lt/recert-6/LT-tomas-9-J4-2",
     "suggested_acceptance": "After a moment, the partner asks a fresh question that uses the coached word.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "#11-#12 never reached the replayed question."
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#12 fresh question given after the moment."
   },
   {
     "id": "LT-petra-38-J3-1",
@@ -292,13 +292,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "recurs": "2026-10-14-lt/recert-3/LT-viktor-67-J4-4",
     "suggested_acceptance": "Quiz prompt quotes the partner's current line and options answer it.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
-    "recertify_evidence": "#6 quiz line 'I had a test today' never appeared in the scene."
+    "recertify_evidence": "#11: quiz 'Which question asks about her day at school?' while Mia said 'I drew a cat. Do you draw?'.",
+    "recurred_as": "LT-viktor-67-J4-2"
   },
   {
     "id": "LT-oksana-34-J3-1",
@@ -786,13 +787,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "The coaching quotes the latest learner reply and gives a line that answers the clerk's last question.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
-    "recertify_evidence": "#10 coach quotes her turn-1 reply 'You said I want other room' while she was stuck on 'Is the room cold?' (#7-#9).",
-    "recurred_as": "LT-petra-38-J4-5"
+    "recertify_evidence": "#16 recap coaching quotes turn 1 'Can you help me please?', not the stuck point. The 'Ana understood' claim was not repeated.",
+    "recurred_as": "LT-petra-38-J4-4"
   },
   {
     "id": "LT-tomas-9-J3-2",
@@ -851,14 +852,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 10,
+    "recurrence": 11,
     "recurs": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-5",
     "suggested_acceptance": "Elementary profile shows only age-fit play and animal situations.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
     "recertify_evidence": "#1 list of 20 incl. 'A booking that is missing', 'The lost jacket'.",
-    "recurred_as": "LT-tomas-9-J4-4"
+    "recurred_as": "LT-tomas-9-J4-2"
   },
   {
     "id": "LT-tomas-9-J3-3",
@@ -1119,14 +1120,14 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "recurs": "2026-10-17-lt-swap-2/recert-1/LT-viktor-67-J4-4",
     "suggested_acceptance": "Repeated article/subject omissions get a note or held fix on the recap.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
-    "recertify_evidence": "rawMoments none for turns 1, 3, 5 apart from the article; same fix twice (#12, #16).",
-    "recurred_as": "LT-viktor-67-J4-4"
+    "recertify_evidence": "Five held fixes never shown as stops, coaching null; #19 'Red, small time' got no stop.",
+    "recurred_as": "LT-viktor-67-J4-5"
   },
   {
     "id": "LT-adela-17-J4-5",
@@ -1152,13 +1153,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 2,
     "suggested_acceptance": "The note names the structure ('be used to' + -ing) and why.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#11 ''interested' is followed by 'in' here, not 'about'.' — no rule named.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#9 note gives a meaning contrast: 'Eventually means in the end; here you mean regularly'. This is not a bare statement.",
     "recurred_as": "LT-adela-17-J4-2"
   },
   {
@@ -1316,12 +1317,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 3,
+    "recurrence": 4,
     "suggested_acceptance": "A second press gives a different level of help.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
-    "recertify_evidence": "'Try: How was school today? What did you do?' at #3, #4, #7, #10.",
+    "recertify_evidence": "#10, #12: 'Try: What did you do at school today?' after Mia's cat line.",
     "recurred_as": "LT-viktor-67-J4-1"
   },
   {

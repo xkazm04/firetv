@@ -246,9 +246,9 @@
     "recurrence": 4,
     "suggested_acceptance": "After supported practice, provide an explicit unaided attempt and verify improvement before treating the replay goal as achieved.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
-    "recertify_status": "recurs",
-    "recertify_evidence": "#6 quiz does not match Mia's line at #2.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
+    "recertify_status": "not-evaluable",
+    "recertify_evidence": "the journey ended character-stopped, so not seeing it proves nothing; judge: The quiz did not invent a question for Mia; it was off-scene but not misattributed (#5, #11).",
     "recurred_as": "LT-viktor-67-J4-2"
   },
   {
@@ -582,13 +582,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 9,
     "suggested_acceptance": "Offer an accessible replay and capture a fresh, improved answer without a cue before claiming this journey complete.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "#11-#12 never reached the replayed question.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#12 fresh question given after the moment.",
     "recurred_as": "LT-tomas-9-J4-2"
   },
   {

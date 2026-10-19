@@ -1,0 +1,543 @@
+{
+  "id": "2026-10-17-lt-swap-2/recert-8",
+  "started": "2026-10-19T07:30:17.145Z",
+  "cast": [
+    "adela-17",
+    "petra-38",
+    "tomas-9",
+    "viktor-67"
+  ],
+  "journeys": [
+    "J4"
+  ],
+  "recertify": null,
+  "pairs": {
+    "adela-17": [
+      "J4"
+    ],
+    "petra-38": [
+      "J4"
+    ],
+    "tomas-9": [
+      "J4"
+    ],
+    "viktor-67": [
+      "J4"
+    ]
+  },
+  "ledger": {
+    "prior": {
+      "adela-17": {
+        "J4": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-adela-17-J4-1",
+            "run": "2026-10-17-lt-swap-2/recert-6",
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Cue gives a simplified question and a gloss; the B2 frame came on the third press",
+            "expected": "A B2 answer frame on the first help press, e.g. 'I'd like to study… because… although…'.",
+            "got": "'Said more simply: What do you want to do after school? Why?', then 'after school: when you finish school'. The frame 'I would like to study…' arrived only on the third press.",
+            "evidence": [
+              "#3 'Said more simply', #4 'What it means', #5 'A way to start I would like to study…'. Adéla pressed cue three times before she could answer.",
+              "cue prompt"
+            ],
+            "recurrence": 9
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-1",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Cue gives simplified question first; B2 frame arrives on press three",
+            "expected": "A B2 answer frame on first help press",
+            "got": "Press 1 'Said more simply', press 2 gloss of 'focus', press 3 'I agree partly, but…'",
+            "evidence": [
+              "#3 'I think social media is bad for focus and sleep', #4 'focus: being able to concentrate', #5 'A way to start I agree partly, but…'",
+              "cue prompt"
+            ],
+            "recurrence": 10
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-3",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner addresses itself as 'Ana' in its own turns",
+            "expected": "Partner speaks to the learner naturally",
+            "got": "'Do you use group chats too, Ana?' and 'Ana might say…' from Ana herself",
+            "evidence": [
+              "#13 'Do you use group chats too, Ana?'; #8 'Ana might say late-night scrolling is still the real problem.'",
+              "partner prompt"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-2",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Rule for the fix is a bare collocation statement, no rule or why",
+            "expected": "Named rule/collocation with a contrast, e.g. interested in + noun/-ing",
+            "got": "'interested' is followed by 'in' here, not 'about'.",
+            "evidence": [
+              "#11 moment note",
+              "moment prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-adela-17-J4-4",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Replay quote truncated and fix not tested",
+            "expected": "Replay shows the full reply and checks use of the fix",
+            "got": "Recap 'Tried again: ...discuss current' cut mid-sentence; replay used:false",
+            "evidence": [
+              "#14 'they also let us share news and discuss current'",
+              "recap builder"
+            ],
+            "recurrence": 1
+          }
+        ]
+      },
+      "petra-38": {
+        "J4": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-1",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Ana ignores what the learner said and repeats 'Is the room cold?'",
+            "expected": "The partner responds to 'the room is not clean', not the scripted cold room.",
+            "got": "Ana asks 'Is the room cold?' at #7, again in the turn after #11, and 'Is the heater broken?' after #14.",
+            "evidence": [
+              "#7 'I am sorry to hear that. Is the room cold?' after 'The room is not clean'; conversation turn 'Okay, I can find you a new room. Is the room cold?'",
+              "partner prompt / scenario script"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-3",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Replay does not make her practise the coached phrase",
+            "expected": "Fresh question where she uses 'another room' and does better.",
+            "got": "#11 she repeats 'I want other room'; later 'A big room' without 'another'; replay used:false.",
+            "evidence": [
+              "#11 'I want leave the room today, please. I want other room.'",
+              "replay prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-4",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Clear learner errors got no moment or held fix",
+            "expected": "Fixes for 'want leave', 'smell bad', and the first 'other room'.",
+            "got": "One moment; heldFixes empty.",
+            "evidence": [
+              "rawMoments turns 1, 7, 9, 11, 13 kind none; #16 'the room is dirty and smell bad'",
+              "moment detection prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-5",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Coach note claims Ana understood, and quotes the first turn not the stuck point",
+            "expected": "Coaching tied to where she was stuck, truthful about Ana.",
+            "got": "'Ana understood the problem' while Ana asked about cold; quote from turn 1.",
+            "evidence": [
+              "#10 'Your complaint and request are clear, and Ana understood the problem.'",
+              "coach prompt"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-2",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Cues do not match the learner's real problem and are not used",
+            "expected": "Help that moves her sentence forward.",
+            "got": "'The room is very cold' and 'The heater does not work…' offered when she needs 'not clean'.",
+            "evidence": [
+              "#3 'Try: The room is very cold. Can you help, please?'; #9 'The heater does not work…'",
+              "cue ladder prompt"
+            ],
+            "recurrence": 1
+          }
+        ]
+      },
+      "tomas-9": {
+        "J4": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-1",
+            "run": "2026-10-17-lt-swap-2/recert-2",
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "No fresh question after the moment",
+            "expected": "After the fix, Ben asks a new question so he can answer better alone.",
+            "got": "He retyped the given fix, then Ben asked an unrelated question.",
+            "evidence": [
+              "#8 'Try I like creepers.'; #9 'You fixed like creepers'; #10 'Did you play with friends yesterday?'",
+              "moment replay flow"
+            ],
+            "recurrence": 9
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-1",
+            "run": "2026-10-17-lt-swap-2/recert-3",
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "No replay with a fresh question after the moment",
+            "expected": "After the coaching moment, a fresh question lets him retry 'the dog is wet' on his own.",
+            "got": "Only 'Back to the conversation'; the next question is unrelated and the session ends at the next turn.",
+            "evidence": [
+              "#5 'Back to the conversation'; #6 'What did he do next?'; #11 '0 on your own · 1 moment to keep'.",
+              "moment replay flow"
+            ],
+            "recurrence": 9
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-tomas-9-J4-2",
+            "run": "2026-10-17-lt-swap-2/recert-4",
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "No replay with a fresh question after the moment",
+            "expected": "After the 'small' moment, a new question lets him try the coached word alone.",
+            "got": "Only 'Back to the conversation'; next question is about having a dog.",
+            "evidence": [
+              "#9 'Back to the conversation'; #10 'Thank you! Do you have a dog?'; #11 still Czech",
+              "moment replay flow"
+            ],
+            "recurrence": 9
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J4-1",
+            "run": "2026-10-17-lt-swap-2/recert-6",
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "No fresh question after the moment",
+            "expected": "After the coaching moment a fresh question lets him retry 'likes' alone.",
+            "got": "Back to the conversation goes to an unrelated question and the mission ends.",
+            "evidence": [
+              "#16 'Back to the conversation'; #17 'Where does he sleep at night?' with 'Mission done'.",
+              "moment replay flow"
+            ],
+            "recurrence": 8
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-2",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Coaching note abstract and drops what he said",
+            "expected": "Tiny child wording quoting 'I like creeper. Dog.'",
+            "got": "'with an s, the usual way to say it'; the quote omits 'Dog.'",
+            "evidence": [
+              "#11 'You said I like creeper.' vs #8 'I like creeper. Dog.'",
+              "moment prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-1",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Replay with fresh question never exercised",
+            "expected": "After coaching, a fresh question lets him retry alone.",
+            "got": "Finished at coach screen; no retry and no better answer shown.",
+            "evidence": [
+              "#11 'Replay the moment' / 'Finish for today'; he chose finish; #12 '0 on your own'.",
+              "moment replay flow"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-3",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Cue generic and help loop repeated",
+            "expected": "Cue that moves him on; Help pressed once is enough.",
+            "got": "Help pressed 4 times with the same 'Try: I build a ___. It is ___.'",
+            "evidence": [
+              "#3-#6 identical cue.",
+              "cue builder"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-4",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Situation list long and mixed",
+            "expected": "Short play/animal list.",
+            "got": "20 entries incl. booking, lost jacket, group project.",
+            "evidence": [
+              "#1 list.",
+              "situation list builder"
+            ],
+            "recurrence": 10
+          }
+        ]
+      },
+      "viktor-67": {
+        "J4": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-viktor-67-J4-1",
+            "run": "2026-10-17-lt-swap-2/recert-4",
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Phrase quiz shows a line Leo never said",
+            "expected": "Quiz options respond to Leo's actual line 'Hi, Grandpa! Want to see my drawing?'",
+            "got": "Quiz: 'Leo says: I had a good day. What is a good next question?' with 'Where is my cup?' as distractor.",
+            "evidence": [
+              "#7 vs #6: Leo's visible line is the drawing question; the quiz invents another.",
+              "recognition practice prompt"
+            ],
+            "recurrence": 7
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-viktor-67-J4-2",
+            "run": "2026-10-17-lt-swap-2/recert-6",
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Phrase quiz asks a question Leo never asked",
+            "expected": "Quiz options answer Leo's actual line \"what did you do today?\"",
+            "got": "The quiz asks \"Grandpa, what is the weather today?\" with \"I am seven years old.\" as the distractor.",
+            "evidence": [
+              "#5 \"Leo asks: Grandpa, what is the weather today? Which answer fits?\" while #2 Leo said \"what did you do today?\"",
+              "recognition practice prompt"
+            ],
+            "recurrence": 4
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-1",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Help cue repeats the same irrelevant line",
+            "expected": "A usable answer phrase, changing with the question",
+            "got": "'Try: How was school today? What did you do?' shown four times, even when Mia asked 'What did you do at school?'",
+            "evidence": [
+              "#3, #4, #7, #10",
+              "cue/support cache"
+            ],
+            "recurrence": 3
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-2",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Past-tense and 'play' questions above A1",
+            "expected": "Short present-tense questions with known words",
+            "got": "'What did you do at school?', 'Did you play at school?'; Viktor 'I don't understand \"play\"'",
+            "evidence": [
+              "#9, #11",
+              "partner prompt"
+            ],
+            "recurrence": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-3",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Replay adds no improvement; same slip returns",
+            "expected": "The learner answers better after the fix",
+            "got": "After fixing 'a garden' he said 'I have garden' again at #15 and #18. Moment 2 only repeated the first.",
+            "evidence": [
+              "#14, #15, #16, #18",
+              "moment replay flow"
+            ],
+            "recurrence": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-4",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "Clear errors missed; same fix twice",
+            "expected": "Moments on different useful gaps",
+            "got": "rawMoments 'none' for turns 1, 3, 5 apart from the article; 'Ty' and 'Garden at school?' unremarked; 2 stops for one slip.",
+            "evidence": [
+              "#8, #10, #12, #16",
+              "moment selection"
+            ],
+            "recurrence": 7
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-viktor-67-J4-5",
+            "run": "2026-10-17-lt-swap-2/recert-7",
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Phrase quiz is not about the scene",
+            "expected": "Options answer Mia's real line",
+            "got": "Quiz invents 'I had a test today' (past tense) while the scene asks how school was",
+            "evidence": [
+              "#6",
+              "recognition practice prompt"
+            ],
+            "recurrence": 4
+          }
+        ]
+      }
+    }
+  },
+  "instrument": {
+    "model": "claude-cli/sonnet",
+    "judgeScreenCap": 8000,
+    "roles": {
+      "tutor": {
+        "engine": "claude-cli",
+        "model": "per request (fast haiku, best sonnet)"
+      },
+      "character": {
+        "engine": "claude-cli",
+        "model": "best",
+        "thinking": false,
+        "resolved": "sonnet"
+      },
+      "judge": {
+        "engine": "claude-cli",
+        "model": "best",
+        "thinking": true,
+        "resolved": "sonnet"
+      }
+    },
+    "driver": {
+      "ledger.cjs": "b4b2984e047e390d",
+      "linga-text.cjs": "558a29f08b0bf759",
+      "metrics.cjs": "5233f96500b831de",
+      "product.cjs": "31591b456d8e545d",
+      "raw-moments.cjs": "f92b9670734792c7",
+      "recertify.cjs": "7a7283f62be42c28",
+      "surface.cjs": "e6927e5c31407596",
+      "verdict.cjs": "f4a65c98ca6f4468"
+    }
+  },
+  "product": {
+    "commit": "737357e77da7ac5105b770bd3d999fea33e62050",
+    "dirty": false,
+    "files": {
+      "desk/src/english/LingaKeys.tsx": "9b2d9b746a9809917e92fbccf71255bcfb8054e0",
+      "desk/src/english/LingaPhone.tsx": "3ef908246bea885d3e9211e92b53806eb3bff59d",
+      "desk/src/english/LingaTV.tsx": "86e0404cc82358102ce4ab57626205eb68ab8ec8",
+      "desk/src/english/LostPicture.tsx": "0018857a24a6d2e6bd08e08719bfc6bab2087c3b",
+      "desk/src/english/OpenDoor.tsx": "1aded4f3f3190dbbecb691b36d2b9957347ea0a3",
+      "desk/src/english/ReplyBox.tsx": "ffa9f13543462e740f39f090dd60fdf173d7f475",
+      "desk/src/english/art/Booking.tsx": "a688608b52093e8e8a950c1f9346bfa0f87f2d1a",
+      "desk/src/english/art/Cafe.tsx": "0fac41c88940c0f2af3f39ce0f9a8a4acc1c113b",
+      "desk/src/english/art/Classroom.tsx": "09bf43a575b0532b383ecedef8b2b0d023e4227b",
+      "desk/src/english/art/Corridor.tsx": "fb7839e3ba87276c3df6bb8b7ac0f7f2dea76c62",
+      "desk/src/english/art/Handover.tsx": "ab03cd5d01ae207135fa249ca364c39ca3fb76b0",
+      "desk/src/english/art/Interview.tsx": "956b8b4b8c44e382cefd060ed328c6384c6a8691",
+      "desk/src/english/art/LostThing.tsx": "fffb458186604a8bbb989ed7d80b947f64a2b0c0",
+      "desk/src/english/art/Meet.tsx": "642c841a66a57b8692d67f90b7ec9e67d806201c",
+      "desk/src/english/art/Person.tsx": "31c5aaf00e492cee0d2723561070763a89e0f5cb",
+      "desk/src/english/art/Room.tsx": "6844e3c10c9f279150b214d9c4c0cdae8b6ea0f0",
+      "desk/src/english/art/Rover.tsx": "9753b0a6ebeaaf27340335f9db450b2f7e69660d",
+      "desk/src/english/art/States.tsx": "d5418d994c45cbd5ebc171b99aa3d6fe6e5b01c7",
+      "desk/src/english/art/Team.tsx": "cfbec13235666e8d73afd2e1fdb68f331c460f07",
+      "desk/src/english/art/Weekend.tsx": "b4abe95e66dcc3c3bcd1c5a713a2a2df057c7c5f",
+      "desk/src/english/art/index.tsx": "492f0bfb1f8bfdf4ef257abe18ea4f0ff222b239",
+      "desk/src/english/art/palette.ts": "c3ecc41432e12651e01e86b46ad58c2b703f13fa",
+      "desk/src/english/useEnglish.ts": "f9dd56e1e450383907e8fc6073e4cdb0ca69f1f6",
+      "desk/src/english/useEnglishAudio.ts": "f7814905db87fc40b27a6e450c302ee67e0575d1",
+      "desk/src/lib/dataDir.ts": "752006b3cab0bd36f659c666c802e1d56890a599",
+      "desk/src/lib/desk/failure.ts": "2358373db21e37784c7e5331517e8962a9738f47",
+      "desk/src/lib/desk/verify.ts": "03dcb2226c27f574c9ca23551fa0fbfca6a875aa",
+      "desk/src/lib/engines/call.ts": "7a442d864384e306c7a8e22bbba8a309aa29deb4",
+      "desk/src/lib/engines/codex.ts": "2c8f1b6e7b1c1ac8241d0e9c397ffd567f355e81",
+      "desk/src/lib/engines/meter.ts": "0df70d85d56a92b3cbf0ba826c933c24b180d397",
+      "desk/src/lib/engines/prices.ts": "63686fb6e8fc3d55e467777c8014a1fd75207fdd",
+      "desk/src/lib/engines/registry.ts": "cdecf946f973700954588e82aa9331f4b9738ec0",
+      "desk/src/lib/engines/shape.ts": "bf50bfc979c4283097cbc9278f7746fb77eb9e2e",
+      "desk/src/lib/engines/text.ts": "d01954f97d6f198302e29307b5a305ba9fb2a5bd",
+      "desk/src/lib/engines/types.ts": "27f58d2f42826e64c0171029a01e4671a7ad6701",
+      "desk/src/lib/english/activity.ts": "e735f42cd890c90dca9b1a88af0a7696c5ede258",
+      "desk/src/lib/english/cert.ts": "4d621ef7ff422fa8b9a4f10c2be9aa4375ca427b",
+      "desk/src/lib/english/check.ts": "34ccdb9cc9b4a24564e3e7d02f45cfe246ba28e3",
+      "desk/src/lib/english/conversation.ts": "73c4aa3b6d0e4eee9d7b6b11f05940835227e942",
+      "desk/src/lib/english/credit.ts": "c2c108b33e01860fbe873148a3b4da8aeeec4a4e",
+      "desk/src/lib/english/curriculum.ts": "4550144b755580709cf4ed8c4aeb36930adcb1b9",
+      "desk/src/lib/english/duet.ts": "808c413adad40ae6ad691a8b521944587a4d0475",
+      "desk/src/lib/english/ease.ts": "56b8b9c5c86324dba5382c263909933a761c9d92",
+      "desk/src/lib/english/errors.ts": "f66cf4c0ced8f59715670d3e9cb8e2eb8ff1f3f0",
+      "desk/src/lib/english/gate.ts": "652b576d3c75e806c4c59daa6458b5ca585bdf2b",
+      "desk/src/lib/english/help.ts": "18977e6d58f1ee31f14d79e06bcdbd7397d52639",
+      "desk/src/lib/english/line.ts": "1346e9dcf213bfc171f9b925537c2bd0ff27f814",
+      "desk/src/lib/english/lostfound.ts": "71be11e999ec992888fde17cb91df97364692358",
+      "desk/src/lib/english/mission.ts": "0fd2b74e98a9043719f5266e422e7c765a59eb66",
+      "desk/src/lib/english/notes.ts": "dfd127239481a51357b528d7c870df5fc894acf3",
+      "desk/src/lib/english/own.ts": "0efb48403b64c2825e51bb98233abb3a972e49cb",
+      "desk/src/lib/english/pitch.ts": "436719b29c377ae318facfa3de8c54522b3f6bec",
+      "desk/src/lib/english/placement.ts": "da0de41145fb26fd6d793321e7b9fba59ff26513",
+      "desk/src/lib/english/repair.ts": "caf5085e8339d67c84e429070957f9608fd00beb",
+      "desk/src/lib/english/replay.ts": "dbbefc569231cf2115852ad119ba5ff51abe669a",
+      "desk/src/lib/english/review.ts": "26b59a9a966545c2677a395f4d13dde2148e0f8f",
+      "desk/src/lib/english/rules.ts": "211af49bea48497a3a965f8b5158b25dd0e0839e",
+      "desk/src/lib/english/slip.ts": "717ae10298d5a4f7910f8905aeee808d73e454ff",
+      "desk/src/lib/english/speaking.ts": "6d1c0438126bdfe9e6f96c876b0d53e4867560a5",
+      "desk/src/lib/english/take.ts": "7cfbcd8c352fe1d965a7e2755b96f4836f7e5080",
+      "desk/src/lib/english/turn.ts": "a6b200353127addbf400d11592411ca2a4f911f7",
+      "desk/src/lib/english/types.ts": "32e5cda1e153e9016f19759235f0ee3e746f0708",
+      "desk/src/lib/english/view.ts": "297c9c082272a2e1a164b3606b27fca340ae0619",
+      "desk/src/lib/library/calculus1.spine.ts": "d7449c59289afa9cce3b6f57a6b21e8e2e880667",
+      "desk/src/lib/library/calculus2.spine.ts": "5ce6725ff95139c63711a4e817f9a24db436216b",
+      "desk/src/lib/library/gcse.ts": "b7d60256697d44c6a5596befcf6ec5522299dd8e",
+      "desk/src/lib/library/lessons.data.ts": "5d1e2b582ab4fd19108e936142f8a8556fa75edb",
+      "desk/src/lib/library/paths.ts": "b73617bf0f1644401e2ac327d4df120fbab8f22f",
+      "desk/src/lib/library/syllabus.ts": "7e9f1c8494ef1667c8ba5dd117555976212fbfc6",
+      "desk/src/lib/library/watched.ts": "986f5a13d31e05e3b54095eb2a21def95b230e99",
+      "desk/src/lib/library/worked.ts": "0ae878d44c4d618c2c2abd0727e52d8b7a776062",
+      "desk/src/lib/rules/calc-expr.ts": "23ad09d1f197f21bdd67f36347bd6fe604cac55e",
+      "desk/src/lib/rules/calc-read.ts": "dfc7d704eda1848918f0d91e674f3c93e57281ba",
+      "desk/src/lib/rules/calc-word.ts": "cbb69c2853c7dca1fe604d40e9be86fb79b6a9b2",
+      "desk/src/lib/rules/calc.ts": "3a698f4cd8c9c39cf56407024817219b5473a847",
+      "desk/src/lib/rules/calc2.ts": "0d14f2fb1c96b8229c8cabc8388809e5033285c7",
+      "desk/src/lib/rules/chain.ts": "81c71cbcf0c41ef5957711c18aa121859b88f498",
+      "desk/src/lib/rules/collect.ts": "eeb866587b64fc356d0bdcf7d962c8a28cc20a13",
+      "desk/src/lib/rules/digest.ts": "c70a39b2854059e313cacc37d8677913f1136eff",
+      "desk/src/lib/rules/english.ts": "751124253b89de3d4dfdf3e0eafe909908fbc64c",
+      "desk/src/lib/rules/essay.ts": "42ae985c5fcbce09b696ac8d6312057579a66e67",
+      "desk/src/lib/rules/fault.ts": "34baf915321f2bf1d4934276cdbea66d16d209d5",
+      "desk/src/lib/rules/kinds.ts": "0f63e252666723ebcf9f7fb5cbeffeab75f80f87",
+      "desk/src/lib/rules/marks.ts": "f2b3be8e621739ae0c4af1ff11e9b4604ea31c47",
+      "desk/src/lib/rules/maths.ts": "63438b7b3ca21038bb10bff879062218344f8ce4",
+      "desk/src/lib/rules/maturita.ts": "4fa443c00e3b035fe0d7df82db692b8ff0f497e2",
+      "desk/src/lib/rules/mode.ts": "d6209deff051e588c665b2b333df832b644c7262",
+      "desk/src/lib/rules/numberWords.ts": "fdf0752fd6b9b1160c73238734356f641a920915",
+      "desk/src/lib/rules/recovery.ts": "905b1c086ff71ef3da38d02dc3e525e41c070b00",
+      "desk/src/lib/rules/school.ts": "8ec68a725b4c99245c10c552ed788ca0d385eb36",
+      "desk/src/lib/rules/slips.ts": "71b2bd3de32196b6d75c19b20aedfc8224a03ca6",
+      "desk/src/lib/rules/taskText.ts": "c1215ad46aa12b2cf6622718dc8e35a36613930a",
+      "desk/src/lib/rules/week.ts": "6e6b5595a11b08f0c045c439a27c2aa5b4012141",
+      "desk/src/lib/session/lan.ts": "80949328e965d9aff1ff72902956df18a883d76f",
+      "desk/src/lib/session/learners.ts": "162bf9e249fd30954feee2642d2299e62b1d45c4",
+      "desk/src/lib/session/store.ts": "5329afd710248216fb4418e04c30f3d534fa9984",
+      "desk/src/maths/typeset.ts": "6013570697ef37df6b5cc81841a311377ff2720c",
+      "desk/src/tv/collection.ts": "c5c8bde7103907de49379eb94ae3f1fb7a269d77",
+      "desk/src/tv/keys.ts": "23988bbc9d1ac8ccecbdf3bb2a654c3807247e0d",
+      "desk/src/tv/landingRows.ts": "0d0caa089907a964bb706f6ed6542d27ea6659a0",
+      "desk/src/tv/mathsRows.ts": "8fb3ddb80a888f5a7336a4ce214076e75cdff46a",
+      "desk/src/tv/paperRows.ts": "39c31815f060b64b2813f81b633c5629b310eb9a",
+      "desk/src/tv/prepareRows.ts": "0fe1f9cc9a488ce141bc010a0d8aa479a744e650",
+      "desk/src/tv/profileRows.ts": "6eb86bfd8a9c314c974cfdbdb38c91018fa54c60",
+      "desk/src/tv/recapRows.ts": "981bdede6f677a487b15fb49f4e4429de4eb5f8b",
+      "desk/src/tv/sheetRows.ts": "928c549331d7f8b6aa6b74f9efddc9328c4017df",
+      "desk/src/tv/writingRows.ts": "d999863a0002ef2ce721590f4c9ecc0340d9aa50"
+    }
+  }
+}

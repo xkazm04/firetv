@@ -1,0 +1,1104 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nA1First words · self-chosen\nTell a friend about Minecraft\nYour mission\nSay what you like to build and do in Minecraft, using I like and I can.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nTell a friend about Minecraft\nSay what you like to build and do in Minecraft, using I like and I can.\n[button: Start talking]\nOr choose a situation [list: Tell a friend about Minecraft [plan-498e6904] | My dog and my animals [plan-e0126680] | Join a football game [plan-8a79277b] | Tell a funny thing [plan-58fc9293] | Say it again, please [plan-0ef72762] | Ask a friend for help [plan-97668d2b] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Minecraft! To je moje, jdu na to.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7007
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nWhat do you make?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Mia one thing you like to make\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Tell Mia one thing you like to make\nWhat do you make?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you make?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím co říct, potřebuju pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nWhat do you make?\nA little support\nTry: I like to build. My favourite block is...\nNowTell Mia one thing you like to make\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Tell Mia one thing you like to make\nWhat do you make?\nA little support\nTry: I like to build. My favourite block is...\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you make?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říct... I need help to answer Mia.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nWhat do you make?\nA little support\nTry: I like to build. My favourite block is...\nNowTell Mia one thing you like to make\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Tell Mia one thing you like to make\nWhat do you make?\nA little support\nTry: I like to build. My favourite block is...\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you make?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím co říct, zkusím pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nWhat do you make?\nA little support\nTry: I like to build. My favourite block is...\nNowTell Mia one thing you like to make\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Tell Mia one thing you like to make\nWhat do you make?\nA little support\nTry: I like to build. My favourite block is...\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you make?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říct. Zkusím znovu pomoc.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nA little support · recognition practice\nMia asks: What do you like in Minecraft? Which answer fits?\n01\nI like to build houses.\n02\nYes, I am ten.\nA little support\nTry: I like to build. My favourite block is...\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Tell Mia one thing you like to make\nWhat do you make?\nA little support\nTry: I like to build. My favourite block is...\nMia asks: What do you like in Minecraft? Which answer fits?\n[button: I like to build houses.] [button: Yes, I am ten.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you make?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know \"I like\" and build, so the first one looks right.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nWhat do you make?\nA little support\nNow use the idea in your own reply on the phone.\nNowTell Mia one thing you like to make\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Tell Mia one thing you like to make\nWhat do you make?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you make?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Nevím, co říct... I like Minecraft? Zkusím to.",
+          "action": "answer",
+          "args": {
+            "text": "I like Minecraft. Creeper."
+          },
+          "result": "ok",
+          "ms": 4650
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nCreepers are scary! What do you build?\nYour turn\nAnswer on your phone: speak or type.\nNowTell Mia one thing you like to make\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Tell Mia one thing you like to make\nCreepers are scary! What do you build?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\nYou · spoken\nI like Minecraft. Creeper.\nMia · Friend from the game club\nCreepers are scary! What do you build?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Creepers are scary! What do you build?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím jak říct, co stavím. Zkusím pomoc.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nCreepers are scary! What do you build?\nSaid more simply\nWhat do you make?\nNowTell Mia one thing you like to make\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Tell Mia one thing you like to make\nCreepers are scary! What do you build?\nSaid more simply\nWhat do you make?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\nYou · spoken\nI like Minecraft. Creeper.\nMia · Friend from the game club\nCreepers are scary! What do you build?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Creepers are scary! What do you build?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, co je build... I need help with the sentence.",
+          "action": "sentence-help",
+          "args": {},
+          "result": "not-offered",
+          "ms": 0
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nCreepers are scary! What do you build?\nSaid more simply\nWhat do you make?\nNowTell Mia one thing you like to make\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Tell Mia one thing you like to make\nCreepers are scary! What do you build?\nSaid more simply\nWhat do you make?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\nYou · spoken\nI like Minecraft. Creeper.\nMia · Friend from the game club\nCreepers are scary! What do you build?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Creepers are scary! What do you build?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Umm, I know Minecraft... I can say I like something, I'll try a simple thing.",
+          "action": "answer",
+          "args": {
+            "text": "I like sword. Já nevím... I like house."
+          },
+          "result": "ok",
+          "ms": 7923
+        },
+        {
+          "n": 11,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nA moment\nYou wanted to say Já nevím...\nIn English\nI don't know\nThis means you do not know something in English.\nA word for this scene\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nA word for this scene\nYou wanted to say “Já nevím...”\nIn English: “I don't know”\nThis means you do not know something in English.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Aha, \"I don't know\" - now I can say it and go on.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 6965
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nNice! Where are the diamonds in the game?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing you can do in the game\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Say one thing you can do in the game\nNice! Where are the diamonds in the game?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\nYou · spoken\nI like Minecraft. Creeper.\nMia · Friend from the game club\nCreepers are scary! What do you build?\nYou · spoken\nI like sword. Já nevím... I like house.\nMia · Friend from the game club\nNice, a house! Is it big?\nMia · Friend from the game club\nNice! Where are the diamonds in the game?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice! Where are the diamonds in the game?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Nevím, co je diamonds... I want to try saying something I can do.",
+          "action": "answer",
+          "args": {
+            "text": "I like diamond. I can... jé, nevím. I like Minecraft."
+          },
+          "result": "ok",
+          "ms": 10343
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nShiny diamonds! Can you find them?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing you can do in the game\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Say one thing you can do in the game\nShiny diamonds! Can you find them?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\nYou · spoken\nI like Minecraft. Creeper.\nMia · Friend from the game club\nCreepers are scary! What do you build?\nYou · spoken\nI like sword. Já nevím... I like house.\nMia · Friend from the game club\nNice, a house! Is it big?\nMia · Friend from the game club\nNice! Where are the diamonds in the game?\nYou · spoken\nI like diamond. I can... jé, nevím. I like Minecraft.\nMia · Friend from the game club\nShiny diamonds! Can you find them?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Shiny diamonds! Can you find them?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Zase nevím, co říct... zkusím jednoduchou větu, co znám.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. I like diamond. Já nevím... I like dog."
+          },
+          "result": "ok",
+          "ms": 16664
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nDo you like dogs?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing you can do in the game\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Say one thing you can do in the game\nDo you like dogs?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\nYou · spoken\nI like Minecraft. Creeper.\nMia · Friend from the game club\nCreepers are scary! What do you build?\nYou · spoken\nI like sword. Já nevím... I like house.\nMia · Friend from the game club\nNice, a house! Is it big?\nMia · Friend from the game club\nNice! Where are the diamonds in the game?\nYou · spoken\nI like diamond. I can... jé, nevím. I like Minecraft.\nMia · Friend from the game club\nShiny diamonds! Can you find them?\nYou · spoken\nYes. I like diamond. Já nevím... I like dog.\nMia · Friend from the game club\nDo you like dogs?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Do you like dogs?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Dogs! I know this one, yes I like dogs.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. I like dog. I like dog Minecraft."
+          },
+          "result": "ok",
+          "ms": 9456
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nNice! Is your dog big?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing you can do in the game\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Say one thing you can do in the game\nNice! Is your dog big?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\nYou · spoken\nI like Minecraft. Creeper.\nMia · Friend from the game club\nCreepers are scary! What do you build?\nYou · spoken\nI like sword. Já nevím... I like house.\nMia · Friend from the game club\nNice, a house! Is it big?\nMia · Friend from the game club\nNice! Where are the diamonds in the game?\nYou · spoken\nI like diamond. I can... jé, nevím. I like Minecraft.\nMia · Friend from the game club\nShiny diamonds! Can you find them?\nYou · spoken\nYes. I like diamond. Já nevím... I like dog.\nMia · Friend from the game club\nDo you like dogs?\nYou · spoken\nYes. I like dog. I like dog Minecraft.\nMia · Friend from the game club\nNice! Is your dog big?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice! Is your dog big?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Jo, I have a dog! Big, I think. I'll say it simply.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Dog big. I like dog."
+          },
+          "result": "ok",
+          "ms": 8526
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nBig dog! What is your dog's name?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing you can do in the game\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Say one thing you can do in the game\nBig dog! What is your dog's name?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\nYou · spoken\nI like Minecraft. Creeper.\nMia · Friend from the game club\nCreepers are scary! What do you build?\nYou · spoken\nI like sword. Já nevím... I like house.\nMia · Friend from the game club\nNice, a house! Is it big?\nMia · Friend from the game club\nNice! Where are the diamonds in the game?\nYou · spoken\nI like diamond. I can... jé, nevím. I like Minecraft.\nMia · Friend from the game club\nShiny diamonds! Can you find them?\nYou · spoken\nYes. I like diamond. Já nevím... I like dog.\nMia · Friend from the game club\nDo you like dogs?\nYou · spoken\nYes. I like dog. I like dog Minecraft.\nMia · Friend from the game club\nNice! Is your dog big?\nYou · spoken\nYes. Dog big. I like dog.\nMia · Friend from the game club\nBig dog! What is your dog's name?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Big dog! What is your dog's name?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Jméno psa... nevím, ale zkusím říct Rex.",
+          "action": "answer",
+          "args": {
+            "text": "Rex. My dog Rex. I like Rex."
+          },
+          "result": "ok",
+          "ms": 6546
+        },
+        {
+          "n": 17,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nGreat name! Does Rex like football?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing you can do in the game\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Say one thing you can do in the game\nGreat name! Does Rex like football?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\nYou · spoken\nI like Minecraft. Creeper.\nMia · Friend from the game club\nCreepers are scary! What do you build?\nYou · spoken\nI like sword. Já nevím... I like house.\nMia · Friend from the game club\nNice, a house! Is it big?\nMia · Friend from the game club\nNice! Where are the diamonds in the game?\nYou · spoken\nI like diamond. I can... jé, nevím. I like Minecraft.\nMia · Friend from the game club\nShiny diamonds! Can you find them?\nYou · spoken\nYes. I like diamond. Já nevím... I like dog.\nMia · Friend from the game club\nDo you like dogs?\nYou · spoken\nYes. I like dog. I like dog Minecraft.\nMia · Friend from the game club\nNice! Is your dog big?\nYou · spoken\nYes. Dog big. I like dog.\nMia · Friend from the game club\nBig dog! What is your dog's name?\nYou · spoken\nRex. My dog Rex. I like Rex.\nMia · Friend from the game club\nGreat name! Does Rex like football?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Great name! Does Rex like football?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Football! I know that. Rex likes football, yes.",
+          "action": "answer",
+          "args": {
+            "text": "Yes. Rex like football. I like football."
+          },
+          "result": "ok",
+          "ms": 9181
+        },
+        {
+          "n": 18,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nTomáš\nMia · Friend from the game club\nTell Mia about your Minecraft world\nMia says\nNice! Does Rex play Minecraft too?\nYour turn\nAnswer on your phone: speak or type.\nNowSay one thing you can do in the game\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nTell Mia about your Minecraft world\nSay what you like to make in Minecraft, using I like and I can.\nNow: Say one thing you can do in the game\nNice! Does Rex play Minecraft too?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMia · Friend from the game club\nWhat do you make?\nYou · spoken\nI like Minecraft. Creeper.\nMia · Friend from the game club\nCreepers are scary! What do you build?\nYou · spoken\nI like sword. Já nevím... I like house.\nMia · Friend from the game club\nNice, a house! Is it big?\nMia · Friend from the game club\nNice! Where are the diamonds in the game?\nYou · spoken\nI like diamond. I can... jé, nevím. I like Minecraft.\nMia · Friend from the game club\nShiny diamonds! Can you find them?\nYou · spoken\nYes. I like diamond. Já nevím... I like dog.\nMia · Friend from the game club\nDo you like dogs?\nYou · spoken\nYes. I like dog. I like dog Minecraft.\nMia · Friend from the game club\nNice! Is your dog big?\nYou · spoken\nYes. Dog big. I like dog.\nMia · Friend from the game club\nBig dog! What is your dog's name?\nYou · spoken\nRex. My dog Rex. I like Rex.\nMia · Friend from the game club\nGreat name! Does Rex like football?\nYou · spoken\nYes. Rex like football. I like football.\nMia · Friend from the game club\nNice! Does Rex play Minecraft too?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice! Does Rex play Minecraft too?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Jsem unavený, ale zvládl jsem to, chci skončit.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 19,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nTomáš\nA way into English\nYour rehearsal\nYou wanted to say Já nevím...\nIn English\nI don't know\nThis means you do not know something in English.\nTried again: “I like diamond. I can... jé, nevím. I like Minecraft.”\nYour mission\nChoose a fresh context for your next conversation.\n8 spoken · 0 written replies · 6 on your own · 2 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Tomáš\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“I like to build houses.”\nFrom this rehearsal\n“Já nevím...”: I don't know\nThis means you do not know something in English.\nTried again: “I like diamond. I can... jé, nevím. I like Minecraft.”\nSaved for the end\n“I like diamond” → “I like diamonds”\nUse a plural or 'a' before this noun.\n“Já nevím”: I don't know\nJá nevím means I don't know in Czech; say I don't know in English.\n“I like dog” → “I like dogs”\nDog needs an s here, because you mean more than one dog.\n“Rex like football” → “Rex likes football”\nOne friend, like Rex, needs the s ending: likes.\nYour level:\nA1 · First words\n· self-chosen\nNext topic:\nMy dog and my animals\nTell what your dog or animal does each day, in order, using first, then and after.\n[button: Start talking]\nOr choose a situation [list: Tell a friend about Minecraft [plan-498e6904] | My dog and my animals [plan-e0126680] | Join a football game [plan-8a79277b] | Tell a funny thing [plan-58fc9293] | Say it again, please [plan-0ef72762] | Ask a friend for help [plan-97668d2b] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Zvládl jsem to, stačilo, chci už skončit.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Tell Mia about your Minecraft world",
+          "goal": "Say what you like to make in Minecraft, using I like and I can.",
+          "partner": "Mia · Friend from the game club",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "What do you make?"
+            },
+            {
+              "role": "learner",
+              "text": "I like Minecraft. Creeper.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Creepers are scary! What do you build?"
+            },
+            {
+              "role": "learner",
+              "text": "I like sword. Já nevím... I like house.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Nice, a house! Is it big?"
+            },
+            {
+              "role": "partner",
+              "text": "Nice! Where are the diamonds in the game?"
+            },
+            {
+              "role": "learner",
+              "text": "I like diamond. I can... jé, nevím. I like Minecraft.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Shiny diamonds! Can you find them?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. I like diamond. Já nevím... I like dog.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Do you like dogs?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. I like dog. I like dog Minecraft.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Nice! Is your dog big?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Dog big. I like dog.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Big dog! What is your dog's name?"
+            },
+            {
+              "role": "learner",
+              "text": "Rex. My dog Rex. I like Rex.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Great name! Does Rex like football?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Rex like football. I like football.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Nice! Does Rex play Minecraft too?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "24fe9dbc-acb2-4f37-8680-0700fdff5f1d:uat-14:moment",
+              "kind": "word",
+              "said": "Já nevím...",
+              "better": "I don't know",
+              "why": "This means you do not know something in English.",
+              "turnId": "24fe9dbc-acb2-4f37-8680-0700fdff5f1d:uat-14",
+              "at": 1792395176711,
+              "replay": {
+                "question": "Nice! Where are the diamonds in the game?",
+                "turnId": "b9cc4290-a12a-425b-ba93-29018fd6140f",
+                "reply": "I like diamond. I can... jé, nevím. I like Minecraft.",
+                "used": false
+              }
+            }
+          ],
+          "heldFixes": [
+            {
+              "id": "24fe9dbc-acb2-4f37-8680-0700fdff5f1d:uat-16:held",
+              "kind": "fix",
+              "said": "I like diamond",
+              "better": "I like diamonds",
+              "why": "Use a plural or 'a' before this noun.",
+              "turnId": "24fe9dbc-acb2-4f37-8680-0700fdff5f1d:uat-16",
+              "at": 1792395216774
+            },
+            {
+              "id": "24fe9dbc-acb2-4f37-8680-0700fdff5f1d:uat-17:held",
+              "kind": "word",
+              "said": "Já nevím",
+              "better": "I don't know",
+              "why": "Já nevím means I don't know in Czech; say I don't know in English.",
+              "turnId": "24fe9dbc-acb2-4f37-8680-0700fdff5f1d:uat-17",
+              "at": 1792395244947
+            },
+            {
+              "id": "24fe9dbc-acb2-4f37-8680-0700fdff5f1d:uat-18:held",
+              "kind": "fix",
+              "said": "I like dog",
+              "better": "I like dogs",
+              "why": "Dog needs an s here, because you mean more than one dog.",
+              "turnId": "24fe9dbc-acb2-4f37-8680-0700fdff5f1d:uat-18",
+              "at": 1792395265009
+            },
+            {
+              "id": "24fe9dbc-acb2-4f37-8680-0700fdff5f1d:uat-21:held",
+              "kind": "fix",
+              "said": "Rex like football",
+              "better": "Rex likes football",
+              "why": "One friend, like Rex, needs the s ending: likes.",
+              "turnId": "24fe9dbc-acb2-4f37-8680-0700fdff5f1d:uat-21",
+              "at": 1792395322121
+            }
+          ],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "I like Minecraft. Creeper.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 3,
+              "n": 2,
+              "reply": "I like sword. Já nevím... I like house.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Já nevím...",
+                "better": "I don't know",
+                "why": "This means you do not know something in English."
+              },
+              "shown": true
+            },
+            {
+              "turn": 6,
+              "n": 3,
+              "reply": "I like diamond. I can... jé, nevím. I like Minecraft.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I like diamond",
+                "better": "I like diamonds",
+                "why": "Use a plural or 'a' before this noun."
+              },
+              "shown": false
+            },
+            {
+              "turn": 8,
+              "n": 4,
+              "reply": "Yes. I like diamond. Já nevím... I like dog.",
+              "present": true,
+              "raw": {
+                "kind": "word",
+                "said": "Já nevím",
+                "better": "I don't know",
+                "why": "Já nevím means I don't know in Czech; say I don't know in English."
+              },
+              "shown": false
+            },
+            {
+              "turn": 10,
+              "n": 5,
+              "reply": "Yes. I like dog. I like dog Minecraft.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I like dog",
+                "better": "I like dogs",
+                "why": "Dog needs an s here, because you mean more than one dog."
+              },
+              "shown": false
+            },
+            {
+              "turn": 12,
+              "n": 6,
+              "reply": "Yes. Dog big. I like dog.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 14,
+              "n": 7,
+              "reply": "Rex. My dog Rex. I like Rex.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 16,
+              "n": 8,
+              "reply": "Yes. Rex like football. I like football.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "Rex like football",
+                "better": "Rex likes football",
+                "why": "One friend, like Rex, needs the s ending: likes."
+              },
+              "shown": false
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "I like to build houses."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I like Minecraft."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I like house."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like diamond."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like diamond."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I like dog."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Dog big."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "My dog Rex."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Rex like football. I like football."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 323413,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-2",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "No fresh question after the moment",
+          "expected": "After the fix, Ben asks a new question so he can answer better alone.",
+          "got": "He retyped the given fix, then Ben asked an unrelated question.",
+          "evidence": [
+            "#8 'Try I like creepers.'; #9 'You fixed like creepers'; #10 'Did you play with friends yesterday?'",
+            "moment replay flow"
+          ],
+          "recurrence": 9
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-3",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "No replay with a fresh question after the moment",
+          "expected": "After the coaching moment, a fresh question lets him retry 'the dog is wet' on his own.",
+          "got": "Only 'Back to the conversation'; the next question is unrelated and the session ends at the next turn.",
+          "evidence": [
+            "#5 'Back to the conversation'; #6 'What did he do next?'; #11 '0 on your own · 1 moment to keep'.",
+            "moment replay flow"
+          ],
+          "recurrence": 9
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-4/LT-tomas-9-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-4",
+          "type": "missing-feature",
+          "dimension": "completion",
+          "title": "No replay with a fresh question after the moment",
+          "expected": "After the 'small' moment, a new question lets him try the coached word alone.",
+          "got": "Only 'Back to the conversation'; next question is about having a dog.",
+          "evidence": [
+            "#9 'Back to the conversation'; #10 'Thank you! Do you have a dog?'; #11 still Czech",
+            "moment replay flow"
+          ],
+          "recurrence": 9
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-6",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "No fresh question after the moment",
+          "expected": "After the coaching moment a fresh question lets him retry 'likes' alone.",
+          "got": "Back to the conversation goes to an unrelated question and the mission ends.",
+          "evidence": [
+            "#16 'Back to the conversation'; #17 'Where does he sleep at night?' with 'Mission done'.",
+            "moment replay flow"
+          ],
+          "recurrence": 8
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Coaching note abstract and drops what he said",
+          "expected": "Tiny child wording quoting 'I like creeper. Dog.'",
+          "got": "'with an s, the usual way to say it'; the quote omits 'Dog.'",
+          "evidence": [
+            "#11 'You said I like creeper.' vs #8 'I like creeper. Dog.'",
+            "moment prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "broken-flow",
+          "dimension": "completion",
+          "title": "Replay with fresh question never exercised",
+          "expected": "After coaching, a fresh question lets him retry alone.",
+          "got": "Finished at coach screen; no retry and no better answer shown.",
+          "evidence": [
+            "#11 'Replay the moment' / 'Finish for today'; he chose finish; #12 '0 on your own'.",
+            "moment replay flow"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Cue generic and help loop repeated",
+          "expected": "Cue that moves him on; Help pressed once is enough.",
+          "got": "Help pressed 4 times with the same 'Try: I build a ___. It is ___.'",
+          "evidence": [
+            "#3-#6 identical cue.",
+            "cue builder"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "clarity",
+          "title": "Situation list long and mixed",
+          "expected": "Short play/animal list.",
+          "got": "20 entries incl. booking, lost jacket, group project.",
+          "evidence": [
+            "#1 list.",
+            "situation list builder"
+          ],
+          "recurrence": 10
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement in this journey; level set by hand."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#6 quiz 'Mia asks: What do you like in Minecraft? Which answer fits?' with two 4-word options, under 15 words."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#11 'I don't know' offered neutrally after 'Já nevím...'; no failure line on screen."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No topic proposal shown in this journey."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "Partner lines like 'Do you like dogs?' / 'Is your dog big?' are short, one question each."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "#19 'Dog needs an s here, because you mean more than one dog' for 'Yes. I like dog' to 'Do you like dogs?'; 'One friend, like Rex' for a dog; #11 'This means you do not know something in English' is muddled."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#6 cue, quiz and phrase choice found without leaving the scene; #8 cue again."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#11 coaching quotes exactly 'Já nevím...' → 'I don't know'; #7 reply 'I like Minecraft. Creeper.' followed help, though #9 help only repeated 'What do you make?'."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#12 fresh question 'Where are the diamonds in the game?' (Try it again) but his answer 'I like diamond. I can... jé, nevím. I like Minecraft.' is no better; replay used false."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#19 '6 on your own · 2 with help'; supported replies flagged, though 'Dog big' is flagged supported in evidence but not in the conversation."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 7,
+            "below": 0,
+            "above": 3
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 6,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, sensitive data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Help cue repeated identically and too long",
+            "expected": "A cue that changes and moves a 9-year-old on, in a few words.",
+            "got": "Help pressed three times gave the same 'Try: I like to build. My favourite block is...'",
+            "evidence": "#2-#4 identical 'Try: I like to build. My favourite block is...'; #5 had to use quiz.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Repeated Help gives a different, shorter cue each press.",
+            "code_hint": "cue builder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Situation list long and mixed",
+            "expected": "A short list about play and animals.",
+            "got": "20 entries incl. booking, lost jacket, group project, speaking practice.",
+            "evidence": "#1 and #19 list with 'A booking that is missing', 'Our group project'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Show age-fit situations only for elementary profiles.",
+            "code_hint": "situation list builder"
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Retry after the moment did not improve",
+            "expected": "A fresh question where the coached phrase fits and he answers better.",
+            "got": "Next reply again contained 'nevím'; recap lists it as 'Tried again' though replay.used false.",
+            "evidence": "#12 'I like diamond. I can... jé, nevím.'; #19 'Tried again: ...jé, nevím...'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After a moment ask a fresh question where the coached phrase fits; recap counts only a real better retry.",
+            "code_hint": "moment replay flow"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Held-fix explanations misleading",
+            "expected": "Accurate child wording that fits the question asked.",
+            "got": "'because you mean more than one dog' after 'Do you like dogs?'; 'One friend, like Rex' for a dog.",
+            "evidence": "#19 recap held fixes for 'I like dog' and 'Rex like football'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Notes name the real referent and avoid wrong grammar reasons.",
+            "code_hint": "moment prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Simplified help repeats the previous question",
+            "expected": "Simpler rewording of the current question.",
+            "got": "'Said more simply: What do you make?' for 'What do you build?'; sentence-help not offered.",
+            "evidence": "#9 shown; #9 result 'not-offered'.",
+            "frequency": "med",
+            "reachability": "med",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Simplified line restates the current question.",
+            "code_hint": "cue builder"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Moment quotes his words exactly and stays kind",
+            "expected": "Quote the learner.",
+            "got": "'You wanted to say Já nevím...' → 'I don't know'; Czech accepted; partner turns short and friendly.",
+            "evidence": "#11 moment; #13 'Shiny diamonds! Can you find them?'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact quoting and low-pressure tone.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 25,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft was good, and Mia was nice, short questions, no stress. I pressed Help three times and got the same long sentence, \"My favourite block is...\" — nevím what that means! The quiz was easier, I picked the house one. When I said \"Já nevím\" it told me \"I don't know\", okay, cool. But the next question about diamonds, I said nevím again, so did I learn it? Not really. Rex and football were fun, I could say that. I didn't like the list with booking and group project, that's homework. I'd use it for the dog talks, but I want help that gives me the word. Mum likes no trip to the club, ale nevím jestli se naučím víc.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-2/LT-tomas-9-J4-1",
+            "status": "not-seen",
+            "evidence": "#11-#12 after 'Back to the conversation' a fresh question 'Where are the diamonds in the game?' labelled 'Try it again'.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-3/LT-tomas-9-J4-1",
+            "status": "not-seen",
+            "evidence": "#12 'Try it again' with a fresh question and the session continued to #18.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-4/LT-tomas-9-J4-2",
+            "status": "not-seen",
+            "evidence": "#12 fresh question given after the moment.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-6/LT-tomas-9-J4-1",
+            "status": "not-seen",
+            "evidence": "#12 fresh question and the mission did not end until he finished at #18.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-2",
+            "status": "not-seen",
+            "evidence": "#11 note quotes 'Já nevím...' exactly in plain words.",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-1",
+            "status": "not-seen",
+            "evidence": "#12 retry reached: 'I like diamond. I can... jé, nevím.' — exercised, though not better.",
+            "finding": 2
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-3",
+            "status": "recurs",
+            "evidence": "#2-#4 Help pressed 3 times, identical 'Try: I like to build. My favourite block is...'",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-tomas-9-J4-4",
+            "status": "recurs",
+            "evidence": "#1 list of 20 incl. 'A booking that is missing', 'The lost jacket'.",
+            "finding": 1
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #12 fresh question 'Where are the diamonds in the game?' (Try it again) but his answer 'I like diamond. I can... jé, nevím. I like Minecraft.' is no better; replay used false.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: #19 'Dog needs an s here, because you mean more than one dog' for 'Yes. I like dog' to 'Do you like dogs?'; 'One friend, like Rex' for a dog; #11 'This means you do not know something in English' is muddled."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 11,
+      "fail": 0,
+      "ms": 110678
+    },
+    "character": {
+      "n": 19,
+      "fail": 0,
+      "ms": 212127
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 67397
+    }
+  }
+}

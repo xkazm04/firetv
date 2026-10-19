@@ -768,13 +768,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 9,
+    "recurrence": 10,
     "suggested_acceptance": "For this exception question, offer a relevant conditional phrase and a fresh retry that still requires explaining what to do when a hint reveals the answer.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
-    "recertify_evidence": "#3, #4 simplification and gloss before #5 'A way to start I agree partly, but…'.",
-    "recurred_as": "LT-adela-17-J4-1"
+    "recertify_evidence": "#3 'Said more simply', #4 gloss, #5 'I think that…'. Again several presses to get a frame.",
+    "recurred_as": "LT-adela-17-J4-2"
   },
   {
     "id": "LT-jana-29-J3-1",
@@ -1080,13 +1080,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 9,
     "suggested_acceptance": "Coach the manageable chunk “on the bed,” provide a fresh question, and establish that he can use that chunk before treating the replay's learning goal as achieved.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "#11 finish pressed; replay not reached.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#12 'Try it again' with a fresh question and the session continued to #18.",
     "recurred_as": "LT-tomas-9-J4-1"
   },
   {

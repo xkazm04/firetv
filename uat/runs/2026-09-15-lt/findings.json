@@ -213,13 +213,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 9,
     "suggested_acceptance": "After supported practice, show a short coaching note with an exact learner quote, offer replay in the scene, and capture a better independent answer to a fresh question.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "#11 Replay offered but not taken; fresh question never shown.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#11-#12 after 'Back to the conversation' a fresh question 'Where are the diamonds in the game?' labelled 'Try it again'.",
     "recurred_as": "LT-tomas-9-J4-1"
   },
   {
@@ -2394,13 +2394,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on codex; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 10,
+    "recurrence": 11,
     "suggested_acceptance": "Show six age-safe choices, at least four clearly about his preferred play, animals, games or sport.",
     "engine": "codex-cli/gpt-6-astra (tutor, Character, judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
     "recertify_evidence": "#1 list of 20 incl. 'A booking that is missing', 'The lost jacket'.",
-    "recurred_as": "LT-tomas-9-J4-4"
+    "recurred_as": "LT-tomas-9-J4-2"
   },
   {
     "id": "LT-viktor-67-J1-1",

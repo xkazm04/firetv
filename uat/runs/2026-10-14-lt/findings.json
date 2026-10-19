@@ -384,12 +384,12 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 10,
+    "recurrence": 11,
     "suggested_acceptance": "Cue gives a usable sentence starter.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
-    "recertify_evidence": "#3 'Said more simply: I think social media is bad for focus and sleep', frame only at #5.",
+    "recertify_evidence": "#3 'Said more simply: Social media connects people…', #4 'stand: what you think', frame only at #5.",
     "recurred_as": "LT-adela-17-J4-1"
   },
   {
@@ -1233,13 +1233,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "suggested_acceptance": "Phrase options derive from the latest partner turn.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
-    "recertify_evidence": "#6 quiz line 'I had a test today' never appeared in the scene.",
-    "recurred_as": "LT-viktor-67-J4-1"
+    "recertify_evidence": "#11: quiz 'Which question asks about her day at school?' while Mia said 'I drew a cat. Do you draw?'.",
+    "recurred_as": "LT-viktor-67-J4-2"
   },
   {
     "id": "LT-adela-17-J1-4",
@@ -3138,13 +3138,13 @@
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "suggested_acceptance": "Beginner basics errors should be noted even in as-needed mode.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
     "recertify_status": "recurs",
-    "recertify_evidence": "rawMoments none for turns 1, 3, 5 apart from the article; same fix twice (#12, #16).",
-    "recurred_as": "LT-viktor-67-J4-4"
+    "recertify_evidence": "Five held fixes never shown as stops, coaching null; #19 'Red, small time' got no stop.",
+    "recurred_as": "LT-viktor-67-J4-5"
   },
   {
     "id": "LT-klara-13-J2-3",

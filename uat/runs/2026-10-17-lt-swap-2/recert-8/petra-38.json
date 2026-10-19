@@ -1,0 +1,825 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "tutor": "claude-cli/haiku",
+    "character": "claude-cli/sonnet",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [
+        "fixture: level set to A2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nAna · hotel receptionist\nA2Everyday basics · self-chosen\nHotel room problem\nYour mission\nExplain a problem in a hotel and ask for a fix or a new room.\nHandle friction\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nHotel room problem\nExplain a problem in a hotel and ask for a fix or a new room.\n[button: Start talking]\nOr choose a situation [list: Hotel room problem [plan-d210db48] | My booking is not in the system [plan-63caf4b3] | Where is the train station? [plan-e2f19173] | Recommend a good restaurant [plan-3c308319] | Call from the travel agency [plan-9f1dd3c3] | Talk with my child's teacher [plan-4752df48] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Hotel room problem is just my work, I'll start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6365
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel receptionist\nHotel desk: a noisy room at night\nAna says\nWhat do you need today?\nYour turn\nAnswer on your phone: speak or type.\nNowName the problem in your room\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel desk: a noisy room at night\nExplain a room problem to Ana and agree on a next step.\nNow: Name the problem in your room\nWhat do you need today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel receptionist\nWhat do you need today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you need today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say this, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel receptionist\nHotel desk: a noisy room at night\nAna says\nWhat do you need today?\nA little support\nTry: Excuse me. The shower is cold. Can you help, please?\nNowName the problem in your room\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel desk: a noisy room at night\nExplain a room problem to Ana and agree on a next step.\nNow: Name the problem in your room\nWhat do you need today?\nA little support\nTry: Excuse me. The shower is cold. Can you help, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel receptionist\nWhat do you need today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you need today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, so I'll try the help button again.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel receptionist\nHotel desk: a noisy room at night\nAna says\nWhat do you need today?\nA little support\nTry: Excuse me. The shower is cold. Can you help, please?\nNowName the problem in your room\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel desk: a noisy room at night\nExplain a room problem to Ana and agree on a next step.\nNow: Name the problem in your room\nWhat do you need today?\nA little support\nTry: Excuse me. The shower is cold. Can you help, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel receptionist\nWhat do you need today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you need today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say, maybe the help button shows more.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel receptionist\nHotel desk: a noisy room at night\nAna says\nWhat do you need today?\nA little support\nTry: Excuse me. The shower is cold. Can you help, please?\nNowName the problem in your room\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel desk: a noisy room at night\nExplain a room problem to Ana and agree on a next step.\nNow: Name the problem in your room\nWhat do you need today?\nA little support\nTry: Excuse me. The shower is cold. Can you help, please?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel receptionist\nWhat do you need today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"What do you need today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know what to say, the hint is helpful; I'll try it in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "Excuse me, the shower is cold. Can you help me please?"
+          },
+          "result": "ok",
+          "ms": 7437
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel receptionist\nHotel desk: a noisy room at night\nAna says\nThank you for telling me. Is anything else wrong with your room?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk for a new room or a repair\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel desk: a noisy room at night\nExplain a room problem to Ana and agree on a next step.\nNow: Ask for a new room or a repair\nThank you for telling me. Is anything else wrong with your room?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel receptionist\nWhat do you need today?\nYou · spoken\nExcuse me, the shower is cold. Can you help me please?\nAna · hotel receptionist\nThank you for telling me. Is anything else wrong with your room?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you for telling me. Is anything else wrong with your room?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say the next thing, I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel receptionist\nHotel desk: a noisy room at night\nAna says\nThank you for telling me. Is anything else wrong with your room?\nSaid more simply\nIs anything else wrong with the room?\nNowAsk for a new room or a repair\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel desk: a noisy room at night\nExplain a room problem to Ana and agree on a next step.\nNow: Ask for a new room or a repair\nThank you for telling me. Is anything else wrong with your room?\nSaid more simply\nIs anything else wrong with the room?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel receptionist\nWhat do you need today?\nYou · spoken\nExcuse me, the shower is cold. Can you help me please?\nAna · hotel receptionist\nThank you for telling me. Is anything else wrong with your room?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you for telling me. Is anything else wrong with your room?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say it, I need help with the sentence.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 4499
+        },
+        {
+          "n": 8,
+          "screen": "linga-coach",
+          "shown": "TV\nLinga\nPetra\nA way into English\nOne useful change\nYou said Can you help me please?\nOne way to try it\nCan you fix the shower, please? Or can I have a new room?\nGood: you named the problem in short, clear sentences. Next, say what you want, a repair or a new room, so Ana knows your request.\nCoach\nReplay the moment with a new question, or finish for today.\n[button: Replay the moment] [button: Finish for today]\nOne useful change\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel desk: a noisy room at night\nExplain a room problem to Ana and agree on a next step.\nNow: Ask for a new room or a repair\nGood: you named the problem in short, clear sentences. Next, say what you want, a repair or a new room, so Ana knows your request.\nOne way to try it: “Can you fix the shower, please? Or can I have a new room?”\n[button: Replay with a new question]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel receptionist\nWhat do you need today?\nYou · spoken\nExcuse me, the shower is cold. Can you help me please?\nAna · hotel receptionist\nThank you for telling me. Is anything else wrong with your room?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good: you named the problem in short, clear sentences. Next, say what you want, a repair or a new room, so Ana knows your request.\"",
+          "offered": [
+            "replay",
+            "finish",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I should say what I want: a repair or new room. Let me replay and try again.",
+          "action": "replay",
+          "args": {},
+          "result": "ok",
+          "ms": 7945
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel receptionist\nHotel desk: a noisy room at night\nAna says\nOkay, the shower is cold. What should we do about it?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk for a new room or a repair\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel desk: a noisy room at night\nExplain a room problem to Ana and agree on a next step.\nNow: Ask for a new room or a repair\nOkay, the shower is cold. What should we do about it?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel receptionist\nWhat do you need today?\nYou · spoken\nExcuse me, the shower is cold. Can you help me please?\nAna · hotel receptionist\nThank you for telling me. Is anything else wrong with your room?\nAna · hotel receptionist\nOkay, the shower is cold. What should we do about it?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Okay, the shower is cold. What should we do about it?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know a little, I will try my own words: I want another room, please.",
+          "action": "answer",
+          "args": {
+            "text": "I want other room please. The shower is cold and I think is not repair today."
+          },
+          "result": "ok",
+          "ms": 12196
+        },
+        {
+          "n": 10,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said I think is not repair today\nYour line\nHere 'repair' needs 'it' and 'be repaired' to say the shower can't be fixed.\nA clue\nSay it again on your phone, your way. Or ask Linga to show you.\n[button: Show me] [button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I think is not repair today”\nSay it again, your way.\nHere 'repair' needs 'it' and 'be repaired' to say the shower can't be fixed.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Show me] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "show-me",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I don't know how to say it, so I'll ask Linga to show me.",
+          "action": "show-me",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 11,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said I think is not repair today\nTry\nI think it cannot be repaired today\nHere 'repair' needs 'it' and 'be repaired' to say the shower can't be fixed.\nThe fix\nSay it once more on your phone, or carry on.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “I think is not repair today”\nTry “I think it cannot be repaired today”\nHere 'repair' needs 'it' and 'be repaired' to say the shower can't be fixed.\nYour reply [text box]\n[button: Send reply (disabled)] [button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "answer",
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "I will try the sentence again, a little like the suggestion.",
+          "action": "answer",
+          "args": {
+            "text": "I think it cannot be repaired today"
+          },
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 12,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said I think is not repair today\nYour try\nI think it cannot be repaired today\nHere 'repair' needs 'it' and 'be repaired' to say the shower can't be fixed.\nYou fixed “think it cannot be repaired”\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYou fixed “think it cannot be repaired”\nYou said “I think is not repair today”\nYour try: “I think it cannot be repaired today”\nHere 'repair' needs 'it' and 'be repaired' to say the shower can't be fixed.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, I understand my mistake now; let me go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 9094
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel receptionist\nHotel desk: a noisy room at night\nAna says\nThank you. Why do you want a new room, not a repair today?\nYour turn\nAnswer on your phone: speak or type.\nNowAgree on a check at ten o'clock\n[button: Help me answer] [button: Pause & coach]\nTry it again\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel desk: a noisy room at night\nExplain a room problem to Ana and agree on a next step.\nNow: Agree on a check at ten o'clock\nThank you. Why do you want a new room, not a repair today?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel receptionist\nWhat do you need today?\nYou · spoken\nExcuse me, the shower is cold. Can you help me please?\nAna · hotel receptionist\nThank you for telling me. Is anything else wrong with your room?\nAna · hotel receptionist\nOkay, the shower is cold. What should we do about it?\nYou · spoken\nI want other room please. The shower is cold and I think is not repair today.\nAna · hotel receptionist\nIs a new room okay? I will check now.\nAna · hotel receptionist\nThank you. Why do you want a new room, not a repair today?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you. Why do you want a new room, not a repair today?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I try to explain in my own words, slowly.",
+          "action": "answer",
+          "args": {
+            "text": "Because the shower is cold and the water is not hot. I am sorry, I want to sleep tonight."
+          },
+          "result": "ok",
+          "ms": 9460
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel receptionist\nHotel desk: a noisy room at night\nAna says\nThank you, that is clear. Can I check the room at ten o'clock?\nYour turn\nAnswer on your phone: speak or type.\nNowAgree on a check at ten o'clock\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel desk: a noisy room at night\nExplain a room problem to Ana and agree on a next step.\nNow: Agree on a check at ten o'clock\nThank you, that is clear. Can I check the room at ten o'clock?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel receptionist\nWhat do you need today?\nYou · spoken\nExcuse me, the shower is cold. Can you help me please?\nAna · hotel receptionist\nThank you for telling me. Is anything else wrong with your room?\nAna · hotel receptionist\nOkay, the shower is cold. What should we do about it?\nYou · spoken\nI want other room please. The shower is cold and I think is not repair today.\nAna · hotel receptionist\nIs a new room okay? I will check now.\nAna · hotel receptionist\nThank you. Why do you want a new room, not a repair today?\nYou · spoken\nBecause the shower is cold and the water is not hot. I am sorry, I want to sleep tonight.\nAna · hotel receptionist\nThank you, that is clear. Can I check the room at ten o'clock?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that is clear. Can I check the room at ten o'clock?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Ten o'clock is fine, I can answer this now.",
+          "action": "answer",
+          "args": {
+            "text": "Yes, ten o'clock is good. Thank you very much, and I am sorry for the problem."
+          },
+          "result": "ok",
+          "ms": 7763
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nAna · hotel receptionist\nHotel desk: a noisy room at night\nAna says\nGood, ten o'clock.\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nHotel desk: a noisy room at night\nExplain a room problem to Ana and agree on a next step.\nGood, ten o'clock.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nAna · hotel receptionist\nWhat do you need today?\nYou · spoken\nExcuse me, the shower is cold. Can you help me please?\nAna · hotel receptionist\nThank you for telling me. Is anything else wrong with your room?\nAna · hotel receptionist\nOkay, the shower is cold. What should we do about it?\nYou · spoken\nI want other room please. The shower is cold and I think is not repair today.\nAna · hotel receptionist\nIs a new room okay? I will check now.\nAna · hotel receptionist\nThank you. Why do you want a new room, not a repair today?\nYou · spoken\nBecause the shower is cold and the water is not hot. I am sorry, I want to sleep tonight.\nAna · hotel receptionist\nThank you, that is clear. Can I check the room at ten o'clock?\nYou · spoken\nYes, ten o'clock is good. Thank you very much, and I am sorry for the problem.\nAna · hotel receptionist\nGood, ten o'clock.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good, ten o'clock.\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I think I managed it, the room is arranged. I want to see what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 16,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said Can you help me please?\nOne way to try it\nCan you fix the shower, please? Or can I have a new room?\nGood: you named the problem in short, clear sentences. Next, say what you want, a repair or a new room, so Ana knows your request.\nYour mission\nChoose a fresh context for your next conversation.\n4 spoken · 0 written replies · 3 on your own · 1 with help · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nThe line hidden in this room\n“Hello. My shower is broken. Can you help me, please?”\nFrom this rehearsal\n“I think is not repair today” → “I think it cannot be repaired today”\nHere 'repair' needs 'it' and 'be repaired' to say the shower can't be fixed.\nTried again: “Because the shower is cold and the water is not hot. I am sorry, I want to sleep tonight.”\nYour level:\nA2 · Everyday basics\n· self-chosen\nNext topic:\nMy booking is not in the system\nCheck a lost hotel booking by spelling, repeating and confirming details.\n[button: Start talking]\nOr choose a situation [list: Hotel room problem [plan-d210db48] | My booking is not in the system [plan-63caf4b3] | Where is the train station? [plan-e2f19173] | Recommend a good restaurant [plan-3c308319] | Call from the travel agency [plan-9f1dd3c3] | Talk with my child's teacher [plan-4752df48] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[checkbox] Play with someone in the room\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed the shower conversation and got help, so I feel finished for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Hotel desk: a noisy room at night",
+          "goal": "Explain a room problem to Ana and agree on a next step.",
+          "partner": "Ana · hotel receptionist",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "What do you need today?"
+            },
+            {
+              "role": "learner",
+              "text": "Excuse me, the shower is cold. Can you help me please?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you for telling me. Is anything else wrong with your room?"
+            },
+            {
+              "role": "partner",
+              "text": "Okay, the shower is cold. What should we do about it?"
+            },
+            {
+              "role": "learner",
+              "text": "I want other room please. The shower is cold and I think is not repair today.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Is a new room okay? I will check now."
+            },
+            {
+              "role": "partner",
+              "text": "Thank you. Why do you want a new room, not a repair today?"
+            },
+            {
+              "role": "learner",
+              "text": "Because the shower is cold and the water is not hot. I am sorry, I want to sleep tonight.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that is clear. Can I check the room at ten o'clock?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, ten o'clock is good. Thank you very much, and I am sorry for the problem.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Good, ten o'clock."
+            }
+          ],
+          "moments": [
+            {
+              "id": "4c2aac94-d265-45cd-a25d-55531b5d92a6:uat-14:moment",
+              "kind": "fix",
+              "said": "I think is not repair today",
+              "better": "I think it cannot be repaired today",
+              "why": "Here 'repair' needs 'it' and 'be repaired' to say the shower can't be fixed.",
+              "turnId": "4c2aac94-d265-45cd-a25d-55531b5d92a6:uat-14",
+              "at": 1792395178107,
+              "slip": "think is not repair",
+              "repair": {
+                "rung": 2,
+                "tried": "I think it cannot be repaired today",
+                "held": true,
+                "selfRepaired": false,
+                "spent": true
+              },
+              "fix": "think it cannot be repaired",
+              "replay": {
+                "question": "Thank you. Why do you want a new room, not a repair today?",
+                "turnId": "4448fddc-8813-4ca3-8d8f-cd3a9e3a83a1",
+                "reply": "Because the shower is cold and the water is not hot. I am sorry, I want to sleep tonight.",
+                "used": false
+              }
+            }
+          ],
+          "heldFixes": [],
+          "rawMoments": [
+            {
+              "turn": 1,
+              "n": 1,
+              "reply": "Excuse me, the shower is cold. Can you help me please?",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 4,
+              "n": 2,
+              "reply": "I want other room please. The shower is cold and I think is not repair today.",
+              "present": true,
+              "raw": {
+                "kind": "fix",
+                "said": "I think is not repair today",
+                "better": "I think it cannot be repaired today",
+                "why": "Here 'repair' needs 'it' and 'be repaired' to say the shower can't be fixed."
+              },
+              "shown": true
+            },
+            {
+              "turn": 7,
+              "n": 3,
+              "reply": "Because the shower is cold and the water is not hot. I am sorry, I want to sleep tonight.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            },
+            {
+              "turn": 9,
+              "n": 4,
+              "reply": "Yes, ten o'clock is good. Thank you very much, and I am sorry for the problem.",
+              "present": true,
+              "raw": {
+                "kind": "none",
+                "said": "",
+                "better": "",
+                "why": ""
+              },
+              "shown": false
+            }
+          ],
+          "coaching": {
+            "before": "Can you help me please?",
+            "after": "Can you fix the shower, please? Or can I have a new room?",
+            "note": "Good: you named the problem in short, clear sentences. Next, say what you want, a repair or a new room, so Ana knows your request."
+          },
+          "evidence": [
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I want other room please"
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "I want to sleep tonight."
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, ten o'clock is good."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 261465,
+      "prior": [
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-1",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "senior-quality",
+          "title": "Ana ignores what the learner said and repeats 'Is the room cold?'",
+          "expected": "The partner responds to 'the room is not clean', not the scripted cold room.",
+          "got": "Ana asks 'Is the room cold?' at #7, again in the turn after #11, and 'Is the heater broken?' after #14.",
+          "evidence": [
+            "#7 'I am sorry to hear that. Is the room cold?' after 'The room is not clean'; conversation turn 'Okay, I can find you a new room. Is the room cold?'",
+            "partner prompt / scenario script"
+          ],
+          "recurrence": 1
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-3",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "completion",
+          "title": "Replay does not make her practise the coached phrase",
+          "expected": "Fresh question where she uses 'another room' and does better.",
+          "got": "#11 she repeats 'I want other room'; later 'A big room' without 'another'; replay used:false.",
+          "evidence": [
+            "#11 'I want leave the room today, please. I want other room.'",
+            "replay prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-4",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "missing",
+          "title": "Clear learner errors got no moment or held fix",
+          "expected": "Fixes for 'want leave', 'smell bad', and the first 'other room'.",
+          "got": "One moment; heldFixes empty.",
+          "evidence": [
+            "rawMoments turns 1, 7, 9, 11, 13 kind none; #16 'the room is dirty and smell bad'",
+            "moment detection prompt"
+          ],
+          "recurrence": 2
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-5",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "trust",
+          "title": "Coach note claims Ana understood, and quotes the first turn not the stuck point",
+          "expected": "Coaching tied to where she was stuck, truthful about Ana.",
+          "got": "'Ana understood the problem' while Ana asked about cold; quote from turn 1.",
+          "evidence": [
+            "#10 'Your complaint and request are clear, and Ana understood the problem.'",
+            "coach prompt"
+          ],
+          "recurrence": 3
+        },
+        {
+          "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-2",
+          "run": "2026-10-17-lt-swap-2/recert-7",
+          "type": "quality-gap",
+          "dimension": "effort",
+          "title": "Cues do not match the learner's real problem and are not used",
+          "expected": "Help that moves her sentence forward.",
+          "got": "'The room is very cold' and 'The heater does not work…' offered when she needs 'not clean'.",
+          "evidence": [
+            "#3 'Try: The room is very cold. Can you help, please?'; #9 'The heater does not work…'",
+            "cue ladder prompt"
+          ],
+          "recurrence": 1
+        }
+      ],
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "Level set by hand (fixture); no placement in J4."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 'What do you need today?' and #9 'What should we do about it?' are simple A2 questions."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#7 'Said more simply: Is anything else wrong with the room?' offered without any failure framing."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "Hotel room problem is her own work scenario (#1); the topic list shows booking, directions, restaurant, travel agency, teacher."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#8 'Can you fix the shower, please? Or can I have a new room?' is usable, but the only moment (#10) fixes a sentence she never needed at the desk, and #8 quotes turn 1, not where she was stuck. Three later turns got no coaching."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Hotel content throughout; nothing unsuitable for children seen."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#3 cue 'Try: Excuse me. The shower is cold...', #7 'Said more simply', #8 coach, all inside the scene."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#8 note quotes 'You said Can you help me please?', which is accurate. But #7 coach was reached from a question she could have answered, and the #3 cue was repeated at #4 and #5 with no new help. After #8 she answered #9 with 'I want other room please' and did not use the coached phrase."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "Replay #8-#9 gave 'What should we do about it?'. Her answer 'I want other room please' still has 'other room'. The recorded replay has used:false. The later answer at #13 was fluent but was not a replay of the moment."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "Facts: the #5 reply is supported:true and is excluded from the evidence. Recap '3 on your own · 1 with help'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in J4."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 2
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal data request, no humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Replay does not make her practise the coached phrase",
+            "expected": "Replay gives a fresh question, she uses the coached form, and the replay is marked used.",
+            "got": "Replay question was 'What should we do about it?'. Her reply kept 'I want other room'. replay.used is false.",
+            "evidence": "#9 'I want other room please'; moment replay used:false; recap shows 'Tried again' with a different reply.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After a fix, the replay question invites the corrected form, and the replay is marked used when she tries it.",
+            "code_hint": "replay prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Clear learner errors got no moment or held fix",
+            "expected": "Fix for 'I want other room', 'want to sleep' and similar errors, shown or held for the recap.",
+            "got": "One moment. heldFixes is empty. Turns 4, 7 and 9 have clear errors; the missed ones are 'other room' and 'I think is not repair'.",
+            "evidence": "rawMoments turns 1, 7, 9 kind none; '#9 I want other room please' got no fix for 'other room'.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each learner turn with a clear error yields a moment or a held fix on the recap.",
+            "code_hint": "moment detection prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Cue repeated three times with no new help",
+            "expected": "Help escalates or changes on repeated presses.",
+            "got": "The same 'Try: Excuse me...' cue at #3, #4, #5.",
+            "evidence": "#4 and #5 show an identical 'A little support' line.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Each further press moves to the next rung (simpler wording, then phrase choice).",
+            "code_hint": "cue ladder"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Recap coaching quotes the first turn, not the stuck point",
+            "expected": "Coaching tied to where she needed help and to the moment she fixed.",
+            "got": "Recap coaching still quotes 'Can you help me please?' while the kept moment is another sentence.",
+            "evidence": "#16 recap 'You said Can you help me please?' next to the 'From this rehearsal' moment about 'repair'.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The recap shows the moment she actually worked on first.",
+            "code_hint": "coach prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Supported reply recorded honestly",
+            "expected": "Help-assisted replies are not counted as independent.",
+            "got": "Recap '3 on your own · 1 with help'.",
+            "evidence": "#16 and facts.evidence supported:false for three replies.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Moment quotes her words exactly and lets her retry",
+            "expected": "Quote of what she said, with a way to try again.",
+            "got": "'You said I think is not repair today' with 'Show me' and a confirmation 'You fixed...'.",
+            "evidence": "#10-#12",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "The hotel scene was my job, and Ana spoke slowly. That helped. When I was stuck, the hint gave me a sentence and I could say it. Nobody made me feel stupid, and 'Said more simply' was kind. But I pressed help three times and got the same line. When I tried again, I said 'I want other room' again, and nothing told me that was wrong. It only fixed 'I think is not repair'. I can't say I trust it yet. Would I tell my sister? Maybe, after it is fixed. The kids' side looked safe, and I'd let Tomáš try it. But I need 'another room' and the other words that matter at the desk tomorrow.",
+        "prior": [
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-1",
+            "status": "not-seen",
+            "evidence": "#9-#14 Ana's replies follow the shower story: 'Is a new room okay? I will check now.'",
+            "finding": -1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-3",
+            "status": "recurs",
+            "evidence": "#9 'I want other room please' after the coaching; replay used:false.",
+            "finding": 0
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-4",
+            "status": "recurs",
+            "evidence": "One moment, heldFixes empty; turns 1, 7, 9 kind none, including 'I want other room'.",
+            "finding": 1
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-5",
+            "status": "recurs",
+            "evidence": "#16 recap coaching quotes turn 1 'Can you help me please?', not the stuck point. The 'Ana understood' claim was not repeated.",
+            "finding": 3
+          },
+          {
+            "id": "2026-10-17-lt-swap-2/recert-7/LT-petra-38-J4-2",
+            "status": "not-seen",
+            "evidence": "#3 cue 'Excuse me. The shower is cold. Can you help, please?' matches her real problem, although it is repeated at #4-#5.",
+            "finding": 2
+          }
+        ]
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #8 note quotes 'You said Can you help me please?', which is accurate. But #7 coach was reached from a question she could have answered, and the #3 cue was repeated at #4 and #5 with no new help. After #8 she answered #9 with 'I want other room please' and did not use the coached phrase.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: Replay #8-#9 gave 'What should we do about it?'. Her answer 'I want other room please' still has 'other room'. The recorded replay has used:false. The later answer at #13 was fluent but was not a replay of the moment.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #8 'Can you fix the shower, please? Or can I have a new room?' is usable, but the only moment (#10) fixes a sentence she never needed at the desk, and #8 quotes turn 1, not where she was stuck. Three later turns got no coaching."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 9,
+      "fail": 0,
+      "ms": 85819
+    },
+    "character": {
+      "n": 16,
+      "fail": 0,
+      "ms": 175120
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 27721
+    }
+  }
+}

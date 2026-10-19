@@ -451,13 +451,13 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 8,
     "suggested_acceptance": "After the replay, Sam asks a new simple question that needs the fixed form.",
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
-    "recertify_run": "2026-10-17-lt-swap-2/recert-7",
-    "recertify_status": "not-evaluable",
-    "recertify_evidence": "Replay not taken at #11.",
+    "recertify_run": "2026-10-17-lt-swap-2/recert-8",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "#12 fresh question and the mission did not end until he finished at #18.",
     "recurred_as": "LT-tomas-9-J4-1"
   },
   {
