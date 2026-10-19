@@ -82,7 +82,7 @@ const OPENS_ASK=(()=>{const src=code(path.join(SRC,'tv/keys.ts')),at=src.indexOf
  * The screens whose copy says "on the phone" and that still open no ask, each with the slice that owes it. An entry
  * leaves this ledger in that slice; one that opens an ask by then must not stay.
  */
-const LEGACY={landing:'pairing: the code is typed on the phone, no ask',pair:'pairing: the code is typed on the phone, no ask',paper:'TL-13: Type a paper opens ask paper',sheet:'the sheet card points at the walk, whose Tell the desk how and Type my second go stops open explain and second (TL-6); the copy is MathsTV, not this slice'};
+const LEGACY={landing:'pairing: the code is typed on the phone, no ask',pair:'pairing: the code is typed on the phone, no ask',sheet:'the sheet card points at the walk, whose Tell the desk how and Type my second go stops open explain and second (TL-6); the copy is MathsTV, not this slice'};
 for(const sc of SCREENS)if(sc.startsWith('linga'))LEGACY[sc]='TL-12: Linga opens reply and words';
 
 // ---------------------------------------------------------------- sessions
@@ -116,7 +116,7 @@ const FIXTURES={
  essaytype:{s:session({screen:'essaytype',subject:'essay',ask:askOf('paragraph')}),panel:'paste',why:'Paste, type or dictate one paragraph on the phone'},
  sentence:{s:session({screen:'sentence',subject:'english',english:null,ask:askOf('sentence')}),panel:'say',why:'Say one sentence on your phone (nothing checked yet)'},
  forensic:{s:session({screen:'forensic',subject:'essay',ask:askOf('rewrite',{n:1})}),panel:'paste',why:'Rewrite on my phone'},
- paper:{s:session({screen:'paper'}),panel:'paper',why:'Type the marks of a paper you sat on the phone'},
+ paper:{s:session({screen:'paper',ask:askOf('paper')}),panel:'paper',why:'Type the marks of a paper you sat on the phone'},
  essayplan:{s:session({screen:'essayplan',subject:'essay',ask:askOf('slot',{i:0})}),panel:'paste',why:'Say it on the phone: the plan slot is sent from the Essay tab'},
 };
 for(const sc of SCREENS)if(sc.startsWith('linga'))FIXTURES[sc]={s:session({screen:sc,subject:'english'}),panel:'linga',why:'Linga: answer on your phone',linga:true};
@@ -532,9 +532,9 @@ test('paper 5: a paper kept can be shown on the TV from the panel - the TV has n
  const src=code(PAPER_PANEL);
  assert.match(src,/seated && kept && <button[^>]*onClick=\{\(\) => void post\(\{ type: "nav", screen: "paper" \}\)\}/);
  const {panelFor}=P();
- // TL-9 re-pin: the ask is read first; the paper screen alone still hands off until TL-13 opens ask paper
+ // TL-9 re-pin: the ask is read first; the paper screen alone asks nothing, ask paper does
  assert.equal(panelFor(session({screen:'units',ask:askOf('paper')})),'paper','ask paper hands the phone to the panel, whatever the screen');
- assert.equal(panelFor(session({screen:'paper'})),'paper','the TV on the list hands the phone to the panel (legacy, until TL-13)');
+ assert.equal(panelFor(session({screen:'paper'})),'stay','the paper screen alone asks nothing of the phone: only ask paper does (TL-13)');
  assert.equal(panelFor(session({joined:false,screen:'paper'})),'join','an unjoined phone is still asked for the code first');
 });
 

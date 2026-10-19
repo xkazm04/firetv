@@ -2,7 +2,7 @@
  * Where the phone should be. The TV opens a hand-off (the session's `ask`); the phone shows that hand-off's panel and
  * goes there by itself when a NEW ask id arrives - on the same TV screen too, and again after a reopened stream. A tab
  * the learner picked stays picked while the same ask stays open. The few screens that still ask the phone without
- * opening an ask (Linga's, a failed read's Try again, the paper list) keep the old screen-keyed cue until their slices
+ * opening an ask (Linga's, a failed read's Try again) keep the old screen-keyed cue until their slices
  * (TL-12, TL-13) open asks. Pure; the phone page calls follow() on every session change. Tested by
  * tools/phone-panel-test.cjs.
  */
@@ -38,8 +38,6 @@ function cueFor(s: Seen): Cue | null {
     const p = s.pages[s.pageIx];
     return p && (readFailed(s) || (p.subject === "essay" && s.jobs?.read?.phase === "failed" && s.jobs.read.key === p.id)) ? { panel: p.subject === "essay" ? "paste" : "capture", key: `page:retry:${p.id}` } : null;
   }
-  // "Type the marks of a paper you sat on the phone" (TL-13 opens ask paper)
-  if (sc === "paper") return { panel: "paper", key: sc };
   return null;
 }
 
