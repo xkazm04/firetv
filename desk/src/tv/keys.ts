@@ -9,7 +9,7 @@
 import { hasWorked } from "@/lib/library/worked";
 import { modeOf } from "@/lib/rules/mode";
 import { turnState } from "@/lib/english/turn";
-import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
+import type { Ask, AskKind, EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
 import { planSlots, planText, rewriteState, rewriteUnruledLine } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
@@ -180,8 +180,13 @@ export const PLAYBOOK_STOPS = PLAYBOOK;
  * instead (the essay.at event), so the page is always about one sentence and one action is focused.
  */
 export const FORENSIC_STOPS = ["rewrite", "why", "next", "back"] as const;
+/** The forensic page's actions as the learner meets them (TL-7): under the curtain a fifth one, "Show the words on my phone", sits before Back. Off the curtain it does not exist. */
+export type ForensicStop = (typeof FORENSIC_STOPS)[number] | "private";
+export function forensicStops(s: Pick<Session, "profiles" | "learner" | "englishLearning" | "essay">): readonly ForensicStop[] {
+  return curtainOn(s) ? ["rewrite", "why", "next", "private", "back"] : FORENSIC_STOPS;
+}
 /** The sentence the forensic page is about, as an index: the one walked to, else the first faulty one, else the first. */
-export function forensicAt(s: Session): number {
+export function forensicAt(s: Pick<Session, "essay" | "essayAt">): number {
   const a = s.essay; if (!a?.sentences.length) return 0;
   const chosen = s.essayAt == null ? -1 : a.sentences.findIndex((x) => x.n === s.essayAt);
   if (chosen >= 0) return chosen;
@@ -251,9 +256,29 @@ export function walkStops(s: Session): WalkStop[] {
   if (p?.marked && it && (it.verdict === "wrong" || it.verdict === "unsure") && toLookAt(it)) out.push("explain", "second");
   return out;
 }
+/** The hand-offs each Essay Master and Linga screen opens (TL-7): the ask kinds that screen may hold open. */
+const ESSAY_HANDOFFS: Partial<Record<Screen, readonly AskKind[]>> = { essaytype: ["paragraph"], essayplan: ["slot"], forensic: ["rewrite", "private"], sentence: ["sentence"] };
+/** The job each of those kinds names in the caption. */
+const ESSAY_HANDOFF_JOB: Partial<Record<AskKind, string>> = { paragraph: "the paragraph", rewrite: "your rewrite", slot: "the sentence for the slot", sentence: "your sentence", private: "the words, kept private" };
+/**
+ * The hand-off this Essay Master or sentence screen is waiting on (TL-7): the session's open ask, when it was opened from
+ * this screen and is one of the kinds the screen opens (on the forensic page, for the sentence in hand). Null otherwise.
+ */
+export function essayHandoffOf(s: Pick<Session, "ask" | "screen" | "essay" | "essayAt">): Ask | null {
+  const a = s.ask;
+  if (!a || a.screen !== s.screen || !ESSAY_HANDOFFS[s.screen]?.includes(a.kind)) return null;
+  if (s.screen === "forensic" && s.essay?.sentences.length && a.detail?.n !== s.essay.sentences[forensicAt(s)].n) return null;
+  return a;
+}
+/** The caption while that hand-off is open: what is awaited and the way out, or that no phone is connected. Null with none open. */
+export function essayHandoffLine(s: Pick<Session, "ask" | "screen" | "essay" | "essayAt" | "phonesLive">): string | null {
+  const a = essayHandoffOf(s);
+  if (!a) return null;
+  return s.phonesLive === 0 ? "No phone is connected. Back: cancel." : `On the phone: ${ESSAY_HANDOFF_JOB[a.kind] ?? "the job"}. Back cancels.`;
+}
 /** A hand-off cancelled by the first Back (TL-6): true when this screen had one open and the Back was spent on it. */
 function cancelAsk(s: Session, o: Out): boolean {
-  const a = handoffOf(s);
+  const a = handoffOf(s) ?? essayHandoffOf(s);
   if (a) o.ev({ type: "ask.cancel", id: a.id });
   return !!a;
 }
@@ -484,8 +509,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     const at = stopAt(SENTENCE_STOPS, s.focus);
     if (k === "left") o.move(SENTENCE_STOPS.length, -1); if (k === "right") o.move(SENTENCE_STOPS.length, 1);
     if (k === "select" && at === "unit") o.nav("headtohead");
-    if (k === "select" && at === "again") o.ev({ type: "status", text: "say or type another sentence on the phone" });
-    if (k === "back") o.nav("linga");
+    if (k === "select" && at === "again") { o.ev({ type: "status", text: "say or type another sentence on the phone" }); o.ev({ type: "ask.open", kind: "sentence" }); }
+    if (k === "back") { if (!cancelAsk(s, o)) o.nav("linga"); }
   },
   headtohead: (s, k, _, o) => { if (k === "back") o.nav(s.english ? "sentence" : "units"); },
   // the lenses top to bottom; Right reaches the last paragraph's card, Select there opens its reading
@@ -501,21 +526,24 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (k === "down" && stops.includes("plan") && stops.indexOf(at) === LENS_STOPS.length - 1) { o.focus(stops.indexOf("plan")); return; }
       if (k === "down") o.move(LENS_STOPS.length, 1); if (k === "up") o.move(LENS_STOPS.length, -1);
       if (k === "right" && stops.includes("last")) o.focus(stops.indexOf("last"));
-      if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen — paste or dictate the paragraph on the phone` }); }
+      if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen — paste or dictate the paragraph on the phone` }); o.ev({ type: "ask.open", kind: "paragraph" }); }
     }
     if (k === "menu") o.nav("playbook", 0, "essaytype");
     // Adult mode: Back from the lens home returns to the Workroom, so it stays reachable once a reading is on the desk (recert-6/L1-helena-46-EM5-2)
+    if (k === "back" && cancelAsk(s, o)) return;
     if (k === "back") { if (isAdultHere(s)) o.calls.push({ url: "/api/twin", body: { open: true } }); else o.nav("landing", landingFocus(s, "essay")); }
   },
   // the Paragraph's slots, written on the phone: Up/Down walk the slots, then Read it and Back; Read it reads only when all three are written
   essayplan: (s, k, _, o) => {
     const plan = s.essayPlan, stops = planStops(s), at = stopAt(stops, s.focus);
-    if (k === "back") { o.nav("essaytype", LENS_STOPS.length); return; }
+    if (k === "back") { if (!cancelAsk(s, o)) o.nav("essaytype", LENS_STOPS.length); return; }
     if (k === "menu") { o.nav("playbook", PLAYBOOK.findIndex((p) => p.id === "para"), "essaytype"); return; }
+    // another slot closes this slot's hand-off (TL-7)
+    if (k === "down" || k === "up") { const was = essayHandoffOf(s); if (was && was.detail?.i !== Math.max(0, Math.min(stops.length - 1, s.focus + (k === "down" ? 1 : -1)))) o.ev({ type: "ask.cancel", id: was.id }); }
     if (k === "down") o.move(stops.length, 1); if (k === "up") o.move(stops.length, -1);
     if (k !== "select") return;
     if (at === "back") o.nav("essaytype", LENS_STOPS.length);
-    if (at === "slot") o.ev({ type: "status", text: planStatus(s.focus) });
+    if (at === "slot") { o.ev({ type: "status", text: planStatus(s.focus) }); o.ev({ type: "ask.open", kind: "slot", detail: { i: s.focus } }); }
     if (at === "read" && plan && !running(s, "analyse")) {
       const open = plan.slots.findIndex((x) => !x);
       if (open >= 0) o.focus(open); else o.calls.push({ url: "/api/analyse", body: { kind: "essay", text: planText(plan), type: plan.lens } });
@@ -534,16 +562,27 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   // one sentence at a time: Up/Down walk the paragraph, Left/Right the actions; Menu is the table, where Up/Down still walk
   forensic: (s, k, local, o) => {
     if (k === "menu") { o.local.table = !local.table; return; }
-    if (k === "back") { if (local.table) o.local.table = false; else o.nav("essaytype", readingLens(s)); return; }
+    if (k === "back") { if (local.table) o.local.table = false; else if (!cancelAsk(s, o)) o.nav("essaytype", readingLens(s)); return; }
     const a = s.essay; if (!a?.sentences.length) return;
-    const i = forensicAt(s), n = a.sentences.length;
-    const go = (j: number) => { if (j !== i) o.ev({ type: "essay.at", n: a.sentences[j].n }); };
+    const i = forensicAt(s), n = a.sentences.length, stops = forensicStops(s);
+    // another sentence closes the hand-off that names this one (TL-7)
+    const go = (j: number) => {
+      if (j === i) return;
+      o.ev({ type: "essay.at", n: a.sentences[j].n });
+      const was = essayHandoffOf(s); if (was) o.ev({ type: "ask.cancel", id: was.id });
+    };
     if (k === "down") go(Math.min(n - 1, i + 1)); if (k === "up") go(Math.max(0, i - 1));
     if (local.table) { if (k === "select") o.local.table = false; return; }
-    if (k === "right") o.move(FORENSIC_STOPS.length, 1); if (k === "left") o.move(FORENSIC_STOPS.length, -1);
+    if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     if (k !== "select") return;
-    const at = stopAt(FORENSIC_STOPS, s.focus);
-    if (at === "rewrite") o.ev({ type: "status", text: rewriteUnruledLine(a, a.sentences[i].n) ?? rewriteStatus(a.sentences[i].n) });
+    const at = stopAt(stops, s.focus);
+    if (at === "rewrite") {
+      const unruled = rewriteUnruledLine(a, a.sentences[i].n);
+      o.ev({ type: "status", text: unruled ?? rewriteStatus(a.sentences[i].n) });
+      // a sentence the desk did not rule has nothing to rewrite: the line says why and no hand-off opens
+      if (!unruled) o.ev({ type: "ask.open", kind: "rewrite", detail: { n: a.sentences[i].n } });
+    }
+    if (at === "private" && curtainOn(s)) o.ev({ type: "ask.open", kind: "private", detail: { n: a.sentences[i].n } });
     if (at === "why") o.nav("playbook", Math.max(0, PLAYBOOK_STOPS.findIndex((p) => p === playFor(a.type))), "forensic");
     if (at === "next") go(nextFaultyAt(a, i));
     if (at === "back") o.nav("essaytype", readingLens(s));

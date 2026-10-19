@@ -10,7 +10,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type 
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
 import { paragraphCount, paragraphPending, paragraphState, pieceBeingRead, readingAPiece, forensicPlace, forensicLead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
-import { stopAt, lensStops, forensicAt, rewriteStatus, planStops, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS, curtainOn } from "@/tv/keys";
+import { stopAt, lensStops, forensicAt, forensicStops, rewriteStatus, planStops, essayHandoffOf, essayHandoffLine, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS, curtainOn, type ForensicStop } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
@@ -45,7 +45,9 @@ function Top({ s, menu, lit }: { s: Session; menu: string; lit?: boolean }) {
     <div className="em-top">
       <div className="em-pill" data-role="essay-chip"><span className="em-key">MENU</span><span>{menu}</span></div>
       <div className={`em-pill${s.timer.running ? " run" : ""}`} data-role="essay-chip"><span className="em-lbl" style={{ fontSize: 20 }}>{s.timer.phase === "break" ? "Break" : "Focus"}</span><span className="em-t">{fmt(s.timer.left)}</span></div>
-      <div className={`em-pill${lit ? " lit" : ""}`} data-role="essay-chip">{PHONE}<span>{s.joined ? "Phone joined" : `PIN ${s.pin}`}</span></div>
+      {essayHandoffOf(s)
+        ? <div className="em-pill lit" data-role="essay-onphone">{PHONE}<span>On your phone</span></div>
+        : <div className={`em-pill${lit ? " lit" : ""}`} data-role="essay-chip">{PHONE}<span>{s.joined ? "Phone joined" : `PIN ${s.pin}`}</span></div>}
       <div className="em-pill" data-role="essay-chip"><span className="em-av">{s.learner?.name.charAt(0)}</span><span>{s.learner?.name}</span></div>
     </div>
   );
@@ -70,13 +72,14 @@ const WAYS = [
   <svg key="t" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="1" /><path d="M6 10h1M10 10h1M14 10h1M7 14h10" /></svg>,
   <svg key="d" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v4" /></svg>,
 ];
-const ACT_ICON: Record<(typeof FORENSIC_STOPS)[number], ReactNode> = {
+const ACT_ICON: Record<ForensicStop, ReactNode> = {
   rewrite: PHONE,
+  private: PHONE,
   why: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden="true"><path d="M4 9a8 8 0 1 1 8 8M12 13V9" /><path d="M4 9l-2.5 3M4 9l3 2.4" /></svg>,
   next: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="square" aria-hidden="true"><path d="M12 3v16M5.5 12.5L12 19l6.5-6.5" /></svg>,
   back: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="square" aria-hidden="true"><path d="M21 12H5M11 5.5L4.5 12l6.5 6.5" /></svg>,
 };
-const ACT_WORD: Record<(typeof FORENSIC_STOPS)[number], string> = { rewrite: "Rewrite on my phone", why: "Why this matters", next: "Next sentence", back: "Back to the paragraph" };
+const ACT_WORD: Record<ForensicStop, string> = { rewrite: "Rewrite on my phone", private: "Show the words on my phone", why: "Why this matters", next: "Next sentence", back: "Back to the paragraph" };
 
 /** A word as letters in three groups: Structure splits on them, Language ripples through them. */
 function Letters({ word }: { word: string }) {
@@ -146,6 +149,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const cap = job?.phase === "running" ? { label: READING_LABEL, text: readingAPiece(a?.piece, job.start) ? READING_PIECE : "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
     : refused ? refused
+    : essayHandoffLine(s) ? { label: "On your phone", text: essayHandoffLine(s) as string }
     : at === "plan" ? { label: "Start from the pattern", text: "Write the paragraph yourself: one sentence for each slot, on the phone." }
     : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: summaryLine(a) }
     : lens && chosen ? { label: `${lens.name} · chosen`, text: "Paste, type or dictate one paragraph on the phone." }
@@ -214,6 +218,7 @@ export function EssayPlan({ s }: { s: Session }) {
   const cap = job?.phase === "running" ? { label: "Reading", text: "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Press OK on Read it to send it again." }
     : refused ? refused
+    : essayHandoffOf(s) && here >= 0 ? { label: `Slot ${here + 1} · ${defs[here]?.label ?? ""}`, text: s.phonesLive === 0 ? "No phone is connected. Back: cancel." : "On the phone. Back cancels." }
     : here >= 0 ? { label: `Slot ${here + 1} · ${defs[here]?.label ?? ""}`, text: fit ?? (slots[here] ? "Written. Say it again on the phone to change it." : "Say it on the phone.") }
     : at === "read" ? { label: "Read it", text: done ? "The desk reads your paragraph through the " + (ESSAY_TYPES.find((t) => t.id === s.essayPlan?.lens)?.name ?? "Structure") + " lens." : "A slot is still to write. OK takes you to it." }
     : { label: "Your plan", text: "Back to the lenses. What you wrote stays." };
@@ -335,15 +340,15 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
   const lit = s.status === rewriteStatus(sn.n);
   const holds = rewriteState(v) === "holds";
   const job = s.jobs?.analyse?.key === `sentence:${sn.n}` ? s.jobs.analyse : undefined;
-  const curtain = curtainOn(s);
+  const curtain = curtainOn(s), stops = forensicStops(s);
   if (table) return <Table s={s} a={a} cur={i} verdicts={verdicts} curtain={curtain} />;
   return (<>
     <Brand /><Top s={s} menu="Table" lit={lit} />
     <Rail a={a} cur={i} verdicts={verdicts} />
-    <Page key={sn.n} curtain={curtain} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} unruled={unruledCaption(a.piece, sn.para ?? 0)} pending={paragraphPending(a.piece, sn.para ?? 0)} />
+    <Page key={sn.n} curtain={curtain} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} wait={essayHandoffLine(s)} unruled={unruledCaption(a.piece, sn.para ?? 0)} pending={paragraphPending(a.piece, sn.para ?? 0)} />
     <nav className="em-acts">
-      {FORENSIC_STOPS.map((k, j) => (
-        <div key={k} className={`em-pill em-act${j === 0 ? " prim" : ""}${stopAt(FORENSIC_STOPS, s.focus) === k ? " is-focused" : ""}`} data-focused={stopAt(FORENSIC_STOPS, s.focus) === k} {...(j === 0 ? { "data-role": "essay-primary" } : {})}>
+      {stops.map((k, j) => (
+        <div key={k} className={`em-pill em-act${j === 0 ? " prim" : ""}${stopAt(stops, s.focus) === k ? " is-focused" : ""}`} data-focused={stopAt(stops, s.focus) === k} {...(j === 0 ? { "data-role": "essay-primary" } : {})}>
           {ACT_ICON[k]}<span>{ACT_WORD[k]}</span>
         </div>
       ))}
@@ -383,7 +388,7 @@ function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<num
 }
 
 /** The one sentence the page is about. Keyed by sentence, so moving along the paragraph remounts it (and its fit). */
-function Page({ curtain, sn, n, place, lead, v, lens, type, inked, job, unruled, pending }: { curtain?: boolean; sn: Sent; n: number; place: string; lead: string; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean; job?: Job; unruled?: { label: string; text: string } | null; pending?: boolean }) {
+function Page({ curtain, sn, n, place, lead, v, lens, type, inked, job, wait, unruled, pending }: { curtain?: boolean; sn: Sent; n: number; place: string; lead: string; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean; job?: Job; wait?: string | null; unruled?: { label: string; text: string } | null; pending?: boolean }) {
   const main = useRef<HTMLElement>(null);
   const t = teaching(v, type);
   const vd = v?.verdict ?? "neutral", state = rewriteState(v);
@@ -412,6 +417,7 @@ function Page({ curtain, sn, n, place, lead, v, lens, type, inked, job, unruled,
   // the rewrite's run on this sentence speaks first; then what the rewrite did; then the reading's own note
   const noteCap = job?.phase === "running" ? { label: "Reading", text: `The desk is reading sentence ${sn.n} again.` }
     : job?.phase === "failed" && state === "none" ? { label: "Not read", text: job.error ?? "The sentence did not come back. Send it again from the phone." }
+    : wait ? { label: "On your phone", text: wait }
     : unruled ? unruled
     : pending ? { label: "Being read", text: "The desk has not read this paragraph yet." }
     : state === "holds" ? { label: "Rewrite · it holds", text: note || "It makes the move now." }

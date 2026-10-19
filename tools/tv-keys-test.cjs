@@ -209,7 +209,7 @@ test('essay 4: Left/Right walk the four actions, and each action does its one th
  const f=(focus,patch={})=>essay({screen:'forensic',focus,...patch});
  assert.equal(focusAfter(f(0),tvKey(f(0),'right',LOCAL)),1);assert.equal(focusAfter(f(0),tvKey(f(0),'left',LOCAL)),0);
  assert.equal(focusAfter(f(3),tvKey(f(3),'right',LOCAL)),3,'Right on the last action stays');
- assert.deepEqual(tvKey(f(0),'select',LOCAL).events,[{type:'status',text:rewriteStatus(4)}],'Rewrite on my phone names the sentence on screen');
+ assert.deepEqual(tvKey(f(0),'select',LOCAL).events,[{type:'status',text:rewriteStatus(4)},{type:'ask.open',kind:'rewrite',detail:{n:4}}],'Rewrite on my phone names the sentence on screen and opens its hand-off (TL-7)');
  assert.doesNotMatch(rewriteStatus(4),/Although|Concede/,'the status never carries a rewrite');
  const why=tvKey(f(1),'select',LOCAL).events;
  assert.deepEqual(why,[{type:'nav',screen:'playbook',focus:PLAYBOOK_STOPS.findIndex(p=>p.id==='thesis'),from:'forensic'}],'Why this matters opens the lesson the lens teaches through');
@@ -813,7 +813,7 @@ test('essay 4 (6c, E4-b): Rewrite on a sentence of a paragraph the desk did not 
  const r={...reading(SIXV),sentences,piece};
  const f=(essayAt)=>essay({screen:'forensic',focus:0,essay:r,essayAt});
  assert.deepEqual(tvKey(f(5),'select',LOCAL).events,[{type:'status',text:'Paragraph 2 did not come back. Send it again from the phone.'}],'an unruled sentence');
- assert.deepEqual(tvKey(f(2),'select',LOCAL).events,[{type:'status',text:rewriteStatus(2)}],'a ruled sentence');
+ assert.deepEqual(tvKey(f(2),'select',LOCAL).events,[{type:'status',text:rewriteStatus(2)},{type:'ask.open',kind:'rewrite',detail:{n:2}}],'a ruled sentence (TL-7: it also opens the hand-off)');
  assert.equal(at(f(2),tvKey(essay({screen:'forensic',focus:2,essay:r,essayAt:5}),'select',LOCAL)),6,'Next sentence still walks every sentence, unruled ones too');
 });
 
@@ -1113,4 +1113,88 @@ test('TL-6: with no phone connected, Up on the asking screen goes to pairing, as
  const s=session({screen:'tonight',awaiting:'maths',ask:askOf('page','tonight'),phonesLive:0});
  assert.deepEqual(tvKey(s,'up',LOCAL).events,[{type:'nav',screen:'pair',focus:0,from:'tonight'}]);
  assert.deepEqual(tvKey({...s,phonesLive:1},'up',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'tonight'}],'a phone is live: Up is what it was');
+});
+
+// ---- TL-7 (TV-led design 6): Essay Master and its sentence flows open their hand-offs from the TV ----
+const ADULT7={id:'hel',name:'Helena',type:'adult',age:34,system:'uk',modules:['essay'],mode:'adult'};
+const kept=()=>({...reading(SIXV),piece:{paragraphs:1,read:[0],failed:[],pieceId:'p1'}});
+const curtained=(patch={})=>essay({profiles:[ADULT7],learner:{id:'hel',name:'Helena'},essay:kept(),screen:'forensic',focus:0,...patch});
+
+test('TL-7: Select on a lens opens the paragraph hand-off beside the lens and its caption',()=>{
+ const {tvKey}=keys();
+ for(let f=0;f<4;f++){
+  const ev=tvKey(session({screen:'essaytype',subject:'essay',focus:f}),'select',LOCAL).events;
+  assert.deepEqual(ev.map(e=>e.type),['essay.type','status','ask.open'],'the status sentence stays as the caption');
+  assert.deepEqual(ev[2],{type:'ask.open',kind:'paragraph'});
+ }
+});
+
+test('TL-7: Rewrite on my phone opens rewrite {n}; an unruled sentence opens nothing',()=>{
+ const {tvKey}=keys();
+ const f=(essayAt)=>essay({screen:'forensic',focus:0,essayAt});
+ assert.deepEqual(tvKey(f(2),'select',LOCAL).events.at(-1),{type:'ask.open',kind:'rewrite',detail:{n:2}});
+ assert.deepEqual(tvKey(f(null),'select',LOCAL).events.at(-1),{type:'ask.open',kind:'rewrite',detail:{n:4}},'the sentence on screen');
+ const sentences=TEXTS.map((text,i)=>({n:i+1,text,words:text.split(' ').length,connectors:[],role:'claim',para:i<3?0:1}));
+ const r={...reading(SIXV),sentences,piece:{paragraphs:2,read:[0],failed:[1]}};
+ assert.equal(tvKey(essay({screen:'forensic',focus:0,essay:r,essayAt:5}),'select',LOCAL).events.some(e=>e.type==='ask.open'),false);
+});
+
+test('TL-7: Select on a slot opens slot {i}; Up/Down to another slot cancels it; Back cancels first',()=>{
+ const {tvKey}=keys();
+ for(const i of [0,1,2])assert.deepEqual(tvKey(planned(['','',''],{focus:i}),'select',LOCAL).events.at(-1),{type:'ask.open',kind:'slot',detail:{i}});
+ const open=(focus)=>planned(['','',''],{focus,ask:askOf('slot','essayplan',{i:focus})});
+ assert.deepEqual(tvKey(open(1),'down',LOCAL).events,[{type:'ask.cancel',id:'a1'},{type:'focus',focus:2}]);
+ assert.deepEqual(tvKey(open(1),'up',LOCAL).events,[{type:'ask.cancel',id:'a1'},{type:'focus',focus:0}]);
+ assert.deepEqual(tvKey(open(0),'up',LOCAL).events,[],'Up on the first slot stays on it: the ask stays');
+ assert.deepEqual(tvKey(open(1),'back',LOCAL).events,[{type:'ask.cancel',id:'a1'}],'the first Back cancels');
+ assert.deepEqual(tvKey(planned(['','',''],{focus:1}),'back',LOCAL).events,[{type:'nav',screen:'essaytype',focus:4}],'the next one leaves');
+});
+
+test('TL-7: Try a sentence on the sentence screen opens sentence; Back cancels it first',()=>{
+ const {tvKey}=keys();
+ const sent=(patch={})=>session({screen:'sentence',focus:0,...patch});
+ assert.deepEqual(tvKey(sent(),'select',LOCAL).events.at(-1),{type:'ask.open',kind:'sentence'});
+ assert.deepEqual(tvKey(sent({ask:askOf('sentence','sentence')}),'back',LOCAL).events,[{type:'ask.cancel',id:'a1'}]);
+ assert.deepEqual(tvKey(sent(),'back',LOCAL).events,[{type:'nav',screen:'linga',focus:0}]);
+});
+
+test('TL-7: Up/Down to another sentence cancels a rewrite ask that names a different n, beside its essay.at; Back cancels first',()=>{
+ const {tvKey}=keys();
+ const on=(essayAt,kind='rewrite')=>essay({screen:'forensic',focus:0,essayAt,ask:askOf(kind,'forensic',{n:essayAt})});
+ assert.deepEqual(tvKey(on(3),'down',LOCAL).events,[{type:'essay.at',n:4},{type:'ask.cancel',id:'a1'}]);
+ assert.deepEqual(tvKey(on(3),'up',LOCAL).events,[{type:'essay.at',n:2},{type:'ask.cancel',id:'a1'}]);
+ assert.deepEqual(tvKey(on(1),'up',LOCAL).events,[],'Up on sentence 1 stays: the ask stays');
+ // an ask that names the sentence the page is NOT on is already not this page's to cancel again
+ assert.deepEqual(tvKey({...on(3),ask:askOf('rewrite','forensic',{n:6})},'down',LOCAL).events,[{type:'essay.at',n:4}]);
+ assert.deepEqual(tvKey(on(3),'back',LOCAL).events,[{type:'ask.cancel',id:'a1'}],'the first Back cancels and stays');
+ assert.deepEqual(tvKey(essay({screen:'forensic',focus:0,essayAt:3}),'back',LOCAL).events,[{type:'nav',screen:'essaytype',focus:1}],'no ask: as it was');
+ // the lens home: Back cancels the paragraph ask before it leaves
+ assert.deepEqual(tvKey(session({screen:'essaytype',subject:'essay',ask:askOf('paragraph','essaytype')}),'back',LOCAL).events,[{type:'ask.cancel',id:'a1'}]);
+});
+
+test('TL-7: with the curtain on, Show the words on my phone is the stop before Back and opens private; with it off there is no such stop',()=>{
+ const {tvKey,forensicStops,FORENSIC_STOPS}=keys();
+ assert.deepEqual([...forensicStops(curtained())],['rewrite','why','next','private','back']);
+ assert.deepEqual([...forensicStops(essay({screen:'forensic'}))],[...FORENSIC_STOPS],'curtain off: the four actions, none private');
+ assert.deepEqual(tvKey(curtained({focus:3}),'select',LOCAL).events,[{type:'ask.open',kind:'private',detail:{n:4}}]);
+ // curtain off: walking the whole row never reaches it, and a focus past the end is Back
+ let s=essay({screen:'forensic',focus:0});
+ for(let k=0;k<8;k++){const r=tvKey(s,'right',LOCAL);s={...s,focus:focusAfter(s,r)};}
+ assert.equal(s.focus,3);
+ assert.equal(tvKey(s,'select',LOCAL).events.some(e=>e.type==='ask.open'),false);
+ // a kept piece but a School/Family learner is not curtained either
+ assert.equal(forensicStops(essay({screen:'forensic',essay:kept()})).includes('private'),false);
+});
+
+test('TL-7: the Essay screens draw the On your phone chip while the ask matches, and the sentence screen too',()=>{
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8'),scr=fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8');
+ assert.match(tv,/essayHandoffOf\(s\)\s*\n?\s*\? <div className="em-pill lit" data-role="essay-onphone">\{PHONE\}<span>On your phone<\/span>/);
+ assert.match(tv,/essayHandoffLine\(s\)/);
+ assert.match(scr,/essayHandoffOf\(s\) && /);
+ const {essayHandoffOf,essayHandoffLine}=keys();
+ const s=essay({screen:'essaytype',ask:askOf('paragraph','essaytype'),phonesLive:1});
+ assert.ok(essayHandoffOf(s));assert.match(essayHandoffLine(s),/^On the phone: .*Back cancels\.$/);
+ assert.equal(essayHandoffOf({...s,screen:'forensic'}),null,'an ask another screen opened');
+ assert.equal(essayHandoffOf({...s,ask:askOf('slot','essaytype')}),null,'a kind this screen does not open');
+ assert.match(essayHandoffLine({...s,phonesLive:0}),/No phone is connected/);
 });

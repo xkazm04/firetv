@@ -669,3 +669,30 @@ test('EM5-3 (recert-6): the TV reads a kept piece by id (kind shelf-piece): the 
   assert.equal(stores(), before);
   texts.deleteAll('ema');
 });
+
+// TL-7: the private hand-off exists only under the curtain, and the TV never receives a sentence's text through it
+test('TL-7: private is a stop only under the curtain, and its ask carries a sentence number, never a sentence', () => {
+  const keys = require(src('tv/keys.ts'));
+  const ADULT = { id: 'hel', name: 'Helena', type: 'adult', age: 34, system: 'uk', modules: ['essay'], mode: 'adult' };
+  const sentences = [{ n: 1, text: 'Schools start too early.', words: 4, connectors: [], role: 'claim', para: 0 }, { n: 2, text: 'Teenagers are tired.', words: 3, connectors: [], role: 'evidence', para: 0 }];
+  const verdicts = [{ n: 1, verdict: 'faulty', note: 'x' }, { n: 2, verdict: 'strong', note: 'y' }];
+  const reading = (piece) => ({ text: 'Schools start too early. Teenagers are tired.', type: 'argument', summary: 's', stats: { sentences: 2 }, sentences, verdicts, ...(piece ? { piece } : {}) });
+  const base = { screen: 'forensic', subject: 'essay', focus: 3, essayAt: 1, ask: null, phonesLive: 1, englishLearning: null, profiles: [ADULT], learner: { id: 'hel', name: 'Helena' } };
+  const kept = { ...base, essay: reading({ paragraphs: 1, read: [0], failed: [], pieceId: 'p1' }) };
+  assert.deepEqual([...keys.forensicStops(kept)], ['rewrite', 'why', 'next', 'private', 'back']);
+  for (const off of [{ ...kept, essay: reading() }, { ...kept, profiles: [{ ...ADULT, type: 'high-school', mode: undefined, age: 15 }] }]) {
+    assert.equal(keys.forensicStops(off).includes('private'), false, 'curtain off: no private action is reachable');
+    assert.equal(keys.tvKey({ ...off, focus: 3 }, 'select').events.some((e) => e.type === 'ask.open' && e.kind === 'private'), false);
+  }
+  const ev = keys.tvKey(kept, 'select').events;
+  assert.deepEqual(ev, [{ type: 'ask.open', kind: 'private', detail: { n: 1 } }]);
+  const wire = JSON.stringify(ev);
+  for (const sn of sentences) assert.equal(wire.includes(sn.text), false, 'the event carries no sentence text');
+  // the desk keeps the same: the ask the TV reads has the number and nothing of the words
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' });
+  dispatch({ type: 'ask.open', kind: 'private', detail: { n: 1, text: 'Schools start too early.' } });
+  const ask = getSession().ask;
+  assert.equal(ask.kind, 'private');
+  assert.equal(JSON.stringify(ask).includes('Schools'), false, 'no sentence text in the ask');
+  assert.equal(keys.essayHandoffLine({ ...kept, ask: { ...ask, screen: 'forensic' } }).includes('Schools'), false, 'the caption names the job, never the words');
+});

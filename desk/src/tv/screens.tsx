@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import type { Profile, Session } from "@/lib/session/store";
 import { fmt } from "./useSession";
-import { playerCommand, stopAt, learnerStops, switchEndsLine, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
+import { playerCommand, stopAt, learnerStops, switchEndsLine, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS, essayHandoffOf, essayHandoffLine } from "./keys";
 import { lessonStates } from "@/lib/library/watched";
 import { pathOf } from "@/lib/library/paths";
 import { recapRows, recapCaption, railOf, setMarks, RECAP_READINGS, RECAP_SLIPS, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
@@ -258,7 +258,8 @@ export function SentenceScreen({ s, focus }: { s: Session; focus: number }) {
       <div className="eyebrow" data-ch="english" style={{ marginTop: 40 }}>English · your sentence</div>
       <div className="sent" style={{ marginTop: 50, maxWidth: 1700 }}>{parts.map((p, i) => p.k ? <span key={i} className="tok" data-k={p.k} data-l={p.l}>{p.text}</span> : <span key={i}>{p.text}</span>)}</div>
       <div className="lt" style={{ position: "absolute", left: 0, bottom: 200, maxWidth: 1500 }}><div className="tag">{card.conflict ? "The rule" : "Right"}</div><div className="txt" style={{ fontSize: 38 }}>{a.explanation}</div></div>
-      <div className="actions" style={{ bottom: 60 }}><button className="btn" data-focused={stopAt(SENTENCE_STOPS, focus) === "again"}>Try it again</button><button className="btn" data-focused={stopAt(SENTENCE_STOPS, focus) === "unit"}>Show me the unit</button></div>
+      {essayHandoffOf(s) && <div className="cap-text" data-role="sentence-onphone" style={{ position: "absolute", left: 0, bottom: 130 }}><span className="cap">On your phone</span> {essayHandoffLine(s)}</div>}
+      <div className="actions" style={{ bottom: 60 }}><button className="btn" data-focused={stopAt(SENTENCE_STOPS, focus) === "again"}>Try a sentence</button><button className="btn" data-focused={stopAt(SENTENCE_STOPS, focus) === "unit"}>Show me the unit</button></div>
     </main>
   </>);
 }
