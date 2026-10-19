@@ -2,8 +2,8 @@
  * Math Buddy's pure rows: what the session alone says is open. Shared by the Tonight screen and
  * the D-pad (tv/keys.ts). Types only from the store - the TV never loads the filesystem.
  */
-import type { Practice, Screen, Session } from "@/lib/session/store";
-import { STATEMENTS } from "@/lib/library/gcse";
+import type { Practice, SchoolSystem, Screen, Session } from "@/lib/session/store";
+import { canOf } from "@/lib/rules/paperEntry";
 import { PATHS, learnerPath, topicIn, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { firstToLook } from "@/tv/sheetRows";
 import { slip as slipById } from "@/lib/rules/maths";
@@ -372,8 +372,8 @@ const moreOf = (n: number) => (n ? ` and ${MORE_WORD[n] ?? "several"} more` : ""
  * A step up aimed at the slips named on its unit's top rung (cycle 18, Practice.topAim) says so in the same slot, in
  * rules/school topAimLine's words: "Aimed at: took the percent of the new amount." A paper's aim comes first.
  */
-export function aimLine(p: (Pick<Practice, "aim"> & Partial<Pick<Practice, "topic" | "topAim">>) | null | undefined): string | null {
-  const said = (p?.aim ?? []).map((c) => STATEMENTS.find((x) => x.code === c)?.can).filter((x): x is string => !!x)
+export function aimLine(p: (Pick<Practice, "aim"> & Partial<Pick<Practice, "topic" | "topAim">>) | null | undefined, system?: SchoolSystem): string | null {
+  const said = (p?.aim ?? []).map((c) => canOf(c, system)).filter(Boolean)
     .map((x) => x.charAt(0).toLowerCase() + x.slice(1));
   if (!said.length) return p?.topAim?.length ? topAimLine(p.topic, p.topAim) : null;
   const kept: string[] = [];

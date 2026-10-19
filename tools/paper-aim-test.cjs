@@ -47,6 +47,7 @@ function seat(extra={}){
  store.dispatch({type:'paper.enter',rows:[{q:'1',marks:0,outOf:4,codes:['A17']},{q:'2',marks:1,outOf:3,codes:['N2']}]});
 }
 const can=(code)=>STATEMENTS.find((x)=>x.code===code).can;
+const {canOf}=require(src('lib/rules/paperEntry.ts'));
 /** The keys the TV would press: the session as it is, the TV's local state as given. */
 const press=(k,local=K.LOCAL)=>{const r=K.tvKey(S(),k,local);for(const e of r.events)store.dispatch(e);return {...r,local:{...local,...r.local}};};
 /** Walk the recovery list to `topicId` and press Select: the TV is then on Get ready for school with the question open. */
@@ -397,7 +398,7 @@ test('MB4-2: the seated maturita learner\'s paper sends a partial link below the
  assert.deepEqual(readerOf(S()),{system:'cz',age:18});
  const v=paperView(S());
  assert.deepEqual(v.topics.map((t)=>t.id),[],'nothing lands on Area of rectangles or Equivalent fractions');
- assert.deepEqual(v.off.map((o)=>[o.can,o.lost]).sort(),[[can('G17'),3],[can('N1'),2]].sort());
+ assert.deepEqual(v.off.map((o)=>[o.can,o.lost]).sort(),[[canOf('G17','cz'),3],[canOf('N1','cz'),2]].sort(),'a seated cz learner reads the statements in Czech (L1-radka-41-MB4-1)');
  assert.deepEqual(aimOf(S().paper.items,'area',readerOf(S())),[],'aimOf with the reader');
  assert.ok(aimOf(S().paper.items,'area').includes('G17'),'aimOf without one keeps the old aim');
  // nobody seated: the old routing
@@ -407,4 +408,12 @@ test('MB4-2: the seated maturita learner\'s paper sends a partial link below the
  // a profile of type other, or one with no age or system, has no reader
  assert.equal(readerOf({profiles:[{id:'x',name:'X',type:'other',modules:[]}],learner:{id:'x'}}),undefined);
  assert.equal(readerOf({profiles:[{id:'x',name:'X',type:'high-school',age:18,modules:[]}],learner:{id:'x'}}),undefined);
+});
+
+test('aim 16 (L1-radka-41-MB4-1): the equations prompt names the aimed statements in the learner own language; no system keeps the English',()=>{
+ const {aimBlock}=require(src('lib/desk/items.ts'));
+ assert.ok(aimBlock(['A17'],'cz').includes(canOf('A17','cz')));
+ assert.notEqual(canOf('A17','cz'),can('A17'));
+ assert.ok(aimBlock(['A17'],'uk').includes(can('A17'))&&aimBlock(['A17']).includes(can('A17')));
+ assert.equal(aimBlock(['nope'],'cz'),'');
 });

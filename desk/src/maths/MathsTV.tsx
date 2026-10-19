@@ -28,7 +28,7 @@ import { playerCommand, running, practiceFailed, stopAt, tonightStops, calendarS
 import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, pastPathEnd, pathEndsLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
-import { leftOutLine, lostLabel, offCountLine, offSummary, paperCaption, paperNone, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
+import { leftOutLine, lostLabel, offCountLine, offSummary, paperCaption, paperNone, paperView, paperWindow, scoreLine, beyondFlag } from "@/tv/paperRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
 import { missingLine } from "@/tv/pageLines";
@@ -712,6 +712,7 @@ const PAPER_ROWS = 5;
  */
 export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
   const v = paperView(s);
+  const sys = systemOf(s.profiles.find((q) => q.id === s.learner?.id));
   const w = paperWindow(v.topics.length, focus, PAPER_ROWS);
   const lamp = Math.min(Math.max(0, focus), Math.max(0, v.topics.length - 1));
   const offAt = Math.min(Math.max(0, focus), v.topics.length + v.off.length - 1) - v.topics.length;
@@ -733,7 +734,7 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
                   <span className="n">{ix + 1}</span>
                   <span className="nm">{o.can}</span>
                   <span className="lost">{lostLabel(o.lost, o.shared)}</span>
-                  <span className="from">From {o.from}{o.beyond ? " · a harder statement" : ""}</span>
+                  <span className="from">From {o.from}{o.beyond ? beyondFlag(sys) : ""}</span>
                 </div>
               );
             })}
@@ -796,7 +797,7 @@ export function PracticeScreen({ s }: { s: Session }) {
   const name = topicName(p.topic);
   const job = markLine(s);
   // a set opened from a paper's recovery row says what it aims at, in the caption slot (MB-B40); any other set, nothing
-  const aim = aimLine(p);
+  const aim = aimLine(p, systemOf(s.profiles.find((q) => q.id === s.learner?.id)));
   return (<>
     <Top s={s} crumb={name} />
     <div className="mb-practice" ref={pan}>

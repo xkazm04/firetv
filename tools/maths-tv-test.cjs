@@ -1237,6 +1237,28 @@ test('paper 9 (L1-vojtech-18-MB4-1): each recovery topic row names the statement
  assert.match(row[0].replace(/<[^>]*>/g,' '),/led by N12/,'the row says which statement led there');
 });
 
+test('paper 10 (L1-radka-41-MB4-1): a cz learner reads the off-desk statement, its harder-statement flag and the aim line in Czech; a uk learner reads the same lines as before',()=>{
+ const {paperView,beyondFlag}=PAPER(),{STATEMENTS}=STM(),{canOf}=require(path.join(root,'src/lib/rules/paperEntry.ts')),{aimLine}=require(path.join(root,'src/tv/mathsRows.ts'));
+ const {CAN_CZ}=require(path.join(root,'src/lib/library/gcse-cz.ts'));
+ const beyond=STATEMENTS.find(x=>!x.touches.length&&!x.foundation);
+ assert.ok(CAN_CZ[beyond.code]&&CAN_CZ[beyond.code]!==beyond.can,'the statement has its own Czech wording');
+ const raw=[it('1',0,2,[beyond.code])],prof=(system)=>[{id:'ema',name:'Ema',type:'high-school',age:15,system,modules:['maths']}];
+ const sess=(system)=>({...paperSession(raw,{},0),profiles:prof(system),learner:{id:'ema',name:'Ema'}});
+ const esc=(x)=>x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+ const cz=sess('cz'),uk=sess('uk');
+ assert.equal(paperView(cz).off[0].can,CAN_CZ[beyond.code]);
+ assert.equal(paperView(uk).off[0].can,beyond.can,'uk is unchanged');
+ const hc=drawMaths('PaperScreen',cz),hu=drawMaths('PaperScreen',uk);
+ assert.ok(hc.includes(esc(CAN_CZ[beyond.code]))&&!hc.includes(esc(beyond.can)),'the cz page prints Czech only');
+ assert.match(hc,/těžší tvrzení/);assert.doesNotMatch(hc,/a harder statement/);
+ assert.ok(hu.includes(esc(beyond.can))&&/a harder statement/.test(hu)&&!/těžší/.test(hu));
+ assert.equal(beyondFlag('uk'),' · a harder statement');assert.equal(beyondFlag(undefined),' · a harder statement');
+ const p={topic:'linear-one-step',items:[],marked:false,aim:['A17']};
+ assert.ok(aimLine(p,'cz').toLowerCase().includes(canOf('A17','cz').toLowerCase()));
+ assert.notEqual(canOf('A17','cz'),canOf('A17','uk'));
+ assert.equal(aimLine(p,'uk'),aimLine(p),'uk and no system read the same English line');
+});
+
 test('MB2-2: past the path\'s end the Topics ruler prints no year under the topic names; a learner on the path keeps it in their system\'s words',()=>{
  const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),{createElement}=require(path.join(root,'node_modules/react'));
  const M=require(path.join(root,'src/maths/MathsTV.tsx'));

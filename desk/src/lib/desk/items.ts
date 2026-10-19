@@ -44,7 +44,7 @@ import { drawWord, wordItems, wordTemplateFor } from "../rules/calc-word";
 import { SCHOOL_UNIT_SLIPS, STATEMENT_FORMS, TOP_SLIP_FORMS, formOf, generatorFor, paperSteer, leaksSchool, question as schoolQuestion, slipShows, storyOf, topFormOf, topGeneratorFor, topSteer, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { JSONSchema } from "../engines/types";
 import { learnerYear, setMix, tierCounts, type Mix, type MixFor } from "../rules/stretch";
-import { STATEMENTS } from "../library/gcse";
+import { canOf } from "../rules/paperEntry";
 
 const SCHEMA = {
   type: "object",
@@ -97,8 +97,8 @@ export function learnerBlock(who: MixFor = {}): string {
  * printed in the map's own words - never a code, a question or a mark count). The learner's age and system are the
  * learner section's (learnerBlock), not this one's. No aim, no section, heading included.
  */
-export function aimBlock(aim: readonly string[] | undefined): string {
-  const said = (aim ?? []).map((c) => STATEMENTS.find((x) => x.code === c)?.can).filter((x): x is string => !!x);
+export function aimBlock(aim: readonly string[] | undefined, system?: SchoolSystem): string {
+  const said = (aim ?? []).map((c) => canOf(c, system)).filter(Boolean);
   if (!said.length) return "";
   return `What this set is aimed at: on a school maths paper the student lost marks on ${said.length === 1 ? "this statement" : "these statements"} of what a student can do:\n` +
     said.map((x) => `- ${x}`).join("\n") + "\n" +
@@ -207,8 +207,8 @@ export async function makeItems(
   // a paper's lost statements, when it opened the set, steer the draw first (MB-B40 cycle 14)
   // a step up's tier-3 slots are aimed at the slips named on the rung the last time (cycle 18); a usual set takes none
   if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch, [...(getLearner(learnerId).skills[topicId]?.slips ?? [])].reverse(), opts.system, opts.aim ?? [], stretch ? opts.topSlips ?? [] : []);
-  const aimed = aimBlock(opts.aim) ? [...(opts.aim ?? [])] : [];
-  const made = flag(await makeLinearItems(topicId, learnerId, n, learnerBlock(opts), aimBlock(opts.aim)));
+  const aimed = aimBlock(opts.aim, opts.system) ? [...(opts.aim ?? [])] : [];
+  const made = flag(await makeLinearItems(topicId, learnerId, n, learnerBlock(opts), aimBlock(opts.aim, opts.system)));
   return aimed.length ? { ...made, aim: aimed } : made;
 }
 

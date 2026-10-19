@@ -5,6 +5,8 @@
  */
 import type { Session } from "@/lib/session/store";
 import { recovery, prereqsOf, reachOf, readerOf, type Recovery } from "@/lib/rules/recovery";
+import { canOf } from "@/lib/rules/paperEntry";
+import { systemOf } from "@/tv/profileRows";
 
 export interface PaperTopic { id: string; name: string; lost: number; from: string; secure: boolean;
   /** The statement codes that led the questions here (recovery topics[].codes), in the order rules/recovery gives them. */
@@ -12,6 +14,8 @@ export interface PaperTopic { id: string; name: string; lost: number; from: stri
   /** Some of its lost marks are a share of a question that reaches other places too (the whole-mark sharing of rules/recovery). */
   shared: boolean; }
 export interface PaperOff { can: string; lost: number; from: string; beyond: boolean; shared: boolean; }
+/** The flag on an off-desk row for a statement beyond a Foundation paper, in the learner's language. */
+export const beyondFlag = (system?: string): string => (system === "cz" ? " · těžší tvrzení" : " · a harder statement");
 export interface PaperView {
   /** No paper on the learner's record. */
   empty: boolean;
@@ -31,6 +35,7 @@ const labels = (qs: readonly string[]) => qs.join(", ");
 export function paperView(s: Pick<Session, "paper" | "skills" | "profiles" | "learner">): PaperView {
   if (!s.paper) return { empty: true, marks: 0, outOf: 0, lost: 0, topics: [], off: [], unmapped: 0, leftOut: 0 };
   const at = readerOf(s);
+  const system = systemOf(s.profiles?.find((q) => q.id === s.learner?.id));
   const r: Recovery = recovery([...s.paper.items, ...s.paper.unmapped], at);
   // a question that reaches more than one place splits its lost marks between them
   const split = new Set<string>();
@@ -40,7 +45,7 @@ export function paperView(s: Pick<Session, "paper" | "skills" | "profiles" | "le
     empty: false, marks: r.totals.marks, outOf: r.totals.outOf, lost: r.totals.lost, unmapped: r.unmapped.length, leftOut: s.paper.leftOut ?? 0,
     // the order is recovery()'s: the learner meets the base of the biggest loss first
     topics: r.topics.map((t) => ({ id: t.id, name: t.name, lost: t.lost, from: labels(t.items), codes: t.codes, secure: s.skills?.[t.id]?.secure === true, shared: isShared(t.items) })),
-    off: r.notOnDesk.map((o) => ({ can: o.can, lost: o.lost, from: labels(o.items), beyond: !o.foundation, shared: isShared(o.items) })),
+    off: r.notOnDesk.map((o) => ({ can: canOf(o.code, system) || o.can, lost: o.lost, from: labels(o.items), beyond: !o.foundation, shared: isShared(o.items) })),
   };
 }
 
