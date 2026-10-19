@@ -26,10 +26,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "The x-ray's model paragraph is on a topic a school would not set this learner, or shows the role words over hatched content, and it never shares a topic with the phone's sample text.",
     "l2_priority": "Screenshot the x-ray from the forensic page's Why. Confirm the three sentences render whole and legible from the sofa.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-barbora-43-EM1-1"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-barbora-43-EM1-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791 (unchanged): the x-ray still has three whole teenage-sleep sentences, the phone placeholder is still the tired/sleep sample, and the seeded task is still 'Later school starts'. No commit since b7fca776 touched them. At ffa91a49 the cited lines of changed files sit at essay/EssayTV.tsx:541->542 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-barbora-43-EM1-1"
   },
   {
     "id": "L1-barbora-43-EM1-2",
@@ -59,10 +63,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "The reading prompt carries the open Essay Master task's name (S6) and the lens's last two readings' fault counts (S7) when present. The grounding score is re-measured against ES-READ.",
     "l2_priority": "Grounded arm: read one paragraph with an essay task set and without it (control). Check whether the notes reference the question.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-barbora-43-EM1-2"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-barbora-43-EM1-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791: the reading prompt still carries mode, age and a task only if the body names one; /api/analyse takes body.task but the phone's piece call sends none; no earlier readings or notes in the prompt. No commit since b7fca776 touched desk/essay.ts, analyse/route.ts or phone/page.tsx. None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-barbora-43-EM1-2"
   },
   {
     "id": "L1-barbora-43-EM4-1",
@@ -91,10 +99,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "The engine sentence shows once per learner before the first reading of any kind. The Recap tab carries a 'Where the writing is' line and a delete that also clears the paragraph on the desk (s.essay and away slots). The shelf stays reachable whatever the TV shows.",
     "l2_priority": "Parent role on a paragraph-only evening: look for the notice and a delete without help; then inspect session.json for the paragraph after delete-all.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-barbora-43-EM4-1"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-barbora-43-EM4-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791: 'Forget tonight's paragraph' is always on the shelf (EssayShelf.tsx:50) but the shelf renders only inside the paragraph panel (page.tsx:724, shelf at :745); the sentence panel (:710) and the plan panel (:718) carry no shelf or forget control. Nothing touched it since b7fca776. None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-barbora-43-EM4-1"
   },
   {
     "id": "L1-barbora-43-EM4-2",
@@ -125,9 +137,13 @@
     "suggested_acceptance": "The recap line names a piece as a piece (or its paragraph count), matching the Sunday wording.",
     "l2_priority": "Read one paragraph and one 3-paragraph piece, End session, compare the Recap line with the Sunday line.",
     "resolution": "open",
-    "recurrence": 10,
+    "recurrence": 11,
     "origin": "2026-10-14-l1/essay-family/L1-barbora-43-EM4-7 (ceiling of EM4-2 / EM4-10)",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-barbora-43-EM4-2"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-barbora-43-EM4-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791: the recap writer still counts 'reading' (recapRows.ts:292) and parseDetail's writing regex tolerates ', N paragraphs' but drops it (:57-60); the Sunday page still says 'paragraph reading' / 'piece' (week.ts:322). Nothing touched them. None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-barbora-43-EM4-2"
   },
   {
     "id": "L1-daniel-15-EM2-1",
@@ -157,9 +173,13 @@
     "suggested_acceptance": "On the Essay tab the recogniser listens in English whatever the school system.",
     "l2_priority": "med",
     "resolution": "open",
-    "recurrence": 10,
+    "recurrence": 11,
     "origin": "2026-10-14-l1/essay-family/L1-daniel-15-EM2-7",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM2-1"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM2-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791: recogniserLang still returns cs-CZ for a cz learner and is applied to every phone recogniser, including the Essay panels. Untouched. None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-daniel-15-EM2-1"
   },
   {
     "id": "L1-daniel-15-EM2-2",
@@ -190,9 +210,13 @@
     "suggested_acceptance": "A rewrite of a claim ruled neutral as a later unsupported claim is not ruled faulty on that ground alone.",
     "l2_priority": "low",
     "resolution": "open",
-    "recurrence": 10,
+    "recurrence": 11,
     "origin": "recert-1 walk",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM2-2"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM2-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791 (rules/essay.ts moved): only the first unsupported claim is faulty (unsupportedSeen, essay.ts:539,579); bodyProves/closesAfterEvidence (:521,:526) need the multi-paragraph context; the rewrite is still judged with new Set([n]) alone (desk/essay.ts:288). 645fdc94 changed revise() tidying/refusal wording only, not the ruling. At ffa91a49 the cited lines of changed files sit at lib/rules/essay.ts:539->565, lib/rules/essay.ts:521->547 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-daniel-15-EM2-2"
   },
   {
     "id": "L1-daniel-15-EM3-1",
@@ -221,10 +245,14 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "The rewrite panel carries 'Send a new piece' / 'Your shelf' that brings the TV to the lens home, or the shelf and box stay reachable below the rewrite panel.",
     "l2_priority": "Reopen Essay Master the next evening with last night's reading on the desk: can the phone paste a new piece without the remote?",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM3-1"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM3-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791: the paste box and shelf still render only when !onSentence && !onPlan (page.tsx:724); onSentence is set while forensic has a reading (:239); Select on Essay still reopens forensic when ownReading (keys.ts:300 openWaiting). 32ffdf92 only changed Next sentence. At ffa91a49 the cited lines of changed files sit at tv/keys.ts:300->308 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-daniel-15-EM3-1"
   },
   {
     "id": "L1-daniel-15-EM3-2",
@@ -254,10 +282,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "A short first line with no full stop, or a question line followed by a paragraph, is taken as the title: shown as such, not read as a paragraph, and passed to the reading prompt as the task.",
     "l2_priority": "Send Daniel's piece with a title line both ways; record the paragraph count, call count and the title's verdict.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM3-2"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM3-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: narrowed by cae23442; still missing: The title is not shown as a title anywhere, is not passed to the reading prompt as the task, and a question line followed by a paragraph still stays a paragraph (by design). At ffa91a49 the cited lines of changed files sit at lib/rules/essay.ts:103->104, lib/rules/essay.ts:86->87 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-daniel-15-EM3-2"
   },
   {
     "id": "L1-daniel-15-EM3-3",
@@ -285,10 +317,14 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "One line on the lens home or the forensic page says the desk reads structure, argument, evidence and word choice, not grammar or spelling.",
     "l2_priority": "optional: check whether any live note comments on grammar despite the lens.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM3-3"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM3-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Unchanged: the strong note still reads 'Well done' (EssayTV.tsx:420) and no line says grammar and spelling are not checked; the faulty-note table is now ADULT_CHECKS/YOUNG_CHECKS (rules/essay.ts:456, :469), neither mentions grammar or spelling.",
+    "recurred_as": "L1-daniel-15-EM3-3"
   },
   {
     "id": "L1-daniel-15-EM3-4",
@@ -318,9 +354,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "Either draw them (e.g. the shelf says whether the notice is accepted) or stop computing them.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM3-4"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM3-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: narrowed by 176f04f0; still missing: provider is still drawn nowhere, and /api/texts GET noticed/notice has no reader (the shelf does not say whether the notice is accepted). At ffa91a49 the cited lines of changed files sit at essay/EssayTV.tsx:477->478, lib/rules/essay.ts:280->292 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-daniel-15-EM3-4"
   },
   {
     "id": "L1-daniel-15-EM3-5",
@@ -351,9 +391,13 @@
     "suggested_acceptance": "Each paragraph shows a provisional verdict as it lands, or the wait screen says plainly that verdicts come when the whole piece is read and how far it has got.",
     "l2_priority": "high",
     "resolution": "open",
-    "recurrence": 10,
+    "recurrence": 11,
     "origin": "2026-10-14-l1/essay-family/L1-daniel-15-EM3-14",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM3-5"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-daniel-15-EM3-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791 (rules/essay.ts moved): decideVerdicts still runs only when para === of - 1 (desk/essay.ts:204, :236), the wait line is pieceReadingLine 'Reading paragraph k of N.' (rules/essay.ts:607-610), and EssayTV.tsx:415 still shows 'Being read'. No provisional verdicts and no plain statement that verdicts come when the whole piece is read. At ffa91a49 the cited lines of changed files sit at lib/rules/essay.ts:607->633, essay/EssayTV.tsx:415->416 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-daniel-15-EM3-5"
   },
   {
     "id": "L1-eliska-12-EM1-1",
@@ -381,12 +425,15 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 11,
     "suggested_acceptance": "CHECKS and planFit have a young wording ('This says what you think, but gives nothing a reader could check.'; 'That reads as a claim.').",
     "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM1-1",
     "severity_prior": "minor",
-    "severity_why": "Since E6 every faulty note is a fixed CHECKS line, so the unvoiced wording shows on every fault, not only when the model's note is empty."
+    "severity_why": "Since E6 every faulty note is a fixed CHECKS line, so the unvoiced wording shows on every fault, not only when the model's note is empty.",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "61a8e2ee (ancestor of HEAD) gave the faulty note a young wording: desk/src/lib/rules/essay.ts keeps ADULT_CHECKS (:456) and adds YOUNG_CHECKS (:469-479), and decideVerdicts(…, band) picks YOUNG_CHECKS when band is 'young' (a learner of 13 or less, rules/voice bandOf); every caller in desk/src/lib/desk/essay.ts (:134, :204, :236, :288) passes voice.band. Executed at ffa91a49 (scratch /tmp/rc11/ex.cjs, no model): three opinion sentences ruled with band 'young' carry 'This says what you think, but gives nothing a reader could check.' (the row's own example) and with 'teen' carry 'This only asserts; nothing here is checkable.'; planFit(…) now returns 'That reads as a claim. This slot wants your evidence: something a reader can check.' (PLAN_READS keeps its article, planFit :888). The one place that matched the old note text, contextObservations' ruledOpinion (:771), accepts both wordings. tools/essay-rules-test.cjs pins it (157 pass 0 fail)."
   },
   {
     "id": "L1-eliska-12-EM1-2",
@@ -414,10 +461,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "The page names the job the lens observed (or none), never the first-pass guess, or labels the guess as such.",
     "l2_priority": "Screenshot the forensic page on P3's sentence 3 under Evidence.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM1-2"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM1-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791: role is still the regex first-pass guess (desk/src/lib/rules/essay.ts:45, LINK.test ? link : EVIDENCE.test ? evidence : claim); EssayTV.tsx:423 (crumb), :431-433 (Its job / move-type word) and :492 (table chip) still draw sn.role / x.role, unlabelled as a guess. 176f04f0 only added word and link counts to the table (:477), not changing the role source. At ffa91a49 the cited lines of changed files sit at lib/rules/essay.ts:45->46, essay/EssayTV.tsx:423->424 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-eliska-12-EM1-2"
   },
   {
     "id": "L1-eliska-12-EM1-4",
@@ -448,9 +499,13 @@
     "suggested_acceptance": "Make supports / backs required for evidence-job and checkable sentences, or have code refuse a reading whose evidence sentence names nothing instead of ruling on it.",
     "l2_priority": "Run P2 live under Structure and Evidence 5 times each and count how often the model emits supports / backs.",
     "resolution": "open",
-    "recurrence": 10,
+    "recurrence": 11,
     "origin": "2026-10-14-l1/essay-family/L1-eliska-12-EM1-12",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM1-4"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM1-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791: supports/backs are still optional in the request schema (desk/src/lib/desk/essay.ts:33,35, not in required). decideVerdicts evidence branch (desk/src/lib/rules/essay.ts:554-568) still rules neutral when no accepted link and marks were judged (:561-562), else the blind/unbacked rule; structure branch (:572-580) still uses blind / unsupported (CHECKS.unsupported :578). Code does not refuse a reading whose evidence sentence names nothing. No commit since b7fca776 changed this. At ffa91a49 the cited lines of changed files sit at lib/rules/essay.ts:554->580, lib/rules/essay.ts:572->598 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-eliska-12-EM1-4"
   },
   {
     "character": "eliska-12",
@@ -482,8 +537,12 @@
     "walker_key": "eliska-12-EM1-5",
     "cert_level": "L1",
     "resolution": "open",
-    "recurrence": 8,
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM1-5"
+    "recurrence": 9,
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM1-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791: closesAfterEvidence (desk/src/lib/rules/essay.ts:526-531) still returns false unless LINK.test(text) (:15) or a connector in EXPLAINS (:400); it is the only exemption for an opinion after backed evidence (:557). A connector-less Explain after backed evidence is still faulty CHECKS.unbacked (:566-567). No commit touched it. At ffa91a49 the cited lines of changed files sit at lib/rules/essay.ts:526->552, lib/rules/essay.ts:15->16, lib/rules/essay.ts:557->583 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-eliska-12-EM1-5"
   },
   {
     "id": "L1-eliska-12-EM1-6",
@@ -512,10 +571,14 @@
     "code_check": "confirmed-present",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 7,
+    "recurrence": 8,
     "suggested_acceptance": "The content check does not depend on a verb list: a frame is kept only if its literal words are scaffold (SCAFFOLD) or a short function-word set, or a frame with more than N non-scaffold literal words is refused; the two repros pinned in essay-rules-test.cjs.",
     "l2_priority": "Count the real model's frames on a young-voice reading; any content frame on screen is a blocker.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM1-6"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM1-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791: FINITE is still a closed verb list (desk/src/lib/rules/essay.ts:344); addsContent (:347-354) needs a FINITE word after a non-scaffold subject, so 'Teenagers sleep [how many] hours.' has no listed verb and passes; cleanFix calls it at :331. No verb-list-free content check was added. At ffa91a49 the cited lines of changed files sit at lib/rules/essay.ts:344->356, lib/rules/essay.ts:347->359, lib/rules/essay.ts:331->343 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-eliska-12-EM1-6"
   },
   {
     "id": "L1-eliska-12-EM2-1",
@@ -543,10 +606,14 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "A kept faulty verdict that the rule would now clear carries a line ('Your new sentence 2 may cover this: read the paragraph again'), and the others are still not re-asked.",
     "scope_note": "matches EM-B3 (docs/BACKLOG.md, declined): a rewrite re-judges only its own sentence, so a kept verdict goes stale; raised here independently by a learner's walk",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM2-1"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM2-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: cited lines re-found at 6b189791: reviseSentence (desk/src/lib/desk/essay.ts:292) still copies every other verdict unchanged (reading.verdicts.filter(v => v.n === s.n)) and decides only sentence n (:288); no line marks a kept faulty verdict that the rule would now clear. None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-eliska-12-EM2-1"
   },
   {
     "id": "L1-eliska-12-EM2-2",
@@ -576,9 +643,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "'Next sentence' after a held rewrite goes to the next faulty sentence.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM2-2"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-eliska-12-EM2-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: narrowed by 32ffdf92; still missing: The instruction ('rewrite it in your own words on the phone's Essay tab, then analyse again') is not shown on the TV page itself after pressing Rewrite on my phone; only the phone chip lights and the bench status bar carries the text. At ffa91a49 the cited lines of changed files sit at tv/keys.ts:191->199, tv/keys.ts:481->497 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-eliska-12-EM2-2"
   },
   {
     "id": "L1-helena-46-EM1-1",
@@ -608,9 +679,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "In Adult mode the lens home's captions and the playbook speak of messages and emails (or the playbook is hidden), checked by a render test.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM1-1"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM1-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: Cited lines re-found at 6b189791: desk/src/essay/EssayTV.tsx:151 and :328 still say 'one paragraph on the phone', desk/src/essay/EssayTV.tsx:542 still the 'Many students arrive at school exhausted' x-ray sample, desk/src/lib/library/lessons.data.ts:51 the Paragraph playbook entry. The only EssayTV change since b7fca776 (176f04f0) is the Table figures line :477; nothing speaks of messages or emails in Adult mode. At ffa91a49 the cited lines of changed files sit at essay/EssayTV.tsx:542->543 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-helena-46-EM1-1"
   },
   {
     "id": "L1-helena-46-EM1-2",
@@ -640,9 +715,13 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "Either the table or a caption shows which engine read the text (her notice names Claude), or the fields are dropped from the user-facing shape.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM1-2"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM1-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: narrowed by 176f04f0; still missing: The engine that read the text (provider) is still shown nowhere and sentences[].connectors is still drawn nowhere; the acceptance names the engine (her notice names Claude). At ffa91a49 the cited lines of changed files sit at essay/EssayTV.tsx:477->478 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-helena-46-EM1-2"
   },
   {
     "id": "L1-helena-46-EM1-3",
@@ -671,9 +750,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "The phone's refusal names the PC page for .docx, or the phone reads .docx through the same docxText.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM1-3"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM1-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: Cited lines re-found at 6b189791 (rules/essay.ts moved the cite to :270). desk/src/lib/rules/essay.ts:270 essayFileProblem still says the desk reads .txt and .md files and refuses anything else; desk/src/app/phone/page.tsx:728 still labels 'Choose a file (.txt or .md)' with accept .txt,.md; desk/src/app/drop/page.tsx:48-50 still reads .docx. The phone refusal does not name the PC page and the phone does not read .docx. At ffa91a49 the cited lines of changed files sit at lib/rules/essay.ts:270->282 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-helena-46-EM1-3"
   },
   {
     "id": "L1-helena-46-EM1-4",
@@ -704,10 +787,14 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "A non-English paragraph gets the desk's sentence before any model call.",
     "scope_note": "Helena writes to clients in English; low reachability for her.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM1-4"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM1-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "paragraphIsEnglish (desk/src/lib/rules/essay.ts:261-268) is unchanged apart from czechShape feeding the Czech share; the under-6-words arm (:265) still needs two Czech words beating the English ones, so a short plain Czech line passes (round-11 probe: 'Rad chodim lesem.', 'Dnes nikam nejdu.', 'Kde bydlis ted?', 'Skola me bavi.', 'Neumim to rict.').",
+    "recurred_as": "L1-helena-46-EM1-4"
   },
   {
     "character": "helena-46",
@@ -735,12 +822,16 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 5,
+    "recurrence": 6,
     "suggested_acceptance": "The phone asks message / email / essay before any read it sends (or the paragraph box carries the choice), analyseEssay takes the format, and the single-paragraph prompt carries the kind line like the piece prompt does.",
     "l2_priority": "On the phone, paste a client email into the paragraph box under the Structure lens and read it on the TV; check the notes do not ask the email for a thesis or evidence.",
     "id": "L1-helena-46-EM1-5",
     "walker_key": "helena-46-EM1-5",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM1-5"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM1-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: Cited lines re-found at 6b189791, untouched by any commit: desk/src/app/phone/page.tsx:320 posts kind essay, text, type with no format; :739 shows the message/email/essay radios only with Keep on and no open piece; desk/src/lib/desk/essay.ts:163 analyseEssay(raw, type, learnerId, age, reader) has no format parameter and its judge call passes format undefined (:167); desk/src/app/api/analyse/route.ts:17-18 the essay body has no format. So a single pasted email is still read as an essay. None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-helena-46-EM1-5"
   },
   {
     "id": "L1-helena-46-EM5-1",
@@ -768,11 +859,14 @@
     ],
     "code_check": "by-design",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 11,
     "suggested_acceptance": "In Adult mode a reading of a kept piece can be shown on the PC page (sentences and verdicts there, marks on the TV), or the TV asks before showing text.",
     "scope_note": "By design the curtain covers the Workroom, recap and Sunday page only (rubric curtain unit); this is the design tension, not a curtain count.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM5-1"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM5-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "b75bd45f (ancestor of HEAD) added curtainOn(s) (desk/src/tv/keys.ts:82-89: a kept piece, s.essay.piece.pieceId, in Adult mode) and EssayTV.tsx reads it on all three surfaces the row cited: the lens home's opening words (LastParagraph h2 :280 -> 'Your kept piece. The words are on the PC page and the phone.'), the forensic page's sentence (Page :426 -> 'Sentence N · the words are on the PC page and the phone') and the Table row text (:492 -> 'Sentence N', with the same line on the keys row :500). The Rail draws arrows only, no text. School and Family mode and a paragraph that was not kept draw as before (curtain false). tools/essay-rules-test.cjs 'L1-helena-46-EM5-1' renders EssayType, Forensic and the Table for Adult+kept, School and un-kept sessions and asserts no sentence text for the first (157 pass 0 fail). This is the row's first arm (marks on the TV, words on the PC page/phone). Residue, not a new row: a faulty note that quotes a word ('word' does not say much here) and The move line can still carry a few of the learner's words on the TV."
   },
   {
     "id": "L1-helena-46-EM5-2",
@@ -801,9 +895,13 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "On /drop the decline reads 'Not now' and the empty shelf names 'Keep it' on this page.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM5-2"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM5-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: Cited lines re-found at 6b189791 and unchanged: desk/src/app/drop/page.tsx:86 renders TextNotice with no mode (default piece), so desk/src/app/phone/EssayShelf.tsx:64 still labels the decline Read without keeping; EssayShelf.tsx:46 still says pieces you read on the TV with Keep it on my shelf land here, on /drop too. None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-helena-46-EM5-2"
   },
   {
     "id": "L1-helena-46-EM5-3",
@@ -831,9 +929,13 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "Either excluded pieces leave the measure too, or the copy says they still count toward the style numbers.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM5-3"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM5-3",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: Cited lines re-found at 6b189791 and unchanged: desk/src/lib/twin/card.ts:46-48 computes born (ps.length >= TWIN_BORN) and dims over all pieces ps, with the excluded filter only on exemplars; desk/src/app/drop/page.tsx:96 still promises leave out anything you would not share beside exemplars only. None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-helena-46-EM5-3"
   },
   {
     "id": "L1-helena-46-EM5-4",
@@ -862,9 +964,13 @@
     "suggested_acceptance": "noBreakHyphen reads as '-'; a table row reads as one line; a fixture pins both.",
     "l2_priority": "Keep a .docx with a table and a non-breaking hyphen on /drop and open it.",
     "resolution": "open",
-    "recurrence": 10,
+    "recurrence": 11,
     "origin": "2026-10-14-l1/essay-adult/L1-helena-46-EM5-15",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM5-4"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-helena-46-EM5-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: Cited lines re-found at 6b189791 and unchanged: desk/src/lib/rules/docx.ts:59 handles only w:tab, w:br and w:t per </w:p> split; a grep finds no noBreakHyphen, w:tc or w:tbl in docx.ts, so table cells still become separate paragraphs and a non-breaking hyphen is dropped. None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-helena-46-EM5-4"
   },
   {
     "id": "L1-kristyna-17-EM1-1",
@@ -896,12 +1002,16 @@
     "code_check": "present-broken",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "Either the reading is refused for a non-English text (EM1-1), or the rules take the text's language: no code verdict on a Czech text is decided by an English-only word list.",
     "l2_priority": "With a Czech paragraph, record verdicts and notes under Argument and Structure; a Czech marker reads them (verdict agreement).",
     "recurs": "2026-10-09-essay-l1/recert-9/L1-kristyna-17-EM1-1",
     "severity_prior": "blocker",
-    "severity_why": "Blocker to major: the refusal now stops most Czech paragraphs before the word lists, so only a paragraph that leaks past the check is mis-ruled."
+    "severity_why": "Blocker to major: the refusal now stops most Czech paragraphs before the word lists, so only a paragraph that leaks past the check is mis-ruled.",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "ffa91a49's czechShape took the refusal from 0.909 to 0.983 on fresh Czech (recert-11/heldout.json), but both arms of the acceptance stay open: refusal is not complete (a leak e.g. 'Kamarad mi pujcil knizku o vesmiru a ja ji precetl za dva dny.'; short plain lines 'Mam rad hory.', 'Skola me bavi.' pass) and the verdict rules still hold English-only lists.",
+    "recurred_as": "L1-kristyna-17-EM1-1"
   },
   {
     "id": "L1-kristyna-17-EM1-2",
@@ -931,9 +1041,13 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "ES-READ ≥ 5/8: the task (when given), the kind, and the learner's recurring faults reach the prompt.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-kristyna-17-EM1-2"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-kristyna-17-EM1-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: Cited lines re-found at 6b189791 and unchanged by any commit: desk/src/lib/desk/essay.ts:102-120 prompt carries person, task and format but no history; desk/src/app/api/analyse/route.ts:53 taskOf(body.task), :184 and :197 hand it to the reading; desk/src/app/phone/page.tsx:293 (piece) and :320 (paragraph) send no task; no recurring faults reach the prompt. None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-kristyna-17-EM1-2"
   },
   {
     "id": "L1-kristyna-17-EM1-3",
@@ -962,12 +1076,16 @@
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "Whatever the language decision, the notes, moves and patterns on one page are in one language the learner chose.",
     "l2_priority": "Read a Czech paragraph live (claude-cli/sonnet): record the language of every note, fix and the summary.",
     "recurs": "2026-10-09-essay-l1/recert-9/L1-kristyna-17-EM1-3",
     "severity_prior": "major",
-    "severity_why": "Major to minor: only a Czech paragraph that leaks past the language check can reach the model now."
+    "severity_why": "Major to minor: only a Czech paragraph that leaks past the language check can reach the model now.",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Unchanged: the reading prompt (desk/src/lib/desk/essay.ts:102-112) still has no language instruction and the CHECKS lines are English (ADULT_CHECKS :456, YOUNG_CHECKS :469, now two English sets). ffa91a49 shrinks the number of Czech paragraphs that reach the model (1 of 60 fresh) but a leaked one still gets notes in whatever language the model picks.",
+    "recurred_as": "L1-kristyna-17-EM1-3"
   },
   {
     "id": "L1-kristyna-17-EM1-5",
@@ -998,10 +1116,13 @@
     "verdict": "confirmed",
     "suggested_acceptance": "A rules test with at least 50 Czech paragraphs of mixed length, including function-word-heavy ones, holds the refusal at 0.95 or better.",
     "l2_priority": "Send five of her real Czech paragraphs and count refusals; code only, no model needed.",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 10,
     "origin": "2026-10-14-l1/essay-family/L1-kristyna-17-EM1-11 (short-title half fixed by 0a53e75e UD-19)",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-kristyna-17-EM1-5"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-kristyna-17-EM1-5",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "ffa91a49 (ancestor of HEAD) added czechShape (desk/src/lib/rules/essay.ts:231-235): a word of 4+ letters that opens with zv zm zr zl zd zb hr hl kd vz ct krk rz, or ends in -ych -ymi -eho -emu -uje -ejte -ujte -ovat -ou -ym (or -ci/-ni/-ti/-ri on 5+ letters), or a stand-alone v, z, k counts as a Czech word in englishReading (:246); no word was added to any list. FRESH held-out probe written for this round (recert-11/heldout.json, 40 plain-letter + 20 diacritic Czech paragraphs of 6-42 words, 34 English; none of it in tools/, uat/ or desk/src, none of it the probe ffa91a49 was tuned on; scratch /tmp/rc11/probe.cjs, paragraphIsEnglish executed, no model): plain-letter Czech 39 of 40 refused (0.975; 37 of 40 at 6b189791), diacritic Czech 20 of 20 (1.00), all Czech 59 of 60 (0.983), English 0 of 34 refused. The one leak: 'Kamarad mi pujcil knizku o vesmiru a ja ji precetl za dva dny.' The round-10 probe's six plain-letter leaks: 3 of 6 still pass (63 of 66 = 0.955 on that probe); both probes together 122 of 126 = 0.968 (plain-letter 78 of 82 = 0.951). tools/essay-heldout-r3.json: plain Czech 30 of 30 (was 27), German 10/10, Italian 4/4, Dutch 4/4, Polish 4/4, English 0 of 30 refused. The acceptance (0.95 on 50+ mixed Czech paragraphs) is met on every corpus the rule's author had not seen, narrowly on plain-letter. ffa91a49 added no test line of its own: the shape rule is pinned only by the existing Czech cases of tools/essay-rules-test.cjs."
   },
   {
     "id": "L1-kristyna-17-EM1-6",
@@ -1034,9 +1155,13 @@
     "suggested_acceptance": "The Essay tab and the plan caption say once 'Essay Master reads English writing' for a profile whose system is not uk/us.",
     "l2_priority": "From a cz profile open the plan and write slot 1 in Czech: is she told before Read it?",
     "resolution": "open",
-    "recurrence": 10,
+    "recurrence": 11,
     "origin": "recert-1 walk (second half of the original EM1-1 acceptance)",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-kristyna-17-EM1-6"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-kristyna-17-EM1-6",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: Cited lines re-found at 6b189791: desk/src/app/phone/page.tsx:725 Essay tab copy has no language; desk/src/tv/profileRows.ts:20 essay blurb has none; desk/src/tv/keys.ts:456 posts the plan read as kind essay; refusal only at read time (desk/src/app/api/analyse/route.ts:164, :192; desk/src/lib/rules/essay.ts:173 NOT_ENGLISH_LINE); planFit desk/src/lib/rules/essay.ts:858 does not check language. No commit touched the phone copy, blurb or plan caption. At ffa91a49 the cited lines of changed files sit at tv/keys.ts:456->472, lib/rules/essay.ts:858->884 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-kristyna-17-EM1-6"
   },
   {
     "id": "L1-kristyna-17-EM3-2",
@@ -1064,8 +1189,12 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "Either the shelf shows the notice line (where the text goes) or the fields are dropped.",
-    "recurs": "2026-10-09-essay-l1/recert-9/L1-kristyna-17-EM3-2"
+    "recurs": "2026-10-09-essay-l1/recert-9/L1-kristyna-17-EM3-2",
+    "recertify_run": "2026-10-09-essay-l1/recert-11",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: Cited lines re-found at 6b189791 and unchanged: desk/src/app/api/texts/route.ts:40 GET still returns pieces, noticed and notice; desk/src/app/phone/EssayShelf.tsx:21 reads only .pieces from /api/texts (no noticed or notice use in the shelf list). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites.",
+    "recurred_as": "L1-kristyna-17-EM3-2"
   }
 ]

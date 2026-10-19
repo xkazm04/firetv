@@ -1,0 +1,26 @@
+# kristyna-17 × EM1 · (recert-11)
+
+- Character: kristyna-17
+- Journey: EM1
+- Cert level: L1 re-walk, code only, no model
+- Head ffa91a49
+- Recertifies: 2026-10-09-essay-l1/recert-10 at 6b189791
+- **Verdict now: L1-conditional.** 1 fixed, 4 recur; 4 rows open. (was L1-conditional)
+
+## Prior rows
+
+| Finding | Status | Evidence (current code) | Commit |
+| --- | --- | --- | --- |
+| L1-kristyna-17-EM1-1 A Czech paragraph that passes the language check is still ruled on English word lists, wi… (major) | recurs → L1-kristyna-17-EM1-1 | ffa91a49's czechShape took the refusal from 0.909 to 0.983 on fresh Czech (recert-11/heldout.json), but both arms of the acceptance stay open: refusal is not complete (a leak e.g. 'Kamarad mi pujcil knizku o vesmiru a ja ji precetl za dva dny.'; short plain lines 'Mam rad hory.', 'Skola me bavi.' pass) and the verdict rules still hold English-only lists. | ffa91a49 (narrows) |
+| L1-kristyna-17-EM1-2 ES-READ: kind and mode now reach the reading, a task has no sender and no history or memo… (major) | recurs → L1-kristyna-17-EM1-2 | Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: Cited lines re-found at 6b189791 and unchanged by any commit: desk/src/lib/desk/essay.ts:102-120 prompt carries person, task and format but no history; desk/src/app/api/analyse/route.ts:53 taskOf(body.task), :184 and :197 hand it to the reading; desk/src/app/phone/page.tsx:293 (piece) and :320 (paragraph) send no task; no recurring faults reach the prompt. None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites. | none |
+| L1-kristyna-17-EM1-3 A Czech paragraph that passes the language check gets notes in whatever language the mode… (minor) | recurs → L1-kristyna-17-EM1-3 | Unchanged: the reading prompt (desk/src/lib/desk/essay.ts:102-112) still has no language instruction and the CHECKS lines are English (ADULT_CHECKS :456, YOUNG_CHECKS :469, now two English sets). ffa91a49 shrinks the number of Czech paragraphs that reach the model (1 of 60 fresh) but a leaked one still gets notes in whatever language the model picks. | none |
+| L1-kristyna-17-EM1-5 The language check lets some Czech through: a paragraph whose shared function words (my,… (major) | fixed | ffa91a49 (ancestor of HEAD) added czechShape (desk/src/lib/rules/essay.ts:231-235): a word of 4+ letters that opens with zv zm zr zl zd zb hr hl kd vz ct krk rz, or ends in -ych -ymi -eho -emu -uje -ejte -ujte -ovat -ou -ym (or -ci/-ni/-ti/-ri on 5+ letters), or a stand-alone v, z, k counts as a Czech word in englishReading (:246); no word was added to any list. FRESH held-out probe written for this round (recert-11/heldout.json, 40 plain-letter + 20 diacritic Czech paragraphs of 6-42 words, 34 English; none of it in tools/, uat/ or desk/src, none of it the probe ffa91a49 was tuned on; scratch /tmp/rc11/probe.cjs, paragraphIsEnglish executed, no model): plain-letter Czech 39 of 40 refused (0.975; 37 of 40 at 6b189791), diacritic Czech 20 of 20 (1.00), all Czech 59 of 60 (0.983), English 0 of 34 refused. The one leak: 'Kamarad mi pujcil knizku o vesmiru a ja ji precetl za dva dny.' The round-10 probe's six plain-letter leaks: 3 of 6 still pass (63 of 66 = 0.955 on that probe); both probes together 122 of 126 = 0.968 (plain-letter 78 of 82 = 0.951). tools/essay-heldout-r3.json: plain Czech 30 of 30 (was 27), German 10/10, Italian 4/4, Dutch 4/4, Polish 4/4, English 0 of 30 refused. The acceptance (0.95 on 50+ mixed Czech paragraphs) is met on every corpus the rule's author had not seen, narrowly on plain-letter. ffa91a49 added no test line of its own: the shape rule is pinned only by the existing Czech cases of tools/essay-rules-test.cjs. | ffa91a49 |
+| L1-kristyna-17-EM1-6 Nothing says before the first send that Essay Master reads English; on the plan she write… (minor) | recurs → L1-kristyna-17-EM1-6 | Re-walked at ffa91a49; what the previous walk found (at 6b189791) still holds: Cited lines re-found at 6b189791: desk/src/app/phone/page.tsx:725 Essay tab copy has no language; desk/src/tv/profileRows.ts:20 essay blurb has none; desk/src/tv/keys.ts:456 posts the plan read as kind essay; refusal only at read time (desk/src/app/api/analyse/route.ts:164, :192; desk/src/lib/rules/essay.ts:173 NOT_ENGLISH_LINE); planFit desk/src/lib/rules/essay.ts:858 does not check language. No commit touched the phone copy, blurb or plan caption. At ffa91a49 the cited lines of changed files sit at tv/keys.ts:456->472, lib/rules/essay.ts:858->884 (hunks re-read: they only add the lines named in the commit messages). None of the seven commits since 6b189791 (b75bd45f curtain on a kept piece, 61a8e2ee young voice, ffa91a49 Czech shape; 56f903ae, da6f9f07, 3240d025, e9c5ee8f are Math) changes what this row cites. | none |
+
+## New findings
+
+None.
+
+## Notes
+
+- Evidence check at ffa91a49: every cited line was re-mapped through `git diff -U0 6b189791 ffa91a49` per file (a cite inside a changed hunk re-read by hand). Every commit named was checked with `git merge-base --is-ancestor <sha> HEAD`. Model-dependent behaviour stays with L2.

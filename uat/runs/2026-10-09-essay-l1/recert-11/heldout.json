@@ -1,0 +1,910 @@
+{
+  "purpose": "Held-out measure of the Essay language check (paragraphIsEnglish, desk/src/lib/rules/essay.ts) at ffa91a4938aa490c91a8c709d097d55f72a3b2f7 (includes ffa91a49, language check round 4: the shape of plain-letter Czech), for L1-kristyna-17-EM1-5",
+  "note": "A FRESH probe written for recert-11 on 2026-10-19, after reading the rule and the acceptance but not the ffa91a49 tuning set: 40 Czech paragraphs of 7-23 words written with diacritics and folded to plain letters (what a learner types without them), 20 other Czech paragraphs with diacritics, 6 short Czech lines (diacritics and folded), 34 English texts (30 paragraphs of 8-24 words, 4 short; some built to collide: 5k, Zlatan, Brown v Smith, spaghetti, martini, gym, safari). Checked by exact and letter-normalised string match: none is in tools/, uat/ or desk/src. It is not the round-10 probe and not tools/essay-heldout-r3.json. The probe is the walker's own, so it is held-out from the fix, not from the walker.",
+  "method": "scratch scripts outside the repo (/tmp/rc11), tools/ts-load.cjs, no model call; paragraphIsEnglish(text) per item at ffa91a49 and, for the before column, desk/src/lib/rules/essay.ts as of 6b189791 loaded from git",
+  "acceptance": "L1-kristyna-17-EM1-5: at least 50 Czech paragraphs of mixed length, including function-word-heavy ones, refusal 0.95 or better; English refused 0",
+  "atFfa91a49": {
+    "fresh": {
+      "czPlainLetter": {
+        "total": 40,
+        "refused": 39
+      },
+      "czDiacritics": {
+        "total": 20,
+        "refused": 20
+      },
+      "english": {
+        "total": 34,
+        "refused": 0
+      },
+      "czShortDiacritics": {
+        "total": 6,
+        "refused": 5
+      },
+      "czShortPlainLetter": {
+        "total": 6,
+        "refused": 1
+      }
+    },
+    "r3": {
+      "czPlain": {
+        "total": 30,
+        "refused": 30
+      },
+      "czShort": {
+        "total": 10,
+        "refused": 6
+      },
+      "de": {
+        "total": 10,
+        "refused": 10
+      },
+      "it": {
+        "total": 4,
+        "refused": 4
+      },
+      "nl": {
+        "total": 4,
+        "refused": 4
+      },
+      "pl": {
+        "total": 4,
+        "refused": 4
+      },
+      "en": {
+        "total": 30,
+        "refused": 0
+      }
+    },
+    "round10ProbePlainLetterLeaks": {
+      "total": 6,
+      "refused": 3
+    },
+    "recordedLearnerText": {
+      "en/paragraph": {
+        "total": 8,
+        "refused": 0
+      },
+      "en/sentence": {
+        "total": 30,
+        "refused": 0
+      },
+      "cs/paragraph": {
+        "total": 2,
+        "refused": 2
+      },
+      "cs/sentence": {
+        "total": 5,
+        "refused": 5
+      }
+    }
+  },
+  "at6b189791": {
+    "fresh": {
+      "czPlainLetter": {
+        "total": 40,
+        "refused": 37
+      },
+      "czDiacritics": {
+        "total": 20,
+        "refused": 20
+      },
+      "english": {
+        "total": 34,
+        "refused": 0
+      },
+      "czShortDiacritics": {
+        "total": 6,
+        "refused": 5
+      },
+      "czShortPlainLetter": {
+        "total": 6,
+        "refused": 1
+      }
+    },
+    "r3": {
+      "czPlain": {
+        "total": 30,
+        "refused": 27
+      },
+      "czShort": {
+        "total": 10,
+        "refused": 6
+      },
+      "de": {
+        "total": 10,
+        "refused": 10
+      },
+      "it": {
+        "total": 4,
+        "refused": 4
+      },
+      "nl": {
+        "total": 4,
+        "refused": 4
+      },
+      "pl": {
+        "total": 4,
+        "refused": 4
+      },
+      "en": {
+        "total": 30,
+        "refused": 0
+      }
+    },
+    "round10ProbePlainLetterLeaks": {
+      "total": 6,
+      "refused": 0
+    },
+    "recordedLearnerText": {
+      "en/paragraph": {
+        "total": 8,
+        "refused": 0
+      },
+      "en/sentence": {
+        "total": 30,
+        "refused": 0
+      },
+      "cs/paragraph": {
+        "total": 2,
+        "refused": 2
+      },
+      "cs/sentence": {
+        "total": 5,
+        "refused": 5
+      }
+    }
+  },
+  "summary": {
+    "freshCzechPlainLetter": "39 of 40 refused (6b189791: 37)",
+    "freshCzechDiacritics": "20 of 20 refused (6b189791: 20)",
+    "freshCzechAll": "59 of 60 refused",
+    "freshEnglishRefused": "0 of 34",
+    "round10ProbeLeaks": "3 of 6 of the six plain-letter leaks recert-10 reported are refused now (the rest of that probe was refused already, 60 of 66 then, so 63 of 66 now)",
+    "bothFreshProbesTogether": "122 of 126 Czech paragraphs refused = 0.968 (plain-letter 78 of 82 = 0.951)"
+  },
+  "items": [
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Vcera jsme byli s babickou na trhu a koupili jsme tam cerstve jahody a velky bochnik chleba.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Muj bratr se uci hrat na kytaru, ale doma mu to moc nejde, protoze nema cas cvicit.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "V lete bychom chteli jet k mori, pokud nam rodice dovoli zustat tam aspon tyden.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Moje trida pise zitra test z dejepisu a ja se porad nemuzu naucit vsechny letopocty.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Kdyz prselo, zustali jsme doma a cele odpoledne jsme hrali deskove hry s mladsi sestrou.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Autobus mel zpozdeni, a proto jsem prisel do skoly az po zvoneni a ucitelka se na me zlobila.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Na zahrade za nasim domem roste stary orech, ktery zasadil dedecek jeste pred mym narozenim.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Nevim, jestli se mi libi vic zima nebo leto, protoze v obou rocnich obdobich se da delat spousta veci.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Kamarad mi pujcil knizku o vesmiru a ja ji precetl za dva dny.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Ve skole nas uci, ze bychom meli tridit odpad, ale doma to nikdo poradne nedela.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Maminka kazdou nedeli pece buchty s makem a cely dum potom voni az na ulici.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Na vylete jsme videli srnku, ktera stala u potoka a divala se primo na nas.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Tenhle rok se chci naucit plavat pod vodou, i kdyz se trochu bojim hlubokych bazenu.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Zeptal jsem se pana ucitele, jestli muzu odevzdat ukol az v pondeli, a on souhlasil.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Nase kocka kazde rano sedi u okna a pozoruje ptaky na krmitku pred domem.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Vetsina spoluzaku jezdi do skoly autobusem, ale ja chodim pesky, protoze bydlim hned za rohem.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Nejradeji mam hodiny vytvarne vychovy, kde muzeme malovat, co chceme, a nikdo nam do toho nemluvi.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Pred tremi tydny jsme se prestehovali do noveho bytu a jeste porad hledame nektere krabice.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Podle me by skola mohla zacinat pozdeji, protoze rano jsem unaveny a nic si nezapamatuju.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Chtela bych byt veterinarkou, abych mohla pomahat zviratum, ktera nemaji nikoho, kdo by se o ne staral.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Dnes rano napadl prvni snih a deti na dvore hned zacaly stavet snehulaka.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Bylo mi lito, ze jsem nemohl jit na oslavu, ale mel jsem horecku a musel jsem zustat v posteli.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Moje oblibena pisnicka je o holce, ktera ceka na nadrazi na kluka, co se nikdy nevrati.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Tatinek pracuje v nemocnici a nekdy se vraci domu az po pulnoci.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Na hodine anglictiny jsme se ucili slovicka k tematu jidlo a pak jsme si zahrali hru.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Reka za mestem se po dlouhych destich rozlila a voda zatopila nekolik sklepu v nasi ulici.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Myslim si, ze telefon by mel byt ve skole zakazany, protoze nas hodne rozptyluje pri vyuce.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Stryc nam o prazdninach ukazal, jak se stavi ohniste a jak se rozdeluje ohen tak, aby nehasl.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Minuly vikend jsme sli s tatou na ryby, ale nechytili jsme vubec nic, jenom jsme se dobre nasmali.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Moje nejlepsi kamaradka se loni odstehovala do jineho mesta, takze si ted piseme kazdy den.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Pokud chces dobre zvladnout zkousku, musis se ucit pravidelne a neodkladat vsechno na posledni chvili.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "V knihovne jsem si vypujcil tri knihy, ale stihl jsem precist jen prvni z nich.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Hodne lidi si mysli, ze hrat pocitacove hry je ztrata casu, ale ja se pri nich ucim spolupraci.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Zitra rano vstavam v sest hodin, protoze jedeme cela rodina na hory.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Babicka mi vypravela, jak vypadala skola, kdyz byla mala, a bylo to docela jine nez dnes.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Nase skola porada kazdy rok sbirku stareho papiru a trida, ktera nasbira nejvic, dostane odmenu.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Z okna vlaku jsem pozoroval pole, lesy a male vesnice, ktere se mihaly kolem.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Drive jsem nesnasel matematiku, ale od te doby, co mi ji vysvetluje starsi bratr, mi pripada zajimavejsi.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Rano pred skolou obvykle snidam jen krajic chleba s maslem a vypiju sklenici mleka.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "paragraph",
+      "text": "Koncert, na ktery jsme sli, byl tak hlasity, ze mi jeste druhy den zvonilo v usich.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Včera večer se nám rozbila pračka a tatínek musel volat opraváře, který přijel až dnes odpoledne.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Přestože je venku zima, rád chodím na dlouhé procházky podél řeky a poslouchám zpěv ptáků.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Jeden z nejhezčích zážitků z prázdnin byl výlet na zříceninu hradu, odkud bylo vidět celé údolí.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Škola by mohla nabízet více kroužků, třeba šachy, programování nebo vaření, aby si každý našel to své.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Strašně se mi chce spát, protože jsem se včera dlouho dívala na seriál a ráno jsem musela brzy vstát.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Naučil jsem se jezdit na kole bez bočních kolek, když mi bylo šest let, a od té doby nikdy nespadl.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Starší sestra říká, že ve městě je větší výběr škol, ale mně se líbí malá škola v naší vesnici.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Dneska jsme ve škole měli požární poplach a všichni jsme se museli rychle shromáždit na hřišti.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Sbírám známky z celého světa a už mám skoro tři sta kousků, které třídím do velkých alb.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Když jsem byla malá, myslela jsem si, že duha končí někde za naším rybníkem.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Kdybych mohl cestovat kamkoli, jel bych do Japonska, protože mě zajímá jejich kultura i jídlo.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Poslední týden jsem nestíhal domácí úkoly a učitelé mi řekli, že bych si měl lépe rozvrhnout čas.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Naše babička vaří nejlepší knedlíky, jaké jsem kdy jedl, a recept prý nikomu neprozradí.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Zajímá mě, jak fungují sopky, a proto jsem si o nich vypůjčil několik knih z knihovny.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Doufám, že příští rok budu mít lepší známky z fyziky, protože mě ten předmět konečně začal bavit.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Na školním dvoře máme nové lavičky a pod nimi spoustu košů na tříděný odpad.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Ráno jsem zaspala, tak jsem musela běžet na zastávku a málem jsem zapomněla svačinu.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Díky kroužku robotiky jsem pochopil, že programování není tak těžké, jak jsem se původně bál.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Podzim je můj nejoblíbenější čas, protože listí barevně září a vzduch voní po dešti a kouři.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "paragraph",
+      "text": "Chtěl bych se stát pilotem, ale nejdřív musím zlepšit angličtinu a také matematiku.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "short",
+      "text": "Rád chodím lesem.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "short",
+      "text": "Dnes nikam nejdu.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "short",
+      "text": "Kde bydlíš teď?",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "short",
+      "text": "Škola mě baví.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "short",
+      "text": "Jedu zítra domů.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-diacritics",
+      "kind": "short",
+      "text": "Neumím to říct.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "short",
+      "text": "Rad chodim lesem.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "short",
+      "text": "Dnes nikam nejdu.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "short",
+      "text": "Kde bydlis ted?",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "short",
+      "text": "Skola me bavi.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "short",
+      "text": "Jedu zitra domu.",
+      "passedAtFfa91a49": false,
+      "passedAt6b189791": false
+    },
+    {
+      "lang": "cs-plain-letter",
+      "kind": "short",
+      "text": "Neumim to rict.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Schools that start later in the morning give teenagers time to sleep, and several studies link this to better grades.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "The council plans to close the old bridge for repairs, which will force drivers to take a longer route through the town centre.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Although the experiment failed twice, the team kept the same method because the results were still useful.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "My grandfather taught me to fish when I was seven, and we still go to the same lake every summer.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Recycling is only effective if people sort their waste carefully, so schools should teach it from an early age.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "The museum was crowded on Saturday, but we managed to see the dinosaur hall before the guided tour began.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "He argued that social media does more harm than good, yet he admitted that he checks it every hour.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "In the nineteenth century, factories grew quickly and many families moved from villages to cities in search of work.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "A good essay needs one clear claim, evidence that a reader can check, and a sentence that links them together.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Our football team trained hard all winter, so we were surprised when the final was cancelled because of snow.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "To be honest, I think that homework should be shorter, because tired students rarely remember what they learned.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "The writer uses short sentences to build tension, and the effect is strongest in the final chapter of the novel.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Climate scientists warn that sea levels will rise, which could put coastal cities at risk within a few decades.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "She decided to learn the piano after hearing a famous pianist play at the concert hall in Vienna.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Public libraries remain important because they give people access to books, computers and quiet places to study.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "There are two sides to the argument: supporters say it saves money, while critics say it costs jobs.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "The recipe calls for flour, eggs, butter and a little sugar, and it takes about forty minutes to bake.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Before the exam, our teacher reminded us to read every question twice and to leave time for checking.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Because the train was late again, we missed the first lesson and had to explain ourselves to the head teacher.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Many people think that electric cars are the future, but others point out that batteries are hard to recycle.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "I ran my first 5k last spring, and my time of 31 minutes was better than I expected.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "The match between Zlatan and the young defender was the most exciting moment of the whole tournament.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "In the legal case of Brown v Smith, the court ruled that the company had broken its own rules.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "They ordered spaghetti and a martini at the little cafe, and then argued about who should pay.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "It is the third time this month that the gym has closed early, which annoys everyone who trains after work.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Her essay on safari tourism was praised for its clear structure, though one paragraph rambled.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Tourists love the famous old town, yet residents complain about noise, rubbish and rising rents.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "The opening scene shows a quiet street, an empty bus stop and a dog waiting for someone who never arrives.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "Technology will not replace teachers, but it can help them mark work faster and spot who needs help.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "paragraph",
+      "text": "He was serious about leaving, so he packed his bags, thanked everyone, and walked out of the house.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "short",
+      "text": "Walk home with us.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "short",
+      "text": "We had a great day.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "short",
+      "text": "It rained all week.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    },
+    {
+      "lang": "en",
+      "kind": "short",
+      "text": "The soup was cold.",
+      "passedAtFfa91a49": true,
+      "passedAt6b189791": true
+    }
+  ]
+}

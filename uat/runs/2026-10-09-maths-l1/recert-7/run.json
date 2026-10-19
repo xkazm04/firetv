@@ -1,0 +1,142 @@
+{
+  "id": "2026-10-09-maths-l1/recert-7",
+  "started": "2026-10-19T16:27:45.132Z",
+  "finished": "2026-10-19T16:27:45.132Z",
+  "cert_level": "L1",
+  "module": "Math Buddy",
+  "base_commit": "ffa91a4938aa490c91a8c709d097d55f72a3b2f7",
+  "cast": [
+    "matyas-19",
+    "nela-12",
+    "owen-17",
+    "radka-41",
+    "vojtech-18"
+  ],
+  "journeys": [
+    "MB1",
+    "MB2",
+    "MB3",
+    "MB4",
+    "MB5"
+  ],
+  "pairs": [
+    {
+      "character": "matyas-19",
+      "journey": "MB1"
+    },
+    {
+      "character": "matyas-19",
+      "journey": "MB3"
+    },
+    {
+      "character": "nela-12",
+      "journey": "MB2"
+    },
+    {
+      "character": "nela-12",
+      "journey": "MB5"
+    },
+    {
+      "character": "owen-17",
+      "journey": "MB4"
+    },
+    {
+      "character": "radka-41",
+      "journey": "MB4"
+    },
+    {
+      "character": "radka-41",
+      "journey": "MB5"
+    },
+    {
+      "character": "vojtech-18",
+      "journey": "MB4"
+    }
+  ],
+  "recertify": {
+    "of": "2026-10-09-maths-l1",
+    "k": 7,
+    "prior_base_commit": "6b1897912bab71ae7197ad4064f40fff5db2e1e9",
+    "prior_run": "2026-10-09-maths-l1/recert-6",
+    "mode": "L1 code re-walk of every row open in recert-6/findings.json; answers fixed | recurs, stamped by recertify.cjs writeBack (fixed as not-seen)"
+  },
+  "instrument": {
+    "level": "L1 theoretical re-walk (uat skill, recertify at L1; README *Levels*)",
+    "walkers": "the builder session, rows answered in code walks (read-only, no model call to the product): each open recert-6 row re-found at current file:line on main ffa91a49 (cites re-mapped through git diff -U0 6b189791 ffa91a49 per file, hunks re-read), the rows the new commits claim to close executed in scratch scripts outside the repo",
+    "model_calls": "none: no desk engine, no Ollama, no codex, no paid API; desk/data untouched",
+    "overlay": [
+      "uat/README.md",
+      "uat/env.md",
+      "uat/rubric.md",
+      "uat/accepted-gaps.md"
+    ]
+  },
+  "product": {
+    "commit": "ffa91a4938aa490c91a8c709d097d55f72a3b2f7",
+    "dirty": false,
+    "files": {
+      "desk/src/app/api/hint/route.ts": "03556de149693cf3118097664a28455bab1e8556",
+      "desk/src/app/api/mark/route.ts": "0351051d72d36ca1e6a27629e7b34dc26f919bb5",
+      "desk/src/app/api/memory/route.ts": "e04ab16d53861d135c41ef0084eccbb0e7c861af",
+      "desk/src/app/api/practice/route.ts": "dce8669002ff805f7518419fe70588b29ead907c",
+      "desk/src/app/api/read/route.ts": "a14935ca35ea1a968775ff39f6ed36f39a2d9c49",
+      "desk/src/app/api/second/route.ts": "7a5b7c9b8c070aff5b5ef0f0aa707433e1facee1",
+      "desk/src/app/api/texts/route.ts": "7ef3a4468b715b87e5cc38cdeaa19a267fd20000",
+      "desk/src/app/phone/EssayShelf.tsx": "42c090ad215987e1c5dbca6446f1a4f5e52813d5",
+      "desk/src/app/phone/ExplainTalk.tsx": "5991293a5edb111c9e77f3ff33399ed8e873db4b",
+      "desk/src/app/phone/PaperPanel.tsx": "6763cf410d48aed3a572a0fce31f1ebe065b216c",
+      "desk/src/app/phone/page.tsx": "a4e5b4f7185ff2640880088fb077163aab0a6a4a",
+      "desk/src/app/phone/recogniserLang.ts": "bf611f7ff8ad2810b09a8c38fd002a85a3620e48",
+      "desk/src/app/phone/rewriteBack.ts": "641ed1d546a29223103a2847feb2add744a952dc",
+      "desk/src/app/tv/page.tsx": "356dd6b2b9eca608af05d591d18a3e55d632d58d",
+      "desk/src/lib/desk/essay.ts": "30b191a62207f6af0b5a380c07ec4e1b1a588e70",
+      "desk/src/lib/desk/explain.ts": "21fd6011f21a0ab7ea7263938853b47078524519",
+      "desk/src/lib/desk/hint.ts": "0f1cf3429644331b27aeada6208a45df7a9c1c17",
+      "desk/src/lib/desk/items.ts": "0ccd67d2866d6699a8dab40d728659bf9aeaf48b",
+      "desk/src/lib/desk/mark.ts": "7b1e53973954a9bacede5b605f00de838a4dc5ef",
+      "desk/src/lib/desk/pick.ts": "784a74907fb3790ca252493306a2c2c14ab691e4",
+      "desk/src/lib/desk/read.ts": "cd43c2f50b3d5df1a866d24e138374e7748d7c8d",
+      "desk/src/lib/desk/verify.ts": "03dcb2226c27f574c9ca23551fa0fbfca6a875aa",
+      "desk/src/lib/desk/worked.ts": "8864edfa73a1492ac976e801553bb30f74c021b7",
+      "desk/src/lib/english/conversation.ts": "54eefa901c2d824522bfd26cd4f6e1863b98d5a8",
+      "desk/src/lib/library/calculus1.spine.ts": "d7449c59289afa9cce3b6f57a6b21e8e2e880667",
+      "desk/src/lib/library/calculus2.spine.ts": "5ce6725ff95139c63711a4e817f9a24db436216b",
+      "desk/src/lib/library/gcse-cz.ts": "d28c1ea4949150ffd0f04daeb0f025b3503a408d",
+      "desk/src/lib/library/gcse.ts": "95442bbbeb197fa00e36cb12d4e77d4091801c95",
+      "desk/src/lib/library/paths.ts": "b73617bf0f1644401e2ac327d4df120fbab8f22f",
+      "desk/src/lib/library/syllabus.ts": "7e9f1c8494ef1667c8ba5dd117555976212fbfc6",
+      "desk/src/lib/library/worked.ts": "86fffd86ab1eeab0e9595958e527aeb0fe9feee9",
+      "desk/src/lib/rules/calc-expr.ts": "23ad09d1f197f21bdd67f36347bd6fe604cac55e",
+      "desk/src/lib/rules/calc-read.ts": "dfc7d704eda1848918f0d91e674f3c93e57281ba",
+      "desk/src/lib/rules/calc-word.ts": "cbb69c2853c7dca1fe604d40e9be86fb79b6a9b2",
+      "desk/src/lib/rules/calc.ts": "bee2cb5ab66f6c0a286748666972dd073c547cb3",
+      "desk/src/lib/rules/calc2.ts": "f16871c12fd8ab3ffb2e90759dfc76395b317f92",
+      "desk/src/lib/rules/chain.ts": "81c71cbcf0c41ef5957711c18aa121859b88f498",
+      "desk/src/lib/rules/digest.ts": "c70a39b2854059e313cacc37d8677913f1136eff",
+      "desk/src/lib/rules/essay.ts": "c54bb2cdd499078f5b17b7bc58e56ee17c377f95",
+      "desk/src/lib/rules/kinds.ts": "0f63e252666723ebcf9f7fb5cbeffeab75f80f87",
+      "desk/src/lib/rules/marks.ts": "f2b3be8e621739ae0c4af1ff11e9b4604ea31c47",
+      "desk/src/lib/rules/maths.ts": "63438b7b3ca21038bb10bff879062218344f8ce4",
+      "desk/src/lib/rules/maturita.ts": "4fa443c00e3b035fe0d7df82db692b8ff0f497e2",
+      "desk/src/lib/rules/paperEntry.ts": "d5312295ab7120f50f7d3346a6222ef9c82c377a",
+      "desk/src/lib/rules/recovery.ts": "905b1c086ff71ef3da38d02dc3e525e41c070b00",
+      "desk/src/lib/rules/school.ts": "2b1704871133c8a6386feec8af50f39ce7e1c2b9",
+      "desk/src/lib/rules/stretch.ts": "db84ff7f6f2516a4b7087a82eeb7a9d5f0d9c49c",
+      "desk/src/lib/rules/taskText.ts": "c1215ad46aa12b2cf6622718dc8e35a36613930a",
+      "desk/src/lib/rules/voice.ts": "d7c3d0440998921f1f85bba7eab5d6a59c02d5b1",
+      "desk/src/lib/rules/week.ts": "6e6b5595a11b08f0c045c439a27c2aa5b4012141",
+      "desk/src/lib/session/learners.ts": "162bf9e249fd30954feee2642d2299e62b1d45c4",
+      "desk/src/lib/session/store.ts": "5329afd710248216fb4418e04c30f3d534fa9984",
+      "desk/src/maths/MathsTV.tsx": "31b9ccc28131523d704b49a918e428b8e5eb4505",
+      "desk/src/maths/typeset.ts": "6013570697ef37df6b5cc81841a311377ff2720c",
+      "desk/src/tv/keys.ts": "e24d97c5e59af26bedf3538f7ad9625f63098b0b",
+      "desk/src/tv/mathsRows.ts": "11bc5f505d22b76954d2bf26a49e25bd2575d102",
+      "desk/src/tv/paperRows.ts": "39e6643551a62c039f98025f69365fee26edcc9d",
+      "desk/src/tv/prepareRows.ts": "0fe1f9cc9a488ce141bc010a0d8aa479a744e650",
+      "desk/src/tv/profileRows.ts": "fff4d5558238564bdf9e47a64203f10e64017fdc",
+      "desk/src/tv/recapRows.ts": "981bdede6f677a487b15fb49f4e4429de4eb5f8b",
+      "desk/src/tv/screens.tsx": "c5eac476563ca77719ea03726b783896d6f3f3b3",
+      "desk/src/tv/sheetRows.ts": "928c549331d7f8b6aa6b74f9efddc9328c4017df"
+    }
+  }
+}
