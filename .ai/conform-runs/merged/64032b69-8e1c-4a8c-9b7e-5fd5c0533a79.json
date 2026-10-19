@@ -1,0 +1,101 @@
+{
+ "schema": "conform-run/1",
+ "worker": "64032b69-8e1c-4a8c-9b7e-5fd5c0533a79",
+ "subject": "motion",
+ "evaluatedAt": "2026-10-19T07:51:55.948729+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "tv-surface",
+   "subject": "motion",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "desk/src/design/on-air.css:124 Reduced motion disables button and image transitions but leaves the page marker's animated top and height active, so movement persists under the preference.",
+   "techniques": [
+    {
+     "technique": "content-bearing-degradation",
+     "verdict": "conformant",
+     "evidence": "desk/src/design/desk-landing.css:204 Reduced mode renders the complete marker stroke; adjacent rules remove the intro and departing layers while retaining settled landing content."
+    },
+    {
+     "technique": "continuity-across-change",
+     "verdict": "deviation",
+     "evidence": "desk/src/landing/themes/paper/Paper.tsx:148 Changing caption text changes its React key, replacing the element instead of updating the mounted caption in place."
+    },
+    {
+     "technique": "engine-selection",
+     "verdict": "conformant",
+     "evidence": "desk/src/design/on-air.css:102 The simple page-position gesture uses a platform-owned CSS transition, which supports ordinary retargeting without a scripted frame engine."
+    },
+    {
+     "technique": "gesture-decomposition",
+     "verdict": "conformant",
+     "evidence": "desk/src/design/desk-landing.css:104 The selected stamp separates its lift from shadow, filter and opacity tracks, allowing their timing and character to be tuned independently."
+    },
+    {
+     "technique": "loop-pause-governance",
+     "verdict": "deviation",
+     "evidence": "desk/src/landing/themes/paper/Paper.tsx:95 The canvas loop reads visibility and preference locally; the landing has no shared pause coordinator incorporating user stop and projecting its result into CSS loops."
+    },
+    {
+     "technique": "one-shot-guarding",
+     "verdict": "deviation",
+     "evidence": "desk/src/design/desk-landing.css:92 Every caption mount runs an entrance; Paper.tsx:148 keys that mount by caption content, so text updates replay the entrance without a stable-identity guard."
+    },
+    {
+     "technique": "performance-discipline",
+     "verdict": "deviation",
+     "evidence": "desk/src/design/on-air.css:106 Animating top and height performs layout work during the gesture instead of using compositor-friendly transforms."
+    },
+    {
+     "technique": "preset-vocabulary",
+     "verdict": "deviation",
+     "evidence": "desk/src/design/on-air.css:136 The shared recap-tile gesture embeds durations and an easing curve instead of referencing duration classes and easing roles."
+    },
+    {
+     "technique": "reduced-motion-mechanics",
+     "verdict": "deviation",
+     "evidence": "desk/src/design/on-air.css:137 The recap lift has no On Air reduced variant: line 124 covers only .btn and .read .img, leaving the Linga recap tile's transform transition active."
+    },
+    {
+     "technique": "taste-budgets",
+     "verdict": "deviation",
+     "evidence": "desk/src/design/desk-landing.css:45 The postcard entrance completes after 1.8 seconds using literal timing values, without a named, centrally enforced entrance budget."
+    },
+    {
+     "technique": "unprompted-motion-lifecycle",
+     "verdict": "deviation",
+     "evidence": "desk/src/tv/keys.ts:601 The landing runs indefinite decorative loops without a visible stop control, and its Play/Pause key is explicitly ignored."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-19T07:51:55.948729+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "motion"
+   ],
+   "techniques": [
+    "content-bearing-degradation",
+    "continuity-across-change",
+    "engine-selection",
+    "gesture-decomposition",
+    "loop-pause-governance",
+    "one-shot-guarding",
+    "performance-discipline",
+    "preset-vocabulary",
+    "reduced-motion-mechanics",
+    "taste-budgets",
+    "unprompted-motion-lifecycle"
+   ],
+   "deviations": 1,
+   "context": "tv-surface",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

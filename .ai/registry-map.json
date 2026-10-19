@@ -1447,7 +1447,11 @@
           "revision": 10,
           "changedAt": "2026-09-24",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/design/on-air.css:124 Reduced motion disables button and image transitions but leaves the page marker's animated top and height active, so movement persists under the preference.",
+          "evaluatedAt": "2026-10-19",
+          "evaluatedAgainst": "sha256-b2:8d9b3eabe2f3b534",
+          "evaluatedRevision": 10
         }
       ],
       "governance": "governed"
