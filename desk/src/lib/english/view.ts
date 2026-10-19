@@ -239,9 +239,26 @@ export function helpOf(c: Conversation): { label: string; help: string; tag: str
     label: h?.rung ? "More help" : "Help me answer",
     help: next ? (next === 1 && h?.say ? SAY_NEXT : RUNG_NEXT[next]) : "Get a phrase starter, then try your own reply on the phone.",
     tag: h?.shown && h.rung ? (h.rung === 1 && h.say ? SAY_TAG : RUNG_TAG[h.rung]) : "A little support",
-    offered: h ? !h.rung || !!next : !c.sceneCued,
+    // a line with only a quiz of its own (LG-5 recert-9) has no rung: the scene's cue, once, as for no ladder
+    offered: h?.rungs.length ? !h.rung || !!next : !c.sceneCued,
   };
 }
+
+/**
+ * LG-5 recert-9: the phrase quiz on screen: the one opened for the partner line on screen, its header that line word for
+ * word (help.ts quizFor). A quiz opened on a session saved before it is the scene's, as it was then.
+ */
+export function quizOnScreen(c: Conversation): { question: string; options: readonly string[] } | null {
+  if (!c.quizOpen) return null;
+  if (c.lineQuiz && c.lineQuiz.forTurn === c.turns.at(-1)?.id) return c.lineQuiz;
+  const scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId);
+  return !c.lineQuiz && scene ? scene.quiz : null;
+}
+/**
+ * LG-5 recert-9: "Choose a phrase" is offered only for a partner line with a quiz of its own, never the scene's static one;
+ * a conversation saved before the ladder (help absent) keeps the scene's quiz, as it had.
+ */
+export const quizOffered = (c: Conversation) => { const last = c.turns.at(-1); return c.help === undefined || !!c.help?.quiz && !!last && c.help.forTurn === last.id; };
 
 /** The level check of the learner at the desk, if one is under way. */
 export const activeCheck = (s: Session): LevelCheck | null => checkAt(s);
@@ -601,21 +618,23 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     // a duet (L2, duet.ts): whose turn it is, in the caption slot
     const beat = st === "your-turn" && captionTag !== "Used again" ? beatCaption(c, s.learner?.name ?? "") : null;
     if (beat) { caption = beat.text; captionTag = beat.tag; }
-    if (c.quizOpen) {
-      hero = { kind: "choices", kicker: "A little support · recognition practice", prompt: scene.quiz.question, options: [...scene.quiz.options], small: true };
-      actions = scene.quiz.options.map((x, i) => act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") }));
+    const onScreen = quizOnScreen(c);
+    if (c.quizOpen && onScreen) {
+      hero = { kind: "choices", kicker: "A little support · recognition practice", prompt: onScreen.question, options: [...onScreen.options], small: true };
+      actions = onScreen.options.map((x, i) => act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") }));
     } else {
       // the Now row over the replay's question reads the replay, never "Mission done" (LG-4 recert-7, adela-17 J4 #12), as the banner below
       hero = { kind: "scene", kicker: `${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: said ? (c.mission ? currentStep(c.mission) ?? (c.phase === "replay" ? "Try it again" : "Mission done") : c.goal) : "", art: c.sceneId, small: true,
         ...(c.mission ? { steps: c.mission.steps.map((text, i) => ({ text, state: (i < c.mission!.reached.length ? "done" : i === c.mission!.reached.length ? "current" : "open") as Dot })) } : {}),
         partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes, ...(c.lost ? { lost: c.lost } : {}) };
-      const quiz = act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") });
+      // LG-5 recert-9: offered only for a line with its own quiz
+      const quiz = quizOffered(c) ? act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") }) : null;
       const second = hasReply ? act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting || refused("coach") }) : quiz;
       // At the top of the ladder the help button gives way to the recognition fallback.
       const first = inFlight ? act("cancel", "Cancel & go back", "Cancel the pending reply and keep the conversation for later.", cmd("leave"), { disabled: refused("leave") }) : help.offered ? act("cue", help.label, help.help, cmd("cue"), { disabled: refused("cue") }) : second === quiz ? null : quiz;
       actions = st === "unprepared" ? [act("retry-scene", "Retry the scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true, ...duetAgain(c) })), chooseSituation("Choose a different situation.", "Choose another")]
         : st === "paused" ? [act("resume", "Resume", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }), act("finish", "Finish rehearsal", "End here and keep your learning evidence.", cmd("finish"), { disabled: refused("finish") }), ...(cutting ? [cutAction()] : [])]
-        : [...(first ? [first] : []), second, ...(cutting && !c.quizOpen ? [cutAction()] : [])];
+        : [...(first ? [first] : []), ...(second ? [second] : []), ...(cutting && !c.quizOpen ? [cutAction()] : [])];
       // The mission is done: the way on is the primary action, and the child may still keep talking (turn.ts takes a turn).
       // Never over the replay's question (LG-4, LT-tomas-9-J4-1): the scene waits for its answer first.
       if (c.mission && missionDone(c.mission) && st === "your-turn" && c.phase !== "replay") {
@@ -726,10 +745,10 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (c.paused) onPhone(act("resume", "Resume conversation", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }));
     else if (st === "coaching") onPhone(act("replay", "Replay with a new question", "Try the same intention with a new question.", cmd("replay"), { disabled: refused("replay") }));
     else {
-      const help = helpOf(c), scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId);
+      const help = helpOf(c), onScreen = quizOnScreen(c);
       if (help.offered) onPhone(act("cue", help.label, help.help, cmd("cue"), { disabled: waiting || refused("cue") }));
-      onPhone(act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") }));
-      if (c.quizOpen && scene) scene.quiz.options.forEach((x, i) => onPhone(act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") })));
+      if (quizOffered(c)) onPhone(act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") }));
+      if (onScreen) onScreen.options.forEach((x, i) => onPhone(act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") })));
       onPhone(act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting || refused("coach") }));
     }
     if (cutting && st !== "coaching") onPhone(cutAction());

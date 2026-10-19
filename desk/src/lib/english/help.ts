@@ -14,15 +14,17 @@
  * answer keys. A ladder lost to a restart gives way to the scene's own cue, as before the ladder.
  */
 import { fitsBand, pastQuestion } from "./gate";
-import type { Band, ConversationHelp, HelpRung } from "./types";
+import type { Band, ConversationHelp, HelpRung, LineQuiz } from "./types";
 
 /** Any revealed rung is help: a reply after the simpler line, the meaning or the starter is supported practice. */
 export const SUPPORTING_RUNG: HelpRung = 1;
-export const SIMPLER_MAX = 160, MEANING_MAX = 160, STARTER_MAX = 80, STARTER_WORDS = 8, SAY_MAX = 80;
+export const SIMPLER_MAX = 160, MEANING_MAX = 160, STARTER_MAX = 80, STARTER_WORDS = 8, SAY_MAX = 80, QUIZ_MAX = 80;
 const LADDER_CAP = 200;
 
-/** `say`: rung 1 is words to say back (sayBack), not the line said more simply. */
-type Ladder = Partial<Record<HelpRung, string>> & { say?: true };
+/** The two phrases of a line's own quiz (LG-5 recert-9): `fits` answers the partner's line, `misfit` does not. */
+export interface QuizWords { fits: string; misfit: string }
+/** `say`: rung 1 is words to say back (sayBack), not the line said more simply; `quiz`: the line's own phrase quiz. */
+type Ladder = Partial<Record<HelpRung, string>> & { say?: true; quiz?: QuizWords };
 // Server memory only: the session reaches every screen.
 const g = globalThis as unknown as { __lingaHelp?: Map<string, Ladder> };
 const ladders = g.__lingaHelp ??= new Map<string, Ladder>();
@@ -63,6 +65,20 @@ export function sayBackFor(raw: string, partnerLine: string, band: Band | undefi
   if (parts.some(pastQuestion) || sentencesOf(say).some(x => theirs.has(x)) || words(say) === words(partnerLine)) return "";
   return partnerLine.trim().endsWith("?") && parts.every(x => x.trim().endsWith("?")) ? "" : say;
 }
+/**
+ * The line's own phrase quiz (LG-5 recert-9, LT-viktor-67-J4-1, LT-tomas-9-J4-2, LT-petra-38-J4-2): the scene's static quiz
+ * quoted a line Mia never said and asked about another line than Sam's. The turn's one help output gives two short phrases
+ * for the line on screen: fits, a reply that answers it, and misfit, one that does not. Each is held to the band, with no
+ * past-tense question at A1-A2, and says none of the line's sentences again; the two differ. Else null: the line has no quiz.
+ */
+export function quizWordsFor(o: Record<string, unknown>, partnerLine: string, band: Band | undefined): QuizWords | null {
+  const theirs = new Set(sentencesOf(partnerLine)), beginner = !!band && SAYS_BACK.includes(band);
+  const ok = (x: string) => !!x && x.length <= QUIZ_MAX && inBand(x, band) && !(beginner && x.split(/(?<=[.!?])\s+/).some(pastQuestion)) && !sentencesOf(x).some(y => theirs.has(y));
+  const fits = plain(o, "fits"), misfit = plain(o, "misfit");
+  // a question line is answered: fits is not only a question
+  const answers = !partnerLine.trim().endsWith("?") || fits.split(/(?<=[.!?])\s+/).some(x => !x.trim().endsWith("?"));
+  return ok(fits) && ok(misfit) && answers && words(fits) !== words(misfit) ? { fits, misfit } : null;
+}
 /** The rungs of a model's ladder that do their job, for this partner line. Anything else is dropped, never the line. */
 export function validLadder(raw: unknown, partnerLine: string, hold: LadderHold = {}): Ladder {
   const o = raw && typeof raw === "object" && !Array.isArray(raw) ? raw as Record<string, unknown> : {};
@@ -74,6 +90,8 @@ export function validLadder(raw: unknown, partnerLine: string, hold: LadderHold 
   const named = fits(plain(o, "meaning")), meaning = !hold.held || namesLineWord(named, same) ? named : "";
   const say = says ? sayBackFor(plain(o, "sayBack"), line, hold.band) : "";
   if (say) { out[1] = say; out.say = true; }
+  const quiz = quizWordsFor(o, line, hold.band);
+  if (quiz) out.quiz = quiz;
   // Said more simply: shorter than the line and not the line again; a question stays a question.
   if (simpler && simpler.length <= SIMPLER_MAX && simpler.length < line.length && words(simpler) !== same && (!line.includes("?") || simpler.endsWith("?"))) out[1] = simpler;
   if (meaning && meaning.length <= MEANING_MAX && words(meaning) !== same && words(meaning) !== words(simpler) && words(meaning) !== words(say)) out[2] = meaning;
@@ -81,14 +99,33 @@ export function validLadder(raw: unknown, partnerLine: string, hold: LadderHold 
   return out;
 }
 
-/** Keep a partner line's ladder, and forget the line before it. What the session may know of it, or null for none. */
+/**
+ * Keep a partner line's ladder, and forget the line before it. What the session may know of it, or null for none. A line
+ * with a quiz and no rung keeps an empty ladder, so "Choose a phrase" still has the line's own quiz.
+ */
 export function keepLadder(turnId: string, ladder: Ladder, previous?: string | null): ConversationHelp | null {
   if (previous) ladders.delete(previous);
   const rungs = ([1, 2, 3] as const).filter(r => ladder[r]);
-  if (!rungs.length) return null;
+  if (!rungs.length && !ladder.quiz) return null;
   ladders.set(turnId, ladder);
   while (ladders.size > LADDER_CAP) ladders.delete(ladders.keys().next().value!);
-  return { forTurn: turnId, rungs, rung: 0, shown: false, ...(ladder.say && ladder[1] ? { say: true } : {}) };
+  return { forTurn: turnId, rungs, rung: 0, shown: false, ...(ladder.say && ladder[1] ? { say: true } : {}), ...(ladder.quiz ? { quiz: true } : {}) };
+}
+
+/** The partner's name on a quiz header: the part of "Mia · Granddaughter" before the dot. */
+const nameOf = (partner: string) => partner.split(" · ")[0].trim() || "Your partner";
+/**
+ * The phrase quiz for the line on screen, or null when that line has none (none came with it, or a restart lost it). Its
+ * header quotes the line word for word ("Mia says: Hi Grandpa! I am home now."); which option fits is set by the line's
+ * turn id, so it is not always the first. Never the scene's static quiz: a line with no quiz of its own has no quiz.
+ */
+export function quizFor(help: ConversationHelp | null | undefined, last: { id: string; role: string; text: string } | undefined, partner: string): LineQuiz | null {
+  if (!help?.quiz || !last || last.role !== "partner" || help.forTurn !== last.id) return null;
+  const q = ladders.get(last.id)?.quiz;
+  if (!q) return null;
+  const correct = [...last.id].reduce((n, ch) => n + ch.charCodeAt(0), 0) % 2;
+  const options: [string, string] = correct === 0 ? [q.fits, q.misfit] : [q.misfit, q.fits];
+  return { forTurn: last.id, question: `${nameOf(partner)} ${last.text.trim().endsWith("?") ? "asks" : "says"}: ${last.text}`, options, correct };
 }
 
 /**

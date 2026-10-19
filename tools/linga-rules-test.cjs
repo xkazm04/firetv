@@ -1278,7 +1278,8 @@ test('K4 case 2: no find after a partner line said it, after the quiz showed it,
  c=await roomStart({},ROVER_OPENING,()=>({reply:'Which bridge do you mean? There are two.',observations:[]}));
  await reply('I want the bridge.');await reply('Which bridge do you mean?');
  assert.equal(getSession().conversation.line.found,undefined,'a partner line already said it');
- c=await roomStart();
+ // LG-5 recert-9 revised this row on purpose: the quiz is the line's own (help.ts quizFor), so its option shows the key here
+ c=await roomStart({},{...ROVER_OPENING,help:{fits:'To the river. Which bridge do you mean?',misfit:'I am nine.'}});
  await command('quiz');assert.equal(getSession().conversation.line.shown,true,'the quiz put it on screen');
  await reply('I go to the river.');await reply('Which bridge do you mean?');
  assert.equal(getSession().conversation.line.found,undefined,'shown by the quiz two turns ago');assert.equal(prompts.at(-1).roomLine,undefined);
@@ -3282,7 +3283,8 @@ test('supported flag 2 (adela-17 J4 #7, petra-38 J4 #8 #12 #18, tomas-9 J4 #10):
  assert.equal(lastLearner().supported,true,'the coached line read back is help used');
 });
 test('supported flag 3 (tomas-9 J4 #2-#8, petra-38 J4 #3-#4): a used cue, an opened or answered quiz and a starter rung support the reply; the flag resets after it',async()=>{
- await recertScene(()=>({reply:'Which date do you need?',help:LADDER}));
+ // LG-5 recert-9: the quiz is the line's own, so the lines come with one (fits, misfit)
+ await recertScene(()=>({reply:'Which date do you need?',help:{...LADDER,fits:'On Friday, please.',misfit:'I like trains.'}}));
  await command('cue');await reply('I like the room.');// the scene cue: the opening had no ladder (tomas-9 #2-#4)
  assert.equal(lastLearner().supported,true,'a cue the learner pressed');assert.equal(getSession().conversation.supported,false,'reset once the reply is recorded');
  await reply('Yes. Friday.');assert.equal(lastLearner().supported,false,'tomas-9 #5: no help between the partner line and this reply');
@@ -3295,7 +3297,9 @@ test('supported flag 3 (tomas-9 J4 #2-#8, petra-38 J4 #3-#4): a used cue, an ope
  assert.deepEqual(flags(),[true,false,true,true,true,false]);
 });
 test('supported flag 4 (tomas-9 J4 #14): the recap\'s on-your-own and with-help counts are the turns\' flags',async()=>{
- await recertScene(p=>p.submittedReply.startsWith('My house')?{reply:'What is in your garden?',moment:{kind:'word',said:'Můj',better:'my',why:'Můj means my.'}}:{reply:'Do you know what Rex likes to eat?'});
+ // LG-5 recert-9: the quiz is the line's own, so the lines come with one and no rung (the cue is still the scene's)
+ const own={fits:'Yes, he likes meat.',misfit:'At nine.'};
+ await recertScene(p=>p.submittedReply.startsWith('My house')?{reply:'What is in your garden?',help:own,moment:{kind:'word',said:'Můj',better:'my',why:'Můj means my.'}}:{reply:'Do you know what Rex likes to eat?',help:own});
  await command('cue');await reply('I like Minecraft.');// #4: helped
  await reply('Yes. Minecraft creeper.');// #5: own
  await command('quiz');await command('choice',{option:1});await reply('My house... Můj house big.');// #8: helped
@@ -3425,21 +3429,22 @@ test('LG-5 recert-8 wired (viktor-67 J4 #9-#12): a line the A1 hold cut keeps it
  c=getSession().conversation;assert.equal(c.turns.at(-1).text,'Do you draw?','the hold cut the line to its question');
  const cues=[];for(let i=0;i<3;i++){await command('cue');cues.push(getSession().conversation.cue);}
  assert.deepEqual(cues,['draw: make a picture with a pencil','Yes, I draw …','Yes, I draw …'],'the cut line\'s own rungs, never the scene cue');
- // a cut line with no rung left: the help gives the quiz, never the past-tense cue
- answer=async req=>{const p=JSON.parse(req.prompt);return {json:{reply:said,observations:[],moment:{kind:'none',said:'',better:'',why:''}},provider:'test',ms:1};};
+ // a cut line with no rung left: the help gives the quiz, never the past-tense cue (LG-5 recert-9: the line's own quiz)
+ answer=async req=>{const p=JSON.parse(req.prompt);return {json:{reply:said,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{fits:'Yes, I draw cats.',misfit:'I am seven.'}},provider:'test',ms:1};};
  await reply('Yes, I draw. I draw garden.');await command('cue');
  c=getSession().conversation;
  assert.notEqual(c.cue,VIKTOR_CUE);assert.equal(c.quizOpen,true,'the recognition fallback');assert.equal(c.supported,true);
 });
 test('LG-5 recert-8 wired (tomas-9 J4 #2-#4): the scene cue is shown once a scene; pressed again, or for a later line with no ladder, the help gives the quiz and the button goes',async()=>{
  const V=view();
- await bandStart('ema','A1','What do you make?',()=>({reply:'Nice! What do you build?',observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
+ await bandStart('ema','A1','What do you make?',()=>({reply:'Nice! What do you build?',observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{fits:'I build a house.',misfit:'I am nine.'}}));
  let c=getSession().conversation;dispatch({type:'linga.changed',conversation:{...c,scene:{...c.scene,cue:TOMAS_CUE}}});
  await command('cue');c=getSession().conversation;
  assert.equal(c.cue,TOMAS_CUE,'the first press: the scene cue, it fits A1');assert.equal(c.quizOpen,false);
  assert.equal(V.helpOf(c).offered,false,'shown once: no second Help button');
+ // LG-5 recert-9 revised this row on purpose: the opening has no quiz of its own, and the scene's static quiz is never shown
  await command('cue');c=getSession().conversation;
- assert.equal(c.quizOpen,true,'pressed again: the quiz, not the same cue');assert.equal(c.cue,'','the quiz does not repeat it either');
+ assert.equal(c.quizOpen,false,'pressed again: no quiz of the line\'s own, and not the scene\'s');assert.equal(V.quizOffered(c),false,'no Choose a phrase either');
  await reply('I like sword.');await command('cue');c=getSession().conversation;
  assert.notEqual(c.cue,TOMAS_CUE,'a later line with no ladder: never the same cue again');assert.equal(c.quizOpen,true);
 });
@@ -3479,4 +3484,80 @@ test('LG-5 recert-9 wired (1) (viktor-67 J4 #3): the first Help press at A1 show
  assert.equal(c.cue,'Hi Mia! Is school good?','a reply-shaped rung');assert.notEqual(c.cue,MIA_LINE);assert.notEqual(c.cue,'Hi! I am home.');
  assert.equal(V.helpOf(c).tag,'You could say','never "Said more simply"');assert.equal(c.supported,true);
  await command('cue');assert.equal(getSession().conversation.cue,'home: the house you live in','then the ladder goes on');
+});
+
+// (2) A per-line phrase quiz. The scene's static quiz was not rebuilt for the line on screen: Viktor's header read "Mia says:
+// School was good. I had maths and art.", a line Mia never said (recert-9/LT-viktor-67-J4-1, blocker), Tomas got "Sam asks: What
+// do you like to build?" while Sam asked "Do you know where creepers live?" (recert-9/LT-tomas-9-J4-2, blocker), and Petra got
+// "What is the best first step?" on three presses (recert-9/LT-petra-38-J4-2). The quiz now comes from the turn's one help output.
+const VIKTOR_QUIZ={question:'Mia says: School was good. I had maths and art.',options:['Nice! What did you draw in art?','Goodbye, Mia.'],correct:0};
+const TOMAS_QUIZ={question:'Sam asks: What do you like to build?',options:['I like to build a big house.','I build big house.'],correct:0};
+const PETRA_LINE='Your room. What is wrong?',PETRA_QUIZ={question:'What is the best first step?',options:['Name the problem clearly','Stay quiet and leave'],correct:0};
+test('LG-5 recert-9 rules (2): a line\'s own quiz is two phrases held to the band; its header quotes the line on screen word for word',()=>{
+ const H=require(path.join(root,'src/lib/english/help.ts'));
+ const mia={fits:'Hi Mia! Is school good?',misfit:'I am seven.'};
+ assert.deepEqual(H.quizWordsFor(mia,MIA_LINE,'A1'),mia);
+ assert.equal(H.quizWordsFor({...mia,fits:MIA_LINE},MIA_LINE,'A1'),null,'the line again is no option');
+ assert.equal(H.quizWordsFor({...mia,fits:'Nice! What did you draw in art?'},MIA_LINE,'A1'),null,'viktor-67 #5: a past-tense question at A1');
+ assert.equal(H.quizWordsFor({fits:'Where do they live?',misfit:'I am nine.'},SAM_LINE,'A1'),null,'a question line is answered, not asked back');
+ assert.equal(H.quizWordsFor({fits:'I am nine.',misfit:'I am nine.'},SAM_LINE,'A1'),null,'two different phrases');
+ assert.equal(H.quizWordsFor({fits:'',misfit:'I am nine.'},SAM_LINE,'A1'),null);
+ const help=H.keepLadder('t-sam',H.validLadder({fits:"No, I don't know.",misfit:'I am nine.'},SAM_LINE,{band:'A1'}));
+ assert.deepEqual(help,{forTurn:'t-sam',rungs:[],rung:0,shown:false,quiz:true},'a quiz and no rung still keeps the line\'s help');
+ const q=H.quizFor(help,{id:'t-sam',role:'partner',text:SAM_LINE},'Sam · Friend');
+ assert.equal(q.question,'Sam asks: Do you know where creepers live?','tomas-9: the line on screen, word for word');
+ assert.deepEqual([...q.options].sort(),['I am nine.',"No, I don't know."]);assert.equal(q.options[q.correct],"No, I don't know.");
+ assert.equal(H.quizFor(help,{id:'t-other',role:'partner',text:'What do you like to build?'},'Sam · Friend'),null,'never a quiz for another line');
+ assert.equal(H.quizFor(null,{id:'t-sam',role:'partner',text:SAM_LINE},'Sam · Friend'),null,'no quiz of its own: none, never the scene\'s');
+});
+/** a scene at `level` whose partner and static quiz are the recert-9 transcript's, its turns answered with `turn(p)`; every request's schema kept */
+let schemas=[];
+async function quizScene(level,partner,staticQuiz,turn){
+ const seen=await bandStart('ema',level,'Hello! Can you see me?',turn);
+ const inner=answer;schemas=[];answer=async(req,a)=>{schemas.push(req.schema);return inner(req,a);};
+ const c=getSession().conversation;dispatch({type:'linga.changed',conversation:{...c,partner,scene:{...c.scene,quiz:staticQuiz}}});
+ return seen;
+}
+const NO_MOMENT={kind:'none',said:'',better:'',why:''};
+test('LG-5 recert-9 wired (2) (viktor-67 J4 #5, #6, #10): Choose a phrase quotes Mia\'s line on screen and its options answer it; never the scene\'s quiz, and no second model call',async()=>{
+ const V=view();
+ const seen=await quizScene('A1','Mia · Granddaughter',VIKTOR_QUIZ,()=>({reply:MIA_LINE,observations:[],moment:NO_MOMENT,help:{simpler:'',meaning:'',starter:'',sayBack:'Hi Mia! Is school good?',fits:'Hi Mia! Come in.',misfit:'I am seven.'}}));
+ await reply('Yes. I see you.');
+ assert.deepEqual(Object.keys(schemas[0].properties.help.properties).filter(k=>k==='fits'||k==='misfit'),['fits','misfit'],'the quiz is asked for in the turn\'s own help output');
+ let c=getSession().conversation;assert.equal(V.quizOffered(c),true);
+ const calls=seen.length;await command('quiz');c=getSession().conversation;
+ assert.equal(seen.length,calls,'opening the quiz makes no model call');
+ assert.equal(c.quizOpen,true);assert.equal(c.lineQuiz.question,'Mia says: Hi Grandpa! I am home now.');
+ const v=V.lingaView(getSession(),{});
+ assert.equal(v.hero.prompt,'Mia says: Hi Grandpa! I am home now.','the line on screen, word for word');
+ assert.deepEqual([...v.hero.options].sort(),['Hi Mia! Come in.','I am seven.']);
+ assert(!JSON.stringify(v).includes('School was good'),'never a line Mia did not say');
+ assert.deepEqual(V.offeredActions(v).filter(a=>a.id==='pick-phrase').map(a=>a.help).sort(),['Hi Mia! Come in.','I am seven.'],'the phone picks from the same two');
+ const right=c.lineQuiz.options.indexOf('Hi Mia! Come in.');
+ await command('choice',{option:1-right});c=getSession().conversation;
+ assert.equal(c.cue,'That one does not answer Mia. Try the other option.');assert.equal(c.quizOpen,true);
+ await command('choice',{option:right});c=getSession().conversation;
+ assert.equal(c.quizOpen,false);assert.equal(c.evidence.at(-1).quote,'Hi Mia! Come in.');assert.equal(c.evidence.at(-1).mode,'choice');
+});
+test('LG-5 recert-9 wired (2) (tomas-9 J4 #6-#7, petra-38 J4 #5-#7): once the ladder is spent the help gives the quiz of the line on screen, and each new line brings its own',async()=>{
+ const V=view();
+ const lines=[SAM_LINE,'Creepers are funny! What are you making?'];let n=0;
+ await quizScene('A1','Sam · Friend',TOMAS_QUIZ,()=>({reply:lines[n++],observations:[],moment:NO_MOMENT,help:n===1?{simpler:'',meaning:'creeper: a green monster',starter:'',sayBack:'',fits:"No, I don't know.",misfit:'I am nine.'}:{simpler:'',meaning:'',starter:'',sayBack:'',fits:'I am making a house.',misfit:'Yes, it is green.'}}));
+ await reply('I like creeper.');
+ await command('cue');assert.equal(getSession().conversation.cue,'creeper: a green monster');
+ let c=getSession().conversation;
+ assert.equal(V.helpOf(c).offered,false,'the ladder is spent');assert.equal(V.quizOffered(c),true,'Choose a phrase takes its place');
+ await command('quiz');c=getSession().conversation;
+ assert.equal(c.quizOpen,true);
+ assert.equal(V.lingaView(getSession(),{}).hero.prompt,'Sam asks: Do you know where creepers live?','tomas-9: Sam\'s question on screen, never "What do you like to build?"');
+ await reply('No. I make house.');
+ c=getSession().conversation;assert.equal(c.quizOpen,false);
+ await command('quiz');
+ assert.equal(V.lingaView(getSession(),{}).hero.prompt,'Sam asks: Creepers are funny! What are you making?','petra-38: a new line, a new quiz, not the same one again');
+ // petra-38 at A2: "Your room. What is wrong?" got the scene's "What is the best first step?"
+ await quizScene('A2','Ms Lee · hotel receptionist',PETRA_QUIZ,()=>({reply:PETRA_LINE,observations:[],moment:NO_MOMENT,help:{simpler:'',meaning:'',starter:'The room is…',sayBack:'The room is cold.',fits:'The heating does not work.',misfit:'I like the city.'}}));
+ await reply('Hello. I am in room two one four.');await command('quiz');
+ const v=V.lingaView(getSession(),{});
+ assert.equal(v.hero.prompt,'Ms Lee asks: Your room. What is wrong?');
+ assert(!JSON.stringify(v).includes(PETRA_QUIZ.question)&&!JSON.stringify(v).includes('Stay quiet and leave'),'never the scene\'s quiz');
 });

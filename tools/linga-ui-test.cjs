@@ -228,9 +228,13 @@ const stat=a=>{const v=num(a).sort((x,y)=>x-y);return v.length?{n:v.length,media
  let s=await current();assert.equal(s.conversation.turns.at(-2).mode,'text');await tv.screenshot({path:path.join(out,'tv-reply.png')});
  await takeMoment(phone,'typed reply');
  await tv.locator('.stage').click({position:{x:10,y:10}});await tv.keyboard.press('m');await tv.waitForSelector('.linga-menu-list');await tv.keyboard.press('Escape');
- await phone.getByRole('button',{name:'Choose a phrase',exact:true}).click();await tv.waitForSelector('.linga-choices');await phone.getByRole('button',{name:'Which bridge do you mean?',exact:true}).click();
+ // LG-5 recert-9: the quiz is the line on screen's own, from the turn's help output; its header quotes that line word for word
+ await phone.getByRole('button',{name:'Choose a phrase',exact:true}).click();await tv.waitForSelector('.linga-choices');
+ s=await current();const quiz=s.conversation.lineQuiz,right=quiz.options[quiz.correct];
+ assert.ok(quiz.question.endsWith(`: ${s.conversation.turns.at(-1).text}`),'the quiz quotes the partner line on screen');
+ await phone.getByRole('button',{name:right,exact:true}).click();
  await phone.waitForFunction(async()=>(await(await fetch('/api/session')).json()).englishLearning.evidence.some(e=>e.mode==='choice'));
- s=await current();assert.ok(s.englishLearning.evidence.some(e=>e.mode==='choice'&&e.quote==='Which bridge do you mean?'));assert.ok(s.englishLearning.evidence.filter(e=>e.id.endsWith(':choice')).every(e=>e.mode==='choice'));
+ s=await current();assert.ok(s.englishLearning.evidence.some(e=>e.mode==='choice'&&e.quote===right));assert.ok(s.englishLearning.evidence.filter(e=>e.id.endsWith(':choice')).every(e=>e.mode==='choice'));
  // E4: a spoken reply (simulated recognition): capture, review the words (tick pre-checked), one tap to send
  await phone.getByRole('button',{name:'Speak a reply',exact:true}).click();await phone.getByRole('button',{name:'Stop & review',exact:true}).waitFor();
  await phone.waitForFunction(()=>document.querySelector('.linga-phone textarea')?.value.includes('Where you saw'));

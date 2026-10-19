@@ -224,7 +224,11 @@ export interface ConversationHelp {
   shown: boolean;
   /** LG-5 recert-9: rung 1 is words to say back to the line (A1-A2), not the line said more simply */
   say?: true;
+  /** LG-5 recert-9: the line has its own phrase quiz (help.ts quizFor); its words stay in server memory until it opens */
+  quiz?: true;
 }
+/** LG-5 recert-9: the phrase quiz on screen, built for the partner line `forTurn`; its header quotes that line word for word. */
+export interface LineQuiz { forTurn: string; question: string; options: [string, string]; correct: number }
 export type NoteKind = "meaning" | "form" | "word" | "register";
 /**
  * One of the three notes at Cut (v2 L3, notes.ts cleanNotes): a quote, exact, from one learner turn of this take, and
@@ -271,6 +275,8 @@ export interface Conversation {
   replayFor?: string;
   capture: boolean; captureAt: number; audioNonce: number;
   supported: boolean; cue: string; quizOpen: boolean;
+  /** LG-5 recert-9: the quiz opened for the line on screen (help.ts quizFor); absent before it opened, or on a session saved before it */
+  lineQuiz?: LineQuiz | null;
   /** LG-5 recert-8: the scene's cue was shown (by help or under the quiz); it is offered once a scene, never again word for word */
   sceneCued?: boolean;
   /** absent on a conversation saved before the ladder, and null when the partner's line came without one */

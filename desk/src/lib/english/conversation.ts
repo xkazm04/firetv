@@ -15,7 +15,7 @@ import { adultContent, isAdult } from "../rules/mode";
 import { ConversationError, lingaLine } from "./errors";
 import { EngineError, type EngineResult } from "../engines/types";
 import { EASE_INSTRUCTION, learnerLost } from "./ease";
-import { climb, keepLadder, MEANING_MAX, SAY_MAX, sceneCueFor, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
+import { climb, keepLadder, MEANING_MAX, QUIZ_MAX, quizFor, SAY_MAX, sceneCueFor, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, ownLines, partnerLines, reuseOf, reviewOf, shownLines, askedAboutFor, slipsAgain, SLIP_AGAIN_TASK, usedLine, usesForm, fossilOf, fossilMoment, FOSSIL_TASK, type SlipAgain } from "./review";
@@ -38,7 +38,8 @@ const required=(value:unknown,name:string,max=160)=>fit(value,max,()=>new Conver
 const line=(value:unknown,max=230)=>fit(value,max,()=>new Error("The tutor returned a response that does not fit the screen."));
 // Every partner line comes with its rescue ladder (help.ts). It is asked for in full, and accepted unchecked:
 // help.ts drops a rung that does not do its job, and a bad ladder never costs the line.
-const helpSchema=schema({simpler:str(SIMPLER_MAX,0),meaning:str(MEANING_MAX,0),starter:str(STARTER_MAX,0),sayBack:str(SAY_MAX,0)});
+// LG-5 recert-9: the line's own phrase quiz (fits, misfit) comes in the same help output: no second call for it
+const helpSchema=schema({simpler:str(SIMPLER_MAX,0),meaning:str(MEANING_MAX,0),starter:str(STARTER_MAX,0),sayBack:str(SAY_MAX,0),fits:str(QUIZ_MAX,0),misfit:str(QUIZ_MAX,0)});
 const loose=(props:Record<string,unknown>)=>({...schema(props),properties:{...props,help:{}}});
 const openingProps={title:str(70),goal:str(120),opening:str(230)};
 // A scene with no authored steps asks the opening for two or three; mission.ts keeps them only if they fit, and a bad list never costs the scene.
@@ -99,7 +100,11 @@ function partnerSays(c:Conversation,value:unknown,max?:number,help?:unknown,answ
  * model's own, uncut.
  */
 function ladderFor(c:Conversation,help:unknown,text:string,asWritten:boolean){
-  return validLadder(text===REDIRECT_LINE?undefined:help,text,{band:heldBand(c),held:!asWritten});
+  const ladder=validLadder(text===REDIRECT_LINE?undefined:help,text,{band:heldBand(c),held:!asWritten});
+  // LG-5 recert-9: words the learner is handed to say (the say-back, the quiz's phrases) pass the audience gate as a partner line does
+  if(ladder.say&&audienceSafe(c,ladder[1]!)===null){delete ladder[1];delete ladder.say;}
+  if(ladder.quiz&&[ladder.quiz.fits,ladder.quiz.misfit].some(x=>audienceSafe(c,x)===null))delete ladder.quiz;
+  return ladder;
 }
 /** The band a partner line is held to (LG-56): the scene's level, or the level check's playing band when that is lower. */
 function heldBand(c:Conversation):Band|undefined{
@@ -137,7 +142,7 @@ ${adult?"":`${isAdult(p,prefs)?"This desk is in Family mode.":"This learner is n
 Every partner reply is one or two sentences, at most 230 characters, ending in at most one question. Plain English, no markdown. React specifically to the learner's meaning. Do not answer on behalf of the learner.${hold?` This learner plays at ${band}: every sentence you say has at most ${hold.words} words, uses only the most common everyday words, and the one question is a simple one.${hold.turn?` Your whole reply has at most ${hold.turn} words: one short question, or a two-word reaction and the question; an answer to whether the learner's line was correct may be two short sentences.`:""}${hold.present?" Speak in the present tense, and ask one short question in the present tense ('What do you like?', never 'What did you do?').":""} A longer line is cut before the learner sees it.`:""}
 When the learner asks whether their own line or a word in it was correct ("Was my sentence correct?", "Is that right?", "Did I say it well?"), quote the line or the words in question exactly, on a yes as well as a no, and say plainly yes or no. Before a yes, check that each word means what the learner meant in the scene, not only that the grammar is right. A word that is a common false friend for a Czech or Slavic speaker, used in its home-language sense, makes the answer no. Known false friends: ${KNOWN_FALSE_FRIENDS.join("; ")}. If input.askedAbout.slips is not empty, the answer is no and the change is that slip's better. If no, give the one change that matters most: a no names the corrected words themselves (for example "'compensate for'"), never only the category ("needs a preposition"). Never answer with general praise such as "sounds natural". Do not reverse a verdict from an earlier turn without saying you are correcting yourself. Then carry on in the scene. Keep the quote short (the words in question, not the whole line) so the reply still fits one or two sentences, at most 230 characters, and at most one question.${c.duet?`
 ${DUET_SYSTEM}`:""}
-With every line you say, return help: the rescue ladder for that line, shown one rung at a time only if the learner asks. simpler: your line said again, shorter and in more common words; a question stays a question and never contains its answer. meaning: the one word or phrase in your line a learner at this level may not know, and what it means in plain words ("word: meaning"). starter: the first two to six words of one possible reply, ending in "…", never a whole sentence and never the full answer. sayBack: one short whole reply the learner could say back to your line, in their own voice and at their level${hold?.present?", in the present tense":""}: words for them to say, never your line again or your question repeated (for "Hi Grandpa! I am home now.": "Hi Mia! Is school good?"). Leave a rung empty when it does not fit.
+With every line you say, return help: the rescue ladder for that line, shown one rung at a time only if the learner asks. simpler: your line said again, shorter and in more common words; a question stays a question and never contains its answer. meaning: the one word or phrase in your line a learner at this level may not know, and what it means in plain words ("word: meaning"). starter: the first two to six words of one possible reply, ending in "…", never a whole sentence and never the full answer. sayBack: one short whole reply the learner could say back to your line, in their own voice and at their level${hold?.present?", in the present tense":""}: words for them to say, never your line again or your question repeated (for "Hi Grandpa! I am home now.": "Hi Mia! Is school good?"). fits and misfit: two short phrases at the learner's level for a choose-a-phrase quiz on your line: fits, a reply that answers your line (not the same words as sayBack); misfit, a reply that does not answer it, because it answers a different question. Leave a rung empty when it does not fit.
 Return only the specified JSON.`;
 }
 /** The scene as every call's input carries it: its title and goal, and the partner and premise - for a scene the learner pitched, their own words, so data in the input JSON, never part of the system prompt. */
@@ -515,21 +520,29 @@ export async function englishCommand(raw:unknown){
     if(!step&&!fallback)return quiz(c,commands);
     commit(step?{...c,help:step.help,cue:step.cue,supported:c.supported||supportedBy(step.help),quizOpen:false,commands,...spent}:{...c,help:null,supported:true,cue:fallback!,sceneCued:true,quizOpen:false,commands,...spent},"linga-talk");return getSession();
   }
-  /** The quiz on screen with the scene's cue under it when that may be shown (LG-5 recert-8: held to the band, once a scene). */
+  /**
+   * The quiz on screen with the scene's cue under it when that may be shown (LG-5 recert-8: held to the band, once a scene).
+   * LG-5 recert-9: the quiz is the line on screen's own (help.ts quizFor), its header that line word for word, never the
+   * scene's static quiz. A line with none opens nothing: the press is kept, and the scene's cue has had its one offer. A
+   * conversation saved before the ladder (help absent) keeps the scene's quiz, as it had.
+   */
   function quiz(c:Conversation,commands=c.commands){
+    const q=quizFor(c.help,c.turns.at(-1),c.partner),options=q?q.options:c.help===undefined?scene!.quiz.options:null;
+    if(!options){commit({...c,sceneCued:true,commands},"linga-talk");return getSession();}
     const cue=sceneCueFor(scene!.cue,heldBand(c),c.sceneCued)??"";
     // the quiz puts its options and the cue on screen: one that shows the hidden line's key words spends the find (K4)
-    const shown=c.line&&[cue,...scene!.quiz.options].some(x=>!!x&&showsLine(c,x))?{line:{...c.line,shown:true}}:{};
-    commit({...c,supported:true,cue,...(cue?{sceneCued:true}:{}),quizOpen:true,help:c.help&&{...c.help,shown:false},commands,...shown},"linga-talk");return getSession();
+    const shown=c.line&&[cue,...options].some(x=>!!x&&showsLine(c,x))?{line:{...c.line,shown:true}}:{};
+    commit({...c,supported:true,cue,...(cue?{sceneCued:true}:{}),quizOpen:true,lineQuiz:q,help:c.help&&{...c.help,shown:false},commands,...shown},"linga-talk");return getSession();
   }
   if(action==="quiz")return quiz(c);
   if(action==="choice"){
-    const quiz=scene.quiz;
+    // the line's own quiz (LG-5 recert-9); a quiz opened on a session saved before it is the scene's
+    const own=c.lineQuiz&&c.lineQuiz.forTurn===c.turns.at(-1)?.id?c.lineQuiz:null,quiz=own??scene.quiz;
     if(![0,1].includes(input.option as number))throw new ConversationError("Choose one of the displayed phrases.");
     const correct=input.option===quiz.correct;
     const e:EnglishEvidence={id:`${c.id}:${commandId}:choice`,episodeId:c.id,turnId:commandId,sceneId:c.sceneId,skill:c.focusSkill,at:Date.now(),mode:"choice",supported:true,success:correct,quote:quiz.options[input.option as number],note:"Recognised a supporting phrase; not speaking evidence."};
     saveEnglish(learnerId,mergeEvidence(learning,[e]));
-    commit({...c,supported:true,quizOpen:!correct,cue:correct?"Now use the idea in your own reply on the phone.":"That phrase has a different purpose. Try the other option.",help:c.help&&{...c.help,shown:false},commands:[...c.commands,commandId],evidence:[...c.evidence,e]},"linga-talk");return getSession();
+    commit({...c,supported:true,quizOpen:!correct,cue:correct?"Now use the idea in your own reply on the phone.":own?`That one does not answer ${c.partner.split(" · ")[0]}. Try the other option.`:"That phrase has a different purpose. Try the other option.",help:c.help&&{...c.help,shown:false},commands:[...c.commands,commandId],evidence:[...c.evidence,e]},"linga-talk");return getSession();
   }
   if(action==="finish"){endTake(closeMoment(c,allowed),commandId);return getSession();}
   if(action==="cut"){

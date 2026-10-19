@@ -2,7 +2,7 @@
 import { useState } from "react";
 import type { Event, Session } from "@/lib/session/store";
 import { certWords, monthOf, recommendFor } from "@/lib/english/cert";
-import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL } from "@/lib/english/curriculum";
+import { defaultPreferences, eligibleScenes, ENGLISH_SKILLS, PROGRESS_LABEL } from "@/lib/english/curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, conversationBand, isBand, MAX_TASKS, PLAN_MAX, restsLine, TOPIC_ASK_MAX, verdictReason } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement, type Take } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
@@ -14,7 +14,7 @@ import { runningTake } from "@/lib/english/take";
 import { beatOf, COSTAR_MAX } from "@/lib/english/duet";
 import { originLabel } from "@/lib/english/line";
 import { LOST_SCENE } from "@/lib/english/lostfound";
-import { activeCheck, fixedClaim, helpOf, lingaHome, lingaView, offeredActions, phonePanel, replayLine, replayThinking, type ViewAction } from "@/lib/english/view";
+import { activeCheck, fixedClaim, helpOf, lingaHome, lingaView, offeredActions, phonePanel, quizOnScreen, replayLine, replayThinking, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
 import { LostPicture } from "./LostPicture";
 import { useEnglish } from "./useEnglish";
@@ -33,7 +33,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
   const [notes,setNotes]=useState(learning.notes.join("\n"));
   const [message,setMessage]=useState("");
   const pending=busy||!!c?.pending;
-  const scene=c?.scene??AUTHORED_SCENES.find(x=>x.id===c?.sceneId);
+  const quizNow=c?quizOnScreen(c):null;
   const save=async()=>{if(await run("preferences",{preferences:prefs,notes:notes.split("\n").map(n=>n.trim()).filter(Boolean)})){setMessage("Your learning preferences are saved. They apply to your next situation.");setPanel("talk");}};
   const currentQuestion=c?.turns.at(-1)?.text;
   // what the phone may draw beyond its own panel's fixed controls comes from the Linga screen model (lib/english/view.ts)
@@ -85,7 +85,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
         </>:<>
           {/* L2: in a duet's learner beat the help is the co-star helper, the same rungs and the same cue action, no model call */}
           {c.duet&&beatOf(c)==="learner"?<CoStarHelper c={c} learner={s.learner?.name??""} cue={cue} busy={busy} run={run}/>:c.cue&&<p><b>{helpOf(c).tag}</b><br/>{c.cue}</p>}
-          {c.quizOpen&&scene&&<><p>{scene.quiz.question}</p>{scene.quiz.options.map((x,i)=><button className="pbtn" data-secondary="true" key={x} disabled={refused("choice")} onClick={()=>run("choice",{option:i})}>{x}</button>)}</>}
+          {quizNow&&<><p>{quizNow.question}</p>{quizNow.options.map((x,i)=><button className="pbtn" data-secondary="true" key={x} disabled={refused("choice")} onClick={()=>run("choice",{option:i})}>{x}</button>)}</>}
           <ReplyBox key={beatOf(c)} ready={!!currentQuestion} busy={pending} question={c.turns.at(-1)?.id} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
             onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt,...(c.duet?{speaker:beatOf(c)}:{})})} note={c.duet?.beat==="costar"?(c.duet.coStarLearnerId?`${c.duet.coStar}'s line counts on ${c.duet.coStar}'s own map.`:`${c.duet.coStar}'s line keeps the scene going; it is not recorded.`):"Recorded as written practice. It counts toward On your own, as speaking does."}/>
           <div className="linga-buttons">{cue&&!(c.duet&&beatOf(c)==="learner")&&<button className="pbtn" data-secondary="true" disabled={busy||cue.disabled} onClick={()=>run("cue")}>{cue.label}</button>}{quiz&&<button className="pbtn" data-secondary="true" disabled={busy||quiz.disabled} onClick={()=>run("quiz")}>{quiz.label}</button>}</div>
