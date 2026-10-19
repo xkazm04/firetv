@@ -3,10 +3,12 @@
  * on the job (`Job.input`). A read is read again on the same page id with the image the session already has -
  * no second page, no re-snap; a hint is asked again for the same item and the same question; a practice set is
  * written again on the same topic; a lesson is asked again for the same topic. The run goes through the kind's own route, so it is the same job
- * (one at a time, a desk-worded failure, a late result dropped).
+ * (one at a time, a desk-worded failure, a late result dropped). The caller's role and its askId go with it, so a phone's
+ * retry meets the same door as its first answer (lite r3: 409 without the open ask); the TV and an in-process retry are as before.
  */
 import { NextResponse } from "next/server";
 import { getSession, type JobKind } from "@/lib/session/store";
+import { ROLE_HEADER } from "@/lib/session/pairing";
 import { MOVED_ON, NOTHING, NOT_AGAIN } from "@/lib/desk/job";
 import { POST as read } from "../../read/route";
 import { POST as hint } from "../../hint/route";
@@ -23,7 +25,7 @@ const ROUTES: Partial<Record<JobKind, { path: string; post: (req: Request) => Pr
 };
 
 export async function POST(req: Request) {
-  const { kind } = ((await req.json().catch(() => null)) ?? {}) as { kind?: JobKind };
+  const { kind, askId } = ((await req.json().catch(() => null)) ?? {}) as { kind?: JobKind; askId?: unknown };
   const s = getSession();
   const job = kind ? s.jobs?.[kind] : undefined;
   const route = kind ? ROUTES[kind] : undefined;
@@ -37,7 +39,9 @@ export async function POST(req: Request) {
     const item = s.pages[s.pageIx]?.items[Number(job.input.itemIx)];
     if (!item || item.key !== job.key) return NextResponse.json({ error: MOVED_ON }, { status: 409 });
   }
+  const role = req.headers.get(ROLE_HEADER);
   return route.post(new Request(new URL(`/api/${route.path}`, req.url), {
-    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(job.input),
+    method: "POST", headers: { "Content-Type": "application/json", ...(role ? { [ROLE_HEADER]: role } : {}) },
+    body: JSON.stringify(typeof askId === "string" ? { ...job.input, askId } : job.input),
   }));
 }
