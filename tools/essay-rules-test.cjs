@@ -532,9 +532,30 @@ test('rewrite case 1: revise puts one sentence in place, recomputed in code, and
  assert.deepEqual([b.stats.evidence,b.stats.links],[2,0],'the evidence count follows the new sentence');
 });
 
+test('L1-eliska-12-EM2-3: a dictated middle sentence (lower case, no full stop) is accepted, tidied, numbered and recounted',()=>{
+ const {revise}=rules();
+ const before=R3(),r=revise(before,2,'  according to a 2019 study,   teenagers fall asleep two hours later ');
+ assert.equal(r.ok,true,r.error);
+ assert.equal(r.reading.sentences[1].text,STUDY);
+ assert.deepEqual(r.reading.sentences.map(x=>x.n),[1,2,3]);
+ assert.deepEqual(r.reading.stats,paragraphStats(r.reading.sentences));
+ assert.equal(r.reading.text,`${before.sentences[0].text} ${STUDY} ${before.sentences[2].text}`);
+ assert.deepEqual(revise(before,2,STUDY).reading,r.reading,'a well formed rewrite is unchanged by the tidy');
+ assert.equal(revise(before,2,'research found that teenagers fall asleep later').ok,false,'unchanged still compares up to case and spacing');
+ assert.match(revise(before,2,'it is bad. Very bad').error,/sentences/i,'two sentences still refused');
+});
+test('L1-eliska-12-EM2-3: a remaining round-trip refusal names the sentence and says what to change',()=>{
+ const {revise}=rules();
+ for(const t of ['2019 was a hot year','(or so they say)']){
+  const r=revise(R3(),2,t);
+  assert.equal(r.ok,false,t);
+  assert.match(r.error,/^Sentence 2 /);assert.match(r.error,/capital letter/);assert.match(r.error,/full stop/);
+  assert.doesNotMatch(r.error,/would not stay one sentence/);
+ }
+});
 test('rewrite case 2: revise refuses a rewrite that is not one new sentence, in the desk\'s words, before any model is asked',async()=>{
  const {revise}=rules();
- const refusals=[[2,'It is bad. Very bad.'],[2,'   '],[2,''],[2,'  research found that TEENAGERS   fall asleep later. '],[4,STUDY],[0,STUDY],[2,'teenagers fall asleep two hours later.']];
+ const refusals=[[2,'It is bad. Very bad.'],[2,'   '],[2,''],[2,'  research found that TEENAGERS   fall asleep later. '],[4,STUDY],[0,STUDY],[2,'research found that teenagers fall asleep later']];
  for(const [n,text] of refusals){const r=revise(R3(),n,text);assert.equal(r.ok,false,`${n} ${JSON.stringify(text)}`);deskWorded(r.error);}
  assert.match(revise(R3(),2,'It is bad. Very bad.').error,/one sentence/i);
  assert.match(revise(R3(),4,STUDY).error,/no sentence 4/i);
@@ -983,7 +1004,7 @@ test('D1: three paragraphs keep their breaks through a rewrite; a rewrite still 
  const twice=R.revise(r.reading,6,'The bell should ring at nine instead.');
  assert(twice.ok);assert.equal(twice.reading.text.split('\n\n').length,4,'and a second rewrite');
  assert.equal(R.revise(reading,2,'two. Sentences here.').ok,false);
- assert.equal(R.revise(reading,5,'and so the start should move.').ok,false,'inside a paragraph a lowercase start would fuse with the sentence before it, as before D1');
+ assert.equal(R.revise(reading,5,'and so the start should move.').ok,true,'dictated lowercase is capitalised, so it no longer fuses with the sentence before it');
 });
 test('D1: a piece is read with paragraphs named in the prompt; verdicts still anchor by number',async()=>{
  seen=[];answer=reply({verdicts:[{n:6,verdict:'faulty',note:'Restates.'},{n:9,verdict:'faulty',note:'none'}],summary:'ok'});

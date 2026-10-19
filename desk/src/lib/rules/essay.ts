@@ -765,13 +765,17 @@ const norm = (t: string) => t.replace(/\s+/g, " ").trim();
  * measured and given its first-pass role by the same rule as a paragraph; the numbering stands, the stats are
  * recounted and the text is rebuilt from the sentences. No verdict is decided here. Refused, in the desk's words
  * and before any model is asked: no such sentence, a blank one, two sentences, the same sentence again (up to
- * case and spacing), and one that would not stay one sentence where it stands in the paragraph.
+ * case and spacing), and one that would run into its neighbour where it stands in the paragraph. Dictated text is
+ * tidied first, the way a learner means it: trimmed, a lower-case first letter capitalised, a full stop added when it
+ * ends without . ! or ?. The sentence is compared with the old one after that tidy.
  */
 export function revise<R extends ReadingLike>(reading: R, n: number, text: string): { ok: true; reading: R } | { ok: false; error: string } {
   const at = Number.isInteger(n) ? reading.sentences.findIndex((s) => s.n === n) : -1;
   if (at < 0) return { ok: false, error: Number.isInteger(n) ? `The paragraph on the desk has no sentence ${n}.` : "Say which sentence: its number on the TV." };
-  const t = norm(typeof text === "string" ? text : "");
+  let t = norm(typeof text === "string" ? text : "");
   if (!t) return { ok: false, error: `Write sentence ${n} first, then send it.` };
+  if (/^\p{Ll}/u.test(t)) t = t[0].toUpperCase() + t.slice(1);
+  if (!/[.!?]$/.test(t)) t += ".";
   const one = splitSentences(t);
   if (one.length !== 1) return { ok: false, error: `That is ${one.length} sentences. Send sentence ${n} as one sentence.` };
   if (t.toLowerCase() === norm(reading.sentences[at].text).toLowerCase()) return { ok: false, error: `That is sentence ${n} as it was. Change it, then send it.` };
@@ -779,7 +783,7 @@ export function revise<R extends ReadingLike>(reading: R, n: number, text: strin
   const rebuilt = joinSentences(sentences);
   const again = splitSentences(rebuilt);
   if (again.length !== sentences.length || again.some((s, i) => s.text !== sentences[i].text || s.para !== sentences[i].para))
-    return { ok: false, error: `In the paragraph that would not stay one sentence. Start it with a capital and end it with a full stop.` };
+    return { ok: false, error: `Sentence ${n} would run into the sentence next to it. Start it with a capital letter and end it with a full stop.` };
   return { ok: true, reading: { ...reading, text: rebuilt, sentences, stats: paragraphStats(sentences) } };
 }
 
