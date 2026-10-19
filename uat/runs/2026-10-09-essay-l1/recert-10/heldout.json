@@ -1,0 +1,511 @@
+{
+ "purpose": "Held-out measure of the Essay language check (paragraphIsEnglish, desk/src/lib/rules/essay.ts) at 6b1897912bab71ae7197ad4064f40fff5db2e1e9 (includes d051b6f2, language check round 3)",
+ "note": "Three measures. (1) heldOut: the learner text recorded under uat/runs/*essay*/ (the 45 texts of recert-9/heldout.json, rerun), items also in tools/essay-rules-test.cjs set aside. (2) r3: tools/essay-heldout-r3.json, committed in 3988b75c before d051b6f2 with the note never tune on it; it is the corpus d051b6f2 was written against, so read it as the held-out corpus of that rule change. (3) freshProbe: 42 distinct Czech paragraphs of six words or more (24 with diacritics, 18 plain), each run as written and folded to plain letters, 9 short Czech sentences, and German, Polish, Italian, Dutch and English paragraphs written for this round after reading the rule, not tuned on and not in tools/essay-rules-test.cjs; fresh to the repo, not independent of whoever tunes the rule.",
+ "method": "scratch scripts outside the repo, tools/ts-load.cjs, no model call; paragraphIsEnglish(text) per item",
+ "heldOut": {
+  "english": {
+   "total": 34,
+   "refused": 0
+  },
+  "czech": {
+   "total": 3,
+   "passedAsEnglish": 0
+  }
+ },
+ "withToolsOverlap": {
+  "english": {
+   "total": 38,
+   "refused": 0
+  },
+  "czech": {
+   "total": 7,
+   "passedAsEnglish": 0
+  }
+ },
+ "r3": {
+  "czPlain": {
+   "total": 30,
+   "refused": 27,
+   "passedAsEnglish": 3,
+   "leaked": [
+    "Pes sousedu stekal celou noc a nikdo v nasem dome nemohl spat.",
+    "Starsi sestra mi pomaha s anglictinou, kdyz nerozumim nejakemu slovicku.",
+    "Letos o prazdninach pojedeme na hory a budeme bydlet v male chate u potoka."
+   ]
+  },
+  "czShort": {
+   "total": 10,
+   "refused": 6,
+   "passedAsEnglish": 4,
+   "leaked": [
+    "Dobry den.",
+    "Mam rad pizzu.",
+    "To nevim.",
+    "Pojd sem!"
+   ]
+  },
+  "de": {
+   "total": 10,
+   "refused": 10,
+   "passedAsEnglish": 0,
+   "leaked": []
+  },
+  "it": {
+   "total": 4,
+   "refused": 4,
+   "passedAsEnglish": 0,
+   "leaked": []
+  },
+  "nl": {
+   "total": 4,
+   "refused": 4,
+   "passedAsEnglish": 0,
+   "leaked": []
+  },
+  "pl": {
+   "total": 4,
+   "refused": 4,
+   "passedAsEnglish": 0,
+   "leaked": []
+  },
+  "en": {
+   "total": 30,
+   "refused": 0,
+   "passedAsEnglish": 30,
+   "englishRefused": 0
+  }
+ },
+ "items": [
+  {
+   "lang": "en",
+   "kind": "paragraph",
+   "source": "essay-w-run W4",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Schools should start later in the morning. During puberty, teenagers' body clocks shift later, so many cannot fall asleep before 11 pm. When Seattle moved its high-school start from 7:50 to 8:45 in 2016, students slept about 34 minutes more each night. Also it is just better and everyone knows it. That is why a later start would help students learn.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-w-run W4 s1",
+   "inTools": true,
+   "passedAsEnglish": true,
+   "text": "Schools should start later in the morning.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-w-run W4 s2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "During puberty, teenagers' body clocks shift later, so many cannot fall asleep before 11 pm.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-w-run W4 s3",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "When Seattle moved its high-school start from 7:50 to 8:45 in 2016, students slept about 34 minutes more each night.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-w-run W4 s4",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Also it is just better and everyone knows it.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-w-run W4 s5",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "That is why a later start would help students learn.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-w-run W5 rewrite",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Also, in the same study, students' grades in their first class of the day went up.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "paragraph",
+   "source": "essay-l1 barbora-43--EM1",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Many students in my class are always tired. Sleep is really important for teenagers. Schools start too early in the morning. This is bad for everyone.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 barbora-43--EM1",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Many students in my class are always tired.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "paragraph",
+   "source": "essay-l1 eliska-12--EM1",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Children should walk or cycle to school instead of going by car. A study from 2019 found that children who walk to school get 20 more minutes of exercise every day. Walking also makes children happier than going by car. So schools should ask parents to let their children walk.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 eliska-12--EM1",
+   "inTools": true,
+   "passedAsEnglish": true,
+   "text": "Walking also makes children happier than going by car.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 eliska-12--EM1",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "This means they are fitter and more awake in lessons.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 eliska-12--EM1",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "So walking to school is better than going by car.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 eliska-12--EM1",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "In Year 8 we all have to wear a blazer.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 eliska-12--EM1",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "I found the lesson boring.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 eliska-12--EM1",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Walking to school makes children happier.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "paragraph",
+   "source": "essay-l1 eliska-12--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Children should walk to school. It is healthier and better for the planet. I found out that my friends who walk are never tired in the first lesson. So walking is the best way to get to school.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "paragraph",
+   "source": "essay-l1 eliska-12--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Walking to school is the best. It is also healthier. So schools should tell parents.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 eliska-12--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Walking makes children happier, because a survey from 2020 found that 7 of 10 children who walk feel calm at school.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 eliska-12--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Walking is much healthier than sitting in a car.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "paragraph",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Phones are bad for school. Some 70% of teachers in a 2023 survey reported more distraction in lessons. This is why schools should act.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "paragraph",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Schools should make rules. Phones go in lockers.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "In conclusion, schools should make rules.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "In my opinion phones should not be banned completely.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "In conclusion, schools should make some rules.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "In my opinion phones should not be banned.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Some students play games in the lesson.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Sometimes my teacher lets us use phones.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Social media is a big distraction.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Soon every school will ban them.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Software like Quizlet helps us.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM2",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "It is a big problem.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "paragraph",
+   "source": "essay-l1 daniel-15--EM3",
+   "inTools": true,
+   "passedAsEnglish": true,
+   "text": "Many students are tired. Sleep is important. Schools start early. This is bad.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM3",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Some students play games in the lesson and they don't listen.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM3",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Schools should make rules, e.g. phones in lockers during lessons.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 daniel-15--EM3",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Should mobile phones be banned at school?",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 helena-46--EM5",
+   "inTools": false,
+   "passedAsEnglish": true,
+   "text": "Our board has cut the 2027 budget by 30%, please keep this confidential.",
+   "passedAtB7fca776": true
+  },
+  {
+   "lang": "cs",
+   "kind": "paragraph",
+   "source": "essay-l1 kristyna-17--EM1",
+   "inTools": true,
+   "passedAsEnglish": false,
+   "text": "Telefony by ve škole měly zůstat povolené. Někteří učitelé tvrdí, že rozptylují, avšak bez nich se žáci nenaučí sebekázni. Proto je lepší je regulovat.",
+   "passedAtB7fca776": false
+  },
+  {
+   "lang": "cs",
+   "kind": "paragraph",
+   "source": "essay-l1 kristyna-17--EM1",
+   "inTools": true,
+   "passedAsEnglish": false,
+   "text": "Telefony by ve škole měly zůstat povolené. Podle výzkumu Univerzity Karlovy se žáci s jasnými pravidly soustředí lépe. To ukazuje, že zákaz není nutný.",
+   "passedAtB7fca776": false
+  },
+  {
+   "lang": "cs",
+   "kind": "sentence",
+   "source": "essay-l1 kristyna-17--EM1",
+   "inTools": true,
+   "passedAsEnglish": false,
+   "text": "Školy by neměly telefony úplně zakazovat.",
+   "passedAtB7fca776": false
+  },
+  {
+   "lang": "cs",
+   "kind": "sentence",
+   "source": "essay-l1 kristyna-17--EM1",
+   "inTools": true,
+   "passedAsEnglish": false,
+   "text": "Žáci se tak učí sebekázni.",
+   "passedAtB7fca776": false
+  },
+  {
+   "lang": "cs",
+   "kind": "sentence",
+   "source": "essay-l1 kristyna-17--EM1",
+   "inTools": false,
+   "passedAsEnglish": false,
+   "text": "Mobilní telefony by ve škole neměly být zakázány.",
+   "passedAtB7fca776": false
+  },
+  {
+   "lang": "cs",
+   "kind": "sentence",
+   "source": "essay-l1 kristyna-17--EM1",
+   "inTools": false,
+   "passedAsEnglish": false,
+   "text": "Například v naší třídě telefony odkládáme do krabice.",
+   "passedAtB7fca776": false
+  },
+  {
+   "lang": "cs",
+   "kind": "sentence",
+   "source": "essay-l1 kristyna-17--EM1",
+   "inTools": false,
+   "passedAsEnglish": false,
+   "text": "Tento problém je hodně důležitý pro celou společnost.",
+   "passedAtB7fca776": false
+  },
+  {
+   "lang": "en",
+   "kind": "sentence",
+   "source": "essay-l1 kristyna-17--EM1",
+   "inTools": true,
+   "passedAsEnglish": true,
+   "text": "Many critics praise the novel. Émile Zola disagreed with them.",
+   "passedAtB7fca776": true
+  }
+ ],
+ "freshProbe": {
+  "note": "output of the scratch probe, corpus written for round 10; the previous round (round 9) fresh probe leaked 21 paragraphs, all of which are refused now because d051b6f2 added their words to the lists (pinned by tools/essay-rules-test.cjs:1938-1940)",
+  "output": [
+   "cz-long-as-written(diacritics) 24/24",
+   "cz-long-plain-as-written 15/18",
+   "  leaked: [\"Mluvime o tom zitra, ted nemam cas, protoze musim jit na trenink.\",\"Moje teta bydli v Praze a kazdy rok k ni jezdime na vanoce.\",\"Kamarad mi pujcil knizku a ja ji prectu do patku, slibuju.\"]",
+   "cz-long-all-folded 36/42",
+   "  leaked: [\"Zahrada za nasim domem je plna jabloni a na podzim sbirame jablka do kosu.\",\"Knizky ctu rad, hlavne dobrodruzne pribehy o piratech a o dalekych ostrovech.\",\"Pes meho kamarada umi otevrit dvere a obcas si sam vezme z lednice sunku.\",\"Mluvime o tom zitra, ted nemam cas, protoze musim jit na trenink.\",\"Moje teta bydli v Praze a kazdy rok k ni jezdime na vanoce.\",\"Kamarad mi pujcil knizku a ja ji prectu do patku, slibuju.\"]",
+   "cz-long-all-folded-sub 21/24",
+   "  leaked: [\"Zahrada za nasim domem je plna jabloni a na podzim sbirame jablka do kosu.\",\"Knizky ctu rad, hlavne dobrodruzne pribehy o piratech a o dalekych ostrovech.\",\"Pes meho kamarada umi otevrit dvere a obcas si sam vezme z lednice sunku.\"]",
+   "cz-short diacritics 8/9",
+   "  leaked: [\"Zítra jdeme do kina.\"]",
+   "cz-short folded 5/9",
+   "  leaked: [\"Mam rad hory.\",\"Zitra jdeme do kina.\",\"To nemyslis vazne.\",\"Bydlim ve meste u reky.\"]",
+   "cz long total (diacr + folded) 75/84",
+   "  leaked: [\"Mluvime o tom zitra, ted nemam cas, protoze musim jit na trenink.\",\"Moje teta bydli v Praze a kazdy rok k ni jezdime na vanoce.\",\"Kamarad mi pujcil knizku a ja ji prectu do patku, slibuju.\",\"Zahrada za nasim domem je plna jabloni a na podzim sbirame jablka do kosu.\",\"Knizky ctu rad, hlavne dobrodruzne pribehy o piratech a o dalekych ostrovech.\",\"Pes meho kamarada umi otevrit dvere a obcas si sam vezme z lednice sunku.\",\"Mluvime o tom zitra, ted nemam cas, protoze musim jit na trenink.\",\"Moje teta bydli v Praze a kazdy rok k ni jezdime na vanoce.\",\"Kamarad mi pujcil knizku a ja ji prectu do patku, slibuju.\"]",
+   "de 10/10",
+   "pl 3/4",
+   "  leaked: [\"Dziś jest zimno i pada deszcz.\"]",
+   "it 2/2",
+   "nl 2/2",
+   "en passed 16/16 refused: []",
+   "heldout english refused 0 / 38  non-en refused 7 / 7",
+   ""
+  ]
+ }
+}

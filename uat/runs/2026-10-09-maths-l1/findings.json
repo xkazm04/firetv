@@ -95,12 +95,12 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "suggested_acceptance": "A snapped page whose items read as Calculus specs (specFromQuestion) can be marked from a photo of his working, by the same code judge as a desk set, items that do not read being \"not sure\".",
     "l2_priority": "precondition: vision host (env.md, Math Buddy) — none until built; then page read rate and handwriting read on a real MA1 sheet.",
-    "recertify_run": "2026-10-09-maths-l1/recert-5",
+    "recertify_run": "2026-10-09-maths-l1/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at c4893c88; phone/page.tsx changed since 67581c54 (fc8a5151, ede841e4, 087c9d13) and the cite moved with it (same line content)",
+    "recertify_evidence": "Cited lines re-found at 6b189791 and unchanged in substance: phone/page.tsx:401-406 sendWorking still posts only {image,w,h} to /api/mark (the other /api/mark call, :425, posts typed answers); api/mark/route.ts:62 still answers 'Start a practice set first.' with no practice, so his own sheet cannot be marked. route.ts:61 and :99 show a body.page branch (markPageRoute) exists on the server, but no client sends a page id (grep of desk/src finds only those two callers); tv/keys.ts:391 page handler has no mark action. No commit since c4893c88 on this path.",
     "recurred_as": "L1-matyas-19-MB1-1"
   },
   {
@@ -1037,12 +1037,12 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "suggested_acceptance": "A teacher signs off the tier-2 denominator range for cz 6. ročník",
     "l2_priority": "Set fit judged by a Czech maths teacher on 3 drawn sets",
-    "recertify_run": "2026-10-09-maths-l1/recert-5",
+    "recertify_run": "2026-10-09-maths-l1/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at c4893c88; no commit since 67581c54 touched the cited files",
+    "recertify_evidence": "Cited lines re-found at 6b189791 unchanged: school.ts:2798 gen(seed,tier) and school.ts:3040 'frac-add-sub': genMixedAddSub(seed) still draw tier-2 common bottoms beyond a 6. rocnik hand range; no teacher sign-off exists in code (school.ts diff since c4893c88 only appends linearWorked at 3646+).",
     "recurred_as": "L1-nela-12-MB2-1"
   },
   {
@@ -1071,12 +1071,12 @@
     "code_check": "by-design",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "suggested_acceptance": "Owner ruling: either the add/sub questions say \"simplest form\" (unsure, not wrong, for 6/4), or the lesson drops \"then simplify\"",
     "l2_priority": "Owner/teacher ruling on unsimplified results for cz",
-    "recertify_run": "2026-10-09-maths-l1/recert-5",
+    "recertify_run": "2026-10-09-maths-l1/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at c4893c88; no commit since 67581c54 touched the cited files",
+    "recertify_evidence": "Cited lines re-found at 6b189791: library/worked.ts:15 still teaches 'Add or take away the tops, then simplify' while school.ts:1588 adds the simplest-form tail only when s.form === 'simplest', so an unsimplified sum is still ticked. 6b189791 only adds new linear-equation entries to worked.ts (lines 38-43), not touching the fraction lesson.",
     "recurred_as": "L1-nela-12-MB2-2"
   },
   {
@@ -1298,11 +1298,11 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "suggested_acceptance": "A school-year pick on the profile, or the cut-off applied",
-    "recertify_run": "2026-10-09-maths-l1/recert-5",
+    "recertify_run": "2026-10-09-maths-l1/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at c4893c88; no commit since 67581c54 touched the cited files",
+    "recertify_evidence": "Cited lines re-found at 6b189791, files untouched since c4893c88: syllabus.ts:302-304 schoolYear(system,age) is still age - SYSTEM_START[system] + 1 with no cut-off, and stretch.ts:74-78 learnerYear calls it; there is still no school-year pick on the profile, so a 12-year-old in 6. rocnik is taken for 7.",
     "recurred_as": "L1-nela-12-MB5-1"
   },
   {
@@ -1857,12 +1857,12 @@
     "code_check": "confirmed-absent",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "suggested_acceptance": "The draft paper persists on the phone until sent.",
     "l2_priority": "Lock the phone mid-entry on iOS/Android browsers; does the draft survive?",
-    "recertify_run": "2026-10-09-maths-l1/recert-5",
+    "recertify_run": "2026-10-09-maths-l1/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at c4893c88; phone/page.tsx changed since 67581c54 (fc8a5151, ede841e4, 087c9d13) and the cite moved with it (same line content)",
+    "recertify_evidence": "Judged on main's code only. desk/src/app/phone/page.tsx:71 is still useState<DraftRow[]>(() => [blankRow()]); nothing in page.tsx writes the rows to localStorage/sessionStorage (:200 localStorage only removes desk.pin); :562 hands rows/setRows to PaperPanel as plain React state. A reload or tab discard loses the typed rows. No commit since c4893c88 touched this (the page.tsx diffs are the Essay keep format/title only).",
     "recurred_as": "L1-owen-17-MB4-1"
   },
   {
@@ -2540,11 +2540,11 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "suggested_acceptance": "The picks can be made on the phone (where the name is typed), or the TV rows start on the likely value (age row near the type's middle; course row skipped when the school path is the only sensible one).",
-    "recertify_run": "2026-10-09-maths-l1/recert-5",
+    "recertify_run": "2026-10-09-maths-l1/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at c4893c88; phone/page.tsx changed since 67581c54 (fc8a5151, ede841e4, 087c9d13) and the cite moved with it (same line content)",
+    "recertify_evidence": "Cited lines re-found at 6b189791: profileRows.ts:24 DEFAULT_SYSTEM uk; profileRows.ts:77 draft type defaults to high-school; rows run Type, Age, Mode, School system, Interested in, Maths course before Save/Back (:79-87); phone profile (page.tsx:557) still has only the Name field and Save/Cancel. No commit changed this.",
     "recurred_as": "L1-radka-41-MB5-1"
   },
   {
@@ -2637,11 +2637,11 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "suggested_acceptance": "The phone Recap lists every learner with work tonight, one block each.",
-    "recertify_run": "2026-10-09-maths-l1/recert-5",
+    "recertify_run": "2026-10-09-maths-l1/recert-6",
     "recertify_status": "recurs",
-    "recertify_evidence": "cited lines re-found at c4893c88; the recapRows.ts cite (66-68) and the phone Recap block (741-750) sit in changed hunks of fc8a5151 and were re-read by hand: the signature moved to :77 and now wraps the log in tonightsLog, and the phone block moved to :750-760 with the tally taking the same wrapped log; the history is still the seated learner's and the block is still titled with their name; phone/page.tsx changed since 67581c54 (fc8a5151, ede841e4, 087c9d13) and the cite moved with it (same line content)",
+    "recertify_evidence": "Cited lines re-found at 6b189791: recapRows.ts:77-78 recapRows(session, now) wraps the seated session's log in tonightsLog; the phone Recap block (page.tsx:757-768) is one block titled with s.learner's name, tiles from recapRows(s, now). No other learner's evening is listed.",
     "recurred_as": "L1-radka-41-MB5-2"
   },
   {
@@ -3472,12 +3472,12 @@
     "code_check": "present-but-missed",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 6,
+    "recurrence": 7,
     "suggested_acceptance": "Each topic row names the statement's can text it came through.",
-    "recertify_run": "2026-10-09-maths-l1/recert-5",
+    "recertify_run": "2026-10-09-maths-l1/recert-6",
     "recertify_status": "recurs",
     "recurred_as": "L1-vojtech-18-MB4-1",
-    "recertify_evidence": "cited lines re-found at c4893c88; no commit since 67581c54 touched the cited files"
+    "recertify_evidence": "5e79b0f7 wired codes through: PaperTopic.codes (desk/src/tv/paperRows.ts:11, built :42) and the topic row prints 'From {t.from} · led by {codes}' (desk/src/maths/MathsTV.tsx:752; test maths-tv-test.cjs 'led by N12'). But it prints the bare statement codes (N12, A1, A22 ...), not the statement's can text. The phone picker (PaperPanel.tsx:37) and the off-desk rows (MathsTV.tsx:734) show statements in words and never a code, so a learner cannot read 'led by A22' as a statement; the acceptance 'names the statement's can text it came through' is not met (and no canOf, so no Czech words either). Narrowed by 5e79b0f7; still missing: The statement's words (STATEMENTS can / canOf(code, system)) instead of, or beside, the bare code; the code alone means nothing on the TV."
   },
   {
     "id": "L1-vojtech-18-MB4-7",
