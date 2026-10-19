@@ -54,6 +54,9 @@ export function paperView(s: Pick<Session, "paper" | "skills" | "profiles" | "le
 /** The stops the D-pad walks (tv/keys): the topic rows, then the off-desk statements. */
 export const paperStopCount = (s: Pick<Session, "paper" | "skills" | "profiles" | "learner">): number => { const v = paperView(s); return v.topics.length + v.off.length; };
 
+/** The index of the "Type a paper" stop (TL-13): one past the last row, so the walk is the rows, then this. */
+export const paperTypeAt = (s: Pick<Session, "paper" | "skills" | "profiles" | "learner">): number => paperStopCount(s);
+
 /**
  * The off-desk row's name (design/maths-lamplight.css .mb-poffrow): 26 px, in 732 px of room - the 1100 px column, less
  * 4 px of border, 48 px of padding, the 56 px number column, two 20 px gaps and the 220 px lost/From column. At 0.55 of a
@@ -78,8 +81,8 @@ export function offCountLine(v: PaperView): string | null {
 export function leftOutLine(v: PaperView): string | null {
   const n = v.leftOut;
   if (n < 1) return null;
-  if (n === 1) return "1 question was left out on the phone, so it is not in this score.";
-  return `${n} questions were left out on the phone, so they are not in this score.`;
+  if (n === 1) return "1 question was left out of the typed paper, so it is not in this score.";
+  return `${n} questions were left out of the typed paper, so they are not in this score.`;
 }
 
 /** The Not on the desk yet card's line: how many statements the desk has no topic for. */
@@ -116,11 +119,11 @@ export function paperBiggest(v: PaperView): PaperTopic | null {
 
 /** The caption: where to start, or how to enter a paper. */
 export function paperCaption(v: PaperView): string {
-  if (v.empty) return "Type the marks of a paper you sat on the phone. The desk shows where they were lost.";
+  if (v.empty) return "Select Type a paper to enter the marks. The desk shows where they were lost.";
   if (!v.topics.length && !v.off.length) {
-    if (v.lost === 1) return "1 mark was lost on a question that names no statement. Pick what it tests on the phone.";
-    if (v.lost > 1) return `${v.lost} marks were lost on questions that name no statement. Pick what each one tests on the phone.`;
-    return "No marks were lost on this paper. Type another on the phone any time.";
+    if (v.lost === 1) return "1 mark was lost on a question that names no statement. Name the statement it tests when the paper is typed.";
+    if (v.lost > 1) return `${v.lost} marks were lost on questions that name no statement. Name the statement each one tests when the paper is typed.`;
+    return "No marks were lost on this paper. Select Type a paper to enter another any time.";
   }
   const first = v.topics[0];
   const big = paperBiggest(v);

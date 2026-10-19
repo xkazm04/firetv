@@ -21,7 +21,7 @@ import { sheetStops, firstToLook, tileOf, toLookAt } from "@/tv/sheetRows";
 import { LANDING_REST, essayWaiting, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
 import { pastPathEnd, prepareStops } from "@/tv/prepareRows";
-import { paperStopCount, paperView } from "@/tv/paperRows";
+import { paperStopCount, paperTypeAt, paperView } from "@/tv/paperRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
 export type Key = "up" | "down" | "left" | "right" | "select" | "back" | "menu" | "play";
@@ -407,7 +407,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (pairUp(s, k, o)) return;
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     if (k === "up") o.nav("learner", 0, "tonight");
-    if (k === "down" && !s.joined) o.nav("pair", 0, "tonight");
+    // Down is the paper you sat (TL-13): pairing lives on the landing, so an unpaired desk meets the same screen
+    if (k === "down") o.nav("paper", 0);
     // Menu is Tonight's one unused button: the lessons on file, the lamp on the next one to watch (tonightDoor names it)
     if (k === "menu") { o.ev({ type: "subject", subject: "maths" }); o.nav("units", unitsFocus(s)); return; }
     if (k !== "select") return;
@@ -475,6 +476,9 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "back") { if (!cancelAsk(s, o)) o.nav(h.screen, h.focus); return; }
     if (!p || s.reading) return;
     if (pairUp(s, k, o)) return;
+    // a failed read that may be asked again is asked again from here (TL-13, M3); one the desk will not repeat is not
+    const rd = s.jobs?.read?.key === p.id ? s.jobs.read : undefined;
+    if (rd?.phase === "failed") { if (k === "select" && rd.retry !== false) o.calls.push({ url: "/api/session/retry", body: { kind: "read" } }); if (k === "select") return; }
     // Ask in words (TL-6), a maths page's one stop past its problems: Down from the last problem, Up back to it
     const askable = p.subject === "maths" && p.items.length > 0;
     if (askable && s.focus === PAGE_ASK) {
@@ -651,8 +655,13 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   // Select on a topic opens Get ready for school on that unit with its question open, as Select there would (or just on
   // the unit while a set or lesson is written), carrying the unit as the paper's aim (MB-B40). Back or Menu land on that unit, or the first when the list is empty.
   paper: (s, k, local, o) => {
-    const n = paperStopCount(s);
+    // the first Back puts the hand-off down (TL-13); the next one leaves
+    if (k === "back" && cancelAsk(s, o)) return;
+    if (pairUp(s, k, o)) return;
+    const count = paperStopCount(s), n = count + 1;
     if (k === "down" || k === "right") o.move(n, 1); if (k === "up" || k === "left") o.move(n, -1);
+    // Type a paper (TL-13), the stop after the rows: the marks are typed on the phone
+    if (k === "select" && s.focus >= paperTypeAt(s)) { if (!handoffOf(s)) o.ev({ type: "ask.open", kind: "paper" }); return; }
     const topics = paperView(s).topics, t = s.focus < topics.length ? stopAt(topics, s.focus) : undefined;
     const ix = t ? prepareStops(s).findIndex((u) => u.id === t.id) : -1;
     if (k === "select" && t && ix >= 0) {

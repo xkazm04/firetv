@@ -604,7 +604,7 @@ test('W8 1: a school learner\'s Tonight has three doors, Left/Right walk them cl
  assert.deepEqual(open.local,{prepareAsk:null},'the question starts closed');assert.deepEqual(open.calls,[]);
  // Up and Down as today
  assert.deepEqual(tvKey({...s,focus:2},'up',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'tonight'}]);
- assert.deepEqual(tvKey({...s,focus:2,joined:false},'down',LOCAL).events,[{type:'nav',screen:'pair',focus:0,from:'tonight'}]);
+ assert.deepEqual(tvKey({...s,focus:2,joined:false},'down',LOCAL).events,[{type:'nav',screen:'paper',focus:0}],'TL-13: unpaired Down opens the paper, not the pair screen (pairing is on the landing)');
  // a Calculus learner: the two doors, byte for byte what they were, and no way to Get ready for school
  const c=calcW8({screen:'tonight',focus:1});
  assert.deepEqual(tonightStops(c),['homework','teach']);assert.deepEqual(tonightStops({...c,pages:[page()]}),['continue','homework','teach']);
@@ -1221,4 +1221,36 @@ test('TL-8: the profile opens with a Name row; Add a learner drafts then asks fo
  // Save with no name is still the reducer's to refuse
  const sv=profileRows(draft).length-1;
  assert.deepEqual(tvKey(session({screen:'profile',focus:flat(profileRows(draft),sv,0),draft}),'select',LOCAL).events,[{type:'profile.save'}]);
+});
+
+// ---- TL-13 (TV-led design 6): Math Buddy's last phone-only steps ----
+test('TL-13: Select on a failed read posts the retry only when the desk may repeat it',()=>{
+ const {tvKey}=keys();
+ const failed=(patch={})=>session({screen:'page',pages:[page()],jobs:{read:{id:'j1',kind:'read',phase:'failed',key:'p1',error:'x',startedAt:0,...patch}}});
+ const r=tvKey(failed(),'select',LOCAL);
+ assert.deepEqual(r.calls,[{url:'/api/session/retry',body:{kind:'read'}}]);assert.deepEqual(r.events,[],'no hint is asked on a page that failed');
+ assert.deepEqual(tvKey(failed({retry:true}),'select',LOCAL).calls.length,1);
+ assert.deepEqual(tvKey(failed({retry:false}),'select',LOCAL).calls,[],'a read the desk will not repeat posts nothing');
+ assert.deepEqual(tvKey(failed(),'down',LOCAL).calls,[],'only Select asks again');
+ assert.deepEqual(tvKey(session({screen:'page',pages:[page()],jobs:{read:{id:'j1',kind:'read',phase:'failed',key:'other',startedAt:0}}}),'select',LOCAL).calls.map(c=>c.url),['/api/hint'],'another page\'s failed read is not this page\'s');
+ assert.deepEqual(tvKey(session({screen:'page',pages:[page()],jobs:{read:{id:'j1',kind:'read',phase:'done',key:'p1',startedAt:0}}}),'select',LOCAL).calls.map(c=>c.url),['/api/hint'],'a read that did not fail: the hint as it was');
+});
+
+test('TL-13: Down on Tonight opens the paper, paired or not',()=>{
+ const {tvKey}=keys();
+ for(const joined of [true,false])assert.deepEqual(tvKey(session({screen:'tonight',focus:0,joined}),'down',LOCAL).events,[{type:'nav',screen:'paper',focus:0}],`joined ${joined}`);
+});
+
+test('TL-13: the paper screen ends on Type a paper; Select opens the paper ask; the first Back cancels it and stays',()=>{
+ const {tvKey}=keys();
+ const empty=session({screen:'paper',focus:0,paper:null});
+ assert.deepEqual(tvKey(empty,'select',LOCAL).events,[{type:'ask.open',kind:'paper'}],'with no paper the one stop is Type a paper');
+ assert.deepEqual(tvKey(empty,'down',LOCAL).events,[],'nothing past it');
+ const open={...empty,ask:askOf('paper','paper')};
+ assert.deepEqual(tvKey(open,'back',LOCAL).events,[{type:'ask.cancel',id:'a1'}],'the first Back puts it down and stays');
+ assert.deepEqual(tvKey(empty,'back',LOCAL).events,[{type:'nav',screen:'prepare',focus:0}],'the next Back leaves as it did');
+ assert.deepEqual(tvKey(open,'select',LOCAL).events,[],'an ask already open is not opened twice');
+ assert.deepEqual(tvKey({...open,phonesLive:0},'up',LOCAL).events,[{type:'nav',screen:'pair',focus:0,from:'paper'}],'no phone: Up pairs');
+ // an ask another screen opened is not this screen to cancel
+ assert.deepEqual(tvKey({...empty,ask:askOf('paper','tonight')},'back',LOCAL).events,[{type:'nav',screen:'prepare',focus:0}]);
 });

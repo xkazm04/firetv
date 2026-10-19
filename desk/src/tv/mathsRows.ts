@@ -386,9 +386,9 @@ export function aimLine(p: (Pick<Practice, "aim"> & Partial<Pick<Practice, "topi
 }
 
 /** The hand-offs each Math screen opens (TV-led design 2.2): the ask kinds that screen may hold open. */
-const HANDOFFS: Partial<Record<Screen, readonly AskKind[]>> = { tonight: ["page"], practice: ["sheet", "answers"], page: ["question"], hint: ["question"], walk: ["explain", "second"] };
+const HANDOFFS: Partial<Record<Screen, readonly AskKind[]>> = { tonight: ["page"], practice: ["sheet", "answers"], page: ["question"], hint: ["question"], walk: ["explain", "second"], paper: ["paper"] };
 /** The job each kind names in the caption: "Waiting for the phone: <the job>. Back cancels." */
-const HANDOFF_JOB: Partial<Record<AskKind, string>> = { page: "the photo", sheet: "the photo of the sheet", answers: "your typed answers", question: "your question", explain: "how you got there", second: "your second go" };
+const HANDOFF_JOB: Partial<Record<AskKind, string>> = { page: "the photo", sheet: "the photo of the sheet", answers: "your typed answers", question: "your question", explain: "how you got there", second: "your second go", paper: "the marks of your paper" };
 /**
  * The hand-off this Math screen is waiting on (TL-6): the session's open ask, when it was opened from this screen, is one
  * of the kinds the screen opens, and (on the Walk) is for the item in hand. Null otherwise. Pure, from the session alone.

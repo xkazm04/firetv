@@ -28,7 +28,7 @@ import { playerCommand, running, practiceFailed, stopAt, tonightStops, calendarS
 import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, pastPathEnd, pathEndsLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
-import { leftOutLine, lostLabel, offCountLine, offSummary, paperCaption, paperNone, paperView, paperWindow, scoreLine, beyondFlag } from "@/tv/paperRows";
+import { leftOutLine, lostLabel, offCountLine, offSummary, paperCaption, paperNone, paperTypeAt, paperView, paperWindow, scoreLine, beyondFlag } from "@/tv/paperRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
 import { missingLine } from "@/tv/pageLines";
@@ -722,17 +722,19 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
   const ow = paperWindow(v.off.length, offAt, PAPER_ROWS);
   const count = offCountLine(v);
   const left = leftOutLine(v);
+  // the stop after the rows (TL-13): the lamp leaves them while it is lit
+  const onType = focus >= paperTypeAt(s);
   return (<>
     <Top s={s} crumb="A paper you sat" />
     <h1 className="mb-title" data-role="maths-title"><Amber text={v.empty ? "A paper you sat" : onOff ? "Not on the desk yet" : "Where the marks went"} /></h1>
-    {v.empty ? <div className="mb-lede" data-role="maths-paper-empty"><div className="mb-kick">No paper yet</div><p>Type the marks of a paper you sat on the phone.</p></div> : (
+    {v.empty ? <div className="mb-lede" data-role="maths-paper-empty"><div className="mb-kick">No paper yet</div><p>Type the marks of a paper you sat. The desk shows where they were lost.</p></div> : (
       <div className="mb-paperrec" data-role="maths-paper">
         {onOff ? (
           <div className="mb-ptopics" data-role="maths-paper-offrows">
             {v.off.slice(ow.from, ow.to).map((o, i) => {
               const ix = ow.from + i;
               return (
-                <div key={o.can} className="mb-prow mb-poffrow" data-focused={ix === offAt || undefined}>
+                <div key={o.can} className="mb-prow mb-poffrow" data-focused={(ix === offAt && !onType) || undefined}>
                   <span className="n">{ix + 1}</span>
                   <span className="nm">{o.can}</span>
                   <span className="lost">{lostLabel(o.lost, o.shared)}</span>
@@ -748,7 +750,7 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
           {v.topics.slice(w.from, w.to).map((t, i) => {
             const ix = w.from + i;
             return (
-              <div key={t.id} className="mb-prow" data-focused={ix === lamp || undefined} data-secure={t.secure || undefined} data-id={t.id}>
+              <div key={t.id} className="mb-prow" data-focused={(ix === lamp && !onType) || undefined} data-secure={t.secure || undefined} data-id={t.id}>
                 <span className="n">{ix + 1}</span>
                 <span className="nm">{t.name}</span>
                 <span className="lost">{lostLabel(t.lost, t.shared)}</span>
@@ -780,7 +782,8 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
         </aside>
       </div>
     )}
-    <Caption text={paperCaption(v)} top={930} />
+    <div className="mb-acts"><Act icon={ICON.paper} label="Type a paper" focused={onType} primary={v.empty} /></div>
+    <Caption text={handoffLine(s) ?? paperCaption(v)} top={930} />
   </>);
 }
 

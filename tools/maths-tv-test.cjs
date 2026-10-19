@@ -876,7 +876,7 @@ test('paper 4: what the desk has no topic for is apart, under "Not on the desk y
 test('paper 5: no paper - the screen asks for the marks on the phone, and a paper with no loss says so',()=>{
  const {paperView,paperCaption}=PAPER();
  const none=drawMaths('PaperScreen',paperSession(null));
- assert.match(none,/data-role="maths-paper-empty"/);assert.match(none,/Type the marks of a paper you sat on the phone/);
+ assert.match(none,/data-role="maths-paper-empty"/);assert.match(none,/Type the marks of a paper you sat\. The desk shows where they were lost/);assert.doesNotMatch(none,/on the phone|on your phone/,'TL-13: no phone words with no ask open');
  assert.equal(paperView(paperSession(null)).empty,true);
  const full=paperView(paperSession([it('1',3,3,['N12'])]));
  assert.equal(full.topics.length,0);assert.match(paperCaption(full),/No marks were lost/);
@@ -1011,7 +1011,7 @@ test('RP1: Select on a recovery row opens Get ready for school on its unit with 
  // a paper with no topics: Select does nothing, Back still goes to the first unit
  const none=mk([it('1',2,2,['N12'])]);
  assert.equal(paperView(none).topics.length,0);
- assert.deepEqual(K.tvKey(none,'select',K.LOCAL).events,[]);
+ assert.deepEqual(K.tvKey(none,'select',K.LOCAL).events,[{type:'ask.open',kind:'paper'}],'TL-13: with no rows the one stop is Type a paper');
  assert.deepEqual(K.tvKey(none,'back',K.LOCAL).events,[{type:'nav',screen:'prepare',focus:0}]);
 });
 
@@ -1035,7 +1035,8 @@ test('RP3 a: one walk - the topics, then the off-desk statements; Select does no
  const foc=(r)=>r.events.find(e=>e.type==='focus')?.focus;
  for(const k of ['right','down'])assert.equal(foc(K.tvKey(mk(t-1),k,K.LOCAL)),t,'forward from the last topic: '+k);
  for(const k of ['left','up'])assert.equal(foc(K.tvKey(mk(t),k,K.LOCAL)),t-1,'back from the first statement: '+k);
- assert.equal(K.tvKey(mk(n-1),'down',K.LOCAL).events.find(e=>e.type==='focus'),undefined,'Down on the last stop stays');
+ assert.equal(foc(K.tvKey(mk(n-1),'down',K.LOCAL)),n,'TL-13: Down from the last statement reaches Type a paper');
+ assert.equal(K.tvKey(mk(n),'down',K.LOCAL).events.find(e=>e.type==='focus'),undefined,'Down on the last stop (Type a paper) stays');
  assert.equal(foc(K.tvKey(mk(n-2),'down',K.LOCAL)),n-1);
  for(let f=t;f<n;f++){
   const sel=K.tvKey(mk(f),'select',K.LOCAL);
@@ -1170,7 +1171,7 @@ test('MB-B19 4: past the path\'s end the Prepare cards print no year and the led
 test('RP6 left out: the score card says how many typed questions the phone left out, and says nothing when none were',()=>{
  const {paperView,leftOutLine}=PAPER();
  const raw=[it('5(b)',1,3,['N12']),it('9',4,4,['A1'])];
- const two='2 questions were left out on the phone, so they are not in this score.',one='1 question was left out on the phone, so it is not in this score.';
+ const two='2 questions were left out of the typed paper, so they are not in this score.',one='1 question was left out of the typed paper, so it is not in this score.';
  const withN=(n)=>{const s=paperSession(raw);s.paper={...s.paper,leftOut:n};return s;};
  assert.equal(leftOutLine(paperView(withN(2))),two);
  assert.equal(leftOutLine(paperView(withN(1))),one);
@@ -1373,4 +1374,25 @@ test('TL-6 6: the Walk draws Tell the desk how and Type my second go on a ringed
 test('TL-6 7: no remote-only self-mark - the Practice card and the Walk offer no Right or Wrong stop (OD2 b)',()=>{
  const html=drawMaths('PracticeScreen',secondSession(null,'practice',{practice:tlSet(),walkIx:0,focus:0}))+drawMaths('Walk',secondSession('wrong','walk',{focus:0}));
  assert.doesNotMatch(html,/<span>(Right|Wrong|I got it right|Mark it)<\/span>/);
+});
+
+// ---- TL-13: the paper screen's last stop, Type a paper ----
+test('TL-13: the paper screen draws Type a paper, lit on the stop past the rows, and the chip only while the paper ask is open',()=>{
+ const {paperView,paperTypeAt}=PAPER();
+ const raw=rp3Paper(),n=paperView(paperSession(raw)).topics.length+paperView(paperSession(raw)).off.length;
+ assert.equal(paperTypeAt(paperSession(raw)),n);
+ for(const [focus,lit] of [[0,null],[n,'Type a paper']]){
+  const html=drawMaths('PaperScreen',paperSession(raw,{},focus));
+  assert.ok(html.includes('Type a paper'));assert.equal(focusedLabel(html),lit,`focus ${focus}`);
+  assert.equal(/class="mb-prow[^"]*" data-focused="true"/.test(html),!lit,'the lamp leaves the rows while Type a paper is lit');
+  assert.ok(!html.includes(CHIP)&&!/on the phone|on your phone/.test(html),`focus ${focus}: no chip and no phone words with no ask`);
+ }
+ const asked=paperSession(null,{},0);
+ assert.equal(focusedLabel(drawMaths('PaperScreen',asked)),'Type a paper');
+ const s={...asked,phonesLive:1,ask:askAt('paper','paper')};
+ const html=drawMaths('PaperScreen',s);
+ assert.ok(html.includes(CHIP)&&html.includes('On your phone'));
+ assert.ok(html.includes('Waiting for the phone: the marks of your paper. Back cancels.'));
+ assert.ok(drawMaths('PaperScreen',{...s,phonesLive:0}).includes('No phone is connected. Up: pair a phone. Back: cancel.'));
+ assert.ok(!drawMaths('PaperScreen',{...s,ask:askAt('paper','tonight')}).includes(CHIP),'an ask from another screen draws nothing');
 });
