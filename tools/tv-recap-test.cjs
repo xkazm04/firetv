@@ -208,12 +208,12 @@ test('case 6: Back, and Select on the desk, go to the landing at rest - for Ema 
   assert.ok(!tvKey(s,'back',LOCAL).events.some((e)=>e.type==='nav'&&e.screen==='tonight'),'never Math Buddy\'s tonight');
 });
 
-test('GUARD: the phone still receives the recap, and its End session still posts session.end',()=>{
+test('GUARD: the phone still receives the recap, and posts no session.end (TL-11: the evening is ended on the TV)',()=>{
  const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
  assert.match(phone,/tiles\.some\(\(t\) => !t\.empty\) \|\| \(s\.log\.endedAt \?\? 0\) >= startOfDay\(now\)/,'M7: the phone\'s Recap shows for a tile with work or an evening ended since local midnight, whatever the TV shows');
  assert.doesNotMatch(phone,/s\.screen === "recap" \|\| s\.log\.problems\.length/,'M7: not tied to the TV\'s screen or the log');
  assert.match(phone,/t\.app === "maths" && !t\.empty \? <ul key="hinted"><li data-role="phone-hinted">\{hintedLine\(t\)\}/,'M7 (MB-B23): the hinted-problems line only when the maths tile is not empty');
- assert.match(phone,/post\(\{ type: "session\.end" \}\)/,'End session on the phone');
+ assert.doesNotMatch(phone,/session\.end/,'TL-11: the phone posts no session.end');assert.doesNotMatch(phone,/End session/,'TL-11: the phone has no End session button');
 });
 
 test('extra: the recap rows stay free of the filesystem-backed session modules',()=>{
@@ -315,34 +315,14 @@ test('M2: an Essay-only evening and a Linga-only evening are written down too; t
  }finally{reg().resetProviders();}
 });
 
-test('M3: the phone\'s What the desk noticed has five states, and a failed write never reads as an empty evening',()=>{
+test('M3: the phone no longer writes the evening down - no What the desk noticed panel, no /api/memory call (TL-11)',()=>{
  const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
- assert.match(phone,/Nothing new to note tonight\./,'the model was asked and returned none');
- assert.match(phone,/Nothing worked on tonight\./,'nothing was asked');
- assert.match(phone,/Tonight is already written down\./,'End session after the TV Menu wrote the evening says it was written, not that there was nothing');
- assert.match(phone,/already: j\.already === true/,'the route\'s already flag reaches the panel');
- assert.doesNotMatch(phone,/Nothing written down tonight/,'the old catch-all is gone');
- assert.match(phone,/asked: j\.asked !== false/,'the route says which case it is');
- assert.match(phone,/\{ error: j\.error \?\? /,'a non-ok answer shows the desk\'s own sentence');
- assert.match(phone,/catch \{ setMemory\(\{ error: /,'a thrown fetch is a failure too, not an empty evening');
- assert.doesNotMatch(phone,/memory\.map\(\(l\) => <li key=\{l\}>/,'a list key is never the line text');
- assert.match(phone,/memory\.lines\.map\(\(l, i\) => <li key=\{i\}>/);
+ assert.doesNotMatch(phone,/phone-memory/);assert.doesNotMatch(phone,/\/api\/memory/);assert.doesNotMatch(phone,/setMemory/);
 });
 
-test('M4: the phone End session ends the evening first, then writes it down, as the TV Menu does',()=>{
+test('M4: the phone has no End session; the TV Menu on the landing still ends the evening first, then writes it down',()=>{
  const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
- const body=/const endSession = async \(\) => \{([\s\S]*?)\n  \};/.exec(phone)?.[1]??'';
- assert.ok(body,'endSession found');
- const end=body.indexOf('post({ type: "session.end" })'),mem=body.indexOf('call("/api/memory"'),busy=body.indexOf('setBusy(true)');
- assert.ok(end>=0&&mem>end,'session.end is posted before /api/memory is called');
- assert.ok(busy>=0&&busy<end,'busy is on from the first tap, before session.end is posted (a second tap in that round trip must not post another)');
- assert.match(body.slice(0,end),/if \(ending\.current\) return;\s*ending\.current = true;/,'a ref guard answers a second tap at once, before the first render');
- assert.match(body.slice(mem),/finally \{ setBusy\(false\); ending\.current = false; \}/,'busy and the guard are released together when the memory call is done');
- assert.equal((body.match(/setBusy\(true\)/g)||[]).length,1,'busy is turned on once');
- assert.doesNotMatch(body.slice(end),/setBusy\(true\)/,'the old shape, busy only around the memory call, is gone');
- assert.match(body.slice(0,mem),/try \{ await post\(\{ type: "session\.end" \}\); \} catch \(e\) \{ setMsg\(/,'a failed session.end is caught and shown in the status line');
- assert.doesNotMatch(body.slice(mem),/session\.end/,'nothing ends the evening after the memory');
- assert.match(phone,/busy \? "Writing tonight down…" : "End session"/);
+ assert.doesNotMatch(phone,/endSession/,'TL-11: the phone has no endSession');
  const tv=fs.readFileSync(path.join(root,'src/tv/keys.ts'),'utf8');
  assert.ok(tv.indexOf('o.ev({ type: "session.end" }); o.calls.push({ url: "/api/memory"')>0,'the TV does the same order');
  assert.match(fs.readFileSync(path.join(root,'src/lib/desk/memory.ts'),'utf8'),/model: "fast", thinking: false/,'writeMemory does not think');

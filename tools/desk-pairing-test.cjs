@@ -805,7 +805,7 @@ test('OPT-2: a timer.tick whose seconds are not a number from 1 to 60 moves neit
  evening('tonight');store.dispatch({type:'timer.start'});
  const at=()=>{const s=store.getSession();return {left:s.timer.left,minutes:s.log.minutes,phase:s.timer.phase};};
  for(const seconds of ['abc',-600,0,1e9,null,undefined,61,'5']){
-  const before=at();const r=await post({type:'timer.tick',seconds},'phone');assert.ok([200,400].includes(r.status),'answered 200 (a number the reducer bounds) or 400 (not a number): '+r.status);
+  const before=at();const r=await post({type:'timer.tick',seconds},'tv');assert.ok([200,400].includes(r.status),'answered 200 (a number the reducer bounds) or 400 (not a number): '+r.status);
   assert.deepEqual(at(),before,`seconds ${JSON.stringify(seconds)} moved the timer`);
   assert.ok(Number.isFinite(store.getSession().timer.left),'the clock is a number');
  }
@@ -1009,7 +1009,7 @@ test('TL-2: after the cooldown trips, a TV reset lets a new phone join at once',
 });
 test('TL-2: phones.forget is the TV\'s: it forgets every phone, keeps the session and lifts the cooldown; a phone or a guest gets 403',async()=>{
  evening('pair');DESK_JOIN();
- const cookie=await joinAs();assert.equal((await post({type:'nav',screen:'units'},'phone',cookie)).status,200);
+ const cookie=await joinAs();assert.equal((await post({type:'task.add',name:'Reading',sub:'english',min:10},'phone',cookie)).status,200);
  const screen=store.getSession().screen;
  for(const role of ['phone','guest']){const r=await post({type:'phones.forget'},role,cookie);assert.equal(r.status,403,role);}
  assert.equal(pairing().roleOf({get:(n)=>n==='desk-phone'?{value:cookie.slice('desk-phone='.length)}:undefined}),'phone','a refused forget left the phone paired');

@@ -521,10 +521,10 @@ test('EM1-7: a one-paragraph kept piece, changed and read as a piece, leaves the
 });
 
 // ---- recert-4 L1-daniel-15-EM3-1: a piece reading on the TV is walked, never replaced by a one-paragraph read ----
-test('EM3-1: after a piece read, Next paragraph posts essay.at for the next paragraph and "This paragraph only" is not offered for a read one', () => {
+test('EM3-1: after a piece read, Next paragraph posts nothing to the TV (TL-11) and "This paragraph only" is not offered for a read one', () => {
   const phone = fs.readFileSync(path.join(root, 'src/app/phone/page.tsx'), 'utf8');
   const next = phone.slice(phone.indexOf('const nextFromRewrite'), phone.indexOf('const nextFromRewrite') + 700);
-  assert.match(next, /type: "essay\.at", n: first\.n/); assert.match(next, /\(x\.para \?\? 0\) === pix \+ 1/);
+  assert.doesNotMatch(next, /essay\.at/); assert.doesNotMatch(next, /post\(/, 'the phone moves to its next paragraph and posts nothing');
   assert.match(phone, /\{!pieceCovers\(pix\) && <button[^>]*data-role="essay-analyse-one"/, 'the one-paragraph button is withheld for a paragraph the piece reading covers');
   assert.match(phone, /pieceCovers = \(ix: number\) => pieceHeld && \(s\?\.essay\?\.piece\?\.read/);
 });

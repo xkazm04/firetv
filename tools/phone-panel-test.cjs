@@ -528,9 +528,10 @@ test('recert-3/L1-radka-41-MB4-1, L1-vojtech-18-MB4-1: a cz learner picks statem
  assert.match(page,/<PaperPanel [^>]*system=\{s\?\.learner \? s\.profiles\?\.find\(\(p\) => p\.id === s\.learner\?\.id\)\?\.system : undefined\}/,'the panel is given the seated learner\'s system');
 });
 
-test('paper 5: a paper kept can be shown on the TV from the panel - the TV has no key into the list, so the phone is its door',()=>{
+test('paper 5: the panel has no Show on the TV button and posts no nav - the TV has its own key into paper (Down on Tonight, TL-13)',()=>{
  const src=code(PAPER_PANEL);
- assert.match(src,/seated && kept && <button[^>]*onClick=\{\(\) => void post\(\{ type: "nav", screen: "paper" \}\)\}/);
+ assert.doesNotMatch(src,/paper-show/);assert.doesNotMatch(src,/Show the last paper on the TV/);
+ assert.doesNotMatch(src,/type: "nav"/,'PaperPanel posts no nav');
  const {panelFor}=P();
  // TL-9 re-pin: the ask is read first; the paper screen alone asks nothing, ask paper does
  assert.equal(panelFor(session({screen:'units',ask:askOf('paper')})),'paper','ask paper hands the phone to the panel, whatever the screen');
@@ -635,8 +636,8 @@ test('P15 explain(): a reply that returns after the learner or the walk item cha
 // Same method as P15: sendSecond() is cut out of page.tsx, transpiled and run against stubs.
 test('P16 sendSecond(): a reply that returns after the learner or the walk item changed sets neither again nor msg; busy clears',async(t)=>{
  const src=fs.readFileSync(PAGE,'utf8');
- const e=src.indexOf('The evening ends first');
- const a=src.indexOf('const seat = useRef'),b=src.lastIndexOf('/**',e);
+ const e=src.indexOf('The phone follows the TV (panelFor.ts)');
+ const a=src.indexOf('const seat = useRef'),b=src.lastIndexOf('\n',e);
  assert.ok(a>0&&e>a&&b>a,'sendSecond() is where the test expects it');
  const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
  const make=(s,respond)=>{
@@ -689,7 +690,7 @@ test('P17 (i) a learner switch resets the last learner\'s essay, photo, typed an
  assert.match(src,/useState\(FRESH_SENTENCE\)/);assert.match(src,/useState<string\[\]>\(FRESH_PARAS\)/,'the load values are the ones the reset uses');
  assert.match(src,/\[keep, setKeep\] = useState\(true\)/,'keep loads true');assert.match(src,/\[ring, setRing\] = useState<[^=]*\| null>\(null\)/,'ring loads null');
  const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
- const NAMES=['Paras','Pix','ReadIx','Note','Info','Source','PieceId','Notice','Shot','Phase','Q','Msg','PaperRows','Typed','Sentence','Memory','Keep','Ring'];
+ const NAMES=['Paras','Pix','ReadIx','Note','Info','Source','PieceId','Notice','Shot','Phase','Q','Msg','PaperRows','Typed','Sentence','Keep','Ring'];
  const make=()=>{
   const calls=[];const s={learner:null};let effect;
   const setters=NAMES.map((n)=>(v)=>calls.push([n,v]));
@@ -698,7 +699,7 @@ test('P17 (i) a learner switch resets the last learner\'s essay, photo, typed an
   const seat=(id)=>{s.learner=id?{id}:null;calls.length=0;effect();return calls.slice();};
   return {seat};
  };
- const want={Paras:P17_LOAD.paras,Pix:0,ReadIx:[],Note:'',Info:'',Source:'message',PieceId:undefined,Notice:null,Shot:null,Phase:'idle',Q:'',Msg:'',PaperRows:[{blank:true}],Typed:[],Sentence:P17_LOAD.sentence,Memory:null,Keep:true,Ring:null};
+ const want={Paras:P17_LOAD.paras,Pix:0,ReadIx:[],Note:'',Info:'',Source:'message',PieceId:undefined,Notice:null,Shot:null,Phase:'idle',Q:'',Msg:'',PaperRows:[{blank:true}],Typed:[],Sentence:P17_LOAD.sentence,Keep:true,Ring:null};
  await t.test('A to B: every listed state goes back to its load value',()=>{
   const m=make();m.seat('ema');const c=m.seat('jakub');
   assert.deepEqual(c.map(([n])=>n).sort(),[...NAMES].sort());
@@ -718,7 +719,7 @@ test('P17 (ii) a reply that returns after the learner changed sets no state but 
  const src=fs.readFileSync(PAGE,'utf8');
  const cut=(from,to)=>{const a=src.indexOf(from),e=src.indexOf(to,a);assert.ok(a>0&&e>a,`${from} is where the test expects it`);return src.slice(a,src.lastIndexOf('\n',e));};
  const SETTERS=['Busy','Msg','Phase','Note','Info','Notice','ReadIx','PieceId','ShelfTick','Q','Paras','Stranded'];
- const PARAMS=['s','seat','call','post','shot','busy','typed','document','HTMLElement','onPlan','onSentence','slotText','rewrite','planFill','paras','pieceProblem','etype','keep','pieceId','source','pieceFormat','essay','paragraphsOf','essayTooLong','pix','page','q','sentence','writeRewriteBack','rewriteStaysLine','stranded',...SETTERS.map((n)=>'set'+n)];
+ const PARAMS=['s','seat','call','post','shot','busy','typed','document','HTMLElement','onPlan','onSentence','slotText','rewrite','planFill','paras','pieceProblem','etype','keep','pieceId','source','pieceFormat','essay','paragraphsOf','essayTooLong','pix','page','ring','q','sentence','writeRewriteBack','rewriteStaysLine','stranded',...SETTERS.map((n)=>'set'+n)];
  const reply=(body,ok=true,status=200)=>Promise.resolve({ok,status,json:async()=>body});
  const gate=()=>{let open;const p=new Promise((r)=>{open=r;});return {p,open};};
  // build one handler; `respond(url, body)` is the network
@@ -1012,25 +1013,9 @@ test('PH-NAMEORDER: the profile name posts go out one at a time, so a slow early
  assert.match(page,/nameQueue\(\(\) => post\(\{ type: "profile\.draft", patch: \{ name: e\.target\.value \} \}\)\)/,'the Profile input posts through the queue');
  assert.match(page,/nameQueue\(\(\) => post\(\{ type: "ask\.cancel", id: handoff\.id \}\)\)/,'Done waits behind the name posts (TL-8: it closes the ask, never saves)');
 });
-test('PH-ENDTWICE: a second tap on End session before the first returns posts nothing',async()=>{
- const body=pageSlice(/const endSession = async \(\) => \{[\s\S]*?\n    \};/,'endSession');
- const js=pageJs(body);
- const make=()=>{
-  const posts=[],calls=[],busy=[];let release;const gate=new Promise((r)=>{release=r;});
-  const env={post:async(e)=>{posts.push(e.type);await gate;},call:async(u)=>{calls.push(u);return {ok:true,json:async()=>({lines:[]})};},
-   setBusy:(b)=>busy.push(b),setMsg:()=>{},setMemory:()=>{},ending:{current:false}};
-  const fn=new Function(...Object.keys(env),js+';return endSession;')(...Object.values(env));
-  return {fn,posts,calls,busy,release};
- };
- const t=make(),a=t.fn(),b=t.fn();
- await new Promise((r)=>setTimeout(r,5));
- assert.deepEqual(t.posts,['session.end'],'one session.end for two taps');
- t.release();await Promise.all([a,b]);
- assert.equal(t.calls.length,1,'one /api/memory call');
- assert.equal(t.busy[0],true,'busy is on from the first tap');
- assert.equal(t.busy[t.busy.length-1],false,'and off when it is done');
- const again=t.fn();await again;
- assert.equal(t.posts.length,2,'after it finished, a later tap ends again (the guard is released)');
+test('PH-ENDTWICE (TL-11): the phone has no End session to tap twice - no endSession, no session.end post',()=>{
+ const page=code(PAGE);
+ assert.doesNotMatch(page,/endSession/);assert.doesNotMatch(page,/session\.end/);assert.doesNotMatch(page,/End session/);
 });
 
 // ---- Essay recert-2 L1-daniel-15-EM3-1 / L1-barbora-43-EM1-5: the sample paragraph is a placeholder, never a value

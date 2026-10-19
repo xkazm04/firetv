@@ -40,8 +40,8 @@ function RowPicker({ codes, pick, system }: { codes: string[]; pick: (code: stri
   </details>;
 }
 
-export function PaperPanel({ rows, setRows, post, seated, status, kept, name, system }: {
-  rows: DraftRow[]; setRows: (r: DraftRow[]) => void; post: (e: Event) => Promise<Response>; seated: boolean; status: string; kept: boolean; name?: string; system?: SchoolSystem;
+export function PaperPanel({ rows, setRows, post, seated, status, name, system }: {
+  rows: DraftRow[]; setRows: (r: DraftRow[]) => void; post: (e: Event) => Promise<Response>; seated: boolean; status: string; kept?: boolean; name?: string; system?: SchoolSystem;
 }) {
   const e = entryOf(rows);
   const set = (i: number, patch: Partial<DraftRow>) => setRows(rows.map((r, k) => (k === i ? { ...r, ...patch } : r)));
@@ -69,7 +69,6 @@ export function PaperPanel({ rows, setRows, post, seated, status, kept, name, sy
       ? <button className="pbtn" data-signal="true" disabled={e.kept === 0} onClick={() => void post({ type: "paper.enter", rows: rawOf(rows) })} data-role="paper-send">
         {paperSend(e.kept, name)}</button>
       : <p>No one is at the desk yet: choose who on the TV first.</p>}
-    {seated && kept && <button className="pbtn" data-secondary="true" onClick={() => void post({ type: "nav", screen: "paper" })} data-role="paper-show">Show the last paper on the TV</button>}
     {status && <p style={{ fontSize: 12 }}>{status}</p>}
   </div>;
 }

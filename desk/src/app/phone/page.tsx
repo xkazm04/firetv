@@ -125,11 +125,10 @@ export default function Phone() {
   useEffect(() => { if (notice === null) setNoticeFor("piece"); }, [notice]);
   const [shelfTick, setShelfTick] = useState(0);
   const [pname, setPname] = useState("");
-  const [ring, setRing] = useState<{ x: number; y: number } | null>(null);
+  const [ring, setRing] = useState<{ x: number; y: number; ix: number } | null>(null);
   const [working, setBusy] = useState(false);
   // a dropped link also holds every Send: the post would go into a dead stream
   const busy = working || !connected;
-  const ending = useRef(false);
   /** The profile name's posts, in the order typed (inOrder). */
   const [nameQueue] = useState(inOrder);
   const video = useRef<HTMLVideoElement>(null);
@@ -153,7 +152,6 @@ export default function Phone() {
    * What the desk noticed tonight, read once on the way out: the lines written, whether the model was asked (an evening
    * with no work asks nothing; one written by an earlier ask is not asked again), or the desk's own sentence for a write that failed.
    */
-  const [memory, setMemory] = useState<{ lines: string[]; asked: boolean; already?: boolean } | { error: string } | null>(null);
   /** A failed run the learner has stepped past ("Snap a new page"): its Try again is not offered again. */
   const [passed, setPassed] = useState("");
   /**
@@ -360,13 +358,10 @@ export default function Phone() {
     try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void analyseParagraph(); } catch { /* said on the next line */ }
     if (!moved()) setNote("That did not reach the desk.");
   };
-  /** From the sentence rewrite panel, on to the next paragraph: the TV goes back to the lens home, the phone to its paragraph. */
+  /** From the sentence rewrite panel, on to the next paragraph: the phone's own paragraph; the TV stays where it is. */
   const nextFromRewrite = () => {
-    // a piece reading on the TV is walked, not replaced: the TV goes to the next paragraph's first sentence (essay.at) and keeps the reading
-    const first = pieceHeld ? s?.essay?.sentences.find((x) => (x.para ?? 0) === pix + 1) : undefined;
+    // the phone moves to its next paragraph and posts nothing: the TV is not moved from here (TL-11)
     goPara(pix + 1);
-    if (first) void post({ type: "essay.at", n: first.n });
-    else void post({ type: "nav", screen: "essaytype", focus: Math.max(0, ESSAY_TYPES.findIndex((t) => t.id === etype)) });
   };
   /** E4-a: a piece that is done with a paragraph that did not come back offers to read just those again (the desk checks it in code). */
   const pieceAgain = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("the desk is reading them again…");
@@ -377,10 +372,11 @@ export default function Phone() {
   const tap = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!page) return; const r = e.currentTarget.getBoundingClientRect(); const y = ((e.clientY - r.top) / r.height) * page.h;
     const best = nearestItem(page.items, y);
-    setRing({ x: e.clientX - r.left, y: e.clientY - r.top }); post({ type: "item", itemIx: best }); if (s?.screen !== "page") post({ type: "nav", screen: "page" });
+    // the tap picks the item for the next hint only (it travels in the hint request); the TV is not moved (TL-11)
+    setRing({ x: e.clientX - r.left, y: e.clientY - r.top, ix: best });
   };
   const ask = async () => { if (!page) return; const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("");
-    try { const r = await call("/api/hint", { askedQ: q, itemIx: s?.itemIx }); if (moved()) return; setQ("");
+    try { const r = await call("/api/hint", { askedQ: q, itemIx: ring?.ix ?? s?.itemIx }); if (moved()) return; setQ("");
       if (!r.ok) { const j = await r.json().catch(() => null); if (moved()) return; setMsg(deskLine(j, `The desk could not ask (${r.status}).`)); } }
     catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); } };
   /** The Say panel's button: the sentence to the TV. */
@@ -465,7 +461,7 @@ export default function Phone() {
   const lastSeated = useRef<string | undefined>(undefined);
   const clearLastLearnersWork = () => {
     setParas(FRESH_PARAS); setPix(0); setReadIx([]); setNote(""); setInfo(""); setSource("message"); setPieceId(undefined); setNotice(null);
-    setShot(null); setPhase("idle"); setQ(""); setMsg(""); setPaperRows([blankRow()]); setTyped([]); setSentence(FRESH_SENTENCE); setMemory(null); setKeep(true); setRing(null);
+    setShot(null); setPhase("idle"); setQ(""); setMsg(""); setPaperRows([blankRow()]); setTyped([]); setSentence(FRESH_SENTENCE); setKeep(true); setRing(null);
   };
   // the first seating after load, and the same learner sitting again after an empty seat, clear nothing
   useEffect(() => {
@@ -528,24 +524,6 @@ export default function Phone() {
       if (moved()) return;
       if (r.ok) setAgain(""); else setMsg(j.error ?? `The desk could not take that (${r.status}).`);
     } catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
-  };
-  /**
-   * The evening ends first, as the TV's Menu does (tv/keys.ts): the recap opens, then the memory is written. Busy shows
-   * "Writing tonight down…" from the first tap, and a second tap before the first is done does nothing (the ref answers
-   * at once; the disabled button waits for a render). A session.end that fails is said in the status line, and the
-   * memory is still written.
-   */
-  const endSession = async () => {
-    if (ending.current) return;
-    ending.current = true;
-    setBusy(true);
-    try { await post({ type: "session.end" }); } catch (e) { setMsg(`The evening could not be closed: ${String(e)}`); }
-    try {
-      const r = await call("/api/memory", {}), j = await r.json().catch(() => ({} as { lines?: unknown; asked?: boolean; already?: boolean; error?: string }));
-      setMemory(r.ok ? { lines: Array.isArray(j.lines) ? j.lines.filter((l: unknown): l is string => typeof l === "string") : [], asked: j.asked !== false, already: j.already === true }
-        : { error: j.error ?? `The desk could not write tonight down (${r.status}).` });
-    } catch { setMemory({ error: "The desk could not be reached, so tonight was not written down." }); }
-    finally { setBusy(false); ending.current = false; }
   };
 
   // The phone follows the TV (panelFor.ts): when the TV's screen changes into a hand-off, the phone moves once to
@@ -825,9 +803,9 @@ export default function Phone() {
 
         {screen === "point" && <div className="pscreen"><h3>Point &amp; ask</h3>
           {page ? <>
-            <p>Tap a problem on the page, then ask. Item {page.items[s!.itemIx]?.n ?? "—"} is on the TV.</p>
+            <p>Tap a problem on the page, then ask. Item {page.items[ring?.ix ?? s!.itemIx]?.n ?? "—"} is picked.</p>
             <div className="mirror" onPointerDown={tap}><img src={page.img} alt="the captured page" />
-              {page.items[s!.itemIx] && <div className="band" style={{ top: `${(page.items[s!.itemIx].band[0] / page.h) * 100}%`, height: `${((page.items[s!.itemIx].band[1] - page.items[s!.itemIx].band[0]) / page.h) * 100}%` }} />}
+              {page.items[ring?.ix ?? s!.itemIx] && <div className="band" style={{ top: `${(page.items[ring?.ix ?? s!.itemIx].band[0] / page.h) * 100}%`, height: `${((page.items[ring?.ix ?? s!.itemIx].band[1] - page.items[ring?.ix ?? s!.itemIx].band[0]) / page.h) * 100}%` }} />}
               {ring && <div className="ring" style={{ left: ring.x, top: ring.y }} />}</div>
             <div className="field"><input placeholder="What do you want to know?" value={q} onChange={(e) => setQ(e.target.value)} /><button className="pbtn" data-secondary="true" onClick={() => listen(setQ)}>Mic</button></div>
             <div className="presets">{["What do I do first?", "Why is this negative?", "Which rule is this?"].map((p) => <button key={p} onClick={() => setQ(p)}>{p}</button>)}</div>
@@ -883,11 +861,6 @@ export default function Phone() {
         {peeking && !view && screen === "tonight" && s && <div className="pscreen"><h3>Tonight's list</h3>
           <div className="tlist">{s.tasks.map((t) => <label key={t.id}><input type="checkbox" checked={t.done} onChange={(e) => post({ type: "task.done", id: t.id, done: e.target.checked })} /><span>{t.name}</span><small>{t.min}m</small></label>)}</div>
           <AddTask onAdd={(name, sub) => post({ type: "task.add", name, sub, min: 10 })} />
-          <button className="pbtn" data-secondary="true" onClick={endSession} disabled={busy}>{busy ? "Writing tonight down…" : "End session"}</button>
-          {memory && <div className="precap" data-role="phone-memory"><b>What the desk noticed</b>
-            <ul>{"error" in memory ? <li>{memory.error}</li>
-              : memory.lines.length ? memory.lines.map((l, i) => <li key={i}>{l}</li>)
-              : <li>{memory.already ? "Tonight is already written down." : memory.asked ? "Nothing new to note tonight." : "Nothing worked on tonight."}</li>}</ul></div>}
           <button className="plink" onClick={closeView}>Back</button></div>}
 
         {peeking && !view && screen === "parent" && s && <div className="pscreen"><h3>Recap</h3>
