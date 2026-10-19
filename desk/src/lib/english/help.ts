@@ -23,9 +23,9 @@ export const SIMPLER_MAX = 160, MEANING_MAX = 160, STARTER_MAX = 80, STARTER_WOR
 const LADDER_CAP = 200;
 
 /** The two phrases of a line's own quiz (LG-5 recert-9): `fits` answers the partner's line, `misfit` does not. */
-export interface QuizWords { fits: string; misfit: string }
+export interface QuizWords { fits: string; misfit: string; task?: string }
 /** `say`: rung 1 is words to say back (sayBack), not the line said more simply; `quiz`: the line's own phrase quiz. */
-type Ladder = Partial<Record<HelpRung, string>> & { say?: true; quiz?: QuizWords };
+type Ladder = Partial<Record<HelpRung, string>> & { say?: true; quiz?: QuizWords; task?: string };
 // Server memory only: the session reaches every screen.
 const g = globalThis as unknown as { __lingaHelp?: Map<string, Ladder> };
 const ladders = g.__lingaHelp ??= new Map<string, Ladder>();
@@ -94,6 +94,16 @@ export function quizWordsFor(o: Record<string, unknown>, partnerLine: string, ba
   const answers = !partnerLine.trim().endsWith("?") || fits.split(/(?<=[.!?])\s+/).some(x => !x.trim().endsWith("?"));
   return ok(fits) && ok(misfit) && answers && words(fits) !== words(misfit) ? { fits, misfit } : null;
 }
+/**
+ * The scene's task as a reply (rework 7, recert-12 LT-viktor-67-J4-1): when the partner's line pulls away from the task
+ * ("Show me your drawing" while the task is to ask about school), the help output carries `task`, one short reply that does
+ * the task. Held like a say-back: the band, no past-tense question at A1-A2, none of the line's sentences. Else "".
+ */
+export function taskPhraseFor(raw: string, partnerLine: string, band: Band | undefined): string {
+  const t = raw.replace(/\s+/g, " ").trim(), theirs = new Set(sentencesOf(partnerLine));
+  if (!t || t.length > SAY_MAX || !band || !SAYS_BACK.includes(band) || !inBand(t, band)) return "";
+  return t.split(/(?<=[.!?])\s+/).some(pastQuestion) || sentencesOf(t).some(x => theirs.has(x)) ? "" : t;
+}
 /** The rungs of a model's ladder that do their job, for this partner line. Anything else is dropped, never the line. */
 export function validLadder(raw: unknown, partnerLine: string, hold: LadderHold = {}): Ladder {
   const o = raw && typeof raw === "object" && !Array.isArray(raw) ? raw as Record<string, unknown> : {};
@@ -103,10 +113,13 @@ export function validLadder(raw: unknown, partnerLine: string, hold: LadderHold 
   // at A1-A2 the line said more simply is never a rung (it gave the partner's line back): the say-back takes its place
   const simpler = says ? "" : fits(plain(o, "simpler")), starter = fits(unfinished(plain(o, "starter")));
   const named = fits(plain(o, "meaning")), meaning = !hold.held || namesLineWord(named, same) ? named : "";
-  const say = says ? sayBackFor(plain(o, "sayBack"), line, hold.band, hold.earlier) : "";
+  const task = taskPhraseFor(plain(o, "task"), line, hold.band);
+  // a line that pulls away from the task: rung 1 is the task phrase, which the say-back would otherwise take (rework 7)
+  const say = task ? task : says ? sayBackFor(plain(o, "sayBack"), line, hold.band, hold.earlier) : "";
   if (say) { out[1] = say; out.say = true; }
+  if (task) out.task = task;
   const quiz = quizWordsFor(o, line, hold.band);
-  if (quiz) out.quiz = quiz;
+  if (quiz) out.quiz = task && words(quiz.fits) !== words(task) ? { ...quiz, task } : quiz;
   // Said more simply: shorter than the line and not the line again; a question stays a question.
   if (simpler && simpler.length <= SIMPLER_MAX && simpler.length < line.length && words(simpler) !== same && (!line.includes("?") || simpler.endsWith("?"))) out[1] = simpler;
   if (meaning && meaning.length <= MEANING_MAX && words(meaning) !== same && words(meaning) !== words(simpler) && words(meaning) !== words(say)) out[2] = meaning;
@@ -139,8 +152,16 @@ export function quizFor(help: ConversationHelp | null | undefined, last: { id: s
   const q = ladders.get(last.id)?.quiz;
   if (!q) return null;
   const correct = [...last.id].reduce((n, ch) => n + ch.charCodeAt(0), 0) % 2;
-  const options: [string, string] = correct === 0 ? [q.fits, q.misfit] : [q.misfit, q.fits];
+  // a line that pulls away from the task: the other option is the task phrase, not a misfit (rework 7)
+  const other = q.task ?? q.misfit;
+  const options: [string, string] = correct === 0 ? [q.fits, other] : [other, q.fits];
   return { forTurn: last.id, question: `${nameOf(partner)} ${last.text.trim().endsWith("?") ? "asks" : "says"}: ${last.text}`, options, correct };
+}
+
+/** Whether an option of the line's quiz is its task phrase: on-task, so a pick of it is never "does not answer" (rework 7). */
+export function isTaskOption(turnId: string, option: string): boolean {
+  const t = ladders.get(turnId)?.quiz?.task;
+  return !!t && words(t) === words(option);
 }
 
 /**

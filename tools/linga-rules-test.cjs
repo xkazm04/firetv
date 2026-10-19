@@ -3589,3 +3589,37 @@ test('LG-5 recert-10 wired (3) (viktor-67 J4 #8): the first Help press on Lena\'
  await reply('Hello Lena. I see you. I am happy.');await command('cue');c=getSession().conversation;
  assert.equal(c.cue,'Me too! Is school fun?');assert.equal(V.helpOf(c).tag,'You could say');
 });
+
+// ---- Linga rework 7 (recert-12, LT-viktor-67-J4-1): the help ladder serves the scene's task at A1-A2 when the partner's line
+// pulls away from it. Viktor, A1, task "Ask Mia one short question about school", Mia says "Hi Mia! Show me your drawing."-shaped.
+// Pause & coach's gating is left as it was: it needs a reply by design.
+const DRAW_LINE='Hi Grandpa! Look at my drawing.',SCHOOL_TASK='Hi Mia! Is school good?';
+test('Linga rework 7 rules: a task phrase is rung 1 and the quiz\'s other option, held by fitsBand; none, and the ladder is as before',()=>{
+ const H=require(path.join(root,'src/lib/english/help.ts')),G=require(path.join(root,'src/lib/english/gate.ts'));
+ const raw={simpler:'',meaning:'',starter:'',sayBack:'Nice drawing!',fits:'Nice drawing!',misfit:'I am seven.',task:SCHOOL_TASK};
+ const l=H.validLadder(raw,DRAW_LINE,{band:'A1'});
+ assert.equal(l[1],SCHOOL_TASK,'press 1: the task phrase');assert.equal(l.say,true);assert.equal(l.task,SCHOOL_TASK);
+ assert(G.fitsBand(l[1],'A1'),'it fits A1 under fitsBand');
+ assert.equal(H.taskPhraseFor('Hi Mia! What did you do at school today?',DRAW_LINE,'A1'),'','a past-tense question at A1 is no task phrase');
+ assert.equal(H.taskPhraseFor('Hello Mia, it is so very nice to see you here at home today!',DRAW_LINE,'A1'),'','over band');
+ assert.equal(H.taskPhraseFor(DRAW_LINE,DRAW_LINE,'A1'),'','the line again');
+ assert.equal(H.taskPhraseFor(SCHOOL_TASK,DRAW_LINE,'B1'),'','B1 keeps its ladder');
+ assert.deepEqual(Object.keys(H.validLadder({...raw,task:''},DRAW_LINE,{band:'A1'})),['1','say','quiz'],'no task: as before');
+ const help=H.keepLadder('t-draw',l);
+ const q=H.quizFor(help,{id:'t-draw',role:'partner',text:DRAW_LINE},'Mia · Granddaughter');
+ assert.deepEqual([...q.options].sort(),[SCHOOL_TASK,'Nice drawing!'].sort(),'the quiz offers the task phrase beside the answer, no misfit');
+ assert.equal(H.isTaskOption('t-draw',SCHOOL_TASK),true);assert.equal(H.isTaskOption('t-draw','Nice drawing!'),false);
+});
+test('Linga rework 7 wired (viktor-67 J4 #2-#13): within two presses an on-task phrase shows, and picking it is not "does not answer"',async()=>{
+ const V=view();
+ await bandStart('ema','A1','Hello! Can you see me?',()=>({reply:DRAW_LINE,observations:[],moment:NO_MOMENT,help:{simpler:'',meaning:'',starter:'',sayBack:'Nice drawing!',fits:'Nice drawing!',misfit:'I am seven.',task:SCHOOL_TASK}}));
+ let c=getSession().conversation;dispatch({type:'linga.changed',conversation:{...c,goal:'Ask Mia one short question about school'}});
+ await reply('Yes. I see you.');
+ await command('cue');c=getSession().conversation;
+ assert.equal(c.cue,SCHOOL_TASK,'press 1: the task phrase, not Mia\'s drawing');assert.equal(V.helpOf(c).tag,'You could say');
+ await command('quiz');c=getSession().conversation;
+ assert.equal(c.quizOpen,true);assert(c.lineQuiz.options.includes(SCHOOL_TASK),'press 2: Choose a phrase offers it too');
+ const task=c.lineQuiz.options.indexOf(SCHOOL_TASK);
+ await command('choice',{option:task});c=getSession().conversation;
+ assert(!/does not answer/.test(c.cue),'an on-task pick is not rejected');assert.equal(c.quizOpen,false);assert.equal(c.evidence.at(-1).success,true);
+});

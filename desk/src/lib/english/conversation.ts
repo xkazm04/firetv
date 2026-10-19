@@ -15,7 +15,7 @@ import { adultContent, isAdult } from "../rules/mode";
 import { ConversationError, lingaLine } from "./errors";
 import { EngineError, type EngineResult } from "../engines/types";
 import { EASE_INSTRUCTION, learnerLost } from "./ease";
-import { climb, keepLadder, MEANING_MAX, QUIZ_MAX, quizFor, SAY_MAX, sceneCueFor, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
+import { climb, isTaskOption, keepLadder, MEANING_MAX, QUIZ_MAX, quizFor, SAY_MAX, sceneCueFor, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, ownLines, partnerLines, reuseOf, reviewOf, shownLines, askedAboutFor, slipsAgain, SLIP_AGAIN_TASK, usedLine, usesForm, fossilOf, fossilMoment, FOSSIL_TASK, type SlipAgain } from "./review";
@@ -39,7 +39,7 @@ const line=(value:unknown,max=230)=>fit(value,max,()=>new Error("The tutor retur
 // Every partner line comes with its rescue ladder (help.ts). It is asked for in full, and accepted unchecked:
 // help.ts drops a rung that does not do its job, and a bad ladder never costs the line.
 // LG-5 recert-9: the line's own phrase quiz (fits, misfit) comes in the same help output: no second call for it
-const helpSchema=schema({simpler:str(SIMPLER_MAX,0),meaning:str(MEANING_MAX,0),starter:str(STARTER_MAX,0),sayBack:str(SAY_MAX,0),fits:str(QUIZ_MAX,0),misfit:str(QUIZ_MAX,0)});
+const helpSchema=schema({simpler:str(SIMPLER_MAX,0),meaning:str(MEANING_MAX,0),starter:str(STARTER_MAX,0),sayBack:str(SAY_MAX,0),fits:str(QUIZ_MAX,0),misfit:str(QUIZ_MAX,0),task:str(SAY_MAX,0)});
 const loose=(props:Record<string,unknown>)=>({...schema(props),properties:{...props,help:{}}});
 const openingProps={title:str(70),goal:str(120),opening:str(230)};
 // A scene with no authored steps asks the opening for two or three; mission.ts keeps them only if they fit, and a bad list never costs the scene.
@@ -104,8 +104,8 @@ function ladderFor(c:Conversation,help:unknown,text:string,asWritten:boolean){
   const earlier=c.turns.filter(t=>t.role==="partner"&&t.text!==text).map(t=>t.text);
   const ladder=validLadder(text===REDIRECT_LINE?undefined:help,text,{band:heldBand(c),held:!asWritten,earlier});
   // LG-5 recert-9: words the learner is handed to say (the say-back, the quiz's phrases) pass the audience gate as a partner line does
-  if(ladder.say&&audienceSafe(c,ladder[1]!)===null){delete ladder[1];delete ladder.say;}
-  if(ladder.quiz&&[ladder.quiz.fits,ladder.quiz.misfit].some(x=>audienceSafe(c,x)===null))delete ladder.quiz;
+  if(ladder.say&&audienceSafe(c,ladder[1]!)===null){delete ladder[1];delete ladder.say;delete ladder.task;if(ladder.quiz)delete ladder.quiz.task;}
+  if(ladder.quiz&&[ladder.quiz.fits,ladder.quiz.misfit,ladder.quiz.task??""].filter(Boolean).some(x=>audienceSafe(c,x)===null))delete ladder.quiz;
   return ladder;
 }
 /** The band a partner line is held to (LG-56): the scene's level, or the level check's playing band when that is lower. */
@@ -144,7 +144,7 @@ ${adult?"":`${isAdult(p,prefs)?"This desk is in Family mode.":"This learner is n
 Every partner reply is one or two sentences, at most 230 characters, ending in at most one question. Plain English, no markdown. React specifically to the learner's meaning. Do not answer on behalf of the learner.${hold?` This learner plays at ${band}: every sentence you say has at most ${hold.words} words, uses only the most common everyday words, and the one question is a simple one.${hold.turn?` Your whole reply has at most ${hold.turn} words: one short question, or a two-word reaction and the question; an answer to whether the learner's line was correct may be two short sentences.`:""}${hold.present?" Speak in the present tense, and ask one short question in the present tense ('What do you like?', never 'What did you do?').":""} A longer line is cut before the learner sees it.`:""}
 When the learner asks whether their own line or a word in it was correct ("Was my sentence correct?", "Is that right?", "Did I say it well?"), quote the line or the words in question exactly, on a yes as well as a no, and say plainly yes or no. Before a yes, check that each word means what the learner meant in the scene, not only that the grammar is right. A word that is a common false friend for a Czech or Slavic speaker, used in its home-language sense, makes the answer no. Known false friends: ${KNOWN_FALSE_FRIENDS.join("; ")}. If input.askedAbout.slips is not empty, the answer is no and the change is that slip's better. If no, give the one change that matters most: a no names the corrected words themselves (for example "'compensate for'"), never only the category ("needs a preposition"). Never answer with general praise such as "sounds natural". Do not reverse a verdict from an earlier turn without saying you are correcting yourself. Then carry on in the scene. Keep the quote short (the words in question, not the whole line) so the reply still fits one or two sentences, at most 230 characters, and at most one question.${c.duet?`
 ${DUET_SYSTEM}`:""}
-With every line you say, return help: the rescue ladder for that line, shown one rung at a time only if the learner asks. simpler: your line said again, shorter and in more common words; a question stays a question and never contains its answer. meaning: the one word or phrase in your line a learner at this level may not know, and what it means in plain words ("word: meaning"). starter: the first two to six words of one possible reply, ending in "…", never a whole sentence and never the full answer. sayBack: one short whole reply the learner could say back to this line, the one you are saying now and never an earlier line of yours, in their own voice and at their level${hold?.present?", in the present tense":""}: words for them to say, never your line again or your question repeated (for "Hi Grandpa! I am home now.": "Hi Mia! Is school good?"). fits and misfit: two short phrases at the learner's level for a choose-a-phrase quiz on your line: fits, a reply that answers your line (not the same words as sayBack); misfit, a reply that does not answer it, because it answers a different question. Leave a rung empty when it does not fit.
+With every line you say, return help: the rescue ladder for that line, shown one rung at a time only if the learner asks. simpler: your line said again, shorter and in more common words; a question stays a question and never contains its answer. meaning: the one word or phrase in your line a learner at this level may not know, and what it means in plain words ("word: meaning"). starter: the first two to six words of one possible reply, ending in "…", never a whole sentence and never the full answer. sayBack: one short whole reply the learner could say back to this line, the one you are saying now and never an earlier line of yours, in their own voice and at their level${hold?.present?", in the present tense":""}: words for them to say, never your line again or your question repeated (for "Hi Grandpa! I am home now.": "Hi Mia! Is school good?"). fits and misfit: two short phrases at the learner's level for a choose-a-phrase quiz on your line: fits, a reply that answers your line (not the same words as sayBack); misfit, a reply that does not answer it, because it answers a different question. task: only when your line pulls away from what the learner came to do (currentStep, else scene.goal; for example you ask to see a drawing and the task is to ask about school): one short reply in their own voice that does that task, not an answer to your line ("Hi Mia! How is school?"); empty when your line already invites the task. Leave a rung empty when it does not fit.
 Return only the specified JSON.`;
 }
 /** The scene as every call's input carries it: its title and goal, and the partner and premise - for a scene the learner pitched, their own words, so data in the input JSON, never part of the system prompt. */
@@ -606,10 +606,12 @@ export async function englishCommand(raw:unknown){
     // the line's own quiz (LG-5 recert-9); a quiz opened on a session saved before it is the scene's
     const own=c.lineQuiz&&c.lineQuiz.forTurn===c.turns.at(-1)?.id?c.lineQuiz:null,quiz=own??scene.quiz;
     if(![0,1].includes(input.option as number))throw new ConversationError("Choose one of the displayed phrases.");
-    const correct=input.option===quiz.correct;
+    // rework 7: the task phrase an option carries is on-task, so it is not "does not answer" (help.ts isTaskOption)
+    const onTask=!!own&&input.option!==quiz.correct&&isTaskOption(own.forTurn,quiz.options[input.option as number]);
+    const correct=input.option===quiz.correct||onTask;
     const e:EnglishEvidence={id:`${c.id}:${commandId}:choice`,episodeId:c.id,turnId:commandId,sceneId:c.sceneId,skill:c.focusSkill,at:Date.now(),mode:"choice",supported:true,success:correct,quote:quiz.options[input.option as number],note:"Recognised a supporting phrase; not speaking evidence."};
     saveEnglish(learnerId,mergeEvidence(learning,[e]));
-    commit({...c,supported:true,quizOpen:!correct,cue:correct?"Now use the idea in your own reply on the phone.":own?`That one does not answer ${c.partner.split(" · ")[0]}. Try the other option.`:"That phrase has a different purpose. Try the other option.",help:c.help&&{...c.help,shown:false},commands:[...c.commands,commandId],evidence:[...c.evidence,e]},"linga-talk");return getSession();
+    commit({...c,supported:true,quizOpen:!correct,cue:onTask?"That is what you came to do. Say it in your own reply on the phone.":correct?"Now use the idea in your own reply on the phone.":own?`That one does not answer ${c.partner.split(" · ")[0]}. Try the other option.`:"That phrase has a different purpose. Try the other option.",help:c.help&&{...c.help,shown:false},commands:[...c.commands,commandId],evidence:[...c.evidence,e]},"linga-talk");return getSession();
   }
   // recert-10: a scene with help used or a clear error held ends with one coaching note, then the coach screen offers its
   // replay (the existing step) or Finish again, which reaches the recap; a scene that owes no note ends as before
