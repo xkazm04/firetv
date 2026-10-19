@@ -391,6 +391,13 @@ The tv-phone-pairing feature stands at full fail. Full r3 had robustness at 0.40
   presence counts a forgotten phone's stream as gone at its next message, when it turns guest.
 - Not taken up, left as known limits: robustness-4 (a duplicated `desk-phone` cookie name, `pairing.ts:201`),
   robustness-7 and robustness-8 (two instances, an unsaved last seen), robustness-9 (an unwritable first key mint).
+- Council lite r2 (63c4bf98, at f9e9593f), the three medium findings, closed by one `fix(pairing)` commit that is no TL slice:
+  robustness-double-join-client-only / craft-join-not-resolution-stable (a listed phone's duplicate right code now gets 200 and
+  the phone view, uncounted, with no token, cookie or pin turn); robustness-forget-not-reaching-streams / craft-revoke-not-reaching-work
+  (phones.forget, a phone's leave and a reset close the open phone streams through `closePhoneStreams`, `lib/session/streams.ts`,
+  so phonesLive drops); robustness-cooldown-renewable / value-lockout-recovery-hidden (a TV code-less join lifts the lockout).
+  Known limits left: a guest can still renew the lockout (the desk-wide wrong-code budget is unchanged), and the TV never shows
+  that a cooldown is running.
 - Must-address 1 to 4 (the floor; value, craft and rivalry unmeasured) close only with a round that runs every member.
   How that round happens is OD7.
 

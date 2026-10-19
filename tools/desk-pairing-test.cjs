@@ -159,7 +159,8 @@ test('case 6: the stream draws each connection\'s own view - after a dispatch th
   const ph=await (await streamRoute().GET(req('/api/session/stream',{role:'phone',cookie:await joinAs()}))).body.getReader();
   assert.equal((await read(ph)).viewer,'phone');
   await post({type:'reset'},'tv');// PR9: the TV's reset forgets every phone
-  const lapsed=await read(ph);assert.equal(lapsed.viewer,'guest');assert.equal(lapsed.joined,false);
+  // lite r2 63c4bf98: the reset also closes every phone's streams (was: the open stream carried a guest message), so the stream ends
+  assert.equal((await ph.read()).done,true);
   await tv.cancel();await guest.cancel();await ph.cancel();
  }finally{mock.timers.reset();}
 });
@@ -1049,4 +1050,50 @@ test('TL-5: the TV and a phone see the ask; a guest sees it only when its kind i
  const g=await (await get('guest')).json();assert.equal(g.ask.id,n.id);assert.equal(g.ask.kind,'name');
  assert.equal((await firstMessage('guest')).ask.kind,'name');
  assert.ok(pairing().LOBBY.includes('ask'));
+});
+
+// ---- lite r2 63c4bf98: a duplicate right code, revocation reaching streams, the TV lifting the cooldown ----
+const livePhones=()=>store.getSession().phonesLive;
+test('lite r2 (a): a listed phone posting join with the turned code is answered as the phone: 200, no count, no cookie, the pin as it was',async()=>{
+ evening('pair');DESK_JOIN();const pin=store.getSession().pin;
+ const r1=await post({type:'join',code:pin},'guest');const cookie='desk-phone='+setCookie(r1,'desk-phone');const turned=store.getSession().pin;assert.notEqual(turned,pin);
+ for(let i=0;i<10;i++){const r=await post({type:'join',code:pin},'phone',cookie);assert.equal(r.status,200,'post '+(i+1));
+  assert.equal(setCookie(r,'desk-phone'),undefined);assert.equal((await r.json()).viewer,'phone');}
+ assert.equal(store.getSession().pin,turned);
+ const g=await post({type:'join',code:turned},'guest');assert.equal(g.status,200,'ten phone posts did not trip the cooldown');
+});
+test('lite r2 (b): a guest\'s wrong code is still 403 and counted; the tenth starts the cooldown',async()=>{
+ evening('pair');DESK_JOIN();const pin=store.getSession().pin,bad=wrongOf(pin);
+ for(let i=0;i<10;i++){const r=await post({type:'join',code:bad},'guest');assert.equal(r.status,403);assert.equal((await r.json()).error,'That code is not on the TV.');}
+ const r=await post({type:'join',code:pin},'guest');assert.equal(r.status,403);assert.deepEqual(await r.json(),{error:TOO_MANY});
+ pairing().joinClear();
+});
+test('lite r2 (c): phones.forget from the TV closes an open phone stream and phonesLive is 0',async()=>{
+ const cookie=await phoneCookie();const ph=await open('phone',cookie);assert.equal(livePhones(),1);
+ const tv=await open('tv');
+ assert.equal((await post({type:'phones.forget'},'tv')).status,200);
+ assert.equal(livePhones(),0);assert.equal(await endsSoon(ph),true,'the phone stream ended');
+ await tv.cancel();
+});
+test('lite r2 (d)+(e): one phone\'s leave closes only its own stream (2 -> 1) and the TV stream stays open',async()=>{
+ const a=await phoneCookie();const b=await phoneCookie();
+ const ra=await open('phone',a),rb=await open('phone',b),tv=await open('tv');assert.equal(livePhones(),2);
+ const r=await post({type:'leave'},'phone',a);assert.equal(r.status,200);
+ assert.equal(livePhones(),1);assert.equal(await endsSoon(ra),true,'A ended');
+ assert.equal(await endsSoon(tv),false,'the TV stream is open');assert.equal(await endsSoon(rb),false,'B is open');
+ await post({type:'phones.forget'},'tv');assert.equal(await endsSoon(tv),false,'the TV stream is open after forget too');
+ await tv.cancel();await rb.cancel();
+});
+test('lite r2 (f): after the cooldown trips, a TV code-less join lifts it and a guest with the right code joins at once',async()=>{
+ evening('pair');DESK_JOIN();const pin=store.getSession().pin,bad=wrongOf(pin);
+ for(let i=0;i<10;i++)await post({type:'join',code:bad},'guest');
+ assert.equal((await post({type:'join',code:pin},'guest')).status,403);
+ assert.equal((await post({type:'join'},'tv')).status,200);
+ assert.equal((await post({type:'join',code:store.getSession().pin},'guest')).status,200);
+});
+test('lite r2 (g): phones.forget from a phone or a guest is still 403',async()=>{
+ const cookie=await phoneCookie();
+ assert.equal((await post({type:'phones.forget'},'phone',cookie)).status,403);
+ assert.equal((await post({type:'phones.forget'},'guest')).status,403);
+ assert.equal(pairing().isPhone(cookie.slice('desk-phone='.length)),true,'the phone is still listed');
 });

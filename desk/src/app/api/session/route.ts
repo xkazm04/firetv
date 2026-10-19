@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { badPost, dispatch, getSession, type Event } from "@/lib/session/store";
 import { COOKIE, JOIN_FIRST, JOIN_NOT_SAVED, LEAVE_NOT_SAVED, NO_CODE, RESET_NOT_SAVED, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinClear, joinCooling, joinDelay, joinSucceeded, joinWrongCode, cookiesOf, forgetAllPhones, forgetPhone, mintPhone, roleFrom, view } from "@/lib/session/pairing";
+import { closePhoneStreams, phoneKey } from "@/lib/session/streams";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +50,7 @@ export async function POST(req: Request) {
     try { forgetAllPhones(); }
     catch (err) { notSaved("a forget of every phone", err); return NextResponse.json({ error: RESET_NOT_SAVED }, { status: 500 }); }
     joinClear();
+    closePhoneStreams();
     return NextResponse.json(view(getSession(), role));
   }
   const refused = e?.type ? SERVER_ONLY[e.type] : undefined;
@@ -67,8 +69,10 @@ export async function POST(req: Request) {
   if (e?.type === "ask.cancel" && getSession().ask?.id !== e.id) return NextResponse.json({ error: "The TV is not asking for that now." }, { status: 409 });
   // forgetting the desk: this device's phone cookie goes; the desk is untouched
   if (e?.type === "leave") {
-    try { forgetPhone(cookiesOf(req).get(PHONE_COOKIE)?.value); }
+    const own = cookiesOf(req).get(PHONE_COOKIE)?.value;
+    try { forgetPhone(own); }
     catch (err) { notSaved("a leave", err); return NextResponse.json({ error: LEAVE_NOT_SAVED }, { status: 500 }); }
+    if (own !== undefined) closePhoneStreams(phoneKey(own));
     const res = NextResponse.json(view(getSession(), role === null ? null : role === "tv" ? "tv" : "guest"));
     res.cookies.set(PHONE_COOKIE, "", { ...COOKIE, maxAge: 0 });
     return res;
@@ -79,6 +83,8 @@ export async function POST(req: Request) {
     // every refusal waits the same delay; a wrong code counts toward the desk's budget (pairing.ts); the TV and an in-process join are never held
     const guarded = role !== null && role !== "tv";
     if (e.code === undefined && role !== null && role !== "tv" && role !== "phone") { await joinDelay(); return NextResponse.json({ error: NO_CODE }, { status: 403 }); }
+    // a listed phone that sends a code that is no longer current (its own first join turned the pin) is answered as the phone it is: no count, no token, no cookie
+    if (role === "phone" && e.code !== undefined && String(e.code) !== pin) return NextResponse.json(view(getSession(), "phone"));
     if (e.code !== undefined && guarded && joinCooling()) { await joinDelay(); return NextResponse.json({ error: TOO_MANY_CODES }, { status: 403 }); }
     if (e.code !== undefined && String(e.code) !== pin) {
       if (guarded) { joinWrongCode(); await joinDelay(); }
@@ -90,6 +96,8 @@ export async function POST(req: Request) {
       try { token = mintPhone(cookiesOf(req).get(PHONE_COOKIE)?.value); }
       catch (err) { notSaved("a join", err); return NextResponse.json({ error: JOIN_NOT_SAVED }, { status: 500 }); }
     }
+    // a join from the TV with no code also lifts the lockout, so the TV need not unpair everyone to do it
+    if (e.code === undefined && (role === null || role === "tv")) joinClear();
     joinSucceeded();
     const s = dispatch({ type: "join" });
     if (role === null || role === "tv") return NextResponse.json(view(s, role));
@@ -106,6 +114,7 @@ export async function POST(req: Request) {
     try { forgetAllPhones(); }
     catch (err) { notSaved("a reset", err); return NextResponse.json({ error: RESET_NOT_SAVED }, { status: 500 }); }
     joinClear();
+    closePhoneStreams();
   }
   return NextResponse.json(view(dispatch(e), role));
 }

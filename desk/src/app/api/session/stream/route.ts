@@ -3,8 +3,8 @@
  * (lib/session/pairing.ts view), asked again for every message, so a phone whose pin has turned over is a guest
  * from the next message on. An in-process call (no x-desk-role) gets the session itself.
  */
-import { dispatch, getSession, subscribe, type Session } from "@/lib/session/store";
-import { createHash } from "node:crypto";
+import { getSession, subscribe, type Session } from "@/lib/session/store";
+import { devices, phoneKey, presence } from "@/lib/session/streams";
 import { PHONE_COOKIE, cookiesOf, liveRole, roleFrom, view } from "@/lib/session/pairing";
 
 export const dynamic = "force-dynamic";
@@ -24,12 +24,8 @@ const DEVICE_STREAMS = 4;
 /** A stream whose reader has this many messages unread is let go: a phone that went to sleep, which reopens by itself. */
 const UNREAD = 32;
 const guests = () => { const g = globalThis as unknown as { __deskGuestStreams?: (() => void)[] }; return (g.__deskGuestStreams ??= []); };
-/** Device key (the TV, or a phone cookie's fingerprint) to that device's close functions, in opening order. */
-const devices = () => { const g = globalThis as unknown as { __deskDeviceStreams?: Map<string, (() => void)[]> }; return (g.__deskDeviceStreams ??= new Map()); };
 const deviceKey = (req: Request | undefined, role: string | null) =>
-  role === "tv" ? "tv" : role === "phone" ? createHash("sha256").update(cookiesOf(req!).get(PHONE_COOKIE)?.value ?? "").digest("hex") : null;
-/** Tell the session how many phones have a stream open: the device keys but the TV's (TL-3). */
-const presence = () => dispatch({ type: "phone.presence", live: [...devices().keys()].filter((k) => k !== "tv").length });
+  role === "tv" ? "tv" : role === "phone" ? phoneKey(cookiesOf(req!).get(PHONE_COOKIE)?.value) : null;
 // Two signatures: the one Next's generated route types check (a Request) and the in-process one (none).
 export async function GET(): Promise<Response>;
 export async function GET(req: Request): Promise<Response>;
