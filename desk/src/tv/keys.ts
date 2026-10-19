@@ -79,6 +79,14 @@ export function isAdultHere(s: Pick<Session, "profiles" | "learner" | "englishLe
   const p = s.profiles.find((x) => x.id === s.learner?.id);
   return modeOf(p, s.englishLearning?.preferences ?? undefined) === "adult";
 }
+/**
+ * The curtain on a kept piece (L1-helena-46-EM5-1): in Adult mode a reading of a piece the learner kept shows marks, verdicts,
+ * counts and sentence numbers on the TV, never a sentence or its opening words; the words are on the PC page and the phone.
+ * School and Family mode, and a paragraph that was not kept, are drawn as ever.
+ */
+export function curtainOn(s: Pick<Session, "profiles" | "learner" | "englishLearning" | "essay">): boolean {
+  return !!s.essay?.piece?.pieceId && isAdultHere(s);
+}
 /** The Workroom's stops: each piece, top to bottom, then the one action. */
 export function workroomStops(s: Pick<Session, "workroom">): (string)[] { return [...(s.workroom?.pieces ?? []).map((p) => p.id), "lenses"]; }
 

@@ -10,7 +10,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type 
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
 import { paragraphCount, paragraphPending, paragraphState, pieceBeingRead, readingAPiece, forensicPlace, forensicLead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
-import { stopAt, lensStops, forensicAt, rewriteStatus, planStops, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
+import { stopAt, lensStops, forensicAt, rewriteStatus, planStops, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS, curtainOn } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
@@ -183,7 +183,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
       </div>
     </section>
     <aside className="em-side">
-      {a ? <LastParagraph a={a} focused={at === "last"} /> : (
+      {a ? <LastParagraph a={a} focused={at === "last"} curtain={curtainOn(s)} /> : (
         <div className={`em-panel${at === "plan" ? " is-focused" : ""}`} data-role="essay-specimen-card" data-focused={at === "plan"}>
           <div className="em-lbl">First paragraph</div>
           <h2 className="em-big">Nothing read</h2>
@@ -251,7 +251,7 @@ export function EssayPlan({ s }: { s: Session }) {
 }
 
 /** The last paragraph as a picture: a block per sentence, as long as the sentence; the faulty ones citron, pointing back. */
-function LastParagraph({ a, focused }: { a: NonNullable<Session["essay"]>; focused: boolean }) {
+function LastParagraph({ a, focused, curtain }: { a: NonNullable<Session["essay"]>; focused: boolean; curtain?: boolean }) {
   const faulty = new Set(a.verdicts.filter((v) => v.verdict === "faulty").map((v) => v.n));
   const first = a.sentences.find((x) => faulty.has(x.n));
   const w0 = (a.sentences[0]?.text ?? "").split(",")[0].split(/\s+/).filter(Boolean);
@@ -277,7 +277,7 @@ function LastParagraph({ a, focused }: { a: NonNullable<Session["essay"]>; focus
   return (
     <div className={`em-panel${focused ? " is-focused" : ""}`} data-role="essay-specimen-card" data-focused={focused}>
       <div className="em-lbl">{a.piece ? `Last piece · ${pieceBeingRead(a.piece) ? `reading ${a.piece.read.length + a.piece.failed.length + (a.piece.notEnglish?.length ?? 0) + 1} of ${a.piece.paragraphs}` : `${a.piece.paragraphs} paragraphs`}` : "Last paragraph"}</div>
-      <h2>“{opening}…”</h2>
+      <h2>{curtain ? "Your kept piece. The words are on the PC page and the phone." : `“${opening}…”`}</h2>
       <svg className="em-strip" width={W} height="104" viewBox={`0 0 ${W} 104`} aria-hidden="true">
         {blocks}
         <path d={`M0 10 H${W - 4} M${W - 16} 2 l12 8 -12 8`} stroke={BONE} strokeWidth="3" fill="none" opacity=".6" />
@@ -335,11 +335,12 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
   const lit = s.status === rewriteStatus(sn.n);
   const holds = rewriteState(v) === "holds";
   const job = s.jobs?.analyse?.key === `sentence:${sn.n}` ? s.jobs.analyse : undefined;
-  if (table) return <Table s={s} a={a} cur={i} verdicts={verdicts} />;
+  const curtain = curtainOn(s);
+  if (table) return <Table s={s} a={a} cur={i} verdicts={verdicts} curtain={curtain} />;
   return (<>
     <Brand /><Top s={s} menu="Table" lit={lit} />
     <Rail a={a} cur={i} verdicts={verdicts} />
-    <Page key={sn.n} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} unruled={unruledCaption(a.piece, sn.para ?? 0)} pending={paragraphPending(a.piece, sn.para ?? 0)} />
+    <Page key={sn.n} curtain={curtain} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} unruled={unruledCaption(a.piece, sn.para ?? 0)} pending={paragraphPending(a.piece, sn.para ?? 0)} />
     <nav className="em-acts">
       {FORENSIC_STOPS.map((k, j) => (
         <div key={k} className={`em-pill em-act${j === 0 ? " prim" : ""}${stopAt(FORENSIC_STOPS, s.focus) === k ? " is-focused" : ""}`} data-focused={stopAt(FORENSIC_STOPS, s.focus) === k} {...(j === 0 ? { "data-role": "essay-primary" } : {})}>
@@ -382,7 +383,7 @@ function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<num
 }
 
 /** The one sentence the page is about. Keyed by sentence, so moving along the paragraph remounts it (and its fit). */
-function Page({ sn, n, place, lead, v, lens, type, inked, job, unruled, pending }: { sn: Sent; n: number; place: string; lead: string; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean; job?: Job; unruled?: { label: string; text: string } | null; pending?: boolean }) {
+function Page({ curtain, sn, n, place, lead, v, lens, type, inked, job, unruled, pending }: { curtain?: boolean; sn: Sent; n: number; place: string; lead: string; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean; job?: Job; unruled?: { label: string; text: string } | null; pending?: boolean }) {
   const main = useRef<HTMLElement>(null);
   const t = teaching(v, type);
   const vd = v?.verdict ?? "neutral", state = rewriteState(v);
@@ -422,7 +423,7 @@ function Page({ sn, n, place, lead, v, lens, type, inked, job, unruled, pending 
     <section className="em-main em-rise" ref={main}>
       <div className="em-crumb em-lbl">{ICON[lens.id]}<span className="em-ln">{lens.name}</span><span>· {place} · {sn.role}</span></div>
       {lead && <div className="em-lbl" data-role="essay-lead">{lead}</div>}
-      <div className="em-sent" data-role="essay-sentence"><span className="em-q" aria-hidden="true">“</span><SentenceText text={sn.text} faulty={vd === "faulty"} /></div>
+      <div className="em-sent" data-role="essay-sentence">{curtain ? <>Sentence {sn.n} &middot; the words are on the PC page and the phone</> : <><span className="em-q" aria-hidden="true">“</span><SentenceText text={sn.text} faulty={vd === "faulty"} /></>}</div>
       <div className="em-note" data-role="essay-problem" data-verdict={vd}><Caption label={noteCap.label} text={noteCap.text} /></div>
       {t ? <>
         <Move move={t.fix.move} label={t.from ? `The move · ${t.from.id === "split" ? "language" : "playbook"} · ${t.from.title}` : "The move"} inked={inked} />
@@ -470,7 +471,7 @@ function Move({ move, label, inked }: { move: string; label: string; inked: bool
 }
 
 /** Menu on the forensic page: the paragraph as rows - number, sentence, role, length - the current one focused. */
-function Table({ s, a, cur, verdicts }: { s: Session; a: Reading; cur: number; verdicts: Map<number, Verdict> }) {
+function Table({ s, a, cur, verdicts, curtain }: { s: Session; a: Reading; cur: number; verdicts: Map<number, Verdict>; curtain?: boolean }) {
   const WINDOW = 6, start = Math.max(0, Math.min(cur - 2, a.sentences.length - WINDOW));
   const rows = a.sentences.slice(start, start + WINDOW);
   const maxW = Math.max(1, ...a.sentences.map((x) => x.words));
@@ -488,7 +489,7 @@ function Table({ s, a, cur, verdicts }: { s: Session; a: Reading; cur: number; v
             <span className="em-caret" />
             <span />
             <span className="em-n">{x.n}</span>
-            <span className="em-tx">{x.text}</span>
+            <span className="em-tx">{curtain ? `Sentence ${x.n}` : x.text}</span>
             <span className="em-chip" data-r={x.role}>{x.role}</span>
             <span className="em-len"><i style={{ width: Math.round(24 + (196 * x.words) / maxW) }} /><b>{x.words}</b></span>
             <span><Arrow len={72} against={vd === "faulty"} color={vd === "faulty" ? CIT : vd === "strong" ? BONE : MUTE} /></span>
@@ -496,7 +497,7 @@ function Table({ s, a, cur, verdicts }: { s: Session; a: Reading; cur: number; v
         );
       })}
     </section>
-    <div className="em-keys"><span className="em-key">OK</span><span className="em-lbl">Open sentence {a.sentences[cur].n}</span><span className="em-key" style={{ marginLeft: 24 }}>MENU</span><span className="em-lbl">Back to the sentence</span></div>
+    <div className="em-keys"><span className="em-key">OK</span><span className="em-lbl">Open sentence {a.sentences[cur].n}{curtain ? ". The words are on the PC page and the phone." : ""}</span><span className="em-key" style={{ marginLeft: 24 }}>MENU</span><span className="em-lbl">Back to the sentence</span></div>
   </>);
 }
 

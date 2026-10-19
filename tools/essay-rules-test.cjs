@@ -1430,10 +1430,10 @@ test('E3-c: the analyse route dispatches an essay refusal as one; the English se
  for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){
   const file=path.join(root,'src',f),m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
 }
-function drawEssay(name,s){
+function drawEssay(name,s,extra){
  const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),{createElement}=require(path.join(root,'node_modules/react'));
  const E=require(path.join(root,'src/essay/EssayTV.tsx'));
- return renderToStaticMarkup(createElement(E[name],{s,focus:-1}));
+ return renderToStaticMarkup(createElement(E[name],{s,focus:-1,...extra}));
 }
 const capOf=(html)=>{const m=/<div class="em-cap[^"]*"><div class="em-lbl">([^<]*)<\/div><p>([^<]*)<\/p>/.exec(html);return m&&{label:m[1],text:m[2]};};
 test('E3-c: EssayType and EssayPlan caption a refusal line, a running job still wins, a plan status is unchanged',()=>{
@@ -1969,4 +1969,23 @@ test('EM3-1/EM3-2 (recert-9): a title line is kept apart from the paragraphs and
  assert.deepEqual(R.paragraphsOf('A. b\n\nC d.'),['A. b','C d.']);
  assert.deepEqual(R.paragraphsOf('One line.\nTwo line.'),['One line. Two line.']);
  assert.deepEqual(R.paragraphsOf(''),[]);assert.deepEqual(R.paragraphsOf(5),[]);
+});
+
+// ---- L1-helena-46-EM5-1: the curtain on a kept piece in Adult mode ----
+test('L1-helena-46-EM5-1: Adult mode with a kept piece draws no sentence text on the lens home, the forensic page or the Table; School mode and an un-kept paragraph still do',()=>{
+ const {getSession}=require(path.join(root,'src/lib/session/store.ts'));
+ const base=getSession();
+ const WORDS=['Moonlight quarterly figures slipped, so Acme must renegotiate.','Clients ought to hear this before Friday.'];
+ const reading=(pieceId)=>({text:WORDS.join(' '),type:'structure',sentences:WORDS.map((text,i)=>({n:i+1,text,words:text.split(/\s+/).length,role:'claim',para:0})),stats:{sentences:2},verdicts:[{n:1,verdict:'faulty',note:'x'},{n:2,verdict:'neutral',note:'y'}],summary:'',...(pieceId?{piece:{paragraphs:1,read:[0],failed:[],pieceId}}:{})});
+ const at=(profile,pieceId)=>({...base,jobs:{},status:'',screen:'forensic',focus:0,profiles:[profile],learner:{id:profile.id,name:profile.name},englishLearning:undefined,essay:reading(pieceId)});
+ const adult={id:'hel',name:'Helena',type:'other',age:46,mode:'adult',modules:['essay']},school={id:'sam',name:'Sam',type:'high-school',age:15,modules:['essay']};
+ const draws=(s)=>({home:drawEssay('EssayType',{...s,screen:'essaytype'}),page:drawEssay('Forensic',s,{table:false}),table:drawEssay('Forensic',s,{table:true})});
+ for(const [k,html] of Object.entries(draws(at(adult,'p1')))){
+  assert.doesNotMatch(html,/Moonlight|Acme|Clients ought/,`${k}: no sentence text on the TV`);
+  assert.match(html,/PC page/,`${k}: says where the words are`);
+ }
+ const tableHtml=draws(at(adult,'p1')).table;
+ assert.match(tableHtml,/Sentence 1/,'the table row keeps its sentence number');
+ for(const [k,html] of Object.entries(draws(at(school,'p1')))) assert.match(html,/Moonlight|Clients ought/,`School mode ${k} shows the text as ever`);
+ for(const [k,html] of Object.entries(draws(at(adult,undefined)))) assert.match(html,/Moonlight|Clients ought/,`an un-kept paragraph ${k} shows the text as ever`);
 });
