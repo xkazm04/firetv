@@ -161,7 +161,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
     <Brand /><Top s={s} menu="Playbook" />
     <section className="em-stack">
       <div className="em-lbl em-h">Choose a lens</div>
-      {totals.read > 0 && <div className="em-lbl em-tot"><span><b>{totals.read}</b> paragraph{totals.read === 1 ? "" : "s"} read</span></div>}
+      {totals.read > 0 && <div className="em-lbl em-tot"><span><b>{totals.read}</b> {adultSay("paragraph", adult)}{totals.read === 1 ? "" : "s"} read</span></div>}
       <div className="em-rows" ref={rows}>
         {LENS_STOPS.map((l, i) => {
           const st = standings.find((x) => x.id === l.id);
@@ -191,7 +191,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
     <aside className="em-side">
       {a ? <LastParagraph a={a} focused={at === "last"} curtain={curtainOn(s)} /> : (
         <div className={`em-panel${at === "plan" ? " is-focused" : ""}`} data-role="essay-specimen-card" data-focused={at === "plan"}>
-          <div className="em-lbl">First paragraph</div>
+          <div className="em-lbl">{adultSay("First paragraph", adult)}</div>
           <h2 className="em-big">Nothing read</h2>
           <div className="em-ways">{["Paste", "Type", "Dictate"].map((w, k) => <div key={w}>{WAYS[k]}<span className="em-lbl">{w}</span></div>)}</div>
           <div className="em-meta">{PHONE}{s.joined ? "Phone joined" : `PIN ${s.pin}`}</div>
@@ -232,7 +232,7 @@ export function EssayPlan({ s }: { s: Session }) {
   return (<>
     <Brand /><Top s={s} menu="Playbook" lit />
     <section className="em-stack" data-role="essay-plan">
-      <div className="em-lbl em-h">Your paragraph, one sentence at a time</div>
+      <div className="em-lbl em-h">{adultSay("Your paragraph, one sentence at a time", adult)}</div>
       <div className="em-plan">
         {defs.map((d, i) => {
           const text = slots[i], focused = here === i;

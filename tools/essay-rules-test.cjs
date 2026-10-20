@@ -2163,3 +2163,12 @@ test('L1-helena-46-EM1-1: an adult profile draws no paragraph at the lens home, 
  assert.match(textOf(drawEssay('Playbook',fam,{focus:pi})),/Unit 2 · Paragraph/);
  assert.equal(ER.playbookTitle('para','Paragraph',false),'Paragraph');assert.equal(ER.playbookTitle('thesis','Thesis',true),'Thesis');
 });
+test('L1-helena-46-EM1-1: the plan heading and the empty lens home label say message for an adult, and keep paragraph for a child seat',()=>{
+ const KEYS2=require(path.join(root,'src/tv/keys.ts'));
+ const adult=seatOf({mode:'adult'}),fam=seatOf({mode:'family'});
+ const stops=KEYS2.lensStops(adult),lensAt=stops.findIndex(x=>x&&x!=='last'&&x!=='plan');
+ const home=(s)=>textOf(drawEssay('EssayType',{...s,essay:undefined},{focus:lensAt})),plan=(s)=>textOf(drawEssay('EssayPlan',{...s,essayPlan:{lens:'structure',slots:['a','b','c']}}));
+ assert.match(home(adult),/First message/);assert.ok(!/paragraph/i.test(home(adult)),'adult lens home: '+home(adult));
+ assert.match(plan(adult),/Your message, one sentence at a time/);assert.ok(!/paragraph/i.test(plan(adult).replace(/Your plan.*$/,'')||''),'adult plan heading');
+ assert.match(home(fam),/First paragraph/);assert.match(plan(fam),/Your paragraph, one sentence at a time/);
+});
