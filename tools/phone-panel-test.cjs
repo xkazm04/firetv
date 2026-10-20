@@ -1182,3 +1182,20 @@ test('L1-daniel-15-EM3-1 / L1-barbora-43-EM4-1: the shelf (and "Forget tonight\'
  assert.equal((src.match(/<EssayShelf /g)||[]).length,1,'one EssayShelf element, shared by the three panels');
  assert.match(src,/const shelf = \(\) => <EssayShelf learnerId=/);
 });
+
+test('L1-daniel-15-EM3-1: one paste box (with its send) is shared by the rewrite, plan and paragraph panels, so the shelf\'s Open text shows under each',()=>{
+ const src=code(PAGE);
+ const panel=(role)=>{const i=src.indexOf(`data-role="${role}"`);assert.ok(i>0,role+' panel exists');const j=src.indexOf('screen === "paste"',i);return src.slice(i,j<0?undefined:j);};
+ for(const role of ['essay-rewrite','essay-plan','essay-paragraph']){
+  const p=panel(role);
+  assert.match(p,/\{pasteField\(\)\}/,role+' carries the paste box');
+  assert.match(p,/\{pasteSend\(\)\}/,role+' carries its send');
+  assert.match(p,/\{shelf\(\)\}/,role+' carries the shelf');
+ }
+ assert.equal((src.match(/aria-label="The paragraph the desk will read"/g)||[]).length,1,'one paste textarea');
+ assert.equal((src.match(/data-role="essay-analyse-one"/g)||[]).length,1,'one send');
+ assert.equal((src.match(/\{againBtn\}/g)||[]).length,1,'the re-send button once, inside the shared box');
+ const box=src.slice(src.indexOf('const pasteField'),src.indexOf('const sendSlot'));
+ assert.match(box,/value=\{essay\}/,'the box shows the text Open loads (essay = the showing paragraph)');
+ assert.match(src,/const openKept = [^\n]*loadParagraphs\(/,'Open loads the paragraphs the box shows');
+});
