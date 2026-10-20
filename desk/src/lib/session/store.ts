@@ -755,7 +755,7 @@ function step(s: Session, e: Event): Session {
     // the landing with no stop named: the lamp rests on what was left (tv/landingRows.ts LANDING_REST)
     case "ask.open": n.ask = { id: randomUUID(), kind: e.kind, learner: s.learner?.id ?? null, screen: s.screen, at: Date.now(), phase: "open", ...(e.detail ? { detail: askDetail(e.detail) } : {}) }; break;
     // a stale id changes nothing (the route answers it 409)
-    case "ask.cancel": if (s.ask?.id !== e.id) return s; n.ask = null; break;
+    case "ask.cancel": if (s.ask?.id !== e.id) return s; n.ask = null; if (namesPhone(n.status)) n.status = ""; break;
     case "ask.sent": if (s.ask?.id !== e.id) return s; n.ask = { ...s.ask, phase: "sent" }; break;
     case "nav": if (s.ask && e.screen !== s.ask.screen) n.ask = null;
       if (!s.learner && !UNSEATED_SCREENS.has(e.screen)) { n.screen = "learner"; n.focus = 0; n.back = "landing"; break; }

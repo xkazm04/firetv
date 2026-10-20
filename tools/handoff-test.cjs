@@ -236,3 +236,11 @@ test('F17: essay.slot leaves another kind of ask, and an ask on another slot, op
  const o=reduce(planned(),{type:'ask.open',kind:'rewrite'});
  assert.equal(reduce(o,{type:'essay.slot',i:0,text:'A first sentence that says something clearly.'}).ask?.kind,'rewrite');
 });
+test('F21: ask.cancel clears a status naming the phone, and leaves any other status',()=>{
+ let s=reduce(seated('essayplan'),{type:'status',text:'say or type slot 1, Your claim, on the phone'});
+ s=reduce(s,{type:'ask.open',kind:'slot',detail:{i:0}});
+ const c=reduce(s,{type:'ask.cancel',id:s.ask.id});assert.equal(c.ask,null);assert.equal(c.status,'');
+ let t=reduce(seated('essayplan'),{type:'ask.open',kind:'slot',detail:{i:0}});t=reduce(t,{type:'status',text:'Saved.'});
+ assert.equal(reduce(t,{type:'ask.cancel',id:t.ask.id}).status,'Saved.');
+ assert.equal(reduce(c,{type:'ask.cancel',id:'stale'}).status,'');
+});

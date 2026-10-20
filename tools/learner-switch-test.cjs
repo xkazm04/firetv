@@ -761,3 +761,16 @@ test('R3-d: an away slot with log null, or a log field of the wrong type, is rep
  await quiet(async()=>{store.dispatch({type:'learner.set',id:'simon'});});
  assert.equal(store.getSession().learner.id,'simon');
 });
+
+
+// ---- after the stick pass (F21) ----
+test('F21: seating another learner clears the previous learner\'s phone-naming status, by learner.set and by profile.save',()=>{
+ const {reduce,fresh}=store;
+ let s=reduce(reduce(fresh(),{type:'profile.draft',patch:{id:'tomas',name:'Tomas'}}),{type:'profile.save'});
+ s=reduce(reduce(s,{type:'profile.draft',patch:{id:'ema',name:'Ema'}}),{type:'profile.save'});
+ s=reduce(s,{type:'learner.set',id:'tomas'});
+ s=reduce(s,{type:'status',text:'say or type slot 1, Your claim, on the phone'});
+ assert.equal(reduce(s,{type:'learner.set',id:'ema'}).status,'');
+ const d=reduce(reduce(s,{type:'profile.draft',patch:{id:'lena',name:'Lena'}}),{type:'profile.save'});
+ assert.equal(d.learner.id,'lena');assert.equal(d.status,'');
+});
