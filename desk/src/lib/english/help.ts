@@ -172,8 +172,8 @@ export function quizFor(help: ConversationHelp | null | undefined, last: { id: s
  * band, is not an unfinished starter and does not repeat the partner's line. Else "".
  */
 export function sceneTaskFor(cue: string, band: Band | undefined, partnerLine: string): string {
-  const t = cue.replace(/^Try(?: [a-z]+)?:s*/, "").replace(/s+/g, " ").trim();
-  if (!t || /(...|…)$/.test(t) || t.length > QUIZ_MAX || !band || !SAYS_BACK.includes(band) || !inBand(t, band)) return "";
+  const t = cue.replace(/^Try(?: [a-z]+)?:\s*/, "").replace(/\s+/g, " ").trim();
+  if (!t || /(\.\.\.|…)$/.test(t) || t.length > QUIZ_MAX || !band || !SAYS_BACK.includes(band) || !inBand(t, band)) return "";
   const theirs = new Set(sentencesOf(partnerLine));
   return sentencesOf(t).some(x => theirs.has(x)) ? "" : t;
 }
