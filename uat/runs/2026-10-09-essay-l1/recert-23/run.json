@@ -1,0 +1,32 @@
+{
+  "id": "2026-10-09-essay-l1/recert-23",
+  "started": "2026-10-20T13:14:03.349Z",
+  "finished": "2026-10-20T13:14:03.349Z",
+  "cert_level": "L1",
+  "module": "Essay Master",
+  "base_commit": "56d93dcba38e5be7ac041379746e3e6f32b2d5b3",
+  "cast": [
+    "kristyna-17"
+  ],
+  "journeys": [
+    "EM1"
+  ],
+  "pairs": [
+    {
+      "character": "kristyna-17",
+      "journey": "EM1"
+    }
+  ],
+  "recertify": {
+    "of": "2026-10-09-essay-l1",
+    "k": 23,
+    "prior_run": "2026-10-09-essay-l1/recert-22",
+    "prior_base_commit": "820a115d3a409026d44a58f0a4b28f6ff45c23f9",
+    "mode": "L1 code re-walk of the two kristyna-17 EM1 rows open in recert-22; closed by scope per the operator ruling of 2026-10-20 (English only, say so)"
+  },
+  "instrument": {
+    "level": "L1 theoretical re-walk",
+    "walkers": "builder session, code only",
+    "model_calls": "none; desk/data untouched"
+  }
+}
