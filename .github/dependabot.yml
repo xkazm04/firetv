@@ -1,0 +1,48 @@
+# Dependabot: weekly version updates for every dependency manifest in the repo, so Ktor, Media3,
+# Compose, Next.js and the GitHub Actions move without someone having to remember. Minor and patch
+# bumps are grouped into one PR per ecosystem and directory; a major arrives on its own PR.
+# Security updates (Dependabot alerts) are switched on in the repo settings and use the same config.
+# The Gradle dependency graph that alerts rely on is submitted by .github/workflows/supply-chain.yml.
+version: 2
+updates:
+  # Root build: core/ + tv-app/, versions in gradle/libs.versions.toml (Ktor, Media3, Compose, AGP, Kotlin).
+  - package-ecosystem: gradle
+    directory: /
+    schedule: { interval: weekly, day: monday }
+    groups:
+      gradle-root-minor-patch: { update-types: [minor, patch] }
+
+  # Death Ride: a separate Gradle build with its own wrapper.
+  - package-ecosystem: gradle
+    directory: /deathride
+    schedule: { interval: weekly, day: monday }
+    groups:
+      gradle-deathride-minor-patch: { update-types: [minor, patch] }
+
+  # Study Desk (Next.js, React).
+  - package-ecosystem: npm
+    directory: /desk
+    schedule: { interval: weekly, day: monday }
+    groups:
+      desk-minor-patch: { update-types: [minor, patch] }
+
+  # Telestrator live probes (Playwright, ws).
+  - package-ecosystem: npm
+    directory: /tools
+    schedule: { interval: weekly, day: monday }
+    groups:
+      tools-minor-patch: { update-types: [minor, patch] }
+
+  # Death Ride probes.
+  - package-ecosystem: npm
+    directory: /deathride/tools
+    schedule: { interval: weekly, day: monday }
+    groups:
+      deathride-tools-minor-patch: { update-types: [minor, patch] }
+
+  # Workflow actions.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly, day: monday }
+    groups:
+      actions-minor-patch: { update-types: [minor, patch] }

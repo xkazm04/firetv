@@ -1,0 +1,25 @@
+# Changelog: CHANGELOG.md keeps its shape on every pull request (.ai/memory/0015).
+#  - tools/changelog-test.cjs checks four things:
+#      - one section per product plus the harness, each opening with `### Unreleased`
+#      - dated milestones, newest first
+#      - every relative link resolves, so a renamed doc cannot silently break the routing
+#      - CONTRIBUTING.md's Definition of Done and the PR template still ask for the line
+#  - It reads files only: no install, no model, no network.
+name: changelog
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  shape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Changelog shape and links
+        run: node tools/changelog-test.cjs
