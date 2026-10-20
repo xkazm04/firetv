@@ -1,0 +1,73 @@
+# Capabilities on every pull request: proves that a change kept every .ai/manifest.yaml command green.
+#  - The same proof as the weekly capabilities.yml, on the merge candidate. `node .ai/doctor.mjs --run --json` runs each
+#    capability (build, test, test-desk, typecheck, evals), and scripts/capability-proof.mjs fails the job when any
+#    of them failed.
+#  - scripts/doctor-gate.mjs --claims then holds the committed `verified` flags to that run. A committed
+#    `verified: true` that did not pass on this tree is a broken claim and the job goes red. A capability that passed
+#    while its flag is still false gets a notice to commit the doctor's own write-back from a local --run.
+#  - So a `verified: true` that reaches main was proven by CI on the change that carried it (.ai/memory/0016).
+#  - CI never commits the flags, and the token stays read-only.
+#  - Same-repository PRs only. --run shell-executes the manifest's commands, so a fork PR could rewrite one and run
+#    arbitrary code (the SECURITY note in .ai/doctor.mjs). This workflow holds no secret.
+# The doctor gives each command 180 s, so the slow work (Gradle, npm ci, the APK build) is warmed up first, exactly as in
+# capabilities.yml. gradle.properties pins the operator's local Android Studio JBR, which does not exist on a runner;
+# the job drops that one line from the checkout and uses the JDK that setup-java installs.
+# NOT RUN ON PULL REQUESTS (2026-10-20): the test-desk capability (`npm --prefix desk test`, about 3 minutes on a
+# runner) is killed at the doctor's fixed 180 s --run budget, so this job was red on every PR it ran on. The budget
+# is part of the .ai/SPEC.md contract and the cure it names (split or wrap the command) changes the manifest, so it
+# is left for an owner decision (issue #12). The workflow stays for a manual run: Actions, capabilities-pr, Run workflow.
+name: capabilities-pr
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: capabilities-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  prove:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: desk/package-lock.json
+      - name: Keep the committed manifest (the doctor rewrites its verified flags)
+        run: cp .ai/manifest.yaml "$RUNNER_TEMP/committed-manifest.yaml"
+      - name: Drop the operator's local JDK pin
+        run: sed -i '/^org.gradle.java.home=/d' gradle.properties
+      - name: Generate the fixture clip (fixtures/README.md; the same command as capabilities.yml)
+        run: |
+          sudo apt-get update -q && sudo apt-get install -y -q ffmpeg
+          mkdir -p tv-app/src/main/res/raw
+          ffmpeg -y \
+            -f lavfi -i "testsrc2=size=1280x720:rate=25:duration=20" \
+            -vf "drawbox=x='mod(t*140\,1180)':y='360+220*sin(t*2)':w=90:h=90:color=orange@0.95:t=fill" \
+            -c:v libx264 -pix_fmt yuv420p -profile:v baseline -level 3.1 -g 25 \
+            tv-app/src/main/res/raw/fixture_clip.mp4
+      - run: npm ci --prefix desk
+      - name: Warm up Gradle (so each capability fits the doctor's 180 s budget)
+        run: node tools/gradlew.cjs :core:test :tv-app:assembleDebug --console=plain
+      - name: Run every manifest capability (doctor --run)
+        run: node .ai/doctor.mjs --run --json > doctor.out || true
+      - name: Judge the capability findings
+        run: node scripts/capability-proof.mjs doctor.out
+      - name: Hold the committed verified flags to this run
+        if: always()
+        run: node scripts/doctor-gate.mjs doctor.out --claims "$RUNNER_TEMP/committed-manifest.yaml"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: capabilities-pr-${{ github.run_id }}
+          path: |
+            doctor.out
+            .ai/manifest.yaml
+          if-no-files-found: warn

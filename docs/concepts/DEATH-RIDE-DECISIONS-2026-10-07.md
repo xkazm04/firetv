@@ -278,3 +278,41 @@ By extension: 109 json, 19 txt, 15 log, 1 md. No refused extension, no logcat na
   4. **Order:** P21 (cards 14 and 15), then P22 (the 900 s sound-on soak, graded on every goal-1 line), then card 16. Cards 2
      and 3 run only if the soak's figures call for them.
 - **Reverse:** the owner may overrule any of these.
+
+## 15. P22 rulings
+
+### (a) The owner's ruling (operator delegate)
+
+- **Who decided:** Athena, operator delegate, 2026-10-16 12:30Z.
+- **Context:** P22 (the 900 s sound-on Stick soak of deathride/main a443f12f). Evidence is under `deathride/evidence/perf/p22/`;
+  the write-up is 4b94f819 (`docs/concepts/deathride/P22-soak.md`), whose questions 1 and 3 these answer.
+- **The ruling, verbatim:** "(2) Death Ride P22: count goal 1 as met for the 10-23 deadline. The 37.6 ms max (5 preempted frames) is recorded as a known limit; no card 3 work before 10-23. The release Code line read under dev.deathride.perf is accepted for ruling 3(b). Move Death Ride to its next goal."
+- **Rulings:**
+  1. **P22 question 1: goal 1 is met for the 10-23 deadline.**
+     - The 37.599 ms max over five preempted frames is recorded as a known limit. It is not a pass of the 33 ms line.
+     - Card 3 (back-pressure) gets no work before 10-23.
+  2. **P22 question 3: the release Code line read under `dev.deathride.perf` satisfies section 14(b) ruling 3(b).** The shipped id
+     (`dev.deathride.tracks`) is not read.
+  3. **Death Ride moves to its next goal.**
+
+### (b) Left open
+
+- **P22 question 2** (a soak without the SurfaceFlinger poller, on a settled host) was not ruled. It is open and not scheduled
+  before 10-23.
+- **P22 question 4** (card 15 and the 30 MB floor) was not ruled. It is open and not scheduled before 10-23.
+- No ruling is inferred for either.
+
+### (c) Reverse
+
+- Goal 1 reopens if a later soak of deathride/main breaks a line the owner's measure (section 14(a)) holds at pass in P22: the
+  active p95 on the screen (one refresh, 16.68 ms), the median (16-18 ms), PSS (< 192 MiB), or zero rejected inputs.
+- The max line alone does not reopen it; the known limit stands until the owner or the operator delegate rules otherwise.
+- The owner may overrule any of these.
+
+## 16. The Wi-Fi stall card (P22 reading)
+
+- **Who decided:** the App Master, under the operator's delegation, 2026-10-16. The owner may overrule it.
+- **Context:** the early-probe Wi-Fi delivery stall card (optimize-2026-10-06-deathride, findings-L line 18) entered the ledger by section 9 ruling 4 and was to be read again at the next goal-1 soak (section 8 ruling 4). That soak was P22 (c6e08fb4, 900 s, sound on, deathride/main a443f12f). P22 rejected 0 inputs: 27,003 of 27,003 per seat were accepted (`docs/concepts/deathride/P22-soak.md`, the Rejected inputs row).
+- **The ruling, verbatim:** "The Wi-Fi stall card is descoped for the 10-23 deadline. It was to be read again at the next goal-1 soak (decisions section 8 ruling 4, section 9 ruling 4). That soak was P22 (c6e08fb4, 900 s, sound on, deathride/main a443f12f). P22 rejected 0 inputs: 27,003 of 27,003 per seat were accepted (docs/concepts/deathride/P22-soak.md, the Rejected inputs row). One clean soak does not prove that bursts are gone, so the card is not declined. The synchronized capture it names (perf-rejection-trace.py, perf-icmp.py) is not run before 10-23. Reverse: any later graded run or soak voided by a rejection burst reopens the card. The stale-input threshold does not change (N3, I2)."
+- **Effect:** the ledger closes at 42 built + 15 declined + 2 descoped + 0 open = 59.
+- **Reverse:** any later graded run or soak voided by a rejection burst reopens the card. The stale-input threshold does not change (N3, I2).

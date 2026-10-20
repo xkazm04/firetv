@@ -1,0 +1,108 @@
+# Structured intake for work an agent (or a person) picks up: the outcome, the criteria that say it is done, and the
+# gates that prove it, taken from AGENTS.md "Which gate for which change". CONTRIBUTING.md, "Handing work to an agent",
+# says how an agent starts from this form and how the pull request answers it.
+name: Agent task
+description: Hand a change to an agent. Give the outcome, the acceptance criteria and the gate for every surface it touches.
+title: "[task] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        An agent starts from this form instead of a free-form request. Write criteria someone can check, not steps
+        to follow. The agent reads AGENTS.md and the `.ai/memory/` entries for the paths it touches. Its pull request
+        links this issue, ticks each criterion with its evidence and reports the exit code of every gate below.
+
+  - type: dropdown
+    id: product
+    attributes:
+      label: Product
+      description: Where the change lands (AGENTS.md, "What this repository is").
+      multiple: true
+      options:
+        - "Telestrator: core/, tv-app/, companion/"
+        - "Study Desk: desk/, uat/"
+        - "Death Ride: deathride/ (its own Gradle build)"
+        - "Repo and agent harness: .ai/, .github/, scripts/, docs/"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-and-why
+    attributes:
+      label: What and why
+      description: The outcome in one or two sentences, and the problem it solves. Link the backlog row, card, run or doc it comes from.
+      placeholder: "The hint writer's re-ask doubles the paid calls on a leak. Ask once with the leak rule in the prompt, so a leak is rarer and costs one call."
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: One observable outcome per line. Each one is checked by a test that fails without the change, a gate, a screenshot or a number. "Works well" is not a criterion.
+      value: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: gates
+    attributes:
+      label: Gates for the touched surfaces
+      description: Every surface the change will touch, from AGENTS.md "Which gate for which change". The agent runs each gate after its last edit and reports the exit code in the pull request.
+      multiple: true
+      options:
+        - "desk/ or a tools/*-test.cjs: npm --prefix desk test"
+        - "a TV screen (desk/src/tv, desk/src/app/tv, LingaTV.tsx): the desk gate plus a Playwright capture on a second dev server"
+        - "the live surface (node tools/model-drift-pr.cjs --surface): the desk gate plus a live drift record the operator takes on the branch"
+        - "core/: node tools/gradlew.cjs :core:test"
+        - "tv-app/ or companion/: node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin"
+        - "uat/driver: node --check uat/driver/linga-text.cjs"
+        - "deathride/: :core:test :link:test from deathride/"
+        - ".ai/, .github/ or scripts/: node .ai/doctor.mjs --json then node scripts/doctor-gate.mjs"
+        - "CHANGELOG.md: node tools/changelog-test.cjs"
+        - "docs only: no gate (say so in the pull request)"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints in play
+      description: The AGENTS.md constraints this task comes close to. They hold whether or not they are ticked. Ticking one tells the agent where to look twice.
+      options:
+        - label: "Withholding: nothing puts the answer on the TV (rules/maths leaks())"
+        - label: "Decisions stay in desk/src/lib/rules/, and the model only explains"
+        - label: "No live model call in a gate: stub at the provider seam"
+        - label: "Never touch desk/data/ (tests use a temp DESK_DATA_DIR)"
+        - label: "A TV surface follows On Air (docs/DESIGN-ON-AIR.md)"
+        - label: "core/ stays free of Android imports"
+        - label: "deathride/ stays a separate build"
+
+  - type: dropdown
+    id: live-calls
+    attributes:
+      label: Live model calls the owner approves
+      description: The gates never call a model. Pick a live run only if the owner will run it or has approved it. Name any second one under "What and why".
+      default: 0
+      options:
+        - "No live call (the default)"
+        - "One live drift record on the branch (scripts/model-drift.ps1)"
+        - "A UAT LT run on codex (uat/driver/linga-text.cjs)"
+        - "A live probe (tools/*-live.cjs)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: memory
+    attributes:
+      label: Settled decisions that apply
+      description: The .ai/memory/ entries this task must not reopen, if you know them. The agent reads the entries whose scope covers its paths in any case.
+      placeholder: "0007 no live model calls in gates; 0014 model drift watched weekly"
+
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+      description: What the agent should leave alone, even if it looks related.

@@ -1,0 +1,43 @@
+# Quality: the repo's own gates (AGENTS.md, "Which gate for which change") on every pull request,
+# so a red gate blocks the merge even when an agent handed off without running it.
+#  - desk: tsc --noEmit, then every rules suite (no live model calls by repo law).
+#  - core: the pure-JVM telestrator unit tests.
+# gradle.properties pins the operator's local Android Studio JBR, which does not exist on a runner;
+# the core job drops that one line from the checkout and uses the JDK that setup-java installs.
+name: quality
+on:
+  pull_request:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  desk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: desk/package-lock.json
+      - run: npm ci --prefix desk
+      - name: Tools dependencies (tools/device.mjs imports pngjs and ws; the device suite runs inside the desk gate)
+        run: npm ci --prefix tools --omit=dev
+      - name: Desk gate (typecheck + rules suites)
+        run: npm --prefix desk test
+
+  core:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Drop the operator's local JDK pin
+        run: sed -i '/^org.gradle.java.home=/d' gradle.properties
+      - name: Core unit tests
+        run: node tools/gradlew.cjs :core:test --console=plain
