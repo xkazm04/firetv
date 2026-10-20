@@ -71,10 +71,11 @@ export function Pair({ s }: { s: Session }) {
           <div className="txt" style={{ letterSpacing: ".3em", fontVariantNumeric: "tabular-nums" }}>{s.pin}</div>
         </div>
         <div className="body" style={{ color: "var(--mute)", marginTop: 24 }}>Scan, or open <span style={{ color: "var(--paper)" }}>{s.phoneUrl.replace(/^https?:\/\//, "")}</span> on your phone and type the code.</div>
+        {/* paired: the two buttons stand under the address in the column, not on the safe edge where they cut its line (stick pass 2026-10-20) */}
+        {s.joined && <div data-role="pair-actions" style={{ display: "flex", gap: 24, justifyContent: "center", marginTop: 36 }}><button className="btn" data-focused={s.focus !== 1}>Pair another</button><button className="btn" data-focused={s.focus === 1}>Forget every phone</button></div>}
       </div>
     </div>
-    {s.joined && <div className="actions" style={{ display: "flex", gap: 24, justifyContent: "center" }}><button className="btn" data-focused={s.focus !== 1}>Pair another</button><button className="btn" data-focused={s.focus === 1}>Forget every phone</button></div>}
-    <div className="ticker"><span>Waiting for a phone</span><i>·</i><span>code <b>{s.pin}</b></span><i>·</i><span>same Wi-Fi as the TV</span></div>
+    <div className="ticker"><span>{s.joined && s.phonesLive > 0 ? "Ready for another phone" : "Waiting for a phone"}</span><i>·</i><span>code <b>{s.pin}</b></span><i>·</i><span>same Wi-Fi as the TV</span></div>
   </>);
 }
 

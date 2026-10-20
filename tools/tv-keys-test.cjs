@@ -1283,3 +1283,21 @@ test('stick pass 2026-10-20: Sentence help with nothing checked yet draws its on
  const asked={...empty,ask:{id:'a1',kind:'sentence',learner:'ema',screen:'sentence',at:0,phase:'open'}};
  assert.match(renderToStaticMarkup(createElement(SentenceScreen,{s:asked,focus:0})),/On the phone: your sentence\. Back cancels\./,'while the ask is open the caption says so');
 });
+
+test('stick pass 2026-10-20: the paired pair screen stands its two buttons under the address, and its ticker does not say it waits for a phone while one is here',()=>{
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server'));
+ const {createElement}=require(path.join(root,'node_modules/react'));
+ for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){
+  const file=path.join(root,'src',f);if(require.cache[file])continue;const m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
+ const {Pair}=require(path.join(root,'src/tv/screens.tsx'));
+ const draw=(p)=>renderToStaticMarkup(createElement(Pair,{s:session({screen:'pair',phoneUrl:'http://10.0.0.2:3000/phone',...p})}));
+ const here=draw({joined:true,phonesLive:1});
+ assert.match(here,/1 phone here/);
+ assert.match(here,/class="ticker"><span>Ready for another phone<\/span>/);
+ const addr=here.indexOf('type the code.'),acts=here.indexOf('data-role="pair-actions"');
+ assert.ok(addr>0&&acts>addr,'the buttons follow the address line in the column');
+ assert.doesNotMatch(here,/class="actions"/,'not pinned to the safe edge, where they cut the address');
+ assert.match(draw({joined:true,phonesLive:0}),/class="ticker"><span>Waiting for a phone<\/span>/,'no phone here: it waits');
+ const unpaired=draw({joined:false,phonesLive:0});
+ assert.match(unpaired,/Waiting for a phone/);assert.doesNotMatch(unpaired,/Forget every phone/);
+});
