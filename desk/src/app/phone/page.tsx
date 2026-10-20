@@ -14,7 +14,7 @@ import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
 import { barItems, moreRows, type MoreId } from "./phoneBar";
-import { BANNER, HTTP_LIMIT, deskLine, follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
+import { BANNER, HTTP_LIMIT, deskLine, follow, joinRefusal, leaveOutcome, shotHeld, type JoinHow, type PScreen } from "./panelFor";
 import { forensicAt, planAt, switchEndsLine } from "@/tv/keys";
 import { dayOf } from "@/tv/mathsRows";
 import { counted, hintedLine, learnerRecaps, recapCaption, recapLine, recapRows, slippedLine, startOfDay, tasksLine, tonightsLog } from "@/tv/recapRows";
@@ -568,7 +568,7 @@ export default function Phone() {
   useEffect(() => {
     if (!s) return;
     const typing = typingNow;
-    const held = (screen === "capture" || screen === "practice") && !!shot && phase !== "sent";
+    const held = shotHeld(screen, !!shot, phase);
     const busyHands = typing || held || holding || hearing.current || !!s.conversation?.capture;
     const step = follow(seen.current, s, { panel: screen, role, busy: busyHands });
     seen.current = step.key;

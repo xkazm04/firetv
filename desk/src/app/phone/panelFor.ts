@@ -47,6 +47,14 @@ export const readFailed = (s: Pick<Seen, "screen" | "pages" | "pageIx" | "jobs">
 /** A panel that turns the camera on as it opens. */
 const opensCamera = (panel: PScreen, s: Seen) => (panel === "capture" && !readFailed(s)) || (panel === "practice" && s.ask?.kind === "sheet" && !s.practice?.marked);
 
+/**
+ * A shot is in the learner's hands while it waits to be sent or is on its way. One whose send failed is not: the TV
+ * owns the retry (TL-13), and a phone that counted it as held deferred every later hand-off for good - it stayed on the
+ * capture panel while the TV asked for a paper or typed answers (stick pass 2026-10-20).
+ */
+export const shotHeld = (panel: PScreen, shot: boolean, phase: "idle" | "sending" | "sent" | "failed") =>
+  (panel === "capture" || panel === "practice") && shot && (phase === "idle" || phase === "sending");
+
 /** Where the phone is, who holds it, and whether the learner's hands are on it (typing, a shot held unsent, recording). */
 export interface At { panel: PScreen; role: "student" | "parent"; busy: boolean }
 /** The key to remember for next time, the panel to move to (null: stay), and the panel a Parent phone is told about (null: none). */

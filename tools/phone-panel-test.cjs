@@ -1269,3 +1269,19 @@ test('L1-kristyna-17-EM1-2 (phone half): the open Essay Master task is sent as a
  assert.equal(pick([{sub:'essay',name:'Draft',done:true}]),undefined);
  assert.equal(pick(undefined),undefined);
 });
+
+test('stick pass 2026-10-20: a shot whose send failed is not held - a later hand-off (a paper, typed answers) moves the phone off the capture panel',()=>{
+ const {shotHeld,follow}=P();
+ assert.equal(shotHeld('capture',true,'idle'),true,'a shot waiting to be sent is in the hands');
+ assert.equal(shotHeld('capture',true,'sending'),true,'and on its way');
+ assert.equal(shotHeld('capture',true,'failed'),false,'a failed send is the TV\'s to retry (TL-13)');
+ assert.equal(shotHeld('practice',true,'failed'),false);
+ assert.equal(shotHeld('capture',true,'sent'),false);assert.equal(shotHeld('capture',false,'idle'),false);
+ assert.equal(shotHeld('paste',true,'idle'),false,'only the camera panels hold a shot');
+ // the stick: the read failed with a 502, the shot stayed, and the TV then asked for a paper
+ const s={joined:true,screen:'paper',subject:'maths',awaiting:null,practice:null,pages:[],pageIx:0,jobs:{},ask:{id:'a9',kind:'paper',learner:'ema',screen:'paper',at:1,phase:'open'}};
+ const step=follow('ask:a1',s,{panel:'capture',role:'student',busy:shotHeld('capture',true,'failed')});
+ assert.equal(step.to,'paper','the phone goes to the rows');
+ const page=code(PAGE);
+ assert.match(page,/const held = shotHeld\(screen, !!shot, phase\)/,'page.tsx asks the one rule');
+});
