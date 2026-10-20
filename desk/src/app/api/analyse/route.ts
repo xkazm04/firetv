@@ -16,9 +16,9 @@ import { modeOf } from "@/lib/rules/mode";
 import { sentenceProblem } from "@/lib/rules/english";
 
 export const dynamic = "force-dynamic";
-type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: string; type: AnalysisType; task?: string; format?: string } | { kind: "rewrite"; n: number; text: string }
+type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: string; type: AnalysisType; task?: string; assignment?: string; format?: string } | { kind: "rewrite"; n: number; text: string }
   | { kind: "piece-again" } | { kind: "shelf-piece"; pieceId: string }
-  | { kind: "piece"; text: string; type: AnalysisType; keep?: boolean; pieceId?: string; source?: string; format?: string; title?: string; task?: string };
+  | { kind: "piece"; text: string; type: AnalysisType; keep?: boolean; pieceId?: string; source?: string; format?: string; title?: string; task?: string; assignment?: string };
 
 /** E3-b: a reading refused before any run with a line for the learner says the line on the TV's status line too, whichever door sent it. */
 /** A refusal said before any run: on the session as the status, and as an essay refusal when it is one (the essay screens caption it). */
