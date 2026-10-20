@@ -796,14 +796,19 @@ test('HW4: the continue card opens the sheet of tonight, never an older one; no 
  assert.equal(continueCard(both,tomorrow),null,'now is a parameter: the same pages a day on offer no card');
  assert.equal(both.pages.length,2,'older pages stay on the desk');
 });
-test('HW6: a failed read says Try again on the phone for maths and English; an essay page names the paste panel',()=>{
+test('HW6 (F8): a failed read names the TV Select key as the retry for maths and English (TL-13), and promises none the desk will not make; an essay page names the paste panel',()=>{
  const {failedReadLine}=require(path.join(root,'src/tv/pageLines.ts'));
  const maths=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8');
- assert.ok(maths.includes('The desk could not read this page. Open Try again on the phone.'));
- for(const subject of ['maths','english'])assert.equal(failedReadLine(subject),'The desk could not read this page. Open Try again on the phone.',subject);
- assert.match(failedReadLine('essay'),/Paste or type it on the phone/);
- for(const subject of ['maths','english','essay'])assert.ok(!/—|snap it again/.test(failedReadLine(subject)),subject);
- assert.match(fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8'),/failedReadLine\(p\.subject\)/,'the page screen uses it');
+ assert.match(maths,/failedReadLine\("maths", read\.retry\)/,'the Math Buddy page draws the same line');
+ assert.ok(!maths.includes('Open Try again on the phone'),'the phone is no longer where the retry is');
+ for(const subject of ['maths','english']){
+  for(const retry of [undefined,true])assert.equal(failedReadLine(subject,retry),'The desk could not read this page. Select to try again.',`${subject} retry ${retry}`);
+  assert.equal(failedReadLine(subject,false),'The desk could not read this page. Take a new photo of the page on the phone.',`${subject}: a read the desk will not repeat`);
+  assert.doesNotMatch(failedReadLine(subject,false),/try again/i);
+ }
+ for(const retry of [undefined,true,false])assert.equal(failedReadLine('essay',retry),'The desk could not read this page. Paste or type it on the phone.','the paste panel line as it was');
+ for(const subject of ['maths','english','essay'])for(const retry of [undefined,false])assert.ok(!/—|snap it again/.test(failedReadLine(subject,retry)),subject);
+ assert.match(fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8'),/failedReadLine\(p\.subject, read\.retry\)/,'the page screen uses it');
 });
 
 test('essay 4 (6c, E4-b): Rewrite on a sentence of a paragraph the desk did not rule puts that paragraph line on the status line; a ruled one says rewriteStatus',()=>{

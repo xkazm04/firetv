@@ -121,7 +121,7 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
   const ovScale = H / p.h;
   // what the pipelines behind this page are doing, in the caption: a read that failed, a hint on its way or not coming
   const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
-  const pageLine = read?.phase === "failed" ? failedReadLine(p.subject) : hj?.phase === "running" ? "thinking about a hint…" : hj?.phase === "failed" ? (hj.retry === false ? "no hint for this one" : "no hint that time — Select to try again") : p.missing?.length ? missingLine(p.missing) : p.marked ? markedLine(p.marked.items) : undefined;
+  const pageLine = read?.phase === "failed" ? failedReadLine(p.subject, read.retry) : hj?.phase === "running" ? "thinking about a hint…" : hj?.phase === "failed" ? (hj.retry === false ? "no hint for this one" : "no hint that time — Select to try again") : p.missing?.length ? missingLine(p.missing) : p.marked ? markedLine(p.marked.items) : undefined;
   return (<>
     <div className="band band-rule" />
     <main className="content-full">

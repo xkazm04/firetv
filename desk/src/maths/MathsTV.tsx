@@ -32,7 +32,7 @@ import { leftOutLine, lostLabel, offCountLine, offSummary, paperCaption, paperNo
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
 import { missingLine } from "@/tv/pageLines";
-import { markedLine } from "@/tv/pageLines";
+import { failedReadLine, markedLine } from "@/tv/pageLines";
 import { MathsMark as Mark } from "@/tv/marks";
 import { MATHS_FONTS } from "./fonts";
 import { MathText, Tick } from "./MathText";
@@ -1009,7 +1009,7 @@ export function PageScreen({ s, focus = 0 }: { s: Session; focus?: number }) {
   if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No page yet" /></h1></>;
   const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
   const line = handoffLine(s) ?? (s.reading ? "Reading the page… the problems appear here all at once when it is read."
-    : read?.phase === "failed" ? "The desk could not read this page. Open Try again on the phone."
+    : read?.phase === "failed" ? failedReadLine("maths", read.retry)
     : hj?.phase === "running" ? "Thinking about a hint for this one…"
     : hj?.phase === "failed" ? (hj.retry === false ? "No hint for this one." : "No hint that time. Select to try again.")
     : p.missing?.length ? missingLine(p.missing)

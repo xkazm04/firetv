@@ -588,14 +588,16 @@ test('HW3: a read that comes back with zero items ends failed with the desk\'s r
  assert.equal((await retry({kind:'read'})).status,200);
  s=store.getSession();assert.equal(s.pages.length,1);assert.equal(s.pages[0].items.length,3);assert.equal(lines(),before+1,'the read that found problems is written down');
 });
-test('HW3: an empty read fails for English and Essay too, and the TV and the phone point to Try again',async()=>{
+test('HW3: an empty read fails for English and Essay too, the TV points to Select and the phone to Try again',async()=>{
  for(const subject of ['english','essay']){
   blank();stubVision(()=>({items:[]}));
   assert.equal((await post('read',{...SNAP,subject})).status,502,subject);
   assert.equal(store.getSession().jobs.read.phase,'failed',subject);
  }
  const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8');
- assert.match(tv,/Open Try again on the phone/);assert.doesNotMatch(tv,/Snap it again on the phone/);
+ // since TL-13 the TV's Select retries the read (F8): the page line names it, and the phone's capture panel still carries Try again
+ assert.match(tv,/failedReadLine\("maths", read\.retry\)/);assert.doesNotMatch(tv,/Open Try again on the phone/);assert.doesNotMatch(tv,/Snap it again on the phone/);
+ assert.equal(require(src('tv/pageLines.ts')).failedReadLine('maths'),'The desk could not read this page. Select to try again.');
  const {panelFor,follow}=require(src('app/phone/panelFor.ts'));
  const page={...PAGE,items:[],provider:'error'};
  const failed={screen:'page',joined:true,subject:'maths',awaiting:null,practice:null,pages:[page],pageIx:0,jobs:{read:{id:'j',kind:'read',phase:'failed',key:page.id,error:'x',startedAt:0,input:{id:page.id}}}};
@@ -788,7 +790,7 @@ test('HF1b: the Math Buddy page screen says the missing numbers, after the hint 
  const end=tv.indexOf('export function',at+10);const slice=tv.slice(at,end<0?undefined:end);
  const branch='p.missing?.length ? missingLine(p.missing)';assert(slice.includes(branch));
  const b=slice.indexOf(branch);
- for(const before of ['Reading the page','could not read this page','Thinking about a hint','No hint that time'])assert(slice.indexOf(before)>=0&&slice.indexOf(before)<b,before);
+ for(const before of ['Reading the page','failedReadLine("maths"','Thinking about a hint','No hint that time'])assert(slice.indexOf(before)>=0&&slice.indexOf(before)<b,before);
  assert(slice.indexOf('is under the lamp')>b);
 });
 
