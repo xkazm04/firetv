@@ -38,7 +38,7 @@ function WorldSet({ layers, back, mode, dir }: { layers: Layer[]; back: boolean;
     <div className="pp-wset" data-mode={mode} style={{ "--dir": dir } as CSSProperties}>
       {layers.map((l, i) => l.back === back && (
         <div key={i} className="pp-layer" data-k={l.k} style={{ "--d": l.d, "--i": i } as CSSProperties}>
-          <svg viewBox="-140 0 2200 1080" width="2200" height="1080" aria-hidden="true">{l.node}</svg>
+          <svg viewBox="-140 0 2200 1080" width="2200" height="1080" aria-hidden="true"><g className="pp-cast">{l.node}</g></svg>
         </div>
       ))}
     </div>

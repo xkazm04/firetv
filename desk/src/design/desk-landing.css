@@ -58,9 +58,14 @@
 .pp .pp-wset { position: absolute; inset: 0; }
 .pp .pp-layer { position: absolute; left: -140px; top: 0; width: 2200px; height: 1080px; will-change: transform, opacity; }
 .pp .pp-layer svg { display: block; width: 2200px; height: 1080px; overflow: visible; }
-.pp .pp-layer[data-k="hill"] { filter: drop-shadow(0 -5px 10px rgba(45, 25, 12, .24)); }
-.pp .pp-layer[data-k="hero"] { filter: drop-shadow(6px 12px 14px rgba(45, 25, 12, .32)); }
-.pp .pp-layer[data-k="soft"] { filter: drop-shadow(0 8px 10px rgba(45, 25, 12, .12)); }
+/* each layer's shadow sits on the drawing inside it, not on the layer: a filter on a composited layer is redrawn by the
+   compositor on every frame (the stick's GPU managed 9 fps), one on the drawing is rastered into the layer's tiles once
+   (docs/concepts/STICK-PERFORMANCE-2026-10-20.md). The hills are still, so their shadow is the whole drawing's. A hero or
+   soft layer has moving pieces (a drifting cloud, a swinging key) that Chrome composites on their own; a shadow on a
+   group holding one is redrawn every frame again, so there each piece of the drawing casts its own */
+.pp .pp-layer[data-k="hill"] .pp-cast { filter: drop-shadow(0 -5px 10px rgba(45, 25, 12, .24)); }
+.pp .pp-layer[data-k="hero"] .pp-cast > * { filter: drop-shadow(6px 12px 14px rgba(45, 25, 12, .32)); }
+.pp .pp-layer[data-k="soft"] .pp-cast > * { filter: drop-shadow(0 8px 10px rgba(45, 25, 12, .12)); }
 /* a world sliding in from the side the D-pad went, one sliding out the other way; layers travel by their own factor */
 .pp .pp-wset[data-mode="choose"] .pp-layer { animation: pp-in .7s var(--pp-ease) backwards; }
 .pp .pp-wset[data-mode="arrive"] .pp-layer { animation: pp-up .65s calc(.7s + var(--i) * .045s) var(--pp-ease) backwards; }
