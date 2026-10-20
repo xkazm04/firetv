@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "firetv-telestrator"
 include(":core")
 include(":tv-app")
+include(":stick-app")
