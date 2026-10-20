@@ -711,3 +711,27 @@ test('TL-7: private is a stop only under the curtain, and its ask carries a sent
   assert.equal(JSON.stringify(ask).includes('Schools'), false, 'no sentence text in the ask');
   assert.equal(keys.essayHandoffLine({ ...kept, ask: { ...ask, screen: 'forensic' } }).includes('Schools'), false, 'the caption names the job, never the words');
 });
+
+// ---- L1-daniel-15-EM3-2: a title line on top of the text is the reading's task, on both paths; an explicit task wins ----
+test('route: the title line is the reading task on the piece and paragraph paths, and an explicit task wins', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); texts.markNoticed('ema');
+  const TITLED = 'Should schools start later\n\n' + PIECE;
+  const taskIn = (req) => /The task the writing answers[^\n]*\n[^\n]*|The task the writing answers/.test(req.prompt) ? req.prompt.includes('Should schools start later') : false;
+  const ask = async (body) => { seen = []; answer = perParagraph(faultyAt([])); const r = await post({ type: 'structure', ...body }); assert.equal(r.status, 200); return seen; };
+  let s = await ask({ kind: 'piece', text: TITLED });
+  assert.ok(s.length && s.every(taskIn), 'piece path: the title reaches every paragraph call as the task');
+  assert.doesNotMatch(s[0].prompt, /1\. Should schools start later/, 'the title is not a sentence');
+  s = await ask({ kind: 'piece', text: PIECE });
+  assert.ok(s.every((q) => !q.prompt.includes('The task the writing answers')), 'piece path: no title, no task');
+  s = await ask({ kind: 'piece', text: TITLED, task: 'Argue for a nine o\'clock start.' });
+  assert.ok(s.every((q) => q.prompt.includes('Argue for a nine') && !taskIn(q)), 'an explicit task overrides the title');
+  const PARA = 'Should schools start later\n\nSchools start too early. Teenagers are tired.';
+  answer = async () => ({ json: { verdicts: [{ n: 1, verdict: 'neutral', note: 'Fine.' }, { n: 2, verdict: 'neutral', note: 'Fine.' }], summary: 'ok' }, provider: 'test', ms: 1 });
+  seen = []; assert.equal((await post({ kind: 'essay', type: 'structure', text: PARA })).status, 200);
+  assert.ok(taskIn(seen[0]), 'paragraph path: the title reaches the reading as the task');
+  assert.doesNotMatch(seen[0].prompt, /1\. Should schools start later/);
+  seen = []; assert.equal((await post({ kind: 'essay', type: 'structure', text: PARA, task: 'My own task.' })).status, 200);
+  assert.ok(seen[0].prompt.includes('My own task.') && !taskIn(seen[0]));
+  seen = []; assert.equal((await post({ kind: 'essay', type: 'structure', text: 'Schools start too early. Teenagers are tired.' })).status, 200);
+  assert.doesNotMatch(seen[0].prompt, /The task the writing answers/);
+});

@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { adultSay, playbookTitle, adultSeat, englishOnlyFor, playbookLine, paragraphCount, paragraphPending, paragraphState, pieceBeingRead, pieceReadingLine, readingAPiece, forensicPlace, forensicLead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
+import { adultSay, playbookTitle, adultSeat, englishOnlyFor, playbookLine, paragraphCount, paragraphPending, paragraphState, pieceBeingRead, pieceReadingLine, readingAPiece, forensicPlace, forensicLead, forensicTitle, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, forensicStops, rewriteStatus, planStops, essayHandoffOf, essayHandoffLine, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS, curtainOn, type ForensicStop } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -352,7 +352,7 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
   return (<>
     <Brand /><Top s={s} menu="Table" lit={lit} />
     <Rail a={a} cur={i} verdicts={verdicts} />
-    <Page key={sn.n} curtain={curtain} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} wait={essayHandoffLine(s)} unruled={unruledCaption(a.piece, sn.para ?? 0)} pending={paragraphPending(a.piece, sn.para ?? 0)} />
+    <Page key={sn.n} curtain={curtain} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} title={forensicTitle(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} wait={essayHandoffLine(s)} unruled={unruledCaption(a.piece, sn.para ?? 0)} pending={paragraphPending(a.piece, sn.para ?? 0)} />
     <nav className="em-acts">
       {stops.map((k, j) => (
         <div key={k} className={`em-pill em-act${j === 0 ? " prim" : ""}${stopAt(stops, s.focus) === k ? " is-focused" : ""}`} data-focused={stopAt(stops, s.focus) === k} {...(j === 0 ? { "data-role": "essay-primary" } : {})}>
@@ -395,7 +395,7 @@ function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<num
 }
 
 /** The one sentence the page is about. Keyed by sentence, so moving along the paragraph remounts it (and its fit). */
-function Page({ curtain, sn, n, place, lead, v, lens, type, inked, job, wait, unruled, pending }: { curtain?: boolean; sn: Sent; n: number; place: string; lead: string; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean; job?: Job; wait?: string | null; unruled?: { label: string; text: string } | null; pending?: boolean }) {
+function Page({ curtain, sn, n, place, lead, title, v, lens, type, inked, job, wait, unruled, pending }: { curtain?: boolean; sn: Sent; n: number; place: string; lead: string; title?: string | null; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean; job?: Job; wait?: string | null; unruled?: { label: string; text: string } | null; pending?: boolean }) {
   const main = useRef<HTMLElement>(null);
   const t = teaching(v, type);
   const vd = v?.verdict ?? "neutral", state = rewriteState(v);
@@ -435,6 +435,7 @@ function Page({ curtain, sn, n, place, lead, v, lens, type, inked, job, wait, un
   return (
     <section className="em-main em-rise" ref={main}>
       <div className="em-crumb em-lbl">{ICON[lens.id]}<span className="em-ln">{lens.name}</span><span>· {place} · first guess: {sn.role}</span></div>
+      {title && <div className="em-lbl" data-role="essay-title">Title · {title}</div>}
       {lead && <div className="em-lbl" data-role="essay-lead">{lead}</div>}
       <div className="em-sent" data-role="essay-sentence">{curtain ? <>Sentence {sn.n} &middot; the words are on the PC page and the phone</> : <><span className="em-q" aria-hidden="true">“</span><SentenceText text={sn.text} faulty={vd === "faulty"} /></>}</div>
       <div className="em-note" data-role="essay-problem" data-verdict={vd}><Caption label={noteCap.label} text={noteCap.text} /></div>

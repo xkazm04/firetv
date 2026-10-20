@@ -131,6 +131,9 @@ export function readTitle(text: unknown): { title: string | null; body: string }
 /** The title line of a text, or null (see readTitle). paragraphsOf leaves it out; a caller that shows or keeps the piece reads it here. */
 export const titleOf = (text: unknown): string | null => readTitle(text).title;
 
+/** The title line the forensic page shows for a reading (L1-daniel-15-EM3-2): the title of the text being read, or null. */
+export const forensicTitle = (a: { text?: unknown } | null | undefined): string | null => titleOf(a?.text);
+
 /**
  * Two limits on what the phone may send. Neither is measured: they are set conservatively (a file of a few pages
  * is well under 100 KB of plain text; 4000 characters is about 650 words, far past any one paragraph a learner of

@@ -2172,3 +2172,20 @@ test('L1-helena-46-EM1-1: the plan heading and the empty lens home label say mes
  assert.match(plan(adult),/Your message, one sentence at a time/);assert.ok(!/paragraph/i.test(plan(adult).replace(/Your plan.*$/,'')||''),'adult plan heading');
  assert.match(home(fam),/First paragraph/);assert.match(plan(fam),/Your paragraph, one sentence at a time/);
 });
+
+test('L1-daniel-15-EM3-2: the title is not a paragraph or a sentence, and the forensic page shows it only when there is one',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const body='Phones distract students. They check them in class.';
+ const t='Phones in School\n\n'+body;
+ assert.deepEqual(R.paragraphsOf(t),[body]);
+ assert.equal(R.splitSentences(t).length,2);assert.equal(R.splitSentences(t)[0].text,'Phones distract students.');
+ assert.equal(R.forensicTitle({text:t}),'Phones in School');
+ assert.equal(R.forensicTitle({text:body}),null);
+ assert.equal(R.forensicTitle(null),null);
+ assert.equal(R.forensicTitle({text:'Should phones be banned?\n\n'+body}),null,'a question line stays as readTitle decides');
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ assert.match(tv,/title=\{forensicTitle\(a\)\}/);assert.match(tv,/\{title && <div className="em-lbl" data-role="essay-title">/);
+ const route=fs.readFileSync(path.join(root,'src/app/api/analyse/route.ts'),'utf8');
+ assert.equal((route.match(/task: taskFor\(body\)/g)||[]).length,2,'both paths take the task from taskFor');
+ assert.match(route,/taskOf\(body\.task\) \?\? taskOf\(titleOf\(body\.text\)\)/);
+});

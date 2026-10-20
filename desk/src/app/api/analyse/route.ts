@@ -8,7 +8,7 @@ import { dispatch, getSession, NOBODY_AT_DESK, type AskKind } from "@/lib/sessio
 import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence, type ReadingFor } from "@/lib/desk/essay";
 import { BUSY, blocksRun, refused, runJob, type JobRun } from "@/lib/desk/job";
-import { ANALYSIS_TYPES, essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, type AnalysisType } from "@/lib/rules/essay";
+import { ANALYSIS_TYPES, essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, titleOf, type AnalysisType } from "@/lib/rules/essay";
 import { addPiece, addVersion, FORMAT_NEEDED_LINE, getPiece, hasFormat, matchPiece, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { roleFrom } from "@/lib/session/pairing";
 import { learnerAge } from "@/lib/rules/voice";
@@ -52,6 +52,8 @@ function readingStands(run: JobRun, owner: string): boolean {
 const TASK_MAX = 400;
 /** The task the paragraph answers, when the send names one: a plain trimmed string, or nothing. */
 const taskOf = (t: unknown): string | undefined => (typeof t === "string" && t.trim() ? t.trim().slice(0, TASK_MAX) : undefined);
+/** The task a reading carries: the one the send names, else the title line on top of the text (L1-daniel-15-EM3-2), else none. */
+const taskFor = (body: { task?: unknown; text?: unknown }): string | undefined => taskOf(body.task) ?? taskOf(titleOf(body.text));
 
 /**
  * A whole piece read paragraph by paragraph while the TV fills in: the one run the phone's piece and the Workroom's kept
@@ -185,7 +187,7 @@ async function post(req: Request) {
       if (kept.ok) pieceId = kept.value.id;
       else return NextResponse.json({ error: kept.error }, { status: kept.status });
     }
-    const r = await readPiece(who, body.text, body.type, age, { pieceId, format: body.format, reader: { mode, task: taskOf(body.task) } });
+    const r = await readPiece(who, body.text, body.type, age, { pieceId, format: body.format, reader: { mode, task: taskFor(body) } });
     return r.ok ? NextResponse.json(r.value) : refused(r);
   }
   // one paragraph per reading: a longer text is refused with a sentence, never cut down (the cap is in rules/essay,
@@ -198,7 +200,7 @@ async function post(req: Request) {
   if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });
   const r = await runJob("analyse", async () => {
     dispatch({ type: "essay.type", essayType: body.type, owner: who.id });
-    const a = await analyseEssay(body.text, body.type, who.id, age, { mode, task: taskOf(body.task) });
+    const a = await analyseEssay(body.text, body.type, who.id, age, { mode, task: taskFor(body) });
     dispatch({ type: "essay.set", analysis: a, owner: who.id });
     return a;
   }, { key: "essay", start: `reading your paragraph — ${body.type} lens…`, done: (a) => a.summary.slice(0, 120) });
