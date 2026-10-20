@@ -167,6 +167,8 @@ function context(c:Conversation,invite=true,now?:{text:string;supported:boolean}
   return {scene:sceneInput(c),...(step?{currentStep:step}:{}),preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",...(conversationBand(placement)!==placement.band?{spokenAnswersAt:spokenBand(placement.tasks)}:{}),practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18),...(bring?{bringBack:bring}:{}),...(roomLine?{roomLine}:{}),...(c.moments?.length?{taughtThisScene:c.moments.map(m=>({said:m.said,better:m.better}))}:{}),...(c.lost?{lostProperty:lostFacts(c.lost)}:{}),...duetInput(c)};
 }
 const PLAIN_NOTE="Say it this way. It is easier to hear.";
+/** A beginner's note dropped for a grammar term: the coach's own checked after line when it has one (recert-13 LT-viktor-67-J4-4), else the generic one. */
+const plainNote=(after:string)=>after?`Say: ${after}`:PLAIN_NOTE;
 const beginner=(c:Conversation)=>easyBand(isBand(c.preferences.level)?c.preferences.level:"A1");
 /**
  * The replay step, one implementation for both ways in: the learner's coach then replay, and Back on a moment (LG-4, owner
@@ -764,7 +766,7 @@ export async function englishCommand(raw:unknown){
       if(audienceSafe(c,line(result.json.after,180))===null||audienceSafe(c,line(result.json.note,220))===null)throw new Error("The coach note did not fit this learner.");if(!before||!coached.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
       // a beginner's coaching keeps their tense, and a note with a grammar term gives way to a plain one (plain.ts)
       if(beginner(c)&&!keepsTense(before,line(result.json.after,180)))throw new Error("The coach changed the learner's tense.");
-      next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:quoteAsked(beginner(c)&&hasGrammarTerm(line(result.json.note,220))?PLAIN_NOTE:line(result.json.note,220),c.partner,answeredBy(c,coached.id)?.text??""),...(finishing?{atFinish:true as const}:{})},quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
+      next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:quoteAsked(beginner(c)&&hasGrammarTerm(line(result.json.note,220))?plainNote(line(result.json.after,180)):line(result.json.note,220),c.partner,answeredBy(c,coached.id)?.text??""),...(finishing?{atFinish:true as const}:{})},quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
     }else{
       const {partner,patch}=replayed(c,result.json,framed);
       // after Back (LG-4): a gate's redirect line or a question asked before is no replay; the catch returns to the conversation

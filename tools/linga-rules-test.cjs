@@ -3926,3 +3926,12 @@ test('hasGrammarTerm: "Use did" and "Use are" are termed; plain advice is not',(
  for(const t of ['Use did for school today.','Use are here.','use a before cat','Try: use the.'])assert.equal(hasGrammarTerm(t),true,t);
  for(const t of ['Say: I eat tomatoes','Use simple words.','Say it this way.','You used a good word.','Please reuse it.'])assert.equal(hasGrammarTerm(t),false,t);
 });
+
+// ---- a dropped termed note becomes "Say: <after>" (recert-13 LT-viktor-67-J4-4) ----
+test('a beginner coach note with a grammar term becomes Say: <the coach\'s own after line>',async()=>{
+ await bandStart('ema','A1','Hello!',()=>({reply:'Fine.',observations:[],moment:NO_MOMENT}));await reply('School good?');
+ const was=answer;
+ answer=async r=>{const p=JSON.parse(r.prompt);if(p.task?.startsWith('Coach'))return {json:{before:'School good?',after:'Is school good?',note:'Use the verb is.'},provider:'test',ms:1};return was(r);};
+ await command('coach');answer=was;
+ assert.equal(getSession().conversation.coaching.note,'Say: Is school good?');
+});
