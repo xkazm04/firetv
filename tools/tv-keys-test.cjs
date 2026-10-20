@@ -1264,3 +1264,22 @@ test('stick pass 2026-10-20: Select on Joined with no one seated opens the learn
  assert.equal(rest.length,1);assert.equal(rest[0].screen,'landing','a seated learner goes to the desk');
  assert.equal(tvKey(session({screen:'joined',learner:null}),'back',LOCAL).events[0].screen,'landing','Back is the desk, seated or not');
 });
+
+test('stick pass 2026-10-20: Sentence help with nothing checked yet draws its one stop, Try a sentence; Select opens the ask, the lamp stays on it, and the caption follows the open ask',()=>{
+ const {tvKey}=keys();
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server'));
+ const {createElement}=require(path.join(root,'node_modules/react'));
+ // next/font runs only under Next: each face module answers with its class names, as in tv-recap-test
+ for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){
+  const file=path.join(root,'src',f);if(require.cache[file])continue;const m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
+ const {SentenceScreen}=require(path.join(root,'src/tv/screens.tsx'));
+ const empty=session({subject:'english',screen:'sentence',english:null,focus:0,phonesLive:1});
+ const h=renderToStaticMarkup(createElement(SentenceScreen,{s:empty,focus:0}));
+ assert.match(h,/<button class="btn" data-focused="true">Try a sentence<\/button>/,'the stop Select acts on is drawn and lit');
+ assert.match(h,/Select: say one sentence on your phone/);
+ assert.deepEqual(tvKey(empty,'select',LOCAL).events.filter(e=>e.type==='ask.open'),[{type:'ask.open',kind:'sentence'}]);
+ for(const k of ['left','right'])assert.deepEqual(tvKey(empty,k,LOCAL).events,[],`${k}: no hidden Show me the unit to walk to`);
+ assert.deepEqual(tvKey({...empty,focus:1},'select',LOCAL).events.filter(e=>e.type==='nav'),[],'a stale focus does not open the unit with no sentence');
+ const asked={...empty,ask:{id:'a1',kind:'sentence',learner:'ema',screen:'sentence',at:0,phase:'open'}};
+ assert.match(renderToStaticMarkup(createElement(SentenceScreen,{s:asked,focus:0})),/On the phone: your sentence\. Back cancels\./,'while the ask is open the caption says so');
+});

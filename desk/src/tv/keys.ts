@@ -519,8 +519,9 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "menu") o.nav(s.subject === "english" ? "headtohead" : s.subject === "essay" ? "xray" : "calendar");
   },
   sentence: (s, k, _, o) => {
-    const at = stopAt(SENTENCE_STOPS, s.focus);
-    if (k === "left") o.move(SENTENCE_STOPS.length, -1); if (k === "right") o.move(SENTENCE_STOPS.length, 1);
+    // nothing checked yet: Try a sentence is the one stop drawn, so the lamp stays on it (Show me the unit needs a sentence)
+    const at = s.english ? stopAt(SENTENCE_STOPS, s.focus) : "again";
+    if (s.english && k === "left") o.move(SENTENCE_STOPS.length, -1); if (s.english && k === "right") o.move(SENTENCE_STOPS.length, 1);
     if (k === "select" && at === "unit") o.nav("headtohead");
     if (k === "select" && at === "again") { o.ev({ type: "status", text: "say or type another sentence on the phone" }); o.ev({ type: "ask.open", kind: "sentence" }); }
     if (k === "back") { if (!cancelAsk(s, o)) o.nav("linga"); }

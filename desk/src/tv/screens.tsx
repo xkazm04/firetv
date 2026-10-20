@@ -242,7 +242,9 @@ export function SentenceScreen({ s, focus }: { s: Session; focus: number }) {
     <main className="content-full">
       <div className="eyebrow" style={{ marginTop: 40 }}>English · your sentence</div>
       <div className="title" style={{ marginTop: 50 }}>Nothing yet</div>
-      <div style={{ position: "absolute", left: 0, bottom: 216 }}><span className="cap">Your turn</span><div className="cap-text">Say one sentence on your phone; the TV shows what the time word decides.</div></div>
+      <div style={{ position: "absolute", left: 0, bottom: 216 }}><span className="cap">{essayHandoffOf(s) ? "On your phone" : "Your turn"}</span><div className="cap-text" data-role="sentence-empty-line">{essayHandoffLine(s) ?? "Select: say one sentence on your phone; the TV shows what the time word decides."}</div></div>
+      {/* the one stop of an empty screen, drawn: Select opens the sentence hand-off (stick pass 2026-10-20 found it hidden) */}
+      <div className="actions" style={{ bottom: 60 }}><button className="btn" data-focused="true">Try a sentence</button></div>
     </main>
   </>);
   const { card } = a;
