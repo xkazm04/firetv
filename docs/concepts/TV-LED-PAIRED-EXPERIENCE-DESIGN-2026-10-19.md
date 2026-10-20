@@ -449,6 +449,21 @@ The tv-phone-pairing feature stands at full fail. Full r3 had robustness at 0.40
 - **OD7. How the pairing reaches its decision (ask 276c835a).** (a) A council lite r2 after TL-2, TL-3 and TL-4 (the App
   Master's earlier lean). (b) One full round 4, as an exception to "there is no round 4". (c) A decision on the record,
   with the known limits above.
+  **Status: resolved (c), a decision on the record.** Chosen by the operator on 2026-10-20 in terminal triage.
+  - The constraint that forced it: tv-phone-pairing has used all three lite and all three full council rounds, so a fourth
+    round is refused. It now goes to the operator as a Report, with no more council rounds.
+  - Lost: (a), because a lite r2 is a round 4 under another name and the rounds are spent; (b), because it is the exception
+    to "there is no round 4" that the rule exists to prevent.
+  - Evidence: the stick pass, in `artifacts/stick-2026-10-20/` and `docs/concepts/STICK-PASS-FOLLOWUPS-SESSION-2026-10-20.md`
+    (that doc is not in this tree yet; it is not merged here).
+  - Known limits, stated plainly:
+    - F0: the stick browser (Silk) does not pass the D-pad, Select, Back or Menu to the page. A new stick-app WebView APK is
+      being built to address it; its walk will be recorded in `docs/concepts/STICK-APK-WALK-2026-10-20.md`. That walk is not
+      merged yet, and no result of it is claimed here.
+    - The three council must-address lines on tv-phone-pairing stay open, as the lines the council reported (see "After the
+      slices: the council"; the full text is in the council run). One is the ask door that checks the ask id but not its kind
+      (`desk/src/lib/session/phoneAsk.ts:21`). Note: `phoneAsk.ts:28` now compares the kind (`1601ce3b`, lite r3 H1), so this
+      line may already be closed in code; the council has not re-judged it.
 - **OD8. When Linga's `reply` hand-off opens.** (a) By itself, as the learner's turn begins: the fewest presses, and
   what "Phone speaks" means today. (b) On Select of "Answer on the phone": the TV leads even that step. Lean: (a).
 - **OD9. Writing as its own app.** (a) No: Writing is the composing flows inside Linga and Essay Master (1.6). (b) A
@@ -608,7 +623,7 @@ Not yet walked on the stick.
 
 | # | Finding | Where |
 |---|---|---|
-| F0 | In Silk, the D-pad, Select, Back and Menu never reach the page; only Play/Pause does. The TV-led design cannot run in the stick's browser | platform: a WebView wrapper (`tv-app/`) or a Fire TV web app; operator question |
+| F0 | In Silk, the D-pad, Select, Back and Menu never reach the page; only Play/Pause does. The TV-led design cannot run in the stick's browser | platform chosen (OD7, 2026-10-20): the stick-app WebView APK; still open until its walk lands in `docs/concepts/STICK-APK-WALK-2026-10-20.md` (not yet merged) |
 | F6 | The `rewrite` and `slot` panels carry the whole paragraph composer, with its Analyse on the TV and the shelf; section 2.2 lists one field, Dictate and Send | `desk/src/app/phone/page.tsx:857`, `:863`, pinned by `tools/phone-panel-test.cjs:1183-1208` |
 | F16 | Read it on the plan gets a 428 when the learner has not seen the text notice, and the TV shows nothing | `desk/src/app/api/analyse/route.ts:203`; `desk/src/essay/EssayTV.tsx` has no line for a refused read |
 | F17 | `essay.slot` does not close the `slot` ask: it stays open with `detail.i` 0 after all three slots, and the TV keeps "On your phone" | `desk/src/lib/session/store.ts:863` |
