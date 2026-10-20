@@ -44,12 +44,23 @@ object KeyBridge {
     fun pageKeyOf(androidKeyCode: Int): PageKey? = TABLE[androidKeyCode]
 
     /**
-     * A keydown then a keyup on the focused element (the page listens on window, so it bubbles there). The script's
-     * value is whether the page took the keydown: keys.ts and LingaTV call preventDefault on every key they map.
+     * The desk's /tv page is also the operator's bench: its button bar hides only under `:fullscreen`
+     * (desk/src/app/globals.css), and a WebView has no fullscreen without a user gesture. The stick shows the stage alone.
+     */
+    const val STAGE_ONLY = "(function(){if(document.getElementById('stick-stage-only'))return;" +
+        "var s=document.createElement('style');s.id='stick-stage-only';" +
+        "s.textContent='.bench > .bar{display:none !important}';document.head.appendChild(s);" +
+        "var a=document.activeElement;if(a&&a.blur&&a!==document.body)a.blur();})()"
+
+    /**
+     * A keydown then a keyup on the focused element (the page listens on window, so it bubbles there), or on the stage
+     * when nothing on it has focus: LingaTV ignores a key whose target is in the bench's `.bar`. The script's value is
+     * whether the page took the keydown: keys.ts and LingaTV call preventDefault on every key they map.
      */
     fun script(k: PageKey): String {
         val init = "{key:'${k.key}',code:'',keyCode:${k.keyCode},which:${k.keyCode},bubbles:true,cancelable:true}"
-        return "(function(){var t=document.activeElement||document.body||document.documentElement;" +
+        return "(function(){var a=document.activeElement;" +
+            "var t=(a&&a!==document.body&&!(a.closest&&a.closest('.bar')))?a:(document.querySelector('.stage')||document.body||document.documentElement);" +
             "var o=$init;var d=new KeyboardEvent('keydown',o);" +
             "try{Object.defineProperty(d,'keyCode',{get:function(){return o.keyCode}});" +
             "Object.defineProperty(d,'which',{get:function(){return o.keyCode}});}catch(e){}" +

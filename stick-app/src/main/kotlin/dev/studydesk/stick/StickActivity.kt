@@ -44,6 +44,7 @@ class StickActivity : Activity() {
             settings.mediaPlaybackRequiresUserGesture = false
             webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = false
+                override fun onPageFinished(view: WebView, url: String) { view.evaluateJavascript(KeyBridge.STAGE_ONLY, null) }
                 override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
                     if (request.isForMainFrame) showNotice("Cannot reach the desk at $url\n(${error.description})")
                 }
@@ -67,7 +68,8 @@ class StickActivity : Activity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        point(intent)
+        // the launcher tile on a running desk only brings it forward; a new address reloads
+        if (!intent.getStringExtra(EXTRA_URL).isNullOrBlank()) point(intent)
     }
 
     /** The address comes from the intent's `url` extra, else the one kept from last time, else the default. */
