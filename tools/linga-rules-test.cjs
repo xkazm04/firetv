@@ -1136,7 +1136,7 @@ test('K1 case 6: a slip taught twice merges into one Taught item; "My tomatoes a
  const R=review();
  assert.equal(R.findPhrase('My tomatoes are big.',VIKTOR.better),null,'today\'s whole-sentence test: null');
  // the moment Linga made in the next scene on the same slip, said in a new sentence
- let c=await slipStart([VIKTOR],()=>({reply:'Lovely! How big is it now?',observations:[],moment:{kind:'fix',said:'My tomatoes is big.',better:'My tomatoes are big.',why:'Tomatoes is plural, so it takes are.'}}));
+ let c=await slipStart([VIKTOR],()=>({reply:'Lovely! How big is it now?',observations:[],moment:{kind:'fix',said:'My tomatoes is big.',better:'My tomatoes are big.',why:'More than one tomato takes are.'}}));
  assert.equal(c.review.id,VIKTOR.id);assert.equal(c.review.fix,'tomatoes are');
  await reply('I have tomatoes. My tomatoes is big.');
  // K2: the moment joins the scene's moments, and merges into the record, when it closes
@@ -2421,7 +2421,7 @@ test('UD-10: context() carries this scene\'s moments as taughtThisScene, and the
 
 // ---- K2 self-repair: a fix moment asks for the learner's line before it shows the fix (repair.ts; LG-4, the withhold option)
 /** The 2026-10-14 LT moment on Viktor's line, as the tutor would return it for this reply. */
-const TOMATO={said:'My tomatoes is one metre',better:'My tomatoes are one metre',why:'Tomatoes is plural, so it takes are.'};
+const TOMATO={said:'My tomatoes is one metre',better:'My tomatoes are one metre',why:'More than one tomato takes are.'};
 let k2Calls=0;
 /** A learner at `level` in a scene where the next reply yields the tomato moment; every model call is counted. */
 async function k2Moment({level='B1',partner='Lovely! Is that big for a tomato plant?',moment={kind:'fix',...TOMATO},observations=[]}={}){
@@ -3265,7 +3265,7 @@ test('supported flag 2 (adela-17 J4 #7, petra-38 J4 #8 #12 #18, tomas-9 J4 #10):
  await reply('I would fly only for very long trips.');
  assert.deepEqual(flags(),[false,false],'the reply after the moment is the learner\'s own');
  // Show me on a fix moment, then an own reply on the new question (petra-38 #9-#12, #15-#18): the shown fix helped the try, not the next answer
- await recertScene(p=>p.submittedReply.includes('arrive yesterday')?{reply:'What did you do after that?',moment:{kind:'fix',said:'you arrive yesterday',better:'you arrived yesterday',why:'A finished event takes the past.'}}:{reply:'And then?'});
+ await recertScene(p=>p.submittedReply.includes('arrive yesterday')?{reply:'What did you do after that?',moment:{kind:'fix',said:'you arrive yesterday',better:'you arrived yesterday',why:'Yesterday asks for arrived.'}}:{reply:'And then?'});
  await reply('I think you arrive yesterday at four.');
  await command('moment-show');assert.equal(getSession().conversation.supported,false,'Show me helps the try, not the next reply');
  await momentTry('I think you arrived yesterday at four.');await command('moment-done');
@@ -3273,7 +3273,7 @@ test('supported flag 2 (adela-17 J4 #7, petra-38 J4 #8 #12 #18, tomas-9 J4 #10):
  await reply('After that I go to my room and sleep.');
  assert.deepEqual(flags(),[false,false],'petra-38 #12: no help used for this answer');
  // ...but a reply that reads back the shown fix is supported (copiesShown over the scene's shown lines)
- await recertScene(p=>p.submittedReply.includes('arrive yesterday')?{reply:'Is that right?',moment:{kind:'fix',said:'you arrive yesterday at four',better:'you arrived yesterday at four o\'clock',why:'A finished event takes the past.'}}:{reply:'Good.'});
+ await recertScene(p=>p.submittedReply.includes('arrive yesterday')?{reply:'Is that right?',moment:{kind:'fix',said:'you arrive yesterday at four',better:'you arrived yesterday at four o\'clock',why:'Yesterday asks for arrived.'}}:{reply:'Good.'});
  await reply('I think you arrive yesterday at four.');await command('moment-show');await command('moment-done');
  await reply('Yes, you arrived yesterday at four o\'clock.');
  assert.equal(lastLearner().supported,true,'a line copied from what was shown is help used');
@@ -3867,4 +3867,28 @@ test('Linga stuck coach: a scene whose cue is no sendable phrase gives the help 
  let calls=0;const was=answer;answer=async r=>{calls++;return was(r);};
  await command('coach');answer=was;
  const c=getSession().conversation;assert.equal(calls,0);assert(c.cue!==''||c.quizOpen,'some help came: a cue or the phrase quiz');
+});
+
+// ---- Linga plain coaching (recert-12 LT-viktor-67-J4-5, recert-13 LT-viktor-67-J4-4): at A1 coaching keeps the tense, names no grammar term ----
+async function plainCoach(coach){
+ await bandStart('ema','A1','Hello! Can you see me?',()=>({reply:'Fine. What else?',observations:[],moment:NO_MOMENT}));
+ await reply('You have school?');
+ const was=answer;answer=async r=>JSON.parse(r.prompt).task?.startsWith('Coach')?{json:coach,provider:'test',ms:1}:was(r);
+ try{await command('coach');}finally{answer=was;}
+ return getSession().conversation;
+}
+test('Linga plain coaching: an A1 coach note with a grammar term is replaced by a plain one, and the learner\'s own words are quoted',async()=>{
+ const c=await plainCoach({before:'You have school?',after:'Do you have school?',note:'Use the subject and the verb in the present tense.'});
+ assert.equal(c.coaching.after,'Do you have school?');assert(!/subject|verb|tense/i.test(c.coaching.note),c.coaching.note);
+});
+test('Linga plain coaching: an A1 coach that moves "You have school?" into the past is refused',async()=>{
+ await assert.rejects(plainCoach({before:'You have school?',after:'Did you have school?',note:'Ask about the day.'}));
+ assert.equal(getSession().conversation.coaching,null);
+});
+test('Linga plain coaching: the A1 coach task asks for the same, a B1 one does not',async()=>{
+ let sent=null;const was=answer;
+ await bandStart('ema','A1','Hello!',()=>({reply:'Fine.',observations:[],moment:NO_MOMENT}));await reply('You have school?');
+ answer=async r=>{const p=JSON.parse(r.prompt);if(p.task?.startsWith('Coach'))sent=p.task;return {json:{before:'You have school?',after:'Do you have school?',note:'Good.'},provider:'test',ms:1};};
+ await command('coach');answer=was;
+ assert(/never turn it into the past/.test(sent),sent);
 });

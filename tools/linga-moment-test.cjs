@@ -679,7 +679,7 @@ test('recert-10: "I am tired and I want sleep" at A2, passed by the tutor as kin
   // a correct reply, a style choice: nothing held
   assert.deepEqual(C.momentOutcome(c,{raw:NONE,reply:'I am tired and I want to sleep.',turnId:'t2',mayStop:true,fossil:null,safe:minorSafe}),{moment:null,held:null});
   // the model's own fix still wins, and a fix it gave that the checks dropped stays dropped (no code fix in its place)
-  const own=C.momentOutcome(c,{raw:{kind:'fix',said:'want sleep',better:'want to sleep',why:'want to + verb.',hold:true},reply:PETRA_TIRED,turnId:'t2',mayStop:true,fossil:null,safe:minorSafe});
+  const own=C.momentOutcome(c,{raw:{kind:'fix',said:'want sleep',better:'want to sleep',why:'Say "want to sleep".',hold:true},reply:PETRA_TIRED,turnId:'t2',mayStop:true,fossil:null,safe:minorSafe});
   assert.equal(own.held.said,'want sleep');
   assert.equal(C.momentOutcome(c,{raw:{kind:'fix',said:'want sleeping',better:'want to sleep',why:'x'},reply:PETRA_TIRED,turnId:'t2',mayStop:false,fossil:null,safe:minorSafe}).held,null);
   // correction off: nothing is held
@@ -939,4 +939,27 @@ test('recert-12 (1) rules: a Back replay question over the learner band is refus
   assert.match(replayRefused(over,'have a cat',x.moment.better,undefined,'A1'),/above the learner's level/,'the recert-12 line at A1');
   assert.equal(replayRefused(over,'have a cat',x.moment.better),null,'no band, no hold');
   assert.equal(replayRefused(ok,'have a cat',x.moment.better,frame,'A1'),null,'in band and in the scene still passes');
+});
+
+// recert-12 LT-viktor-67-J4-5 / recert-13 LT-viktor-67-J4-4: at A1-A2 a fix keeps the learner's tense and explains in no grammar term
+const PLAIN_RAW=(better,why)=>({kind:'fix',said:'You have school?',better,why});
+const plainOut=(level,raw)=>{
+  const c=scene(level,['You have school?'],[]),o={c,raw,reply:'You have school?',turnId:'t0',safe:()=>true};
+  return C.momentOutcome(c,{...o,mayStop:true,fossil:null});
+};
+test('A1-A2: "You have school?" is never rewritten into the past, and a why with a grammar term drops the fix',()=>{
+  for(const level of ['A1','A2']){
+    assert.equal(plainOut(level,PLAIN_RAW('Did you have school?','Ask about the day.')).moment,null,`${level} past tense`);
+    assert.equal(plainOut(level,PLAIN_RAW('Do you have school?','Use the subject and the verb: do you.')).moment,null,`${level} jargon`);
+    assert.equal(plainOut(level,PLAIN_RAW('Do you have school?','This is how we ask.')).moment?.better,'Do you have school?',`${level} plain fix stays`);
+  }
+});
+test('B1 and above keep the fix as before (tense change and a grammar word are allowed)',()=>{
+  assert.equal(plainOut('B1',PLAIN_RAW('Did you have school?','Use the past tense for yesterday.')).moment?.better,'Did you have school?');
+});
+test('the beginner moment and coach tasks ask for the learner\'s tense and no grammar words',()=>{
+  const {PLAIN_TASK,keepsTense,hasGrammarTerm}=require(path.join(root,'src/lib/english/plain.ts'));
+  assert.ok(C.momentTaskFor(true).includes(PLAIN_TASK));assert.ok(!C.momentTaskFor(false).includes(PLAIN_TASK));
+  assert.equal(keepsTense('I go to school','I went to school'),false);assert.equal(keepsTense('I want sleep','I want to sleep'),true);
+  assert.equal(keepsTense('We need a room','We need a room, please'),true);assert.equal(hasGrammarTerm('Say it like this.'),false);
 });
