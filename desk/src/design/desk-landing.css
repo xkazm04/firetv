@@ -49,6 +49,8 @@
 @keyframes pp-card { from { translate: 90px 40px; opacity: 0; rotate: 10deg; } to { translate: 0 0; opacity: 1; rotate: 0deg; } }
 
 /* ----- the world in the light ----- */
+/* the sky of the world in the light, under the arrival and the layers: what shows while a world's layers raster */
+.pp .pp-sky { position: absolute; inset: 0; z-index: 0; }
 .pp .pp-worlds { position: absolute; inset: 0; z-index: 1; }
 .pp .pp-host { position: absolute; inset: 0; transform-origin: 1920px 560px; transition: transform .8s var(--pp-ease); }
 .pp .pp-host.pp-back { z-index: 0; } .pp .pp-host.pp-front { z-index: 2; }

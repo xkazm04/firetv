@@ -14,6 +14,19 @@ export interface Layer { d: number; k: "sky" | "soft" | "hill" | "hero"; back: b
 const L = (d: number, k: Layer["k"], back: boolean, node: ReactNode): Layer => ({ d, k, back, node });
 const f1 = (n: number) => Math.round(n * 10) / 10;
 
+/**
+ * Each world's sky, top to bottom over the stage's first 1000 px. The sky layer paints it as an SVG gradient, and the
+ * landing lays the same colours under the layers (skyBackdrop), so a world whose layers the GPU has not rastered yet
+ * shows its sky, never the bare paper (docs/concepts/STICK-WHITE-FRAME-2026-10-20.md).
+ */
+export const SKY: Record<"maths" | "english" | "essay", Array<[number, string]>> = {
+  maths: [[0, "#566cd8"], [0.42, "#8a9dea"], [0.78, "#d6dcf5"], [1, "#f6ecd9"]],
+  english: [[0, "#f38a5f"], [0.45, "#f7a878"], [0.78, "#fdd2a0"], [1, "#ffe6bd"]],
+  essay: [[0, "#68a382"], [0.42, "#9bc79b"], [0.75, "#d4e7bb"], [1, "#f2f1d3"]],
+};
+/** The CSS form of a world's sky for a 1080 px stage: the SVG gradient's stops at the same heights. */
+export const skyBackdrop = (app: keyof typeof SKY) => `linear-gradient(to bottom, ${SKY[app].map(([o, c]) => `${c} ${Math.round(o * 1000)}px`).join(", ")})`;
+
 // ---------------------------------------------------------------- Math Buddy: a paper staircase, one lantern, the top in a cloud
 
 const Plus = ({ x, y, s, r, fill }: { x: number; y: number; s: number; r: number; fill: string }) => (
@@ -37,7 +50,7 @@ export function mathsWorld(c: Extract<ArtState, { app: "maths" }>): Layer[] {
     ticks.push(<line key={i} x1={f1(Math.cos(a) * 208)} y1={f1(-Math.sin(a) * 208)} x2={f1(Math.cos(a) * r2)} y2={f1(-Math.sin(a) * r2)} stroke="#8f9de2" strokeWidth="3" strokeLinecap="round" />);
   }
   out.push(L(0.1, "sky", true, <>
-    <defs><SkyGradient id="mSky" stops={[[0, "#566cd8"], [0.42, "#8a9dea"], [0.78, "#d6dcf5"], [1, "#f6ecd9"]]} /></defs>
+    <defs><SkyGradient id="mSky" stops={SKY.maths} /></defs>
     <rect x="-1400" y="-900" width="4800" height="2800" fill={paint("mSky")} />
     <circle cx="1560" cy="560" r="440" fill={paint("rWarm")} opacity=".75" />
     <g transform="translate(1560 596)"><path d="M-214 0A214 214 0 0 1 214 0Z" fill={paint("gCream")} /><path d="M-162 0A162 162 0 0 1 162 0Z" fill="#fff0b0" /><path d="M-104 0A104 104 0 0 1 104 0Z" fill="#ffdc70" opacity=".7" />{ticks}</g>
@@ -112,7 +125,7 @@ export function mathsWorld(c: Extract<ArtState, { app: "maths" }>): Layer[] {
 export function englishWorld(c: Extract<ArtState, { app: "english" }>): Layer[] {
   const out: Layer[] = [], resume = c.resume, tonight = c.next;
   out.push(L(0.1, "sky", true, <>
-    <defs><SkyGradient id="lSky" stops={[[0, "#f38a5f"], [0.45, "#f7a878"], [0.78, "#fdd2a0"], [1, "#ffe6bd"]]} />
+    <defs><SkyGradient id="lSky" stops={SKY.english} />
       <mask id="pp-lMoon"><rect x="-100" y="-100" width="200" height="200" fill="#fff" /><circle cx="30" cy="-16" r="52" fill="#000" /></mask></defs>
     <rect x="-1400" y="-900" width="4800" height="2800" fill={paint("lSky")} />
     <circle cx="960" cy="730" r="520" fill={paint("rWarm")} opacity=".8" /><Circ x={960} y={730} r={250} fill={paint("gButter")} opacity={0.95} /><Circ x={960} y={730} r={190} fill="#fff6cc" opacity={0.55} />
@@ -226,7 +239,7 @@ export function PageBars({ sent, has }: { sent: number | null; has: boolean }) {
 export function essayWorld(c: Extract<ArtState, { app: "essay" }>): Layer[] {
   const out: Layer[] = [], sent = c.sent, has = c.sent != null || c.paras > 0;
   out.push(L(0.1, "sky", true, <>
-    <defs><SkyGradient id="eSky" stops={[[0, "#68a382"], [0.42, "#9bc79b"], [0.75, "#d4e7bb"], [1, "#f2f1d3"]]} /></defs>
+    <defs><SkyGradient id="eSky" stops={SKY.essay} /></defs>
     <rect x="-1400" y="-900" width="4800" height="2800" fill={paint("eSky")} />
     <circle cx="1660" cy="330" r="330" fill={paint("rCream")} opacity=".8" /><Circ x={1660} y={330} r={92} fill="#fff8e2" opacity={0.95} /><Circ x={1660} y={330} r={66} fill="#fffdf3" />
   </>));
@@ -265,7 +278,7 @@ export function essayWorld(c: Extract<ArtState, { app: "essay" }>): Layer[] {
 /** A desk with no app on it: the same sky and hills, nothing in front. */
 export function emptyWorld(): Layer[] {
   return [
-    L(0.1, "sky", true, <><defs><SkyGradient id="mSky" stops={[[0, "#566cd8"], [0.42, "#8a9dea"], [0.78, "#d6dcf5"], [1, "#f6ecd9"]]} /></defs><rect x="-1400" y="-900" width="4800" height="2800" fill={paint("mSky")} /></>),
+    L(0.1, "sky", true, <><defs><SkyGradient id="mSky" stops={SKY.maths} /></defs><rect x="-1400" y="-900" width="4800" height="2800" fill={paint("mSky")} /></>),
     L(0.34, "hill", true, <><Hill base={640} amp={34} seed={11} fill="#b8c2f2" /><Hill base={690} amp={30} seed={7} fill="#a2aeed" /></>),
     L(0.6, "hill", true, <><Hill base={752} amp={36} seed={23} fill="#8898e4" /><Hill base={806} amp={26} seed={5} fill="#6f81dc" /></>),
     L(1.25, "hero", false, <Hill base={940} amp={26} seed={91} fill={paint("gIndigo")} />),

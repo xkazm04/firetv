@@ -19,7 +19,7 @@ import { DESK_FONTS } from "@/landing/fonts";
 import { Defs } from "./shapes";
 import { HouseMark, Icon, PhoneGlyph, PostcardArt } from "./glyphs";
 import { Stamp } from "./stamps";
-import { worldFor, type Layer } from "./worlds";
+import { skyBackdrop, worldFor, type Layer } from "./worlds";
 import { afterFonts } from "@/lib/afterFonts";
 
 /** Each app's colours (its own deep, its shadow, its highlight, the letters' extrusion, the motes' glow). */
@@ -257,6 +257,9 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
   return (
     <div className={`desk-tv pp ${DESK_FONTS}`} data-role="desk-scene" data-theme="paper" data-lit={at} data-boot={boot || undefined} data-unpaired={unpaired || undefined} data-empty={view.empty || undefined} data-zoom={zoom ? "true" : undefined} style={theme}>
       <Defs />
+      {/* the world's sky under everything: until the GPU has rastered a world's layers (or the arrival's reveal has
+          reached them), the stage shows that sky, not the bare paper */}
+      <div className="pp-sky" aria-hidden="true" style={{ background: skyBackdrop(st.world ?? "maths") }} />
       {boot && <Intro />}
       <div className="pp-worlds">
         <div className="pp-host pp-back">
