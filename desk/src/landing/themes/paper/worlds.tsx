@@ -32,6 +32,12 @@ export const SKY: Record<"maths" | "english" | "essay", Array<[number, string]>>
 };
 /** The CSS form of a world's sky for a 1080 px stage: the SVG gradient's stops at the same heights. */
 export const skyBackdrop = (app: keyof typeof SKY) => `linear-gradient(to bottom, ${SKY[app].map(([o, c]) => `${c} ${Math.round(o * 1000)}px`).join(", ")})`;
+/**
+ * The sky's box: the layer (-140..2060 x 0..1080) and what a slide can bring into view (a world slides in or out by up to
+ * 288 px, rises 90 px). It was 4800 x 2800, a 9600 x 5600 px layer on the stick's GPU for a picture that is mostly
+ * off-stage; past this box the backdrop shows the same sky (docs/concepts/STICK-PERFORMANCE-2026-10-20.md).
+ */
+const SkyRect = ({ id }: { id: string }) => <rect x="-460" y="-120" width="2840" height="1320" fill={paint(id)} />;
 
 // ---------------------------------------------------------------- Math Buddy: a paper staircase, one lantern, the top in a cloud
 
@@ -57,7 +63,7 @@ export function mathsWorld(c: Extract<ArtState, { app: "maths" }>): Layer[] {
   }
   out.push(L(0.1, "sky", true, <>
     <defs><SkyGradient id="mSky" stops={SKY.maths} /></defs>
-    <rect x="-1400" y="-900" width="4800" height="2800" fill={paint("mSky")} />
+    <SkyRect id="mSky" />
     <circle cx="1560" cy="560" r="440" fill={paint("rWarm")} opacity=".75" />
     <g transform="translate(1560 596)"><path d="M-214 0A214 214 0 0 1 214 0Z" fill={paint("gCream")} /><path d="M-162 0A162 162 0 0 1 162 0Z" fill="#fff0b0" /><path d="M-104 0A104 104 0 0 1 104 0Z" fill="#ffdc70" opacity=".7" />{ticks}</g>
     <path d="M170 770Q880 60 1760 560" fill="none" stroke="#fff" strokeOpacity=".8" strokeWidth="5" strokeDasharray="1 19" strokeLinecap="round" />
@@ -133,7 +139,7 @@ export function englishWorld(c: Extract<ArtState, { app: "english" }>): Layer[] 
   out.push(L(0.1, "sky", true, <>
     <defs><SkyGradient id="lSky" stops={SKY.english} />
       <mask id="pp-lMoon"><rect x="-100" y="-100" width="200" height="200" fill="#fff" /><circle cx="30" cy="-16" r="52" fill="#000" /></mask></defs>
-    <rect x="-1400" y="-900" width="4800" height="2800" fill={paint("lSky")} />
+    <SkyRect id="lSky" />
     <circle cx="960" cy="730" r="520" fill={paint("rWarm")} opacity=".8" /><Circ x={960} y={730} r={250} fill={paint("gButter")} opacity={0.95} /><Circ x={960} y={730} r={190} fill="#fff6cc" opacity={0.55} />
     {tonight && <>
       <g transform="translate(1590 268)"><circle r="120" fill={paint("rCream")} opacity=".7" /><circle r="66" fill="#fff3c4" mask="url(#pp-lMoon)" /></g>
@@ -246,7 +252,7 @@ export function essayWorld(c: Extract<ArtState, { app: "essay" }>): Layer[] {
   const out: Layer[] = [], sent = c.sent, has = c.sent != null || c.paras > 0;
   out.push(L(0.1, "sky", true, <>
     <defs><SkyGradient id="eSky" stops={SKY.essay} /></defs>
-    <rect x="-1400" y="-900" width="4800" height="2800" fill={paint("eSky")} />
+    <SkyRect id="eSky" />
     <circle cx="1660" cy="330" r="330" fill={paint("rCream")} opacity=".8" /><Circ x={1660} y={330} r={92} fill="#fff8e2" opacity={0.95} /><Circ x={1660} y={330} r={66} fill="#fffdf3" />
   </>));
   out.push(L(0.22, "soft", true, <><Drift dur={22}><Cloud x={300} y={300} s={0.7} /></Drift><Drift dur={26} delay={-9}><Cloud x={1420} y={220} s={0.55} /></Drift></>));
@@ -284,7 +290,7 @@ export function essayWorld(c: Extract<ArtState, { app: "essay" }>): Layer[] {
 /** A desk with no app on it: the same sky and hills, nothing in front. */
 export function emptyWorld(): Layer[] {
   return [
-    L(0.1, "sky", true, <><defs><SkyGradient id="mSky" stops={SKY.maths} /></defs><rect x="-1400" y="-900" width="4800" height="2800" fill={paint("mSky")} /></>),
+    L(0.1, "sky", true, <><defs><SkyGradient id="mSky" stops={SKY.maths} /></defs><SkyRect id="mSky" /></>),
     L(0.34, "hill", true, <g><Hill base={640} amp={34} seed={11} fill="#b8c2f2" /><Hill base={690} amp={30} seed={7} fill="#a2aeed" /></g>),
     L(0.6, "hill", true, <g><Hill base={752} amp={36} seed={23} fill="#8898e4" /><Hill base={806} amp={26} seed={5} fill="#6f81dc" /></g>),
     L(1.25, "hero", false, <Hill base={940} amp={26} seed={91} fill={paint("gIndigo")} />),
