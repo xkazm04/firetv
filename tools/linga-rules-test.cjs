@@ -3892,3 +3892,18 @@ test('Linga plain coaching: the A1 coach task asks for the same, a B1 one does n
  await command('coach');answer=was;
  assert(/never turn it into the past/.test(sent),sent);
 });
+
+// ---- Linga replay keeps the scene's task (recert-13 LT-viktor-67-J4-3): the replay call is given the goal and the open step ----
+test('Linga replay on task: the replay call carries the scene goal and the open step, and its task asks to stay on them',async()=>{
+ let sent=null;
+ await bandStart('ema','B1','Hello!',()=>({reply:'Nice.',observations:[],moment:NO_MOMENT}));
+ const c0=getSession().conversation;dispatch({type:'linga.changed',conversation:{...c0,mission:{steps:['Ask Sam about school.'],reached:[]}}});
+ await reply('I build house.');
+ const was=answer;answer=async r=>{const p=JSON.parse(r.prompt);
+  if(p.task?.startsWith('Coach'))return {json:{before:'I build house',after:'I build a house',note:'Add a.'},provider:'test',ms:1};
+  if(p.coaching){sent=p;return {json:{reply:'Which house do you build?',form:'I build a house'},provider:'test',ms:1};}
+  return was(r);};
+ await command('coach');await command('replay');answer=was;
+ assert.equal(sent.sceneGoal,getSession().conversation.goal);assert.equal(sent.currentStep,'Ask Sam about school.');
+ assert(/Stay on the scene's task/.test(sent.task)&&/sceneGoal/.test(sent.task),sent.task);
+});
