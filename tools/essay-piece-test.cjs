@@ -503,7 +503,7 @@ test('UD-7: a kind essay paragraph from a learner who has not noticed: 428 TEXT_
   texts.deleteAll('ema'); seatAndMark();
   let r = await post({ kind: 'essay', text: E7_PARA, type: 'evidence' });
   assert.equal(r.status, 428); const body = await r.json(); assert.equal(body.notice, true); assert.equal(body.error, texts.TEXT_NOTICE);
-  assert.equal(seen.length, 0); assert.deepEqual(getSession().jobs, {}, 'no job'); assert.equal(status(), 'before');
+  assert.equal(seen.length, 0); assert.deepEqual(getSession().jobs, {}, 'no job'); assert.equal(status(), "Not read yet. Open the Essay tab on your phone and read the text notice first, then press OK on Read it again.");
 });
 
 // ---- recert-4 L1-helena-46-EM1-7: a one-paragraph piece opened from the shelf and changed reads as a new version of the same id ----
