@@ -74,10 +74,13 @@
     "verdict": "confirmed",
     "suggested_acceptance": "Either the item stores tex for the typesetter, or the field and its code are dropped.",
     "l2_priority": "none",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 12,
     "origin": "2026-10-14-l1/math-adult/L1-matyas-19-MB3-21",
-    "recurs": "2026-10-09-maths-l1/recert-11/L1-matyas-19-MB3-5"
+    "recurs": "2026-10-09-maths-l1/recert-11/L1-matyas-19-MB3-5",
+    "recertify_run": "2026-10-09-maths-l1/recert-13",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Fixed in e6ed58a8: desk/src/lib/rules/calc.ts question() and implicitQuestion and calc2.ts calc2Question and sequenceQuestion return { plain } only; the TeX-only helpers (numTex, approachTex, texXY in calc.ts, numTex in calc2.ts) and the toTex imports are gone. No file outside the pass's paths was needed (items.ts:420 reads q.plain). calc2-approx-test:153 and calc2-sequence-test:199 still deep-equal. tools/calc1-frozen.json regenerated through calc1-frozen-gen.cjs table() with its 175 rows kept: only the tex keys leave; calc2-seam-test case 1 is byte-exact against it (specs 175, calls 3955). calc-rules-test asserts the plain literals and that no tex is carried; maths-calculus-test and maths-calculus-live read the library examples' tex, not question(), and are unchanged."
   },
   {
     "id": "L1-nela-12-MB2-2",
@@ -111,11 +114,14 @@
     ],
     "code_check": "by-design",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 13,
     "recurs": "2026-10-09-maths-l1/recert-11/L1-nela-12-MB2-2",
     "suggested_acceptance": "Owner ruling: either the add/sub questions say \"simplest form\" (unsure, not wrong, for 6/4), or the lesson drops \"then simplify\"",
-    "l2_priority": "Owner/teacher ruling on unsimplified results for cz"
+    "l2_priority": "Owner/teacher ruling on unsimplified results for cz",
+    "recertify_run": "2026-10-09-maths-l1/recert-13",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Fixed in 90fd4a86: owner ruling Variant 2 (answered 2026-10-20 under the operator's delegation; reversible). desk/src/lib/rules/school.ts gen() and its two fallbacks carry form \"simplest\", so the question says 'Give your answer in its simplest form.' and an unsimplified sum (6/4 for 3/4 + 3/4) takes the existing s.form === \"simplest\" path (WHY.simplest): unsure, never wrong. check() for specs without the form and library/worked.ts are unchanged; 'then simplify' now agrees with the question. The top rung (genMixedAddSub) still asks for no form. tools/school-rules-test.cjs: a new assertion (an add/sub spec says simplest form; 6/4 is unsure, 3/2 right) and GENERATOR's question text; school-practice-test keys and regex; maths-calculus-test 7 lets the longer row fit down to 34 px as 7d does (smallest 38 px); school-stretch, maths-aim and maths-like type their answers in lowest terms; paper-aim PLAIN_FP bf2c158c... and SLIPS_FP e8b346d3... regenerated (question text changed). school-toprung needed no change."
   },
   {
     "id": "L1-radka-41-MB5-2",

@@ -1,0 +1,55 @@
+{
+  "id": "2026-10-09-maths-l1/recert-13",
+  "started": "2026-10-20T09:00:00.000Z",
+  "finished": "2026-10-20T09:00:00.000Z",
+  "cert_level": "L1",
+  "module": "Math Buddy",
+  "base_commit": "ee0fd7d7757ca1bde4703e99331ce426946610f4",
+  "cast": [
+    "matyas-19",
+    "nela-12",
+    "radka-41"
+  ],
+  "journeys": [
+    "MB1",
+    "MB2",
+    "MB3",
+    "MB5"
+  ],
+  "pairs": [
+    {
+      "character": "matyas-19",
+      "journey": "MB1"
+    },
+    {
+      "character": "matyas-19",
+      "journey": "MB3"
+    },
+    {
+      "character": "nela-12",
+      "journey": "MB2"
+    },
+    {
+      "character": "radka-41",
+      "journey": "MB5"
+    }
+  ],
+  "recertify": {
+    "of": "2026-10-09-maths-l1",
+    "k": 13,
+    "prior_base_commit": "b6581a9e75c7ca28f6483bf0ad47f73ed9cc739a",
+    "prior_run": "2026-10-09-maths-l1/recert-12",
+    "mode": "L1 code re-walk of every row open in recert-12/findings.json (4 rows) with two builder fixes built against the frozen suites; answers fixed | recurs"
+  },
+  "instrument": {
+    "level": "L1 theoretical re-walk (uat skill, recertify at L1; README *Levels*)",
+    "walkers": "the builder session (autopilot accepted-idea-delivery 79f20ae6, branch autopilot/accepted-idea-delivery-79f20ae6 cut from main ee0fd7d7): MB2-2 and MB3-5 built and measured against the named tools suites and npm run test:rules (90 suites green); MB1-1 and MB5-2 not touched",
+    "model_calls": "none: no desk engine, no Ollama, no claude CLI, no codex, no paid API; desk/data untouched",
+    "overlay": [
+      "uat/README.md",
+      "uat/env.md",
+      "uat/rubric.md",
+      "uat/accepted-gaps.md"
+    ]
+  }
+}
