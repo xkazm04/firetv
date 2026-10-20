@@ -43,8 +43,8 @@ android {
 }
 dependencies {
     implementation(project(":game"))
-    implementation("com.badlogicgames.gdx:gdx-backend-android:1.13.5")
-    for (abi in tvAbis) nativeJars("com.badlogicgames.gdx:gdx-platform:1.13.5:natives-$abi")
+    implementation("com.badlogicgames.gdx:gdx-backend-android:1.14.2")
+    for (abi in tvAbis) nativeJars("com.badlogicgames.gdx:gdx-platform:1.14.2:natives-$abi")
 }
 val extractNatives by tasks.registering {
     inputs.files(nativeJars); outputs.dir(layout.buildDirectory.dir("generated/natives"))
