@@ -362,7 +362,7 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 # Essay Master
 
-4 open in 3 pairs across 20 runs
+4 open in 3 pairs across 21 runs
 
 recurring 4 · unasked by a later run of their pair 0
 
@@ -370,16 +370,16 @@ Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Lin
 
 ## kristyna-17 EM1 · 2 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-19/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 20, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-19/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 20, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-20/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 21, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-20/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 21, first seen 2026-10-09-essay-l1
 
 ## eliska-12 EM2 · 1 open · top rank 6
 
-- `2026-10-09-essay-l1/recert-19/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 20, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-20/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 21, first seen 2026-10-09-essay-l1
 
 ## helena-46 EM1 · 1 open · top rank 2
 
-- `2026-10-09-essay-l1/recert-19/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; 8 of 60 semi-blind short plain-letter Czech lines still go to the model · recurrence 20, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-20/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; 3 of 60 blind short plain-letter Czech lines still go to the model · recurrence 21, first seen 2026-10-09-essay-l1
 
 # Math Buddy
 

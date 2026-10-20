@@ -1,0 +1,22 @@
+# helena-46 × EM1 · (recert-20)
+
+- Character: helena-46
+- Journey: EM1
+- Cert level: L1 re-walk, code only, no model
+- Head bf036c94
+- Recertifies: 2026-10-09-essay-l1/recert-19 at 2bdbdee8
+- **Verdict now: L1-conditional.** 0 fixed, 1 recur; 1 rows open. (was L1-conditional)
+
+## Prior rows
+
+| Finding | Status | Evidence (current code) | Commit |
+| --- | --- | --- | --- |
+| L1-helena-46-EM1-4 A language the desk does not read is refused only when it is clearly Czech; 3 of 60 blind  (polish) | recurs → L1-helena-46-EM1-4 | recert-20 @bf036c94: Re-walked at bf036c94 (the local main tip); what the previous walk (at 2bdbdee8) found: paragraphIsEnglish (desk/src/lib/rules/essay.ts:280-291, was :278-289; doc :279) is byte-identical and its short-paragraph arm (:286, r.english === 0 && r.czechPlain >= 1) is fed by czPlain (:265, was :263), which counts czechShortShape (:249, was :247). bf036c94 widened that shape: CZECH_SHORT_SHAPE (:245) gained the endings [bcdfghjklmprstvz]ne, cce, izi and [aeiou][vk]at, and CZECH_SHORT_WORDS (:247, new, 40 plain-letter words, 15 of them the words of the 8 r2 leaks) is read by czechShortShape; CZECH_SHORT_FUNCTION is now :248. The refusal still sits in desk/src/app/api/analyse/route.ts:173, :201 before any run. Measured in a scratch script outside the repo (rc20/measure20.cjs, tools/ts-load.cjs, no model): tools/essay-heldout-czech-short-r3.json BLIND, Czech refused 57/60 (95.0%), English refused 0/45; the same set on bf036c94^ was 55/60 and 0/45, so the rule earned +2 blind lines. The file was committed alone in 2da37c3b (06:22:56) before the rule bf036c94 (06:28:11) and no later commit edited it; whole-file sha256 e90edcb74df70140cb383d3199cbefafc167db6a7d6c709472aea9af054a0c84, its pinned inner sha256 ad2017a6678efe1a906d5949ea66e5e1b6e83daf1f29f2baa5622496c82488ab equals the recomputed hash and the one the r3 test pins. The other sets, labelled: r2 tools/essay-heldout-czech-short-r2.json 60/60, English 0/44 = TUNED (its 8 leaks were tuned on; 60/60 is not blind evidence); first held-out tools/essay-heldout-czech-short.json 53/53, English 0/42 = TUNED; tools/essay-tuning-czech-short.json 56/56, English 0/44 = TUNED. App Master ruling (my r3 measurement equals 57/60, so it stands): blind 57/60 (95%, 3 leaks) does NOT meet the bar; the row stays OPEN, narrowed (recurs). Reasons: the expected text, "A Czech message is refused in a plain sentence before the wait", is a universal claim about a Czech message, and one short Czech message in twenty (3 of 60) still goes to the wait, which is the failure the row names; the baseline on the same blind set was already 55/60, so the rule earned +2 blind lines; most of that coverage predates the rule, and the rule was tuned only on r2. Restated: 3 of 60 blind short plain-letter Czech lines still go to the model. The 3 r3 leaking lines are not printed, quoted or analysed anywhere (counts only), so r3 keeps its value until a builder deliberately spends it. Noted, counts only: of the 5 r3 lines the baseline missed, 2 are now refused, and both hold a word of CZECH_SHORT_WORDS (1 of them a word beyond the 15 r2 leak words), none by the shape endings alone. Next step: a fix aimed at the 3 r3 leaks turns r3 into a TUNED set; a fresh, never-seen r4 set must be pinned (committed alone, sha256 inside) BEFORE that fix and measured once after it. Closure needs zero blind leaks with 0 English refused. git diff -U0 2bdbdee8 bf036c94 touches one desk file, desk/src/lib/rules/essay.ts (two hunks: :245 CZECH_SHORT_SHAPE gained four endings, +2 lines at :246-247 the comment and CZECH_SHORT_WORDS, :249 czechShortShape also reads CZECH_SHORT_WORDS; every line from :248 is +2), plus tools/essay-rules-test.cjs and the new tools/essay-heldout-czech-short-r3.json (2da37c3b); desk/src/lib/desk/essay.ts, desk/src/app/api/analyse/route.ts and desk/src/app/phone/page.tsx are byte-identical. Every cite of recert-19 was re-derived at bf036c94. | bf036c94 (narrowed) |
+
+## New findings
+
+None.
+
+## Notes
+
+- Evidence check at bf036c94: every desk/src/lib/rules/essay.ts line was re-derived (git diff -U0 2bdbdee8 bf036c94 shifts every line from :248 by +2); desk/src/lib/desk/essay.ts and desk/src/app/phone/page.tsx are byte-identical. Every commit named was checked with `git merge-base --is-ancestor <sha> main`. Nothing is resolved-verified: that needs live L2 evidence. Model-dependent behaviour stays with L2.
