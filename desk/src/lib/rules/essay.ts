@@ -7,6 +7,7 @@
  * a sentence that exists.
  */
 import type { Band } from "./voice";
+import { czechLean } from "./essayLang";
 export type Role = "claim" | "evidence" | "link" | "context";
 /** `para` (0-based) is set only when the text has more than one paragraph; a one-paragraph text reads as it always did. */
 export interface Sentence { n: number; text: string; words: number; connectors: string[]; role: Role; para?: number; }
@@ -276,18 +277,39 @@ export const ENGLISH_MIN_WORDS = 6;
 export const ENGLISH_FLOOR = 0.15;
 export const CZECH_FLOOR = 0.25;
 
-/** Whether a paragraph reads as English. It says no only when it can tell; anything else, a short paragraph included, is English. */
-export function paragraphIsEnglish(text: unknown): boolean {
-  const r = englishReading(text);
-  const other = Math.max(r.czech, r.german, r.polish, r.french, r.spanish, r.italian, r.dutch);
+/** Whether the word-list rule refuses a paragraph on these shares, `other` the strongest foreign share and `czechPlain` the plain-letter Czech count. */
+function wordsRefuse(r: ReturnType<typeof englishReading>, other: number, czechPlain: number): boolean {
   // UD-19: a paragraph under ENGLISH_MIN_WORDS is English unless two or more of its words read as another language and beat the English ones (40% of the words, or a third when no English word is there); never on length alone
   // EM1-1: and so is a short paragraph with no English function word in it and one plain-letter Czech word of three letters or more (Mam rad hory, Venku fouka vitr); an English line with no function word and no Czech word stays English
   if (r.words < ENGLISH_MIN_WORDS) {
-    if (r.words > 0 && r.english === 0 && r.czechPlain >= 1) return false;
-    return !(r.words > 0 && r.english < ENGLISH_FLOOR && other * r.words >= 2 && other > r.english && (other >= 0.4 || (r.english === 0 && other >= 1 / 3)));
+    if (r.words > 0 && r.english === 0 && czechPlain >= 1) return true;
+    return r.words > 0 && r.english < ENGLISH_FLOOR && other * r.words >= 2 && other > r.english && (other >= 0.4 || (r.english === 0 && other >= 1 / 3));
   }
   // E3-d: English words mixed into a foreign paragraph do not make it English: the foreign signal must lose to the English share
-  return !(other >= CZECH_FLOOR && other > r.english);
+  return other >= CZECH_FLOOR && other > r.english;
+}
+
+/**
+ * Round 5 (L1-helena-46-EM1-9, L1-helena-46-EM1-4): the letter-run profile of rules/essayLang, not a word list, reads a paragraph of up to
+ * PROFILE_MAX_WORDS words. A refusal that rests on Czech alone is lifted when the profile leans English by more than PROFILE_ENGLISH_LEAN,
+ * and a paragraph of PROFILE_MIN_WORDS words or more with no English function word is refused when it leans Czech by more than
+ * PROFILE_CZECH_LEAN (no training line of English is shorter, so a two-word name such as Slavoj Žižek is left to the word lists). Both
+ * margins sit in the middle of the range that made no error in leave-one-set-out cross-validation over the training sets.
+ */
+export const PROFILE_MAX_WORDS = 12;
+export const PROFILE_ENGLISH_LEAN = 0.15;
+export const PROFILE_CZECH_LEAN = 0.2;
+export const PROFILE_MIN_WORDS = 3;
+
+/** Whether a paragraph reads as English. It says no only when it can tell; anything else, a short paragraph included, is English. */
+export function paragraphIsEnglish(text: unknown): boolean {
+  const r = englishReading(text);
+  const notCzech = Math.max(r.german, r.polish, r.french, r.spanish, r.italian, r.dutch);
+  const refused = wordsRefuse(r, Math.max(r.czech, notCzech), r.czechPlain);
+  if (r.words === 0 || r.words > PROFILE_MAX_WORDS) return !refused;
+  const lean = czechLean(text);
+  if (refused) return !wordsRefuse(r, notCzech, 0) && lean < -PROFILE_ENGLISH_LEAN;
+  return !(r.words >= PROFILE_MIN_WORDS && r.english === 0 && lean > PROFILE_CZECH_LEAN);
 }
 
 /**

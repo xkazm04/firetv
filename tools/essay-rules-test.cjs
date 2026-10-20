@@ -2318,9 +2318,27 @@ test('L1-helena-46-EM1-4 round 4: the r4 blind set is pinned at its measured rat
  console.log(`# EM1-4 r4 held-out: Czech refused ${cz.length}/${held.czech.length}, English refused ${en.length}/${held.english.length}`);
  assert.equal(held.czech.length,59);
  assert.equal(held.english.length,45);
- // blind figure, measured once: 54 of 59 before the rule, 55 of 59 after; r4 is not tuned on
- assert.ok(cz.length>=54,'r4 blind Czech refused is at least the step-2 baseline (54 of 59)');
- // one r4 English line was already refused before the rule change (step-2 baseline 1/45): known, reported, not tuned on
- assert.ok(en.length<=1,'r4 English refused does not grow past the baseline of 1 of 45');
+ // r4 is TUNED from round 5 (the letter-run profile of rules/essayLang learnt from it, and its english[15] was the case fixed): 54 of 59 before round 4, 55 of 59 blind after it, 59 of 59 tuned after round 5
+ assert.ok(cz.length>=55,'r4 TUNED Czech refused is no lower than the round-4 figure (55 of 59)');
+ // L1-helena-46-EM1-9: the one r4 English line refused in rounds 3 and 4 (english[15], named by its hash only) is English now, and no other is refused
+ assert.equal(require('node:crypto').createHash('sha256').update(held.english[15],'utf8').digest('hex'),'aab59657a72c339de214c8918ffcbc28490326c7d42acb73e74141c37daaeb71');
+ assert.equal(R.paragraphIsEnglish(held.english[15]),true,'r4 english[15] is not refused');
+ assert.deepEqual(en.map(t=>held.english.indexOf(t)),[],'r4 English refused is 0 of 45');
  for(const f of ['essay-heldout-czech-short-r2.json','essay-heldout-czech-short-r3.json']){const h=JSON.parse(fs.readFileSync(path.join(__dirname,f),'utf8'));assert.deepEqual(h.english.filter(t=>!R.paragraphIsEnglish(t)),[],f+' English is not refused');}
+});
+
+test('L1-helena-46-EM1-9 round 5: the letter-run profile is trainProfile() on the training sets (never r5), and no English line of a tuning or older held-out set is refused',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts')),L=require(path.join(root,'src/lib/rules/essayLang.ts'));
+ const j=(f)=>JSON.parse(fs.readFileSync(path.join(__dirname,f),'utf8'));
+ const short=['essay-tuning-czech-short.json','essay-heldout-czech-short.json','essay-heldout-czech-short-r2.json','essay-heldout-czech-short-r3.json','essay-heldout-czech-short-r4.json'].map(j),big=j('essay-heldout-r3.json');
+ const profile=L.trainProfile([...short.flatMap(s=>s.czech),...big.czPlain,...big.czShort],[...short.flatMap(s=>s.english),...big.en]);
+ assert.equal(L.PROFILE,profile,'PROFILE in rules/essayLang.ts is not the one these sets train: regenerate it, never hand-edit it');
+ for(const s of short){assert.deepEqual(s.english.filter(t=>!R.paragraphIsEnglish(t)),[],s.purpose.slice(0,40)+': English is not refused');assert.deepEqual(s.czech.filter(t=>R.paragraphIsEnglish(t)).length,0,s.purpose.slice(0,40)+': Czech is refused');}
+ assert.deepEqual(big.en.filter(t=>!R.paragraphIsEnglish(t)),[],'essay-heldout-r3 English is not refused');
+ for(const k of ['czPlain','czShort','de','it','nl','pl'])assert.equal(big[k].filter(t=>R.paragraphIsEnglish(t)).length,0,'essay-heldout-r3 '+k+' is refused');
+ // the profile leans: English lines below 0, Czech above, and it reads no list
+ assert.ok(L.czechLean('We had soup for lunch')<0);assert.ok(L.czechLean('Mame doma kocku')>0);assert.equal(L.czechLean(''),0);assert.equal(L.czechLean(null),0);
+ // a refusal another language makes is never lifted by the Czech/English profile; a two-word name stays to the word lists
+ assert.equal(R.paragraphIsEnglish('Ich bin heute sehr müde.'),false);
+ for(const t of ['Slavoj Žižek','Tim ran home.','Hello there'])assert.equal(R.paragraphIsEnglish(t),true,t);
 });
