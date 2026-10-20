@@ -175,7 +175,19 @@
     "recurrence": 3,
     "recurs": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-3",
     "suggested_acceptance": "Pause & coach is enabled before the first reply.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "code_recert": {
+      "level": "code-only (no model call)",
+      "base": "main f315e1b9 (6f95d267)",
+      "l2": "L2 live recert owed (operator)",
+      "resolution_note": "not closed in the ledger sense: resolution stays open",
+      "table": "uat/runs/2026-10-17-lt-swap-2/recert-13/code-recert-14.md",
+      "clauses": {
+        "Pause & coach is enabled before the first reply": "code: fixed - desk/src/lib/english/view.ts:689 (the second action is no longer gated on hasReply; disabled only while waiting or refused) and desk/src/lib/english/turn.ts:105-106 (accepts: coach when the last turn is the partner's); product accepts() on a no-reply conversation with the partner last = true, an empty conversation = false",
+        "a stuck learner gets the scene phrase to say, else the next help rung, no model call": "code: fixed - desk/src/lib/english/conversation.ts:582-590 (phrase from sceneTaskFor, else falls through to the cue branch and climb(); never a model call). Product sceneTaskFor on the recorded plan cue 'Try: What did you do at school today?' = '' at A1 (past tense out of band) and the phrase at A2; on the recorded cue rung 'Hi Sam! How is school today?' = the phrase at A1 and A2",
+        "the press is never silent": "code: fixed - desk/src/lib/english/conversation.ts:588 (no rung and no in-band cue: 'Take your time. One short sentence is enough: <goal>'); open sub-case: at A1 with the past-tense plan cue and no ladder the learner gets the goal line, not a phrase to say (L2 to judge whether that is enough)"
+      }
+    }
   },
   {
     "id": "LT-adela-17-J4-2",
@@ -324,7 +336,19 @@
     "recurrence": 6,
     "recurs": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-4",
     "suggested_acceptance": "After a repair, the recap invites answering the fresh question.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "code_recert": {
+      "level": "code-only (no model call)",
+      "base": "main f315e1b9 (7c185a08)",
+      "l2": "L2 live recert owed (operator)",
+      "resolution_note": "not closed in the ledger sense: resolution stays open",
+      "table": "uat/runs/2026-10-17-lt-swap-2/recert-13/code-recert-14.md",
+      "clauses": {
+        "the fresh-question replay is asked with the scene goal and the open step": "code: fixed - desk/src/lib/english/conversation.ts:713 (replay input carries sceneGoal: c.goal and currentStep while the mission is open); test tools/linga-rules-test.cjs:3896-3908",
+        "the task tells the model to stay on the scene (no drift to breakfast or tomatoes)": "code: fixed on the prompt side - desk/src/lib/english/conversation.ts:177 (REPLAY_TASK: 'Stay on the scene's task ... a scene about school does not turn to breakfast or tomatoes'); no code check rejects an off-topic replay question (replay.ts:97-107 replayRefused tests form, frame, band, rephrase only), so on-topic rests on the model: code: open for the outcome",
+        "after a repair the recap invites answering the fresh question": "code: open - not changed by 7c185a08 (code side only): view.ts:227 replayLine still reads 'Tried again, not with the new form yet' only after a try; nothing invites an untried fresh question. L2 to check what the recap shows when the replay is not tried"
+      }
+    }
   },
   {
     "id": "LT-viktor-67-J4-4",
@@ -353,7 +377,19 @@
     "resolution": "open",
     "recurrence": 1,
     "suggested_acceptance": "Notes use plain words, for example 'Say: I eat tomatoes'.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "code_recert": {
+      "level": "code-only (no model call)",
+      "base": "main f315e1b9 (fbb8fd6d)",
+      "l2": "L2 live recert owed (operator)",
+      "resolution_note": "not closed in the ledger sense: resolution stays open",
+      "table": "uat/runs/2026-10-17-lt-swap-2/recert-13/code-recert-14.md",
+      "clauses": {
+        "coaching names no grammar term at A1-A2": "code: fixed - desk/src/lib/english/plain.ts:13 hasGrammarTerm; desk/src/lib/english/conversation.ts:330 (a beginner's moment whose why has a term is dropped), :767 (a coach note with a term becomes PLAIN_NOTE), :301/:713 (PLAIN_TASK in the moment and coach tasks). Product hasGrammarTerm on the recorded notes: 'Add the subject and verb so the sentence is clear.' = true (dropped), 'An English sentence needs a verb' = true (dropped)",
+        "notes use plain words, for example Say: I eat tomatoes": "code: fixed in effect, not in form - a term-free note passes ('Say: I eat tomatoes every day.' = no term) and a termed one is replaced by 'Say it this way. It is easier to hear.' (conversation.ts:169); code never composes a 'Say: <better>' note itself, the wording rests on the model following PLAIN_TASK: L2 to read real notes",
+        "the Is school good? fix is shown (held fixes)": "code: open - not touched by fbb8fd6d; the three held fixes are the LG-23 hold by design (moment and held-fix path), so 'School good?' -> 'Is school good?' stays held until the finish. L2 to check it is shown there"
+      }
+    }
   },
   {
     "id": "LT-tomas-9-J4-3",

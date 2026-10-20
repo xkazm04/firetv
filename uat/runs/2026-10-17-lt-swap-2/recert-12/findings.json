@@ -398,7 +398,18 @@
     "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
     "recertify_run": "2026-10-17-lt-swap-2/recert-13",
     "recertify_status": "not-evaluable",
-    "recertify_evidence": "the journey ended budget, so not seeing it proves nothing; judge: #20 the moment 'Every day tomatoes' -> 'I eat tomatoes every day' keeps the meaning and has no tense error. Only the jargon remains."
+    "recertify_evidence": "the journey ended budget, so not seeing it proves nothing; judge: #20 the moment 'Every day tomatoes' -> 'I eat tomatoes every day' keeps the meaning and has no tense error. Only the jargon remains.",
+    "code_recert": {
+      "level": "code-only (no model call)",
+      "base": "main f315e1b9 (fbb8fd6d)",
+      "l2": "L2 live recert owed (operator)",
+      "resolution_note": "not closed in the ledger sense: resolution stays open",
+      "table": "uat/runs/2026-10-17-lt-swap-2/recert-12/code-recert-14.md",
+      "clauses": {
+        "the fix keeps his intended meaning (no tense change)": "code: fixed - desk/src/lib/english/plain.ts:25 keepsTense and desk/src/lib/english/conversation.ts:330 (moment) / :766 (coach throws). Product keepsTense('You have school?','Did you have school today?') = false, so that exact recorded fix is dropped; 'School good?' -> 'Is school good?' = true",
+        "no grammar terms in the note": "code: fixed for the listed terms, edge open - desk/src/lib/english/plain.ts:13. Product hasGrammarTerm('Use did for school today') = false: an instruction naming an auxiliary word ('did') is not in the term list. Moot for the recorded case (the tense guard drops the moment first) but a term-free-by-regex note that says 'Use did' / 'Use are' would pass; L2 to read real notes"
+      }
+    }
   },
   {
     "id": "LT-tomas-9-J4-4",
