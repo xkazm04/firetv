@@ -279,6 +279,7 @@ class StickActivity : Activity() {
                 probe { p ->
                     when {
                         p is Probe.Answered && (p.viewer == "tv" || key != null) -> apply(Step.Open(desk, if (p.viewer == "tv") null else key))
+                        p is Probe.Answered && mode == Mode.UNPAIRED -> { render(); schedule() }
                         p is Probe.Answered -> apply(Step.Unpaired(desk))
                         mode == Mode.UNPAIRED -> apply(Step.Down(desk, (p as Probe.Failed).why))
                         else -> { why = (p as Probe.Failed).why; render() ; schedule() }

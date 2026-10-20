@@ -32,7 +32,7 @@ object DeskNet {
             val body = (if (status in 200..299) c.inputStream else c.errorStream)?.use(::readCapped).orEmpty()
             Probe.read(status, body)
         } catch (e: SocketTimeoutException) {
-            Probe.Failed("it did not answer within ${(connectMs + readMs) / 1000} s")
+            Probe.Failed("${desk.label} did not answer in time")
         } catch (e: NoRouteToHostException) {
             Probe.Failed("no route to it: is the stick on the same Wi-Fi as the computer?")
         } catch (e: ConnectException) {
