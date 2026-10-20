@@ -1293,6 +1293,19 @@ test('E1-b: reviseSentence rules a Structure rewrite against the links the first
  assert.match(seen.at(-1).system,/add supports: the number of the claim it backs/);
 });
 
+test('rewrite link: a rewrite that leaves out the link its lens needs fails the run, like the first pass; 0 and an integer link rule',async()=>{
+ const {reviseSentence}=deskEssay(),ss=splitSentences(UNI);
+ const reading=(type,verdicts=[])=>({text:UNI,type,sentences:ss,stats:paragraphStats(ss),verdicts,summary:'s',provider:'test'});
+ const ev='In 2020 a survey found 80% of pupils saved time.';
+ const ruling=async(type,obs)=>{answer=obsReply([obs]);try{return (await reviseSentence(reading(type),2,ev)).verdicts.find(v=>v.n===2).verdict;}catch(e){return 'threw: '+e.message;}};
+ assert.match(await ruling('structure',{n:2,job:'evidence'}),/^threw: no observation came back for sentence 2/,'Structure evidence with no supports');
+ assert.match(await ruling('evidence',{n:2,support:'checkable'}),/^threw: no observation came back for sentence 2/,'Evidence checkable with no backs');
+ assert.notEqual((await ruling('structure',{n:2,job:'evidence',supports:0})).slice(0,5),'threw','supports 0 is an answer');
+ assert.notEqual((await ruling('evidence',{n:2,support:'checkable',backs:0})).slice(0,5),'threw','backs 0 is an answer');
+ assert.notEqual((await ruling('structure',{n:2,job:'evidence',supports:1})).slice(0,5),'threw','an integer link rules');
+ assert.notEqual((await ruling('evidence',{n:2,support:'checkable',backs:1})).slice(0,5),'threw','an integer link rules');
+});
+
 // ---- EM-B21 (council rulings 2026-10-09 section 6, E3): a sentence may open with any capital, not only A-Z ----
 test('EM-B21: splitSentences splits before a capital outside A-Z and before an opening low quote; English text is unchanged',()=>{
  const R=require(path.join(root,'src/lib/rules/essay.ts'));
