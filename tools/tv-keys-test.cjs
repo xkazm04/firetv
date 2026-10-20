@@ -1254,3 +1254,13 @@ test('TL-13: the paper screen ends on Type a paper; Select opens the paper ask; 
  // an ask another screen opened is not this screen to cancel
  assert.deepEqual(tvKey({...empty,ask:askOf('paper','tonight')},'back',LOCAL).events,[{type:'nav',screen:'prepare',focus:0}]);
 });
+
+test('stick pass 2026-10-20: Select on Joined with no one seated opens the learner cards, as its line says; seated, it is the desk',()=>{
+ const {tvKey,LANDING_REST}=keys();
+ const shown=fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8');
+ assert.match(shown,/Paired\. Select: choose who is studying/,'the line this case holds the key to');
+ assert.deepEqual(tvKey(session({screen:'joined',learner:null}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}]);
+ const rest=tvKey(session({screen:'joined'}),'select',LOCAL).events;
+ assert.equal(rest.length,1);assert.equal(rest[0].screen,'landing','a seated learner goes to the desk');
+ assert.equal(tvKey(session({screen:'joined',learner:null}),'back',LOCAL).events[0].screen,'landing','Back is the desk, seated or not');
+});

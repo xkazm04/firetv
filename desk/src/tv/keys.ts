@@ -394,8 +394,12 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (s.joined) { if (k === "down") o.focus(1); if (k === "up") o.focus(0); if (k === "select" && s.focus === 1) o.ev({ type: "phones.forget" }); }
     if (k === "back") { const to = s.back ?? "landing"; o.nav(to, to === "landing" ? landingFocus(s, "phone") : 0); }
   },
-  // the desk is home: Select or Back rests the lamp there, as choosing a learner does (store.ts learner.set)
-  joined: (_, k, __, o) => { if (k === "select" || k === "back") o.nav("landing", LANDING_REST); },
+  // the desk is home: Select or Back rests the lamp there, as choosing a learner does (store.ts learner.set). With no one
+  // seated, Select does what the screen says, "choose who is studying": the learner cards (stick pass 2026-10-20)
+  joined: (s, k, _, o) => {
+    if (k === "select" && !s.learner) { o.nav("learner", 0, "landing"); return; }
+    if (k === "select" || k === "back") o.nav("landing", LANDING_REST);
+  },
   tonight: (s, k, _, o) => {
     const stops = tonightStops(s), at = stopAt(stops, s.focus);
     if (k === "back") {
