@@ -173,9 +173,13 @@ export function quizFor(help: ConversationHelp | null | undefined, last: { id: s
  */
 export function sceneTaskFor(cue: string, band: Band | undefined, partnerLine: string): string {
   const t = cue.replace(/^Try(?: [a-z]+)?:\s*/, "").replace(/\s+/g, " ").trim();
-  if (!t || /(\.\.\.|…)$/.test(t) || t.length > QUIZ_MAX || !band || !SAYS_BACK.includes(band) || !inBand(t, band)) return "";
+  if (!t || !band || !SAYS_BACK.includes(band)) return "";
   const theirs = new Set(sentencesOf(partnerLine));
-  return sentencesOf(t).some(x => theirs.has(x)) ? "" : t;
+  const sendable = (x: string) => /^[A-Z]/.test(x) && !/\.\.\.|…|___/.test(x) && x.length <= QUIZ_MAX && inBand(x, band) && !sentencesOf(x).some(s => theirs.has(s));
+  if (sendable(t)) return t;
+  // a cue that is an unfinished starter or too long for the band still has finished sentences ("I like to build. My favourite
+  // block is..."): the longest finished one that fits is the task phrase (recert-13 code-only recert, tomas-9)
+  return t.split(/(?<=[.!?])\s+/).filter(sendable).sort((a, b) => b.length - a.length)[0] ?? "";
 }
 
 /** Whether an option of the line's quiz is its task phrase: on-task, so a pick of it is never "does not answer" (rework 7). */

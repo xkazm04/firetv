@@ -3779,9 +3779,11 @@ test('H3 case 3: the words and prefs hand-offs gate their own commands and Linga
 // line, offers the scene's task phrase within two presses, says to type when nothing is new, and a pick shows the phrase to send.
 // Scenes are recert-13's (uat/runs/2026-10-17-lt-swap-2/recert-13): Viktor A1 (Sam, school), Tomas A1 (Sam, building), Petra A2 (hotel).
 const R8_SCENES=[
- {name:'viktor-67 A1',level:'A1',partner:'Sam · grandson',cue:'Try: Hi Sam! Is school good?',task:'Hi Sam! Is school good?',line:'Hi Grandpa! I am home from school now.',help:{fits:'Hi Sam! Good to see you.',misfit:'The weather is cold today.'}},
- {name:'tomas-9 A1',level:'A1',partner:'Sam · Friend',cue:'Try: I make a big tree.',task:'I make a big tree.',line:'Hi, Sam here. What do you make?',help:{fits:'I make a house.',misfit:'I am nine.'}},
- {name:'petra-38 A2',level:'A2',partner:'Ms Lee · hotel receptionist',cue:'Try: The room is cold.',task:'The room is cold.',line:'Your room. What is wrong?',help:{fits:'The bed is very noisy.',misfit:'I like the city.'}},
+ // cue: the plan topic's scene cue as the earlier recert runs recorded it (recert-13 did not record scene.cue, only the help rungs);
+ // task: the model's own task phrase for the line, as recert-13 viktor-67's cue rung showed it (the real A1 cue is a past-tense question, so sceneTaskFor is empty there)
+ {name:'viktor-67 A1',level:'A1',partner:'Sam · grandson',cue:'Try: What did you do at school today?',task:'Hi Sam! How is school today?',line:'Hi Grandpa! I am home from school now.',help:{fits:'Hi Sam! Good to see you.',misfit:'The weather is cold today.',task:'Hi Sam! How is school today?'}},
+ {name:'tomas-9 A1',level:'A1',partner:'Sam · Minecraft friend',cue:'Try: I like to build. My favourite block is...',task:'I like to build.',line:'Hi, Sam here. What do you make?',help:{fits:'I make a house.',misfit:'I am nine.'}},
+ {name:'petra-38 A2',level:'A2',partner:'Mia · hotel receptionist',cue:'Try: I have a problem. The room is very cold.',task:'I have a problem. The room is very cold.',line:'Your room. What is wrong?',help:{fits:'The bed is very noisy.',misfit:'I like the city.'}},
 ];
 const pairKey=o=>[...o].map(x=>x.toLowerCase()).sort().join('|');
 /** the scene at its level with the partner's one line; each press of Choose a phrase is recorded as {options,cue,quizOpen} */
@@ -3811,6 +3813,19 @@ for(const sc of R8_SCENES)test(`Linga rework 8 wired (${sc.name}): a pick is fol
 test('Linga rework 8 rules: the scene task phrase keeps its words (no letter is eaten) and B1 asks nothing of the new path',()=>{
  const H=require(path.join(root,'src/lib/english/help.ts'));
  assert.equal(H.sceneTaskFor('Try: Hi Sam! Is school good?','A1','Hi Grandpa! I am home from school now.'),'Hi Sam! Is school good?');
+});
+test('Linga rework 8 rules (code-only recert-13): sceneTaskFor over the real scene cues keeps a finished sendable sentence, never a starter, blank, over-band or repeated line',()=>{
+ const H=require(path.join(root,'src/lib/english/help.ts'));
+ const T=(cue,band,line='Hello! How are you?')=>H.sceneTaskFor(cue,band,line);
+ assert.equal(T('Try: I like to build. My favourite block is...','A1'),'I like to build.','tomas-9: the unfinished starter keeps its finished sentence');
+ assert.equal(T('Try: What did you do at school today?','A1'),'','viktor-67 A1: a past-tense question is out of band, the quiz task covers it');
+ assert.equal(T('Try: What did you do at school today?','A2'),'What did you do at school today?');
+ assert.equal(T('Try: I have a problem. The room is very cold.','A2'),'I have a problem. The room is very cold.','petra-38 A2');
+ assert.equal(T('Try: I have a problem. The room is very cold.','A1'),'The room is very cold.');
+ assert.equal(T('Try: I build a ___. It is ___.','A1'),'','a blank is not a phrase to send');
+ assert.equal(T('Try: My name is… I really like… because…','A2'),'','a starter with no finished sentence');
+ assert.equal(T('Try: I like to build. My favourite block is...','B1'),'','B1 asks nothing of the path');
+ assert.equal(T('Try: I like to build. My favourite block is...','A1','I like to build.'),'','never the partner own line');
 });
 /** Adela (B1) on the recert-13 inputs: every press of Choose a phrase and every pick, as the learner sees them */
 async function r8Adela(){
