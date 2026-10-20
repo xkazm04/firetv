@@ -377,12 +377,33 @@ test('case 13 (W6): the phone Practice panel has two routes - snap the sheet, ty
 
 test('case 14 (W6): the TV\'s Practice card is not made false by the typed route, and still asks nothing to be typed on the TV',()=>{
  const tv=code(path.join(SRC,'maths/MathsTV.tsx'));
- assert.match(tv,/The phone is waiting for the sheet or your answers\./,'the card names both ways in');
- assert.doesNotMatch(tv,/The phone is waiting for the sheet\./);
- // the ask stays the snap, in the TV\'s own copy (the hand-off scan reads it); the TV never asks for typing
+ const rows=require(path.join(SRC,'tv/mathsRows.ts'));
+ // (a) joined with no ask open: the card does not say the phone waits, and names both ways in
+ assert.doesNotMatch(tv,/The phone is waiting for the sheet/);
+ assert.equal(rows.handoffLine({ask:null,screen:'practice',walkIx:0,phonesLive:1}),null,'no ask open: no hand-off line');
+ const how=rows.practiceHandoffHow();
+ assert.doesNotMatch(how,/waiting/i);assert.match(how,/Snap the sheet/);assert.match(how,/Type my answers/);
+ assert.match(tv,/s\.joined \? practiceHandoffHow\(\)/,'the joined, no-ask branch shows it');
+ // (b) with a hand-off ask open, the hand-off line shows
+ const open=rows.handoffLine({ask:{...askOf('sheet'),screen:'practice'},screen:'practice',walkIx:0,phonesLive:1});
+ assert.match(open,/Waiting for the phone: the photo of the sheet/);
+ assert.match(tv,/wait \?\? \(s\.joined/,'an open ask\'s line comes first');
+ // (c) the ask stays the snap, in the TV\'s own copy (the hand-off scan reads it)
  assert.match(tv,/then snap the whole sheet with the phone/);
- const card=tv.slice(tv.indexOf('The phone is waiting for the sheet or your answers.')-200,tv.indexOf('The phone is waiting for the sheet or your answers.')+80);
+ // (d) the card never asks for typing on the TV keyboard; pointing at the TV\'s own Type my answers action (it routes to the phone) is allowed
+ const at=tv.indexOf('s.joined ? practiceHandoffHow()');
+ const card=tv.slice(at-200,at+120).replace(/Type my answers/g,'');
  assert.doesNotMatch(card,/\btype\b/i,'no typing asked of the TV');
+ assert.doesNotMatch(how.replace(/Type my answers/g,''),/\btype\b/i);
+});
+
+test('F20 (stick pass): with a phone joined and no ask open, the practice card says how to hand the job over, in plain words with no dash',()=>{
+ const rows=require(path.join(SRC,'tv/mathsRows.ts'));
+ const how=rows.practiceHandoffHow();
+ assert.doesNotMatch(how,/waiting|is waiting/i,'nothing has been handed over, so no phone waits');
+ assert.match(how,/Snap the sheet/);assert.match(how,/Type my answers/);
+ assert.doesNotMatch(how,/[-—–]/u,'no dash of any kind');
+ assert.ok(how.split(/\s+/).length<=16,'short');
 });
 
 test('plan case 7 (panel): the plan screen hands the phone to the Essay panel',()=>{

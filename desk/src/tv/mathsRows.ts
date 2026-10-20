@@ -405,3 +405,7 @@ export function handoffLine(s: Pick<Session, "ask" | "screen" | "walkIx" | "phon
   if (!a) return null;
   return s.phonesLive === 0 ? "No phone is connected. Up: pair a phone. Back: cancel." : `Waiting for the phone: ${HANDOFF_JOB[a.kind] ?? "the job"}. Back cancels.`;
 }
+/** The practice card's line with a phone joined and no hand-off open: nothing has been handed over yet, so it names the TV's two ways in (PRACTICE_STOPS), not a phone that waits. */
+export function practiceHandoffHow(): string {
+  return "Choose Snap the sheet or Type my answers to hand the job to the phone.";
+}

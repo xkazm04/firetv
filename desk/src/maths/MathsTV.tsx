@@ -23,7 +23,7 @@ import { Plot } from "./Plot";
 import { CALC_SHAPES, type CalcSpec } from "@/lib/rules/calc";
 import { deskLine, itemName, partPlace, type PartPlace } from "@/lib/rules/calc-word";
 const isCalcSpec = (spec: unknown): spec is CalcSpec => !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
-import { aimLine, calendarWeeks, continueCard, explainLine, fitRow, handoffLine, handoffOf, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, tonightsSheet, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { aimLine, calendarWeeks, continueCard, explainLine, fitRow, handoffLine, handoffOf, practiceHandoffHow, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, tonightsSheet, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { playerCommand, running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, PRACTICE_STOPS, PAGE_ASK, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
 import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, pastPathEnd, pathEndsLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
@@ -823,7 +823,7 @@ export function PracticeScreen({ s, focus = 0 }: { s: Session; focus?: number })
         <div className="hl"><span className="mb-lab">What to do</span></div>
         {aim && <div className="aim" data-role="maths-practice-aim">{aim}</div>}
         <div className="ht">Work {workWhat(p.items.length)} on paper, then snap the whole sheet with the phone. The desk marks it and walks you through it here.</div>
-        {job ? <JobNote job={job} /> : <div className="nx" data-role={wait ? "maths-wait" : undefined}>{ARROW}<span>{wait ?? (s.joined ? "The phone is waiting for the sheet or your answers." : `Pair the phone first · PIN ${s.pin}`)}</span></div>}
+        {job ? <JobNote job={job} /> : <div className="nx" data-role={wait ? "maths-wait" : undefined}>{ARROW}<span>{wait ?? (s.joined ? practiceHandoffHow() : `Pair the phone first · PIN ${s.pin}`)}</span></div>}
       </div>
     </aside>
     <div className="mb-acts">

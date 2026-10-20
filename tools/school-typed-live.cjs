@@ -131,7 +131,7 @@ const phoneLayout = (page) => page.evaluate(() => {
     await tv.waitForSelector('.maths-tv[data-screen="practice"] [data-role="maths-sheet"] .mb-item:nth-child(6)', { timeout: 15000 });
     await tv.waitForTimeout(1500);
     const card = await tv.locator('.mb-card .nx').textContent();
-    assert.match(card, /waiting for the sheet or your answers/, 'the TV card names both ways in');
+    assert.doesNotMatch(card, /waiting/i, 'the TV card does not say the phone waits'); assert.match(card, /Snap the sheet/, 'the TV card names the snap way in'); assert.match(card, /Type my answers/, 'and the typed way in');
     const tvOpen = await measure(tv);
     assert.deepEqual(tvOpen.outside, [], 'the practice card keeps to the safe zone'); assert.deepEqual(tvOpen.small, [], 'and to the 28 px floor');
     await tvShot('01-tv-practice-waiting');
