@@ -101,12 +101,12 @@ class StickActivity : Activity() {
         return true
     }
 
-    /** Back goes to the page on release; held past BACK_HOLD_MS it leaves at once, whatever the page would do. */
+    /** Back goes to the page on release; held (the system's long press, or BACK_HOLD_MS) it leaves at once, whatever the page would do. */
     private fun onBack(e: KeyEvent, k: PageKey): Boolean {
         when (e.action) {
             KeyEvent.ACTION_DOWN -> {
                 if (e.repeatCount == 0) { backDownAt = e.eventTime; backHeld = false }
-                else if (!backHeld && backDownAt >= 0 && e.eventTime - backDownAt >= KeyBridge.BACK_HOLD_MS) {
+                else if (!backHeld && backDownAt >= 0 && (e.isLongPress || e.eventTime - backDownAt >= KeyBridge.BACK_HOLD_MS)) {
                     backHeld = true
                     Log.i(TAG, "Back held: leaving")
                     finish()
