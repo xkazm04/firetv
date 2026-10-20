@@ -411,8 +411,9 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (pairUp(s, k, o)) return;
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     if (k === "up") o.nav("learner", 0, "tonight");
-    // Down is the paper you sat (TL-13): pairing lives on the landing, so an unpaired desk meets the same screen
-    if (k === "down") o.nav("paper", 0);
+    // Down is the paper you sat (TL-13): pairing lives on the landing, so an unpaired desk meets the same screen.
+    // It carries `from`, so the paper's Back comes back here (F10)
+    if (k === "down") o.nav("paper", 0, "tonight");
     // Menu is Tonight's one unused button: the lessons on file, the lamp on the next one to watch (tonightDoor names it)
     if (k === "menu") { o.ev({ type: "subject", subject: "maths" }); o.nav("units", unitsFocus(s)); return; }
     if (k !== "select") return;
@@ -662,9 +663,11 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   // Then the off-desk statements, one walk (Select there does nothing; Back and Menu go to the first unit).
   // Select on a topic opens Get ready for school on that unit with its question open, as Select there would (or just on
   // the unit while a set or lesson is written), carrying the unit as the paper's aim (MB-B40). Back or Menu land on that unit, or the first when the list is empty.
+  // Back from a paper Down on Tonight opened (`back`, set by its nav) returns to Tonight instead (F10).
   paper: (s, k, local, o) => {
-    // the first Back puts the hand-off down (TL-13); the next one leaves
+    // the first Back puts the hand-off down (TL-13); the next one leaves, to where the paper was opened from
     if (k === "back" && cancelAsk(s, o)) return;
+    if (k === "back" && s.back === "tonight") { o.nav("tonight", 0); return; }
     if (pairUp(s, k, o)) return;
     const count = paperStopCount(s), n = count + 1;
     if (k === "down" || k === "right") o.move(n, 1); if (k === "up" || k === "left") o.move(n, -1);

@@ -604,7 +604,7 @@ test('W8 1: a school learner\'s Tonight has three doors, Left/Right walk them cl
  assert.deepEqual(open.local,{prepareAsk:null},'the question starts closed');assert.deepEqual(open.calls,[]);
  // Up and Down as today
  assert.deepEqual(tvKey({...s,focus:2},'up',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'tonight'}]);
- assert.deepEqual(tvKey({...s,focus:2,joined:false},'down',LOCAL).events,[{type:'nav',screen:'paper',focus:0}],'TL-13: unpaired Down opens the paper, not the pair screen (pairing is on the landing)');
+ assert.deepEqual(tvKey({...s,focus:2,joined:false},'down',LOCAL).events,[{type:'nav',screen:'paper',focus:0,from:'tonight'}],'TL-13: unpaired Down opens the paper, not the pair screen (pairing is on the landing)');
  // a Calculus learner: the two doors, byte for byte what they were, and no way to Get ready for school
  const c=calcW8({screen:'tonight',focus:1});
  assert.deepEqual(tonightStops(c),['homework','teach']);assert.deepEqual(tonightStops({...c,pages:[page()]}),['continue','homework','teach']);
@@ -1243,7 +1243,7 @@ test('TL-13: Select on a failed read posts the retry only when the desk may repe
 
 test('TL-13: Down on Tonight opens the paper, paired or not',()=>{
  const {tvKey}=keys();
- for(const joined of [true,false])assert.deepEqual(tvKey(session({screen:'tonight',focus:0,joined}),'down',LOCAL).events,[{type:'nav',screen:'paper',focus:0}],`joined ${joined}`);
+ for(const joined of [true,false])assert.deepEqual(tvKey(session({screen:'tonight',focus:0,joined}),'down',LOCAL).events,[{type:'nav',screen:'paper',focus:0,from:'tonight'}],`joined ${joined}: the paper knows it was opened from Tonight (F10)`);
 });
 
 test('TL-13: the paper screen ends on Type a paper; Select opens the paper ask; the first Back cancels it and stays',()=>{
@@ -1253,11 +1253,25 @@ test('TL-13: the paper screen ends on Type a paper; Select opens the paper ask; 
  assert.deepEqual(tvKey(empty,'down',LOCAL).events,[],'nothing past it');
  const open={...empty,ask:askOf('paper','paper')};
  assert.deepEqual(tvKey(open,'back',LOCAL).events,[{type:'ask.cancel',id:'a1'}],'the first Back puts it down and stays');
- assert.deepEqual(tvKey(empty,'back',LOCAL).events,[{type:'nav',screen:'prepare',focus:0}],'the next Back leaves as it did');
+ assert.deepEqual(tvKey(empty,'back',LOCAL).events,[{type:'nav',screen:'prepare',focus:0}],'the next Back leaves as it did when Tonight did not open it');
  assert.deepEqual(tvKey(open,'select',LOCAL).events,[],'an ask already open is not opened twice');
  assert.deepEqual(tvKey({...open,phonesLive:0},'up',LOCAL).events,[{type:'nav',screen:'pair',focus:0,from:'paper'}],'no phone: Up pairs');
- // an ask another screen opened is not this screen to cancel
+ // an ask another screen opened is not this screen to cancel: Back leaves, to where the paper was opened from
  assert.deepEqual(tvKey({...empty,ask:askOf('paper','tonight')},'back',LOCAL).events,[{type:'nav',screen:'prepare',focus:0}]);
+ assert.deepEqual(tvKey({...empty,back:'tonight',ask:askOf('paper','tonight')},'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}]);
+});
+
+test('F10: the second Back from the paper goes back to where it was opened: Tonight after Down on Tonight, Get ready for school otherwise',()=>{
+ const {tvKey}=keys();
+ const empty=session({screen:'paper',focus:0,paper:null});
+ const fromTonight={...empty,back:'tonight'},fromPrepare={...empty,back:'prepare'};
+ assert.deepEqual(tvKey(fromTonight,'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}],'opened from Tonight: Back is Tonight');
+ assert.deepEqual(tvKey(fromPrepare,'back',LOCAL).events,[{type:'nav',screen:'prepare',focus:0}],'opened from Get ready for school: Back is there');
+ // the two-step Back holds for both: an open paper ask is put down first, and the screen stays
+ for(const s of [fromTonight,fromPrepare])assert.deepEqual(tvKey({...s,ask:askOf('paper','paper')},'back',LOCAL).events,[{type:'ask.cancel',id:'a1'}],`from ${s.back}: the first Back cancels`);
+ // the reducer keeps a nav's `from` as the session's `back` (store.ts nav): Down on Tonight's from is what this Back reads
+ assert.match(fs.readFileSync(path.join(root,'src/lib/session/store.ts'),'utf8'),/if \(e\.from\) n\.back = e\.from;/);
+ assert.deepEqual(tvKey(fromTonight,'menu',LOCAL).events,[{type:'nav',screen:'prepare',focus:0}],'Menu is unchanged: the first unit');
 });
 
 test('stick pass 2026-10-20: Select on Joined with no one seated opens the learner cards, as its line says; seated, it is the desk',()=>{
