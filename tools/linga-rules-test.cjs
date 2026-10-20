@@ -3907,3 +3907,10 @@ test('Linga replay on task: the replay call carries the scene goal and the open 
  assert.equal(sent.sceneGoal,getSession().conversation.goal);assert.equal(sent.currentStep,'Ask Sam about school.');
  assert(/Stay on the scene's task/.test(sent.task)&&/sceneGoal/.test(sent.task),sent.task);
 });
+
+// ---- an instruction naming a function word is jargon at A1 (recert-12 LT-viktor-67-J4-5 edge) ----
+test('hasGrammarTerm: "Use did" and "Use are" are termed; plain advice is not',()=>{
+ const {hasGrammarTerm}=require(path.join(root,'src/lib/english/plain.ts'));
+ for(const t of ['Use did for school today.','Use are here.','use a before cat','Try: use the.'])assert.equal(hasGrammarTerm(t),true,t);
+ for(const t of ['Say: I eat tomatoes','Use simple words.','Say it this way.','You used a good word.','Please reuse it.'])assert.equal(hasGrammarTerm(t),false,t);
+});

@@ -9,8 +9,11 @@ export const PLAIN_TASK = " This learner is a beginner: keep the tense of the wo
 
 const TERMS = /\b(subjects?|verbs?|nouns?|pronouns?|adjectives?|adverbs?|prepositions?|articles?|plurals?|singulars?|tenses?|past|present|future|participles?|auxiliary|clauses?|conjugat\w*|infinitive|gerund|grammar|grammatical|inflect\w*|syntax|word order)\b/i;
 
-/** Whether a note or reason uses a grammar term. */
-export const hasGrammarTerm = (text: string): boolean => TERMS.test(text);
+/** An instruction naming a function word to a beginner ("Use did for school today", "Use are"): jargon without a term (recert-12 LT-viktor-67-J4-5). */
+const USE_FUNCTION_WORD = /\buse\s+(?:did|do|does|are|is|am|was|were|have|has|a|an|the)\b/i;
+
+/** Whether a note or reason uses a grammar term, or tells the learner to use a function word by name. */
+export const hasGrammarTerm = (text: string): boolean => TERMS.test(text) || USE_FUNCTION_WORD.test(text);
 
 const NOT_PAST = new Set(["hundred", "wicked", "naked", "sacred", "kindred"]);
 const IRREGULAR = /\b(did|was|were|had|went|ate|saw|made|took|came|got|bought|gave|knew|told|found|said)\b/i;
