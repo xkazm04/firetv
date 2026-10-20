@@ -26,4 +26,4 @@ conversation.ts coach branch: a beginner's note dropped for a grammar term becom
 
 ## Summary
 
-Three code edges closed, one commit each; clauses still open for L2: the J4-3 recap, the J4-4 held fix, the A1 no-phrase sub-case of J4-2. Not run: tsc (no desk/node_modules checked in the worktree junction was used only for the rule suite).
+Three code edges closed, one commit each; clauses still open for L2: the J4-3 recap, the J4-4 held fix, the A1 no-phrase sub-case of J4-2. Not run: tsc or lint (none configured for the gate).
