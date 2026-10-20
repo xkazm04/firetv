@@ -244,3 +244,11 @@ test('F21: ask.cancel clears a status naming the phone, and leaves any other sta
  assert.equal(reduce(t,{type:'ask.cancel',id:t.ask.id}).status,'Saved.');
  assert.equal(reduce(c,{type:'ask.cancel',id:'stale'}).status,'');
 });
+
+test('F16: a 428 on the plan Read it says on the TV what is needed (an essay refusal the plan captions), and keeps the 428 and the notice',async()=>{
+ seatOpen('essayplan',null);
+ const r=await call('analyse',ROUTES.analyse.body,'tv');
+ assert.equal(r.status,428);const j=await r.json();assert.equal(j.notice,true);assert.match(j.error,/text engine/);
+ const s=store.getSession();assert.match(s.status,/text notice first/);assert.match(s.status,/phone/);assert.equal(s.essayRefused,s.status);
+ assert.deepEqual(require(path.join(root,'src/lib/rules/essay.ts')).refusalCaption(s),{label:'Not read',text:s.status});
+});

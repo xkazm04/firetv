@@ -25,6 +25,8 @@ const reread=process.argv.includes('--reread');
 // the forensic table's figures row shows the paragraph's words and links beside the other counts (EM1-3, EM1-4); a source pin, no model needed
 {const tv=fs.readFileSync(path.resolve(__dirname,'../desk/src/essay/EssayTV.tsx'),'utf8');const f=tv.match(/const figs:[^
 ]*/)?.[0]||'';assert.ok(/a\.stats\.words[^\]]*"words"/.test(f)&&/a\.stats\.links[^\]]*"links"/.test(f),'the forensic table figures include words and links');}
+// F16: the plan's caption shows an essay refusal (the 428 text-notice line the analyse route sets); a source pin, no model needed
+{const tv=fs.readFileSync(path.resolve(__dirname,'../desk/src/essay/EssayTV.tsx'),'utf8');const plan=tv.slice(tv.indexOf('export function EssayPlan'));assert.ok(plan.includes('const refused = refusalCaption(s)')&&plan.includes(': refused ? refused'),'the plan caption shows a refused read');}
 const key=JSON.parse(fs.readFileSync(path.join(data,'pairing.json'),'utf8')).key;
 const ADULT=process.env.ADULT==='1';
 const out=path.resolve(__dirname,ADULT?'../artifacts/essay-integration-adult':'../artifacts/essay-integration');fs.mkdirSync(out,{recursive:true});

@@ -27,6 +27,9 @@ function refusedWithLine(error: string, essay = true) {
   return NextResponse.json({ error }, { status: 400 });
 }
 
+/** F16: the TV's Read it met the one-time text notice, which only the phone shows: the 428 stays, and the TV says what is needed (an essay refusal, so the plan captions it). */
+export const NOTICE_FIRST_LINE = "Not read yet. Open the Essay tab on your phone and read the text notice first, then press OK on Read it again.";
+
 /** The kinds of reading this route answers; a body naming none of them is not a reading. */
 const KINDS: ReadonlyArray<Body["kind"]> = ["english", "essay", "rewrite", "piece-again", "piece", "shelf-piece"];
 const NOT_A_READING = "The desk did not get anything to read. Send it again from the phone.";
@@ -200,7 +203,7 @@ async function post(req: Request) {
   // E3: code decides whether the paragraph is English before any run, and says so plainly when it is not
   if (!paragraphIsEnglish(body.text)) return refusedWithLine(NOT_ENGLISH_LINE);
   // UD-7: the first paragraph read asks the same one-time notice as keep, before any run
-  if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });
+  if (!noticed(who.id)) { dispatch({ type: "status", text: NOTICE_FIRST_LINE, essayRefused: true }); return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 }); }
   const r = await runJob("analyse", async () => {
     dispatch({ type: "essay.type", essayType: body.type, owner: who.id });
     const a = await analyseEssay(body.text, body.type, who.id, age, { mode, task: taskFor(body), assignment: assignmentOf(body) }, hasFormat(body.format) ? body.format : undefined);
