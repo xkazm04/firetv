@@ -704,7 +704,7 @@ test('P17 (i) a learner switch resets the last learner\'s essay, photo, typed an
  assert.match(src,/useState\(FRESH_SENTENCE\)/);assert.match(src,/useState<string\[\]>\(FRESH_PARAS\)/,'the load values are the ones the reset uses');
  assert.match(src,/\[keep, setKeep\] = useState\(true\)/,'keep loads true');assert.match(src,/\[ring, setRing\] = useState<[^=]*\| null>\(null\)/,'ring loads null');
  const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
- const NAMES=['Paras','Pix','ReadIx','Note','Info','Source','PieceId','Notice','Shot','Phase','Q','Msg','PaperRows','Typed','Sentence','Keep','Ring'];
+ const NAMES=['Paras','Pix','ReadIx','Note','Info','Source','PieceId','Notice','Shot','Phase','Q','Msg','PaperRows','Typed','Sentence','Keep','Ring','Heading'];
  const make=()=>{
   const calls=[];const s={learner:null};let effect;
   const setters=NAMES.map((n)=>(v)=>calls.push([n,v]));
@@ -713,7 +713,7 @@ test('P17 (i) a learner switch resets the last learner\'s essay, photo, typed an
   const seat=(id)=>{s.learner=id?{id}:null;calls.length=0;effect();return calls.slice();};
   return {seat};
  };
- const want={Paras:P17_LOAD.paras,Pix:0,ReadIx:[],Note:'',Info:'',Source:'message',PieceId:undefined,Notice:null,Shot:null,Phase:'idle',Q:'',Msg:'',PaperRows:[{blank:true}],Typed:[],Sentence:P17_LOAD.sentence,Keep:true,Ring:null};
+ const want={Paras:P17_LOAD.paras,Pix:0,ReadIx:[],Note:'',Info:'',Source:'message',PieceId:undefined,Notice:null,Shot:null,Phase:'idle',Q:'',Msg:'',PaperRows:[{blank:true}],Typed:[],Sentence:P17_LOAD.sentence,Keep:true,Ring:null,Heading:null};
  await t.test('A to B: every listed state goes back to its load value',()=>{
   const m=make();m.seat('ema');const c=m.seat('jakub');
   assert.deepEqual(c.map(([n])=>n).sort(),[...NAMES].sort());
@@ -733,7 +733,7 @@ test('P17 (ii) a reply that returns after the learner changed sets no state but 
  const src=fs.readFileSync(PAGE,'utf8');
  const cut=(from,to)=>{const a=src.indexOf(from),e=src.indexOf(to,a);assert.ok(a>0&&e>a,`${from} is where the test expects it`);return src.slice(a,src.lastIndexOf('\n',e));};
  const SETTERS=['Busy','Msg','Phase','Note','Info','Notice','ReadIx','PieceId','ShelfTick','Q','Paras','Stranded'];
- const PARAMS=['s','seat','call','post','shot','busy','typed','document','HTMLElement','onPlan','onSentence','slotText','rewrite','planFill','paras','pieceProblem','etype','keep','pieceId','source','pieceFormat','essay','paragraphsOf','essayTooLong','pix','page','ring','q','sentence','writeRewriteBack','rewriteStaysLine','stranded',...SETTERS.map((n)=>'set'+n)];
+ const PARAMS=['s','seat','call','post','shot','busy','typed','document','HTMLElement','onPlan','onSentence','slotText','rewrite','planFill','paras','pieceProblem','etype','keep','pieceId','source','pieceFormat','essay','paragraphsOf','essayTooLong','pix','page','ring','q','sentence','writeRewriteBack','rewriteStaysLine','stranded','heading','titleOf',...SETTERS.map((n)=>'set'+n)];
  const reply=(body,ok=true,status=200)=>Promise.resolve({ok,status,json:async()=>body});
  const gate=()=>{let open;const p=new Promise((r)=>{open=r;});return {p,open};};
  // build one handler; `respond(url, body)` is the network
@@ -744,7 +744,7 @@ test('P17 (ii) a reply that returns after the learner changed sets no state but 
   const rec=(k)=>(v)=>calls.push([k,typeof v==='function'?'fn':v]);
   const stubs={s:{practice:{items:[{n:10}]},walkIx:0,itemIx:0},seat,call:(u,b)=>{urls.push([u,b]);return respond(u,b);},post:(e)=>{urls.push(['post',e]);return respond('post',e);},shot:{url:'u',w:1,h:2},busy:false,typed:['a','b'],
    document:{activeElement:null},HTMLElement:class{},onPlan:{i:0,plan:{}},onSentence:{n:2},slotText:'slot',rewrite:'rw',planFill:()=>({ok:true}),paras:['one','two'],pieceProblem:()=>'',
-   etype:'structure',keep:true,pieceId:'p1',source:'message',pieceFormat:'message',essay:'one',paragraphsOf:(x)=>[x],essayTooLong:()=>'',pix:0,page:{items:[]},q:'why',sentence:'I go.',writeRewriteBack:()=>({paras:['one','two'],written:true,line:''}),rewriteStaysLine:()=>'',stranded:0};
+   etype:'structure',keep:true,pieceId:'p1',source:'message',pieceFormat:'message',essay:'one',paragraphsOf:(x)=>[x],essayTooLong:()=>'',pix:0,page:{items:[]},q:'why',sentence:'I go.',writeRewriteBack:()=>({paras:['one','two'],written:true,line:''}),rewriteStaysLine:()=>'',stranded:0,heading:null,titleOf:()=>null};
   const out=f(...PARAMS.map((p)=>p.startsWith('set')&&SETTERS.includes(p.slice(3))?rec(p.slice(3)):stubs[p]));
   return {fn:out[name],calls,urls,seat,mark:()=>calls.length};
  };
@@ -1046,16 +1046,18 @@ test('the Essay box starts and resets empty; the sample is only a placeholder; a
  // onEssayPaste cut out and run against stubs
  const a=src.indexOf('const onEssayPaste'),e=src.indexOf('/** The whole piece to the TV',a);assert.ok(a>0&&e>a);
  const js=ts.transpileModule(src.slice(a,src.lastIndexOf('\n',e)),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
- const {paragraphsOf}=require(path.join(SRC,'lib/rules/essay.ts'));
+ const {paragraphsOf,titleOf}=require(path.join(SRC,'lib/rules/essay.ts'));
  const run=(value,pasted)=>{
-  const loaded=[];let prevented=false;
-  const f=new Function('paragraphsOf','setSource','setPieceId','setPieceTitle','loadParagraphs',`${js}\nreturn onEssayPaste;`)(paragraphsOf,()=>{},()=>{},()=>{},(ps)=>loaded.push(ps));
+  const loaded=[],titles=[];let prevented=false;
+  const f=new Function('paragraphsOf','titleOf','setSource','setPieceId','setPieceTitle','loadParagraphs',`${js}\nreturn onEssayPaste;`)(paragraphsOf,titleOf,()=>{},()=>{},()=>{},(ps,said,title)=>{loaded.push(ps);titles.push(title);});
   f({preventDefault(){prevented=true;},clipboardData:{getData:()=>pasted},currentTarget:{value,selectionStart:value.length,selectionEnd:value.length}});
-  return {loaded,prevented};
+  return {loaded,titles,prevented};
  };
  const pasted='First paragraph of mine.\n\nSecond paragraph of mine.';
  for(const box of [FRESH[0],''])assert.deepEqual(run(box,pasted).loaded,[paragraphsOf(pasted)],'exactly the pasted paragraphs, nothing of the sample');
  assert.deepEqual(run(FRESH[0],pasted).loaded[0],['First paragraph of mine.','Second paragraph of mine.']);
+ assert.deepEqual(run('',pasted).titles,[null],'an untitled paste hands over no title, so no task key');
+ assert.deepEqual(run('',['My Trip to Brno','','We went on a train.','','It was long.'].join('\n')).titles,['My Trip to Brno'],'a titled paste hands over its title');
  assert.equal(run('',pasted).prevented,true);
  assert.equal(run('','one line only').prevented,false,'a paste without a blank line is left to the browser');
  // reading an empty box stays refused
@@ -1209,4 +1211,21 @@ test('L1-daniel-15-EM3-1 (recert-14 gap): one whole-piece read block is shared b
  const i=src.indexOf('const pieceRead');const blk=src.slice(i,src.indexOf('const sendSlot'));
  assert.match(blk,/paras\.length > 1 &&/,'only when the piece has more than one paragraph');
  assert.match(blk,/disabled=\{busy \|\| notice !== null\} onClick=\{\(\) => void readPiece\(\)\} data-role="essay-read-piece"/,'same readPiece call and disabled rule');
+});
+
+test('L1-daniel-15-EM3-2 (phone half): a titled paste reaches /api/analyse with its title as task, on the piece and the paragraph call; an untitled one sends none',()=>{
+ const src=code(PAGE);
+ assert.match(src,/titleOf/,'the phone reads the title line with titleOf');
+ const piece=src.match(/kind: "piece",[^}]*?\.\.\.\(heading \? \{ task: heading \} : \{\}\)/);
+ assert.ok(piece,'the piece call sends task only when a title was read');
+ const para=src.match(/kind: "essay", text: one, \.\.\.\(titleOf\(essay\) \?\? heading \? \{ task: titleOf\(essay\) \?\? heading \} : \{\}\)/);
+ assert.ok(para,'the paragraph call sends task only when a title was read');
+ assert.match(src,/loadParagraphs\(ps, `That is \$\{ps\.length\} paragraphs[^`]*`, titleOf\(all\)\)/,'a paste keeps the title of the whole pasted text');
+ assert.match(src,/titleOf\(text\)\);\s*\};/,'a file keeps its title line');
+ // the values those sites compute, run through the real rules: titled -> the title, untitled -> null (no task key)
+ const E=require(path.join(SRC,'lib/rules/essay.ts'));
+ const titled='My Trip to Brno\n\nWe went on a train.\n\nIt was a long day.';
+ assert.equal(E.titleOf(titled),'My Trip to Brno');
+ assert.equal(E.paragraphsOf(titled).length,2,'paragraphsOf drops the title, so only titleOf can carry it');
+ assert.equal(E.titleOf('We went on a train.\n\nIt was a long day.'),null,'an untitled paste has no task');
 });

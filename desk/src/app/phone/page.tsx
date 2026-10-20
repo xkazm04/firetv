@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call as rawCall } from "@/tv/useSession";
 import { ESSAY_TYPES, PLAYBOOK } from "@/lib/library/lessons.data";
-import { englishOnlyLine, essayFileProblem, essayTooLong, REWRITE_WHILE_READING, paragraphsOf, pieceAgainOffered, pieceBeingRead, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
+import { englishOnlyLine, essayFileProblem, essayTooLong, REWRITE_WHILE_READING, paragraphsOf, titleOf, pieceAgainOffered, pieceBeingRead, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
 import { EssayShelf, TextNotice } from "./EssayShelf";
 import { rewriteStaysLine, writeRewriteBack } from "./rewriteBack";
 import { topicIn } from "@/lib/library/paths";
@@ -120,6 +120,7 @@ export default function Phone() {
   const [pieceFormat, setPieceFormat] = useState("");
   /** An optional name for a new kept piece; empty keeps the desk's "Untitled" name (recert-6/L1-helena-46-EM5-6). */
   const [pieceTitle, setPieceTitle] = useState("");
+  const [heading, setHeading] = useState<string | null>(null); // the title line paragraphsOf left out of what was loaded; sent as the task (L1-daniel-15-EM3-2)
   const [notice, setNotice] = useState<string | null>(null);
   /** Which read the one-time notice interrupted: the whole piece (kept on the shelf) or the single paragraph showing. */
   const [noticeFor, setNoticeFor] = useState<"piece" | "paragraph">("piece");
@@ -304,7 +305,7 @@ export default function Phone() {
       if (r.ok) { const back = writeRewriteBack(paras, onSentence.text, rewrite); if (back.written) setParas(back.paras); else setStranded((k) => k + 1); setMsg(back.line ? `on the TV. ${back.line}` : "on the TV"); }
       else setMsg((j as { error?: string }).error ?? "failed"); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   /** Load a text as a list of paragraphs, the first one showing. */
-  const loadParagraphs = (ps: string[], said: string) => { setParas(ps); setStranded(0); setPix(0); setReadIx([]); setNote(""); setInfo(said); setMsg(""); };
+  const loadParagraphs = (ps: string[], said: string, title: string | null = null) => { setHeading(title); setParas(ps); setStranded(0); setPix(0); setReadIx([]); setNote(""); setInfo(said); setMsg(""); };
   const goPara = (i: number) => { if (i >= 0 && i < paras.length) { setPix(i); setNote(""); setInfo(""); setMsg(""); } };
   /** A file the learner picked: checked, read here in the browser (no upload), split on blank lines. */
   const pickFile = async (f: File | undefined) => {
@@ -319,14 +320,14 @@ export default function Phone() {
     const ps = paragraphsOf(text);
     if (!ps.length) return setNote("That file is empty. Pick one with some writing in it.");
     setSource("file"); setPieceId(undefined); setPieceTitle(f.name.replace(/\.[^./\\]*$/, "").trim().slice(0, 80)); // the file name, without its extension, names the piece unless the learner types another
-    loadParagraphs(ps, ps.length > 1 ? `${f.name}: ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.` : "");
+    loadParagraphs(ps, ps.length > 1 ? `${f.name}: ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.` : "", titleOf(text));
   };
   /** A pasted message with blank lines is split the same way; a paste without any goes in as it always did. */
   const onEssayPaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
     const t = e.currentTarget, pasted = e.clipboardData.getData("text");
-    const ps = paragraphsOf(t.value.slice(0, t.selectionStart) + pasted + t.value.slice(t.selectionEnd));
+    const all = t.value.slice(0, t.selectionStart) + pasted + t.value.slice(t.selectionEnd), ps = paragraphsOf(all);
     if (ps.length < 2) return;
-    e.preventDefault(); setSource("paste"); setPieceId(undefined); setPieceTitle(""); loadParagraphs(ps, `That is ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.`);
+    e.preventDefault(); setSource("paste"); setPieceId(undefined); setPieceTitle(""); loadParagraphs(ps, `That is ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.`, titleOf(all));
   };
   /** The whole piece to the TV (v2 E1): kept on the shelf first when asked; a 428 means the one-time notice is due. */
   const readPiece = async (keepIt = keep) => {
@@ -336,7 +337,7 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNote(""); setInfo(""); setBusy(true); setMsg(stranded ? `${rewriteStaysLine(stranded)} The desk is reading your piece…` : "the desk is reading your piece…");
     try {
-      const r = await call("/api/analyse", { kind: "piece", text: whole, type: etype, keep: keepIt, pieceId, source, ...(pieceFormat ? { format: pieceFormat } : {}), ...(keepIt && !pieceId && pieceTitle.trim() ? { title: pieceTitle.trim() } : {}) });
+      const r = await call("/api/analyse", { kind: "piece", text: whole, ...(heading ? { task: heading } : {}), type: etype, keep: keepIt, pieceId, source, ...(pieceFormat ? { format: pieceFormat } : {}), ...(keepIt && !pieceId && pieceTitle.trim() ? { title: pieceTitle.trim() } : {}) });
       const j = await r.json().catch(() => ({} as { error?: string; notice?: boolean; piece?: { pieceId?: string } }));
       if (moved()) return;
       if (r.status === 428 && (j as { notice?: boolean }).notice) { setMsg(""); setNotice((j as { error?: string }).error ?? ""); return; }
@@ -363,7 +364,7 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNote(""); setInfo(""); setBusy(true); setMsg("the desk is reading it…");
     try {
-      const r = await call("/api/analyse", { kind: "essay", text: one, type: etype });
+      const r = await call("/api/analyse", { kind: "essay", text: one, ...(titleOf(essay) ?? heading ? { task: titleOf(essay) ?? heading } : {}), type: etype });
       if (moved()) return;
       if (r.ok) { setMsg("on the TV"); setReadIx((x) => [...x, pix]); }
       else {
@@ -483,7 +484,7 @@ export default function Phone() {
   // P17 (i) begin: a different learner seated clears what the last learner worked on, on the phone
   const lastSeated = useRef<string | undefined>(undefined);
   const clearLastLearnersWork = () => {
-    setParas(FRESH_PARAS); setPix(0); setReadIx([]); setNote(""); setInfo(""); setSource("message"); setPieceId(undefined); setNotice(null);
+    setParas(FRESH_PARAS); setHeading(null); setPix(0); setReadIx([]); setNote(""); setInfo(""); setSource("message"); setPieceId(undefined); setNotice(null);
     setShot(null); setPhase("idle"); setQ(""); setMsg(""); setPaperRows([blankRow()]); setTyped([]); setSentence(FRESH_SENTENCE); setKeep(true); setRing(null);
   };
   // the first seating after load, and the same learner sitting again after an empty seat, clear nothing
