@@ -3654,6 +3654,18 @@ test('F14 (stick pass 2026-10-20): a phrase chosen on the TV is the learner turn
  assert(next&&next.startsWith('turn:')&&!next.includes(line),'the next turn reply ask is the new line, as after a typed reply');
 });
 
+test('F15 (stick pass 2026-10-20): at rest (focus -1) the first action is drawn lit and is the stop the keys move from, so the first Down leaves it',()=>{
+ const V=view();
+ assert.equal(V.focusStep(-1,1,3),1,'Down from rest: the second action, never the lit first one again');
+ assert.equal(V.focusStep(-1,-1,3),2,'Up from rest wraps from the first action');
+ assert.equal(V.focusStep(0,1,3),1);assert.equal(V.focusStep(2,1,3),0);assert.equal(V.focusStep(0,-1,3),2);
+ assert.equal(V.focusStep(-1,1,1),0,'one action: it stays');
+ const src=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.match(src,/focus:focusStep\(focus,delta,actions\.length\)/,'LingaTV moves focus by it');
+ assert.match(src,/data-rest=\{focus<0&&i===0&&!a\.disabled\?true:undefined\}/,'rest is drawn on the first action');
+ assert.match(src,/actions\[Math\.max\(0,focus\)\]/,'and Select at rest takes the first action');
+});
+
 // ---- TL-12: Linga, the TV drives and the phone speaks ----
 /** The TV's Linga hand-offs (ask.kind reply, words, prefs) as the session holds one. */
 const handoff=(s,kind)=>({...s,ask:{id:'ask-1',kind,learner:s.learner?.id??null,screen:s.screen,at:0,phase:'open'}});

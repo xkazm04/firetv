@@ -6,7 +6,7 @@ import { AUTHORED_SCENES } from "@/lib/english/curriculum";
 import { ownerOf } from "@/lib/english/activity";
 import { accepts } from "@/lib/english/turn";
 import { runningTake } from "@/lib/english/take";
-import { activeCheck, artOf, lingaView, NO_UI, progressDots, replyKey, TRY_TAG, tvStatus, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
+import { activeCheck, artOf, focusStep, lingaView, NO_UI, progressDots, replyKey, TRY_TAG, tvStatus, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
 import { landingFocus } from "@/tv/landingRows";
 import { keyOf } from "@/tv/keys";
 import { useEnglish } from "./useEnglish";
@@ -86,7 +86,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       // Space pauses and resumes the scene, only where the turn takes a pause: never over a reply in flight
       if(k==="play"){if(c&&!onCheck&&accepts(c,"pause"))cmd("pause");return;}
       if(k==="up"&&home&&!menu&&!picking){post({type:"nav",screen:"learner",from:"linga"});return;}
-      if(k!=="select"){const delta=k==="right"||k==="down"?1:-1;post({type:"focus",focus:focus<0?0:(focus+delta+actions.length)%actions.length});return;}
+      if(k!=="select"){const delta=k==="right"||k==="down"?1:-1;post({type:"focus",focus:focusStep(focus,delta,actions.length)});return;}
       const a=actions[Math.max(0,focus)];if(a&&!a.disabled&&(!waiting||cancel(a)))go(a);
     };
     addEventListener("keydown",handler);return()=>removeEventListener("keydown",handler);

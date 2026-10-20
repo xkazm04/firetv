@@ -263,6 +263,14 @@ export function wordsJob(s: Session): WordsJob | null {
   const p = s.profiles.find(x => x.id === s.learner?.id);
   return modeOf(p, s.englishLearning.preferences ?? defaultPreferences(p)) === "adult" ? "pitch" : null;
 }
+/**
+ * Where a D-pad step lands on a row of `count` actions (F15, stick pass 2026-10-20). At rest (focus -1) the row draws its first
+ * action lit and Select takes it, so the keys move from that stop too: the first Down reaches the second action.
+ */
+export function focusStep(focus: number, delta: number, count: number): number {
+  return count > 0 ? (Math.max(0, focus) + delta + count) % count : 0;
+}
+
 /** The learner's turn the reply ask is for (TL-12): the view's answer without the goal, which is typed in the words panel. A key that changes with each question. */
 export function replyKey(v: Pick<LingaView, "answer">): string | null {
   const a = v.answer;
