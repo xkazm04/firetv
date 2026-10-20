@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { adultSeat, englishOnlyFor, playbookLine, paragraphCount, paragraphPending, paragraphState, pieceBeingRead, pieceReadingLine, readingAPiece, forensicPlace, forensicLead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
+import { adultSay, playbookTitle, adultSeat, englishOnlyFor, playbookLine, paragraphCount, paragraphPending, paragraphState, pieceBeingRead, pieceReadingLine, readingAPiece, forensicPlace, forensicLead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, forensicStops, rewriteStatus, planStops, essayHandoffOf, essayHandoffLine, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS, curtainOn, type ForensicStop } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -148,14 +148,14 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const refused = refusalCaption(s);
   const adult = adultSeat(s), english = englishOnlyFor(s);
   const withEnglish = (text: string) => english ? `${text} ${english}` : text;
-  const cap = job?.phase === "running" ? { label: READING_LABEL, text: readingAPiece(a?.piece, job.start) ? PIECE_WAIT(a?.piece) : "The desk is reading your paragraph. It lands here." }
-    : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
+  const cap = job?.phase === "running" ? { label: READING_LABEL, text: readingAPiece(a?.piece, job.start) ? PIECE_WAIT(a?.piece) : adultSay("The desk is reading your paragraph. It lands here.", adult) }
+    : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ?? adultSay("The paragraph did not come back. Send it again from the phone.", adult) }
     : refused ? refused
     : essayHandoffLine(s) ? { label: "On your phone", text: essayHandoffLine(s) as string }
     : at === "plan" ? { label: "Start from the pattern", text: withEnglish(adult ? "Write the message yourself: one sentence for each slot, on the phone." : "Write the paragraph yourself: one sentence for each slot, on the phone.") }
     : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: summaryLine(a) }
     : lens && chosen ? { label: `${lens.name} · chosen`, text: withEnglish(adult ? "Paste, type or dictate one message or email on the phone." : "Paste, type or dictate one paragraph on the phone.") }
-    : lens ? { label: `${lens.name} reads`, text: withEnglish(lens.promise) } : { label: "Essay Master", text: "Choose a lens." };
+    : lens ? { label: `${lens.name} reads`, text: withEnglish(adultSay(lens.promise, adult)) } : { label: "Essay Master", text: "Choose a lens." };
 
   return (<>
     <Brand /><Top s={s} menu="Playbook" />
@@ -216,13 +216,13 @@ export function EssayPlan({ s }: { s: Session }) {
   const done = slots.every(Boolean);
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const fit = here >= 0 && slots[here] ? planFit(defs, here, slots[here]) : null;
-  const refused = refusalCaption(s);
-  const cap = job?.phase === "running" ? { label: "Reading", text: "The desk is reading your paragraph. It lands here." }
-    : job?.phase === "failed" ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Press OK on Read it to send it again." }
+  const refused = refusalCaption(s), adult = adultSeat(s);
+  const cap = job?.phase === "running" ? { label: "Reading", text: adultSay("The desk is reading your paragraph. It lands here.", adult) }
+    : job?.phase === "failed" ? { label: "Not read", text: job.error ?? adultSay("The paragraph did not come back. Press OK on Read it to send it again.", adult) }
     : refused ? refused
     : essayHandoffOf(s) && here >= 0 ? { label: `Slot ${here + 1} · ${defs[here]?.label ?? ""}`, text: s.phonesLive === 0 ? "No phone is connected. Back: cancel." : "On the phone. Back cancels." }
     : here >= 0 ? { label: `Slot ${here + 1} · ${defs[here]?.label ?? ""}`, text: fit ?? (slots[here] ? "Written. Say it again on the phone to change it." : "Say it on the phone.") }
-    : at === "read" ? { label: "Read it", text: done ? "The desk reads your paragraph through the " + (ESSAY_TYPES.find((t) => t.id === s.essayPlan?.lens)?.name ?? "Structure") + " lens." : "A slot is still to write. OK takes you to it." }
+    : at === "read" ? { label: "Read it", text: done ? adultSay("The desk reads your paragraph through the ", adult) + (ESSAY_TYPES.find((t) => t.id === s.essayPlan?.lens)?.name ?? "Structure") + " lens." : "A slot is still to write. OK takes you to it." }
     : { label: "Your plan", text: "Back to the lenses. What you wrote stays." };
   const acts: Array<{ k: string; word: string; on: boolean; off?: boolean }> = [
     { k: "write", word: "Write on my phone", on: at === "slot" },
@@ -521,6 +521,7 @@ function Table({ s, a, cur, verdicts, curtain }: { s: Session; a: Reading; cur: 
 export function Playbook({ s, focus }: { s: Session; focus: number }) {
   const at = stopAt(PLAYBOOK_STOPS, focus) ?? PLAYBOOK_STOPS[0];
   const forReading = s.essay ? playFor(s.essay.type) : null;
+  const adult = adultSeat(s), title = (p: Play) => playbookTitle(p.id, p.title, adult);
   const unit = (p: Play) => playLesson(p)?.unit ?? (PLAYBOOK_STOPS as readonly Play[]).indexOf(p) + 1;
   return (<>
     <Brand /><Top s={s} menu="Back" />
@@ -531,8 +532,8 @@ export function Playbook({ s, focus }: { s: Session; focus: number }) {
           <div key={p.id} className={`em-w${p === at ? " is-focused" : ""}`} data-k="book" data-focused={p === at} style={{ "--em-f": "100%" } as CSSProperties}>
             <span className="em-caret" />
             <div className="em-type">
-              <div className="em-ol"><Letters word={p.title} /></div>
-              <div className="em-sol" style={{ animationDelay: `${i * 120}ms` }}><Letters word={p.title} /></div>
+              <div className="em-ol"><Letters word={title(p)} /></div>
+              <div className="em-sol" style={{ animationDelay: `${i * 120}ms` }}><Letters word={title(p)} /></div>
             </div>
             <div className="em-st"><span className="em-lbl">Unit {String(unit(p)).padStart(2, "0")}</span><span className="em-d">{playLesson(p)?.minutes ?? ""} min</span></div>
           </div>
@@ -541,13 +542,13 @@ export function Playbook({ s, focus }: { s: Session; focus: number }) {
     </section>
     <aside className="em-side">
       <div className="em-panel" data-role="essay-specimen-card">
-        <div className="em-lbl">{forReading === at ? "For your paragraph" : "The shape"}</div>
-        <h2>{at.title}</h2>
+        <div className="em-lbl">{forReading === at ? (adult ? "For your message" : "For your paragraph") : "The shape"}</div>
+        <h2>{title(at)}</h2>
         <div style={{ marginTop: 22 }}><Pattern compact pattern={at.pattern} label={<span className="em-lbl">The pattern</span>} /></div>
         <div className="em-door"><span>X-ray</span><span className="em-key">OK</span></div>
       </div>
     </aside>
-    <div className="em-caption"><Caption label={`Unit ${unit(at)} · ${at.title}`} text={playbookLine(at.id, at.line, adultSeat(s))} /></div>
+    <div className="em-caption"><Caption label={`Unit ${unit(at)} · ${title(at)}`} text={playbookLine(at.id, at.line, adultSeat(s))} /></div>
   </>);
 }
 
@@ -568,7 +569,7 @@ export function Xray({ s }: { s: Session }) {
   return (<>
     <Brand /><Top s={s} menu="Back" />
     <section className="em-xray">
-      <div className="em-lbl">Playbook · {p.title} · x-ray</div>
+      <div className="em-lbl">Playbook · {playbookTitle(p.id, p.title, adultSeat(s))} · x-ray</div>
       {XRAY.map((r, i) => (
         <div key={r.role} className={`em-xrow${lit.includes(i) ? "" : " dim"}`} data-role-name={r.role}>
           <div className="em-xword">
@@ -581,6 +582,6 @@ export function Xray({ s }: { s: Session }) {
         </div>
       ))}
     </section>
-    <div className="em-xcap"><Caption label={`Unit ${playLesson(p)?.unit ?? PLAYBOOK_STOPS.indexOf(p) + 1} · ${p.title}`} text={playbookLine(p.id, p.line, adultSeat(s))} /></div>
+    <div className="em-xcap"><Caption label={`Unit ${playLesson(p)?.unit ?? PLAYBOOK_STOPS.indexOf(p) + 1} · ${playbookTitle(p.id, p.title, adultSeat(s))}`} text={playbookLine(p.id, p.line, adultSeat(s))} /></div>
   </>);
 }

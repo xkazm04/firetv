@@ -2132,3 +2132,34 @@ test('EM1-1: Adult mode hears messages and emails on the lens home, the plan and
  assert.match(textOf(drawEssay('Playbook',fam,{focus:pi})),/Claim, then evidence, then the link back\./);
  assert.match(textOf(drawEssay('Xray',{...adult,focus:pi})),/In a message or an email/);
 });
+test('L1-helena-46-EM1-1: an adult profile draws no paragraph at the lens home, the wait and failure captions, the plan and the playbook stop; family still does',()=>{
+ const KEYS2=require(path.join(root,'src/tv/keys.ts'));
+ const L=require(path.join(root,'src/lib/library/lessons.data.ts'));
+ const adult=seatOf({mode:'adult'}),fam=seatOf({mode:'family'});
+ const stops=KEYS2.lensStops(adult),argAt=stops.findIndex(x=>x&&x.id==='argument');
+ assert.ok(argAt>=0);
+ const job=(phase,extra)=>({analyse:{id:'j',phase,key:'essay',startedAt:Date.now(),...extra}});
+ const PARA=/paragraph/i;
+ const planOf=(s,extra)=>({...s,essayPlan:{lens:'structure',slots:['a','b','c']},...extra});
+ const surfaces=(s)=>({
+  argument:capOf(drawEssay('EssayType',s,{focus:argAt})).text,
+  wait:capOf(drawEssay('EssayType',{...s,jobs:job('running')},{focus:argAt})).text,
+  fail:capOf(drawEssay('EssayType',{...s,jobs:job('failed')},{focus:argAt})).text,
+  planWait:capOf(drawEssay('EssayPlan',planOf(s,{jobs:job('running')}))).text,
+  planFail:capOf(drawEssay('EssayPlan',planOf(s,{jobs:job('failed')}))).text,
+  planRead:capOf(drawEssay('EssayPlan',planOf(s,{focus:3}))).text,
+ });
+ const A=surfaces(adult),F=surfaces(fam);
+ assert.match(A.argument,/Does the message take a side/);
+ for(const [k,t] of Object.entries(A)) assert.ok(!PARA.test(t),'adult '+k+': '+t);
+ for(const k of ['argument','wait','fail','planWait','planFail','planRead']) assert.match(F[k],PARA,'family '+k);
+ const pi=KEYS2.PLAYBOOK_STOPS.findIndex(x=>x.id==='para');
+ for(const name of ['Playbook','Xray']){
+  const a=textOf(drawEssay(name,name==='Xray'?{...adult,focus:pi}:adult,{focus:pi})),f=textOf(drawEssay(name,name==='Xray'?{...fam,focus:pi}:fam,{focus:pi}));
+  assert.ok(!/Unit 0?2 · Paragraph/.test(a)&&!/Playbook · Paragraph/.test(a),name+' adult title');
+  assert.match(a,/Message/);assert.match(f,/Paragraph/);
+ }
+ assert.match(textOf(drawEssay('Playbook',adult,{focus:pi})),/Unit 2 · Message/);
+ assert.match(textOf(drawEssay('Playbook',fam,{focus:pi})),/Unit 2 · Paragraph/);
+ assert.equal(ER.playbookTitle('para','Paragraph',false),'Paragraph');assert.equal(ER.playbookTitle('thesis','Thesis',true),'Thesis');
+});

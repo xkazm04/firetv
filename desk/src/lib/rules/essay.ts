@@ -914,6 +914,10 @@ export const adultSeat = (s: Seat) => seatedProfile(s)?.mode === "adult";
 export function playbookLine(id: string, school: string, adult: boolean): string {
   return adult ? ADULT_PLAY_LINE[id] ?? school : school;
 }
+/** The playbook stop's title for an adult: the paragraph structure is a message there; every other title and every other mode keeps its own. */
+export const playbookTitle = (id: string, title: string, adult: boolean): string => adult && id === "para" ? "Message" : title;
+/** A line that says paragraph, spoken to an adult as a message; the school words for everyone else. */
+export const adultSay = (text: string, adult: boolean): string => adult ? text.replace(/paragraph/g, "message").replace(/Paragraph/g, "Message") : text;
 const ADULT_PLAY_LINE: Record<string, string> = {
   thesis: "The one sentence of a message that takes a side and says why.",
   para: "In a message or an email: the point, then the proof, then what it means for the reader.",
