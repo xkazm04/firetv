@@ -2342,3 +2342,18 @@ test('L1-helena-46-EM1-9 round 5: the letter-run profile is trainProfile() on th
  assert.equal(R.paragraphIsEnglish('Ich bin heute sehr müde.'),false);
  for(const t of ['Slavoj Žižek','Tim ran home.','Hello there'])assert.equal(R.paragraphIsEnglish(t),true,t);
 });
+
+test('L1-helena-46-EM1-4 round 5: the r5 BLIND set is pinned at its measured rate (60 of 60 Czech refused, 0 of 45 English); r4 is tuned',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const held=JSON.parse(fs.readFileSync(path.join(__dirname,'essay-heldout-czech-short-r5.json'),'utf8'));
+ const sha=require('node:crypto').createHash('sha256').update(JSON.stringify({czech:held.czech,english:held.english})).digest('hex');
+ assert.equal(sha,held.sha256,'the r5 held-out file was edited');
+ assert.equal(sha,'b44e9ce80a16f0e108d8553ebc9fd223f41800751b09e53ef2a6463162e6dd91');
+ assert.equal(held.czech.length,60);
+ assert.equal(held.english.length,45);
+ const cz=held.czech.filter(t=>!R.paragraphIsEnglish(t)),en=held.english.filter(t=>!R.paragraphIsEnglish(t));
+ console.log(`# EM1-4 r5 BLIND: Czech refused ${cz.length}/${held.czech.length}, English refused ${en.length}/${held.english.length}`);
+ // BLIND: committed alone in befc9a06 before the round-5 profile (d97ec7b9), measured once after it was final; the round-4 word-list rule gives 57 of 60 and 1 of 45 on it. Never tuned on.
+ assert.equal(cz.length,60,'r5 BLIND Czech refused (60 of 60)');
+ assert.deepEqual(en.map(t=>held.english.indexOf(t)),[],'r5 BLIND English refused is 0 of 45');
+});
