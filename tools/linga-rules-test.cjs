@@ -3774,3 +3774,59 @@ test('H3 case 3: the words and prefs hand-offs gate their own commands and Linga
  assert.match(phone,/run\(action, \{ \.\.\.extra, askId: a\?\.id \}\)/);
  assert.doesNotMatch(phone,/useEnglish\(s\);[\s\S]*\brun\(\s*"(?!capture|preferences)/,'only the gated commands are posted by literal');
 });
+
+// ---- Linga rework 8 (recert-13, LT-viktor-67-J4-1, LT-tomas-9-J4-2): at A1-A2 Choose a phrase never repeats a pair on one
+// line, offers the scene's task phrase within two presses, says to type when nothing is new, and a pick shows the phrase to send.
+// Scenes are recert-13's (uat/runs/2026-10-17-lt-swap-2/recert-13): Viktor A1 (Sam, school), Tomas A1 (Sam, building), Petra A2 (hotel).
+const R8_SCENES=[
+ {name:'viktor-67 A1',level:'A1',partner:'Sam · grandson',cue:'Try: Hi Sam! Is school good?',task:'Hi Sam! Is school good?',line:'Hi Grandpa! I am home from school now.',help:{fits:'Hi Sam! Good to see you.',misfit:'The weather is cold today.'}},
+ {name:'tomas-9 A1',level:'A1',partner:'Sam · Friend',cue:'Try: I make a big tree.',task:'I make a big tree.',line:'Hi, Sam here. What do you make?',help:{fits:'I make a house.',misfit:'I am nine.'}},
+ {name:'petra-38 A2',level:'A2',partner:'Ms Lee · hotel receptionist',cue:'Try: The room is cold.',task:'The room is cold.',line:'Your room. What is wrong?',help:{fits:'The bed is very noisy.',misfit:'I like the city.'}},
+];
+const pairKey=o=>[...o].map(x=>x.toLowerCase()).sort().join('|');
+/** the scene at its level with the partner's one line; each press of Choose a phrase is recorded as {options,cue,quizOpen} */
+async function r8Presses(sc,n){
+ await bandStart('ema',sc.level,'Hello! Can you see me?',()=>({reply:sc.line,observations:[],moment:NO_MOMENT,help:{simpler:'',meaning:'',starter:'',sayBack:'',...sc.help}}));
+ const c0=getSession().conversation;dispatch({type:'linga.changed',conversation:{...c0,partner:sc.partner,scene:{...c0.scene,cue:sc.cue}}});
+ await reply('Hello. I see you.');
+ const out=[];
+ for(let i=0;i<n;i++){await command('quiz');const c=getSession().conversation;out.push({options:c.quizOpen&&c.lineQuiz?[...c.lineQuiz.options]:null,cue:c.cue,quizOpen:c.quizOpen});}
+ return out;
+}
+for(const sc of R8_SCENES)test(`Linga rework 8 wired (${sc.name}): Choose a phrase never repeats a pair on one line, offers the scene's task phrase within two presses, and says to type when nothing is new`,async()=>{
+ const presses=await r8Presses(sc,5);
+ const pairs=presses.filter(p=>p.options).map(p=>pairKey(p.options));
+ for(let i=1;i<pairs.length;i++)assert.notEqual(pairs[i],pairs[i-1],`press ${i+1} is not the pair of press ${i}`);
+ assert.equal(new Set(pairs).size,pairs.length,'no pair is offered twice on one line');
+ assert(presses.slice(0,2).some(p=>p.options?.includes(sc.task)),'the scene\'s task phrase is offered within 2 presses');
+ const last=presses.at(-1);assert.equal(last.options,null,'with nothing new the quiz does not open again');assert.equal(last.cue,'You can type your own reply on the phone.','it says to type');
+});
+for(const sc of R8_SCENES)test(`Linga rework 8 wired (${sc.name}): a pick is followed by the phrase shown ready to send`,async()=>{
+ await r8Presses(sc,1);
+ let c=getSession().conversation;const i=c.lineQuiz.options.indexOf(c.lineQuiz.options[c.lineQuiz.correct]);
+ const picked=c.lineQuiz.options[i];
+ await command('choice',{option:i});c=getSession().conversation;
+ assert.equal(c.quizOpen,false);assert(c.cue.includes(`"${picked}"`),`the cue shows the phrase to send: ${c.cue}`);assert(/on the phone/.test(c.cue));
+});
+test('Linga rework 8 rules: the scene task phrase keeps its words (no letter is eaten) and B1 asks nothing of the new path',()=>{
+ const H=require(path.join(root,'src/lib/english/help.ts'));
+ assert.equal(H.sceneTaskFor('Try: Hi Sam! Is school good?','A1','Hi Grandpa! I am home from school now.'),'Hi Sam! Is school good?');
+});
+/** Adela (B1) on the recert-13 inputs: every press of Choose a phrase and every pick, as the learner sees them */
+async function r8Adela(){
+ const sc={level:'B1',partner:'Sam · grandson',cue:'Try: Hi Sam! Is school good?',line:'Hi Grandpa! I am home from school now.',help:{fits:'Hi Sam! Good to see you.',misfit:'The weather is cold today.',task:'Hi Sam! Is school good?'}};
+ await bandStart('ema',sc.level,'Hello! Can you see me?',()=>({reply:sc.line,observations:[],moment:NO_MOMENT,help:{simpler:'',meaning:'',starter:'',sayBack:'Hi Sam! Good to see you.',...sc.help}}));
+ const c0=getSession().conversation;dispatch({type:'linga.changed',conversation:{...c0,partner:sc.partner,scene:{...c0.scene,cue:sc.cue}}});
+ await reply('Hello. I see you.');
+ const out=[],snap=(step,error)=>{const c=getSession().conversation;out.push({step,error:error??null,cue:c.cue,quizOpen:c.quizOpen,options:c.lineQuiz?.options??null,shown:c.help?.shown??null});};
+ const go=async(step,action,extra)=>{try{await command(action,extra);snap(step);}catch(e){snap(step,e.message);}};
+ await go('cue1','cue');await go('cue2','cue');await go('quiz1','quiz');await go('quiz2','quiz');await go('quiz3','quiz');
+ for(const o of [0,1]){await go(`choice${o}`,'choice',{option:o});await go(`quiz-after${o}`,'quiz');}
+ return out;
+}
+// the expected value is the output of the code at 4a6720a0 (the parent of rework 8), read through git show and hard-coded
+const ADELA_BEFORE_R8=[{"step":"cue1","error":null,"cue":"Try: Hi Sam! Is school good?","quizOpen":false,"options":null,"shown":null},{"step":"cue2","error":null,"cue":"Try: Hi Sam! Is school good?","quizOpen":false,"options":null,"shown":null},{"step":"quiz1","error":null,"cue":"Try: Hi Sam! Is school good?","quizOpen":false,"options":null,"shown":null},{"step":"quiz2","error":null,"cue":"Try: Hi Sam! Is school good?","quizOpen":false,"options":null,"shown":null},{"step":"quiz3","error":null,"cue":"Try: Hi Sam! Is school good?","quizOpen":false,"options":null,"shown":null},{"step":"choice0","error":"Open Choose a phrase first.","cue":"Try: Hi Sam! Is school good?","quizOpen":false,"options":null,"shown":null},{"step":"quiz-after0","error":null,"cue":"Try: Hi Sam! Is school good?","quizOpen":false,"options":null,"shown":null},{"step":"choice1","error":"Open Choose a phrase first.","cue":"Try: Hi Sam! Is school good?","quizOpen":false,"options":null,"shown":null},{"step":"quiz-after1","error":null,"cue":"Try: Hi Sam! Is school good?","quizOpen":false,"options":null,"shown":null}];
+test('Linga rework 8 regression: B1 help for the same inputs is byte-identical to its output before rework 8 (Adela)',async()=>{
+ const got=await r8Adela();
+  assert.equal(JSON.stringify(got),JSON.stringify(ADELA_BEFORE_R8));
+});
