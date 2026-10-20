@@ -147,3 +147,14 @@ test('TL-10: Recap and This week are read-only views: opening them is a state ch
  assert.match(fn,/openPanel\(|openView\(/);assert.doesNotMatch(fn,/post\(/);assert.doesNotMatch(fn,/call\(/);
  assert.match(p,/if \(id === "recap"\) openPanel\("parent"\)/);assert.match(p,/else if \(id === "recap"\) openPanel\("parent"\);/);
 });
+
+test('stick pass 2026-10-20: an ask whose panel holds its own submit (paper, reply, words, prefs) puts Cancel alone in the bar, never a primary that cannot be pressed',()=>{
+ const {barItems,PANEL_SUBMITS}=B();
+ assert.deepEqual([...PANEL_SUBMITS].sort(),['paper','prefs','reply','words']);
+ for(const kind of ['paper','reply','words','prefs'])for(const primaryOff of [false,true])
+  assert.deepEqual(barItems({joined:true,ask:{kind,phase:'open'},primaryOff}).map(i=>i.id),['cancel'],kind);
+ assert.deepEqual(barItems({joined:true,ask:{kind:'reply',phase:'sent'}}).map(i=>i.label),['Sent','More'],'sent is as before');
+ assert.deepEqual(barItems({joined:true,ask:{kind:'rewrite',phase:'open'}}).map(i=>i.id),['cancel','primary'],'a kind the bar submits keeps its primary');
+ // the preferences ask is not the name's: the bar's Done for a name only closes the ask, and must not stand in for Save preferences
+ assert.doesNotMatch(flat(PAGE),/case "prefs":/,'page.tsx gives prefs no bar primary');
+});

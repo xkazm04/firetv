@@ -623,7 +623,7 @@ export default function Phone() {
     // Done only closes the phone's end of the hand-off; Save and Back stay on the TV (TL-8)
     const done = () => void nameQueue(() => post({ type: "ask.cancel", id: handoff.id })).catch(() => setMsg("That did not reach the desk."));
     switch (handoff.kind) {
-      case "name": case "prefs": return { run: done, off: !pname.trim() || !s?.draft, ctx: {} };
+      case "name": return { run: done, off: !pname.trim() || !s?.draft, ctx: {} };
       case "page": return { run: snapping ? snap : () => send(shot!.url, shot!.w, shot!.h, shot!.sub, shot!.title), off: snapping ? !cam || busy : busy, ctx: { snap: snapping } };
       case "sheet": {
         if (route === "type") return { run: sendTyped, off: busy || !typed.some((x) => x.trim()), ctx: {} };
@@ -641,7 +641,7 @@ export default function Phone() {
       case "slot": return { run: sendSlot, off: busy || !onPlan || !slotText.trim(), ctx: {} };
       case "sentence": return { run: checkSentence, off: busy, ctx: {} };
       case "private": return { run: () => void post({ type: "ask.cancel", id: handoff.id }), off: false, ctx: {} };
-      // paper, reply and words are submitted inside their own panels (PaperPanel, LingaPhone): the bar has no hook into them yet (TL-9)
+      // paper, reply, words and prefs are submitted inside their own panels (PaperPanel, LingaPhone): the bar holds Cancel alone (phoneBar.ts PANEL_SUBMITS)
       default: return none;
     }
   })();
