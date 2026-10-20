@@ -55,6 +55,9 @@ const taskOf = (t: unknown): string | undefined => (typeof t === "string" && t.t
 /** The task a reading carries: the one the send names, else the title line on top of the text (L1-daniel-15-EM3-2), else none. */
 const taskFor = (body: { task?: unknown; text?: unknown }): string | undefined => taskOf(body.task) ?? taskOf(titleOf(body.text));
 
+/** The open Essay Master task's name the send carries, bounded like the task: a plain trimmed string, or nothing. Data to the reading, never an instruction. */
+const assignmentOf = (body: { assignment?: unknown }): string | undefined => taskOf(body.assignment);
+
 /**
  * A whole piece read paragraph by paragraph while the TV fills in: the one run the phone's piece and the Workroom's kept
  * piece share. The first paragraph back opens the reading (essay.set), the rest grow it (essay.progress).
@@ -187,7 +190,7 @@ async function post(req: Request) {
       if (kept.ok) pieceId = kept.value.id;
       else return NextResponse.json({ error: kept.error }, { status: kept.status });
     }
-    const r = await readPiece(who, body.text, body.type, age, { pieceId, format: body.format, reader: { mode, task: taskFor(body) } });
+    const r = await readPiece(who, body.text, body.type, age, { pieceId, format: body.format, reader: { mode, task: taskFor(body), assignment: assignmentOf(body) } });
     return r.ok ? NextResponse.json(r.value) : refused(r);
   }
   // one paragraph per reading: a longer text is refused with a sentence, never cut down (the cap is in rules/essay,
@@ -200,7 +203,7 @@ async function post(req: Request) {
   if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });
   const r = await runJob("analyse", async () => {
     dispatch({ type: "essay.type", essayType: body.type, owner: who.id });
-    const a = await analyseEssay(body.text, body.type, who.id, age, { mode, task: taskFor(body) }, hasFormat(body.format) ? body.format : undefined);
+    const a = await analyseEssay(body.text, body.type, who.id, age, { mode, task: taskFor(body), assignment: assignmentOf(body) }, hasFormat(body.format) ? body.format : undefined);
     dispatch({ type: "essay.set", analysis: a, owner: who.id });
     return a;
   }, { key: "essay", start: `reading your paragraph — ${body.type} lens…`, done: (a) => a.summary.slice(0, 120) });

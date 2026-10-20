@@ -121,6 +121,8 @@ export default function Phone() {
   /** An optional name for a new kept piece; empty keeps the desk's "Untitled" name (recert-6/L1-helena-46-EM5-6). */
   const [pieceTitle, setPieceTitle] = useState("");
   const [heading, setHeading] = useState<string | null>(null); // the title line paragraphsOf left out of what was loaded; sent as the task (L1-daniel-15-EM3-2)
+  /** The open Essay Master task's name (a session task of the essay subject, not yet done), sent beside the text as the assignment. */
+  const assignment = s?.tasks?.find((t) => t.sub === "essay" && !t.done)?.name;
   const [notice, setNotice] = useState<string | null>(null);
   /** Which read the one-time notice interrupted: the whole piece (kept on the shelf) or the single paragraph showing. */
   const [noticeFor, setNoticeFor] = useState<"piece" | "paragraph">("piece");
@@ -337,7 +339,7 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNote(""); setInfo(""); setBusy(true); setMsg(stranded ? `${rewriteStaysLine(stranded)} The desk is reading your piece…` : "the desk is reading your piece…");
     try {
-      const r = await call("/api/analyse", { kind: "piece", text: whole, ...(heading ? { task: heading } : {}), type: etype, keep: keepIt, pieceId, source, ...(pieceFormat ? { format: pieceFormat } : {}), ...(keepIt && !pieceId && pieceTitle.trim() ? { title: pieceTitle.trim() } : {}) });
+      const r = await call("/api/analyse", { kind: "piece", text: whole, ...(heading ? { task: heading } : {}), ...(assignment ? { assignment } : {}), type: etype, keep: keepIt, pieceId, source, ...(pieceFormat ? { format: pieceFormat } : {}), ...(keepIt && !pieceId && pieceTitle.trim() ? { title: pieceTitle.trim() } : {}) });
       const j = await r.json().catch(() => ({} as { error?: string; notice?: boolean; piece?: { pieceId?: string } }));
       if (moved()) return;
       if (r.status === 428 && (j as { notice?: boolean }).notice) { setMsg(""); setNotice((j as { error?: string }).error ?? ""); return; }
@@ -364,7 +366,7 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNote(""); setInfo(""); setBusy(true); setMsg("the desk is reading it…");
     try {
-      const r = await call("/api/analyse", { kind: "essay", text: one, ...(titleOf(essay) ?? heading ? { task: titleOf(essay) ?? heading } : {}), type: etype, ...(!pieceId && pieceFormat ? { format: pieceFormat } : {}) });
+      const r = await call("/api/analyse", { kind: "essay", text: one, ...(titleOf(essay) ?? heading ? { task: titleOf(essay) ?? heading } : {}), ...(assignment ? { assignment } : {}), type: etype, ...(!pieceId && pieceFormat ? { format: pieceFormat } : {}) });
       if (moved()) return;
       if (r.ok) { setMsg("on the TV"); setReadIx((x) => [...x, pix]); }
       else {
