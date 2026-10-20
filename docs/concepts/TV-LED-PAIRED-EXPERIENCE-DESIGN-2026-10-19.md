@@ -583,6 +583,16 @@ Next.js's dev badge sits over the phone's left bar item in the captures. It appe
 | F12 | Paired pair screen: ticker "Waiting for a phone"; buttons over the address | b46f5bc2 | `tools/tv-keys-test.cjs` |
 | F5 | The rewrite status named the phone's Essay tab | 2a78c7af | `tools/tv-keys-test.cjs` |
 
+### Linga stick fixes (2026-10-20, after the pass)
+
+Not yet walked on the stick.
+
+| # | Finding | Commit | Test |
+|---|---|---|---|
+| F14 | Choose a phrase on the TV now answers the turn: a right pick is sent as the learner's line (mode `choice`, helped), the partner answers and the next reply ask opens. A wrong pick, a duet, a running take and the turn cap still cue the phone | 5cf2f07f | `tools/linga-rules-test.cjs` (F14) |
+| F15 | At rest (focus −1) the first lit action is the stop the D-pad moves from, so the first Down reaches the second action (`focusStep`) | 64bce506 | `tools/linga-rules-test.cjs` (F15) |
+| F19 | A generated scene draws its place's picture (café, hotel, classroom, interview, moon) or the neutral `start`, never its skill's; the plan doors follow the same rule | 868dfccd | `tools/linga-rules-test.cjs` (F19) |
+
 ### Open, for the next builders (not fixed here)
 
 | # | Finding | Where |
