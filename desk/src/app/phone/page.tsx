@@ -894,11 +894,14 @@ export default function Phone() {
             const log = tonightsLog(s, now), mins = Math.round(log.minutes), list = tasksLine(s.tasks);
             const tally = [mins > 0 ? counted(mins, "minute") + " on task" : "", log.problems.length ? counted(log.problems.length, "problem") : "", log.hints ? counted(log.hints, "hint") : ""].filter(Boolean).join(" · ");
             // one block per learner with work tonight, headed by their name; the seated learner's carries the tally, the list and the caption
-            return <>{blocks.map((b) => { const own = b.id === s.learner?.id; return <div className="precap" data-role="phone-recap" data-learner={b.id} key={b.id}><b>{`${b.name}, tonight`}</b>{own && tally}
+            // MB5-2 (operator, 2026-10-20): the phone shows the seated learner's evening only; the others' show on the TV
+            const seatedId = s.learner?.id, mine = blocks.filter((b) => b.id === seatedId), othersHere = blocks.length > mine.length && !!seatedId;
+            return <>{mine.map((b) => { const own = true; return <div className="precap" data-role="phone-recap" data-learner={b.id} key={b.id}><b>{`${b.name}, tonight`}</b>{own && tally}
               <ul>{b.tiles.map((t) => <li key={t.app} data-app={t.app}>{recapLine(t)}</li>)}{own && list && <li data-app="tasks">{list}</li>}</ul>
               <p style={{ margin: "10px 0 0", fontWeight: 600 }}>{recapCaption(b.tiles)}</p>
               {b.tiles.map((t) => (t.app === "maths" && !t.empty ? <ul key="hinted"><li data-role="phone-hinted">{hintedLine(t)}</li>{slippedLine(t) && <li data-role="phone-slipped">{slippedLine(t)}</li>}</ul> : null))}</div>; })}
-              {!blocks.length && <div className="precap" data-role="phone-recap"><b>{s.learner ? `${s.learner.name}, tonight` : "Tonight"}</b>{tally}
+              {othersHere && <p data-role="phone-recap-others" style={{ margin: "10px 0 0" }}>The other learners' evenings show on the TV.</p>}
+              {!mine.length && <div className="precap" data-role="phone-recap"><b>{s.learner ? `${s.learner.name}, tonight` : "Tonight"}</b>{tally}
                 <ul>{tiles.map((t) => <li key={t.app} data-app={t.app}>{recapLine(t)}</li>)}{list && <li data-app="tasks">{list}</li>}</ul>
                 <p style={{ margin: "10px 0 0", fontWeight: 600 }}>{recapCaption(tiles)}</p></div>}</>;
           })()}

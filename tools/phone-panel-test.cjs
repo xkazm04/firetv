@@ -1293,3 +1293,17 @@ test('stick pass 2026-10-20: the practice panel takes its route from the ask - a
  const at=page.indexOf('data-role="practice-route"');assert.ok(at>0);
  assert.match(page.slice(at-260,at),/routeAsked \? <p data-role="practice-route-line">/,'the toggle is drawn only when the TV asked no route');
 });
+
+test('recert-13/L1-radka-41-MB5-2 (operator ruling b): the phone Recap shows the seated learner only, then one line that the others show on the TV',()=>{
+ const src=code(PAGE);
+ const i=src.indexOf('screen === "parent"');assert.ok(i>0);
+ const recap=src.slice(i,src.indexOf('view === "week"',i));
+ assert.doesNotMatch(recap,/\{blocks\.map\(/,'the recap no longer maps every learner');
+ assert.match(recap,/blocks\.filter\(\(b\) => b\.id === seatedId\)/,'only the seated learner\'s block is drawn');
+ assert.match(recap,/data-role="phone-recap-others"[^>]*>The other learners' evenings show on the TV\./,'the honest line');
+ assert.match(recap,/othersHere = blocks\.length > mine\.length && !!seatedId/,'the line only with someone seated and others having work');
+ assert.match(recap,/\{!mine\.length && <div className="precap" data-role="phone-recap">/,'no one seated: the plain Tonight tiles, no other name');
+ const week=src.slice(src.indexOf('function WeekPage'));
+ assert.match(src,/<WeekPage lines=\{s\.learner \? s\.week : null\}\s*\/>/,'This week is the seated learner\'s own');
+ assert.ok(week.length>0);
+});
