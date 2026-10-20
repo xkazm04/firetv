@@ -296,6 +296,7 @@ assertion is changed unless the slice names it, and every suite in `rulesSuites`
 - Tests: `tools/tv-keys-test.cjs`: cases for each new name, `break` Back, and a source pin on `LingaTV.tsx`.
 - Stick check: open `/tv?key=…` on the stick. On the landing, Linga home, a lesson and the break, press Back, Menu and Play/Pause. Record which key value each sends and what it does. Back must not leave the page.
 - Landed: ba1899bb (the new key names, LingaTV calls keyOf, Back on break skips it).
+- Stick check: TL-1 passes on the stick through the stick-app WebView APK (Amazon WebView 150 on the AFTKM, base 56d93dcb), commits 17a3a854..fa678440; the walk is [`docs/concepts/STICK-APK-WALK-2026-10-20.md`](STICK-APK-WALK-2026-10-20.md). Open item: no physical remote was pressed; the keys were sent with `adb shell input keyevent` (`--longpress BACK` for the hold).
 
 ### TL-2. Pairing holds: one join in flight, no stale QR code, the TV lifts the lock
 - Files: `desk/src/app/phone/page.tsx`, `desk/src/lib/session/pairing.ts`, `desk/src/app/api/session/route.ts`, `tools/desk-pairing-test.cjs`, `tools/phone-panel-test.cjs`.
@@ -454,16 +455,14 @@ The tv-phone-pairing feature stands at full fail. Full r3 had robustness at 0.40
     round is refused. It now goes to the operator as a Report, with no more council rounds.
   - Lost: (a), because a lite r2 is a round 4 under another name and the rounds are spent; (b), because it is the exception
     to "there is no round 4" that the rule exists to prevent.
-  - Evidence: the stick pass, in `artifacts/stick-2026-10-20/` and `docs/concepts/STICK-PASS-FOLLOWUPS-SESSION-2026-10-20.md`
-    (that doc is not in this tree yet; it is not merged here).
+  - Evidence: the stick pass, in `artifacts/stick-2026-10-20/` and `docs/concepts/STICK-PASS-FOLLOWUPS-SESSION-2026-10-20.md`).
   - Known limits, stated plainly:
-    - F0: the stick browser (Silk) does not pass the D-pad, Select, Back or Menu to the page. A new stick-app WebView APK is
-      being built to address it; its walk will be recorded in `docs/concepts/STICK-APK-WALK-2026-10-20.md`. That walk is not
-      merged yet, and no result of it is claimed here.
+    - F0 is resolved by the stick-app APK; TL-1 and the remote-driven re-walk pass ([`docs/concepts/STICK-APK-WALK-2026-10-20.md`](STICK-APK-WALK-2026-10-20.md)). No physical remote
+      was pressed in that walk; the keys were sent with `adb input keyevent`.
     - The three council must-address lines on tv-phone-pairing stay open, as the lines the council reported (see "After the
-      slices: the council"; the full text is in the council run). One is the ask door that checks the ask id but not its kind
-      (`desk/src/lib/session/phoneAsk.ts:21`). Note: `phoneAsk.ts:28` now compares the kind (`1601ce3b`, lite r3 H1), so this
-      line may already be closed in code; the council has not re-judged it.
+      slices: the council"; the full text is in the council run). One was the ask door that checked the ask id but not its
+      kind. That limit is stale: `withPhoneAsk` on main checks the open ask's kind (`1601ce3b`, lite r3 H1), and H1 passed live
+      on the stick (see "The lite r3 reworks on the stick"). The council has not re-judged that must-address line.
 - **OD8. When Linga's `reply` hand-off opens.** (a) By itself, as the learner's turn begins: the fewest presses, and
   what "Phone speaks" means today. (b) On Select of "Answer on the phone": the TV leads even that step. Lean: (a).
 - **OD9. Writing as its own app.** (a) No: Writing is the composing flows inside Linga and Essay Master (1.6). (b) A
@@ -505,6 +504,8 @@ The fixes made in this pass are the commits listed near the end of this section.
 The results were the same in fullscreen and with the stage focused. Amazon's Fire TV web-app docs give these values for a page inside a Fire TV web app or an Android WebView wrapper: Select 13, arrows 37-40, Play/Pause 179, Back 4. In the Silk browser, the cursor keeps those keys.
 
 **So on this stick, in Silk, the remote cannot drive the TV at all beyond Play/Pause.** TL-1's key map is right for the one key that arrives. For the D-pad to reach the page, the desk has to open either in a WebView wrapper (an APK like `tv-app/` whose activity forwards `dispatchKeyEvent`) or as a Fire TV web app. Which one is a scope question for the operator. As TL-1 asked, Back leaving the page is reported here, not guessed at.
+
+**Update, after the walk through the APK:** TL-1 passes on the stick through the stick-app WebView APK (Amazon WebView 150 on the AFTKM, base 56d93dcb), commits 17a3a854..fa678440; see [`docs/concepts/STICK-APK-WALK-2026-10-20.md`](STICK-APK-WALK-2026-10-20.md). The table above is the Silk result and stands. Open item: no physical remote was pressed; the keys were sent with `adb shell input keyevent`.
 
 ### The walk
 
@@ -619,16 +620,26 @@ Not yet walked on the stick.
 | F18 | A withheld explain reply is the desk's own line, not the opening question again | 400156f1 | `tools/maths-tv-test.cjs` |
 | F20 | With a phone joined and no ask open, the practice card names the TV's two ways in (Snap the sheet, Type my answers) instead of saying the phone is waiting | b4d5638a | `tools/phone-panel-test.cjs` (case 14, F20) |
 
+### Resolved by the stick-app APK (2026-10-20)
+
+| # | Finding | Resolved by |
+|---|---|---|
+| F0 | In Silk, the D-pad, Select, Back and Menu never reach the page; only Play/Pause does | `stick-app/` (17a3a854, 56e9db4e, 59e7e00a); walk fa678440, [`docs/concepts/STICK-APK-WALK-2026-10-20.md`](STICK-APK-WALK-2026-10-20.md). Keys were sent with `adb input keyevent`; no physical remote was pressed |
+| F13 | In Silk fullscreen, the learner screen painted only its top 290 px; windowed, it paints | Not seen inside the APK (the walk's TL-1 row 'Select (no learner)': the learner screen 'paints in full, unlike Silk fullscreen (F13)'); Silk fullscreen not re-checked. Not diagnosed |
+
+### Fixed on main after the pass
+
+| # | Finding | Commit |
+|---|---|---|
+| F6 | The `rewrite` and `slot` panels carried the whole paragraph composer; now one field, Dictate and Send | 859fd55d |
+| F16 | Read it on the plan said nothing when the analyse route answered 428; the TV now says the text notice comes first | f0db1359 |
+| F17 | `essay.slot` did not close the `slot` ask | c1e08b40 |
+| F21 | A phone-naming status outlived its ask; `ask.cancel` now clears it | d456d31e |
+
 ### Open, for the next builders (not fixed here)
 
 | # | Finding | Where |
 |---|---|---|
-| F0 | In Silk, the D-pad, Select, Back and Menu never reach the page; only Play/Pause does. The TV-led design cannot run in the stick's browser | platform chosen (OD7, 2026-10-20): the stick-app WebView APK; still open until its walk lands in `docs/concepts/STICK-APK-WALK-2026-10-20.md` (not yet merged) |
-| F6 | The `rewrite` and `slot` panels carry the whole paragraph composer, with its Analyse on the TV and the shelf; section 2.2 lists one field, Dictate and Send | `desk/src/app/phone/page.tsx:857`, `:863`, pinned by `tools/phone-panel-test.cjs:1183-1208` |
-| F16 | Read it on the plan gets a 428 when the learner has not seen the text notice, and the TV shows nothing | `desk/src/app/api/analyse/route.ts:203`; `desk/src/essay/EssayTV.tsx` has no line for a refused read |
-| F17 | `essay.slot` does not close the `slot` ask: it stays open with `detail.i` 0 after all three slots, and the TV keeps "On your phone" | `desk/src/lib/session/store.ts:863` |
-| F21 | A phone-naming status outlives its ask. After Back cancelled the slot ask, Math Buddy's Tonight still carried "say or type slot 1, Your claim, on the phone", and Tomas's statuses carried into Ema's evening | `desk/src/lib/session/store.ts` (`ask.cancel` does not clear a `namesPhone` status) |
-| F13 | In Silk fullscreen, the learner screen painted only its top 290 px; windowed, it paints | stick render, not diagnosed |
 | F22 | The main checkout's `desk/node_modules` lacks `@next/env` and sharp's native binary, so `next dev` cannot start there | environment, `C:/Users/kazda/kiro/firetv/desk/node_modules` |
 
 ### Input to OD7
