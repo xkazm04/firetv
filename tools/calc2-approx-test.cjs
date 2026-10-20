@@ -89,10 +89,9 @@ test('refused: pieces off the range, an odd Simpson, an unknown rule, a reversed
  assert.equal(C.wellFormed(AI('x^2+1','pi/4','pi/2',4,'trapezoid')).ok,true,'a constant bound reads');
 });
 
-test('question: the plain and tex of T_5 equal their literals; the text names the rule, n and four places, and never the value',()=>{
+test('question: the plain of T_5 equals its literal, with no tex (L1-matyas-19-MB3-5); the text names the rule, n and four places, and never the value',()=>{
  assert.deepEqual(C.question(T5),{
   plain:'Use the trapezoid rule with n = 5 to approximate int_1^2 1/x dx, to four decimal places.',
-  tex:'\\text{Use the trapezoid rule with } n = 5 \\text{ to approximate } \\int_{1}^{2} \\frac{1}{x}\\,dx\\text{, to four decimal places.}',
  });
  assert.equal(C.question(S4).plain,"Use Simpson's rule with n = 4 to approximate int_1^2 1/x dx, to four decimal places.");
  assert.equal(C.question(M5).plain,'Use the midpoint rule with n = 5 to approximate int_1^2 1/x dx, to four decimal places.');

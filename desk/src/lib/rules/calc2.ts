@@ -17,7 +17,7 @@
  * Pure: imports at most calc-expr.ts and calc-read.ts - no engine, no session store, no TV module, no React, and not
  * calc.ts (which imports this file). A few lines of calc.ts are written again here for that reason (num, BAD_SPEC).
  */
-import { compile, integrate, limitInf, toPlain, toTex, type Expr } from "./calc-expr";
+import { compile, integrate, limitInf, toPlain, type Expr } from "./calc-expr";
 import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
 /** A comma system writes its decimals with a comma (taskText.ts commaSystem, written again here: this file imports no taskText, calc2-seam-test pins it). */
 const commaSystem = (system?: string) => system === "cz" || system === "de";
@@ -185,7 +185,6 @@ export function calc2WellFormed(spec: unknown): { ok: true } | { ok: false; why:
 const tidy = (s: string) => s.trim().replace(/\s+/g, " ");
 const isSum = (e: Expr) => e.node.k === "add" || e.node.k === "sub";
 const numPlain = (n: Num) => (typeof n === "number" ? String(n) : tidy(n));
-const numTex = (n: Num) => { if (typeof n === "number") return String(n); const e = compile(n); return e ? toTex(e) : tidy(n); };
 /** A bound as plain text: a bare non-negative number as it is, anything else in brackets (int_(-1)^2). */
 const script = (n: Num) => { const p = numPlain(n); return /^\d+(\.\d+)?$/.test(p) ? p : `(${p})`; };
 const RULE_PLAIN: Record<ApproxRule, string> = { trapezoid: "the trapezoid rule", midpoint: "the midpoint rule", simpson: "Simpson's rule" };
@@ -195,16 +194,15 @@ const RULE_PLAIN: Record<ApproxRule, string> = { trapezoid: "the trapezoid rule"
  * decimal places.' Null when the spec is malformed (structure): a malformed spec never throws. It names the rule, n and
  * the places and never the value: the only numbers printed are the spec's own parameters.
  */
-export function calc2Question(spec: unknown): { plain: string; tex: string } | null {
+export function calc2Question(spec: unknown): { plain: string } | null {
   if (isSequence(spec)) return sequenceQuestion(spec);
   const st = structure(spec);
   if (typeof st === "string") return null;
   const { s, f } = st;
-  const F = tidy(s.f), Ft = toTex(f);
-  const Fb = isSum(f) ? `(${F})` : F, Fbt = isSum(f) ? `(${Ft})` : Ft;
+  const F = tidy(s.f);
+  const Fb = isSum(f) ? `(${F})` : F;
   return {
     plain: `Use ${RULE_PLAIN[s.rule]} with n = ${s.pieces} to approximate int_${script(s.a)}^${script(s.b)} ${Fb} dx, to four decimal places.`,
-    tex: `\\text{Use ${RULE_PLAIN[s.rule]} with } n = ${s.pieces} \\text{ to approximate } \\int_{${numTex(s.a)}}^{${numTex(s.b)}} ${Fbt}\\,dx\\text{, to four decimal places.}`,
   };
 }
 
@@ -480,13 +478,12 @@ function readSequence(spec: unknown): SeqRead {
 /** The term as the question prints it: f with n in the place of x. */
 const termPlain = (f: Expr) => toPlain(f, "n");
 
-function sequenceQuestion(spec: SequenceSpec): { plain: string; tex: string } | null {
+function sequenceQuestion(spec: SequenceSpec): { plain: string } | null {
   const st = sequenceStructure(spec);
   if (typeof st === "string") return null;
   const { f } = st;
   return {
     plain: `Find lim_(n->infinity) a_n, where a_n = ${termPlain(f)}.`,
-    tex: `\\text{Find } \\lim_{n \\to \\infty} a_n \\text{, where } a_n = ${toTex(f, "n")}.`,
   };
 }
 

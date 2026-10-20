@@ -157,32 +157,32 @@ test('3: wellFormed accepts a spec with a finite, non-degenerate truth and rejec
 
 test('4: question() prints every shape in the typesetter\'s notation, and every form typesets with nothing dropped',()=>{
  const want=[
-  [{shape:'derivative',f:'3x^2 + 2x'},'Differentiate f(x) = 3x^2 + 2x.','\\text{Differentiate } f(x) = 3x^{2} + 2x.'],
-  [{shape:'limit',f:'sin(3x)/x',at:0},'Find lim_(x->0) sin(3x)/x.','\\text{Find } \\lim_{x \\to 0} \\frac{\\sin(3x)}{x}.'],
-  [{shape:'definite-integral',f:'2x',a:0,b:3},'Evaluate int_0^3 2x dx.','\\text{Evaluate } \\int_{0}^{3} 2x\\,dx.'],
-  [{shape:'critical-point',f:'x^2 - 4x + 1',on:[0,5]},'Find the critical point of f(x) = x^2 - 4x + 1 on [0, 5].','\\text{Find the critical point of } f(x) = x^{2} - 4x + 1 \\text{ on } [0, 5].'],
+  [{shape:'derivative',f:'3x^2 + 2x'},'Differentiate f(x) = 3x^2 + 2x.'],
+  [{shape:'limit',f:'sin(3x)/x',at:0},'Find lim_(x->0) sin(3x)/x.'],
+  [{shape:'definite-integral',f:'2x',a:0,b:3},'Evaluate int_0^3 2x dx.'],
+  [{shape:'critical-point',f:'x^2 - 4x + 1',on:[0,5]},'Find the critical point of f(x) = x^2 - 4x + 1 on [0, 5].'],
   [EV,'Find f(3) for f(x) = x^2 + 1.',null],[DA,"Find f'(2) for f(x) = x^3 + x^2.",null],[AD,'Find int x dx.',null],
   [{shape:'antiderivative',f:'3x^2 - 4/x'},'Find int (3x^2 - 4/x) dx.',null],
-  [{shape:'limit',f:'1/x',at:0,side:'+'},'Find lim_(x->0+) 1/x.','\\text{Find } \\lim_{x \\to 0^+} \\frac{1}{x}.'],
+  [{shape:'limit',f:'1/x',at:0,side:'+'},'Find lim_(x->0+) 1/x.'],
   [{shape:'limit',f:'(3x^2 - x)/(2x^2 + 5)',at:'inf'},'Find lim_(x->infinity) (3x^2 - x)/(2x^2 + 5).',null],
   [{shape:'limit',f:'e^x - 1 - x',at:'-inf'},'Find lim_(x->-infinity) (e^x - 1 - x).',null],
   [{shape:'definite-integral',f:'sin(x)',a:0,b:'pi/2'},'Evaluate int_0^(pi/2) sin(x) dx.',null],
   [{shape:'definite-integral',f:'x^2 + 1',a:-1,b:2},'Evaluate int_(-1)^2 (x^2 + 1) dx.',null],
   [EX,'Find the maximum value of f(x) = x^3 - 12x on [-3, 0].',null],
-  [NW,"Use Newton's method on x^2 - 2 = 0 with x_1 = 1 to find x_2.","\\text{Use Newton's method on } x^{2} - 2 = 0 \\text{ with } x_1 = 1 \\text{ to find } x_{2}."],
-  [IM,'Find dy/dx if x^2 + y^2 = 25.','\\text{Find } \\frac{dy}{dx} \\text{ if } x^{2} + y^{2} = 25.'],
-  [IMP,'Find dy/dx at (3, 4) if x^2 + y^2 = 25.','\\text{Find } \\frac{dy}{dx} \\text{ at } (3, 4) \\text{ if } x^{2} + y^{2} = 25.'],
-  [IM2,'Find dy/dx if x*y + y^2 = 7.','\\text{Find } \\frac{dy}{dx} \\text{ if } xy + y^{2} = 7.'],
-  [{shape:'implicit-derivative',f:'x^3 + y^3 = 6x y'},'Find dy/dx if x^3 + y^3 = 6x y.','\\text{Find } \\frac{dy}{dx} \\text{ if } x^{3} + y^{3} = 6xy.'],
+  [NW,"Use Newton's method on x^2 - 2 = 0 with x_1 = 1 to find x_2."],
+  [IM,'Find dy/dx if x^2 + y^2 = 25.'],
+  [IMP,'Find dy/dx at (3, 4) if x^2 + y^2 = 25.'],
+  [IM2,'Find dy/dx if x*y + y^2 = 7.'],
+  [{shape:'implicit-derivative',f:'x^3 + y^3 = 6x y'},'Find dy/dx if x^3 + y^3 = 6x y.'],
  ];
  const bad=[];
- for(const [spec,plain,tex] of want){
+ for(const [spec,plain] of want){
   const q=C.question(spec);
   if(!q){bad.push(`no question: ${JSON.stringify(spec)}`);continue;}
   if(q.plain!==plain)bad.push(`plain: ${q.plain} (want ${plain})`);
-  if(tex&&q.tex!==tex)bad.push(`tex: ${q.tex} (want ${tex})`);
-  const fp=typesetFault(q.plain,false),ft=typesetFault(q.tex,true);
-  if(fp)bad.push(`plain ${q.plain}: ${fp}`);if(ft)bad.push(`tex ${q.tex}: ${ft}`);
+  if(Object.keys(q).join()!=='plain')bad.push(`the question carries more than plain: ${Object.keys(q)}`);
+  const fp=typesetFault(q.plain,false);
+  if(fp)bad.push(`plain ${q.plain}: ${fp}`);
  }
  assert.deepEqual(bad,[]);
  assert.equal(C.question({shape:'derivative',f:'y + 1'}),null,'an unreadable spec prints nothing');
@@ -267,8 +267,8 @@ test('7: the sweep - every Calculus 1 topic has a well-formed spec whose questio
   if(!spec){bad.push(`${t.id}: no spec`);continue;}
   const w=C.wellFormed(spec);if(!w.ok)bad.push(`${t.id}: ${w.why}`);
   const q=C.question(spec);if(!q){bad.push(`${t.id}: no question`);continue;}
-  const fp=typesetFault(q.plain,false),ft=typesetFault(q.tex,true);
-  if(fp)bad.push(`${t.id} plain ${q.plain}: ${fp}`);if(ft)bad.push(`${t.id} tex ${q.tex}: ${ft}`);
+  const fp=typesetFault(q.plain,false);
+  if(fp)bad.push(`${t.id} plain ${q.plain}: ${fp}`);
   if(C.leaksCalc(spec,q.plain))bad.push(`${t.id}: the question leaks its own answer: ${q.plain}`);
  }
  assert.deepEqual(bad,[]);
@@ -338,13 +338,13 @@ test('9: never throws - every public function on malformed and randomly mutated 
   if(!wh.threw&&(typeof wh.out!=='string'||!wh.out))failures.push(`${label}: withheldCalc(${show(spec)}) -> ${show(wh.out)}`);
   if(!sl.threw&&!Array.isArray(sl.out))failures.push(`${label}: slipsFor(${show(shape)}) -> ${show(sl.out)}`);
   if(ok){
-   if(!q.threw&&!(q.out&&typeof q.out.plain==='string'&&typeof q.out.tex==='string'))failures.push(`${label}: question(${show(spec)}) of a well-formed spec -> ${show(q.out)}`);
+   if(!q.threw&&!(q.out&&typeof q.out.plain==='string'&&!('tex' in q.out)))failures.push(`${label}: question(${show(spec)}) of a well-formed spec -> ${show(q.out)}`);
    else if(!q.threw&&!lite){const back=call('specFromQuestion',[q.out.plain],()=>C.specFromQuestion(q.out.plain));if(!back.threw&&back.out!==null&&!C.wellFormed(back.out).ok)failures.push(`${label}: specFromQuestion read back a spec wellFormed refuses: ${show(back.out)}`);}
    return;
   }
   // malformed by construction prints nothing; a refused mutation may be merely degenerate (it still prints), never junk
   if(!q.threw&&malformed&&q.out!==null)failures.push(`${label}: question(${show(spec)}) of a malformed spec -> ${show(q.out)}, want null`);
-  if(!q.threw&&q.out!==null&&!(typeof q.out.plain==='string'&&typeof q.out.tex==='string'&&!/undefined|NaN|\[object|Infinity|null/.test(q.out.plain+q.out.tex)))failures.push(`${label}: question(${show(spec)}) printed junk: ${show(q.out)}`);
+  if(!q.threw&&q.out!==null&&!(typeof q.out.plain==='string'&&!('tex' in q.out)&&!/undefined|NaN|\[object|Infinity|null/.test(q.out.plain)))failures.push(`${label}: question(${show(spec)}) printed junk: ${show(q.out)}`);
   verdicts.forEach((v,i)=>{if(!v.threw&&!(v.out&&v.out.verdict==='unsure'))failures.push(`${label}: checkAnswer(${show(spec)}, ${show(answers[i])}) -> ${show(v.out)}, want unsure`);});
   leaks.forEach((l,i)=>{if(!l.threw&&l.out!==false)failures.push(`${label}: leaksCalc(${show(spec)}, ${show(lines[i])}) -> ${show(l.out)}, want false`);});
  };
@@ -602,7 +602,7 @@ test('MB-B36 log: a Calculus question printed for cz or de shows the natural log
   for(const sys of ['uk','us',undefined])assert.deepEqual(C.question(spec,sys),base,`${spec.f} ${sys} as before`);
   for(const sys of ['cz','de']){
    const q=C.question(spec,sys);
-   assert.ok(!/(?<![a-z\\])log/.test(q.plain)&&!/\\log/.test(q.tex),`${spec.f} ${sys}: ${q.plain} | ${q.tex}`);
+   assert.ok(!/(?<![a-z\\])log/.test(q.plain));
    assert.equal(q.plain,base.plain.replace(/log/g,'ln'),`${spec.f} ${sys}: only the name changes`);
   }
  }

@@ -123,15 +123,14 @@ test('printer: the plain in n, renamed back, is the same function; no variable i
  assert.equal(X.toTex(X.compile('x/(x+1)'),'n'),'\\frac{n}{n + 1}');
 });
 
-test('question: the plain and tex of n/(n+1) equal their literals; the fixtures print their terms in n',()=>{
+test('question: the plain of n/(n+1) equals its literal, with no tex (L1-matyas-19-MB3-5); the fixtures print their terms in n',()=>{
  assert.deepEqual(C.question(NN),{
   plain:'Find lim_(n->infinity) a_n, where a_n = n/(n + 1).',
-  tex:'\\text{Find } \\lim_{n \\to \\infty} a_n \\text{, where } a_n = \\frac{n}{n + 1}.',
  });
  assert.equal(C.question(LNN).plain,'Find lim_(n->infinity) a_n, where a_n = ln(n)/n.');
  assert.equal(C.question(EN).plain,'Find lim_(n->infinity) a_n, where a_n = (1 + 1/n)^n.');
  assert.equal(C.question(HALF).plain,'Find lim_(n->infinity) a_n, where a_n = (n^2 + 1)/(2n^2).');
- for(const spec of KEPT){const q=C.question(spec);assert.doesNotMatch(q.plain,/x/,spec.f);assert.doesNotMatch(q.tex.replace(/text\{[^}]*\}/g,''),/x/,spec.f);}
+ for(const spec of KEPT){const q=C.question(spec);assert.doesNotMatch(q.plain,/x/,spec.f);assert.equal('tex' in q,false,spec.f);}
 });
 
 test('reader: every fixture reads back from its own plain question; the four page texts read; sin and tan stay functions',()=>{

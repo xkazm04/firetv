@@ -18,7 +18,7 @@
 import { commaSystem, readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
 import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, systemLogs, withinRel } from "./calc-read";
-import { agreesWhereBoth, compile, derivativeAt, evalNode, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit, type Node } from "./calc-expr";
+import { agreesWhereBoth, compile, derivativeAt, evalNode, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, type Expr, type Limit, type Node } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
 
@@ -310,11 +310,9 @@ export function wellFormed(spec: unknown): { ok: true } | { ok: false; why: stri
 const tidy = (s: string) => s.trim().replace(/\s+/g, " ");
 const isSum = (e: Expr) => e.node.k === "add" || e.node.k === "sub";
 const numPlain = (n: Num) => (typeof n === "number" ? String(n) : tidy(n));
-const numTex = (n: Num) => { if (typeof n === "number") return String(n); const e = compile(n); return e ? toTex(e) : tidy(n); };
 /** A bound or subscript as plain text: a bare non-negative number as it is, anything else in brackets (int_(-1)^2). */
 const script = (n: Num) => { const p = numPlain(n); return /^\d+(\.\d+)?$/.test(p) ? p : `(${p})`; };
 const approach = (at: Num | "inf" | "-inf", side?: "+" | "-") => (at === "inf" ? "infinity" : at === "-inf" ? "-infinity" : `${numPlain(at)}${side ?? ""}`);
-const approachTex = (at: Num | "inf" | "-inf", side?: "+" | "-") => (at === "inf" ? "\\infty" : at === "-inf" ? "-\\infty" : `${numTex(at)}${side ? `^${side}` : ""}`);
 
 /**
  * The spec and its function when every field question() prints is there and of its type - the function reads with x
@@ -349,7 +347,7 @@ function printable(spec: unknown): { s: CalcSpec; f: Expr } | null {
 }
 
 /**
- * The question, printed by code from the spec, as the plain text our prompts use and the TeX the typesetter reads:
+ * The question, printed by code from the spec, as the plain text our prompts use:
  * 'Differentiate f(x) = 3x^2 + 2x.', 'Find lim_(x->0) sin(3x)/x.', 'Evaluate int_0^3 2x dx.', 'Find the critical point
  * of f(x) = x^2 - 4x + 1 on [0, 5].' Null when the spec is malformed (printable): a malformed spec reaches here from
  * a model, a session file or a page reader, and it is a null, never a throw. It never carries the answer: the spec
@@ -357,10 +355,9 @@ function printable(spec: unknown): { s: CalcSpec; f: Expr } | null {
  * bare log - the engine's natural log - prints as ln (calc-read naturalAsLn), so a cz learner never reads base 10 into
  * it; any other system, or none, prints exactly as before.
  *
- * tex has no screen reader: items.ts keeps plain only. It is the TeX form the rule suites hold to the typesetter
- * (typesetFault in calc-rules-test) and the frozen calc fixtures record, so dropping it would rewrite those fixtures.
+ * No TeX form is printed: no screen read it (items.ts keeps plain only), so it was dropped (L1-matyas-19-MB3-5).
  */
-export function question(spec: unknown, system?: SchoolSystem): { plain: string; tex: string } | null {
+export function question(spec: unknown, system?: SchoolSystem): { plain: string } | null {
   if (commaSystem(system) && spec && typeof spec === "object") {
     // a comma-system learner reads a bare log as base 10 (calc-read czechAnswer): the engine's natural log prints as ln
     const ln = Object.fromEntries(Object.entries(spec).map(([k, v]) => [k, typeof v === "string" ? naturalAsLn(v) : Array.isArray(v) ? v.map((x) => (typeof x === "string" ? naturalAsLn(x) : x)) : v]));
@@ -371,38 +368,38 @@ export function question(spec: unknown, system?: SchoolSystem): { plain: string;
   const p = printable(spec);
   if (!p) return null;
   const { s, f } = p;
-  const F = tidy(s.f), Ft = toTex(f);
-  const Fb = isSum(f) ? `(${F})` : F, Fbt = isSum(f) ? `(${Ft})` : Ft;
+  const F = tidy(s.f);
+  const Fb = isSum(f) ? `(${F})` : F;
   const nums = (...n: unknown[]) => n.every((v) => num(v) !== null);
   switch (s.shape) {
     case "evaluate":
       if (!nums(s.at)) return null;
-      return { plain: `Find f(${numPlain(s.at)}) for f(x) = ${F}.`, tex: `\\text{Find } f(${numTex(s.at)}) \\text{ for } f(x) = ${Ft}.` };
+      return { plain: `Find f(${numPlain(s.at)}) for f(x) = ${F}.` };
     case "derivative":
-      return { plain: `Differentiate f(x) = ${F}.`, tex: `\\text{Differentiate } f(x) = ${Ft}.` };
+      return { plain: `Differentiate f(x) = ${F}.` };
     case "derivative-at":
       if (!nums(s.at)) return null;
-      return { plain: `Find f'(${numPlain(s.at)}) for f(x) = ${F}.`, tex: `\\text{Find } f'(${numTex(s.at)}) \\text{ for } f(x) = ${Ft}.` };
+      return { plain: `Find f'(${numPlain(s.at)}) for f(x) = ${F}.` };
     case "antiderivative":
-      return { plain: `Find int ${Fb} dx.`, tex: `\\text{Find } \\int ${Fbt}\\,dx.` };
+      return { plain: `Find int ${Fb} dx.` };
     case "definite-integral":
       if (!nums(s.a, s.b)) return null;
-      return { plain: `Evaluate int_${script(s.a)}^${script(s.b)} ${Fb} dx.`, tex: `\\text{Evaluate } \\int_{${numTex(s.a)}}^{${numTex(s.b)}} ${Fbt}\\,dx.` };
+      return { plain: `Evaluate int_${script(s.a)}^${script(s.b)} ${Fb} dx.` };
     case "limit":
       if (s.at !== "inf" && s.at !== "-inf" && !nums(s.at)) return null;
-      return { plain: `Find lim_(x->${approach(s.at, s.side)}) ${Fb}.`, tex: `\\text{Find } \\lim_{x \\to ${approachTex(s.at, s.side)}} ${Fbt}.` };
+      return { plain: `Find lim_(x->${approach(s.at, s.side)}) ${Fb}.` };
     case "critical-point":
       if (!Array.isArray(s.on) || !nums(...s.on)) return null;
-      return { plain: `Find the critical point of f(x) = ${F} on [${numPlain(s.on[0])}, ${numPlain(s.on[1])}].`, tex: `\\text{Find the critical point of } f(x) = ${Ft} \\text{ on } [${numTex(s.on[0])}, ${numTex(s.on[1])}].` };
+      return { plain: `Find the critical point of f(x) = ${F} on [${numPlain(s.on[0])}, ${numPlain(s.on[1])}].` };
     case "extremum": {
       if (!Array.isArray(s.on) || !nums(...s.on)) return null;
       const word = s.kind === "min" ? "minimum" : "maximum";
-      return { plain: `Find the ${word} value of f(x) = ${F} on [${numPlain(s.on[0])}, ${numPlain(s.on[1])}].`, tex: `\\text{Find the ${word} value of } f(x) = ${Ft} \\text{ on } [${numTex(s.on[0])}, ${numTex(s.on[1])}].` };
+      return { plain: `Find the ${word} value of f(x) = ${F} on [${numPlain(s.on[0])}, ${numPlain(s.on[1])}].` };
     }
     case "newton-step": {
       if (!nums(s.x0) || typeof s.steps !== "number") return null;
       const n = s.steps + 1;
-      return { plain: `Use Newton's method on ${F} = 0 with x_1 = ${numPlain(s.x0)} to find x_${n < 10 ? n : `(${n})`}.`, tex: `\\text{Use Newton's method on } ${Ft} = 0 \\text{ with } x_1 = ${numTex(s.x0)} \\text{ to find } x_{${n}}.` };
+      return { plain: `Use Newton's method on ${F} = 0 with x_1 = ${numPlain(s.x0)} to find x_${n < 10 ? n : `(${n})`}.` };
     }
   }
 }
@@ -1290,15 +1287,8 @@ function yInside(s: ImplicitSpec): boolean {
   return false;
 }
 
-/** A side in TeX: y printed where the engine read its marker, a number or a letter before y written straight on (2y, xy). */
-function texXY(side: string): string {
-  const e = compile(yMarked(side));
-  if (!e) return tidy(side);
-  return toTex(e).split(Y_MARK).join("y").replace(/([0-9a-z}]) \\cdot y(?![a-z])/g, "$1y");
-}
-
 /** 'Find dy/dx if x^2 + y^2 = 25.', 'Find dy/dx at (3, 4) if x^2 + y^2 = 25.' - null when the spec is malformed. */
-function implicitQuestion(s: ImplicitSpec): { plain: string; tex: string } | null {
+function implicitQuestion(s: ImplicitSpec): { plain: string } | null {
   if (["answer", "truth", "solution", "value"].some((k) => k in s)) return null;
   const sides = sidesOf(s.f), at = pointOf(s);
   if (!sides || at === undefined) return null;
@@ -1306,7 +1296,6 @@ function implicitQuestion(s: ImplicitSpec): { plain: string; tex: string } | nul
   const pt = at && s.point ? s.point : null;
   return {
     plain: `Find dy/dx${pt ? ` at (${numPlain(pt[0])}, ${numPlain(pt[1])})` : ""} if ${l} = ${r}.`,
-    tex: `\\text{Find } \\frac{dy}{dx}${pt ? ` \\text{ at } (${numTex(pt[0])}, ${numTex(pt[1])})` : ""} \\text{ if } ${texXY(l)} = ${texXY(r)}.`,
   };
 }
 

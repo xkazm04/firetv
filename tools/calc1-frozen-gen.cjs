@@ -8,6 +8,10 @@
  * (sign, arithmetic-slip, forgot-chain, product-as-product, quotient-order, power-off-by-one, wrong-trig-sign). OLD: no
  * such entries; NEW: those entries, and calls 3954 -> 3955. No row moved.
  *
+ * Regenerated on purpose (L1-matyas-19-MB3-5), rows kept as they were (the 175 specs of the file, not a fresh collection):
+ * question() no longer prints a TeX form, no screen read it. OLD: every row's `question` was { plain, tex }; NEW: { plain }.
+ * No other value moved: specs 175, calls 3955.
+ *
  * Specs are collected from the suites' own sources (see SOURCES): the sweep spec per topic and CHECKS in
  * calc-rules-test.cjs (with each answer the suite pairs with a spec), plus every object literal `{shape: '<calc shape>' ...}`
  * that evaluates on its own in the other calc suites. Each spec records wellFormed, question (plain and tex), checkAnswer
