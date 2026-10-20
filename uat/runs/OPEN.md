@@ -2,7 +2,7 @@
 
 Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run. One section per module that has open rows.
 
-244 open across 13 runs
+243 open across 13 runs
 drained 9 of 13 runs
 undrained: 2026-10-14-lt, 2026-10-16-lt-a2b1-tightening, 2026-10-17-lt-swap, 2026-10-17-lt-swap-2 (home: docs/uat-insights/<run-id>.md, uat/README.md)
 
@@ -362,48 +362,47 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 # Essay Master
 
-12 open in 7 pairs across 14 runs
+11 open in 7 pairs across 15 runs
 
-recurring 12 · unasked by a later run of their pair 0
+recurring 11 · unasked by a later run of their pair 0
 
 Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Linga driver does not rerun them.
 
 ## kristyna-17 EM1 · 3 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-13/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 14, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-13/L1-kristyna-17-EM1-2` major · rank 9 · ES-READ: kind and mode now reach the reading, a task has no sender and no history or memory reaches it · recurrence 14, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-13/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 14, first seen 2026-10-09-essay-l1
-
-## daniel-15 EM3 · 2 open · top rank 9
-
-- `2026-10-09-essay-l1/recert-13/L1-daniel-15-EM3-1` major · rank 9 · The paste box and the shelf are hidden whenever the TV is on the forensic page, and Essay Master reopens there · recurrence 14, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-13/L1-daniel-15-EM3-2` major · rank 9 · A title line is read as its own paragraph or fuses into sentence 1; the task never reaches the prompt as a task · recurrence 14, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-14/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 15, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-14/L1-kristyna-17-EM1-2` major · rank 9 · ES-READ: kind and mode now reach the reading, a task has no sender and no history or memory reaches it · recurrence 15, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-14/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 15, first seen 2026-10-09-essay-l1
 
 ## barbora-43 EM1 · 1 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-13/L1-barbora-43-EM1-2` major · rank 9 · ES-READ grounding: the reading still never sees her earlier readings or notes, and no client sends the assignment · recurrence 14, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-14/L1-barbora-43-EM1-2` major · rank 9 · ES-READ grounding: the reading still never sees her earlier readings or notes, and no client sends the assignment · recurrence 15, first seen 2026-10-09-essay-l1
+
+## daniel-15 EM3 · 1 open · top rank 9
+
+- `2026-10-09-essay-l1/recert-14/L1-daniel-15-EM3-2` major · rank 9 · A title line is read as its own paragraph or fuses into sentence 1; the task never reaches the prompt as a task · recurrence 15, first seen 2026-10-09-essay-l1
 
 ## eliska-12 EM1 · 1 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-13/L1-eliska-12-EM1-4` major · rank 9 · The planted-claim fix depends on the model naming links (supports / backs): when it omits them, Structure marks the true topic sentence and Evidence marks nothing · recurrence 13, first seen 2026-10-09-essay-l1/recert-1
+- `2026-10-09-essay-l1/recert-14/L1-eliska-12-EM1-4` major · rank 9 · The planted-claim fix depends on the model naming links (supports / backs): when it omits them, Structure marks the true topic sentence and Evidence marks nothing · recurrence 14, first seen 2026-10-09-essay-l1/recert-1
 
 ## helena-46 EM1 · 3 open · top rank 6
 
-- `2026-10-09-essay-l1/recert-13/L1-helena-46-EM1-1` minor · rank 6 · Adult mode's lens home, plan, playbook and x-ray speak only to school paragraphs · recurrence 14, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-13/L1-helena-46-EM1-5` minor · rank 6 · An email read on its own, or a piece read with Keep off, is still judged as an essay: the kind of writing is asked and sent only for a kept piece · recurrence 8, first seen 2026-10-09-essay-l1/recert-6
-- `2026-10-09-essay-l1/recert-13/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; short Czech, Czech without diacritics and German go to the model · recurrence 14, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-14/L1-helena-46-EM1-1` minor · rank 6 · Adult mode's lens home, plan, playbook and x-ray speak only to school paragraphs · recurrence 15, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-14/L1-helena-46-EM1-5` minor · rank 6 · An email read on its own, or a piece read with Keep off, is still judged as an essay: the kind of writing is asked and sent only for a kept piece · recurrence 9, first seen 2026-10-09-essay-l1/recert-6
+- `2026-10-09-essay-l1/recert-14/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; short Czech, Czech without diacritics and German go to the model · recurrence 15, first seen 2026-10-09-essay-l1
 
 ## eliska-12 EM2 · 1 open · top rank 6
 
-- `2026-10-09-essay-l1/recert-13/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 14, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-14/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 15, first seen 2026-10-09-essay-l1
 
 ## daniel-15 EM2 · 1 open · top rank 4
 
-- `2026-10-09-essay-l1/recert-13/L1-daniel-15-EM2-2` minor · rank 4 · A rewrite of a sentence first ruled neutral as a later unsupported claim is ruled faulty: 'Rewrite · not yet' · recurrence 13, first seen 2026-10-09-essay-l1/recert-1
+- `2026-10-09-essay-l1/recert-14/L1-daniel-15-EM2-2` minor · rank 4 · A rewrite of a sentence first ruled neutral as a later unsupported claim is ruled faulty: 'Rewrite · not yet' · recurrence 14, first seen 2026-10-09-essay-l1/recert-1
 
 # Math Buddy
 
-6 open in 5 pairs across 10 runs
+6 open in 5 pairs across 11 runs
 
 recurring 6 · unasked by a later run of their pair 0
 
@@ -411,21 +410,21 @@ Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Lin
 
 ## nela-12 MB2 · 2 open · top rank 6
 
-- `2026-10-09-maths-l1/recert-9/L1-nela-12-MB2-1` minor · rank 6 · Add and subtract fractions, tier 2, uses elevenths with common bottoms up to 132; 6. ročník level needs a teacher's read · recurrence 10, first seen 2026-10-09-maths-l1
-- `2026-10-09-maths-l1/recert-9/L1-nela-12-MB2-2` minor · rank 6 · Unsimplified sums are ticked right, while the worked lesson teaches "then simplify" · recurrence 10, first seen 2026-10-09-maths-l1
+- `2026-10-09-maths-l1/recert-10/L1-nela-12-MB2-1` minor · rank 6 · Add and subtract fractions, tier 2, uses elevenths with common bottoms up to 132; 6. ročník level needs a teacher's read · recurrence 11, first seen 2026-10-09-maths-l1
+- `2026-10-09-maths-l1/recert-10/L1-nela-12-MB2-2` minor · rank 6 · Unsimplified sums are ticked right, while the worked lesson teaches "then simplify" · recurrence 11, first seen 2026-10-09-maths-l1
 
 ## matyas-19 MB1 · 1 open · top rank 6
 
-- `2026-10-09-maths-l1/recert-9/L1-matyas-19-MB1-1` minor · rank 6 · His own weekly MA1 sheet can be hinted but never marked; only the desk's own six-question sets are marked · recurrence 10, first seen 2026-10-09-maths-l1
+- `2026-10-09-maths-l1/recert-10/L1-matyas-19-MB1-1` minor · rank 6 · His own weekly MA1 sheet can be hinted but never marked; only the desk's own six-question sets are marked · recurrence 11, first seen 2026-10-09-maths-l1
 
 ## radka-41 MB5 · 1 open · top rank 6
 
-- `2026-10-09-maths-l1/recert-9/L1-radka-41-MB5-2` minor · rank 6 · The recap and the week cover only the child seated now · recurrence 10, first seen 2026-10-09-maths-l1
+- `2026-10-09-maths-l1/recert-10/L1-radka-41-MB5-2` minor · rank 6 · The recap and the week cover only the child seated now · recurrence 11, first seen 2026-10-09-maths-l1
 
 ## vojtech-18 MB4 · 1 open · top rank 6
 
-- `2026-10-09-maths-l1/recert-9/L1-vojtech-18-MB4-3` minor · rank 6 · The only inequality statement is the linear A22; a quadratic or logarithmic inequality, or a domain, has no statement to pick · recurrence 6, first seen 2026-10-09-maths-l1/recert-4
+- `2026-10-09-maths-l1/recert-10/L1-vojtech-18-MB4-3` minor · rank 6 · The only inequality statement is the linear A22; a quadratic or logarithmic inequality, or a domain, has no statement to pick · recurrence 7, first seen 2026-10-09-maths-l1/recert-4
 
 ## matyas-19 MB3 · 1 open · top rank 1
 
-- `2026-10-09-maths-l1/recert-9/L1-matyas-19-MB3-5` polish · rank 1 · question(spec).tex is computed for every Calculus spec and read by no screen · recurrence 9, first seen 2026-10-09-maths-l1/recert-1
+- `2026-10-09-maths-l1/recert-10/L1-matyas-19-MB3-5` polish · rank 1 · question(spec).tex is computed for every Calculus spec and read by no screen · recurrence 10, first seen 2026-10-09-maths-l1/recert-1

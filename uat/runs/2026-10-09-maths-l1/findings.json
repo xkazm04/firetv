@@ -95,12 +95,12 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 9,
+    "recurrence": 10,
     "suggested_acceptance": "A snapped page whose items read as Calculus specs (specFromQuestion) can be marked from a photo of his working, by the same code judge as a desk set, items that do not read being \"not sure\".",
     "l2_priority": "precondition: vision host (env.md, Math Buddy) — none until built; then page read rate and handwriting read on a real MA1 sheet.",
-    "recertify_run": "2026-10-09-maths-l1/recert-8",
+    "recertify_run": "2026-10-09-maths-l1/recert-10",
     "recertify_status": "recurs",
-    "recertify_evidence": "Re-walked at ee7d6ac7; what the previous walk (at ffa91a49) found still holds: sendWorking (desk/src/app/phone/page.tsx:422) still posts only {image,w,h} to /api/mark (:427) and the typed-answers call (:446) posts answers; desk/src/app/api/mark/route.ts:64 still answers \"Start a practice set first.\" with no practice, and the route's body.page arm (route.ts:12-14) has no client that sends a page id. withPhoneAsk (route.ts:48) only gates the door. Cites re-mapped through git diff -U0 ffa91a49 ee7d6ac7 per file; phone/page.tsx:401 -> 422, route.ts:62 -> 64. None of the 43 commits since ffa91a49 changes what this row cites except as named.",
+    "recertify_evidence": "Re-walked at 67e0a3a6; what the previous walk (at c2dacc69) found still holds: sendWorking (desk/src/app/phone/page.tsx:441) still posts only {image,w,h} to /api/mark and the typed-answers call (:460) posts answers; these are the only two /api/mark callers in desk/src. desk/src/app/api/mark/route.ts:64 still answers \"Start a practice set first.\" with no practice, and the route's body.page arm (route.ts:12-14, :62) has no client that sends a page id. Waits on the vision path. git diff c2dacc69 67e0a3a6 is empty on every file this row cites (route.ts and tv/keys.ts); phone/page.tsx:424 -> 441, :429 -> 441, :448 -> 460 (the c2dacc69-to-67e0a3a6 hunks, 67e0a3a6's 11 lines at :276 among them). None of the commits since c2dacc69 (the Essay commits, 5358ddeb) changes what this row cites except as named.",
     "recurred_as": "L1-matyas-19-MB1-1"
   },
   {
@@ -1037,12 +1037,12 @@
     "code_check": "n-a",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 9,
+    "recurrence": 10,
     "suggested_acceptance": "A teacher signs off the tier-2 denominator range for cz 6. ročník",
     "l2_priority": "Set fit judged by a Czech maths teacher on 3 drawn sets",
-    "recertify_run": "2026-10-09-maths-l1/recert-8",
+    "recertify_run": "2026-10-09-maths-l1/recert-10",
     "recertify_status": "recurs",
-    "recertify_evidence": "Re-walked at ee7d6ac7; what the previous walk (at ffa91a49) found still holds: desk/src/lib/rules/school.ts:2798 gen(seed, tier) and :3040 \"frac-add-sub\": genMixedAddSub(seed) still draw tier-2 common bottoms beyond a 6. rocnik hand range (median 36, max 132); no teacher sign-off exists in code or in uat/. Cites re-mapped through git diff -U0 ffa91a49 ee7d6ac7 per file. None of the 43 commits since ffa91a49 changes what this row cites except as named.",
+    "recertify_evidence": "Re-walked at 67e0a3a6; what the previous walk (at c2dacc69) found still holds: desk/src/lib/rules/school.ts:2798 gen(seed, tier) and :3040 \"frac-add-sub\": genMixedAddSub(seed) still draw tier-2 common bottoms beyond a 6. rocnik hand range (median 36, max 132); no teacher sign-off exists in code or in uat/. Waits on a teacher: no code closes it. git diff c2dacc69 67e0a3a6 is empty on every file this row cites. None of the commits since c2dacc69 (the Essay commits, 5358ddeb) changes what this row cites except as named.",
     "recurred_as": "L1-nela-12-MB2-1"
   },
   {
@@ -1071,12 +1071,12 @@
     "code_check": "by-design",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 9,
+    "recurrence": 10,
     "suggested_acceptance": "Owner ruling: either the add/sub questions say \"simplest form\" (unsure, not wrong, for 6/4), or the lesson drops \"then simplify\"",
     "l2_priority": "Owner/teacher ruling on unsimplified results for cz",
-    "recertify_run": "2026-10-09-maths-l1/recert-8",
+    "recertify_run": "2026-10-09-maths-l1/recert-10",
     "recertify_status": "recurs",
-    "recertify_evidence": "Re-walked at ee7d6ac7; what the previous walk (at ffa91a49) found still holds: desk/src/lib/library/worked.ts:15 still teaches \"Add or take away the tops, then simplify\" while desk/src/lib/rules/school.ts:1588 adds the simplest-form tail only when s.form === \"simplest\", so an unsimplified sum is still ticked right. Needs the owner's ruling. Cites re-mapped through git diff -U0 ffa91a49 ee7d6ac7 per file. None of the 43 commits since ffa91a49 changes what this row cites except as named.",
+    "recertify_evidence": "Re-walked at 67e0a3a6; what the previous walk (at c2dacc69) found still holds: desk/src/lib/library/worked.ts:15 still teaches \"Add or take away the tops, then simplify\" while desk/src/lib/rules/school.ts:1588 adds the simplest-form tail only when s.form === \"simplest\", so an unsimplified sum is still ticked right. Waits on an owner ruling (simplest form asked, or the lesson drops \"then simplify\"). git diff c2dacc69 67e0a3a6 is empty on every file this row cites. None of the commits since c2dacc69 (the Essay commits, 5358ddeb) changes what this row cites except as named.",
     "recurred_as": "L1-nela-12-MB2-2"
   },
   {
@@ -2637,11 +2637,11 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 9,
+    "recurrence": 10,
     "suggested_acceptance": "The phone Recap lists every learner with work tonight, one block each.",
-    "recertify_run": "2026-10-09-maths-l1/recert-8",
+    "recertify_run": "2026-10-09-maths-l1/recert-10",
     "recertify_status": "recurs",
-    "recertify_evidence": "Re-walked at ee7d6ac7; what the previous walk (at ffa91a49) found still holds: the phone Recap (desk/src/app/phone/page.tsx:866-877) is one block titled for the seated learner (`${s.learner.name}, tonight`) with tiles from recapRows(s, now) (desk/src/tv/recapRows.ts:78), which wraps the seated session's log in tonightsLog; no other learner's evening is listed. f36296f2 touched recapLine's Essay wording only. Cites re-mapped through git diff -U0 ffa91a49 ee7d6ac7 per file; phone/page.tsx:757 -> 866, recapRows.ts:77 -> 78. None of the 43 commits since ffa91a49 changes what this row cites except as named.",
+    "recertify_evidence": "Narrowed again by 5358ddeb (ancestor of main); not closed. The code half the recert-9 note named holds. Read: desk/src/lib/session/store.ts slotOf now ends with ...tonightOf(s) (:499-508: the history lines at or after local midnight and the English talks {at, turns} are kept in the MathsSlot of a learner who leaves, \"never put back on the session\"), emptyOf counts them so a slot with only a talk is kept (:509), and withSlot drops them on sitting back down (:511); desk/src/tv/recapRows.ts:123-124 reads them back (history: x.history ?? [], sessions from x.talks). Executed at 67e0a3a6 (scratch /tmp/rc14/ex.cjs and ex3.cjs outside the repo, loaded through tools/ts-load.cjs, no model; two profiles, Ema seated with a set tonight): Ben away with a set marked tonight and no hint -> [ema, ben], Ben's maths tile sets [5 of 6]; Ben away with only an English talk of 5 turns -> [ema, ben], talks [5]; Ben away with only yesterday's line and talk -> [ema]; Ben away with an empty slot -> [ema]; the present learner alone -> [ema] with the same tiles as before; the real store: reduce(learner.set jakub) from a session with one line tonight, one yesterday and a 6-turn talk leaves away.ema.history = [\"Two-step equations\"] and away.ema.talks = [{at, turns: 6}], and sitting back down leaves nothing of it on the session. So each away case yields a block from learnerRecaps. What is missing: the block never reaches the phone. The phone Recap renders learnerRecaps(s, now) (desk/src/app/phone/page.tsx:881) over the session the phone is sent, and every response to a phone or the TV passes through view() (desk/src/lib/session/pairing.ts:276 const { away: _away, week, ...seen } = s; the doc comment at :254 says no caller is sent the away work; session/route.ts:49, :63, :119-142 and session/stream/route.ts:53 all use it). Executed the same session through view(s, role): in-process and role null -> [ema, ben]; role phone -> [ema], no away key; role tv -> [ema]. So on the real phone an away learner still gets no block, and the acceptance (every learner with work tonight, one block each, on the phone Recap) is met only in process. tools/tv-recap-test.cjs 62/0 covers the pure function and the store, not the view. Closing it takes a ruling and a small code change: send the phone only the derived tonight tiles of the away learners (a new view field), or relax the away strip for the Recap alone; pairing.ts's privacy rule is the owner's.",
     "recurred_as": "L1-radka-41-MB5-2"
   },
   {
