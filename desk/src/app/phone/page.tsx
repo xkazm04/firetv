@@ -354,7 +354,7 @@ export default function Phone() {
     try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void readPiece(true); } catch { /* said on the next line */ }
     if (!moved()) setNote("That did not reach the desk.");
   };
-  const openKept = (id: string, text: string) => { const ps = paragraphsOf(text); setPieceId(id); setSource("message"); loadParagraphs(ps.length ? ps : [text], `Opened from your shelf: ${ps.length} paragraph${ps.length === 1 ? "" : "s"}. Change it, then read it again as a new version.`); };
+  const openKept = (id: string, text: string, title?: string) => { const ps = paragraphsOf(text); setPieceId(id); setSource("message"); loadParagraphs(ps.length ? ps : [text], `Opened from your shelf: ${ps.length} paragraph${ps.length === 1 ? "" : "s"}. Change it, then read it again as a new version.`, title && !/^Untitled \S+ \d+$/.test(title) ? title : null); };
   /** Analyse the paragraph showing. Blank lines typed into it split it first; the desk still reads only the first part. */
   const analyseParagraph = async () => {
     const ps = paragraphsOf(essay); if (!ps.length) return;

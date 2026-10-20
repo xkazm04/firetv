@@ -13,7 +13,7 @@ export interface ShelfCard { id: string; format: string; title: string; versions
 const FORMAT_LABEL: Record<string, string> = { message: "Message", email: "Email", essay: "Essay" };
 const when = (at: number) => new Date(at).toLocaleDateString(undefined, { day: "numeric", month: "short" });
 
-export function EssayShelf({ learnerId, refresh, onOpen, onGone, where }: { where?: "pc"; learnerId: string | undefined; refresh: number; onOpen: (id: string, text: string) => void; onGone?: (id: string | "all") => void }) {
+export function EssayShelf({ learnerId, refresh, onOpen, onGone, where }: { where?: "pc"; learnerId: string | undefined; refresh: number; onOpen: (id: string, text: string, title?: string) => void; onGone?: (id: string | "all") => void }) {
   const [cards, setCards] = useState<ShelfCard[] | null>(null);
   const [line, setLine] = useState("");
   const [sure, setSure] = useState(false);
@@ -26,8 +26,8 @@ export function EssayShelf({ learnerId, refresh, onOpen, onGone, where }: { wher
   const open = async (id: string) => {
     try {
       const r = await fetch(`/api/texts?id=${encodeURIComponent(id)}`);
-      const j = (await r.json()) as { versions?: { text: string }[]; error?: string };
-      if (r.ok && j.versions?.length) onOpen(id, j.versions[j.versions.length - 1].text); else setSay(j.error ?? "That piece could not be opened.");
+      const j = (await r.json()) as { versions?: { text: string }[]; title?: string; error?: string };
+      if (r.ok && j.versions?.length) onOpen(id, j.versions[j.versions.length - 1].text, j.title); else setSay(j.error ?? "That piece could not be opened.");
     } catch { setSay("That did not reach the desk."); }
   };
   const remove = async (q: string, done: string, gone?: string) => {

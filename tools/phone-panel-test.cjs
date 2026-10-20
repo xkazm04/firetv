@@ -1240,3 +1240,17 @@ test('L1-helena-46-EM1-5: the message / email / essay choice is asked before any
  assert.match(src,/kind: "essay", text: one,[^\n]*\.\.\.\(!pieceId && pieceFormat \? \{ format: pieceFormat \} : \{\}\)/,'the paragraph call posts format when one is chosen');
  assert.match(src,/kind: "piece",[^\n]*\.\.\.\(pieceFormat \? \{ format: pieceFormat \} : \{\}\)/,'the piece call still posts it');
 });
+test('recert-16 neighbour of L1-daniel-15-EM3-2: shelf re-read keeps its title',()=>{
+ const shelf=fs.readFileSync(path.join(SRC,'app/phone/EssayShelf.tsx'),'utf8');
+ assert.match(shelf,/onOpen\(id, j\.versions\[j\.versions\.length - 1\]\.text, j\.title\)/,'the shelf hands the stored title to onOpen');
+ assert.match(shelf,/onOpen: \(id: string, text: string, title\?: string\) => void/,'the title is an optional third argument');
+ const src=code(PAGE);
+ const a=src.indexOf('const openKept'),e=src.indexOf('const analyseParagraph',a);
+ assert.ok(a>0&&e>a);
+ const js=ts.transpileModule(src.slice(a,e).replace(/\/\*\*[\s\S]*$/,''),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const {paragraphsOf}=require(path.join(SRC,'lib/rules/essay.ts'));
+ const run=(title)=>{const got=[];new Function('paragraphsOf','setPieceId','setSource','loadParagraphs',`${js}\nreturn openKept;`)(paragraphsOf,()=>{},()=>{},(ps,said,t)=>got.push(t))('p1','One.\n\nTwo.',title);return got[0];};
+ assert.equal(run('My Trip to Brno'),'My Trip to Brno','a titled kept piece opens with its title as the heading (so the calls post it as task)');
+ assert.equal(run(undefined),null,'no title from the other caller: no heading');
+ assert.equal(run('Untitled email 1'),null,'the desk\'s own placeholder name is not a task');
+});
