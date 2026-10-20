@@ -1199,3 +1199,14 @@ test('L1-daniel-15-EM3-1: one paste box (with its send) is shared by the rewrite
  assert.match(box,/value=\{essay\}/,'the box shows the text Open loads (essay = the showing paragraph)');
  assert.match(src,/const openKept = [^\n]*loadParagraphs\(/,'Open loads the paragraphs the box shows');
 });
+
+test('L1-daniel-15-EM3-1 (recert-14 gap): one whole-piece read block is shared by the rewrite, plan and paragraph panels',()=>{
+ const src=code(PAGE);
+ const panel=(role)=>{const i=src.indexOf(`data-role="${role}"`);assert.ok(i>0,role+' panel exists');const j=src.indexOf('screen === "paste"',i);return src.slice(i,j<0?undefined:j);};
+ for(const role of ['essay-rewrite','essay-plan','essay-paragraph'])assert.match(panel(role),/\{pieceRead\(\)\}/,role+' carries the whole-piece read');
+ assert.equal((src.match(/data-role="essay-read-piece"/g)||[]).length,1,'one read-whole-piece button definition');
+ assert.equal((src.match(/data-role="essay-piece"/g)||[]).length,1,'one Keep / format / title block');
+ const i=src.indexOf('const pieceRead');const blk=src.slice(i,src.indexOf('const sendSlot'));
+ assert.match(blk,/paras\.length > 1 &&/,'only when the piece has more than one paragraph');
+ assert.match(blk,/disabled=\{busy \|\| notice !== null\} onClick=\{\(\) => void readPiece\(\)\} data-role="essay-read-piece"/,'same readPiece call and disabled rule');
+});

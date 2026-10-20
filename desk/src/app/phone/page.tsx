@@ -284,6 +284,15 @@ export default function Phone() {
       <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()), "essay")}>Dictate</button>
         {!pieceCovers(pix) && <button className="pbtn" data-role="essay-analyse-one" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || notice !== null || !essay.trim()} onClick={paras.length === 1 && pieceId ? () => void readPiece(true) : analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button>}</div>
   </>;
+  // the whole-piece read, shared like pasteField(): a multi-paragraph piece opened under the rewrite or plan panel can be sent whole too
+  const pieceRead = () => <>
+      {paras.length > 1 && <div className="field" data-role="essay-piece">
+          <label className="pkeep"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} data-role="essay-keep" /><span>Keep it on my shelf</span></label>
+          {keep && !pieceId && <div className="pkeep" role="radiogroup" aria-label="What is it?" data-role="essay-format">{([["message", "Message"], ["email", "Email"], ["essay", "Essay"]] as const).map(([id, label]) => <label key={id}><input type="radio" name="piece-format" checked={pieceFormat === id} onChange={() => setPieceFormat(id)} data-role={`essay-format-${id}`} /><span>{label}</span></label>)}</div>}
+          {keep && !pieceId && <input className="pkeep" type="text" value={pieceTitle} maxLength={80} onChange={(e) => setPieceTitle(e.target.value)} placeholder="Name this piece (optional)" aria-label="Name this piece (optional)" data-role="essay-title" />}
+          {stranded > 0 && <p className="pnote" data-role="essay-rewrites-stay" aria-live="polite">{rewriteStaysLine(stranded)}</p>}
+          <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
+  </>;
   const sendSlot = async () => { if (!onPlan) return; const r = planFill(onPlan.plan, onPlan.i, slotText); if (!r.ok) { setMsg(r.error); return; }
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setMsg("sending…");
@@ -838,13 +847,13 @@ export default function Phone() {
           <div className="field"><textarea value={rewrite} onChange={(e) => setRewrite(e.target.value)} /></div>
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setRewrite(t), "essay")}>Dictate</button>
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || rewriting} onClick={sendRewrite}>Send</button></div>
-          {pasteField()}{pasteSend()}{pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}{shelf()}</div>}
+          {pasteField()}{pieceRead()}{pasteSend()}{pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}{shelf()}</div>}
 
         {screen === "paste" && onPlan && <div className="pscreen" data-role="essay-plan"><h3>Slot {onPlan.i + 1} · {onPlan.slots[onPlan.i]?.label}</h3><p>One sentence, in your own words. It inks on the TV. When all three are written, press OK on Read it.</p>
           <div className="field"><textarea aria-label="Your sentence for this slot" value={slotText} onChange={(e) => setSlotText(e.target.value)} /></div>
           {onPlan.plan.slots[onPlan.i] && planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i]) && <p data-role="essay-plan-fit">{planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i])}</p>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setSlotText(t), "essay")}>Dictate</button>
-            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !slotText.trim()} onClick={sendSlot}>Send</button></div>{pasteField()}{pasteSend()}{shelf()}</div>}
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !slotText.trim()} onClick={sendSlot}>Send</button></div>{pasteField()}{pieceRead()}{pasteSend()}{shelf()}</div>}
 
         {screen === "paste" && !onSentence && !onPlan && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
           <p>Send a .txt or .md file (a .docx goes through the PC page), or type, paste or dictate a message. The desk reads a whole piece, or one paragraph at a time.</p>
@@ -857,12 +866,7 @@ export default function Phone() {
             <b aria-live="polite">Paragraph {pix + 1} of {paras.length}</b>
             <button className="pbtn" data-signal={readIx.includes(pix) ? "true" : undefined} data-secondary={readIx.includes(pix) ? undefined : "true"} aria-label="Next paragraph" disabled={pix + 1 >= paras.length} onClick={() => goPara(pix + 1)}>Next</button></div>}
           {pasteField()}
-          {paras.length > 1 && <div className="field" data-role="essay-piece">
-            <label className="pkeep"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} data-role="essay-keep" /><span>Keep it on my shelf</span></label>
-            {keep && !pieceId && <div className="pkeep" role="radiogroup" aria-label="What is it?" data-role="essay-format">{([["message", "Message"], ["email", "Email"], ["essay", "Essay"]] as const).map(([id, label]) => <label key={id}><input type="radio" name="piece-format" checked={pieceFormat === id} onChange={() => setPieceFormat(id)} data-role={`essay-format-${id}`} /><span>{label}</span></label>)}</div>}
-            {keep && !pieceId && <input className="pkeep" type="text" value={pieceTitle} maxLength={80} onChange={(e) => setPieceTitle(e.target.value)} placeholder="Name this piece (optional)" aria-label="Name this piece (optional)" data-role="essay-title" />}
-            {stranded > 0 && <p className="pnote" data-role="essay-rewrites-stay" aria-live="polite">{rewriteStaysLine(stranded)}</p>}
-            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
+          {pieceRead()}
           {pasteSend()}
           {shelf()}</div>}
 
