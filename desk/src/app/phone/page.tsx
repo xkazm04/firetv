@@ -168,6 +168,9 @@ export default function Phone() {
   const boxes = useRef<(HTMLInputElement | null)[]>([]);
   const openSet = s?.practice && !s.practice.marked ? `${s.practice.topic}:${s.practice.items.map((i) => i.question).join("|")}` : "";
   useEffect(() => { setRoute("snap"); setTyped([]); }, [openSet]);
+  // the TV chose the route (TL-6: its card's Snap the sheet or Type my answers); the ask carries it, and the panel follows (D9)
+  const routeAsked = s?.ask?.kind === "answers" ? "type" : s?.ask?.kind === "sheet" ? "snap" : null;
+  useEffect(() => { if (routeAsked) setRoute(routeAsked); }, [s?.ask?.id, routeAsked]);
 
   // the QR on the TV carries the code: arrive with ?pin= and the phone gives it to the desk, which checks it, then tidies the bar
   useEffect(() => {
@@ -753,10 +756,11 @@ export default function Phone() {
 
           // not marked: the sheet is still on the table. Two ways in: snap all six at once, or type the six answers.
           if (!pr.marked) return <div className="pscreen"><h3>Practice</h3>
-            <div className="proute" data-role="practice-route" role="group" aria-label="How to hand in the set">
-              <button aria-pressed={route === "snap"} onClick={() => { setRoute("snap"); setMsg(""); }}>Snap the sheet</button>
-              <button aria-pressed={route === "type"} onClick={() => { setRoute("type"); setMsg(""); }}>Type my answers</button>
-            </div>
+            {routeAsked ? <p data-role="practice-route-line">The TV chose: <b>{routeAsked === "type" ? "Type my answers" : "Snap the sheet"}</b>.</p>
+              : <div className="proute" data-role="practice-route" role="group" aria-label="How to hand in the set">
+                <button aria-pressed={route === "snap"} onClick={() => { setRoute("snap"); setMsg(""); }}>Snap the sheet</button>
+                <button aria-pressed={route === "type"} onClick={() => { setRoute("type"); setMsg(""); }}>Type my answers</button>
+              </div>}
             {route === "type" ? (() => {
               const n = pr.items.length, any = typed.some((t) => t.trim());
               return <>

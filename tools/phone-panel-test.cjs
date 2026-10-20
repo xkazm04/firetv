@@ -1285,3 +1285,11 @@ test('stick pass 2026-10-20: a shot whose send failed is not held - a later hand
  const page=code(PAGE);
  assert.match(page,/const held = shotHeld\(screen, !!shot, phase\)/,'page.tsx asks the one rule');
 });
+
+test('stick pass 2026-10-20: the practice panel takes its route from the ask - answers types, sheet snaps - and shows the TV\'s choice as a line, not a toggle (D9)',()=>{
+ const page=code(PAGE).replace(/\s+/g,' ');
+ assert.match(page,/const routeAsked = s\?\.ask\?\.kind === "answers" \? "type" : s\?\.ask\?\.kind === "sheet" \? "snap" : null;/,'the route the TV asked for');
+ assert.match(page,/useEffect\(\(\) => \{ if \(routeAsked\) setRoute\(routeAsked\); \}, \[s\?\.ask\?\.id, routeAsked\]\)/,'a new ask sets it');
+ const at=page.indexOf('data-role="practice-route"');assert.ok(at>0);
+ assert.match(page.slice(at-260,at),/routeAsked \? <p data-role="practice-route-line">/,'the toggle is drawn only when the TV asked no route');
+});
