@@ -37,7 +37,12 @@
     "resolution": "open",
     "suggested_acceptance": "A kept faulty verdict that the rule would now clear carries a line ('Your new sentence 2 may cover this: read the paragraph again'), and the others are still not re-asked.",
     "scope_note": "matches EM-B3 (docs/BACKLOG.md, declined): a rewrite re-judges only its own sentence, so a kept verdict goes stale; raised here independently by a learner's walk",
-    "recurs": "2026-10-09-essay-l1/recert-19/L1-eliska-12-EM2-1"
+    "recurs": "2026-10-09-essay-l1/recert-19/L1-eliska-12-EM2-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-21",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at 6e50d7c3 (the local main tip); what the previous walk (at bf036c94) found still holds: reviseSentence (desk/src/lib/desk/essay.ts:271) still decides only sentence n (:304) and copies every other verdict unchanged (:308, reading.verdicts.filter(v => v.n === s.n)); no line marks a kept faulty verdict that the rule would now clear. f4aea028 changed :303 (the observation check of the rewritten sentence, now unanswered) and the import at :10, in place, so no line moves; it makes a rewrite with no link fail the run, which is a different row (L1-eliska-12-EM2-7, fixed). Stays DECLINED under R6.",
+    "recurrence": 2,
+    "recurred_as": "L1-eliska-12-EM2-1"
   },
   {
     "id": "L1-helena-46-EM1-4",
@@ -80,7 +85,12 @@
     "resolution": "open",
     "suggested_acceptance": "A non-English paragraph gets the desk's sentence before any model call.",
     "scope_note": "Helena writes to clients in English; low reachability for her.",
-    "recurs": "2026-10-09-essay-l1/recert-19/L1-helena-46-EM1-4"
+    "recurs": "2026-10-09-essay-l1/recert-19/L1-helena-46-EM1-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-21",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at 6e50d7c3 (the local main tip); what the previous walk (at bf036c94) found: paragraphIsEnglish (desk/src/lib/rules/essay.ts:280-291) is the same function. b490c9d0 changed two lines in place (CZECH_SHORT_SHAPE :245 gains four shapes; CZECH_SHORT_WORDS :247 gains three words), so no line moves. Narrowed again, not met. BLIND r4, tools/essay-heldout-czech-short-r4.json: committed alone in 76523b70 (2026-10-20 06:54:04, the only commit that touches the file) before the rule b490c9d0 (06:59:21); whole-file sha256 02a9eb1b1fb3696b420580206ebb881bf1a92dd2e7b111ac198a9c99ed8a3461; pinned inner sha256 3e4861b694fd72fd4e78fe98c652655d2c6aa3f4ec3d37ef047861dcb18bf3f7, recomputed equal. Czech refused 55 of 59 (93.2%) after the rule, 54 of 59 before it (b490c9d0^): 4 leaks, +1 blind line earned by the rule; English refused 1 of 45 both before and after (filed as L1-helena-46-EM1-9). r3 is now TUNED: 60 of 60 (57 of 60 before the rule), English 0 of 45; it is no longer blind evidence. r2 60 of 60, the first held-out 53 of 53 and the tuning set 56 of 56 are TUNED, 0 leaks, English 0 of 44, 0 of 42, 0 of 44. The 4 r4 leaks are not printed (counts only). DECISION (App Master's brief, 2026-10-20): word-list tuning stops after four rounds. Each fresh blind set leaked about 5 percent (r3 3 of 60 = 5.0%; r4 4 of 59 = 6.8%, measured here and above the 5 percent the brief expected), so the residual is accepted and stated and is not chased further with word lists. The row stays open as the accepted residual; a builder does not tune on it again. It reopens for work only on a non-word-list approach (for example a character-n-gram or statistical language identifier, measured on a fresh never-seen blind set pinned before it is built); closure needs zero blind leaks with 0 English refused.",
+    "recurrence": 2,
+    "recurred_as": "L1-helena-46-EM1-4"
   },
   {
     "id": "L1-kristyna-17-EM1-1",
@@ -126,7 +136,12 @@
     "l2_priority": "With a Czech paragraph, record verdicts and notes under Argument and Structure; a Czech marker reads them (verdict agreement).",
     "recurs": "2026-10-09-essay-l1/recert-19/L1-kristyna-17-EM1-1",
     "severity_prior": "blocker",
-    "severity_why": "Blocker to major: the refusal now stops most Czech paragraphs before the word lists, so only a paragraph that leaks past the check is mis-ruled."
+    "severity_why": "Blocker to major: the refusal now stops most Czech paragraphs before the word lists, so only a paragraph that leaks past the check is mis-ruled.",
+    "recertify_run": "2026-10-09-essay-l1/recert-21",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at 6e50d7c3 (the local main tip); what the previous walk (at bf036c94) found: Refusal arm: narrowed again, not met. paragraphIsEnglish (desk/src/lib/rules/essay.ts:280-291) refuses 55 of 59 Czech (93.2%, BLIND: tools/essay-heldout-czech-short-r4.json, committed alone in 76523b70 before the rule b490c9d0; sha256 02a9eb1b1fb3696b420580206ebb881bf1a92dd2e7b111ac198a9c99ed8a3461) and 1 of 45 English; 54 of 59 before the rule. r3 is now TUNED (60 of 60, English 0 of 45), r2 60 of 60, the first held-out 53 of 53 and the tuning set 56 of 56 are TUNED. Word-list tuning has stopped (decision recorded on L1-helena-46-EM1-4): the 4 blind leaks are an accepted residual. L arm: open and operator-owned (rule on Czech word lists, or say we do not rule Czech). CONNECTORS (:14), LINK (:16), CONTRAST (:435), wordIn (:448), noTurn (ADULT_CHECKS :500, YOUNG_CHECKS :513) were re-read at 6e50d7c3 and are byte-identical to bf036c94 and at the same line numbers. The refusal figures narrow this row; they never fix it.",
+    "recurrence": 2,
+    "recurred_as": "L1-kristyna-17-EM1-1"
   },
   {
     "id": "L1-kristyna-17-EM1-3",
@@ -169,6 +184,11 @@
     "l2_priority": "Read a Czech paragraph live (claude-cli/sonnet): record the language of every note, fix and the summary.",
     "recurs": "2026-10-09-essay-l1/recert-19/L1-kristyna-17-EM1-3",
     "severity_prior": "major",
-    "severity_why": "Major to minor: only a Czech paragraph that leaks past the language check can reach the model now."
+    "severity_why": "Major to minor: only a Czech paragraph that leaks past the language check can reach the model now.",
+    "recertify_run": "2026-10-09-essay-l1/recert-21",
+    "recertify_status": "recurs",
+    "recertify_evidence": "Re-walked at 6e50d7c3 (the local main tip); what the previous walk (at bf036c94) found still holds: the reading prompt (desk/src/lib/desk/essay.ts:113-136) still has no language instruction and the CHECKS lines are English (ADULT_CHECKS desk/src/lib/rules/essay.ts:497, YOUNG_CHECKS :510). desk/src/lib/desk/essay.ts moved by f4aea028 in two lines only (:10 the import drops observationOk; :303 reviseSentence uses unanswered), neither in the reading prompt, and no line moves. Notes for a Czech text that clears the language check are in whatever language the model picks; the operator names the language.",
+    "recurrence": 2,
+    "recurred_as": "L1-kristyna-17-EM1-3"
   }
 ]
