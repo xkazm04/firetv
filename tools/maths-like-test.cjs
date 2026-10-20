@@ -157,7 +157,7 @@ test('case 5: a snapped 3/4 + 1/6 -> hint, one press -> six code-written frac-ad
  const s=store.getSession(),pr=s.practice;
  assert.equal(s.screen,'practice');assert.equal(pr.topic,'frac-add-sub');assert.equal(pr.items.length,6);
  assert.ok(pr.items.every((i)=>S.unitOf(i.spec)==='frac-add-sub'),'six items of the unit');
- const answer=(spec)=>{const m=/^(\d+)\/(\d+) ([-+]) (\d+)\/(\d+)$/.exec(spec.expr);const [a,bb,c,d]=[+m[1],+m[2],+m[4],+m[5]];return `${m[3]==='+'?a*d+c*bb:a*d-c*bb}/${bb*d}`;};
+ const answer=(spec)=>{const m=/^(\d+)\/(\d+) ([-+]) (\d+)\/(\d+)$/.exec(spec.expr);const [a,bb,c,d]=[+m[1],+m[2],+m[4],+m[5]];const N=m[3]==='+'?a*d+c*bb:a*d-c*bb,D=bb*d,g=((x,y)=>{while(y)[x,y]=[y,x%y];return x;})(N,D);return `${N/g}/${D/g}`;};  // lowest terms: the question asks for the simplest form (L1-nela-12-MB2-2)
  assert.equal(learners.getLearner(LEARNER).skills['frac-add-sub']?.seen??0,0,'nothing on the record yet');
  markTyped(pr.items.map((i)=>answer(i.spec)),pr,LEARNER,()=>true,'uk');
  assert.equal(learners.getLearner(LEARNER).skills['frac-add-sub'].seen,6,'the homework night reaches the ruler');

@@ -299,16 +299,20 @@ test('7: the school corpus (Family W5b) - every fractions question the generator
  // Seeds 0..99 at both tiers: every form renders where a question sits (no drop, no raw TeX, inside its row), with
  // both operands and nothing else stacked, so a fraction's numerals are set at the fraction-part size (max(.78em, 28px)).
  const S=require(path.join(root,'src/lib/rules/school.ts'));
- const off=[];let n=0;
+ const off=[];let n=0,fitted=0,smallest=52;
  for(const tier of [1,2])for(let seed=0;seed<100;seed++){
   const q=S.question(S.gen(seed,tier));n++;
   for(const [form,line,tex] of [['plain',q.plain,false],['tex',q.tex,true]]){
    const st=renderStatus(line,'question',tex);
-   if(st!=='renders')off.push(`${tier}/${seed} ${form} ${line}: ${st}`);
+   // L1-nela-12-MB2-2: the add/subtract questions end 'Give your answer in its simplest form.', a row wider than the paper at 52 px;
+   // the sheet fits it down in 2 px steps (as 7d), and this holds it at 34 px or more. The TeX form must only not break.
+   if(st==='degrades:too-wide'){const px=Math.floor(52*CTX.question.w/listW(T.parseMath(line),52,'print'));if(form==='plain'){fitted++;smallest=Math.min(smallest,px);}if(px<34&&form==='plain')off.push(`${tier}/${seed} ${form} ${line}: fits only at ${px} px`);}
+   else if(st!=='renders')off.push(`${tier}/${seed} ${form} ${line}: ${st}`);
    let fr=0;T.walk(T.parseMath(line),(x)=>{if(x.t==='frac')fr++;});
    if(fr!==2)off.push(`${tier}/${seed} ${form} ${line}: ${fr} stacked fractions`);
   }
  }
+ console.log(`# 7: ${n} add/subtract questions, ${fitted} fitted below 52 px, the smallest at ${smallest} px`);
  assert.equal(n,200);
  assert.equal(off.length,0,'a school question that does not set cleanly:\n'+off.join('\n'));
 });

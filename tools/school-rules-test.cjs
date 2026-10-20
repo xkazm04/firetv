@@ -286,6 +286,16 @@ function reference(expr){
  return {a,b,c,d,op,n:n/g,den:den/g};
 }
 
+test('L1-nela-12-MB2-2: the add/subtract questions say simplest form, and an unsimplified 6/4 for 3/4 + 3/4 is unsure, not right', () => {
+ const g=S.gen(1,1);assert.equal(g.form,'simplest');assert.match(S.question(g).plain,/Give your answer in its simplest form.$/);
+ const spec={shape:'compute',expr:'3/4 + 3/4',form:'simplest'};
+ assert.match(S.question(spec).plain,/in its simplest form.$/);
+ for (const sys of S.SCHOOL_SYSTEMS){
+  assert.equal(S.check(spec,'6/4',sys).verdict,'unsure','6/4 is the right value, not finished');
+  assert.equal(S.check(spec,'3/2',sys).verdict,'right');
+ }
+});
+
 test('GENERATOR: seeds 1..200 for tiers 1 and 2 give well-formed, distinct, correctly judged items', () => {
  const counts={};
  for (const tier of [1,2]){
@@ -312,7 +322,8 @@ test('GENERATOR: seeds 1..200 for tiers 1 and 2 give well-formed, distinct, corr
     assert.equal(S.check(s,`${r.n+1}/${r.den}`,sys).verdict,'wrong',`${s.expr} != ${r.n+1}/${r.den}`);
     const rd=S.readNumber(truth,sys);assert.equal(rd.form,'fraction');
    }
-   assert.equal(S.question(s).plain,`Work out ${s.expr}.`);
+   assert.equal(s.form,'simplest','an add/subtract spec asks for its simplest form (L1-nela-12-MB2-2, ruling Variant 2)');
+   assert.equal(S.question(s).plain,`Work out ${s.expr}. Give your answer in its simplest form.`);
    assert.ok(S.leaksSchool(s,`The answer is ${truth}.`),`the answer leaks: ${s.expr}`);
    assert.ok(!S.leaksSchool(s,S.question(s).plain),`the question does not: ${s.expr}`);
    seen.add(s.expr);

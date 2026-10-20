@@ -2814,14 +2814,14 @@ export function gen(seed: unknown, tier: unknown): SchoolSpec | null {
       if (a * d === c * b) continue;
       if (a * d < c * b) { [a, b, c, d] = [c, d, a, b]; }
     }
-    const spec: SchoolSpec = { shape: "compute", expr: `${a}/${b} ${minus ? "-" : "+"} ${c}/${d}` };
+    const spec: SchoolSpec = { shape: "compute", expr: `${a}/${b} ${minus ? "-" : "+"} ${c}/${d}`, form: "simplest" };
     const r = read(spec);
     if (!r.ok || r.truth.d === ONE) continue;
     // an answer equal to an operand (5/6 - 5/12 = 5/12) is printed by the question itself
     if (eq(r.truth, mk(BigInt(a), BigInt(b))!) || eq(r.truth, mk(BigInt(c), BigInt(d))!)) continue;
     return spec;
   }
-  return tier === 1 ? { shape: "compute", expr: "1/4 + 1/2" } : { shape: "compute", expr: "3/4 + 1/6" };
+  return tier === 1 ? { shape: "compute", expr: "1/4 + 1/2", form: "simplest" } : { shape: "compute", expr: "3/4 + 1/6", form: "simplest" };
 }
 
 // ------------------------------------------------------------------ the W7 generators: three more fractions units

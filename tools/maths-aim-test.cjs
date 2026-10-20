@@ -168,7 +168,7 @@ test('case 5: a typed set of six frac-add-sub items, three showing tops-and-bott
  seat();noModel();made(LEARNER,T,SL);
  const items=makeSchoolItems(T,6,4242).items;
  assert.ok(shows(items,SL)>=3,'the set shows the slip three times or more');
- const answer=(spec)=>{const m=/^(\d+)\/(\d+) ([-+]) (\d+)\/(\d+)$/.exec(spec.expr);const [a,b,c,d]=[+m[1],+m[2],+m[4],+m[5]];return `${m[3]==='+'?a*d+c*b:a*d-c*b}/${b*d}`;};
+ const answer=(spec)=>{const m=/^(\d+)\/(\d+) ([-+]) (\d+)\/(\d+)$/.exec(spec.expr);const [a,b,c,d]=[+m[1],+m[2],+m[4],+m[5]];const N=m[3]==='+'?a*d+c*b:a*d-c*b,D=b*d,g=((x,y)=>{while(y)[x,y]=[y,x%y];return x;})(N,D);return `${N/g}/${D/g}`;};  // lowest terms: the question asks for the simplest form (L1-nela-12-MB2-2)
  const set={topic:T,items,marked:false};
  // before: the scratch is on the topic's groove
  assert.ok(scratches(drawMaths('Topics',seated(learners.getLearner(LEARNER).skills))),'the scratch is drawn while the slip is live');

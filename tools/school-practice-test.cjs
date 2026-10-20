@@ -76,9 +76,9 @@ test('2: makeItems on frac-add-sub writes six distinct items by code - three tie
   assert.equal(new Set(r.items.map((i)=>i.question.replace(/\s+/g,''))).size,6,'six distinct questions');
   for(const it of r.items){
    assert.equal(it.spec.shape,'compute');assert.ok(S.wellFormed(it.spec).ok,it.spec.expr);
-   assert.deepEqual(Object.keys(it.spec).sort(),['expr','shape'],'the spec carries its expression and nothing else');
+   assert.deepEqual(Object.keys(it.spec).sort(),['expr','form','shape'],'the spec carries its expression and the simplest-form ask (L1-nela-12-MB2-2) and nothing else');
    assert.equal(it.question,S.question(it.spec).plain,'the question is printed by code from the spec');
-   assert.match(it.question,/^Work out \d+\/\d+ [-+] \d+\/\d+\.$/);
+   assert.match(it.question,/^Work out \d+\/\d+ [-+] \d+\/\d+. Give your answer in its simplest form.$/);
    assert.equal(it.tier,tierOf(it.spec),`${it.spec.expr}: the stored tier is the one its bottoms give, computed by code`);
    assert.equal(S.leaksSchool(it.spec,it.question),false,'the question does not state its own answer');
    assert.ok(!('difficulty' in it)&&!('answer' in it),'no model difficulty, no answer');

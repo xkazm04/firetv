@@ -67,7 +67,9 @@ const usual=(rec)=>{if(!rec)return 'none';const {stretch,...rest}=rec;return JSO
 const answerOf=(spec)=>{
  const m=/^(?:[a-z]+ )?(?:(\d+) )?(\d+)\/(\d+) ([-+×÷]) (?:(\d+) )?(\d+)\/(\d+)$/.exec(spec.expr);assert.ok(m,spec.expr);
  const [b,d]=[+m[3],+m[7]],a=(+(m[1]||0))*b+(+m[2]),c=(+(m[5]||0))*d+(+m[6]);
- const [N,D]={'+':[a*d+c*b,b*d],'-':[a*d-c*b,b*d],'×':[a*c,b*d],'÷':[a*d,b*c]}[m[4]];return `${N}/${D}`;
+ const [N,D]={'+':[a*d+c*b,b*d],'-':[a*d-c*b,b*d],'×':[a*c,b*d],'÷':[a*d,b*c]}[m[4]];
+ // lowest terms: the add/subtract questions ask for the simplest form (L1-nela-12-MB2-2), where 6/4 is only unsure
+ const g=((x,y)=>{while(y)[x,y]=[y,x%y];return Math.abs(x);})(N,D);return D/g===1?`${N/g}`:`${N/g}/${D/g}`;
 };
 
 // ------------------------------------------------------------------ 1. the baseline mix, by code
