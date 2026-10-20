@@ -2,7 +2,7 @@
 
 Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run. One section per module that has open rows.
 
-237 open across 13 runs
+236 open across 13 runs
 drained 9 of 13 runs
 undrained: 2026-10-14-lt, 2026-10-16-lt-a2b1-tightening, 2026-10-17-lt-swap, 2026-10-17-lt-swap-2 (home: docs/uat-insights/<run-id>.md, uat/README.md)
 
@@ -362,28 +362,24 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 # Essay Master
 
-5 open in 4 pairs across 19 runs
+4 open in 3 pairs across 20 runs
 
-recurring 5 · unasked by a later run of their pair 0
+recurring 4 · unasked by a later run of their pair 0
 
 Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Linga driver does not rerun them.
 
 ## kristyna-17 EM1 · 2 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-18/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 19, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-18/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 19, first seen 2026-10-09-essay-l1
-
-## eliska-12 EM1 · 1 open · top rank 9
-
-- `2026-10-09-essay-l1/recert-18/L1-eliska-12-EM1-4` major · rank 9 · The planted-claim fix depends on the model naming links (supports / backs): when it omits them, Structure marks the true topic sentence and Evidence marks nothing · recurrence 18, first seen 2026-10-09-essay-l1/recert-1
+- `2026-10-09-essay-l1/recert-19/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 20, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-19/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 20, first seen 2026-10-09-essay-l1
 
 ## eliska-12 EM2 · 1 open · top rank 6
 
-- `2026-10-09-essay-l1/recert-18/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 19, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-19/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 20, first seen 2026-10-09-essay-l1
 
 ## helena-46 EM1 · 1 open · top rank 2
 
-- `2026-10-09-essay-l1/recert-18/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; 8 of 53 held-out short plain-letter Czech lines still go to the model · recurrence 19, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-19/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; 8 of 60 semi-blind short plain-letter Czech lines still go to the model · recurrence 20, first seen 2026-10-09-essay-l1
 
 # Math Buddy
 

@@ -1,0 +1,22 @@
+# helena-46 × EM1 · (recert-19)
+
+- Character: helena-46
+- Journey: EM1
+- Cert level: L1 re-walk, code only, no model
+- Head 2bdbdee8
+- Recertifies: 2026-10-09-essay-l1/recert-18 at 8a739027
+- **Verdict now: L1-conditional.** 0 fixed, 1 recur; 1 rows open. (was L1-conditional)
+
+## Prior rows
+
+| Finding | Status | Evidence (current code) | Commit |
+| --- | --- | --- | --- |
+| L1-helena-46-EM1-4 A language the desk does not read is refused only when it is clearly Czech; 8 of 53 held-o… (polish) | recurs → L1-helena-46-EM1-4 | recert-19 @2bdbdee8: Re-walked at 2bdbdee8 (the local main tip); what the previous walk (at 8a739027) found: paragraphIsEnglish (desk/src/lib/rules/essay.ts:278-290) changed in 534ba3e0: verb and prefix shapes (CZECH_SHORT_SHAPE :245, CZECH_SHORT_FUNCTION :246, czechShortShape :247, used by czPlain :263) now count in a short paragraph with no English function word, and the eight leaks of recert-18 are refused. Measured in the scratch script (rc19/exec19.cjs, tools/ts-load.cjs, no model): paragraphIsEnglish refuses 52 of 60 Czech (86.7%) and 0 of 44 English lines of tools/essay-heldout-czech-short-r2.json. This is SEMI-BLIND evidence: the baseline misses were printed before the rule was written, and the file was committed by 82905fd2 before the rule (534ba3e0) and not edited since (its pinned sha256 equals the hash of its two arrays; whole-file sha256 8ebcdc0cb1fcadae7aa812f6b7ffa1e21fa1f0c30d0e1fd19e49654f6739128b). The 8 r2 leaks are "Mama uklizi pokoj.", "Deda sekal drevo.", "Nechapu ten priklad.", "Boli me noha.", "Nebavi me to.", "Mrzne a fouka.", "Pojedu k babicce.", "Neumim plavat.". The old held-out file tools/essay-heldout-czech-short.json now refuses 53 of 53 (0 of 42 English) but is TUNED, not evidence: its 8 leaks were tuned on in 534ba3e0 (that file's own header forbade it) and the figure is not cited as blind anywhere. Other corpora: recert-12/heldout.json Czech 48/48, English 0/32, short plain-letter 6/6 (tuned figure); recert-11/heldout.json Czech 72/72, English 0/34; the Kamarad line is refused; fifteen short English lines with names (Tim, Pan Smith, Jan, Mas, Nas, Ted, Dan, Kim, Anna, Mama and Papa, Pavel, Emil, Hotel, April, Koala) are all kept. The row's expected text, "A Czech message is refused in a plain sentence before the wait", does not hold on blind evidence: 52/60 is semi-blind, 8 of 60 short plain-letter Czech lines (13.3%) still reach the model, and the 53/53 of the old file is tuned. Narrowed (86.7% semi-blind, from 84.9% held out at 8a739027), not fixed: the polish row stays open. What would close it: a FRESH, never-seen held-out set, tools/essay-heldout-czech-short-r3.json, written and committed BEFORE any further change to paragraphIsEnglish by an author who has not read the r2 leaks or the word list, with its sha256 pinned inside it, measured once after the rule is final, with 0 English refused; a blind figure at or near all-refused is the bar, not a tuned one. The remaining gap is a lexicon question (the refusal is a word list and shapes, so every unlisted everyday word is a leak). git diff -U0 8a739027 2bdbdee8 touches one desk file, desk/src/lib/rules/essay.ts (+8 at :240-247 CZECH_SHORT_SHAPE, CZECH_SHORT_FUNCTION and czechShortShape; czPlain :263 now also counts czechShortShape; +15 at :467-481 linkMissing and the doc above unanswered; :491 the unanswered filter also calls linkMissing; every line from :240 is +8, every line from :470 is +23), plus tools/essay-heldout-czech-short-r2.json (new), tools/essay-rules-test.cjs and tools/essay-piece-test.cjs; desk/src/lib/desk/essay.ts, desk/src/app/api/analyse/route.ts and desk/src/app/phone/page.tsx are byte-identical. Every cite of recert-18 (130 cited line numbers, ranges expanded) was re-mapped through it per file and compared byte for byte with the old line: 0 differ; the 1 inside a hunk (rules/essay.ts old :255, the czPlain line) was re-read by hand at :263. | 534ba3e0 (narrowed) |
+
+## New findings
+
+None.
+
+## Notes
+
+- Evidence check at 2bdbdee8: every cited line was re-mapped through `git diff -U0 8a739027 2bdbdee8` per file and compared with the old line (a cite inside a changed hunk re-read by hand). Every commit named was checked with `git merge-base --is-ancestor <sha> main` (82905fd2, 534ba3e0 and 2bdbdee8: all true). Nothing is resolved-verified: that needs live L2 evidence. Model-dependent behaviour stays with L2.
