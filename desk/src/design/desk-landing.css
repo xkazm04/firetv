@@ -74,6 +74,12 @@
 .pp .pp-wset[data-mode="arrive"] .pp-layer { animation: pp-up .65s calc(.7s + var(--i) * .045s) var(--pp-ease) backwards; }
 .pp .pp-wset[data-mode="fade"] .pp-layer { animation: pp-up .56s calc(var(--i) * .04s) var(--pp-ease) backwards; }
 .pp .pp-wset[data-mode="leave"] .pp-layer { animation: pp-out .64s cubic-bezier(.4, 0, .2, 1) forwards; }
+/* a world not in the light stays mounted (its tiles stay rastered for the next lamp move) but unseen and still; the lit
+   one lies over the one leaving */
+.pp .pp-wset { z-index: 1; }
+.pp .pp-wset[data-mode="leave"], .pp .pp-wset[data-mode="rest"] { z-index: 0; }
+.pp .pp-wset[data-mode="rest"] .pp-layer { opacity: 0; }
+.pp .pp-wset[data-mode="rest"] * { animation-play-state: paused; }
 @keyframes pp-in { from { translate: calc(var(--dir) * 1920px * max(.15, var(--d))) 24px; opacity: 0; } 62% { opacity: 1; } to { translate: 0 0; opacity: 1; } }
 @keyframes pp-up { from { translate: 0 90px; opacity: 0; } to { translate: 0 0; opacity: 1; } }
 @keyframes pp-out { 0%, 25% { translate: 0 0; opacity: 1; } to { translate: calc(var(--dir) * -1920px * max(.15, var(--d))) 0; opacity: 0; } }
@@ -210,6 +216,6 @@
 /* reduced motion: everything is where it ends up, and the hand-off is a cut (app/tv/page.tsx does not wait) */
 @media (prefers-reduced-motion: reduce) {
   .pp *, .pp *::before, .pp *::after { animation: none !important; transition: none !important; }
-  .pp .pp-intro, .pp .pp-wset[data-mode="leave"] { display: none; }
+  .pp .pp-intro, .pp .pp-wset[data-mode="leave"], .pp .pp-wset[data-mode="rest"] { display: none; }
   .pp .pp-marker { stroke-dasharray: none; }
 }

@@ -33,7 +33,7 @@ const LEARNER_TONE = ["#e2603f", "#2f7a63", "#5a55c8", "#c9932d"];
 
 // ---------------------------------------------------------------- the world: layers that slide at their own speeds
 
-function WorldSet({ layers, back, mode, dir }: { layers: Layer[]; back: boolean; mode: "none" | "arrive" | "choose" | "fade" | "leave"; dir: number }) {
+function WorldSet({ layers, back, mode, dir }: { layers: Layer[]; back: boolean; mode: "none" | "arrive" | "choose" | "fade" | "leave" | "rest"; dir: number }) {
   return (
     <div className="pp-wset" data-mode={mode} style={{ "--dir": dir } as CSSProperties}>
       {layers.map((l, i) => l.back === back && (
@@ -243,12 +243,17 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
     return () => clearTimeout(t);
   }, [st.seq, st.prev]);
 
-  const art = (id: Subject | null) => apps.find((a) => a.id === id)?.art ?? null;
-  const artKey = JSON.stringify([art(st.world), st.prev && art(st.prev.id)]);
-  const cur = useMemo(() => worldFor(art(st.world)), [st.world, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  const old = useMemo(() => (st.prev ? worldFor(art(st.prev.id)) : null), [st.prev, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  // every app's world stays mounted, so its tiles stay rastered: a lamp move only slides layers the GPU already has, where
+  // building the arriving world then held the stick's GPU for 0.5-0.7 s. Only the lit world (and one leaving) shows;
+  // the others rest unseen and still (data-mode="rest", design/desk-landing.css)
+  const artKey = JSON.stringify([apps.map((a) => [a.id, a.art]), st.world === null]);
+  const worlds = useMemo(() => [
+    ...apps.map((a) => ({ id: a.id as Subject | "none", layers: worldFor(a.art) })),
+    ...(st.world === null ? [{ id: "none" as const, layers: worldFor(null) }] : []),
+  ], [artKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const first = st.seq === 0, dir = st.dir;
   const mode = first ? (boot ? "arrive" : "none") : dir ? "choose" : "fade";
+  const modeOf = (id: Subject | "none") => id === (st.world ?? "none") ? mode : id === st.prev?.id ? "leave" : "rest";
 
   const held = zoom === "place" || zoom === "phone" ? "house" : world ?? "house";
   const T = THEME[held];
@@ -264,13 +269,11 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
       {boot && <Intro />}
       <div className="pp-worlds">
         <div className="pp-host pp-back">
-          {old && <WorldSet key={`o${st.seq}`} layers={old} back mode="leave" dir={dir} />}
-          <WorldSet key={`c${st.seq}`} layers={cur} back mode={mode} dir={dir} />
+          {worlds.map((w) => <WorldSet key={w.id} layers={w.layers} back mode={modeOf(w.id)} dir={dir} />)}
         </div>
         <Title name={name} unpaired={unpaired} seq={st.seq} still={first && !boot} />
         <div className="pp-host pp-front">
-          {old && <WorldSet key={`o${st.seq}`} layers={old} back={false} mode="leave" dir={dir} />}
-          <WorldSet key={`c${st.seq}`} layers={cur} back={false} mode={mode} dir={dir} />
+          {worlds.map((w) => <WorldSet key={w.id} layers={w.layers} back={false} mode={modeOf(w.id)} dir={dir} />)}
         </div>
       </div>
       <Motes glow={T.glow} />
