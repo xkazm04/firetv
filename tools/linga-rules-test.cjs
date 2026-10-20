@@ -1458,7 +1458,9 @@ test('own pictures for teacher and lost change no other scene and no plan topic'
  assert.deepEqual(SKILL_ART,{contact:'meet',describe:'weekend',repair:'rover',negotiate:'team',request:'booking',narrate:'interview',relate:'date',resolve:'conflict'},'the skill pictures a plan topic borrows are exactly as before');
  assert.deepEqual(SCENE_ART.slice(0,8),['meet','weekend','rover','team','booking','interview','date','conflict'],'the first eight pictures keep their keys');
  for(const x of ENGLISH_SCENES.filter(s=>!['teacher','lost'].includes(s.id))) assert.equal(artOf(x.id,x.skill),SCENE_ART.slice(0,8).includes(x.id)?x.id:SKILL_ART[x.skill],`${x.id} keeps the picture it had`);
- for(const skill of Object.keys(SKILL_ART)) for(const id of ['topic-1','plan-abc','teachers','lost-and-found','']) assert.equal(artOf(id,skill),SKILL_ART[skill],`a plan topic "${id}" of skill ${skill} still borrows ${SKILL_ART[skill]}`);
+ // F19 (stick pass 2026-10-20) revised this row on purpose: a generated scene no longer borrows its skill's picture (a café
+ // topic drew the hotel); with no place in its words it takes the neutral picture. It pinned SKILL_ART[skill] before.
+ for(const skill of Object.keys(SKILL_ART)) for(const id of ['topic-1','plan-abc','teachers','lost-and-found','']) assert.equal(artOf(id,skill),'start',`a plan topic "${id}" of skill ${skill} with no place takes the neutral picture`);
 });
 test('school situations go to learners under 18 (age 15 counts) and never to "other" or an adult',()=>{
  const yes=[{type:'high-school',age:12},{type:'elementary',age:9},{type:'elementary',age:13},{type:'high-school',age:15},{type:'high-school',age:17},{type:'elementary'},{type:'high-school'}];
@@ -3664,6 +3666,24 @@ test('F15 (stick pass 2026-10-20): at rest (focus -1) the first action is drawn 
  assert.match(src,/focus:focusStep\(focus,delta,actions\.length\)/,'LingaTV moves focus by it');
  assert.match(src,/data-rest=\{focus<0&&i===0&&!a\.disabled\?true:undefined\}/,'rest is drawn on the first action');
  assert.match(src,/actions\[Math\.max\(0,focus\)\]/,'and Select at rest takes the first action');
+});
+
+test('F19 (stick pass 2026-10-20): a generated scene draws the picture of its place, or the neutral one, never its skill\'s',()=>{
+ const V=view();
+ const cafe={id:'plan-cafe',name:'A hot drink at the café',goal:'Order a hot drink and ask what it costs.',partner:'Ana · Barista',skill:'request',audience:'all',minutes:'6–8',premise:'A fictional café in town.',cue:'Try: I want a hot drink.',quiz:{question:'Ana asks: What would you like?',options:['I want a hot drink.','I am seven.'],correct:0}};
+ const words=x=>[x.name,x.goal,x.partner,x.premise].join(' ');
+ assert.equal(V.artOf(cafe.id,cafe.skill,words(cafe)),'date','the café scene: the café table, not the hotel desk');
+ assert.equal(V.artOf('plan-hotel','contact','Check in at a small hotel · Lee · Receptionist'),'booking','a hotel scene of another skill: the hotel desk');
+ assert.equal(V.artOf('plan-train','request','Buy a train ticket at the station · Kim · Ticket seller'),'start','no drawn place matches: neutral');
+ assert.equal(V.artOf('plan-train','request',''),'start','no words: neutral, never SKILL_ART');
+ assert.equal(V.artOf('booking','request','Order a coffee'),'booking','an authored scene keeps its own picture');
+ assert.equal(V.artOf('project','negotiate','Our group project'),'team','an authored scene keeps the picture it borrows');
+ const talk=V.lingaView(sessionOf(fixture('linga-talk',{placement:placed(),conversation:convo({sceneId:cafe.id,title:cafe.name,goal:cafe.goal,partner:cafe.partner,scene:cafe})})),{});
+ assert.equal(talk.hero.illustration,'date','linga-talk draws the café');
+ const src=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.doesNotMatch(src,/artOf\(c\.sceneId,[^)]*\)\s*;/,'LingaTV\'s phrase quiz art passes the scene words too');
+ const topics=V.lingaView(sessionOf(fixture('linga-plan',{placement:placed(),check:checkOf({stage:'plan',turns:[],topics:[{...cafe,name:undefined,title:cafe.name,why:'You like cafés.'},{...cafe,name:undefined,id:'plan-2',title:'Ask about a lost bag',goal:'Describe a bag.',partner:'Jo · Clerk',premise:'A fictional office.',why:'Useful.'}]})})),{});
+ assert.deepEqual(topics.hero.topics.map(t=>t.art),['date','start'],'the plan doors draw the same picture as the scene');
 });
 
 // ---- TL-12: Linga, the TV drives and the phone speaks ----

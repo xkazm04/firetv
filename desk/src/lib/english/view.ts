@@ -29,14 +29,34 @@ import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types"
 
 /**
  * The picture behind the arch (english/art): one of the ten drawn situations, or a piece for a state of the journey.
- * A scene whose id is in SCENE_ART has its own picture. A plan topic, and the school situation "project", have none;
- * they borrow the situation that practises the same skill (SKILL_ART).
+ * A scene whose id is in SCENE_ART has its own picture. The school situation "project" and the speaking-practice scenes
+ * have none; they borrow the situation that practises the same skill (SKILL_ART). A generated scene (a plan topic, a
+ * pitched scene) never borrows: its skill's picture contradicted its place on the stick (F19: a café drew the hotel).
  */
 export const SCENE_ART = ["meet", "weekend", "rover", "team", "booking", "interview", "date", "conflict", "teacher", "lost"] as const;
 export type SceneArt = typeof SCENE_ART[number];
 export type ArtKey = SceneArt | "check" | "plan" | "coach" | "done" | "start" | "cert";
 export const SKILL_ART: Record<SkillId, SceneArt> = { contact: "meet", describe: "weekend", repair: "rover", negotiate: "team", request: "booking", narrate: "interview", relate: "date", resolve: "conflict" };
-export function artOf(sceneId: string, skill: SkillId): SceneArt { return (SCENE_ART as readonly string[]).includes(sceneId) ? sceneId as SceneArt : SKILL_ART[skill]; }
+/** The drawn places a generated scene's words can name, the first match winning; a place none of them draws is neutral. */
+const PLACE_ART: ReadonlyArray<[RegExp, SceneArt]> = [
+  [/\b(?:caf[eé]|coffee|barista|tea ?shop)(?![a-z])/i, "date"],
+  [/\bhotels?\b/i, "booking"],
+  [/\b(?:classroom|teacher)s?\b/i, "teacher"],
+  [/\binterview/i, "interview"],
+  [/\b(?:moon|rover)s?\b/i, "rover"],
+];
+/** The picture for a generated scene whose place no drawing shows: the neutral way in, never another place's. */
+export const NEUTRAL_ART = "start" satisfies ArtKey;
+/** The words a scene is read by for its place: its name or title, goal, partner and premise. */
+export function placeWords(x: { name?: string; title?: string; goal?: string; partner?: string; premise?: string } | null | undefined): string {
+  return x ? [x.name, x.title, x.goal, x.partner, x.premise].filter(Boolean).join(" · ") : "";
+}
+/** An authored scene's picture (its own, or its skill's); a generated scene's from `words` (placeWords), else NEUTRAL_ART. */
+export function artOf(sceneId: string, skill: SkillId, words = ""): ArtKey {
+  if ((SCENE_ART as readonly string[]).includes(sceneId)) return sceneId as SceneArt;
+  if (AUTHORED_SCENES.some(x => x.id === sceneId)) return SKILL_ART[skill];
+  return PLACE_ART.find(([re]) => re.test(words))?.[1] ?? NEUTRAL_ART;
+}
 /** The sentence to take with you: a scene's cue without its "Try…:" lead. */
 export function sentenceOf(cue: string): string { return cue.replace(/^Try(?: [a-z]+)?:\s*/, ""); }
 
@@ -122,10 +142,10 @@ export type Hero =
   | { kind: "message"; kicker: string; text: string; note: string }
   | { kind: "heading"; kicker: string; title: string }
   | { kind: "choices"; kicker: string; prompt: string; options: string[]; small: boolean }
-  | { kind: "topics"; kicker: string; title: string; topics: Array<{ id: string; title: string; skill: string; why: string; art: SceneArt }>; selected: number }
+  | { kind: "topics"; kicker: string; title: string; topics: Array<{ id: string; title: string; skill: string; why: string; art: ArtKey }>; selected: number }
   | { kind: "scene"; kicker: string; title: string; who: string; said: string; subtitle: string; art: string; small: boolean;
       /** the scene's partner, for the name tag; its cue as a sentence to take with you; its picture; the level and length */
-      partner: string; sentence: string; illustration: SceneArt; band: Band; minutes: string;
+      partner: string; sentence: string; illustration: ArtKey; band: Band; minutes: string;
       /** the scene's mission, when it has one: the subtitle is then its current step (mission.ts), and the TV's data line reads "Now" */
       steps?: Array<{ text: string; state: Dot }>;
       /** a scene this learner pitched (v2 L3): the situation card says it is their own */
@@ -431,7 +451,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       case "resume": {
         const cv = c!;
         title = cv.title; caption = "Your conversation is waiting. Carry on from the last question.";
-        hero = intro("Continue your rehearsal", skillName(cv.focusSkill), artOf(cv.sceneId, cv.scene?.skill ?? cv.focusSkill), cv.partner);
+        hero = intro("Continue your rehearsal", skillName(cv.focusSkill), artOf(cv.sceneId, cv.scene?.skill ?? cv.focusSkill, placeWords(cv.scene ?? cv)), cv.partner);
         actions = [act("carry-on", "Carry on talking", caption, cmd("resume"), { disabled: refused("resume") }), chooseSituation("Choose a goal and practise it in a conversation.")];
         break;
       }
@@ -461,7 +481,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
         break;
       case "next-topic":
         title = recommended.name; caption = recommended.goal;
-        hero = intro(`${read} · ${BAND_NAME[read]}${self}`, [talking, skillName(recommended.skill)].filter(Boolean).join(" · "), artOf(recommended.id, recommended.skill), recommended.partner);
+        hero = intro(`${read} · ${BAND_NAME[read]}${self}`, [talking, skillName(recommended.skill)].filter(Boolean).join(" · "), artOf(recommended.id, recommended.skill, placeWords(recommended)), recommended.partner);
         actions = [act("start-talking", "Start talking", caption, cmd("start", { sceneId: recommended.id, replace: true })), chooseSituation("Choose a goal and practise it in a conversation.")];
         break;
     }
@@ -527,7 +547,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     actions = [act("ask-goal", "Type my goal", "Type what you would like to practise on your phone, in English or in your own language. Back cancels.", { ask: { kind: "words" } }), act("skip-goal", "Let Linga pick", "Linga picks conversations for your level without a goal. You can swap any of them.", cmd("plan-goal", { skip: true })), act("not-now", "Not now", "Leave for now. Linga asks again when you come back to your topics.", cmd("check-leave"))];
   } else if (s.screen === "linga-plan" && lc) {
     tag = `Your topics · ${read}`; title = lc.topics.length ? `${lc.topics.length} conversations for you` : "Your topics";
-    hero = { kind: "topics", kicker: lc.pending ? "Linga is working on your topics" : "Swap any topic · add your own on the phone", title, topics: lc.topics.map(t => ({ id: t.id, title: t.title, skill: skillName(t.skill), why: t.why, art: SKILL_ART[t.skill] })), selected: s.focus - 1 };
+    hero = { kind: "topics", kicker: lc.pending ? "Linga is working on your topics" : "Swap any topic · add your own on the phone", title, topics: lc.topics.map(t => ({ id: t.id, title: t.title, skill: skillName(t.skill), why: t.why, art: artOf(t.id, t.skill, placeWords(t)) })), selected: s.focus - 1 };
     caption = lc.pending ? (lc.topics.length ? "Take a moment. Linga is finding another topic." : "Take a moment. Linga is picking conversations for your level and interests.") : lc.error || "Add a topic in your own words on the phone."; captionTag = lc.pending ? "Preparing" : "Your topics";
     actions = lc.pending ? [act("cancel", "Cancel & come back later", "Stop here. Your topics so far are kept.", cmd("check-leave"))]
       : lc.topics.length ? [act("agree", "Agree to these topics", "Save these as your plan. Linga starts with the first one.", cmd("plan-agree")), ...lc.topics.map(t => act("swap", "Swap this topic", t.why, cmd("plan-swap", { topicId: t.id }))), act("renew", "All new topics", "Replace every topic with a fresh set.", cmd("plan-renew")), ...(lc.topics.length < PLAN_MAX ? [act("ask-topic", "Add a topic", "Type a topic in your own words on your phone. Linga adds a conversation for it. Back cancels.", { ask: { kind: "words" } })] : [])]
@@ -536,7 +556,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const i = sceneIndex % scenes.length, scene = scenes[i];
     tag = `Situation ${i + 1} of ${scenes.length}`; title = scene.name; caption = scene.goal;
     hero = { kind: "scene", kicker: `${scene.partner} · ${scene.minutes} minutes`, title, who: "", said: "", subtitle: skillName(scene.skill), art: scene.id, small: false,
-      partner: scene.partner, sentence: sentenceOf(scene.cue), illustration: artOf(scene.id, scene.skill), band: level, minutes: scene.minutes, ...(isPitchId(scene.id) ? { own: true } : {}) };
+      partner: scene.partner, sentence: sentenceOf(scene.cue), illustration: artOf(scene.id, scene.skill, placeWords(scene)), band: level, minutes: scene.minutes, ...(isPitchId(scene.id) ? { own: true } : {}) };
     actions = [act("start-situation", "Start this situation", scene.goal, cmd("start", { sceneId: scene.id, replace: true })), act("next-situation", "Next situation", `${scenes[(i + 1) % scenes.length].name}.`, { ui: { sceneIndex: (i + 1) % scenes.length } }), ...(modeOf(p, prefs) === "adult" ? [act("ask-pitch", "Pitch a scene", "Describe a scene in your own words on your phone. Linga shapes it and starts it now. Back cancels.", { ask: { kind: "words" } })] : [])];
   } else if (s.screen === "linga-cert") {
     // the plate (Family W10): what cert.ts issued, in words; no count, no score, no digit but the band's
@@ -611,7 +631,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     tag = "Take Two"; captionTag = inFlight ? "Preparing" : over ? "Take done" : "Your line again";
     caption = over ? "That was the take. Go back to the notes when you are ready." : inFlight ? "Take a moment. Your partner is preparing the next turn." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : again ? "Carry on on your phone, or go back to the notes." : "Say your line again on your phone.";
     hero = { kind: "scene", kicker: `Take Two · ${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: note ? `“${note.quote}”` : "", art: c.sceneId, small: true, take: true,
-      partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes };
+      partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill, placeWords(scene)), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes };
     actions = [inFlight ? act("cancel", "Cancel", "Cancel the reply on its way. The take stays where it was.", cmd("leave"), { disabled: refused("leave") })
       : act("take-end", "Back to the notes", "End this take and go back to the notes on your take.", cmd("take-end"), { disabled: refused("take-end") })];
   } else if (c && s.screen === "linga-recap") {
@@ -692,7 +712,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       // the Now row over the replay's question reads the replay, never "Mission done" (LG-4 recert-7, adela-17 J4 #12), as the banner below
       hero = { kind: "scene", kicker: `${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: said ? (c.mission ? currentStep(c.mission) ?? (c.phase === "replay" ? "Try it again" : "Mission done") : c.goal) : "", art: c.sceneId, small: true,
         ...(c.mission ? { steps: c.mission.steps.map((text, i) => ({ text, state: (i < c.mission!.reached.length ? "done" : i === c.mission!.reached.length ? "current" : "open") as Dot })) } : {}),
-        partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes, ...(c.lost ? { lost: c.lost } : {}), ...(tryForm && said ? { tryForm } : {}) };
+        partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill, placeWords(scene)), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes, ...(c.lost ? { lost: c.lost } : {}), ...(tryForm && said ? { tryForm } : {}) };
       // LG-5 recert-9: offered only for a line with its own quiz
       const quiz = quizOffered(c) ? act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") }) : null;
       const second = act("coach", "Pause & coach", hasReply ? "Work on one useful change, then replay this moment." : "Stuck? Get one phrase to say.", cmd("coach"), { disabled: waiting || refused("coach") });

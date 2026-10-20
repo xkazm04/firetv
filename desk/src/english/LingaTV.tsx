@@ -6,7 +6,7 @@ import { AUTHORED_SCENES } from "@/lib/english/curriculum";
 import { ownerOf } from "@/lib/english/activity";
 import { accepts } from "@/lib/english/turn";
 import { runningTake } from "@/lib/english/take";
-import { activeCheck, artOf, focusStep, lingaView, NO_UI, progressDots, replyKey, TRY_TAG, tvStatus, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
+import { activeCheck, artOf, focusStep, lingaView, placeWords, NO_UI, progressDots, replyKey, TRY_TAG, tvStatus, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
 import { landingFocus } from "@/tv/landingRows";
 import { keyOf } from "@/tv/keys";
 import { useEnglish } from "./useEnglish";
@@ -180,7 +180,7 @@ function artFor(h:Hero,s:Session):ArtKey{
     case "heading":return "check";
     case "choices":{
       if(s.screen!=="linga-talk"||!c)return "check";
-      return artOf(c.sceneId,c.scene?.skill??AUTHORED_SCENES.find(x=>x.id===c.sceneId)?.skill??c.focusSkill);
+      return artOf(c.sceneId,c.scene?.skill??AUTHORED_SCENES.find(x=>x.id===c.sceneId)?.skill??c.focusSkill,placeWords(c.scene??c));
     }
     default:return "start";
   }
