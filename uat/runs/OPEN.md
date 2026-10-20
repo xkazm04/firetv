@@ -421,7 +421,7 @@ Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Lin
 
 # Math Buddy
 
-6 open in 5 pairs across 9 runs
+6 open in 5 pairs across 10 runs
 
 recurring 6 · unasked by a later run of their pair 0
 
@@ -429,21 +429,21 @@ Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Lin
 
 ## nela-12 MB2 · 2 open · top rank 6
 
-- `2026-10-09-maths-l1/recert-8/L1-nela-12-MB2-1` minor · rank 6 · Add and subtract fractions, tier 2, uses elevenths with common bottoms up to 132; 6. ročník level needs a teacher's read · recurrence 9, first seen 2026-10-09-maths-l1
-- `2026-10-09-maths-l1/recert-8/L1-nela-12-MB2-2` minor · rank 6 · Unsimplified sums are ticked right, while the worked lesson teaches "then simplify" · recurrence 9, first seen 2026-10-09-maths-l1
+- `2026-10-09-maths-l1/recert-9/L1-nela-12-MB2-1` minor · rank 6 · Add and subtract fractions, tier 2, uses elevenths with common bottoms up to 132; 6. ročník level needs a teacher's read · recurrence 10, first seen 2026-10-09-maths-l1
+- `2026-10-09-maths-l1/recert-9/L1-nela-12-MB2-2` minor · rank 6 · Unsimplified sums are ticked right, while the worked lesson teaches "then simplify" · recurrence 10, first seen 2026-10-09-maths-l1
 
 ## matyas-19 MB1 · 1 open · top rank 6
 
-- `2026-10-09-maths-l1/recert-8/L1-matyas-19-MB1-1` minor · rank 6 · His own weekly MA1 sheet can be hinted but never marked; only the desk's own six-question sets are marked · recurrence 9, first seen 2026-10-09-maths-l1
+- `2026-10-09-maths-l1/recert-9/L1-matyas-19-MB1-1` minor · rank 6 · His own weekly MA1 sheet can be hinted but never marked; only the desk's own six-question sets are marked · recurrence 10, first seen 2026-10-09-maths-l1
 
 ## radka-41 MB5 · 1 open · top rank 6
 
-- `2026-10-09-maths-l1/recert-8/L1-radka-41-MB5-2` minor · rank 6 · The recap and the week cover only the child seated now · recurrence 9, first seen 2026-10-09-maths-l1
+- `2026-10-09-maths-l1/recert-9/L1-radka-41-MB5-2` minor · rank 6 · The recap and the week cover only the child seated now · recurrence 10, first seen 2026-10-09-maths-l1
 
 ## vojtech-18 MB4 · 1 open · top rank 6
 
-- `2026-10-09-maths-l1/recert-8/L1-vojtech-18-MB4-3` minor · rank 6 · The only inequality statement is the linear A22; a quadratic or logarithmic inequality, or a domain, has no statement to pick · recurrence 5, first seen 2026-10-09-maths-l1/recert-4
+- `2026-10-09-maths-l1/recert-9/L1-vojtech-18-MB4-3` minor · rank 6 · The only inequality statement is the linear A22; a quadratic or logarithmic inequality, or a domain, has no statement to pick · recurrence 6, first seen 2026-10-09-maths-l1/recert-4
 
 ## matyas-19 MB3 · 1 open · top rank 1
 
-- `2026-10-09-maths-l1/recert-8/L1-matyas-19-MB3-5` polish · rank 1 · question(spec).tex is computed for every Calculus spec and read by no screen · recurrence 8, first seen 2026-10-09-maths-l1/recert-1
+- `2026-10-09-maths-l1/recert-9/L1-matyas-19-MB3-5` polish · rank 1 · question(spec).tex is computed for every Calculus spec and read by no screen · recurrence 9, first seen 2026-10-09-maths-l1/recert-1
