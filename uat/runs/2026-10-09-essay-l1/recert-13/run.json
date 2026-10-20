@@ -1,0 +1,119 @@
+{
+  "id": "2026-10-09-essay-l1/recert-13",
+  "started": "2026-10-20T00:23:15.164Z",
+  "finished": "2026-10-20T00:23:15.164Z",
+  "cert_level": "L1",
+  "module": "Essay Master",
+  "base_commit": "0eaf5a979aa0a75fbe10ba91d27110b8b1a8fe0e",
+  "cast": [
+    "barbora-43",
+    "daniel-15",
+    "eliska-12",
+    "helena-46",
+    "kristyna-17"
+  ],
+  "journeys": [
+    "EM1",
+    "EM2",
+    "EM3",
+    "EM4",
+    "EM5"
+  ],
+  "pairs": [
+    {
+      "character": "barbora-43",
+      "journey": "EM1"
+    },
+    {
+      "character": "barbora-43",
+      "journey": "EM4"
+    },
+    {
+      "character": "daniel-15",
+      "journey": "EM2"
+    },
+    {
+      "character": "daniel-15",
+      "journey": "EM3"
+    },
+    {
+      "character": "eliska-12",
+      "journey": "EM1"
+    },
+    {
+      "character": "eliska-12",
+      "journey": "EM2"
+    },
+    {
+      "character": "helena-46",
+      "journey": "EM1"
+    },
+    {
+      "character": "helena-46",
+      "journey": "EM5"
+    },
+    {
+      "character": "kristyna-17",
+      "journey": "EM1"
+    }
+  ],
+  "recertify": {
+    "of": "2026-10-09-essay-l1",
+    "k": 13,
+    "prior_base_commit": "ee7d6ac770ff1f6f4a10e03c5410aba688a423d7",
+    "prior_run": "2026-10-09-essay-l1/recert-12",
+    "mode": "L1 code re-walk of every row open in recert-12/findings.json; answers fixed | recurs, stamped by recertify.cjs writeBack (fixed as not-seen); no held-out probe, because paragraphIsEnglish is unchanged since ffa91a49"
+  },
+  "instrument": {
+    "level": "L1 theoretical re-walk (uat skill, recertify at L1; README *Levels*)",
+    "walkers": "the builder session, rows answered in code walks (read-only, no model call to the product): each open recert-12 row re-found at current file:line on main 0eaf5a97 (cites re-mapped through git diff -U0 ee7d6ac7 0eaf5a97 per file, moved and replaced hunks re-read by hand), the rows the eight new Essay commits claim to close read against their acceptance and executed in scratch scripts outside the repo (renderToStaticMarkup of the real EssayTV, tools/essay-rules-test.cjs, phone-panel-test.cjs, essay-piece-test.cjs, docx-rules-test.cjs)",
+    "model_calls": "none: no desk engine, no Ollama, no claude CLI, no codex, no paid API; desk/data untouched",
+    "overlay": [
+      "uat/README.md",
+      "uat/env.md",
+      "uat/rubric.md",
+      "uat/accepted-gaps.md"
+    ]
+  },
+  "product": {
+    "commit": "0eaf5a979aa0a75fbe10ba91d27110b8b1a8fe0e",
+    "dirty": false,
+    "files": {
+      "desk/src/app/api/analyse/route.ts": "83ac5fcbc53704b04dca65f847f11212b91c8443",
+      "desk/src/app/api/texts/route.ts": "7ef3a4468b715b87e5cc38cdeaa19a267fd20000",
+      "desk/src/app/api/twin/route.ts": "ea02e7a58cea26a0375e7cf6eee8af3790f6ec85",
+      "desk/src/app/drop/page.tsx": "6599d4fbb5da0717677ffdd0a3157fd9cdd2a9f6",
+      "desk/src/app/phone/EssayShelf.tsx": "52ac75091f77265aaf08a7a65674850d5c82e3a9",
+      "desk/src/app/phone/PaperPanel.tsx": "d9bf0f50366165affe2272a1246d3bf2a16c7cc4",
+      "desk/src/app/phone/page.tsx": "cfe3c364fe36ed0fb35c38cf72667e94a82b5463",
+      "desk/src/app/phone/panelFor.ts": "f48ba914240cacf3937e1ac66f68151a6615af06",
+      "desk/src/app/phone/phoneBar.ts": "db54efae64a1427b62de83b34c2bf62a79b84ad7",
+      "desk/src/app/phone/recogniserLang.ts": "0d8031cb059693a2425a8095210c24847143b068",
+      "desk/src/app/phone/rewriteBack.ts": "641ed1d546a29223103a2847feb2add744a952dc",
+      "desk/src/app/tv/page.tsx": "024ac6ba9e9e662bb32383f6987125f86c7b1716",
+      "desk/src/essay/EssayTV.tsx": "950d891cc6d45d2121ba14365473d52b9dda1ce0",
+      "desk/src/essay/Workroom.tsx": "d32415798338d799dcddef019336841a9f3ee3ee",
+      "desk/src/essay/captions.ts": "5ad4b5f645893490c592a2c1586db866273b6a0f",
+      "desk/src/lib/desk/essay.ts": "30b191a62207f6af0b5a380c07ec4e1b1a588e70",
+      "desk/src/lib/library/gcse-cz.ts": "d28c1ea4949150ffd0f04daeb0f025b3503a408d",
+      "desk/src/lib/library/lessons.data.ts": "5d1e2b582ab4fd19108e936142f8a8556fa75edb",
+      "desk/src/lib/prompt/assemble.ts": "a62590ce7c67d0bbd649a46b750490c28330376b",
+      "desk/src/lib/rules/docx.ts": "b1fc3c3b74af1031c4e8a597a91e3a6efe47f635",
+      "desk/src/lib/rules/essay.ts": "2fcc9888b8591341f5192e2363d15822ee2fa8c5",
+      "desk/src/lib/rules/paperEntry.ts": "d5312295ab7120f50f7d3346a6222ef9c82c377a",
+      "desk/src/lib/rules/recovery.ts": "4b96096124ccfe6ddec1828434987d3f10870156",
+      "desk/src/lib/rules/style.ts": "8ac2d08e913cdc7ff6d0018fc2f226bb1972db1e",
+      "desk/src/lib/rules/voice.ts": "d7c3d0440998921f1f85bba7eab5d6a59c02d5b1",
+      "desk/src/lib/rules/week.ts": "6e6b5595a11b08f0c045c439a27c2aa5b4012141",
+      "desk/src/lib/session/phoneAsk.ts": "3b472f9cb6c39e5bf8eeec615e54874ee9717c85",
+      "desk/src/lib/session/store.ts": "80c9422d4a24fa5783e5922c9f75ffadab568f6f",
+      "desk/src/lib/session/texts.ts": "1eff1e79f1c84549cd4c1e662e67a8293c7a45c0",
+      "desk/src/lib/twin/card.ts": "4694b4232cc1fc3be760c75baf67da8c8f005c4b",
+      "desk/src/tv/keys.ts": "6614014677cdc9b2331f39b22b2ceb2523aaf285",
+      "desk/src/tv/landingRows.ts": "c245a87efc6fd72d7c043485186040ca6ac13d61",
+      "desk/src/tv/profileRows.ts": "71f43b49afef5b8f9b2b7f9dfdae0dc255910907",
+      "desk/src/tv/recapRows.ts": "2a7ff465115d96e9b11d9c0753991e58d7f21cd3",
+      "desk/src/tv/screens.tsx": "8ea64a46cc4ec03561777fc2f5474e8249c03f1d"
+    }
+  }
+}

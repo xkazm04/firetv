@@ -2,7 +2,7 @@
 
 Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run. One section per module that has open rows.
 
-256 open across 13 runs
+244 open across 13 runs
 drained 9 of 13 runs
 undrained: 2026-10-14-lt, 2026-10-16-lt-a2b1-tightening, 2026-10-17-lt-swap, 2026-10-17-lt-swap-2 (home: docs/uat-insights/<run-id>.md, uat/README.md)
 
@@ -362,62 +362,44 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 # Essay Master
 
-24 open in 9 pairs across 13 runs
+12 open in 7 pairs across 14 runs
 
-recurring 24 · unasked by a later run of their pair 0
+recurring 12 · unasked by a later run of their pair 0
 
 Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Linga driver does not rerun them.
 
-## daniel-15 EM3 · 5 open · top rank 9
+## kristyna-17 EM1 · 3 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-12/L1-daniel-15-EM3-1` major · rank 9 · The paste box and the shelf are hidden whenever the TV is on the forensic page, and Essay Master reopens there · recurrence 13, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-12/L1-daniel-15-EM3-2` major · rank 9 · A title line is read as its own paragraph or fuses into sentence 1; the task never reaches the prompt as a task · recurrence 13, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-12/L1-daniel-15-EM3-5` major · rank 9 · No verdict lands until the last paragraph is read (C3 second clause fails by design) · recurrence 12, first seen 2026-10-09-essay-l1/recert-1
-- `2026-10-09-essay-l1/recert-12/L1-daniel-15-EM3-3` minor · rank 6 · Nothing says grammar and spelling are not checked; 'Well done' lands on sentences with errors · recurrence 13, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-12/L1-daniel-15-EM3-4` minor · rank 3 · Present-and-correct-but-unwired: provider, stats.words, stats.links; /api/texts noticed and notice · recurrence 13, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-13/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 14, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-13/L1-kristyna-17-EM1-2` major · rank 9 · ES-READ: kind and mode now reach the reading, a task has no sender and no history or memory reaches it · recurrence 14, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-13/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 14, first seen 2026-10-09-essay-l1
 
-## kristyna-17 EM1 · 4 open · top rank 9
+## daniel-15 EM3 · 2 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-12/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 13, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-12/L1-kristyna-17-EM1-2` major · rank 9 · ES-READ: kind and mode now reach the reading, a task has no sender and no history or memory reaches it · recurrence 13, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-12/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 13, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-12/L1-kristyna-17-EM1-6` minor · rank 6 · Nothing says before the first send that Essay Master reads English; on the plan she writes and inks three Czech slots before the refusal · recurrence 12, first seen 2026-10-09-essay-l1/recert-1
+- `2026-10-09-essay-l1/recert-13/L1-daniel-15-EM3-1` major · rank 9 · The paste box and the shelf are hidden whenever the TV is on the forensic page, and Essay Master reopens there · recurrence 14, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-13/L1-daniel-15-EM3-2` major · rank 9 · A title line is read as its own paragraph or fuses into sentence 1; the task never reaches the prompt as a task · recurrence 14, first seen 2026-10-09-essay-l1
 
-## barbora-43 EM1 · 2 open · top rank 9
+## barbora-43 EM1 · 1 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-12/L1-barbora-43-EM1-1` major · rank 9 · The x-ray shows a hand-in-ready model paragraph on the topic of the phone's own sample paragraph · recurrence 13, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-12/L1-barbora-43-EM1-2` major · rank 9 · ES-READ grounding: the reading still never sees her earlier readings or notes, and no client sends the assignment · recurrence 13, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-13/L1-barbora-43-EM1-2` major · rank 9 · ES-READ grounding: the reading still never sees her earlier readings or notes, and no client sends the assignment · recurrence 14, first seen 2026-10-09-essay-l1
 
-## eliska-12 EM1 · 2 open · top rank 9
+## eliska-12 EM1 · 1 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-12/L1-eliska-12-EM1-4` major · rank 9 · The planted-claim fix depends on the model naming links (supports / backs): when it omits them, Structure marks the true topic sentence and Evidence marks nothing · recurrence 12, first seen 2026-10-09-essay-l1/recert-1
-- `2026-10-09-essay-l1/recert-12/L1-eliska-12-EM1-2` minor · rank 6 · The forensic crumb, 'Its job' and the table show the regex first-pass role, which can contradict the verdict · recurrence 13, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-13/L1-eliska-12-EM1-4` major · rank 9 · The planted-claim fix depends on the model naming links (supports / backs): when it omits them, Structure marks the true topic sentence and Evidence marks nothing · recurrence 13, first seen 2026-10-09-essay-l1/recert-1
 
-## barbora-43 EM4 · 1 open · top rank 8
+## helena-46 EM1 · 3 open · top rank 6
 
-- `2026-10-09-essay-l1/recert-12/L1-barbora-43-EM4-1` major · rank 8 · A paragraph-only evening's delete is out of reach when the TV is on a sentence or the plan: the shelf, and 'Forget tonight's paragraph' with it, shows only on the paragraph panel · recurrence 13, first seen 2026-10-09-essay-l1
-
-## helena-46 EM1 · 4 open · top rank 6
-
-- `2026-10-09-essay-l1/recert-12/L1-helena-46-EM1-1` minor · rank 6 · Adult mode's lens home, plan, playbook and x-ray speak only to school paragraphs · recurrence 13, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-12/L1-helena-46-EM1-5` minor · rank 6 · An email read on its own, or a piece read with Keep off, is still judged as an essay: the kind of writing is asked and sent only for a kept piece · recurrence 7, first seen 2026-10-09-essay-l1/recert-6
-- `2026-10-09-essay-l1/recert-12/L1-helena-46-EM1-2` minor · rank 3 · Four reading fields are computed and never shown (provider, stats.links, stats.words, sentences[].connectors) · recurrence 13, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-12/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; short Czech, Czech without diacritics and German go to the model · recurrence 13, first seen 2026-10-09-essay-l1
-
-## daniel-15 EM2 · 2 open · top rank 6
-
-- `2026-10-09-essay-l1/recert-12/L1-daniel-15-EM2-1` minor · rank 6 · Dictate on the Essay tab and the rewrite panel listens in Czech for a cz learner, but the desk reads English · recurrence 12, first seen 2026-10-09-essay-l1/recert-1
-- `2026-10-09-essay-l1/recert-12/L1-daniel-15-EM2-2` minor · rank 4 · A rewrite of a sentence first ruled neutral as a later unsupported claim is ruled faulty: 'Rewrite · not yet' · recurrence 12, first seen 2026-10-09-essay-l1/recert-1
+- `2026-10-09-essay-l1/recert-13/L1-helena-46-EM1-1` minor · rank 6 · Adult mode's lens home, plan, playbook and x-ray speak only to school paragraphs · recurrence 14, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-13/L1-helena-46-EM1-5` minor · rank 6 · An email read on its own, or a piece read with Keep off, is still judged as an essay: the kind of writing is asked and sent only for a kept piece · recurrence 8, first seen 2026-10-09-essay-l1/recert-6
+- `2026-10-09-essay-l1/recert-13/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; short Czech, Czech without diacritics and German go to the model · recurrence 14, first seen 2026-10-09-essay-l1
 
 ## eliska-12 EM2 · 1 open · top rank 6
 
-- `2026-10-09-essay-l1/recert-12/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 13, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-13/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 14, first seen 2026-10-09-essay-l1
 
-## helena-46 EM5 · 3 open · top rank 3
+## daniel-15 EM2 · 1 open · top rank 4
 
-- `2026-10-09-essay-l1/recert-12/L1-helena-46-EM5-2` minor · rank 3 · On /drop the notice's 'Read without keeping' reads nothing, and the empty shelf says pieces arrive from the TV · recurrence 13, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-12/L1-helena-46-EM5-3` polish · rank 2 · Leaving a piece out of the exemplars still lets its text shape the dims and count toward birth · recurrence 13, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-12/L1-helena-46-EM5-4` polish · rank 2 · .docx text: table cells become separate paragraphs and a non-breaking hyphen is dropped and glues the words · recurrence 12, first seen 2026-10-09-essay-l1/recert-1
+- `2026-10-09-essay-l1/recert-13/L1-daniel-15-EM2-2` minor · rank 4 · A rewrite of a sentence first ruled neutral as a later unsupported claim is ruled faulty: 'Rewrite · not yet' · recurrence 13, first seen 2026-10-09-essay-l1/recert-1
 
 # Math Buddy
 

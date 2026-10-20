@@ -1,0 +1,25 @@
+# helena-46 × EM1 · (recert-13)
+
+- Character: helena-46
+- Journey: EM1
+- Cert level: L1 re-walk, code only, no model
+- Head 0eaf5a97
+- Recertifies: 2026-10-09-essay-l1/recert-12 at ee7d6ac7
+- **Verdict now: L1-conditional.** 1 fixed, 3 recur; 3 rows open. (was L1-conditional)
+
+## Prior rows
+
+| Finding | Status | Evidence (current code) | Commit |
+| --- | --- | --- | --- |
+| L1-helena-46-EM1-1 Adult mode's lens home, plan, playbook and x-ray speak only to school paragraphs (minor) | recurs → L1-helena-46-EM1-1 | Narrowed by 31f14444 (ancestor of main): in Adult mode the chosen-lens caption says "Paste, type or dictate one message or email on the phone." (desk/src/essay/EssayTV.tsx:157), the plan stop "Write the message yourself" (:155), the empty forensic caption "one message or email" (:340), and the playbook and x-ray captions use playbookLine (desk/src/lib/rules/essay.ts:914, ADULT_PLAY_LINE :917; EssayTV.tsx:550, :584); the x-ray sample is now about octopuses, not students (5aa1a604). Still school-speak in Adult mode, executed at 0eaf5a97 (scratch /tmp/rc13/ex.cjs, adult us profile, no model): the focused Argument lens on the lens home draws "Argument reads :: Does the paragraph take a side, and does every sentence push the same way?" (:158 lens.promise, desk/src/lib/library/lessons.data.ts:39); the wait caption of a single paragraph draws "The desk is reading your paragraph." (:151) and the failure "The paragraph did not come back." (:152); the plan screen draws "The desk is reading your paragraph." (:220), "The paragraph did not come back." (:221) and "The desk reads your paragraph through the Structure lens." (:225); the playbook stop is still titled "Unit 2 · Paragraph". The acceptance asks that the lens home's captions and the playbook speak of messages and emails; the render test (tools/essay-rules-test.cjs 166/0) pins the chosen-lens, plan and playbook captions only. Cites re-mapped through git diff -U0 ee7d6ac7 0eaf5a97 per file. | 31f14444 (narrowed) |
+| L1-helena-46-EM1-2 Four reading fields are computed and never shown (provider, stats.links, stats.… (minor) | fixed | 5aa1a604 (ancestor of main) draws the two fields that were left: the engine that read the text (desk/src/essay/EssayTV.tsx:496, "read by", data-role="essay-provider") and each sentence's connectors on its table row (:506, data-role="essay-connectors"); stats.words and stats.links were drawn by 176f04f0 (:495). Executed at 0eaf5a97 (scratch /tmp/rc13/ex.cjs outside the repo, renderToStaticMarkup of the real EssayTV, no model): the table text reads "claude read by" and the row "First, we go. · first". tools/essay-rules-test.cjs 166/0. The acceptance (the table or a caption shows which engine read the text, or the fields are dropped) is met; the label is the provider name the engine reports, which is the engine her notice names. | 5aa1a604 |
+| L1-helena-46-EM1-4 A language the desk does not read is refused only when it is clearly Czech; sho… (polish) | recurs → L1-helena-46-EM1-4 | Re-walked at 0eaf5a97; what the previous walk (at ee7d6ac7) found still holds: paragraphIsEnglish (desk/src/lib/rules/essay.ts:261-268) is byte for byte what it was at ee7d6ac7 and at ffa91a49 (git diff ee7d6ac7 0eaf5a97 touches desk/src/lib/rules/essay.ts only from :895, the new seat helpers), so no fresh held-out probe was written this round: recert-12/heldout.json stays the latest measure (plain-letter Czech 36 of 36 refused, diacritic Czech 12 of 12, German 5 of 5, Polish 3 of 3, English 0 of 32; short plain-letter Czech lines 4 of 6, "Preji hezky den." and "Venku fouka vitr." still go to the model). Still open: a paragraph under 6 words is judged by the laxer arm on purpose (:265). None of the eight Essay commits since ee7d6ac7 (5aa1a604, eb97cef2, ca0c905c, 6374a2e6, 012df48f, 16ee1e98, c2dacc69, 31f14444) changes what this row cites. | none |
+| L1-helena-46-EM1-5 An email read on its own, or a piece read with Keep off, is still judged as an… (minor) | recurs → L1-helena-46-EM1-5 | Re-walked at 0eaf5a97; what the previous walk (at ee7d6ac7) found still holds: desk/src/app/phone/page.tsx:346 still posts kind essay, text, type with no format; the message / email / essay radios show only with Keep on and no open piece (:855); desk/src/lib/desk/essay.ts:159 takes the format only from a kept piece or a sent one, and :163 analyseEssay(raw, type, learnerId, ...) still judges an email read on its own as an essay; desk/src/app/api/analyse/route.ts:19 types no format on kind essay. Cites re-mapped through git diff -U0 ee7d6ac7 0eaf5a97 per file; phone/page.tsx:343 -> 346, :849 -> 855. None of the eight Essay commits since ee7d6ac7 (5aa1a604, eb97cef2, ca0c905c, 6374a2e6, 012df48f, 16ee1e98, c2dacc69, 31f14444) changes what this row cites. | none |
+
+## New findings
+
+None.
+
+## Notes
+
+- Evidence check at 0eaf5a97: every cited line was re-mapped through `git diff -U0 ee7d6ac7 0eaf5a97` per file (a cite inside a changed hunk re-read by hand). Every commit named was checked with `git merge-base --is-ancestor <sha> HEAD`. Model-dependent behaviour stays with L2.
