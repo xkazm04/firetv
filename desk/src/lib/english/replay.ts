@@ -94,7 +94,7 @@ export function asksCoachedQuestion(question: string, after: string): boolean {
  * question must invite it. Given the band (recert-12), the question must fit it, and given a question form, must not ask the learner the coached
  * question when the coached form is one the learner asks.
  */
-export function replayRefused(question: string, form: unknown, after: string, frame?: Frame, band?: Band): string | null {
+export function replayRefused(question: string, form: unknown, after: string, frame?: Frame, band?: Band, scene?: string[]): string | null {
   const want = new Set(contentWords(after));
   if (typeof form !== "string" || !wordsOf(form).some(w => want.has(w))) return "The replay question did not call for the coached form.";
   if (wordsOf(after).length > 1 && findPhrase(question, after) !== null) return "The replay question said the coached form itself.";
@@ -103,5 +103,19 @@ export function replayRefused(question: string, form: unknown, after: string, fr
   // recert-12 (LT-viktor-67-J4): a Back replay is held to the band the way a partner line is; bandLine can only cut it, never fit it
   if (band && !fitsBand(question, band)) return "The replay question was above the learner's level.";
   if (frame && !invitesFrame(question, frame)) return "The replay question did not invite the coached frame.";
+  // recert-13 (LT-viktor-67-J4-3): the question stays on the scene (its goal, open step or cue), not on a new topic
+  if (scene && !staysOnScene(question, scene)) return "The replay question left the scene.";
   return null;
+}
+/** Words that open any question or instruction and so say nothing of a scene's topic. */
+const FILLER = new Set(["what", "where", "when", "who", "whom", "whose", "which", "why", "how", "does", "did", "do", "today", "ask", "about", "try", "say", "tell", "hi", "hello", "please", "your", "you", "can", "could", "would", "will", "there", "here", "some", "any", "much", "many", "often", "usually", "like", "have", "has", "get", "go"]);
+const topicWords = (text: string) => wordsOf(text).filter(w => !LIGHT.has(w) && !AUX.has(w) && !FILLER.has(w) && w.length > 2);
+/**
+ * Whether a replay question shares a content word with the scene's texts (goal, open step, cue). Pure; with no topic word in
+ * the scene at all there is nothing to hold the question to, so it stays.
+ */
+export function staysOnScene(question: string, scene: string[]): boolean {
+  const topic = new Set(scene.flatMap(topicWords));
+  if (!topic.size) return true;
+  return topicWords(question).some(w => topic.has(w));
 }

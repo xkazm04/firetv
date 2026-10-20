@@ -3908,6 +3908,18 @@ test('Linga replay on task: the replay call carries the scene goal and the open 
  assert(/Stay on the scene's task/.test(sent.task)&&/sceneGoal/.test(sent.task),sent.task);
 });
 
+// ---- a replay stays on the scene (recert-13 LT-viktor-67-J4-3 code check) ----
+test('replayRefused: a replay about weekend sport in a school scene is refused; the on-topic replay passes',()=>{
+ const {replayRefused,staysOnScene}=require(path.join(root,'src/lib/english/replay.ts'));
+ const scene=['Ask Sam about school.','Try: What did you do at school today?'];
+ assert.equal(replayRefused('Which sport do you play at the weekend?','I play football','I play football'),null,'no scene given: not held to one');
+ assert.equal(replayRefused('Which sport do you play at the weekend?','I play football','I play football',undefined,undefined,scene),'The replay question left the scene.');
+ assert.equal(replayRefused('Which sport do you play at school?','I play football','I play football',undefined,undefined,scene),null);
+ assert.equal(staysOnScene('What did you eat for breakfast?',scene),false);
+ assert.equal(staysOnScene('Is your school big?',['Ask Sam about school.']),true);
+ assert.equal(staysOnScene('Anything at all?',['Ask.']),true,'a scene with no topic word holds nothing');
+});
+
 // ---- an instruction naming a function word is jargon at A1 (recert-12 LT-viktor-67-J4-5 edge) ----
 test('hasGrammarTerm: "Use did" and "Use are" are termed; plain advice is not',()=>{
  const {hasGrammarTerm}=require(path.join(root,'src/lib/english/plain.ts'));

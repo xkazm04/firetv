@@ -179,11 +179,11 @@ export const REPLAY_TASK="Return to the scene with one new short question that t
  * Why a Back replay answer is no replay of the coaching (replay.ts replayRefused, with the moment's frame), as the retry
  * names it to the model: the question as the learner would see it, and the reason. Null when it holds.
  */
-function backRefusal(c:Conversation,json:Record<string,unknown>,after:string,frame:Frame):{question:string;why:string}|null{
+function backRefusal(c:Conversation,json:Record<string,unknown>,after:string,frame:Frame,cue?:string):{question:string;why:string}|null{
   const question=partnerSays(c,json.reply,undefined,json.help);
   // a redirect line or a question asked before is refused as before, never asked again (LG-4 (b))
   if(asksNothingNew(c,question))return null;
-  const why=replayRefused(question,json.form,after,frame,heldBand(c));
+  const why=replayRefused(question,json.form,after,frame,heldBand(c),[c.goal,...(c.mission&&!missionDone(c.mission)?[currentStep(c.mission)]:[]),...(cue?[cue]:[])]);
   return why?{question,why:`${why} Ask again: your question must use every word in frameWords, and be short and plain enough for the learner.`}:null;
 }
 /** A Back replay line that asks nothing new: the gate's redirect line, or a question in askedBefore again. */
@@ -717,7 +717,7 @@ export async function englishCommand(raw:unknown){
     let result!:EngineResult<Record<string,unknown>>;
     for(let refused:{question:string;why:string}|null=null,tries=0;tries<2;tries++){
       result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:refused?JSON.stringify({...JSON.parse(prompt),refused}):prompt,schema:action==="turn"?(pair&&c.duet?.coStarLearnerId?withCoStar(stepTask?turnWithStep:turnSchema):stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:formSchema,accept:action==="turn"?(pair?pairAccept:turnAccept):action==="replay"?formAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"});
-      refused=framed?backRefusal(c,result.json,coaching!.after,frame!):null;
+      refused=framed?backRefusal(c,result.json,coaching!.after,frame!,scene?.cue):null;
       if(!refused)break;
     }
     const current=checkCurrent(c,commandId);
@@ -771,7 +771,7 @@ export async function englishCommand(raw:unknown){
       if(framed&&asksNothingNew(c,partner.text))throw new Error("The replay asked nothing new.");
       // recert-7 (LT-petra-38-J4-2): a fresh question that does not call for the coached form, or says it, is no replay either;
       // recert-8: nor one that does not invite the frame, once asked for again (the call above)
-      const refused=framed?backRefusal(c,result.json,coaching!.after,frame!):null;if(refused)throw new Error(refused.why);
+      const refused=framed?backRefusal(c,result.json,coaching!.after,frame!,scene?.cue):null;if(refused)throw new Error(refused.why);
       next={...next,...patch,...(back?{replayFor:undefined,moments:current.moments.map(x=>x.id===back!.moment.id?{...x,replay:{question:partner.text,turnId:partner.id}}:x)}:{}),...(finishCoach?{coaching:{...finishCoach,replay:{question:partner.text,turnId:partner.id}}}:{})};
     }
     commit(next,screenFor(next));return getSession();
