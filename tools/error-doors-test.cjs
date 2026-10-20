@@ -49,7 +49,7 @@ const MODEL_ROUTES={
  'analyse':'desk-jobs-rules-test.cjs','explain':'desk-jobs-rules-test.cjs','hint':'desk-jobs-rules-test.cjs','mark':'desk-jobs-rules-test.cjs',
  'practice':'desk-jobs-rules-test.cjs','read':'desk-jobs-rules-test.cjs','session/retry':'desk-jobs-rules-test.cjs','worked':'desk-jobs-rules-test.cjs',
  'english':'linga-rules-test.cjs','listen':'linga-rules-test.cjs','speak':'linga-rules-test.cjs',
- 'memory':'tv-recap-test.cjs','second':'maths-second-test.cjs','smoke':'engines-rules-test.cjs',
+ 'memory':'tv-recap-test.cjs','writing/coach':'writing-rules-test.cjs','second':'maths-second-test.cjs','smoke':'engines-rules-test.cjs',
 };
 const REACHES=/from\s*["']@\/lib\/(engines|desk|english)\//;
 test('every route that reaches a model is known here by name, with the suite that drives it',()=>{
