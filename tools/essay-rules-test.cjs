@@ -1156,7 +1156,7 @@ test('essay-master-A case 7: the prompt no longer asks for a verdict; the withho
   assert.equal('verdict' in item.properties,false,`${lens}: no verdict property on a sentence`);
   assert.equal(JSON.stringify(schema).includes('"verdict"'),false);
  }
- seen=[];answer=obsReply([{n:2,support:'checkable'}]);
+ seen=[];answer=obsReply([{n:2,support:'checkable',backs:0}]);
  const {reviseSentence}=deskEssay();
  await reviseSentence(R3(),2,STUDY);
  assert.doesNotMatch(seen[0].system,/'strong' if it now does its job/);
@@ -1192,7 +1192,7 @@ test('a note never carries a verdict label: the verdict is code\'s',async()=>{
  for(const note of ['Strongly worded, but no source.','Good use of a number.','Strong evidence: the study names its year.','This is a strong claim.','Fine-grained detail would help.'])
   assert.equal((await one('argument',{side:'pushes',note}))[1],note,note);
  const {reviseSentence}=deskEssay();
- answer=obsReply([{n:2,support:'checkable',note:'Strong: names the study.'}]);
+ answer=obsReply([{n:2,support:'checkable',backs:0,note:'Strong: names the study.'}]);
  const r=await reviseSentence(R3(),2,STUDY);
  assert.equal(r.verdicts.find(v=>v.n===2).note,'Names the study.');
 });
