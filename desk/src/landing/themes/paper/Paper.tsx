@@ -230,11 +230,12 @@ function Intro() {
 
 export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
   const { world, apps, at } = view, unpaired = !view.phone.paired;
-  // the world that is leaving slides out while the new one slides in
-  const [st, setSt] = useState<{ world: Subject | null; prev: { id: Subject; dir: number } | null; seq: number }>({ world, prev: null, seq: 0 });
+  // the world that is leaving slides out while the new one slides in. The move's direction is kept after the leaving
+  // world goes: read from it, the lit world turned "fade" 0.72 s after each move and played its rise a second time
+  const [st, setSt] = useState<{ world: Subject | null; prev: { id: Subject; dir: number } | null; dir: number; seq: number }>({ world, prev: null, dir: 0, seq: 0 });
   if (st.world !== world) {
     const ids = apps.map((a) => a.id), was = st.world, dir = was && world && ids.includes(was) ? (ids.indexOf(world) > ids.indexOf(was) ? 1 : -1) : 0;
-    setSt({ world, prev: was && ids.includes(was) ? { id: was, dir } : null, seq: st.seq + 1 });
+    setSt({ world, prev: was && ids.includes(was) ? { id: was, dir } : null, dir, seq: st.seq + 1 });
   }
   useEffect(() => {
     if (!st.prev) return;
@@ -246,7 +247,7 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
   const artKey = JSON.stringify([art(st.world), st.prev && art(st.prev.id)]);
   const cur = useMemo(() => worldFor(art(st.world)), [st.world, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const old = useMemo(() => (st.prev ? worldFor(art(st.prev.id)) : null), [st.prev, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  const first = st.seq === 0, dir = st.prev?.dir ?? 0;
+  const first = st.seq === 0, dir = st.dir;
   const mode = first ? (boot ? "arrive" : "none") : dir ? "choose" : "fade";
 
   const held = zoom === "place" || zoom === "phone" ? "house" : world ?? "house";
