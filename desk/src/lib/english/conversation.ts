@@ -619,6 +619,7 @@ export async function englishCommand(raw:unknown){
     commit({...c,supported:true,cue,...(cue?{sceneCued:true}:{}),quizOpen:true,lineQuiz:q,help:c.help&&{...c.help,shown:false,...(q&&(band==="A1"||band==="A2")?{quizSeen:[...(c.help.quizSeen??[]),...options]}:{})},commands,...shown},"linga-talk");return getSession();
   }
   if(action==="quiz")return quiz(c);
+  let chosen:string|null=null;
   if(action==="choice"){
     // the line's own quiz (LG-5 recert-9); a quiz opened on a session saved before it is the scene's
     const own=c.lineQuiz&&c.lineQuiz.forTurn===c.turns.at(-1)?.id?c.lineQuiz:null,quiz=own??scene.quiz;
@@ -628,7 +629,14 @@ export async function englishCommand(raw:unknown){
     const correct=input.option===quiz.correct||onTask,band=heldBand(c),picked=quiz.options[input.option as number],beginnerPick=!!own&&(band==="A1"||band==="A2");
     const e:EnglishEvidence={id:`${c.id}:${commandId}:choice`,episodeId:c.id,turnId:commandId,sceneId:c.sceneId,skill:c.focusSkill,at:Date.now(),mode:"choice",supported:true,success:correct,quote:quiz.options[input.option as number],note:"Recognised a supporting phrase; not speaking evidence."};
     saveEnglish(learnerId,mergeEvidence(learning,[e]));
-    commit({...c,supported:true,quizOpen:!correct,cue:onTask?(beginnerPick?`That is what you came to do. Say it in your own reply on the phone: "${picked}"`:"That is what you came to do. Say it in your own reply on the phone."):correct?(beginnerPick?`Say it in your own reply on the phone: "${picked}"`:"Now use the idea in your own reply on the phone."):own?`That one does not answer ${c.partner.split(" · ")[0]}. Try the other option.`:"That phrase has a different purpose. Try the other option.",help:c.help&&{...c.help,shown:false},commands:[...c.commands,commandId],evidence:[...c.evidence,e]},"linga-talk");return getSession();
+    // F14 (stick pass 2026-10-20): a right pick from the TV row (asTurn) is the learner's turn, sent as a typed reply is, so
+    // a remote alone carries the scene. Its line is marked "choice" and helped, so it never counts as speaking on its own.
+    // A duet's beat, a running take and a scene at its turn cap keep the cue to say it on the phone.
+    if(input.asTurn===true&&correct&&!c.duet&&!runningTake(c)&&accepts(c,"turn",deskMode)&&c.turns.filter(t=>t.role==="learner").length<24){
+      c={...c,supported:true,quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false},evidence:[...c.evidence,e]};
+      chosen=picked;action="turn";
+    }
+    else{commit({...c,supported:true,quizOpen:!correct,cue:onTask?(beginnerPick?`That is what you came to do. Say it in your own reply on the phone: "${picked}"`:"That is what you came to do. Say it in your own reply on the phone."):correct?(beginnerPick?`Say it in your own reply on the phone: "${picked}"`:"Now use the idea in your own reply on the phone."):own?`That one does not answer ${c.partner.split(" · ")[0]}. Try the other option.`:"That phrase has a different purpose. Try the other option.",help:c.help&&{...c.help,shown:false},commands:[...c.commands,commandId],evidence:[...c.evidence,e]},"linga-talk");return getSession();}
   }
   // recert-10: a scene with help used or a clear error held ends with one coaching note, then the coach screen offers its
   // replay (the existing step) or Finish again, which reaches the recap; a scene that owes no note ends as before
@@ -672,7 +680,8 @@ export async function englishCommand(raw:unknown){
   let reply="",mode:EvidenceMode="text";
   // L2 (duet.ts): in a duet the learner's line is held, with no call, until the co-star's; the pair then takes the turn's one call
   let pair:DuetPair|null=null;
-  if(action==="turn"){
+  if(chosen!==null){reply=chosen;mode="choice";}
+  else if(action==="turn"){
     if(input.lastTurnId!==c.turns.at(-1)?.id)throw new ConversationError("A new question arrived. Review it before sending your reply.",409);
     reply=required(input.text,"reply",1200);
     if(!["speech","text"].includes(String(input.mode)))throw new ConversationError("Choose a speech or typed reply.");
@@ -782,5 +791,5 @@ export async function englishCommand(raw:unknown){
     if(back){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,replayFor:undefined,error:"",commands:[...c.commands,commandId].slice(-100)},"linga-talk");}catch{/* newer episode owns the UI */}return getSession();}
     // recert-10: Finish never strands the scene either: a finish coaching that fails, or its replay that fails, is the recap
     if(finishing||finishCoach){try{const current=checkCurrent(c,commandId);endTake({...current,pending:null,error:""},commandId);}catch{/* newer episode owns the UI */}return getSession();}
-    try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:lingaLine(e,"The tutor could not complete that turn. Your reply is still on the phone; please retry.")});}catch{/* newer episode owns the UI */}throw e;}
+    try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:lingaLine(e,chosen!==null?"The tutor could not answer that phrase. Choose a phrase again.":"The tutor could not complete that turn. Your reply is still on the phone; please retry.")});}catch{/* newer episode owns the UI */}throw e;}
 }

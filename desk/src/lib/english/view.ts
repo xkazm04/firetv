@@ -677,7 +677,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const onScreen = quizOnScreen(c);
     if (c.quizOpen && onScreen) {
       hero = { kind: "choices", kicker: "A little support · recognition practice", prompt: onScreen.question, options: [...onScreen.options], small: true };
-      actions = onScreen.options.map((x, i) => act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") }));
+      // F14 (stick pass 2026-10-20): the TV's pick is the learner's turn, so a remote alone carries the scene (conversation.ts)
+      actions = onScreen.options.map((x, i) => act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i, asTurn: true }), { disabled: refused("choice") }));
     } else {
       const tryForm = replayForm(c);
       // the Now row over the replay's question reads the replay, never "Mission done" (LG-4 recert-7, adela-17 J4 #12), as the banner below

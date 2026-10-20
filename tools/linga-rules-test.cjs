@@ -3632,6 +3632,28 @@ test('Linga rework 7 wired (viktor-67 J4 #2-#13): within two presses an on-task 
  assert(!/does not answer/.test(c.cue),'an on-task pick is not rejected');assert.equal(c.quizOpen,false);assert.equal(c.evidence.at(-1).success,true);
 });
 
+test('F14 (stick pass 2026-10-20): a phrase chosen on the TV is the learner turn: the partner answers it and the next turn opens; a wrong pick does not',async()=>{
+ const V=view();let n=0;
+ const seen=await quizScene('A1','Mia · Granddaughter',VIKTOR_QUIZ,()=>({reply:n++?'Come in! Do you want juice?':MIA_LINE,observations:[],moment:NO_MOMENT,help:{simpler:'',meaning:'',starter:'',sayBack:'Hi Mia! Is school good?',fits:'Hi Mia! Come in.',misfit:'I am seven.'}}));
+ await reply('Yes. I see you.');
+ await command('quiz');let c=getSession().conversation;
+ const v=V.lingaView(getSession(),{}),picks=v.actions.filter(a=>a.id==='pick-phrase');
+ assert(picks.length===2&&picks.every(a=>a.run.command.action==='choice'&&a.run.command.extra.asTurn===true),'the TV row picks as the learner turn');
+ const right=c.lineQuiz.options.indexOf('Hi Mia! Come in.'),turns=c.turns.length,line=c.turns.at(-1).id,calls=seen.length;
+ await command('choice',{option:1-right,asTurn:true});c=getSession().conversation;
+ assert.equal(c.turns.length,turns,'a wrong pick is no turn');assert.equal(c.quizOpen,true);assert.equal(seen.length,calls,'and asks no model');
+ await command('choice',{option:right,asTurn:true});c=getSession().conversation;
+ assert.equal(seen.length,calls+1,'the pick is sent as the turn: one call');
+ assert.equal(seen.at(-1).prompt.submittedReply,'Hi Mia! Come in.');
+ const learner=c.turns.at(-2);
+ assert.equal(learner.role,'learner');assert.equal(learner.text,'Hi Mia! Come in.');assert.equal(learner.mode,'choice','a picked phrase, never speaking evidence');assert.equal(learner.supported,true);
+ assert.equal(c.turns.at(-1).role,'partner');assert.equal(c.turns.at(-1).text,'Come in! Do you want juice?','the partner answers it');
+ assert.equal(c.quizOpen,false);assert.equal(c.pending,null);assert.equal(c.supported,false,'the next reply starts unhelped');
+ assert(c.evidence.some(e=>e.mode==='choice'&&e.quote==='Hi Mia! Come in.'),'the recognition is still recorded');
+ const next=V.replyKey(V.lingaView(getSession(),{}));
+ assert(next&&next.startsWith('turn:')&&!next.includes(line),'the next turn reply ask is the new line, as after a typed reply');
+});
+
 // ---- TL-12: Linga, the TV drives and the phone speaks ----
 /** The TV's Linga hand-offs (ask.kind reply, words, prefs) as the session holds one. */
 const handoff=(s,kind)=>({...s,ask:{id:'ask-1',kind,learner:s.learner?.id??null,screen:s.screen,at:0,phase:'open'}});
