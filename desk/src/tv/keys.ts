@@ -212,7 +212,7 @@ export function nextFaultyAt(a: EssayAnalysis, i: number): number {
   return (i + 1) % n;
 }
 /** What Rewrite on my phone puts on the status line; the page inks the move while it is the status. */
-export const rewriteStatus = (n: number) => `sentence ${n}: rewrite it in your own words on the phone's Essay tab, then analyse again`;
+export const rewriteStatus = (n: number) => `sentence ${n}: rewrite it in your own words on the phone`;
 /** The YouTube IFrame API's postMessage form of Play/Pause: what the lesson screens send the embed when lessonPaused flips. */
 export const playerCommand = (paused: boolean): string => JSON.stringify({ event: "command", func: paused ? "pauseVideo" : "playVideo", args: "" });
 export const HINT_STOPS = ["stuck", "lesson", "ask"] as const;

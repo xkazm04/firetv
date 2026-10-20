@@ -1301,3 +1301,11 @@ test('stick pass 2026-10-20: the paired pair screen stands its two buttons under
  const unpaired=draw({joined:false,phonesLive:0});
  assert.match(unpaired,/Waiting for a phone/);assert.doesNotMatch(unpaired,/Forget every phone/);
 });
+
+test('stick pass 2026-10-20: the rewrite status names the phone, not the Essay tab the shell dropped (TL-10), nor an analyse the phone\'s Send already runs',()=>{
+ const {rewriteStatus}=keys();
+ assert.equal(rewriteStatus(1),'sentence 1: rewrite it in your own words on the phone');
+ assert.doesNotMatch(rewriteStatus(3),/tab|analyse again/);
+ // the status stays a phone-naming one, so a desk restart still drops it (store.ts namesPhone, D2)
+ assert.match(rewriteStatus(2),/\bphone\b/i);
+});
