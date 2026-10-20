@@ -2205,3 +2205,20 @@ test('L1-daniel-15-EM2-2: a rewrite of a claim first ruled neutral as a later un
  const e4=RE.decideVerdicts('structure',es,new Set([4]),[{n:4,job:'claim'},...RE.contextObservations('structure',es,4,efirst)]).find(v=>v.n===4);
  assert.equal(e4?.verdict??'neutral',(efirst.find(v=>v.n===4)?.verdict??'neutral'),'(c) a rewritten closing claim is ruled as in the first reading');
 });
+
+test('L1-kristyna-17-EM1-1 refusal arm: short plain-letter Czech is refused, short English is not; the tuning set is pinned whole and the held-out set at its measured rate',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const tuning=JSON.parse(fs.readFileSync(path.join(__dirname,'essay-tuning-czech-short.json'),'utf8'));
+ const held=JSON.parse(fs.readFileSync(path.join(__dirname,'essay-heldout-czech-short.json'),'utf8'));
+ for(const t of tuning.czech)assert.equal(R.paragraphIsEnglish(t),false,t);
+ for(const t of tuning.english)assert.equal(R.paragraphIsEnglish(t),true,t);
+ // the held-out file is never tuned on: its sha256 must still be the one pinned with it, and the rate below is what was measured once, after the rule was final
+ const sha=require('node:crypto').createHash('sha256').update(JSON.stringify({czech:held.czech,english:held.english})).digest('hex');
+ assert.equal(sha,held.sha256,'the held-out file was edited');
+ const cz=held.czech.filter(t=>!R.paragraphIsEnglish(t)),en=held.english.filter(t=>!R.paragraphIsEnglish(t));
+ console.log(`# EM1-1 held-out: Czech refused ${cz.length}/${held.czech.length}, English refused ${en.length}/${held.english.length}`);
+ assert.equal(cz.length,45,'held-out Czech refused (measured once: 45 of 53)');
+ assert.equal(held.czech.length,53);
+ assert.deepEqual(en,[],'no short English is refused');
+ for(const t of ['Hello there','Tim ran home.','Slavoj Žižek','Mama made soup.'])assert.equal(R.paragraphIsEnglish(t),true,t);
+});

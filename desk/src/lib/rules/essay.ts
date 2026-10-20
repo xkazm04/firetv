@@ -205,7 +205,9 @@ const CZECH_WORDS = new Set(("je se ze na jsou ve si byl byla bylo jako ktery kt
   "pravda pravdu ano dekuji dekuju prosim pomoc pomoci hlad zizen unaveny unavena unavene spokojeny rada rado mas meli " +
   "osme sedme deveme sedm osm pesky zhorsily zhorsit vstava vstavat vstavam vozi vozit prinesl prinesla tvori tvorit nosi nosit nese davaji davat dava dala dali slibil slibila " +
   "souhlasim souhlasime tebou mnou naucil naucila naucit naucili ucit uci ucila ucil zdravim ahoj nashledanou " +
-  "umi umim umime umet vedi znam zname znat vidi videl videla videli vidime vidim slysi slysel budu budeme budete").split(" "));
+  "umi umim umime umet vedi znam zname znat vidi videl videla videli vidime vidim slysi slysel budu budeme budete " +
+  // EM1-1 refusal arm: the everyday words of a short phone message (no English twin; tim, pak and the other short names stay out of the one-word reading below)
+  "mam hory hlad zizen jdu jdeme jdes spi spim spat pujcil pujcila pujcit pujcis knizku knizka knizky kniha knihu vesmir vesmiru precetl precetla psa psy pes kocku kocour kocoura sobota sobotu nedele pondeli utery streda ctvrtek zitra vcera vcas chvili chvile prijdu prijdes prijde prijdeme radsi zustanu zustat zustaneme bydlim bydli meste mesta malem svacinu svacina kavu adresu karty cekam cekame cekat trenerem trener mobil mobilu tenisky zvonek zazvonil sousedka sousedku sousedi spolu zvladneme zvladnu sladke sladky pisen libi libilo opravdu chces chcete slovicka slovicek zmrzlinu zmrzlina palacinky jidlo vylet vyletu dovolenou dovolena stesti zkousky zkousela zkousel pastelky nemocna nemocny nevadi kluci holky hristi zima zimu dva dve tri ctyri pet dny dnu rok kolo mesic mesice posli poslal poslala napsal napsala napsat zapomnel zapomnela ztratil ztratila nasel nasla koupil koupila koupit vzal vzala dostal dostala dostat odevzdal odevzdala mluvil mluvila mluvit rekl rekla rict vstaval vstavala prisel prisla odesel odesla zustal zustala mrzi smal smala smali ptam ptat nemam nemas nemate nemuzu nechci nechce nemel nemela tohle tahle tamhle tuhle jeden jedno vsude nikde nekde nikam nekam").split(" "));
 /** Common German function words (E3: the desk reads English, so German is refused too). Words that are also English (in, an, so, man, will, was, war, die, hat) are left out. */
 const GERMAN_WORDS = new Set(("der das und ist nicht ein eine einen zu mit auf fur von den dem des sich auch es wir sie ich aber wie oder wenn dass im aus bei nach nur noch werden wird sind haben kann uber " +
   "einem einer eines diese dieser dieses wurde wurden sein ihre ihr unser nicht kein keine mehr sehr schon dann denn weil doch ja nein hier dort " +
@@ -238,22 +240,26 @@ const CZECH_ONE_LETTER = new Set(["v", "z", "k"]);
 const czechShape = (w: string) => CZECH_ONE_LETTER.has(w) || (w.length >= 4 && (CZECH_SHAPE_START.test(w) || CZECH_SHAPE_END.test(w)));
 const fold = (w: string) => w.replace(/ł/g, "l").replace(/Ł/g, "L").normalize("NFD").replace(/[̀-ͯ]/g, "");
 
+/** Czech list words that are also a short English name or word (Tim, Pak, Nas, Mas): one of them alone never turns a short paragraph. */
+const CZECH_NAME_LIKE = new Set(["tim", "pak", "nas", "mas", "nim", "jen", "tam", "ani", "ted"]);
 /** The shares behind the English rule: words, English function words over words, then each other language's signal over words. */
-export function englishReading(text: unknown): { words: number; english: number; czech: number; german: number; polish: number; french: number; spanish: number; italian: number; dutch: number } {
+export function englishReading(text: unknown): { words: number; english: number; czech: number; czechPlain: number; german: number; polish: number; french: number; spanish: number; italian: number; dutch: number } {
   const ws = (typeof text === "string" ? text.toLowerCase().match(/[\p{L}']+/gu) : null) ?? [];
-  if (!ws.length) return { words: 0, english: 0, czech: 0, german: 0, polish: 0, french: 0, spanish: 0, italian: 0, dutch: 0 };
+  if (!ws.length) return { words: 0, english: 0, czech: 0, czechPlain: 0, german: 0, polish: 0, french: 0, spanish: 0, italian: 0, dutch: 0 };
   // an apostrophe elision (l'ecole, d'accord) leaves the word after it
   const fs = ws.map((w) => fold(w.replace(/^[a-z]{1,2}'(?=.)/, "")));
   const share = (n: number) => n / ws.length;
   const en = ws.filter((w) => ENGLISH_WORDS.has(w)).length;
   const cz = ws.filter((w, i) => CZECH_LETTERS.test(w) || CZECH_WORDS.has(fs[i]) || SLAVIC_ENDING.test(fs[i]) || czechShape(fs[i])).length;
+  // the plain-letter evidence alone, no diacritic: a name such as Žižek is one Czech letter, not one Czech word (EM1-1)
+  const czPlain = fs.filter((w) => w.length >= 3 && !CZECH_NAME_LIKE.has(w) && (CZECH_WORDS.has(w) || czechShape(w))).length;
   const de = fs.filter((w) => GERMAN_WORDS.has(w)).length;
   const pl = fs.filter((w) => POLISH_WORDS.has(w)).length;
   const fr = fs.filter((w) => FRENCH_WORDS.has(w)).length;
   const es = fs.filter((w) => SPANISH_WORDS.has(w)).length;
   const it = fs.filter((w) => ITALIAN_WORDS.has(w)).length;
   const nl = fs.filter((w) => DUTCH_WORDS.has(w)).length;
-  return { words: ws.length, english: share(en), czech: share(cz), german: share(de), polish: share(pl), french: share(fr), spanish: share(es), italian: share(it), dutch: share(nl) };
+  return { words: ws.length, english: share(en), czech: share(cz), czechPlain: czPlain, german: share(de), polish: share(pl), french: share(fr), spanish: share(es), italian: share(it), dutch: share(nl) };
 }
 /** The floors, set on the corpus in tools/essay-rules-test.cjs (E3-a, E3-d): a paragraph of at least ENGLISH_MIN_WORDS words is not English when another language's signal is at or over the floor and over the English share. */
 export const ENGLISH_MIN_WORDS = 6;
@@ -265,7 +271,11 @@ export function paragraphIsEnglish(text: unknown): boolean {
   const r = englishReading(text);
   const other = Math.max(r.czech, r.german, r.polish, r.french, r.spanish, r.italian, r.dutch);
   // UD-19: a paragraph under ENGLISH_MIN_WORDS is English unless two or more of its words read as another language and beat the English ones (40% of the words, or a third when no English word is there); never on length alone
-  if (r.words < ENGLISH_MIN_WORDS) return !(r.words > 0 && r.english < ENGLISH_FLOOR && other * r.words >= 2 && other > r.english && (other >= 0.4 || (r.english === 0 && other >= 1 / 3)));
+  // EM1-1: and so is a short paragraph with no English function word in it and one plain-letter Czech word of three letters or more (Mam rad hory, Venku fouka vitr); an English line with no function word and no Czech word stays English
+  if (r.words < ENGLISH_MIN_WORDS) {
+    if (r.words > 0 && r.english === 0 && r.czechPlain >= 1) return false;
+    return !(r.words > 0 && r.english < ENGLISH_FLOOR && other * r.words >= 2 && other > r.english && (other >= 0.4 || (r.english === 0 && other >= 1 / 3)));
+  }
   // E3-d: English words mixed into a foreign paragraph do not make it English: the foreign signal must lose to the English share
   return !(other >= CZECH_FLOOR && other > r.english);
 }
