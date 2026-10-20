@@ -7,7 +7,7 @@
  */
 import { text } from "../engines/text";
 import { assemble, data, dataRows, say } from "../prompt/assemble";
-import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, sentenceRows, revise, ruledSentences, SIDES, splitSentences, summaryLine, SUPPORTS, taught, unanswered, type AnalysisType, type Sentence } from "../rules/essay";
+import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, paragraphCount, paragraphIsEnglish, paragraphStats, sentenceRows, revise, ruledSentences, SIDES, splitSentences, summaryLine, SUPPORTS, taught, unanswered, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
 import { getPiece, hasFormat } from "../session/texts";
 import { getLearner, LearnersUnread, readLearner, recallLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
@@ -300,7 +300,7 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   // only the observation for sentence n is read; one that is missing or that the lens cannot read fails the run, so a
   // verdict is never invented. The others come from the first pass, as context for the rule.
   const got = (Array.isArray(json?.observations) ? json.observations : []).find((o) => o?.n === n);
-  if (!got || !observationOk(lens.id, got)) throw new Error(`no observation came back for sentence ${n}`);
+  if (!got || unanswered(lens.id, new Set([n]), [got]).length) throw new Error(`no observation came back for sentence ${n}`);
   const decided = decideVerdicts(lens.id, next.sentences, new Set([n]), [got, ...contextObservations(lens.id, next.sentences, n, reading.verdicts)], voice.band).find((v) => v.n === n);
   if (!decided) throw new Error(`no verdict could be decided for sentence ${n}`);
   const was = before?.was ?? { text: old.text, verdict: before?.verdict ?? "neutral", ...(before?.fix ? { fix: before.fix } : {}) };
