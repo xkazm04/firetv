@@ -23,7 +23,7 @@ repo:
 # deathride/ is a separate Gradle build and is gated from its own directory.
 # evals is the deterministic AI-output subset of test-desk (model roles stubbed, no live call; see
 # docs/AI_HARNESS.md). It needs desk/node_modules. Every capability here runs through doctor --run
-# on each same-repo PR (.github/workflows/capabilities-pr.yml) and weekly (capabilities.yml). CI never
+# on demand (.github/workflows/capabilities-pr.yml, manual: issue #12) and weekly (capabilities.yml). CI never
 # commits the verified flags it computes. A flag becomes true only through a local doctor --run whose
 # write-back is committed in a PR, and that PR's run must then pass it (.ai/memory/0016).
 capabilities:
