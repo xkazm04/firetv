@@ -63,7 +63,7 @@ jobs:
         with:
           subject-path: dist/apk/tv-app-debug.apk
           sbom-path: dist/tv-app-debug.cdx.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: tv-app-debug-sbom-${{ github.event.workflow_run.head_sha }}
           path: |
@@ -88,7 +88,7 @@ jobs:
           mkdir -p ../dist
           npm sbom --sbom-format cyclonedx --omit dev --package-lock-only > ../dist/desk.cdx.json
           node -e "const b=require('../dist/desk.cdx.json');if(!(b.components||[]).length)throw new Error('the desk SBOM lists no component');console.log(b.components.length+' components')"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: desk-sbom-${{ github.event.workflow_run.head_sha || github.sha }}
           path: dist/desk.cdx.json

@@ -57,7 +57,7 @@ jobs:
       - name: Show which verified flags the run would flip (never committed by CI)
         if: always()
         run: git diff -- .ai/manifest.yaml
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: capabilities-${{ github.run_id }}
