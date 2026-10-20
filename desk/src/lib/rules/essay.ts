@@ -237,6 +237,14 @@ const CZECH_SHAPE_START = /^(?:zv|zm|zr|zl|zd|zb|hr|hl|kd|vz|ct|krk|rz)/;
 const CZECH_SHAPE_END = /(?:ych|ymi|eho|emu|uje|ejte|ujte|ovat|ou|ym)$|.{3}(?:ci|ni|ti|ri)$/;
 /** The one-letter Czech prepositions: an English text has no stand-alone v, z or k. */
 const CZECH_ONE_LETTER = new Set(["v", "z", "k"]);
+/**
+ * Round 2 of the short-Czech refusal (L1-helena-46-EM1-4): verb and prefix shapes read only in a short paragraph that has no English function word
+ * (the one place czPlain is used), so a long English text never meets them. Czech past-tense -vil/-lil/-nil/-dil/-pil/-mil/-hil, -jel, [eou]sel,
+ * imperatives in -uj, the roz-/poz- prefixes and a -jd- cluster (pojd), on five letters or more; and the unstressed pronouns mi, ti, nami, vami, uz.
+ */
+const CZECH_SHORT_SHAPE = /^(?:roz|poz).{3,}|jd|uj$|(?:[vlndpmh]il|[vlndpmh]ila|[vlndpmh]ili|jel|jela|jeli|[eou]sel|[eou]sela)$/;
+const CZECH_SHORT_FUNCTION = new Set(["mi", "ti", "uz", "nami", "vami"]);
+const czechShortShape = (w: string) => CZECH_SHORT_FUNCTION.has(w) || (w.length >= 5 && CZECH_SHORT_SHAPE.test(w)) || (w.length === 4 && /jd|^uj[ae]/.test(w));
 const czechShape = (w: string) => CZECH_ONE_LETTER.has(w) || (w.length >= 4 && (CZECH_SHAPE_START.test(w) || CZECH_SHAPE_END.test(w)));
 const fold = (w: string) => w.replace(/ł/g, "l").replace(/Ł/g, "L").normalize("NFD").replace(/[̀-ͯ]/g, "");
 
@@ -252,7 +260,7 @@ export function englishReading(text: unknown): { words: number; english: number;
   const en = ws.filter((w) => ENGLISH_WORDS.has(w)).length;
   const cz = ws.filter((w, i) => CZECH_LETTERS.test(w) || CZECH_WORDS.has(fs[i]) || SLAVIC_ENDING.test(fs[i]) || czechShape(fs[i])).length;
   // the plain-letter evidence alone, no diacritic: a name such as Žižek is one Czech letter, not one Czech word (EM1-1)
-  const czPlain = fs.filter((w) => w.length >= 3 && !CZECH_NAME_LIKE.has(w) && (CZECH_WORDS.has(w) || czechShape(w))).length;
+  const czPlain = fs.filter((w) => (w.length >= 3 && !CZECH_NAME_LIKE.has(w) && (CZECH_WORDS.has(w) || czechShape(w))) || czechShortShape(w)).length;
   const de = fs.filter((w) => GERMAN_WORDS.has(w)).length;
   const pl = fs.filter((w) => POLISH_WORDS.has(w)).length;
   const fr = fs.filter((w) => FRENCH_WORDS.has(w)).length;

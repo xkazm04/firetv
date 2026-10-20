@@ -2217,8 +2217,23 @@ test('L1-kristyna-17-EM1-1 refusal arm: short plain-letter Czech is refused, sho
  assert.equal(sha,held.sha256,'the held-out file was edited');
  const cz=held.czech.filter(t=>!R.paragraphIsEnglish(t)),en=held.english.filter(t=>!R.paragraphIsEnglish(t));
  console.log(`# EM1-1 held-out: Czech refused ${cz.length}/${held.czech.length}, English refused ${en.length}/${held.english.length}`);
- assert.equal(cz.length,45,'held-out Czech refused (measured once: 45 of 53)');
+ assert.equal(cz.length,53,'held-out Czech refused (45 of 53 before the second round, 53 of 53 after; the second round did not tune on this file)');
  assert.equal(held.czech.length,53);
  assert.deepEqual(en,[],'no short English is refused');
  for(const t of ['Hello there','Tim ran home.','Slavoj Žižek','Mama made soup.'])assert.equal(R.paragraphIsEnglish(t),true,t);
+});
+
+test('L1-helena-46-EM1-4 second round: the eight leaks of recert-18 are refused; the r2 held-out set is pinned at its measured rate and short English is not refused',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ // tuned on these eight (recert-18 rows 1 and 5); not a held-out figure
+ for(const t of ['Sneh uz roztal.','Pozdravuj sestru.','Autobus ujel.','Telefon mi dosel.','Ucitel nas pochvalil.','Dej mi vedet.','Pojd s nami ven.','Pomuzes mi s ukolem?'])assert.equal(R.paragraphIsEnglish(t),false,t);
+ for(const t of ['Tim ran home.','Pan is a cat.','Jan has a dog.','Ted went out.','Dan likes pizza.','Kim called me.','Anna sat down.','Pavel is my friend.','Emil ran home.','Hotel opened.','April rain.','Koala sleeps.'])assert.equal(R.paragraphIsEnglish(t),true,t);
+ const held=JSON.parse(fs.readFileSync(path.join(__dirname,'essay-heldout-czech-short-r2.json'),'utf8'));
+ const sha=require('node:crypto').createHash('sha256').update(JSON.stringify({czech:held.czech,english:held.english})).digest('hex');
+ assert.equal(sha,held.sha256,'the r2 held-out file was edited');
+ const cz=held.czech.filter(t=>!R.paragraphIsEnglish(t)),en=held.english.filter(t=>!R.paragraphIsEnglish(t));
+ console.log(`# EM1-4 r2 held-out: Czech refused ${cz.length}/${held.czech.length}, English refused ${en.length}/${held.english.length}`);
+ assert.equal(held.czech.length,60);
+ assert.equal(cz.length,52,'r2 held-out Czech refused (52 of 60 after the rule, 50 of 60 before it; the baseline was read before the rule was written, and its eight misses were seen, so this is a measure with that caveat)');
+ assert.deepEqual(en,[],'no short English is refused');
 });
