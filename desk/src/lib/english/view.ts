@@ -219,7 +219,14 @@ export interface LingaView {
   recap: Recap | null;
   /** lines the phone shows beyond the TV, for the driver */
   details: string[];
+  /** LG-23: clear errors held for the end of a running scene; a count only, the fix itself is withheld for the try */
+  saved: number;
+  /** the quiet marker the TV and the phone draw beside the conversation while saved > 0; "" otherwise */
+  savedLine: string;
 }
+
+/** The in-scene marker of held fixes: a count and no fix wording (the fix is withheld for the try). */
+export const savedLine = (n: number) => n > 0 ? `Saved for the end: ${n}` : "";
 
 /** the list of certificates names the newest seven: seven doors and Back fill the list's column */
 const CERTS_SHOWN = 7;
@@ -778,8 +785,9 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (job === "pitch" && modeOf(p, prefs) === "adult") phone.push(act("pitch-scene", "Pitch a scene in your own words on the phone", "Linga shapes the scene you describe and starts it now.", cmd("pitch"), { needs: "text" }));
   }
   // a check action the table (activity.ts) would refuse is drawn disabled, wherever it is offered
+  const saved = c && s.screen !== "linga-recap" ? (c.heldFixes ?? []).length : 0;
   const tabled = (a: ViewAction): ViewAction => { const x = a.run.command?.action; return lc && !a.disabled && x && isCheckCommand(x) && !checkAccepts(lc, x) ? { ...a, disabled: true } : a; };
-  return { screen: menu ? "menu" : picking ? "linga-verdict" : s.screen, home, tag, title, captionTag, baseCaption, caption, error, hero, actions: actions.map(tabled), footer: footer.map(tabled), phone: phone.map(tabled), answer: answerOf(s, lc, c), spoken, audible, waiting, recap, details };
+  return { screen: menu ? "menu" : picking ? "linga-verdict" : s.screen, home, tag, title, captionTag, baseCaption, caption, error, hero, actions: actions.map(tabled), footer: footer.map(tabled), phone: phone.map(tabled), answer: answerOf(s, lc, c), spoken, audible, waiting, recap, details, saved, savedLine: savedLine(saved) };
 }
 
 /**

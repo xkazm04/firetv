@@ -3989,3 +3989,31 @@ test('a beginner coach note with a grammar term becomes Say: <the coach\'s own a
  await command('coach');answer=was;
  assert.equal(getSession().conversation.coaching.note,'Say: Is school good?');
 });
+
+// ---- LT-petra-38-J4-3 (recert-13, council-lite r3 value must-address 2): a held fix shows in the scene that one was saved ----
+test('LT-petra-38-J4-3: a scene with one held fix exposes a held count of 1 to the TV and phone views before Finish; the marker holds no fix wording',async()=>{
+ const {lingaView}=require(path.join(root,'src/lib/english/view.ts'));
+ await bandStart('ema','A2','Hello! What do you like?',()=>({reply:'Nice. Do you sleep well?',observations:[],moment:{kind:'none',said:'',better:'',why:''}}));
+ assert.equal(lingaView(getSession()).saved,0,'nothing held yet');
+ assert.equal(lingaView(getSession()).savedLine,'');
+ await reply('I can not sleep.');
+ const c=getSession().conversation;
+ assert.equal(c.phase,'conversation','no stop');assert.equal(c.moment??null,null);assert.equal((c.heldFixes??[]).length,1,'one held fix');
+ const v=lingaView(getSession());
+ assert.equal(v.saved,1);assert.equal(v.savedLine,'Saved for the end: 1');
+ const fix=c.heldFixes[0];
+ for(const w of [fix.said,fix.better,fix.why,'cannot','can not'])assert(!v.savedLine.toLowerCase().includes(String(w).toLowerCase()),`marker holds no fix wording: ${w}`);
+ assert(!/\d[^]*\d/.test(v.savedLine),'only the count');
+});
+test('LT-petra-38-J4-3: "I can not sleep" is a known slip, and "can not only" stays right',()=>{
+ const {clearSlip,KNOWN_SLIPS,KNOWN_SLIP_FIXES}=require(path.join(root,'src/lib/english/slip.ts'));
+ assert(KNOWN_SLIPS.includes('can not'));assert.equal(KNOWN_SLIP_FIXES['can not'],'cannot');
+ assert.deepEqual(clearSlip('I can not sleep.'),{said:'I can not sleep.',better:'I cannot sleep.',why:'Say "cannot", not "can not".'});
+ for(const ok of ['She can not only sing but also dance.','I cannot sleep.','Can you help?'])assert.equal(clearSlip(ok),null,ok);
+});
+test('LT-petra-38-J4-3: the band hold is unchanged: an A1 partner line over 8 words is still held',()=>{
+ const {bandLine,fitsBand}=require(path.join(root,'src/lib/english/gate.ts'));
+ const long='Hi, I am the new girl in your class, and I really love building houses! What is yours like?';
+ assert.equal(fitsBand(long,'A1'),false);assert.equal(bandLine(long,'A1'),'What is yours like?');
+ assert.equal(bandLine('Hello! What do you like?','A1'),'Hello! What do you like?');
+});

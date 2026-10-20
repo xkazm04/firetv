@@ -67,6 +67,7 @@ function ReplyPanel({ s, run, busy }: { s: Session; run: Run; busy: boolean }) {
     return <>
       <p><b>One thing to fix</b></p>
       <div className="linga-status" aria-live="polite">You said “{m.said}”<br />{!!m.better && !r?.held ? <>Try “{m.better}”</> : "Say it again, your way."}</div>
+      {v.savedLine && <p className="linga-status" data-role="linga-saved">{v.savedLine}</p>}
       <ReplyBox ready busy={busy} question={m.turnId} stopWhen={!accepts(c, "capture")} onCapture={active => run("capture", { active })} onSend={onSend({})} note="A try is practice: it is not recorded as evidence." />
     </>;
   }
@@ -74,6 +75,7 @@ function ReplyPanel({ s, run, busy }: { s: Session; run: Run; busy: boolean }) {
     const line = (runningTake(c)?.turns ?? c.turns).at(-1), duet = c.duet;
     return <>
       <div className="linga-status" aria-live="polite">{line?.text}</div>
+      {v.savedLine && <p className="linga-status" data-role="linga-saved">{v.savedLine}</p>}
       {duet && <p className="linga-status" data-role="linga-beat"><b>{duet.beat === "costar" ? `${duet.coStar}'s turn` : `${s.learner?.name ?? "Your"}'s turn`}</b></p>}
       <ReplyBox key={beatOf(c)} ready busy={busy} question={line?.id} stopWhen={!accepts(c, "capture")} onCapture={active => run("capture", { active })}
         onSend={onSend(duet ? { speaker: beatOf(c) } : {})}

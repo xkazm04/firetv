@@ -36,7 +36,7 @@ export const FUNCTION_WORDS: readonly string[] = [
  */
 export const KNOWN_SLIPS: readonly string[] = [
   "we was", "they was", "you was", "he don't", "she don't", "it don't", "he have", "she have", "it have", "he do", "she do",
-  "i is", "you is", "we is", "they is", "more better", "most best", "more worse",
+  "i is", "you is", "we is", "they is", "more better", "most best", "more worse", "can not",
 ];
 /**
  * The right form of each KNOWN_SLIPS pair (LG-57), so code can name the fix of a known slip the learner says twice in
@@ -45,7 +45,7 @@ export const KNOWN_SLIPS: readonly string[] = [
 export const KNOWN_SLIP_FIXES: Readonly<Record<string, string>> = {
   "we was": "we were", "they was": "they were", "you was": "you were", "he don't": "he doesn't", "she don't": "she doesn't", "it don't": "it doesn't",
   "he have": "he has", "she have": "she has", "it have": "it has", "he do": "he does", "she do": "she does",
-  "i is": "i am", "you is": "you are", "we is": "we are", "they is": "they are", "more better": "better", "most best": "best", "more worse": "worse",
+  "i is": "i am", "you is": "you are", "we is": "we are", "they is": "they are", "more better": "better", "most best": "best", "more worse": "worse", "can not": "cannot",
 };
 /**
  * Words a Czech or Slavic speaker commonly uses in their home-language sense (a false friend), each with the sense meant
@@ -84,6 +84,8 @@ const toks = (text: string): Tok[] => [...text.matchAll(WORD)].map(m => { const 
 const keyWords = (key: string) => toks(key).map(t => t.key);
 const runAt = (have: string[], want: string[], i: number) => want.every((w, k) => have[i + k] === w);
 const holds = (have: string[], want: string[]) => { for (let i = 0; i + want.length <= have.length; i++) if (runAt(have, want, i)) return true; return false; };
+/** "can not" is a slip except in "can not only ..." ("She can not only sing but dance"), where it is right (LT-petra-38-J4-3). */
+const rightHere = (words: string[], want: string[], i: number) => want.join(" ") === "can not" && words[i + 2] === "only";
 const content = (w: string) => w !== "#" && !FUNCTION.has(w);
 
 /** Whether a slip key may write to the learner record: it holds a content word, or a pair on KNOWN_SLIPS. */
@@ -162,7 +164,7 @@ export function slipStands(text: string, slip: string): string | null {
   const want = keyWords(slip), have = toks(text), words = have.map(t => t.key);
   if (want.length < 2) return null;
   for (let i = 0; i + want.length <= have.length; i++)
-    if (runAt(words, want, i) && !(i > 0 && LICENSORS.has(have[i - 1].word))) return text.slice(have[i].at, have[i + want.length - 1].end);
+    if (runAt(words, want, i) && !rightHere(words, want, i) && !(i > 0 && LICENSORS.has(have[i - 1].word))) return text.slice(have[i].at, have[i + want.length - 1].end);
   return null;
 }
 /** Whether a pair may write to the learner record in a scene whose partner said `partnerLines`: guarded, and never words the partner said. */
@@ -210,7 +212,7 @@ export function clearSlip(reply: string): ClearSlip | null {
   const upper = (w: string) => w.replace(/^i\b/, "I");
   for (let i = 0; i < t.length; i++) {
     if (i > 0 && LICENSORS.has(t[i - 1].word)) continue;
-    const k = KNOWN_SLIPS.find(k => runAt(words, keyWords(k), i));
+    const k = KNOWN_SLIPS.find(k => runAt(words, keyWords(k), i) && !rightHere(words, keyWords(k), i));
     if (k) {
       const fix = KNOWN_SLIP_FIXES[k], end = t[i + keyWords(k).length - 1].end;
       const cased = /^\p{Lu}/u.test(reply[t[i].at]) ? fix[0].toUpperCase() + fix.slice(1) : upper(fix);
