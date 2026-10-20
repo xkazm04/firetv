@@ -2189,3 +2189,19 @@ test('L1-daniel-15-EM3-2: the title is not a paragraph or a sentence, and the fo
  assert.equal((route.match(/task: taskFor\(body\)/g)||[]).length,2,'both paths take the task from taskFor');
  assert.match(route,/taskOf\(body\.task\) \?\? taskOf\(titleOf\(body\.text\)\)/);
 });
+test('L1-daniel-15-EM2-2: a rewrite of a claim first ruled neutral as a later unsupported claim stays neutral; the first unsupported claim stays faulty',()=>{
+ const T='Homework is pointless. Teachers give too much. It ruins evenings.',ss=RE.splitSentences(T);
+ const all=[1,2,3].map(n=>({n,job:'claim'}));
+ const first=RE.decideVerdicts('structure',ss,new Set([1,2,3]),all);
+ assert.deepEqual(first.map(v=>[v.n,v.verdict]),[[1,'faulty'],[2,'neutral'],[3,'neutral']]);
+ const redo=(n)=>RE.decideVerdicts('structure',ss,new Set([n]),[{n,job:'claim'},...RE.contextObservations('structure',ss,n,first)]).find(v=>v.n===n);
+ assert.equal(redo(2)?.verdict??'neutral','neutral','(a) the later bare claim rewritten alone is neutral, as in the first reading');
+ assert.equal(redo(3)?.verdict??'neutral','neutral','(a) the last claim too');
+ assert.equal(redo(1).verdict,'faulty','(b) the first unsupported claim, rewritten and still bare, stays faulty');
+ // (c) the other neutral rulings hold for a rewritten sentence: a claim closing after marked evidence
+ const E='Homework is pointless. Research found that 70% of pupils lose sleep. Teachers give too much. Therefore it ruins evenings.',es=RE.splitSentences(E);
+ const eo=[{n:1,job:'claim'},{n:2,job:'evidence'},{n:3,job:'claim'},{n:4,job:'claim'}];
+ const efirst=RE.decideVerdicts('structure',es,new Set([1,2,3,4]),eo);
+ const e4=RE.decideVerdicts('structure',es,new Set([4]),[{n:4,job:'claim'},...RE.contextObservations('structure',es,4,efirst)]).find(v=>v.n===4);
+ assert.equal(e4?.verdict??'neutral',(efirst.find(v=>v.n===4)?.verdict??'neutral'),'(c) a rewritten closing claim is ruled as in the first reading');
+});

@@ -570,8 +570,19 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
   }
   const out: VerdictLike[] = [];
   let unsupportedSeen = false;
+  // a claim that is only context (a rewrite's neighbour) is ruled by the same rule, so when it comes first it still takes the
+  // one unsupported slot; a rewritten later claim is then not the first judged claim by default
+  const claimRuled = (s: Sentence, at: number) => {
+    const rest = sentences.slice(at + 1), stop = rest.findIndex((t) => ok(t.n)?.job === "claim");
+    const between = stop < 0 ? rest : rest.slice(0, stop);
+    const blind = !named.has(s.n) && between.some((t) => ok(t.n)?.job === "evidence" && marked(t) && linkOf(t) === undefined);
+    return strongClaims.has(s.n) || blind || bodyProves(s) || closesAfterEvidence(s);
+  };
   sentences.forEach((s, at) => {
-    if (!judged.has(s.n)) return;
+    if (!judged.has(s.n)) {
+      if (lens === "structure" && ok(s.n)?.job === "claim" && !claimRuled(s, at)) unsupportedSeen = true;
+      return;
+    }
     const o = by.get(s.n), read = ok(s.n);
     let verdict: VerdictLike["verdict"] = "neutral", check = "";
     if (read) {
@@ -604,11 +615,8 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
         const bad = validIssues(read, s.text)[0];
         if (bad) { verdict = "faulty"; check = bad.kind === "repeated" ? CHECKS.repeated(bad.word) : CHECKS.word(bad.word); }
       } else if (read.job === "claim") {
-        const rest = sentences.slice(at + 1), stop = rest.findIndex((t) => ok(t.n)?.job === "claim");
-        const between = stop < 0 ? rest : rest.slice(0, stop);
-        const blind = !named.has(s.n) && between.some((t) => ok(t.n)?.job === "evidence" && marked(t) && linkOf(t) === undefined);
         if (strongClaims.has(s.n)) verdict = "strong";
-        else if (blind || bodyProves(s) || closesAfterEvidence(s)) verdict = "neutral";
+        else if (claimRuled(s, at)) verdict = "neutral";
         else if (!unsupportedSeen) { verdict = "faulty"; check = CHECKS.unsupported; unsupportedSeen = true; }
       } else if (read.job === "evidence") verdict = marked(s) ? "strong" : "neutral";
       else if (read.job === "link") {
