@@ -861,6 +861,8 @@ function step(s: Session, e: Event): Session {
       n.essayType = e.lens; n.subject = "essay"; break;
     // a refused sentence changes nothing but the status line; a written one moves the caret to the first empty slot (or Read it)
     case "essay.slot": { if (!s.essayPlan) break; const r = planFill(s.essayPlan, e.i, e.text); if (!r.ok) { n.status = r.error; break; }
+      // a slot answered on the phone closes its own ask (F17), and the line that sent the learner there goes with it
+      if (s.ask?.kind === "slot" && s.ask.detail?.i === e.i) { n.ask = null; if (namesPhone(n.status)) n.status = ""; }
       n.essayPlan = r.plan; if (s.screen === "essayplan") { const open = r.plan.slots.findIndex((x) => !x); n.focus = open < 0 ? r.plan.slots.length : open; } break; }
     case "essay.clear": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essay: null, essayAt: null })); break; }
       n.essay = null; n.essayAt = null; if (n.screen === "forensic") n.screen = "landing"; break;

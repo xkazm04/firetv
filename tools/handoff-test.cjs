@@ -216,3 +216,23 @@ test('(e) the phone\'s paper post names the open paper ask: PaperPanel sends ask
  assert.match(panel,/type: "paper\.enter", rows: rawOf\(rows\), \.\.\.\(askId \? \{ askId \} : \{\}\)/);
  assert.match(page,/<PaperPanel .*askId=\{s\?\.ask\?\.kind === "paper" \? askId : undefined\}/);
 });
+
+// ---- after the stick pass (F17, F21) ----
+const planned=()=>{let s=seated('essayplan');s=reduce(s,{type:'essay.plan',lens:'evidence'});return {...s,screen:'essayplan'};};
+test('F17: essay.slot closes the slot ask for that slot, and the status that sent the learner to the phone goes with it',()=>{
+ let s=planned();
+ for(let i=0;i<3;i++){
+  s={...reduce(s,{type:'status',text:store.planStatus?store.planStatus(i):'say or type slot on the phone'}),};
+  s=reduce(s,{type:'ask.open',kind:'slot',detail:{i}});
+  assert.equal(s.ask.kind,'slot');assert.equal(s.ask.detail.i,i);
+  s=reduce(s,{type:'essay.slot',i,text:'A sentence number '+i+' that says something clearly.'});
+  assert.equal(s.ask,null,`slot ${i} answered closes its ask`);assert.equal(s.status,'',`slot ${i} answered clears the phone line`);
+ }
+});
+test('F17: essay.slot leaves another kind of ask, and an ask on another slot, open',()=>{
+ let s=planned();
+ s=reduce(s,{type:'ask.open',kind:'slot',detail:{i:2}});
+ assert.equal(reduce(s,{type:'essay.slot',i:0,text:'A first sentence that says something clearly.'}).ask?.detail?.i,2);
+ const o=reduce(planned(),{type:'ask.open',kind:'rewrite'});
+ assert.equal(reduce(o,{type:'essay.slot',i:0,text:'A first sentence that says something clearly.'}).ask?.kind,'rewrite');
+});
