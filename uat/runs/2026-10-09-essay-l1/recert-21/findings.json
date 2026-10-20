@@ -38,7 +38,12 @@
     "resolution": "open",
     "suggested_acceptance": "A kept faulty verdict that the rule would now clear carries a line ('Your new sentence 2 may cover this: read the paragraph again'), and the others are still not re-asked.",
     "scope_note": "matches EM-B3 (docs/BACKLOG.md, declined): a rewrite re-judges only its own sentence, so a kept verdict goes stale; raised here independently by a learner's walk",
-    "recurs": "2026-10-09-essay-l1/recert-20/L1-eliska-12-EM2-1"
+    "recurs": "2026-10-09-essay-l1/recert-20/L1-eliska-12-EM2-1",
+    "recertify_run": "2026-10-09-essay-l1/recert-22",
+    "recertify_status": "recurs",
+    "recertify_evidence": "recert-22 @820a115d: Re-walked at 820a115d; what the previous walk (at 6e50d7c3) found still holds: desk/src/lib/desk/essay.ts is byte-identical to 6e50d7c3; reviseSentence still decides only sentence n and copies every other verdict unchanged (:271, :304, :308). Stays DECLINED under R6 (docs/BACKLOG.md).",
+    "recurrence": 2,
+    "recurred_as": "L1-eliska-12-EM2-1"
   },
   {
     "id": "L1-helena-46-EM1-4",
@@ -79,10 +84,13 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "suggested_acceptance": "A non-English paragraph gets the desk's sentence before any model call.",
     "scope_note": "Helena writes to clients in English; low reachability for her.",
-    "recurs": "2026-10-09-essay-l1/recert-20/L1-helena-46-EM1-4"
+    "recurs": "2026-10-09-essay-l1/recert-20/L1-helena-46-EM1-4",
+    "recertify_run": "2026-10-09-essay-l1/recert-22",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "recert-22 @820a115d: fixed by d97ec7b9 (a character 1-4-gram Czech/English profile, no word list, trained on the tuning and older held-out sets only) and pinned by 820a115d: the fresh blind set tools/essay-heldout-czech-short-r5.json (committed alone in befc9a06 before the rule; inner sha256 b44e9ce80a16f0e108d8553ebc9fd223f41800751b09e53ef2a6463162e6dd91) has 60 of 60 short plain-letter Czech refused and 0 of 45 English refused, measured once after the rule was final (57 of 60 and 1 of 45 on the 6e50d7c3 rule). This meets the closure bar recert-21 set: zero blind leaks with 0 English refused. r4 is now TUNED (59 of 59). r5 was authored by the same builder session that then built the profile (before it read the rule or any earlier set); LT evidence only, not resolved-verified."
   },
   {
     "id": "L1-kristyna-17-EM1-1",
@@ -129,7 +137,12 @@
     "l2_priority": "With a Czech paragraph, record verdicts and notes under Argument and Structure; a Czech marker reads them (verdict agreement).",
     "recurs": "2026-10-09-essay-l1/recert-20/L1-kristyna-17-EM1-1",
     "severity_prior": "blocker",
-    "severity_why": "Blocker to major: the refusal now stops most Czech paragraphs before the word lists, so only a paragraph that leaks past the check is mis-ruled."
+    "severity_why": "Blocker to major: the refusal now stops most Czech paragraphs before the word lists, so only a paragraph that leaks past the check is mis-ruled.",
+    "recertify_run": "2026-10-09-essay-l1/recert-22",
+    "recertify_status": "recurs",
+    "recertify_evidence": "recert-22 @820a115d: Re-walked at 820a115d; refusal arm met by the round-5 letter-run profile (d97ec7b9, desk/src/lib/rules/essayLang.ts, read in paragraphIsEnglish desk/src/lib/rules/essay.ts:281-313): r5 BLIND 60 of 60 Czech refused and 0 of 45 English (tools/essay-heldout-czech-short-r5.json, committed alone in befc9a06 before the rule, measured once after it); r4 now TUNED 59 of 59, 0 of 45. L arm unchanged and operator-owned (rule on Czech word lists, or say we do not rule Czech): CONNECTORS (:15), LINK (:17), CONTRAST (:457), wordIn (:470), noTurn (ADULT_CHECKS :522, YOUNG_CHECKS :535) are byte-identical to 6e50d7c3, moved +1 by the essayLang import (:10) and +22 by the rule (after :289). A Czech paragraph that clears the check is still ruled on English lists; the refusal figures narrow this row and never fix it.",
+    "recurrence": 2,
+    "recurred_as": "L1-kristyna-17-EM1-1"
   },
   {
     "id": "L1-kristyna-17-EM1-3",
@@ -173,7 +186,12 @@
     "l2_priority": "Read a Czech paragraph live (claude-cli/sonnet): record the language of every note, fix and the summary.",
     "recurs": "2026-10-09-essay-l1/recert-20/L1-kristyna-17-EM1-3",
     "severity_prior": "major",
-    "severity_why": "Major to minor: only a Czech paragraph that leaks past the language check can reach the model now."
+    "severity_why": "Major to minor: only a Czech paragraph that leaks past the language check can reach the model now.",
+    "recertify_run": "2026-10-09-essay-l1/recert-22",
+    "recertify_status": "recurs",
+    "recertify_evidence": "recert-22 @820a115d: Re-walked at 820a115d; what the previous walk (at 6e50d7c3) found still holds: desk/src/lib/desk/essay.ts is byte-identical to 6e50d7c3 and the reading prompt (:113-136) still has no language instruction; the CHECKS lines are English (ADULT_CHECKS desk/src/lib/rules/essay.ts:519, YOUNG_CHECKS :532, moved +22 by d97ec7b9, text unchanged). Fewer Czech paragraphs reach the model (r5 BLIND 0 of 60 leak), but one that does still gets notes in whatever language the model picks; the operator names the language.",
+    "recurrence": 2,
+    "recurred_as": "L1-kristyna-17-EM1-3"
   },
   {
     "id": "L1-helena-46-EM1-9",
@@ -201,9 +219,12 @@
     ],
     "code_check": "present-broken",
     "verdict": "confirmed",
-    "resolution": "open",
+    "resolution": "fixed",
     "suggested_acceptance": "English refused 0 of 45 on the r4 set. RECOMMENDATION (a recert may not edit tools/): once a fix exists, change tools/essay-rules-test.cjs:2324 from en.length<=1 to a failing assertion that r4 English refused is 0 (0/45), like the r2 and r3 English assertions.",
-    "scope_note": "Found by the blind r4 set (committed in 76523b70); reported, not tuned on. Part of the helena-46 language-refusal arm (L1-helena-46-EM1-4)."
+    "scope_note": "Found by the blind r4 set (committed in 76523b70); reported, not tuned on. Part of the helena-46 language-refusal arm (L1-helena-46-EM1-4).",
+    "recertify_run": "2026-10-09-essay-l1/recert-22",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "recert-22 @820a115d: fixed by d97ec7b9 (the round-5 letter-run profile, desk/src/lib/rules/essayLang.ts, read in paragraphIsEnglish desk/src/lib/rules/essay.ts:305-313): tools/essay-heldout-czech-short-r4.json english[15] (sha256 aab59657a72c339de214c8918ffcbc28490326c7d42acb73e74141c37daaeb71) is English; r4 English refused 0 of 45 (1 of 45 on the 6e50d7c3 rule); 0 English refused on r3, r2, the first held-out set, the tuning set and essay-heldout-r3.json; r5 BLIND 0 of 45. The pin at tools/essay-rules-test.cjs:2326 is now a failing assertion of 0 (was en.length<=1). LT evidence only; not resolved-verified."
   },
   {
     "id": "L1-eliska-12-EM2-7",
