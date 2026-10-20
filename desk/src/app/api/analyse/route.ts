@@ -16,7 +16,7 @@ import { modeOf } from "@/lib/rules/mode";
 import { sentenceProblem } from "@/lib/rules/english";
 
 export const dynamic = "force-dynamic";
-type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: string; type: AnalysisType; task?: string } | { kind: "rewrite"; n: number; text: string }
+type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: string; type: AnalysisType; task?: string; format?: string } | { kind: "rewrite"; n: number; text: string }
   | { kind: "piece-again" } | { kind: "shelf-piece"; pieceId: string }
   | { kind: "piece"; text: string; type: AnalysisType; keep?: boolean; pieceId?: string; source?: string; format?: string; title?: string; task?: string };
 
@@ -200,7 +200,7 @@ async function post(req: Request) {
   if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });
   const r = await runJob("analyse", async () => {
     dispatch({ type: "essay.type", essayType: body.type, owner: who.id });
-    const a = await analyseEssay(body.text, body.type, who.id, age, { mode, task: taskFor(body) });
+    const a = await analyseEssay(body.text, body.type, who.id, age, { mode, task: taskFor(body) }, hasFormat(body.format) ? body.format : undefined);
     dispatch({ type: "essay.set", analysis: a, owner: who.id });
     return a;
   }, { key: "essay", start: `reading your paragraph — ${body.type} lens…`, done: (a) => a.summary.slice(0, 120) });

@@ -160,11 +160,11 @@ function formatOf(learnerId: string, pieceId?: string, sent?: string): string | 
 }
 
 /** `age` is the seated profile's; without one the reading speaks as it always has (rules/voice, the teen band). */
-export async function analyseEssay(raw: string, type: AnalysisType, learnerId: string, age?: number, reader: ReadingFor = {}): Promise<EssayAnalysis> {
+export async function analyseEssay(raw: string, type: AnalysisType, learnerId: string, age?: number, reader: ReadingFor = {}, format?: string): Promise<EssayAnalysis> {
   const sentences = splitSentences(raw);
   const stats = paragraphStats(sentences);
   const lens = lensOf(type);
-  const { verdicts, provider } = await judge(sentences, new Set(sentences.map((s) => s.n)), lens, essayReadingVoice(age, reader.mode), undefined, undefined, reader);
+  const { verdicts, provider } = await judge(sentences, new Set(sentences.map((s) => s.n)), lens, essayReadingVoice(age, reader.mode), undefined, formatOf(learnerId, undefined, format), reader);
   record(learnerId, lens, sentences.length, verdicts.filter((v) => v.verdict === "faulty").length);
   const reading: EssayAnalysis = { text: raw, type, sentences, stats, verdicts, summary: "", provider };
   return { ...reading, summary: summaryLine(reading) };

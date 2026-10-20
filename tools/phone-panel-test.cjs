@@ -1229,3 +1229,14 @@ test('L1-daniel-15-EM3-2 (phone half): a titled paste reaches /api/analyse with 
  assert.equal(E.paragraphsOf(titled).length,2,'paragraphsOf drops the title, so only titleOf can carry it');
  assert.equal(E.titleOf('We went on a train.\n\nIt was a long day.'),null,'an untitled paste has no task');
 });
+test('L1-helena-46-EM1-5: the message / email / essay choice is asked before any read (one paragraph included) and the paragraph call posts it',()=>{
+ const src=code(PAGE);
+ const a=src.indexOf('const pieceRead = () =>'),b=src.indexOf('paras.length > 1 &&',a);
+ assert.ok(a>0&&b>a,'pieceRead found');
+ const before=src.slice(a,b);
+ assert.match(before,/!pieceId && <div[^>]*data-role="essay-format"/,'the radios sit before the paras.length > 1 block, so a single paragraph and Keep off see them');
+ assert.match(before,/data-role=\{`essay-format-\$\{id\}`\}/,'the same essay-format-* radios');
+ assert.equal((src.match(/essay-format-/g)||[]).length,1,'one choice, not a second set of radios');
+ assert.match(src,/kind: "essay", text: one,[^\n]*\.\.\.\(!pieceId && pieceFormat \? \{ format: pieceFormat \} : \{\}\)/,'the paragraph call posts format when one is chosen');
+ assert.match(src,/kind: "piece",[^\n]*\.\.\.\(pieceFormat \? \{ format: pieceFormat \} : \{\}\)/,'the piece call still posts it');
+});

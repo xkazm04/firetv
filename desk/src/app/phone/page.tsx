@@ -287,9 +287,9 @@ export default function Phone() {
   </>;
   // the whole-piece read, shared like pasteField(): a multi-paragraph piece opened under the rewrite or plan panel can be sent whole too
   const pieceRead = () => <>
+      {!pieceId && <div className="field pkeep" role="radiogroup" aria-label="What is it?" data-role="essay-format">{([["message", "Message"], ["email", "Email"], ["essay", "Essay"]] as const).map(([id, label]) => <label key={id}><input type="radio" name="piece-format" checked={pieceFormat === id} onChange={() => setPieceFormat(id)} data-role={`essay-format-${id}`} /><span>{label}</span></label>)}</div>}
       {paras.length > 1 && <div className="field" data-role="essay-piece">
           <label className="pkeep"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} data-role="essay-keep" /><span>Keep it on my shelf</span></label>
-          {keep && !pieceId && <div className="pkeep" role="radiogroup" aria-label="What is it?" data-role="essay-format">{([["message", "Message"], ["email", "Email"], ["essay", "Essay"]] as const).map(([id, label]) => <label key={id}><input type="radio" name="piece-format" checked={pieceFormat === id} onChange={() => setPieceFormat(id)} data-role={`essay-format-${id}`} /><span>{label}</span></label>)}</div>}
           {keep && !pieceId && <input className="pkeep" type="text" value={pieceTitle} maxLength={80} onChange={(e) => setPieceTitle(e.target.value)} placeholder="Name this piece (optional)" aria-label="Name this piece (optional)" data-role="essay-title" />}
           {stranded > 0 && <p className="pnote" data-role="essay-rewrites-stay" aria-live="polite">{rewriteStaysLine(stranded)}</p>}
           <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
@@ -364,7 +364,7 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNote(""); setInfo(""); setBusy(true); setMsg("the desk is reading it…");
     try {
-      const r = await call("/api/analyse", { kind: "essay", text: one, ...(titleOf(essay) ?? heading ? { task: titleOf(essay) ?? heading } : {}), type: etype });
+      const r = await call("/api/analyse", { kind: "essay", text: one, ...(titleOf(essay) ?? heading ? { task: titleOf(essay) ?? heading } : {}), type: etype, ...(!pieceId && pieceFormat ? { format: pieceFormat } : {}) });
       if (moved()) return;
       if (r.ok) { setMsg("on the TV"); setReadIx((x) => [...x, pix]); }
       else {

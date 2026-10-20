@@ -592,6 +592,20 @@ test('L1-helena-46-EM1-1: the piece prompt carries the format as data; a kept pi
   assert(seen.every((r) => kind(r) === undefined && !/kind of writing/i.test(r.system + r.prompt)), 'no format: the prompt is the essay prompt, unchanged');
 });
 
+test('L1-helena-46-EM1-5: a paragraph read carries the kind line when the body names a format, and is unchanged without one', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); texts.markNoticed('ema');
+  const P = 'Schools start too early. Teenagers are tired.';
+  answer = async () => ({ json: { verdicts: [{ n: 1, verdict: 'neutral', note: 'Fine.' }, { n: 2, verdict: 'neutral', note: 'Fine.' }], summary: 'ok' }, provider: 'test', ms: 1 });
+  seen = []; assert.equal((await post({ kind: 'essay', type: 'structure', text: P, format: 'email' })).status, 200);
+  assert.equal(seen.length, 1, 'one judge call');
+  assert.match(seen[0].prompt, /The kind of writing this is.*\s*.*email/);
+  assert.match(seen[0].system, /judge the text as that kind of writing/);
+  seen = []; assert.equal((await post({ kind: 'essay', type: 'structure', text: P, format: 'Not A Format!' })).status, 200);
+  assert.ok(!/kind of writing/i.test(seen[0].system + seen[0].prompt), 'a format the desk does not know is dropped');
+  seen = []; assert.equal((await post({ kind: 'essay', type: 'structure', text: P })).status, 200);
+  assert.ok(!/kind of writing/i.test(seen[0].system + seen[0].prompt), 'no format: no kind line');
+});
+
 // ---- recert-5 L1-daniel-15-EM3-1: a revised essay sent again is a new version of the kept piece, not a second card ----
 const REVISED = '# Early starts\n\nSchools start too early. Teenagers are tired.\n\nResearch found that teens sleep later. This is bad.\n\nTherefore school should start at nine, and later is better.';
 test('EM3-1 (recert-5): a second paste of the same piece adds a version, a different text still makes a new piece, a refused read keeps nothing', async () => {
