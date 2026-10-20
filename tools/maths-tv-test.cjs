@@ -1156,6 +1156,45 @@ test('heard 1: an item an explanation heard a value on stays unsure; the drawn c
  }finally{reg.resetProviders();}
 });
 
+// F18 (stick pass 2026-10-20): after /api/explain answered 200 the walk card flipped to "The desk replied" over the same opening
+// question. Root cause: explainItem (lib/desk/explain.ts, `own`) stands the item's own line in for a model reply that is empty
+// or gives the answer away, and on a wrong item that line is stored as the reply as it is: it.reply === it.said.
+test('F18: a reply the desk had to withhold is a reply the card can tell apart, never the opening question again',async()=>{
+ const reg=require(path.join(root,'src/lib/engines/registry.ts'));require(path.join(root,'src/lib/engines/text.ts'));
+ const store=require(path.join(root,'src/lib/session/store.ts')),route=require(path.join(root,'src/app/api/explain/route.ts'));
+ const {verify}=require(path.join(root,'src/lib/desk/verify.ts'));
+ const opening='I got something different for number 2. How did you get there?';
+ const walk=()=>{
+  store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
+  store.dispatch({type:'practice.set',practice:{topic:'linear-one-step',marked:false,items:[{n:1,question:'x+1=10'},{n:2,question:'x-5=2'}]}});
+  store.dispatch({type:'practice.marked',items:[{n:1,question:'x+1=10',studentAnswer:'9',verdict:'right',said:'Number 1 is right.'},{n:2,question:'x-5=2',studentAnswer:'3',studentWorking:'x = 2 - 5\nx = 3',verdict:'wrong',said:opening}]});
+ };
+ const post=async(transcript)=>{const r=await route.POST(new Request('http://desk/api/explain',{method:'POST',body:JSON.stringify({transcript,n:1})}));return {status:r.status,body:await r.json()};};
+ try{
+  for(const reply of ['','You should get 7.','so x = 7']){
+   reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply,slip:'unclear',value:''})})});
+   walk();
+   const r=await post('I took the five over and got three');
+   assert.equal(r.status,200,`«${reply}»`);
+   const s=store.getSession(),it=s.practice.items[1];
+   assert.ok(it.reply,'the reply is written onto the item');
+   assert.notEqual(it.reply,it.said,`«${reply}»: the reply is not the opening line again`);
+   assert.equal(r.body.reply,it.reply,'the phone reads the same reply');
+   const numbers=(it.reply.match(/-?\d+(\.\d+)?(\/\d+)?/g)??[]).filter(v=>verify('x-5=2',v));
+   assert.deepEqual(numbers,[],`no answer in the reply: ${it.reply}`);
+   const card=words(cardOf(drawMaths('Walk',{...s,screen:'walk',walkIx:1,focus:0}))).join(' ');
+   assert.match(card,/The desk replied/);
+   assert.ok(!card.includes('How did you get there?'),`the card does not ask the opening question again: ${card}`);
+   assert.ok(card.includes(words(it.reply).join(' ')),`the card shows the reply: ${card}`);
+  }
+  // a reply the desk may show is shown as the model wrote it, as before
+  reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'Look at the line where the 5 moved.',slip:'unclear',value:''})})});
+  walk();
+  assert.equal((await post('I took the five over')).body.reply,'Look at the line where the 5 moved.');
+  assert.equal(store.getSession().practice.items[1].reply,'Look at the line where the 5 moved.');
+ }finally{reg.resetProviders();}
+});
+
 test('MB-B19 4: past the path\'s end the Prepare cards print no year and the lede carries the path-ends line; a younger learner is unchanged',()=>{
  const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),{createElement}=require(path.join(root,'node_modules/react'));
  const M=require(path.join(root,'src/maths/MathsTV.tsx'));

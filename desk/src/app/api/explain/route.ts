@@ -12,8 +12,19 @@ import { learnerAge } from "@/lib/rules/voice";
 import { learnerSystem } from "@/lib/rules/school";
 import { itemName } from "@/lib/rules/calc-word";
 import { EXPLAIN_TRANSCRIPT_MAX } from "@/lib/rules/saidValue";
+import { ASK } from "@/lib/rules/maths";
 
 export const dynamic = "force-dynamic";
+
+/**
+ * The reply when the model's own could not be shown (empty, or it gave the answer away) and explainItem stood the item's
+ * own line in for it (lib/desk/explain.ts `own`): that line is the question the card already asks, so stored as the reply
+ * the card read "The desk replied" over the opening question again (F18). No number, no answer; English but for cz.
+ */
+const HEARD_LINE = {
+  en: "The desk heard you. Go through your working one step at a time and check each step against the one before it.",
+  cz: "Stůl tě slyšel. Projdi svůj postup krok za krokem a každý krok porovnej s tím předchozím.",
+};
 export function POST(req: Request) { return withPhoneAsk(req, ["explain"], () => post(req)); }
 async function post(req: Request) {
   const { transcript, n } = ((await req.json().catch(() => null)) ?? {}) as { transcript?: unknown; n?: number };
@@ -33,7 +44,11 @@ async function post(req: Request) {
     return !!now && now.owner === practice.owner && now.topic === practice.topic && it?.question === item.question ? it : undefined;
   };
   const r = await runJob("explain", async () => {
-    const x = await explainItem(item, transcript, practice.topic, who.id, () => same()?.verdict === "unsure", learnerAge(s), learnerSystem(s), itemName(practice.items, practice.items.indexOf(item)));
+    const sys = learnerSystem(s);
+    const got = await explainItem(item, transcript, practice.topic, who.id, () => same()?.verdict === "unsure", learnerAge(s), sys, itemName(practice.items, practice.items.indexOf(item)));
+    // the item's own line came back as the reply: answer with a line of the desk's, not the opening question again (F18)
+    const heard = sys === "cz" ? HEARD_LINE.cz : HEARD_LINE.en;
+    const x = got.reply === (item.said ?? ASK(item.n)) ? { ...got, reply: heard, shown: heard } : got;
     // an explanation never settles (X7): only a wrong item takes the slip the explanation named (the reducer keeps its verdict and pen)
     if (same()) dispatch({ type: "practice.settle", n: item.n, reply: x.reply, ...(x.renamed ?? {}) });
     return x;
