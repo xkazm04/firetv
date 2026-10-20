@@ -242,9 +242,11 @@ const CZECH_ONE_LETTER = new Set(["v", "z", "k"]);
  * (the one place czPlain is used), so a long English text never meets them. Czech past-tense -vil/-lil/-nil/-dil/-pil/-mil/-hil, -jel, [eou]sel,
  * imperatives in -uj, the roz-/poz- prefixes and a -jd- cluster (pojd), on five letters or more; and the unstressed pronouns mi, ti, nami, vami, uz.
  */
-const CZECH_SHORT_SHAPE = /^(?:roz|poz).{3,}|jd|uj$|(?:[vlndpmh]il|[vlndpmh]ila|[vlndpmh]ili|jel|jela|jeli|[eou]sel|[eou]sela)$/;
+const CZECH_SHORT_SHAPE = /^(?:roz|poz).{3,}|jd|uj$|(?:[vlndpmh]il|[vlndpmh]ila|[vlndpmh]ili|jel|jela|jeli|[eou]sel|[eou]sela)$|[bcdfghjklmprstvz]ne$|cce$|izi$|[aeiou][vk]at$/;
+/** Round 3: plain-letter verbs, nouns and negations a pupil types on a phone that have no English twin (read only in a short paragraph with no English function word, like CZECH_SHORT_SHAPE). */
+const CZECH_SHORT_WORDS = new Set("neumim nechapu nebavi nemam nevidim nevidela neslysim nerozumim nesnasim pojedu pojedeme pojedes bavi boli mrzne fouka noha nohu plavat priklad priklady sekal sekat drevo deda uklizi uklizet uklid babicce babicku babice dedeckovi mamince tatinkovi sestre bratrovi vyhral vyhrala prohral prohrala".split(" "));
 const CZECH_SHORT_FUNCTION = new Set(["mi", "ti", "uz", "nami", "vami"]);
-const czechShortShape = (w: string) => CZECH_SHORT_FUNCTION.has(w) || (w.length >= 5 && CZECH_SHORT_SHAPE.test(w)) || (w.length === 4 && /jd|^uj[ae]/.test(w));
+const czechShortShape = (w: string) => CZECH_SHORT_FUNCTION.has(w) || CZECH_SHORT_WORDS.has(w) || (w.length >= 5 && CZECH_SHORT_SHAPE.test(w)) || (w.length === 4 && /jd|^uj[ae]/.test(w));
 const czechShape = (w: string) => CZECH_ONE_LETTER.has(w) || (w.length >= 4 && (CZECH_SHAPE_START.test(w) || CZECH_SHAPE_END.test(w)));
 const fold = (w: string) => w.replace(/ł/g, "l").replace(/Ł/g, "L").normalize("NFD").replace(/[̀-ͯ]/g, "");
 
