@@ -108,8 +108,8 @@ export interface LearnerRecap { id: string; name: string; tiles: RecapTile[] }
 
 /**
  * Every learner with work tonight, one entry each, in the profiles' order (C5). The seated learner is read as recapRows
- * reads them; one away from the desk is read off their slot (log, pages, practice), since the session holds no history
- * or conversations for them. A learner whose tiles are all empty gets no entry. Pure; recapRows itself is untouched.
+ * reads them; one away from the desk is read off their slot (log, pages, practice, and the tonight history lines and talks it kept
+ * when they left). A learner whose tiles are all empty gets no entry. Pure; recapRows itself is untouched.
  */
 export function learnerRecaps(session: Session, now: number): LearnerRecap[] {
   const out: LearnerRecap[] = [];
@@ -120,7 +120,8 @@ export function learnerRecaps(session: Session, now: number): LearnerRecap[] {
     else if (session.away?.[p.id]) {
       const x = session.away[p.id];
       s = { ...session, learner: { id: p.id, name: p.name }, pages: x.pages, practice: x.practice, tasks: x.tasks ?? [], essay: x.essay ?? null,
-        log: { ...x.log, minutes: 0, started: null, day: session.log?.day }, history: [], englishLearning: { ...session.englishLearning, sessions: [] } };
+        log: { ...x.log, minutes: 0, started: null, day: session.log?.day }, history: x.history ?? [],
+        englishLearning: { ...session.englishLearning, sessions: (x.talks ?? []).map((t, i) => ({ id: `away${i}`, sceneId: "", title: "", at: t.at, turns: t.turns })) } };
     }
     if (!s) continue;
     const tiles = recapRows(s, now);

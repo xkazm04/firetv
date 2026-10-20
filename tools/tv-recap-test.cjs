@@ -109,6 +109,34 @@ test('L1-radka-41-MB5-2: learnerRecaps gives one block per learner with work ton
  assert.equal(jk[0].tiles[0].hints,1);
 });
 
+test('L1-radka-41-MB5-2: an away learner with a set marked tonight and no hint, or an English talk and nothing else, still gets a block',()=>{
+ const {learnerRecaps}=recap();
+ const slot=(o={})=>({pages:[],pageIx:0,itemIx:0,reading:false,hint:null,lesson:null,noLesson:false,lessonPaused:false,topic:null,practice:null,walkIx:0,log:{problems:[],hints:0,hard:[]},tasks:[],...o});
+ const BEN={id:'ben',name:'Ben',type:'high-school',age:15,system:'uk',modules:['maths','english']};
+ const base=evening({profiles:[EMA,BEN]});
+ const ids=(s)=>learnerRecaps(s,NOW).map((b)=>b.id);
+ const set=learnerRecaps({...base,away:{ben:slot({history:[{at:TODAY(18),kind:'practice',label:'Two-step equations',detail:'5 of 6 right'}]})}},NOW);
+ assert.deepEqual(set.map((b)=>b.id),['ema','ben'],'away, set marked tonight, no hint');
+ assert.deepEqual(set[1].tiles[0].sets,[{right:5,of:6}]);
+ const talk=learnerRecaps({...base,away:{ben:slot({talks:[{at:TODAY(18),turns:5}]})}},NOW);
+ assert.deepEqual(talk.map((b)=>b.id),['ema','ben'],'away, an English talk tonight and nothing else');
+ assert.deepEqual(talk[1].tiles[1].talks,[5]);
+ assert.deepEqual(ids({...base,away:{ben:slot({history:[{at:YESTERDAY,kind:'practice',label:'x',detail:'3 of 6 right'}],talks:[{at:YESTERDAY,turns:9}]})}}),['ema'],'yesterday\'s work is not tonight\'s');
+ assert.deepEqual(ids({...base,away:{ben:slot()}}),['ema'],'no work tonight, no block');
+});
+
+test('L1-radka-41-MB5-2 store: a learner who leaves the desk keeps tonight\'s lines and talks in their slot, off the session',()=>{
+ const {reduce}=store();
+ const t0=new Date().setHours(0,0,1,0);
+ const x=session({history:[{at:t0,kind:'practice',label:'Two-step equations',detail:'5 of 6 right'},{at:t0-864e5,kind:'practice',label:'Old',detail:'1 of 6 right'}],
+  englishLearning:{...noEnglish,sessions:[{id:'a',sceneId:'c',title:'T',at:t0,turns:6}]}});
+ const jak=reduce(x,{type:'learner.set',id:'jakub'});
+ assert.deepEqual(jak.away.ema.history.map((h)=>h.label),['Two-step equations'],'only tonight\'s line');
+ assert.deepEqual(jak.away.ema.talks,[{at:t0,turns:6}]);
+ const back=reduce(jak,{type:'learner.set',id:'ema'});
+ assert.ok(!('talks' in back)&&!back.away?.ema,'sitting back down takes the slot off the desk and leaves nothing of it on the session');
+});
+
 // the static words a screen's JSX can show: text nodes with each {...} removed, and a string or template literal that is a whole child with each ${...} removed; '=>' starts no text node
 function staticText(src){
  const strip=(t)=>{let o;do{o=t;t=t.replace(/\{[^{}]*\}/g,' ');}while(t!==o);return t.replace(/{[^{}]*$/,' ');};

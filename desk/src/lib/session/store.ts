@@ -492,14 +492,23 @@ export interface MathsSlot {
   essay?: EssayAnalysis | null; essayType?: string | null; essayAt?: number | null;
   /** The plan on the desk; optional so a slot saved before it existed still loads. */
   essayPlan?: Plan;
+  /** Tonight's history lines and English talks (turns) of a learner who left the desk, so the phone Recap can read them; optional so a slot saved before they existed still loads. Never put back on the session. */
+  history?: HistoryEntry[]; talks?: Array<{ at: number; turns: number }>;
 }
 const emptySlot = (): MathsSlot => ({ pages: [], pageIx: 0, itemIx: 0, reading: false, hint: null, lesson: null, noLesson: false, lessonPaused: false, topic: null, practice: null, walkIx: 0, log: { problems: [], hints: 0, hard: [] }, tasks: [], essay: null, essayType: null, essayAt: null, essayPlan: undefined });
 const slotOf = (s: Session): MathsSlot => ({ pages: s.pages, pageIx: s.pageIx, itemIx: s.itemIx, reading: s.reading, hint: s.hint, lesson: s.lesson, noLesson: s.noLesson, lessonPaused: s.lessonPaused,
   topic: s.topic, practice: s.practice, walkIx: s.walkIx, log: { problems: s.log.problems, hints: s.log.hints, hard: s.log.hard }, tasks: s.tasks ?? [],
-  essay: s.essay ?? null, essayType: s.essayType ?? null, essayAt: s.essayAt ?? null, essayPlan: s.essayPlan });
-const emptyOf = (x: MathsSlot) => !x.pages.length && !x.practice && !x.hint && !x.lesson && !x.topic && !x.log.hints && !x.log.problems.length && !x.tasks?.length && !x.essay && !x.essayType && !x.essayPlan?.slots.some(Boolean);
+  essay: s.essay ?? null, essayType: s.essayType ?? null, essayAt: s.essayAt ?? null, essayPlan: s.essayPlan,
+  ...tonightOf(s) });
+/** The seated learner's work since local midnight (history lines, English talks), kept in their slot when they leave. */
+function tonightOf(s: Session): Pick<MathsSlot, "history" | "talks"> {
+  const from = new Date().setHours(0, 0, 0, 0), history = (s.history ?? []).filter((h) => h.at >= from);
+  const talks = (s.englishLearning?.sessions ?? []).filter((x) => x.at >= from).map((x) => ({ at: x.at, turns: x.turns }));
+  return { ...(history.length ? { history } : {}), ...(talks.length ? { talks } : {}) };
+}
+const emptyOf = (x: MathsSlot) => !x.pages.length && !x.practice && !x.hint && !x.lesson && !x.topic && !x.log.hints && !x.log.problems.length && !x.tasks?.length && !x.essay && !x.essayType && !x.essayPlan?.slots.some(Boolean) && !x.history?.length && !x.talks?.length;
 /** A slot onto the session's fields; the log keeps the desk's clock (minutes, started), which is the evening's, not a learner's. */
-function withSlot(n: Session, x: MathsSlot): void { const { log, ...rest } = x; Object.assign(n, rest); n.log = { ...n.log, ...log }; }
+function withSlot(n: Session, x: MathsSlot): void { const { log, history: _h, talks: _t, ...rest } = x; Object.assign(n, rest); n.log = { ...n.log, ...log }; }
 /** Who sits down: the learner leaving takes their work to `away`, the learner arriving gets theirs back (or a clean desk). */
 function seat(s: Session, n: Session, id: string): void {
   const was = s.learner?.id;
