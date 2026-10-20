@@ -854,13 +854,13 @@ export default function Phone() {
           <div className="field"><textarea value={rewrite} onChange={(e) => setRewrite(e.target.value)} /></div>
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setRewrite(t), "essay")}>Dictate</button>
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || rewriting} onClick={sendRewrite}>Send</button></div>
-          {pasteField()}{pieceRead()}{pasteSend()}{pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}{shelf()}</div>}
+          {pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}</div>}
 
         {screen === "paste" && onPlan && <div className="pscreen" data-role="essay-plan"><h3>Slot {onPlan.i + 1} · {onPlan.slots[onPlan.i]?.label}</h3><p>One sentence, in your own words. It inks on the TV. When all three are written, press OK on Read it.</p>
           <div className="field"><textarea aria-label="Your sentence for this slot" value={slotText} onChange={(e) => setSlotText(e.target.value)} /></div>
           {onPlan.plan.slots[onPlan.i] && planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i]) && <p data-role="essay-plan-fit">{planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i])}</p>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setSlotText(t), "essay")}>Dictate</button>
-            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !slotText.trim()} onClick={sendSlot}>Send</button></div>{pasteField()}{pieceRead()}{pasteSend()}{shelf()}</div>}
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !slotText.trim()} onClick={sendSlot}>Send</button></div></div>}
 
         {screen === "paste" && !onSentence && !onPlan && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
           <p>Send a .txt or .md file (a .docx goes through the PC page), or type, paste or dictate a message. The desk reads a whole piece, or one paragraph at a time.</p>

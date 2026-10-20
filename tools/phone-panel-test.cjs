@@ -1177,18 +1177,18 @@ test('case 12 (TL-12): panelFor holds no Linga cue of its own: it does not impor
  assert.doesNotMatch(src,/key:\s*"linga"/);
 });
 
-test('L1-daniel-15-EM3-1 / L1-barbora-43-EM4-1: the shelf (and "Forget tonight\'s paragraph" with it) is rendered under the paragraph, rewrite and plan panels',()=>{
+test('L1-daniel-15-EM3-1 / L1-barbora-43-EM4-1: the shelf (and "Forget tonight\'s paragraph" with it) is rendered under the paragraph panel (F6: the rewrite and plan panels are one field)',()=>{
  const src=code(PAGE);
  const panel=(role)=>{const i=src.indexOf(`data-role="${role}"`);assert.ok(i>0,role+' panel exists');const j=src.indexOf('screen === "paste"',i);return src.slice(i,j<0?undefined:j);};
- for(const role of ['essay-rewrite','essay-plan','essay-paragraph'])assert.match(panel(role),/\{shelf\(\)\}/,role+' carries the shelf');
- assert.equal((src.match(/<EssayShelf /g)||[]).length,1,'one EssayShelf element, shared by the three panels');
+ for(const role of ['essay-paragraph'])assert.match(panel(role),/\{shelf\(\)\}/,role+' carries the shelf');
+ assert.equal((src.match(/<EssayShelf /g)||[]).length,1,'one EssayShelf element');
  assert.match(src,/const shelf = \(\) => <EssayShelf learnerId=/);
 });
 
 test('L1-daniel-15-EM3-1: one paste box (with its send) is shared by the rewrite, plan and paragraph panels, so the shelf\'s Open text shows under each',()=>{
  const src=code(PAGE);
  const panel=(role)=>{const i=src.indexOf(`data-role="${role}"`);assert.ok(i>0,role+' panel exists');const j=src.indexOf('screen === "paste"',i);return src.slice(i,j<0?undefined:j);};
- for(const role of ['essay-rewrite','essay-plan','essay-paragraph']){
+ for(const role of ['essay-paragraph']){
   const p=panel(role);
   assert.match(p,/\{pasteField\(\)\}/,role+' carries the paste box');
   assert.match(p,/\{pasteSend\(\)\}/,role+' carries its send');
@@ -1202,10 +1202,10 @@ test('L1-daniel-15-EM3-1: one paste box (with its send) is shared by the rewrite
  assert.match(src,/const openKept = [^\n]*loadParagraphs\(/,'Open loads the paragraphs the box shows');
 });
 
-test('L1-daniel-15-EM3-1 (recert-14 gap): one whole-piece read block is shared by the rewrite, plan and paragraph panels',()=>{
+test('L1-daniel-15-EM3-1 (recert-14 gap): the whole-piece read block lives on the paragraph panel (F6)',()=>{
  const src=code(PAGE);
  const panel=(role)=>{const i=src.indexOf(`data-role="${role}"`);assert.ok(i>0,role+' panel exists');const j=src.indexOf('screen === "paste"',i);return src.slice(i,j<0?undefined:j);};
- for(const role of ['essay-rewrite','essay-plan','essay-paragraph'])assert.match(panel(role),/\{pieceRead\(\)\}/,role+' carries the whole-piece read');
+ for(const role of ['essay-paragraph'])assert.match(panel(role),/\{pieceRead\(\)\}/,role+' carries the whole-piece read');
  assert.equal((src.match(/data-role="essay-read-piece"/g)||[]).length,1,'one read-whole-piece button definition');
  assert.equal((src.match(/data-role="essay-piece"/g)||[]).length,1,'one Keep / format / title block');
  const i=src.indexOf('const pieceRead');const blk=src.slice(i,src.indexOf('const sendSlot'));
@@ -1306,4 +1306,16 @@ test('recert-13/L1-radka-41-MB5-2 (operator ruling b): the phone Recap shows the
  const week=src.slice(src.indexOf('function WeekPage'));
  assert.match(src,/<WeekPage lines=\{s\.learner \? s\.week : null\}\s*\/>/,'This week is the seated learner\'s own');
  assert.ok(week.length>0);
+});
+
+test('F6 (stick pass): the rewrite and slot panels are one field, Dictate and Send - no paste box, whole-piece read, analyse or shelf',()=>{
+ const src=code(PAGE);
+ const panel=(role)=>{const i=src.indexOf(`data-role="${role}"`);assert.ok(i>0,role+' panel exists');const j=src.indexOf('screen === "paste"',i);return src.slice(i,j<0?undefined:j);};
+ for(const role of ['essay-rewrite','essay-plan']){
+  const p=panel(role);
+  assert.equal((p.match(/<textarea/g)||[]).length,1,role+': one field');
+  assert.match(p,/Dictate/);assert.match(p,/>Send</);
+  for(const gone of ['pasteField()','pieceRead()','pasteSend()','shelf()'])assert.ok(!p.includes(gone),role+' drops '+gone);
+ }
+ assert.match(panel('essay-paragraph'),/\{shelf\(\)\}/,'the paragraph panel keeps the composer');
 });
