@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-16T11:20:52.6551054Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "node#7",
+                             "IDProcess":  17724,
+                             "PercentProcessorTime":  408
+                         },
+                         {
+                             "Name":  "chrome-headless-shell#3",
+                             "IDProcess":  41724,
+                             "PercentProcessorTime":  134
+                         },
+                         {
+                             "Name":  "find",
+                             "IDProcess":  2940,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "git#1",
+                             "IDProcess":  43792,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  6524,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "node#19",
+                             "IDProcess":  30512,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "node#4",
+                             "IDProcess":  44584,
+                             "PercentProcessorTime":  89
+                         },
+                         {
+                             "Name":  "chrome-headless-shell#1",
+                             "IDProcess":  13808,
+                             "PercentProcessorTime":  59
+                         },
+                         {
+                             "Name":  "dwm",
+                             "IDProcess":  1300,
+                             "PercentProcessorTime":  19
+                         },
+                         {
+                             "Name":  "chrome-headless-shell",
+                             "IDProcess":  24448,
+                             "PercentProcessorTime":  19
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                81,
+                                76,
+                                71
+                            ]
+}
