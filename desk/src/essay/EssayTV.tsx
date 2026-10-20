@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { adultSay, playbookTitle, adultSeat, englishOnlyFor, playbookLine, paragraphCount, paragraphPending, paragraphState, pieceBeingRead, pieceReadingLine, readingAPiece, forensicPlace, forensicLead, forensicTitle, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
+import { adultSay, playbookTitle, adultSeat, playbookLine, paragraphCount, paragraphPending, paragraphState, pieceBeingRead, pieceReadingLine, readingAPiece, forensicPlace, forensicLead, forensicTitle, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, forensicStops, rewriteStatus, planStops, essayHandoffOf, essayHandoffLine, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS, curtainOn, type ForensicStop } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -18,7 +18,7 @@ import { CIT, BONE, EssayBrand as Brand, EssayArrow as Arrow } from "@/tv/marks"
 import { ESSAY_FONTS } from "./fonts";
 import { EssayCabinet } from "./EssayCabinet";
 import { WorkroomScreen } from "./Workroom";
-import { NOT_READ_LABEL, READING_LABEL } from "./captions";
+import { ENGLISH_ONLY_STATEMENT, NOT_READ_LABEL, READING_LABEL, tieNotEnglish } from "./captions";
 import { afterFonts } from "@/lib/afterFonts";
 
 const MUTE = "rgba(238,233,224,.5)";
@@ -146,7 +146,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const chosen = lens && s.essayType === lens.id;
   const refused = refusalCaption(s);
-  const adult = adultSeat(s), english = englishOnlyFor(s);
+  const adult = adultSeat(s), english = ENGLISH_ONLY_STATEMENT;
   const withEnglish = (text: string) => english ? `${text} ${english}` : text;
   const cap = job?.phase === "running" ? { label: READING_LABEL, text: readingAPiece(a?.piece, job.start) ? PIECE_WAIT(a?.piece) : adultSay("The desk is reading your paragraph. It lands here.", adult) }
     : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ?? adultSay("The paragraph did not come back. Send it again from the phone.", adult) }
@@ -352,7 +352,7 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
   return (<>
     <Brand /><Top s={s} menu="Table" lit={lit} />
     <Rail a={a} cur={i} verdicts={verdicts} />
-    <Page key={sn.n} curtain={curtain} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} title={forensicTitle(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} wait={essayHandoffLine(s)} unruled={unruledCaption(a.piece, sn.para ?? 0)} pending={paragraphPending(a.piece, sn.para ?? 0)} />
+    <Page key={sn.n} curtain={curtain} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} title={forensicTitle(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} wait={essayHandoffLine(s)} unruled={tieNotEnglish(unruledCaption(a.piece, sn.para ?? 0))} pending={paragraphPending(a.piece, sn.para ?? 0)} />
     <nav className="em-acts">
       {stops.map((k, j) => (
         <div key={k} className={`em-pill em-act${j === 0 ? " prim" : ""}${stopAt(stops, s.focus) === k ? " is-focused" : ""}`} data-focused={stopAt(stops, s.focus) === k} {...(j === 0 ? { "data-role": "essay-primary" } : {})}>

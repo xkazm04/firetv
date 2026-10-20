@@ -2103,19 +2103,30 @@ test('EM1-6: englishOnlyLine speaks for a system outside uk and us only',()=>{
  assert.equal(ER.englishOnlyFor(seatOf({system:'uk'})),null);
  assert.equal(ER.englishOnlyFor({learner:null,profiles:[]}),null);
 });
-test('EM1-6: the lens home and the plan caption say it once for a cz profile, not for a uk one',()=>{
+test('EM1-6/recert-23: the lens home and the plan caption say Essay Master reads English texts, once, for every profile',()=>{
  const E=require(path.join(root,'src/essay/EssayTV.tsx'));void E;
  const KEYS2=require(path.join(root,'src/tv/keys.ts'));
- for(const [sys,want] of [['cz',1],['uk',0]]){
+ for(const [sys] of [['cz'],['uk']]){
   const s=seatOf({system:sys});
   const stops=KEYS2.lensStops(s);
   const lensAt=stops.findIndex(x=>x&&x!=='last'&&x!=='plan'),planAt=stops.indexOf('plan');
   assert.ok(lensAt>=0&&planAt>=0,'both stops exist');
   for(const f of [lensAt,planAt]){
-   const n=(textOf(drawEssay('EssayType',s,{focus:f})).match(/Essay Master reads English writing\./g)||[]).length;
-   assert.equal(n,want,sys+' focus '+f);
+   const n=(textOf(drawEssay('EssayType',s,{focus:f})).match(/Essay Master reads English texts\./g)||[]).length;
+   assert.equal(n,1,sys+' focus '+f);
   }
  }
+});
+test('recert-23: the English-only statement and the not-English tie are pinned',()=>{
+ const C=require(path.join(root,'src/essay/captions.ts'));
+ assert.equal(C.ENGLISH_ONLY_STATEMENT,'Essay Master reads English texts.');
+ assert.equal(C.NOT_ENGLISH_TIE,'This reads as not English; Essay Master reads English texts.');
+ const c=C.tieNotEnglish(ER.unruledCaption({paragraphs:2,read:[0],failed:[],notEnglish:[1]},1));
+ assert.deepEqual(c,{label:'Not read',text:'Paragraph 2 is not in English, so the desk did not read it. This reads as not English; Essay Master reads English texts.'});
+ const nr=ER.unruledCaption({paragraphs:2,read:[0],failed:[1]},1);
+ assert.deepEqual(C.tieNotEnglish(nr),nr);
+ assert.equal(C.tieNotEnglish(null),null);
+ assert.ok(!/—/.test(C.ENGLISH_ONLY_STATEMENT+C.NOT_ENGLISH_TIE),'no em dash');
 });
 test('EM1-2: the crumb, Its job and the table call the regex role a first guess',()=>{
  const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
