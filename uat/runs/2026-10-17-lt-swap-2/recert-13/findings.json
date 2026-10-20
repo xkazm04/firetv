@@ -27,7 +27,21 @@
     "recurrence": 3,
     "recurs": "2026-10-17-lt-swap-2/recert-12/LT-viktor-67-J4-1",
     "suggested_acceptance": "Phrase choice offers at least one option that answers the task, and it changes on repeat.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "code_recert": {
+      "level": "code-only (no model call)",
+      "base": "d1959706 + 610e9492",
+      "l2": "L2 live recert owed (operator)",
+      "resolution_note": "not closed in the ledger sense: resolution stays open",
+      "scenes": "recert-13 did not record scene.cue; cues are the same plan topics as recorded by recert-8/9/10/11/12 (viktor \"Ask about school\", tomas \"Show me your Minecraft world\", petra \"My hotel room is not clean\")",
+      "table": "uat/runs/2026-10-17-lt-swap-2/recert-13/code-recert.md",
+      "clauses": {
+        "no repeated pair on one line": "code: closed - desk/src/lib/english/help.ts:157-163 (quizSeen never re-shown, else null); test \"Linga rework 8 wired (viktor-67 A1): Choose a phrase never repeats a pair on one line...\" (tools/linga-rules-test.cjs)",
+        "task phrase offered within 2 presses": "code: open - desk/src/lib/english/help.ts:161 [q.task, sceneTaskFor]: the recorded A1 cue is a past-tense question, so sceneTaskFor is empty at A1 by the band rule and the phrase depends on the model supplying help.task (the prompt asks for it when the line pulls away, conversation.ts:147); with no task the 2nd press is the type-your-own fallback and no task phrase is ever offered; not fixable in help.ts without offering an out-of-band phrase; test viktor-67 A1 within two presses passes only with help.task set",
+        "a pick shows the phrase to send": "code: closed - desk/src/lib/english/conversation.ts:616 (beginnerPick); test \"Linga rework 8 wired (viktor-67 A1): a pick is followed by the phrase shown ready to send\"",
+        "type your own reply once nothing is new": "code: closed - desk/src/lib/english/conversation.ts:599; same first test (last press options null, cue \"You can type your own reply on the phone.\")"
+      }
+    }
   },
   {
     "id": "LT-adela-17-J4-1",
@@ -117,7 +131,21 @@
     "recurrence": 3,
     "recurs": "2026-10-17-lt-swap-2/recert-12/LT-tomas-9-J4-3",
     "suggested_acceptance": "Phrase choice fills or speaks a reply, or options include a true answer; no loop.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "code_recert": {
+      "level": "code-only (no model call)",
+      "base": "d1959706 + 610e9492",
+      "l2": "L2 live recert owed (operator)",
+      "resolution_note": "not closed in the ledger sense: resolution stays open",
+      "scenes": "recert-13 did not record scene.cue; cues are the same plan topics as recorded by recert-8/9/10/11/12 (viktor \"Ask about school\", tomas \"Show me your Minecraft world\", petra \"My hotel room is not clean\")",
+      "table": "uat/runs/2026-10-17-lt-swap-2/recert-13/code-recert.md",
+      "clauses": {
+        "no repeated pair on one line": "code: closed - desk/src/lib/english/help.ts:157-163; test \"Linga rework 8 wired (tomas-9 A1): Choose a phrase never repeats a pair on one line...\"",
+        "task phrase offered within 2 presses": "code: closed - desk/src/lib/english/help.ts:174-185 sceneTaskFor now returns \"I like to build.\" for the recorded unfinished-starter cue (was \"\" before this commit: a real defect, fixed); tests \"tomas-9 A1 ... within two presses\" and \"Linga rework 8 rules (code-only recert-13)\"",
+        "a pick shows the phrase to send": "code: closed - desk/src/lib/english/conversation.ts:616; test \"Linga rework 8 wired (tomas-9 A1): a pick is followed by the phrase shown ready to send\"",
+        "type your own reply once nothing is new": "code: closed - desk/src/lib/english/conversation.ts:599; first tomas-9 test"
+      }
+    }
   },
   {
     "id": "LT-viktor-67-J4-2",
