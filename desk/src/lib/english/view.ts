@@ -686,7 +686,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
         partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes, ...(c.lost ? { lost: c.lost } : {}), ...(tryForm && said ? { tryForm } : {}) };
       // LG-5 recert-9: offered only for a line with its own quiz
       const quiz = quizOffered(c) ? act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") }) : null;
-      const second = hasReply ? act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting || refused("coach") }) : quiz;
+      const second = act("coach", "Pause & coach", hasReply ? "Work on one useful change, then replay this moment." : "Stuck? Get one phrase to say.", cmd("coach"), { disabled: waiting || refused("coach") });
       // At the top of the ladder the help button gives way to the recognition fallback.
       const first = inFlight ? act("cancel", "Cancel & go back", "Cancel the pending reply and keep the conversation for later.", cmd("leave"), { disabled: refused("leave") }) : help.offered ? act("cue", help.label, help.help, cmd("cue"), { disabled: refused("cue") }) : second === quiz ? null : quiz;
       // TL-12: Choose a phrase is the remote's own way to answer a turn, so it stays on the row at every learner turn that has a quiz

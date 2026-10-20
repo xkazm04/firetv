@@ -3845,3 +3845,26 @@ test('Linga rework 8 regression: B1 help for the same inputs is byte-identical t
  const got=await r8Adela();
   assert.equal(JSON.stringify(got),JSON.stringify(ADELA_BEFORE_R8));
 });
+
+// ---- Linga stuck coach (recert-13 LT-viktor-67-J4-2): Pause & coach is open before any reply, and asks no model ----
+async function stuckStart(cue){
+ await bandStart('ema','A1','Hello! Can you see me?',()=>({reply:'Hi Grandpa! I am home from school now.',observations:[],moment:NO_MOMENT}));
+ const c0=getSession().conversation;
+ dispatch({type:'linga.changed',conversation:{...c0,partner:'Sam · grandson',scene:{...c0.scene,cue}}});
+}
+const coachAction=()=>view().lingaView(getSession()).actions.find(a=>a.id==='coach');
+test('Linga stuck coach: Pause & coach is offered and open before the learner has replied, and a press makes no model call',async()=>{
+ await stuckStart('Try: Hi Sam! Is school good?');
+ const a=coachAction();assert(a,'Pause & coach is on the row');assert.equal(a.disabled,false,'and it is not disabled');
+ let calls=0;const was=answer;answer=async r=>{calls++;return was(r);};
+ await command('coach');answer=was;
+ const c=getSession().conversation;
+ assert.equal(calls,0,'no model call');assert.equal(c.coaching,null);assert.equal(c.phase,'conversation');
+ assert(c.cue.includes('"Hi Sam! Is school good?"'),`the scene's phrase to say: ${c.cue}`);assert.equal(c.supported,true);
+});
+test('Linga stuck coach: a scene whose cue is no sendable phrase gives the help ladder instead, still no model call',async()=>{
+ await stuckStart('Try: What did you do at school today?');
+ let calls=0;const was=answer;answer=async r=>{calls++;return was(r);};
+ await command('coach');answer=was;
+ const c=getSession().conversation;assert.equal(calls,0);assert(c.cue!==''||c.quizOpen,'some help came: a cue or the phrase quiz');
+});

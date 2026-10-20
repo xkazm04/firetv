@@ -102,7 +102,8 @@ export function accepts(c: Conversation, action: string, mode?: Mode, note?: num
   if (action === "moment-show") return showOpen(c.moment);
   if (action === "cut") return mode === "adult" && hasReply(c);
   if (action === "take-two") return mode === "adult" && !noteRefusal(c, note);
-  return action !== "coach" || hasReply(c);
+  // a stuck learner may ask too (recert-13 LT-viktor-67-J4-2): with no reply yet, coaching is a phrase to say, not a note on a reply
+  return action !== "coach" || hasReply(c) || c.turns.at(-1)?.role === "partner";
 }
 
 /** The sentence for a fix a restart lost (repair.ts). */

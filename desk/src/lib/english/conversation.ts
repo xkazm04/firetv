@@ -15,7 +15,7 @@ import { adultContent, isAdult } from "../rules/mode";
 import { ConversationError, lingaLine } from "./errors";
 import { EngineError, type EngineResult } from "../engines/types";
 import { EASE_INSTRUCTION, learnerLost } from "./ease";
-import { climb, isTaskOption, keepLadder, MEANING_MAX, QUIZ_MAX, quizFor, SAY_MAX, sceneCueFor, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
+import { climb, isTaskOption, keepLadder, MEANING_MAX, QUIZ_MAX, quizFor, SAY_MAX, sceneCueFor, sceneTaskFor, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, ownLines, partnerLines, reuseOf, reviewOf, shownLines, askedAboutFor, slipsAgain, SLIP_AGAIN_TASK, usedLine, usesForm, fossilOf, fossilMoment, FOSSIL_TASK, type SlipAgain } from "./review";
@@ -575,6 +575,15 @@ export async function englishCommand(raw:unknown){
   if(action==="capture") {commit({...c,capture:true,captureAt:Date.now()});return getSession();}
   if(action==="pause") {commit({...c,paused:!c.paused,capture:false},undefined,c.paused?parkCheck():undefined);return getSession();}
   if(action==="repeat") {commit({...c,audioNonce:c.audioNonce+1,capture:false});return getSession();}
+  if(action==="coach"&&!c.turns.some(t=>t.role==="learner")){
+    // a stuck learner's coaching (recert-13 LT-viktor-67-J4-2): no reply to quote yet, so no model call. The scene's own phrase to say
+    // when it has one, else the next rung of the help ladder (the cue below)
+    const band=heldBand(c),phrase=sceneTaskFor(scene.cue,band,c.turns.at(-1)?.text??"");
+    if(phrase){commit({...c,supported:true,cue:`Take your time. Say it on your phone: "${phrase}"`,sceneCued:true,quizOpen:false,help:c.help&&{...c.help,shown:false},commands:[...c.commands,commandId].slice(-100)},"linga-talk");return getSession();}
+    // nothing to climb and no cue to offer: say what to do, so the press is never silent
+    if(!climb(c.help,c.turns.at(-1)?.id)&&!sceneCueFor(scene.cue,band,c.sceneCued)){commit({...c,supported:true,cue:`Take your time. One short sentence is enough: ${c.goal}`,quizOpen:false,commands:[...c.commands,commandId].slice(-100)},"linga-talk");return getSession();}
+    action="cue";
+  }
   if(action==="cue"){
     // The next rung of the line on screen, or the scene's cue when that line has no ladder. No model call. The
     // command id is kept, so a retried request cannot climb a second rung.
