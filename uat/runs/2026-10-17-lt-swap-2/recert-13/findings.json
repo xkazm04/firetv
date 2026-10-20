@@ -348,6 +348,16 @@
         "the task tells the model to stay on the scene (no drift to breakfast or tomatoes)": "code: fixed on the prompt side - desk/src/lib/english/conversation.ts:177 (REPLAY_TASK: 'Stay on the scene's task ... a scene about school does not turn to breakfast or tomatoes'); no code check rejects an off-topic replay question (replay.ts:97-107 replayRefused tests form, frame, band, rephrase only), so on-topic rests on the model: code: open for the outcome",
         "after a repair the recap invites answering the fresh question": "code: open - not changed by 7c185a08 (code side only): view.ts:227 replayLine still reads 'Tried again, not with the new form yet' only after a try; nothing invites an untried fresh question. L2 to check what the recap shows when the replay is not tried"
       }
+    },
+    "code_recert_15": {
+      "level": "code-only (no model call)",
+      "base": "main ee0fd7d7",
+      "l2": "L2 live recert owed (operator)",
+      "resolution_note": "not closed in the ledger sense: resolution stays open",
+      "table": "docs/uat-insights/2026-10-20-lt-code-recert-15.md",
+      "commit": "9c22af0e",
+      "verdict": "edge closed in code: replayRefused (replay.ts) now refuses a Back or fresh replay question that shares no content word with the scene goal, open step or cue (\"The replay question left the scene.\"); the recap clause stays open as in code-recert-14",
+      "test": "tools/linga-rules-test.cjs \"replayRefused: a replay about weekend sport in a school scene is refused...\""
     }
   },
   {
@@ -389,6 +399,16 @@
         "notes use plain words, for example Say: I eat tomatoes": "code: fixed in effect, not in form - a term-free note passes ('Say: I eat tomatoes every day.' = no term) and a termed one is replaced by 'Say it this way. It is easier to hear.' (conversation.ts:169); code never composes a 'Say: <better>' note itself, the wording rests on the model following PLAIN_TASK: L2 to read real notes",
         "the Is school good? fix is shown (held fixes)": "code: open - not touched by fbb8fd6d; the three held fixes are the LG-23 hold by design (moment and held-fix path), so 'School good?' -> 'Is school good?' stays held until the finish. L2 to check it is shown there"
       }
+    },
+    "code_recert_15": {
+      "level": "code-only (no model call)",
+      "base": "main ee0fd7d7",
+      "l2": "L2 live recert owed (operator)",
+      "resolution_note": "not closed in the ledger sense: resolution stays open",
+      "table": "docs/uat-insights/2026-10-20-lt-code-recert-15.md",
+      "commit": "195ab5cc",
+      "verdict": "Say-form closed in code: a beginner note dropped for a grammar term becomes \"Say: <after>\" from the coach's own validated after line (PLAIN_NOTE only when after is empty); held fix (LG-23) stays open",
+      "test": "tools/linga-rules-test.cjs \"a beginner coach note with a grammar term becomes Say: <the coach's own after line>\""
     }
   },
   {
@@ -703,6 +723,16 @@
     "resolution": "n-a",
     "recurrence": 1,
     "suggested_acceptance": "Keep the cue tied to the task and quote the learner verbatim.",
-    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)",
+    "code_recert_15": {
+      "level": "code-only (no model call)",
+      "base": "main ee0fd7d7",
+      "l2": "L2 live recert owed (operator)",
+      "resolution_note": "not closed in the ledger sense: resolution stays open",
+      "table": "docs/uat-insights/2026-10-20-lt-code-recert-15.md",
+      "commit": "d6e143f3",
+      "verdict": "edge closed in code: hasGrammarTerm treats \"use <did|do|does|are|is|am|was|were|have|has|a|an|the>\" as termed; plain advice (\"Say: I eat tomatoes\") is not",
+      "test": "tools/linga-rules-test.cjs \"hasGrammarTerm: \\\"Use did\\\" and \\\"Use are\\\" are termed; plain advice is not\""
+    }
   }
 ]
