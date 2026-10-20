@@ -458,3 +458,156 @@ The tv-phone-pairing feature stands at full fail. Full r3 had robustness at 0.40
   link and the bar the operator saw. The hand-off model follows after the deadline. (b) TL-1 to TL-11: the full TV-led
   model for Math Buddy and Essay Master, with Linga after. (c) All thirteen slices. Lean: (a), because TL-5 to TL-11 change
   every module's hand-off at once, four days before a demo.
+
+## Stick pass 2026-10-20
+
+This was the first run of the TV-led flows on the real stick: an AFTKM on Android 11, reached over `adb` at 10.0.0.139:5555, running Silk 152.5.31. The base was `main` at ed23c4ac. Every screencap is under `artifacts/stick-2026-10-20/`:
+- `tv-<step>.png` is an `adb exec-out screencap` of the stick.
+- `phone-<step>-360.png` and `phone-<step>-414.png` are the phone at both widths.
+
+The fixes made in this pass are the commits listed near the end of this section. Everything else is listed for the next builders.
+
+### How it was run
+
+- **The desk.** `next dev --webpack` ran from this branch's worktree on port 3107, with `DESK_DATA_DIR` set to a fresh temp dir (it seeds Ema and Jakub). The main checkout could not serve it: its `desk/node_modules` currently has no `@next/env` and no native `sharp` binary, so `next dev` dies at start. The operator's dev server on :3000 had started before the modules went missing. `@next/env` was supplied through `NODE_PATH` (a temp copy of 16.3.8). Nothing in the main checkout was touched.
+- **The way in.** The Windows firewall opens only port 3000 ("StudyDesk 3000 (Private)"). The stick therefore reached the desk through `adb reverse tcp:3107 tcp:3107` and opened `http://localhost:3107/tv?key=…`. The QR still prints `10.0.0.141:3107`.
+- **The remote.** In Silk, the D-pad, Select, Back and Menu never reach the page (see the key table). Every step below was driven by `Input.dispatchKeyEvent` over Silk's DevTools socket (`adb forward tcp:9333 localabstract:amazon_silk_devtools_remote`). The injected keys were the browser key names `ArrowUp`…, `Enter`, `Backspace`, `m` and `MediaPlayPause`. The screens, fonts, layout and timing are the stick's own; the key path is not the remote's.
+- **The phone.** A headless mobile Chromium (Playwright, DPR 2) at 360 and 414 px, joined with the TV's code. Each phone shot also records whether the page scrolls sideways, and the width, height and wrapping of each bar item.
+- **Models.** Live calls went only through the desk's own engine, the claude CLI: Linga's topics and scene, the essay reading, the practice set and the explain reply. The vision engine is not running on this host, so every page read fails ("The engine behind it is not answering"). For that reason M5, Ask in words, could not be reached.
+- **Fullscreen.** The captures were taken in Silk fullscreen (`requestFullscreen` on the bench), so the stage fills the stick's screen. Silk shows a toast for a few seconds on entering fullscreen, and some captures carry it.
+
+### TL-1: the key values each remote button sends (stick check)
+
+| Button (`adb shell input keyevent`) | What the page receives | What happens |
+|---|---|---|
+| DPAD_UP/DOWN/LEFT/RIGHT | nothing | Silk moves its own on-screen cursor (`tv-K1-silk-windowed-cursor.png`) |
+| DPAD_CENTER, ENTER | nothing | Silk clicks under its cursor; no TV screen handles a click (only LingaTV has two `onClick`s) |
+| BACK | nothing | Silk's own Back: browser history, then "Exiting Amazon Silk"; in fullscreen it leaves fullscreen (`tv-key-after-back-in-fullscreen.png`) |
+| MENU | nothing | Silk's own menu and toolbar |
+| MEDIA_PLAY_PAUSE | `keydown` with `key: "MediaPlayPause"`, `code: ""`, `keyCode: 179`; `defaultPrevented` true | the desk's play: the clock started and stopped on the marked sheet (`tv-TL1-play-on-tonight.png`) |
+| MEDIA_REWIND, MEDIA_FAST_FORWARD | nothing | nothing |
+
+The results were the same in fullscreen and with the stage focused. Amazon's Fire TV web-app docs give these values for a page inside a Fire TV web app or an Android WebView wrapper: Select 13, arrows 37-40, Play/Pause 179, Back 4. In the Silk browser, the cursor keeps those keys.
+
+**So on this stick, in Silk, the remote cannot drive the TV at all beyond Play/Pause.** TL-1's key map is right for the one key that arrives. For the D-pad to reach the page, the desk has to open either in a WebView wrapper (an APK like `tv-app/` whose activity forwards `dispatchKeyEvent`) or as a Fire TV web app. Which one is a scope question for the operator. As TL-1 asked, Back leaving the page is reported here, not guessed at.
+
+### The walk
+
+| Step | Expected | Seen | Screencaps | Verdict |
+|---|---|---|---|---|
+| P1 Landing, unpaired | The phone object is a stop; Select opens `pair` with the QR and code | As expected; the lamp rests on the phone | `tv-P1-landing-unpaired`, `tv-P1-pair-screen` | pass |
+| P2 Phone opens `/phone` | Join panel, no bar | Join panel, no bar, no sideways scroll at 360/414 | `phone-P2-unjoined-*` | pass |
+| P3 Wrong code `1111` | Refused on the phone; TV unchanged | "That code is not on the TV."; TV stays on `pair` | `phone-P3-wrong-code-*`, `tv-P3-wrong-code` | pass |
+| P3 Right code, Join tapped during the auto-join (D13) | One join, no wrong-code line | Join was disabled during the auto-join; joined, no error | `phone-P4-joined-*` | pass |
+| P4 Joined | TV "Paired. Select: choose who is studying"; phone "Look at the TV" | As expected; phone bar Recap · More, 180 px each at 360 | `tv-P4-joined`, `phone-P4-joined-*` | pass |
+| P5 Select on Joined, no one seated | `learner` | `landing` (F1, fixed f8561690) | `tv-L1-learner-empty` | fail → fixed |
+| L1 Learner cards | Cards and Add a learner | Laid out (CDP rects), but in fullscreen only the top 290 px painted; windowed they paint (F13) | `tv-L1-learner-cards` | pass (render gap noted) |
+| L3/L4 Add a learner | Profile opens with ask `name`; phone shows the Name panel | As expected; phone Name, Cancel · Done | `tv-L3-profile-ask-name`, `phone-L4-ask-name-*` | pass |
+| L4 Type "Tomas" on the phone | TV title follows each letter | As expected | `tv-L4-name-typed`, `phone-L4-name-typed-*` | pass |
+| L5 Done on phone, Save on TV | Done closes the ask; Save seats Tomas | As expected; phone strip "Tomas · TV: the desk" | `tv-L5-saved-seated`, `phone-L5-*` | pass |
+| E1 Linga home, I'll pick my level, A1, See my topics | All on the remote | As expected | `tv-E1-*` | pass |
+| E3 Type my goal | Ask `words`; phone moves; Send closes it | As expected; phone Sent, then idle; 6 topics planned | `tv-E3-*`, `phone-E3-*` | pass |
+| E4/E5 Start talking | Partner line; ask `reply` opens by itself (OD8 a); phone follows | As expected | `tv-E4-talk-partner-line`, `phone-E5-reply-ask-*` | pass |
+| E5 One turn by Choose a phrase only | The phrase answers the turn and closes the ask | Focus starts at −1 with the first action drawn lit, so Down then Select ran Help me answer twice (F15). Choose a phrase → Option 1 "I want a hot drink." closed the reply ask, but the turn did not move. The TV said "Say it in your own reply on the phone" while the phone showed the idle card for at least 15 s (F14) | `tv-E5-choose-phrase*`, `tv-E5-phrase-quiz`, `tv-E5-phrase-answered`, `phone-E5-after-phrase-*` | **fail** |
+| E5 The same turn typed on the phone | The phone's reply answers it | The panel's "Send reply" worked; the partner answered, a new `reply` ask opened, and the phone followed. The bar's Send was dead (F3, fixed a8e53e1d) | `phone-E5-reply-typed-*`, `tv-E4-partner-second-line` | pass (bar fixed) |
+| E6 Back from the scene | Leaves to Linga home, closes the ask | As expected | `tv-E6-back-from-talk` | pass |
+| E8 Set up on the phone | Ask `prefs` | Opens; phone shows the form. The bar's Save used the name's rule and stayed off (F3, fixed) | `tv-E8-prefs-ask`, `phone-E8-prefs-ask-*` | pass (bar fixed) |
+| W1 Sentence help | `sentence`, with a way to ask | "Nothing yet" with no action drawn; Select opened the ask through a hidden stop (F4, fixed 3c761b61) | `tv-W1-sentence`, `tv-W2-sentence-ask-hidden-select`, `tv-FIX-F4-*` | fail → fixed |
+| W2/W3 A sentence from the phone | Check → verdict on the TV, ask closed | As expected ("I lived here since 2019." → the rule) | `phone-W2-sentence-ask-*`, `tv-W3-sentence-verdict` | pass |
+| S1 Essay Master | Lens home | As expected | `tv-S1-essay-lenses` | pass |
+| S3 Select on a lens | Ask `paragraph`; phone shows the lens as a line | As expected. The first read raised the text notice on the phone ("I understand, read it", 428), while the TV only said "On the phone: the paragraph" | `tv-S3-*`, `phone-S3-*` | pass |
+| S4 The reading | `forensic`, ask closed | As expected | `tv-S4-forensic`, `phone-S4-after-read-*` | pass |
+| S5 Rewrite on my phone | Ask `rewrite {n}`; phone prefilled; Send → `essay.revised` | As expected ("REWRITE · IT HOLDS"). The status said "on the phone's Essay tab" (F5, fixed 2a78c7af). The panel also carries the whole paragraph composer and the shelf (F6) | `tv-S5-*`, `phone-S5-*` | pass |
+| W4 The plan | Down from the last lens → plan | Offered only with no paragraph on the desk (`lensStops`, `tv/keys.ts:160`); reached as Ema | `tv-W4-*` | pass |
+| W5/W6 Slots from the phone | Ask `slot {i}`; slot inks; Read it reads | Slots ink and the phone follows the caret, but the ask stays open (`i: 0`) through all three slots (F17). Read it did nothing: `/api/analyse` returned 428 because Ema had not seen the text notice, and the TV said nothing (F16) | `tv-W5-slot-ask`, `tv-W6-*`, `phone-W5-*`, `phone-W6-*` | **fail** (Read it) |
+| M1 Tonight | The doors | As expected | `tv-M1-tonight` | pass |
+| M2 I have homework | Ask `page {subject}`; "Waiting for the photo"; phone camera panel | As expected; sample sheet sent | `tv-M2-page-ask`, `phone-M2-*` | pass |
+| M3 Failed read, Select on the TV | A new read | A new read job started (the engine is down, so it failed again). The caption still says "Open Try again on the phone" (F8) | `tv-M4-page`, `tv-M3-retry-pressed` | pass (copy owed) |
+| M10/M11 Down on Tonight, Type a paper | `paper`; ask `paper`; phone shows the rows | `paper` and the ask opened, but the phone stayed on Capture with the old Try again (F9, fixed 469beb8b) | `tv-M10-paper`, `tv-M11-paper-ask`, `phone-M11-paper-ask-*` | fail → fixed |
+| M10 Back from the empty paper | Back to Tonight | Lands on Get ready for school (F10) | `tv-M10-back-lands-on-prepare` | fail (pinned) |
+| M7 Practice card, Type my answers | Ask `answers`; phone shows the boxes | Phone stuck on Capture again (F9). Once freed, it opened on the camera route with its own Snap/Type toggle (F11, fixed 11a37c39). The typed answers were marked: 5 right, 1 to look at | `tv-M7-*`, `phone-M7-*` | fail → fixed |
+| M8/M9 The walk, Tell the desk how | Ask `explain {walkIx}`; reply on the TV | The ask opens and the typed explanation was sent (200). The card flips to "The desk replied" but shows the same opening question (F18, not diagnosed) | `tv-M8-*`, `tv-M9-*`, `phone-M9-explain-ask-*` | pass (reply text owed) |
+| M12 Play/Pause | The clock | The real `MEDIA_PLAY_PAUSE` started and stopped it | `tv-TL1-play-on-tonight` | pass |
+| P6 Forget this desk (phone, More) | Phone back to Join; TV "No phone here" | As expected, within 20 s | `phone-P6-*`, `tv-P6-tv-after-phone-forgot` | pass |
+| TL-2 Forget every phone (TV) | Phone dropped to Join; `phonesLive` 0 | As expected | `tv-TL2-*`, `phone-TL2-after-forget-every-*` | pass |
+| TL-3 Paired phone stop | "1 phone here", Pair another, Forget every phone | As expected, but the ticker said "Waiting for a phone" and the buttons cut the address line (F12, fixed b46f5bc2) | `tv-P6-pair-paired`, `tv-FIX-F12-pair-paired` | pass (fixed) |
+| TL-4 Server stopped ~30 s with the TV on Tonight | Band on the stage within 2 s; phone header shows the link; back with no reload | Band at 2 s; phone "Lost the desk link. Reconnecting…"; both came back and the remote worked again | `tv-TL4-link-lost-2s`, `tv-TL4-link-back`, `phone-TL4-*` | pass |
+| TL-10 Bottom bar 360-414 px | ≤ 3 items, no wrap, no sideways scroll | In every phone shot: no sideways scroll, at most 2 items, 56 px high, no label wraps; the narrowest item is 149 px (Cancel at 360) | all `phone-*` | pass |
+
+Not walked:
+- S7 (`private`, the Adult curtain).
+- E2 and E7 (a level-check question, a moment).
+- M5 Ask in words (no page could be read).
+
+Next.js's dev badge sits over the phone's left bar item in the captures. It appears only in dev.
+
+### The section 6 stick checks
+
+| Slice | Stick check | Verdict |
+|---|---|---|
+| TL-1 | Back, Menu, Play/Pause on the landing, Linga, a lesson, the break; Back must not leave the page | **fail**: in Silk only Play/Pause arrives; Back leaves (key table) |
+| TL-2 | Join during the auto-join; reset and pair again | pass (Join disabled in flight; Forget every phone, then rejoin) |
+| TL-3 | Close the phone; the TV reads "No phone here" | pass |
+| TL-4 | Stop the server; the band; back with no reload | pass |
+| TL-5 | none | n/a |
+| TL-6 | Waiting for the photo with the chip; Back cancels; practice stops reachable | pass (with CDP keys) |
+| TL-7 | A lens → "Send the text from the phone"; slot 2 "On the phone" | pass |
+| TL-8 | Add a learner, name on the phone, Save on the TV | pass |
+| TL-9 | The phone follows a second ask on the same screen | pass for rewrite, reply and slot; fail after a failed send (F9, fixed) |
+| TL-10 | No wrap, no sideways scroll at 360 and 414 | pass |
+| TL-11 | The phone cannot move the TV | pass (H2 below) |
+| TL-12 | A whole scene, one turn by Choose a phrase alone | **fail** (F14) |
+| TL-13 | Down shows the paper; Type a paper moves the phone; a failed read retried with Select | pass on the TV; the phone did not move (F9, fixed) |
+
+### The lite r3 reworks on the stick
+
+- **H1 (the ask door checks the ask's kind): pass.** Three refusals were checked:
+  - With ask `rewrite` open, the phone's "Analyse on the TV" posted `/api/analyse` kind `essay` → 409 "The TV is not asking for that now." The ask stayed open and the TV stayed on `forensic` (`tv-H1-rewrite-ask-paragraph-refused`, `phone-H1-paragraph-on-rewrite-refused-*`).
+  - `/api/read` with the rewrite ask's id → 409, TV unchanged.
+  - With ask `explain` open, the second-go Send → `/api/second` 409 (`phone-H1-second-on-explain-refused-*`).
+- **H2 (the phone cannot seat a learner or move the TV): pass.** From the joined phone:
+  - `learner.set`, `profile.discard`, `topic.open`, `practice.clear`, `nav`, `focus` and `session.end` → 403 "Only the TV moves the desk."
+  - `paper.enter` with no ask → 409.
+  - The session was byte-identical after each post, and the TV stayed on `forensic` (`tv-H2-after-phone-posts`).
+- **H3 (phoneDoor for `/api/english`): pass.** These posts each got 409 and moved nothing (`tv-H3-after-phone-english-posts`): `turn` with no askId, `turn` and `plan-goal` carrying the open `rewrite` ask's id, and `preferences` with a stale id. The accepting side was seen in the walk: `plan-goal` (E3) and `turn` (E5), each with the open ask's id, went through and closed their asks.
+
+### Fixed in this pass (each with a case in tools/)
+
+| # | Finding | Commit | Test |
+|---|---|---|---|
+| F1 | Joined's Select went to the landing with no one seated | f8561690 | `tools/tv-keys-test.cjs` |
+| F3 | The bar's dead Send for `paper`/`reply`/`words`; the `prefs` Save on the name's rule | a8e53e1d | `tools/phone-shell-test.cjs` |
+| F9 | A shot whose send failed held the phone on Capture, deferring every later ask | 469beb8b | `tools/phone-panel-test.cjs` |
+| F11 | The practice panel ignored the ask's route and kept its own toggle | 11a37c39 | `tools/phone-panel-test.cjs` |
+| F4 | Empty Sentence help drew no action; Select hit a hidden stop | 3c761b61 | `tools/tv-keys-test.cjs` |
+| F12 | Paired pair screen: ticker "Waiting for a phone"; buttons over the address | b46f5bc2 | `tools/tv-keys-test.cjs` |
+| F5 | The rewrite status named the phone's Essay tab | 2a78c7af | `tools/tv-keys-test.cjs` |
+
+### Open, for the next builders (not fixed here)
+
+| # | Finding | Where |
+|---|---|---|
+| F0 | In Silk, the D-pad, Select, Back and Menu never reach the page; only Play/Pause does. The TV-led design cannot run in the stick's browser | platform: a WebView wrapper (`tv-app/`) or a Fire TV web app; operator question |
+| F14 | Choose a phrase does not answer the turn. The engine asks for the phrase "in your own reply on the phone", but LingaTV has already cancelled the reply ask and marked the turn answered, so the phone is idle | `desk/src/lib/english/conversation.ts:616`, `desk/src/english/LingaTV.tsx:46` |
+| F15 | `linga-talk` opens at focus −1 with the first action drawn lit; the first Down only moves to that same action | `desk/src/english/LingaTV.tsx:89` |
+| F19 | A generated scene draws its skill's art: the café scene shows the HOTEL sign | `desk/src/lib/english/view.ts:39` (`artOf` → `SKILL_ART`) |
+| F8 | A failed maths read says "Open Try again on the phone", but since TL-13 the retry is the TV's Select | `desk/src/maths/MathsTV.tsx:1012`. `desk/src/tv/pageLines.ts:9` is pinned as is by `tools/tv-keys-test.cjs:799-806` and `tools/desk-jobs-rules-test.cjs:598`, so its copy waits for the same decision |
+| F10 | Back from an empty paper lands on Get ready for school, not Tonight, after Down on Tonight opened it | `desk/src/tv/keys.ts:681-685`, pinned by `tools/tv-keys-test.cjs:1251` ("the next Back leaves as it did"); changing it changes a TL-13 acceptance |
+| F6 | The `rewrite` and `slot` panels carry the whole paragraph composer, with its Analyse on the TV and the shelf; section 2.2 lists one field, Dictate and Send | `desk/src/app/phone/page.tsx:857`, `:863`, pinned by `tools/phone-panel-test.cjs:1183-1208` |
+| F16 | Read it on the plan gets a 428 when the learner has not seen the text notice, and the TV shows nothing | `desk/src/app/api/analyse/route.ts:203`; `desk/src/essay/EssayTV.tsx` has no line for a refused read |
+| F17 | `essay.slot` does not close the `slot` ask: it stays open with `detail.i` 0 after all three slots, and the TV keeps "On your phone" | `desk/src/lib/session/store.ts:863` |
+| F18 | After `/api/explain` returned 200, the walk card reads "The desk replied" over the same opening question | `desk/src/maths/MathsTV.tsx:875-883` (not diagnosed) |
+| F20 | The practice card says "The phone is waiting for the sheet or your answers." with no ask open | `desk/src/maths/MathsTV.tsx:826` |
+| F21 | A phone-naming status outlives its ask. After Back cancelled the slot ask, Math Buddy's Tonight still carried "say or type slot 1, Your claim, on the phone", and Tomas's statuses carried into Ema's evening | `desk/src/lib/session/store.ts` (`ask.cancel` does not clear a `namesPhone` status) |
+| F13 | In Silk fullscreen, the learner screen painted only its top 290 px; windowed, it paints | stick render, not diagnosed |
+| F22 | The main checkout's `desk/node_modules` lacks `@next/env` and sharp's native binary, so `next dev` cannot start there | environment, `C:/Users/kazda/kiro/firetv/desk/node_modules` |
+
+### Input to OD7
+
+On the stick, the pairing core held:
+- join, a wrong code, and one join in flight;
+- Forget this desk and Forget every phone;
+- presence and the dropped link;
+- H1-H3, under live posts.
+
+The TV-led experience as a whole did not run on the stick, though. In Silk the remote reaches the page only with Play/Pause, and Linga's remote-only turn dead-ends. Any round that judges the pairing feature should know that both of these facts lie outside the pairing code.
