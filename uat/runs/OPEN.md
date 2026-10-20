@@ -2,7 +2,7 @@
 
 Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run. One section per module that has open rows.
 
-242 open across 13 runs
+240 open across 13 runs
 drained 9 of 13 runs
 undrained: 2026-10-14-lt, 2026-10-16-lt-a2b1-tightening, 2026-10-17-lt-swap, 2026-10-17-lt-swap-2 (home: docs/uat-insights/<run-id>.md, uat/README.md)
 
@@ -362,42 +362,34 @@ Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each
 
 # Essay Master
 
-10 open in 7 pairs across 16 runs
+8 open in 5 pairs across 17 runs
 
-recurring 10 · unasked by a later run of their pair 0
+recurring 8 · unasked by a later run of their pair 0
 
 Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Linga driver does not rerun them.
 
 ## kristyna-17 EM1 · 3 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-15/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 16, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-15/L1-kristyna-17-EM1-2` major · rank 9 · ES-READ: kind and mode now reach the reading, a task has no sender and no history or memory reaches it · recurrence 16, first seen 2026-10-09-essay-l1
-- `2026-10-09-essay-l1/recert-15/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 16, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-16/L1-kristyna-17-EM1-1` major · rank 9 · A Czech paragraph that passes the language check is still ruled on English word lists, with English advice · recurrence 17, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-16/L1-kristyna-17-EM1-2` major · rank 9 · ES-READ: kind and mode now reach the reading, a task has no sender and no history or memory reaches it · recurrence 17, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-16/L1-kristyna-17-EM1-3` minor · rank 6 · A Czech paragraph that passes the language check gets notes in whatever language the model picks; the prompt names none · recurrence 17, first seen 2026-10-09-essay-l1
 
 ## barbora-43 EM1 · 1 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-15/L1-barbora-43-EM1-2` major · rank 9 · ES-READ grounding: the reading still never sees her earlier readings or notes, and no client sends the assignment · recurrence 16, first seen 2026-10-09-essay-l1
-
-## daniel-15 EM3 · 1 open · top rank 9
-
-- `2026-10-09-essay-l1/recert-15/L1-daniel-15-EM3-2` major · rank 9 · A title line is read as its own paragraph or fuses into sentence 1; the task never reaches the prompt as a task · recurrence 16, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-16/L1-barbora-43-EM1-2` major · rank 9 · ES-READ grounding: the reading still never sees her earlier readings or notes, and no client sends the assignment · recurrence 17, first seen 2026-10-09-essay-l1
 
 ## eliska-12 EM1 · 1 open · top rank 9
 
-- `2026-10-09-essay-l1/recert-15/L1-eliska-12-EM1-4` major · rank 9 · The planted-claim fix depends on the model naming links (supports / backs): when it omits them, Structure marks the true topic sentence and Evidence marks nothing · recurrence 15, first seen 2026-10-09-essay-l1/recert-1
+- `2026-10-09-essay-l1/recert-16/L1-eliska-12-EM1-4` major · rank 9 · The planted-claim fix depends on the model naming links (supports / backs): when it omits them, Structure marks the true topic sentence and Evidence marks nothing · recurrence 16, first seen 2026-10-09-essay-l1/recert-1
 
 ## helena-46 EM1 · 2 open · top rank 6
 
-- `2026-10-09-essay-l1/recert-15/L1-helena-46-EM1-5` minor · rank 6 · An email read on its own, or a piece read with Keep off, is still judged as an essay: the kind of writing is asked and sent only for a kept piece · recurrence 10, first seen 2026-10-09-essay-l1/recert-6
-- `2026-10-09-essay-l1/recert-15/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; short Czech, Czech without diacritics and German go to the model · recurrence 16, first seen 2026-10-09-essay-l1
+- `2026-10-09-essay-l1/recert-16/L1-helena-46-EM1-5` minor · rank 6 · An email read on its own, or a piece read with Keep off, is still judged as an essay: the kind of writing is asked and sent only for a kept piece · recurrence 11, first seen 2026-10-09-essay-l1/recert-6
+- `2026-10-09-essay-l1/recert-16/L1-helena-46-EM1-4` polish · rank 2 · A language the desk does not read is refused only when it is clearly Czech; short Czech, Czech without diacritics and German go to the model · recurrence 17, first seen 2026-10-09-essay-l1
 
 ## eliska-12 EM2 · 1 open · top rank 6
 
-- `2026-10-09-essay-l1/recert-15/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 16, first seen 2026-10-09-essay-l1
-
-## daniel-15 EM2 · 1 open · top rank 4
-
-- `2026-10-09-essay-l1/recert-15/L1-daniel-15-EM2-2` minor · rank 4 · A rewrite of a sentence first ruled neutral as a later unsupported claim is ruled faulty: 'Rewrite · not yet' · recurrence 15, first seen 2026-10-09-essay-l1/recert-1
+- `2026-10-09-essay-l1/recert-16/L1-eliska-12-EM2-1` minor · rank 6 · Kept verdicts go stale: after her rewrite adds the evidence, the earlier claim stays 'no evidence' · recurrence 17, first seen 2026-10-09-essay-l1
 
 # Math Buddy
 
