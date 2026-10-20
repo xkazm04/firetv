@@ -1,0 +1,18 @@
+# Editor settings for the code in this repo (Android Studio, IntelliJ and VS Code read this file).
+# Line endings are owned by .gitattributes, not here, and nothing below trims whitespace or rewrites
+# final newlines: deathride/ keeps byte-hashed evidence and art files whose exact bytes (CRLF and
+# trailing blanks included) are the record. Only indentation is set, and only for source files.
+# There is no linter wired yet (AGENTS.md, "Commands"); .ai/memory/0011 says what is still owed.
+root = true
+
+# Kotlin: kotlin.code.style=official (gradle.properties). The ktlint_* keys are read by ktlint and
+# detekt-formatting whenever either is added; IntelliJ already honours the same style.
+[*.{kt,kts}]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+ktlint_code_style = intellij_idea
+
+[*.{ts,tsx,js,jsx,cjs,mjs,json,yml,yaml,css}]
+indent_style = space
+indent_size = 2

@@ -1,0 +1,44 @@
+# Model drift: is live model quality still where it was? (uat/drift/README.md, .ai/memory/0014)
+#  - watch (weekly, and on dispatch): `node tools/model-drift.cjs --status --max-age 21` reads the committed live
+#    records in uat/drift/. It goes red, and GitHub emails the owner, in three cases:
+#      - no live record exists ("never measured")
+#      - the newest live record alerted (an answer reached the TV, a pipeline errored, a kill criterion failed, or
+#        the hints, the page read or the lesson pick drifted past their thresholds)
+#      - the newest live record is older than 21 days
+#  - suite (every pull request, and with the watch): tools/model-drift-test.cjs proves the comparison, the thresholds
+#    and the refusals on the bench's replay.
+# No job here makes a model call or holds a key (.ai/memory/0007). The live run spends real calls on the operator's own
+# engines (Ollama vision, claude-cli or codex), so it runs on the operator's machine: scripts/model-drift.ps1, weekly
+# through a scheduled task. CI can only watch what that run commits.
+name: model-drift
+on:
+  schedule:
+    - cron: "53 6 * * 1"
+  workflow_dispatch: {}
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  suite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: desk/package-lock.json
+      - run: npm ci --prefix desk
+      - name: Model-drift suite (replay, no model)
+        run: node tools/model-drift-test.cjs
+
+  watch:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: The newest live record, judged (no model call)
+        run: node tools/model-drift.cjs --status --max-age 21

@@ -1,0 +1,44 @@
+{
+  "about": "Degraded engine answers for the drill in tools/engine-degraded-test.cjs. Each row is what a provider hands back (a raw answer, or {\"$throw\": kind}) and the fallback the desk owes the learner at the TV. Rows with a todo name a gap the desk has today: the fix sits on the live model surface (desk/src/lib/desk/hint.ts, read.ts), so it waits for a live drift record (.ai/memory/0017). JSON cannot carry NaN, and real providers answer in JSON text, so a NaN coordinate is not a case here.",
+  "problem": "2x+3=11",
+  "lessonId": "jWpiMu5LNdg",
+  "good": {
+    "hint": { "hint": "Look at the +3 first.", "what_to_try_next": "Write the two sides one under the other." },
+    "lesson": { "lesson": "none", "why": "no lesson covers this" },
+    "read": { "items": [ { "number": 1, "text": "2x+3=11", "y": 0.3, "x": 0.5 }, { "number": 2, "text": "x-5=2", "y": 0.7, "x": 0.5 } ] }
+  },
+  "read": [
+    { "name": "prose instead of JSON", "answer": "I can see two equations: 2x+3=11 and x-5=2.", "expect": { "fails": "The desk could not read that page. The answer came back in pieces." } },
+    { "name": "an empty object", "answer": {}, "expect": { "fails": "The desk could not read that page. The answer came back in pieces." } },
+    { "name": "items is not a list", "answer": { "items": "two equations" }, "expect": { "fails": "The desk could not read that page. The answer came back in pieces." } },
+    { "name": "an item whose text is null", "answer": { "items": [ { "number": 1, "text": null, "y": 0.2, "x": 0.5 } ] }, "expect": { "fails": "The desk could not read that page. The answer came back in pieces." } },
+    { "name": "coordinates given as words", "answer": { "items": [ { "number": 1, "text": "2x+3=11", "y": "top", "x": "middle" } ] }, "expect": { "fails": "The desk could not read that page. The answer came back in pieces." } },
+    { "name": "the engine times out", "answer": { "$throw": "timeout" }, "expect": { "fails": "The desk could not read that page. It took too long." } },
+    { "name": "the engine is not running", "answer": { "$throw": "unreachable" }, "expect": { "fails": "The desk could not read that page. The engine behind it is not answering." } },
+    { "name": "the engine process dies", "answer": { "$throw": "exit" }, "expect": { "fails": "The desk could not read that page. The engine behind it stopped part way." } },
+    { "name": "a page with nothing on it", "answer": { "items": [] }, "expect": { "lands": 0 } },
+    { "name": "centres outside the photo", "answer": { "items": [ { "number": 1, "text": "2x+3=11", "y": 1.4, "x": 0.5 }, { "number": 2, "text": "x-5=2", "y": -0.2, "x": 1.3 } ] }, "expect": { "inPage": true }, "todo": "read.ts trusts the model's fractions: y 1.4 gives an inverted band ([136, 100] on a 100 px page), so the TV crops nothing. The centres should be clamped into the page." },
+    { "name": "a blank item among real ones", "answer": { "items": [ { "number": 1, "text": "   ", "y": 0.2, "x": 0.5 }, { "number": 2, "text": "x-5=2", "y": 0.5, "x": 0.5 } ] }, "expect": { "noBlankItems": true }, "todo": "read.ts keeps an item whose text is only spaces, so the TV can focus an empty problem and ask a hint for nothing. A blank item should be dropped." }
+  ],
+  "hint": [
+    { "name": "prose that states the answer", "answer": "Sure! x = 4, because 2 times 4 plus 3 is 11.", "expect": { "fails": "The desk could not come up with a hint just now. The answer came back in pieces." } },
+    { "name": "an empty object", "answer": {}, "expect": { "fails": "The desk could not come up with a hint just now. The answer came back in pieces." } },
+    { "name": "fields of the wrong type", "answer": { "hint": 7, "what_to_try_next": null }, "expect": { "fails": "The desk could not come up with a hint just now. The answer came back in pieces." } },
+    { "name": "the engine times out", "answer": { "$throw": "timeout" }, "expect": { "fails": "The desk could not come up with a hint just now. It took too long." } },
+    { "name": "the engine is not running", "answer": { "$throw": "unreachable" }, "expect": { "fails": "The desk could not come up with a hint just now. The engine behind it is not answering." } },
+    { "name": "the engine process dies", "answer": { "$throw": "exit" }, "expect": { "fails": "The desk could not come up with a hint just now. The engine behind it stopped part way." } },
+    { "name": "the answer, twice", "answer": { "hint": "So x is 4.", "what_to_try_next": "Write x = 4 under the line." }, "expect": { "withheld": true } },
+    { "name": "empty strings", "answer": { "hint": "", "what_to_try_next": "" }, "expect": { "neverBlank": true }, "todo": "hint.ts's SCHEMA sets no minLength, so an empty hint lands on the TV and is read aloud as silence. It should fail as a shape break or fall back to the withheld line." },
+    { "name": "whitespace only", "answer": { "hint": "   ", "what_to_try_next": "  " }, "expect": { "neverBlank": true }, "todo": "The same gap as empty strings: a hint of spaces is a blank card on the TV." }
+  ],
+  "lesson": [
+    { "name": "none", "answer": { "lesson": "none", "why": "no lesson covers this" }, "expect": { "noLesson": true } },
+    { "name": "an id the library does not have", "answer": { "lesson": "lesson-that-does-not-exist", "why": "chosen because it fits" }, "expect": { "noLesson": true } },
+    { "name": "an empty id", "answer": { "lesson": "", "why": "" }, "expect": { "noLesson": true } },
+    { "name": "an id that is a number", "answer": { "lesson": 5, "why": "chosen" }, "expect": { "noLesson": true } },
+    { "name": "no why", "answer": { "lesson": "none" }, "expect": { "noLesson": true } },
+    { "name": "the engine times out", "answer": { "$throw": "timeout" }, "expect": { "noLesson": true } },
+    { "name": "a real id padded with spaces", "answer": { "lesson": "  jWpiMu5LNdg  ", "why": "chosen because your problem needs one step undone" }, "expect": { "lesson": "jWpiMu5LNdg" } },
+    { "name": "a why that gives the answer away", "answer": { "lesson": "jWpiMu5LNdg", "why": "chosen because x = 4 here" }, "expect": { "lesson": "jWpiMu5LNdg", "whyWithheld": true } }
+  ]
+}

@@ -1,0 +1,27 @@
+# Model drift, before merge: does this pull request change what a real model is asked, and if so, did it measure the
+# change? (uat/drift/README.md, .ai/memory/0017)
+#  - suite: tools/model-drift-pr-test.cjs proves the verdicts and the derived live surface (no model, no desk modules).
+#  - check: `node tools/model-drift-pr.cjs --base origin/<base branch>`. A pull request that changes a file the lab bench
+#    runs on the real engines (the prompts, the engine seam and the rules they import: `node tools/model-drift-pr.cjs
+#    --surface`) goes red unless it adds a live record to uat/drift/ that measured its own code and does not alert
+#    against the base branch's newest live record. A pull request that leaves the surface alone passes and owes no model
+#    call. Rewriting or deleting a committed record is red too: the records are append-only.
+# No job here makes a model call or holds a key (.ai/memory/0007). The live run it asks for is the operator's:
+# scripts/model-drift.ps1 on the pull request's branch, then commit the record and DRIFT.md. model-drift.yml keeps the
+# weekly watch on main. The runner's preinstalled Node runs both steps; neither needs desk/node_modules.
+name: model-drift-pr
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  live-record:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the base branch and the commit a record measured must both be in the history
+      - name: Pre-merge drift suite (no model)
+        run: node tools/model-drift-pr-test.cjs
+      - name: Owed a live record, and does it hold the baseline? (no model call)
+        run: node tools/model-drift-pr.cjs --base "origin/$GITHUB_BASE_REF"
