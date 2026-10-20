@@ -2,7 +2,7 @@
  * TL-5: the hand-off lives in the session. The reducer over plain sessions: ask.open mints an Ask (id, phase open, the TV's
  * screen, the seated learner) and replaces an open one; ask.cancel and ask.sent answer only the open id; a learner switch,
  * session.end, reset, a nav off the asking screen and a restart (load) each close it; a status that names the phone goes
- * with a switch and a restart. The session file is a scratch DESK_DATA_DIR. No route, no model.
+ * with a switch and a restart. The session file is a scratch DESK_DATA_DIR. One route case (f): /api/english re-opens the hand-off when a phone answer fails. No model.
  * Run with npm test in desk/ (directly: node tools/handoff-test.cjs).
  */
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict');
@@ -251,4 +251,39 @@ test('F16: a 428 on the plan Read it says on the TV what is needed (an essay ref
  assert.equal(r.status,428);const j=await r.json();assert.equal(j.notice,true);assert.match(j.error,/text engine/);
  const s=store.getSession();assert.match(s.status,/text notice first/);assert.match(s.status,/phone/);assert.equal(s.essayRefused,s.status);
  assert.deepEqual(require(path.join(root,'src/lib/rules/essay.ts')).refusalCaption(s),{label:'Not read',text:s.status});
+});
+
+// ---- the Linga route's hand-off re-open (council linga-conversation-turn, robustness-3): no model, the command fails at its learner check
+const english=(body,role='phone',raw)=>require(path.join(root,'src/app/api/english/route.ts')).POST(new Request('http://desk/api/english',{method:'POST',headers:role?{'x-desk-role':role}:{},body:raw??JSON.stringify(body)}));
+const failingTurn=askId=>({action:'turn',learnerId:'nobody-here',episodeId:'e',commandId:'ho-1',text:'hi',mode:'text',lastTurnId:'t',askId});
+test('(f) a phone answer to /api/english that fails re-opens the ask: a new id, the same kind and detail, phase open',async()=>{
+ seatOpen('linga','reply');
+ const old=store.getSession().ask,detail=old.detail;
+ const r=await english(failingTurn(old.id));
+ assert.equal(r.status,409,'the ConversationError status');assert.equal((await r.json()).error,'The learner at the desk changed. Try again.');
+ const a=store.getSession().ask;
+ assert.ok(a,'an ask is open again');assert.notEqual(a.id,old.id,'a new id');assert.equal(a.kind,'reply');assert.equal(a.phase,'open');assert.deepEqual(a.detail,detail);
+ // the phone can answer again: the new id passes the door
+ assert.equal((await english(failingTurn(a.id))).status,409);assert.equal(store.getSession().ask.phase,'open');assert.notEqual(store.getSession().ask.id,a.id);
+});
+test('(f) a failure after the ask changed (another ask opened, or a cancel) does not re-open the old one',async()=>{
+ const cmd=require(path.join(root,'src/lib/english/conversation.ts')),orig=cmd.englishCommand;
+ const failWith=f=>Object.defineProperty(cmd,'englishCommand',{value:async()=>{f();throw new cmd.ConversationError('boom',409);},configurable:true,writable:true});
+ try{
+  seatOpen('linga','reply');const o2=store.getSession().ask;
+  failWith(()=>{store.dispatch({type:'ask.open',kind:'page'});});
+  assert.equal((await english(failingTurn(o2.id))).status,409);
+  const a=store.getSession().ask;assert.equal(a.kind,'page','the newer ask stands');assert.equal(a.phase,'open');assert.notEqual(a.id,o2.id);
+  seatOpen('linga','reply');const o3=store.getSession().ask;
+  failWith(()=>{store.dispatch({type:'ask.cancel',id:o3.id});});
+  assert.equal((await english(failingTurn(o3.id))).status,409);assert.equal(store.getSession().ask,null,'a cancelled ask is not re-opened');
+ }finally{Object.defineProperty(cmd,'englishCommand',{value:orig,configurable:true,writable:true});}
+});
+test('(f) a too-long body (413) and bad JSON (400) answer before any ask change; the TV\'s failure does not re-open',async()=>{
+ seatOpen('linga','reply');const o=store.getSession().ask,frozen=JSON.stringify(store.getSession().ask);
+ const big=await english(null,'phone',JSON.stringify({action:'turn',askId:o.id,text:'x'.repeat(12001)}));assert.equal(big.status,413);
+ const bad=await english(null,'phone','{not json');assert.equal(bad.status,400);
+ assert.equal(JSON.stringify(store.getSession().ask),frozen,'the ask is untouched');
+ const tv=await english(failingTurn(o.id),'tv');assert.equal(tv.status,409);
+ assert.equal(JSON.stringify(store.getSession().ask),frozen,'a TV command never marked the ask sent, so nothing re-opens');
 });
