@@ -790,6 +790,11 @@ export async function englishCommand(raw:unknown){
     // Back never strands the scene (LG-4): a failed replay after a moment is the conversation, with no error
     if(back){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,replayFor:undefined,error:"",commands:[...c.commands,commandId].slice(-100)},"linga-talk");}catch{/* newer episode owns the UI */}return getSession();}
     // recert-10: Finish never strands the scene either: a finish coaching that fails, or its replay that fails, is the recap
-    if(finishing||finishCoach){try{const current=checkCurrent(c,commandId);endTake({...current,pending:null,error:""},commandId);}catch{/* newer episode owns the UI */}return getSession();}
+    if(finishing||finishCoach){
+      let current:Conversation;try{current=checkCurrent(c,commandId);}catch{return getSession();/* newer episode owns the UI */}
+      // only a stale command is silent: any other endTake failure leaves Finish as the retry, never a stranded scene
+      try{endTake({...current,pending:null,error:""},commandId);}catch(e2){try{commit({...current,pending:null,error:lingaLine(e2,"Linga could not save this take. Press Finish to try again.")});}catch{/* newer episode owns the UI */}}
+      return getSession();
+    }
     try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:lingaLine(e,chosen!==null?"The tutor could not answer that phrase. Choose a phrase again.":"The tutor could not complete that turn. Your reply is still on the phone; please retry.")});}catch{/* newer episode owns the UI */}throw e;}
 }

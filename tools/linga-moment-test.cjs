@@ -794,6 +794,25 @@ test('recert-10 (1): a held fix is the finish note as it is, with no call; no he
     assert.deepEqual(failed.getSession().conversation.coaching,{...ROOM_COACH,atFinish:true});
   }finally{failed.done();}
 });
+test('recert-10 (1): a Finish whose take cannot be saved names Finish as the retry, with nothing pending; a newer episode still owns the UI',async()=>{
+  const L=require(path.join(root,'src/lib/session/learners.ts')),realSave=L.saveLearner;
+  const f=await finishing({coach:()=>{throw new Error('timed out');}});
+  try{
+    L.saveLearner=()=>{throw new Error('disk full');};
+    await f.cmd('finish');
+    const s=f.getSession(),c=s.conversation;
+    assert.equal(c.pending??null,null,'nothing pending');assert.notEqual(c.phase,'finished');
+    assert(/Finish/.test(c.error),'the error names Finish as the retry: '+c.error);
+    L.saveLearner=realSave;
+    await f.cmd('finish');
+    assert.equal(f.getSession().screen,'linga-recap','the retry ends the take');assert.equal(f.getSession().conversation.error,'');
+  }finally{L.saveLearner=realSave;f.done();}
+  const g=await finishing({coach:()=>{const {dispatch}=require(path.join(root,'src/lib/session/store.ts'));dispatch({type:'reset'});throw new Error('timed out');}});
+  try{
+    await g.cmd('finish');
+    assert.equal(g.getSession().conversation??null,null,'a newer episode (here: a reset) keeps the UI; the stale finish writes nothing');
+  }finally{g.done();}
+});
 test('recert-10 (1): the finish note picks the reply that matters most: a held fix, else the latest reply with help; never a scene with a note already',()=>{
   const turns=[{id:'p0',role:'partner',text:'Hi.'},{id:'t1',role:'learner',text:'I go home.',supported:true},{id:'p1',role:'partner',text:'Ok.'},{id:'t2',role:'learner',text:'Fine.'},{id:'p2',role:'partner',text:'Bye?'}];
   const base={turns,coaching:null,supported:false,moments:[],preferences:{correction:'as-needed',level:'A2'}};
