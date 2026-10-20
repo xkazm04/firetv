@@ -231,6 +231,8 @@ export interface ConversationHelp {
   say?: true;
   /** LG-5 recert-9: the line has its own phrase quiz (help.ts quizFor); its words stay in server memory until it opens */
   quiz?: true;
+  /** rework 8 (A1-A2): the phrases Choose a phrase has shown for this line; a later press offers none of them again */
+  quizSeen?: string[];
 }
 /** LG-5 recert-9: the phrase quiz on screen, built for the partner line `forTurn`; its header quotes that line word for word. */
 export interface LineQuiz { forTurn: string; question: string; options: [string, string]; correct: number }

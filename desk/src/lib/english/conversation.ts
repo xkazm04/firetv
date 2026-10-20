@@ -594,12 +594,14 @@ export async function englishCommand(raw:unknown){
    * conversation saved before the ladder (help absent) keeps the scene's quiz, as it had.
    */
   function quiz(c:Conversation,commands=c.commands){
-    const q=quizFor(c.help,c.turns.at(-1),c.partner),options=q?q.options:c.help===undefined?scene!.quiz.options:null;
+    const band=heldBand(c),q=quizFor(c.help,c.turns.at(-1),c.partner,band,scene!.cue),options=q?q.options:c.help===undefined?scene!.quiz.options:null;
+    // rework 8: at A1-A2 a second press with nothing new to offer says so, never the same pair again
+    if(!options&&band&&(band==="A1"||band==="A2")&&c.help?.quizSeen?.length){commit({...c,sceneCued:true,quizOpen:false,cue:"You can type your own reply on the phone.",help:{...c.help,shown:false},commands},"linga-talk");return getSession();}
     if(!options){commit({...c,sceneCued:true,commands},"linga-talk");return getSession();}
     const cue=sceneCueFor(scene!.cue,heldBand(c),c.sceneCued)??"";
     // the quiz puts its options and the cue on screen: one that shows the hidden line's key words spends the find (K4)
     const shown=c.line&&[cue,...options].some(x=>!!x&&showsLine(c,x))?{line:{...c.line,shown:true}}:{};
-    commit({...c,supported:true,cue,...(cue?{sceneCued:true}:{}),quizOpen:true,lineQuiz:q,help:c.help&&{...c.help,shown:false},commands,...shown},"linga-talk");return getSession();
+    commit({...c,supported:true,cue,...(cue?{sceneCued:true}:{}),quizOpen:true,lineQuiz:q,help:c.help&&{...c.help,shown:false,...(q&&(band==="A1"||band==="A2")?{quizSeen:[...(c.help.quizSeen??[]),...options]}:{})},commands,...shown},"linga-talk");return getSession();
   }
   if(action==="quiz")return quiz(c);
   if(action==="choice"){
@@ -608,10 +610,10 @@ export async function englishCommand(raw:unknown){
     if(![0,1].includes(input.option as number))throw new ConversationError("Choose one of the displayed phrases.");
     // rework 7: the task phrase an option carries is on-task, so it is not "does not answer" (help.ts isTaskOption)
     const onTask=!!own&&input.option!==quiz.correct&&isTaskOption(own.forTurn,quiz.options[input.option as number]);
-    const correct=input.option===quiz.correct||onTask;
+    const correct=input.option===quiz.correct||onTask,band=heldBand(c),picked=quiz.options[input.option as number],beginnerPick=!!own&&(band==="A1"||band==="A2");
     const e:EnglishEvidence={id:`${c.id}:${commandId}:choice`,episodeId:c.id,turnId:commandId,sceneId:c.sceneId,skill:c.focusSkill,at:Date.now(),mode:"choice",supported:true,success:correct,quote:quiz.options[input.option as number],note:"Recognised a supporting phrase; not speaking evidence."};
     saveEnglish(learnerId,mergeEvidence(learning,[e]));
-    commit({...c,supported:true,quizOpen:!correct,cue:onTask?"That is what you came to do. Say it in your own reply on the phone.":correct?"Now use the idea in your own reply on the phone.":own?`That one does not answer ${c.partner.split(" · ")[0]}. Try the other option.`:"That phrase has a different purpose. Try the other option.",help:c.help&&{...c.help,shown:false},commands:[...c.commands,commandId],evidence:[...c.evidence,e]},"linga-talk");return getSession();
+    commit({...c,supported:true,quizOpen:!correct,cue:onTask?(beginnerPick?`That is what you came to do. Say it in your own reply on the phone: "${picked}"`:"That is what you came to do. Say it in your own reply on the phone."):correct?(beginnerPick?`Say it in your own reply on the phone: "${picked}"`:"Now use the idea in your own reply on the phone."):own?`That one does not answer ${c.partner.split(" · ")[0]}. Try the other option.`:"That phrase has a different purpose. Try the other option.",help:c.help&&{...c.help,shown:false},commands:[...c.commands,commandId],evidence:[...c.evidence,e]},"linga-talk");return getSession();
   }
   // recert-10: a scene with help used or a clear error held ends with one coaching note, then the coach screen offers its
   // replay (the existing step) or Finish again, which reaches the recap; a scene that owes no note ends as before

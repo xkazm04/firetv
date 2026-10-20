@@ -147,15 +147,35 @@ const nameOf = (partner: string) => partner.split(" · ")[0].trim() || "Your par
  * header quotes the line word for word ("Mia says: Hi Grandpa! I am home now."); which option fits is set by the line's
  * turn id, so it is not always the first. Never the scene's static quiz: a line with no quiz of its own has no quiz.
  */
-export function quizFor(help: ConversationHelp | null | undefined, last: { id: string; role: string; text: string } | undefined, partner: string): LineQuiz | null {
+export function quizFor(help: ConversationHelp | null | undefined, last: { id: string; role: string; text: string } | undefined, partner: string, band?: Band, sceneCue = ""): LineQuiz | null {
   if (!help?.quiz || !last || last.role !== "partner" || help.forTurn !== last.id) return null;
   const q = ladders.get(last.id)?.quiz;
   if (!q) return null;
   const correct = [...last.id].reduce((n, ch) => n + ch.charCodeAt(0), 0) % 2;
+  const question = `${nameOf(partner)} ${last.text.trim().endsWith("?") ? "asks" : "says"}: ${last.text}`;
+  if (help.quizSeen?.length && band && SAYS_BACK.includes(band)) {
+    // rework 8 (recert-13, LT-viktor-67-J4-1, LT-tomas-9-J4-2): a later press of Choose a phrase on the same line never shows
+    // a phrase it showed; it offers one not yet offered (the task phrase, the scene's own), else null: type your own reply
+    const shown = new Set(help.quizSeen.map(words)), own = sceneTaskFor(sceneCue, band, last.text);
+    const fresh = [q.task, own].find(x => !!x && !shown.has(words(x)));
+    if (!fresh) return null;
+    return { forTurn: last.id, question, options: correct === 0 ? [fresh, q.misfit] : [q.misfit, fresh], correct };
+  }
   // a line that pulls away from the task: the other option is the task phrase, not a misfit (rework 7)
   const other = q.task ?? q.misfit;
   const options: [string, string] = correct === 0 ? [q.fits, other] : [other, q.fits];
-  return { forTurn: last.id, question: `${nameOf(partner)} ${last.text.trim().endsWith("?") ? "asks" : "says"}: ${last.text}`, options, correct };
+  return { forTurn: last.id, question, options, correct };
+}
+
+/**
+ * The scene's own cue as a phrase a learner may send (rework 8): "Try: Hi Sam! How is school?" is the phrase when it fits the
+ * band, is not an unfinished starter and does not repeat the partner's line. Else "".
+ */
+export function sceneTaskFor(cue: string, band: Band | undefined, partnerLine: string): string {
+  const t = cue.replace(/^Try(?: [a-z]+)?:s*/, "").replace(/s+/g, " ").trim();
+  if (!t || /(...|…)$/.test(t) || t.length > QUIZ_MAX || !band || !SAYS_BACK.includes(band) || !inBand(t, band)) return "";
+  const theirs = new Set(sentencesOf(partnerLine));
+  return sentencesOf(t).some(x => theirs.has(x)) ? "" : t;
 }
 
 /** Whether an option of the line's quiz is its task phrase: on-task, so a pick of it is never "does not answer" (rework 7). */
