@@ -176,7 +176,7 @@ test('aim 7: the map from a paper\'s statements to a unit\'s forms - pinned to t
  * probability's step-up sets, which gained a top rung after cycle 14 (MB-B20) and moved by design; every other row is as
  * c4f39c53 drew it.
  */
-const PLAIN_FP='c196d8bbe89e39eeeed3cf0bf1eba554b47e45a7ced01ea85e571b95668aa5fe',SLIPS_FP='ec6b23846ee1c72265197a4b917bd185e271f96497fab8162a22de37493f6fc5';
+const PLAIN_FP='9107c18d21b360faaf35349884435f42243bd1174784e809aaca9590d1096c3a',SLIPS_FP='15f6826d6a08b553b327a0187149fffc67b5451cf84a39055dbe2e295869c880';
 function fingerprint(slipsOn,paper){
  const h=crypto.createHash('sha256');
  const systems=slipsOn?[undefined,'cz']:[undefined,'cz','uk'],seeds=slipsOn?[0,42]:[0,1,7,42,999,123456,4294967295-3];

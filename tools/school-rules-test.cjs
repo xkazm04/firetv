@@ -302,6 +302,7 @@ test('GENERATOR: seeds 1..200 for tiers 1 and 2 give well-formed, distinct, corr
    assert.ok(r.b<=12&&r.d<=12&&r.b>=2&&r.d>=2,`denominators 2..12: ${s.expr}`);
    if (tier===1) assert.ok(r.b===r.d||r.b%r.d===0||r.d%r.b===0,`tier 1 same or one-multiple: ${s.expr}`);
    else assert.ok(r.b!==r.d&&r.b%r.d!==0&&r.d%r.b!==0,`tier 2 unlike: ${s.expr}`);
+   if (tier===2) assert.ok(r.b<=10&&r.d<=10&&r.b*r.d/refGcd(r.b,r.d)<=24,`tier 2 bottoms 2..10, common bottom at most 24 (L1-nela-12-MB2-1): ${s.expr}`);
    assert.ok(r.n>0,`positive: ${s.expr}`);assert.ok(r.den>1,`not a whole number: ${s.expr}`);
    const same=(p,q,x,y)=>p*y===q*x;
    assert.ok(!same(r.n,r.den,r.a,r.b)&&!same(r.n,r.den,r.c,r.d),`the answer is not an operand: ${s.expr}`);

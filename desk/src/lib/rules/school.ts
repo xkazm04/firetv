@@ -2776,10 +2776,15 @@ function prng(seed: number): () => number {
 }
 const gcdN = (a: number, b: number): number => (b === 0 ? a : gcdN(b, a % b));
 
-/** Denominator pairs, 2..12: tier 1 the same or one a multiple of the other; tier 2 unlike, neither dividing the other. */
+/** Tier 2: the largest bottom, and the largest common bottom, a learner meets (L1-nela-12-MB2-1: 7/11 + 5/9 over 99 was out of reach). */
+export const TIER2_MAX_BOTTOM = 10, TIER2_MAX_COMMON = 24;
+/** Denominator pairs: tier 1 the same or one a multiple of the other, 2..12; tier 2 unlike, neither dividing the other, within the two bounds above. */
 const PAIRS: Record<1 | 2, [number, number][]> = (() => {
   const one: [number, number][] = [], two: [number, number][] = [];
-  for (let b = 2; b <= 12; b++) for (let d = 2; d <= 12; d++) (b % d === 0 || d % b === 0 ? one : two).push([b, d]);
+  for (let b = 2; b <= 12; b++) for (let d = 2; d <= 12; d++) {
+    if (b % d === 0 || d % b === 0) one.push([b, d]);
+    else if (b <= TIER2_MAX_BOTTOM && d <= TIER2_MAX_BOTTOM && (b * d) / gcdN(b, d) <= TIER2_MAX_COMMON) two.push([b, d]);
+  }
   return { 1: one, 2: two };
 })();
 /** The tops that make a proper fraction in lowest terms over b. */
