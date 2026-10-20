@@ -464,8 +464,23 @@ export function observationOk(lens: string, o: unknown): boolean {
 }
 
 /**
- * The judged sentence numbers, ascending, that have no readable observation. Observations are read as decideVerdicts
- * reads them: the first one with a numeric n wins for that n, and one for a number outside `judged` does not count.
+ * Whether a first-pass observation leaves out the link its lens needs to rule on it: a Structure sentence whose job is evidence
+ * with no integer `supports`, or an Evidence sentence that is checkable with no integer `backs`. 0 is the answer "backs
+ * nothing" (no sentence is numbered 0, so it is never an accepted link); only an absent or non-integer field is a gap.
+ * Without the link code cannot tell what the sentence proves, so a ruling on it would mark the true topic sentence or pass
+ * the planted claim (L1-eliska-12-EM1-4).
+ */
+function linkMissing(lens: string, o: unknown): boolean {
+  const x = o as Obs;
+  if (lens === "structure") return x.job === "evidence" && !Number.isInteger(x.supports);
+  if (lens === "evidence") return x.support === "checkable" && !Number.isInteger(x.backs);
+  return false;
+}
+
+/**
+ * The judged sentence numbers, ascending, that have no readable observation, or whose observation omits the link its
+ * lens needs (linkMissing). Observations are read as decideVerdicts reads them: the first one with a numeric n wins for
+ * that n, and one for a number outside `judged` does not count.
  */
 export function unanswered(lens: string, judged: Set<number>, observations: unknown): number[] {
   const first = new Map<number, unknown>();
@@ -473,7 +488,7 @@ export function unanswered(lens: string, judged: Set<number>, observations: unkn
     const n = (o as Obs | null)?.n;
     if (o && typeof o === "object" && typeof n === "number" && !first.has(n)) first.set(n, o);
   }
-  return [...judged].filter((n) => !observationOk(lens, first.get(n))).sort((x, y) => x - y);
+  return [...judged].filter((n) => !observationOk(lens, first.get(n)) || linkMissing(lens, first.get(n))).sort((x, y) => x - y);
 }
 
 /** The line a faulty sentence gets as its note: the check that failed, in its own words. */

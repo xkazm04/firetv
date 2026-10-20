@@ -18,9 +18,9 @@ const engine=require(path.join(root,'src/lib/engines/text.ts'));
  * the rule send observations directly, with a legacy `verdict` beside them to show it is ignored).
  */
 const WANTED={
- structure:{faulty:{job:'link'},strong:{job:'evidence'},neutral:{job:'context'}},
+ structure:{faulty:{job:'link'},strong:{job:'evidence',supports:0},neutral:{job:'context'}},
  argument:{faulty:{side:'wanders'},strong:{side:'pushes'},neutral:{side:'neutral'}},
- evidence:{faulty:{support:'opinion'},strong:{support:'checkable'},neutral:{support:'context'}},
+ evidence:{faulty:{support:'opinion'},strong:{support:'checkable',backs:0},neutral:{support:'context'}},
 };
 // the sentences a fixture did not name, answered neutral only so the reading is whole: analyseEssay below leaves their entries out of the verdicts
 const filler=new Set();
@@ -1072,7 +1072,7 @@ test('essay-master-A case 1: Structure - only the FIRST unsupported claim is fau
  // E1: the evidence now names claim 1 (supports:1); without the link claim 1 would be neutral, never strong by position
  const b=await analyseEssay('Homework is pointless. Research found that pupils lose sleep. It ruins evenings.','structure','oa-1');
  assert.deepEqual(verdictsOf(b),[[1,'strong'],[2,'strong'],[3,'faulty']],'claim 1 has marked evidence after it; claim 3 is the first without');
- answer=obsReply([{n:1,job:'claim'},{n:2,job:'evidence'}]);
+ answer=obsReply([{n:1,job:'claim'},{n:2,job:'evidence',supports:0}]);
  const c=await analyseEssay('Homework is pointless. Teachers give too much.','structure','oa-1');
  assert.deepEqual(verdictsOf(c),[[1,'faulty'],[2,'neutral']],'evidence with no EVIDENCE marker does not support a claim');
  assert.equal(a.verdicts[0].note,'This claim has no evidence after it that a reader can check.','no note from the model: the failed check\'s own line');
@@ -1105,13 +1105,13 @@ test('essay-master-A case 3: Language - a vague word must be in the sentence; le
  assert.match(c.verdicts[0].note,/important/,'an empty note becomes the failed check\'s line');
 });
 test('essay-master-A case 4: Evidence - checkable is strong only with an EVIDENCE marker or a number; an opinion with nothing checkable after it is faulty',async()=>{
- answer=obsReply([{n:1,support:'checkable',note:'x'}]);
+ answer=obsReply([{n:1,support:'checkable',backs:0,note:'x'}]);
  assert.deepEqual(verdictsOf(await analyseEssay('Teenagers are just lazy.','evidence','oa-4')),[[1,'neutral']],'never strong without a marker');
- answer=obsReply([{n:1,support:'checkable',note:'x'}]);
+ answer=obsReply([{n:1,support:'checkable',backs:0,note:'x'}]);
  assert.deepEqual(verdictsOf(await analyseEssay('Research found that teenagers fall asleep later.','evidence','oa-4')),[[1,'strong']]);
  answer=obsReply([{n:1,support:'opinion',note:'x'}]);
  assert.deepEqual(verdictsOf(await analyseEssay('Teenagers are just lazy.','evidence','oa-4')),[[1,'faulty']]);
- answer=obsReply([{n:1,support:'opinion',note:'x'},{n:2,support:'checkable',note:'y'}]);
+ answer=obsReply([{n:1,support:'opinion',note:'x'},{n:2,support:'checkable',backs:0,note:'y'}]);
  assert.deepEqual(verdictsOf(await analyseEssay('Teenagers are just lazy. A 2019 study measured their sleep.','evidence','oa-4')),[[1,'neutral'],[2,'strong']],'an opinion with checkable support after it is not left bare');
 });
 test('essay-master-A case 5: a rewrite is decided by the same rule - the move stays hatched until the check passes',async()=>{
@@ -1625,7 +1625,7 @@ test('E6-4: the TV caption and the spoken line both draw summaryLine',()=>{
 // ---- E7 (essay full r1 craft-1): a reading that leaves a judged sentence unanswered fails and records nothing ----
 test('E7-1: unanswered() names the judged sentences with no readable observation, ascending, first observation wins',()=>{
  const {unanswered}=rules();
- const ok={structure:{job:'claim'},argument:{side:'pushes'},evidence:{support:'checkable'},language:{issues:[]}};
+ const ok={structure:{job:'claim'},argument:{side:'pushes'},evidence:{support:'checkable',backs:0},language:{issues:[]}};
  const bad={structure:{job:'boss'},argument:{side:'sideways'},evidence:{support:'vibes'},language:{issues:'many'}};
  const judged=new Set([3,1,2]);
  for(const lens of Object.keys(ok)){
@@ -2236,4 +2236,41 @@ test('L1-helena-46-EM1-4 second round: the eight leaks of recert-18 are refused;
  assert.equal(held.czech.length,60);
  assert.equal(cz.length,52,'r2 held-out Czech refused (52 of 60 after the rule, 50 of 60 before it; the baseline was read before the rule was written, and its eight misses were seen, so this is a measure with that caveat)');
  assert.deepEqual(en,[],'no short English is refused');
+});
+
+// ---- L1-eliska-12-EM1-4 (recert-18): the planted-claim fix must not hang on optional link fields ----
+test('L1-eliska-12-EM1-4: Structure on the planted-claim paragraph (P2) with no supports is refused, never ruled',async()=>{
+ const claimEv=(ev)=>[{n:1,job:'claim',note:'x'},{n:2,job:'evidence',note:'x',...ev},{n:3,job:'claim',note:'x'}];
+ for(const ev of [{},{supports:null},{supports:'3'},{supports:2.5}]){
+  answer=obsReply(claimEv(ev));
+  await assert.rejects(analyseEssay(P2,'structure','el-4'),{message:NOT_EVERY_SENTENCE},`links absent ${JSON.stringify(ev)}: no verdict, so the true topic sentence 1 is never marked`);
+ }
+ answer=obsReply(claimEv({supports:3}));
+ const linked=verdictsOf(await analyseEssay(P2,'structure','el-4'));
+ assert.deepEqual(linked,[[1,'faulty'],[2,'strong'],[3,'strong']],'the linked path is unchanged: the claim the evidence does not back is the faulty one');
+ answer=obsReply(claimEv({supports:0}));
+ const none=verdictsOf(await analyseEssay(P2,'structure','el-4'));
+ assert.notDeepEqual(none.find(v=>v[0]===1),[1,'faulty'],'supports 0 (backs nothing) is an answer, and the topic sentence is not marked');
+});
+test('L1-eliska-12-EM1-4: Evidence on the planted-claim paragraph (P2) with no backs is refused, never ruled neutral',async()=>{
+ const obs=(ev)=>[{n:1,support:'opinion',note:'x'},{n:2,support:'checkable',note:'x',...ev},{n:3,support:'opinion',note:'x'}];
+ for(const ev of [{},{backs:null},{backs:'3'},{backs:1.5}]){
+  answer=obsReply(obs(ev));
+  await assert.rejects(analyseEssay(P2,'evidence','el-4'),{message:NOT_EVERY_SENTENCE},`links absent ${JSON.stringify(ev)}: refused, the planted claim is not passed as neutral`);
+ }
+ answer=obsReply(obs({backs:3}));
+ const linked=verdictsOf(await analyseEssay(P2,'evidence','el-4'));
+ assert.deepEqual(linked.find(v=>v[0]===1),[1,'faulty'],'the linked path: the opinion nothing backs is faulty');
+ assert.notEqual(linked.find(v=>v[0]===3)[1],'faulty','the opinion the evidence backs is not');
+ answer=obsReply(obs({backs:0}));
+ await analyseEssay(P2,'evidence','el-4');
+});
+test('L1-eliska-12-EM1-4: unanswered() counts a missing link on an evidence-job or checkable sentence, and only there',()=>{
+ const {unanswered}=rules(),j=new Set([1,2]);
+ assert.deepEqual(unanswered('structure',j,[{n:1,job:'claim'},{n:2,job:'evidence'}]),[2]);
+ assert.deepEqual(unanswered('structure',j,[{n:1,job:'claim'},{n:2,job:'evidence',supports:0}]),[]);
+ assert.deepEqual(unanswered('structure',j,[{n:1,job:'claim'},{n:2,job:'context'}]),[]);
+ assert.deepEqual(unanswered('evidence',j,[{n:1,support:'opinion'},{n:2,support:'checkable'}]),[2]);
+ assert.deepEqual(unanswered('evidence',j,[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1}]),[]);
+ assert.deepEqual(unanswered('argument',j,[{n:1,side:'pushes'},{n:2,side:'neutral'}]),[]);
 });

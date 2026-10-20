@@ -26,9 +26,9 @@ let seen = [], answer = async () => { throw new Error('no model call expected');
  * the rule send observations directly, with a legacy `verdict` beside them to show it is ignored).
  */
 const WANTED={
- structure:{faulty:{job:'link'},strong:{job:'evidence'},neutral:{job:'context'}},
+ structure:{faulty:{job:'link'},strong:{job:'evidence',supports:0},neutral:{job:'context'}},
  argument:{faulty:{side:'wanders'},strong:{side:'pushes'},neutral:{side:'neutral'}},
- evidence:{faulty:{support:'opinion'},strong:{support:'checkable'},neutral:{support:'context'}},
+ evidence:{faulty:{support:'opinion'},strong:{support:'checkable',backs:0},neutral:{support:'context'}},
 };
 const asObservations=(req,r)=>{
  if(!r||!r.json||!('verdicts' in r.json)||!req.schema?.properties?.observations)return r;
