@@ -1,0 +1,25 @@
+# first launch: the walk's stale pref restored, then the launcher intent
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<map>
+    <string name="url">http://localhost:3107/tv?key=<stale temp key></string>
+</map>
+10-20 16:51:15.057  1725  1725 I StickKeys: dropped the old kept link http://localhost:3107/tv?key=… (loopback, not kept)
+10-20 16:51:15.057  1725  1725 I StickKeys: trying 10.0.0.141:3000 (DEFAULT)
+10-20 16:51:15.336  1725  1725 I StickKeys: probe 10.0.0.141:3000: Answered(viewer=guest)
+10-20 16:51:15.338  1725  1725 I StickKeys: step Unpaired(desk=Desk(host=10.0.0.141, port=3000))
+10-20 16:51:20.431  1725  1725 I StickKeys: probe 10.0.0.141:3000: Answered(viewer=guest)
+# pref after
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <string name="desk">10.0.0.141:3000</string>
+</map>
+
+# kept desk set to 10.0.0.142:3000 (the computer's address changed), launcher intent
+10-20 16:51:25.548  2108  2108 I StickKeys: trying 10.0.0.142:3000 (SAVED)
+10-20 16:51:27.577  2108  2108 I StickKeys: probe 10.0.0.142:3000: Failed(why=it did not answer within 7 s)
+10-20 16:51:27.578  2108  2108 I StickKeys: step Scan
+10-20 16:51:27.590  2108  2108 I StickKeys: searching the LAN for a desk (stick at 10.0.0.139)
+10-20 16:51:30.712  2108  2108 I StickKeys: search found [10.0.0.141:3000=guest]
+10-20 16:51:30.713  2108  2108 I StickKeys: step Unpaired(desk=Desk(host=10.0.0.141, port=3000))
+10-20 16:51:35.814  2108  2108 I StickKeys: probe 10.0.0.141:3000: Answered(viewer=guest)
+10-20 16:51:40.887  2108  2108 I StickKeys: probe 10.0.0.141:3000: Answered(viewer=guest)
