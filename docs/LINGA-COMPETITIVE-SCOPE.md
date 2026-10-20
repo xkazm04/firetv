@@ -81,6 +81,18 @@ Q2 2026 letter says most new Super subscribers now get Video Call too [D15 · 20
 
 ## 2. Must-haves by 20 October, ranked
 
+**Status at `main` 2026-10-20 (checked against the code and `tools/linga-rules-test.cjs`).**
+
+| Must-have | Status | Commits | What is still owed |
+|---|---|---|---|
+| **MH-1** phone microphone over HTTPS | **landed** | `d371f78a` | A real phone on the LAN (browser step "phone voice over Wi-Fi") and whether it trusts the certificate: operator. |
+| **MH-2** keyword backstop under the model's audience label | **landed** | `3ed215b8`, `af472044` | Nothing in code. |
+| **MH-3** one thing learned tonight on the TV recap | **landed** | `2c778750` | A TV screenshot of the recap (E7): operator. |
+| **MH-4** one-tap spoken send, the wait measured every turn | **landed** (code); the figures are owed | `27c66e1e`, `4fbfebba` | The pre-ticked confirmation and the three per-turn timings (`tools/linga-ui-test.cjs`, E8) are in code. No live run has produced the figures; whether streamed speech is worth spend (O7) waits on them. |
+
+**Full-loop gaps closed in code, 2026-10-20 (code-only, L2 live recert owed):** a stuck learner can ask for coaching before any reply (`9a9f14e9`); at A1-A2 a fix keeps the learner's tense and coaching names no grammar term (`9afe257c`); the fresh-question replay is given the scene's goal and open step and told to stay on them (`fd76b5bd`, prompt side only: a code test that refuses an off-task question rejected realistic replays, so none is kept).
+
+
 Four, not five. Builders have 13 days for M4 and M5 together, and the fifth candidate (help in the child's own
 language) needs a scope call first. It is listed after the cut.
 
