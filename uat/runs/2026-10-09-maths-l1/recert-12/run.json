@@ -1,0 +1,55 @@
+{
+  "id": "2026-10-09-maths-l1/recert-12",
+  "started": "2026-10-20T07:45:34.745Z",
+  "finished": "2026-10-20T07:45:34.745Z",
+  "cert_level": "L1",
+  "module": "Math Buddy",
+  "base_commit": "b6581a9e75c7ca28f6483bf0ad47f73ed9cc739a",
+  "cast": [
+    "matyas-19",
+    "nela-12",
+    "radka-41"
+  ],
+  "journeys": [
+    "MB1",
+    "MB2",
+    "MB3",
+    "MB5"
+  ],
+  "pairs": [
+    {
+      "character": "matyas-19",
+      "journey": "MB1"
+    },
+    {
+      "character": "matyas-19",
+      "journey": "MB3"
+    },
+    {
+      "character": "nela-12",
+      "journey": "MB2"
+    },
+    {
+      "character": "radka-41",
+      "journey": "MB5"
+    }
+  ],
+  "recertify": {
+    "of": "2026-10-09-maths-l1",
+    "k": 12,
+    "prior_base_commit": "ed23c4aca3001b5ddc4450b7f8ed636663a18805",
+    "prior_run": "2026-10-09-maths-l1/recert-11",
+    "mode": "L1 code re-walk of every row open in recert-11/findings.json (5 rows) after two builder fixes were tried with the test suites in hand; answers fixed | recurs, stamped by recertify.cjs writeBack (fixed as not-seen)"
+  },
+  "instrument": {
+    "level": "L1 theoretical re-walk (uat skill, recertify at L1; README *Levels*)",
+    "walkers": "the builder session (autopilot accepted-idea-delivery 47b27a1c, branch autopilot/accepted-idea-delivery-47b27a1c cut from main f315e1b9): MB2-1 built and measured against tools/school-rules-test.cjs, school-stretch-test.cjs, maths-aim-test.cjs, maths-like-test.cjs, school-practice-test.cjs, school-toprung-test.cjs and paper-aim-test.cjs; MB3-5 tried against the calc suites and not built",
+    "model_calls": "none: no desk engine, no Ollama, no claude CLI, no codex, no paid API; desk/data untouched",
+    "overlay": [
+      "uat/README.md",
+      "uat/env.md",
+      "uat/rubric.md",
+      "uat/accepted-gaps.md"
+    ]
+  }
+}

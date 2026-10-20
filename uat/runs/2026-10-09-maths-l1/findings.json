@@ -95,13 +95,13 @@
     "code_check": "confirmed-absent",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "A snapped page whose items read as Calculus specs (specFromQuestion) can be marked from a photo of his working, by the same code judge as a desk set, items that do not read being \"not sure\".",
     "l2_priority": "precondition: vision host (env.md, Math Buddy) — none until built; then page read rate and handwriting read on a real MA1 sheet.",
-    "recertify_run": "2026-10-09-maths-l1/recert-11",
+    "recertify_run": "2026-10-09-maths-l1/recert-12",
     "recertify_status": "recurs",
-    "recertify_evidence": "Reconciled at ed23c4ac: not landed; owed. The server half exists (desk/src/app/api/mark/route.ts body.page arm, markPageRoute), the client half does not: sendWorking (desk/src/app/phone/page.tsx) posts {image,w,h} only and the typed-answers call posts answers, and desk/src/tv/keys.ts has no mark action on the page screen. Needs desk/src/app/phone/page.tsx and desk/src/tv/keys.ts (both held by the stick pass, outside this pass's paths) plus the vision path to read a ten-problem photo; route.ts needs nothing.",
-    "recurred_as": "L1-matyas-19-MB1-3"
+    "recertify_evidence": "Reconciled at b6581a9e: not landed; owed to the stick pass. desk/src/app/phone/page.tsx and desk/src/tv/keys.ts are unchanged on this branch since ed23c4ac and held by the stick pass; the vision path is still needed to read a ten-problem photo. Not touched by this pass.",
+    "recurred_as": "L1-matyas-19-MB1-1"
   },
   {
     "id": "L1-matyas-19-MB1-4",
@@ -1036,13 +1036,13 @@
     ],
     "code_check": "n-a",
     "verdict": "uncertain",
-    "resolution": "open",
+    "resolution": "fixed",
     "recurrence": 11,
     "suggested_acceptance": "A teacher signs off the tier-2 denominator range for cz 6. ročník",
     "l2_priority": "Set fit judged by a Czech maths teacher on 3 drawn sets",
-    "recertify_run": "2026-10-09-maths-l1/recert-11",
-    "recertify_status": "recurs",
-    "recertify_evidence": "Reconciled at ed23c4ac: not landed on main (school.ts PAIRS still draws tier 2 from bottoms 2..12 with common bottoms up to 132). Tried and not committed: PAIRS tier 2 limited to bottoms 2..10 with a common bottom of at most 24 (desk/src/lib/rules/school.ts:2780; no elevenths, nothing up to 132). The bound moves every frozen tier-2 draw: with it alone tools/paper-aim-test.cjs \"the usual draw\" hash fails, and with both school.ts changes of this pass tools/school-rules-test.cjs, school-stretch-test.cjs, maths-aim-test.cjs, paper-aim-test.cjs and maths-like-test.cjs are red. Those tests are outside this pass's paths, so nothing was changed. Needs: desk/src/lib/rules/school.ts (PAIRS and the gen doc line) and the frozen draws in tools/paper-aim-test.cjs, school-stretch-test.cjs, maths-aim-test.cjs and maths-like-test.cjs regenerated; no teacher read is needed for the bound itself.",
+    "recertify_run": "2026-10-09-maths-l1/recert-12",
+    "recertify_status": "not-seen",
+    "recertify_evidence": "Fixed in b6581a9e: desk/src/lib/rules/school.ts PAIRS tier 2 keeps bottoms 2..10 with a common bottom of at most 24 (TIER2_MAX_BOTTOM, TIER2_MAX_COMMON), so no elevenths and nothing up to 132; tier 1 and gen()'s fallback (3/4 + 1/6) are unchanged. tools/school-rules-test.cjs GENERATOR now asserts for seeds 1..200 that no tier-2 draw has a bottom above 10 or a common bottom above 24 (129 distinct tier-2 specs remain, the suite needs 100). Frozen values moved by the bound: tools/paper-aim-test.cjs PLAIN_FP and SLIPS_FP (hashes of the tier-1/2 draw grids), regenerated; school-stretch, maths-aim, maths-like, school-practice, school-toprung and school-rules froze nothing the bound moves and are green unchanged. No teacher read is needed for the bound itself.",
     "recurred_as": "L1-nela-12-MB2-6"
   },
   {
@@ -1071,13 +1071,13 @@
     "code_check": "by-design",
     "verdict": "uncertain",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "Owner ruling: either the add/sub questions say \"simplest form\" (unsure, not wrong, for 6/4), or the lesson drops \"then simplify\"",
     "l2_priority": "Owner/teacher ruling on unsimplified results for cz",
-    "recertify_run": "2026-10-09-maths-l1/recert-11",
+    "recertify_run": "2026-10-09-maths-l1/recert-12",
     "recertify_status": "recurs",
-    "recertify_evidence": "Reconciled at ed23c4ac: not landed (worked.ts:15 still teaches \"then simplify\"; school.ts check() ticks 22/24 right for 3/4 + 1/6). Tried and not committed: check() marks a sum of two fractions or mixed numbers written as a fraction not in lowest terms unsure (WHY.simplest) while a decimal or whole number stays right. It contradicts expectations frozen on purpose: tools/school-rules-test.cjs SPELLINGS has \"22/24\" and \"33/36\" for 3/4 + 1/6, \"14/24\" for 5/6 - 1/4, \"6/8\" for 1/2 + 1/4, \"6/4\" and \"1 2/4\" for 3/4 + 3/4 and \"-2/4\" for 1/4 - 3/4 as right; tools/maths-like-test.cjs case 5 answers six items with unsimplified sums; school-stretch-test.cjs and maths-aim-test.cjs go red too. The alternative, form \"simplest\" on the generated specs (the question then says \"Give your answer in its simplest form.\"), is red in school-rules, maths-calculus, school-practice, school-toprung, school-stretch, maths-aim, paper-aim and maths-like. Both are policy flips of tests outside this pass's paths. Needs: desk/src/lib/rules/school.ts and those tests, with the owner's choice between the two.",
-    "recurred_as": "L1-nela-12-MB2-7"
+    "recertify_evidence": "Reconciled at b6581a9e: not landed, and not touched (the simplest-form marking rule waits on the owner's choice between check() marking an unsimplified fraction unsure and form \"simplest\" on the generated specs; both flip tests frozen on purpose, see recert-11). school.ts check() and worked.ts:15 are unchanged since ed23c4ac; the tier-2 PAIRS bound of b6581a9e (MB2-1) does not touch check().",
+    "recurred_as": "L1-nela-12-MB2-2"
   },
   {
     "id": "L1-nela-12-MB2-8",
@@ -2637,12 +2637,12 @@
     "code_check": "by-design",
     "verdict": "confirmed",
     "resolution": "open",
-    "recurrence": 11,
+    "recurrence": 12,
     "suggested_acceptance": "The phone Recap lists every learner with work tonight, one block each.",
-    "recertify_run": "2026-10-09-maths-l1/recert-11",
+    "recertify_run": "2026-10-09-maths-l1/recert-12",
     "recertify_status": "recurs",
-    "recertify_evidence": "Reconciled at ed23c4ac: not landed. Operator ruling (b), 2026-10-20: keep the privacy strip (desk/src/lib/session/pairing.ts view() keeps removing `away` from every phone and TV response); the phone Recap covers only the seated child, with one honest line that the others show on the TV. The acceptance is amended (suggested_acceptance) and the strip needs no change. Acceptance amended, code owed at desk/src/app/phone/page.tsx (the Recap section that renders learnerRecaps(s, now), about :881: the honest line, in the learner's language) and its copy in desk/src/tv/ if the TV names where the others are shown; both held by the stick pass, outside this pass's paths. Not closed.",
-    "recurred_as": "L1-radka-41-MB5-7"
+    "recertify_evidence": "Reconciled at b6581a9e: not landed. Operator ruling (b) of 2026-10-20 stands (privacy strip kept; the phone Recap covers only the seated child with one honest line that the others show on the TV); code owed at desk/src/app/phone/page.tsx (the Recap, about :881), held by the stick pass and unchanged on this branch since ed23c4ac. Not touched by this pass.",
+    "recurred_as": "L1-radka-41-MB5-2"
   },
   {
     "id": "L1-radka-41-MB5-8",
