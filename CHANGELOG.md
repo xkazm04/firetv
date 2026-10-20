@@ -125,6 +125,7 @@ The agent contract, CI and the evals that cover every product.
 
 ### Unreleased
 
+- CI repair after the ascent/runner harvest (issue #12): `supply-chain.yml` no longer has the dependency-graph job (the repository's dependency graph is off), `ai-conformance.yml` is the weekly report only (`conformance-gate.yml` is the per-PR verdict), `capabilities-pr.yml` runs by hand only (test-desk exceeds the doctor's 180 s budget), and the `quality.yml` desk job installs `tools/` dependencies; two Windows-only assumptions in `tools/maths-rules-test.cjs` and `tools/engines-rules-test.cjs` now hold on Linux too.
 - A live model-drift watch:
   - `tools/model-drift.cjs` records each live lab-bench run in [uat/drift/](uat/drift/README.md) and compares it with the last one.
   - `scripts/model-drift.ps1` runs it weekly on the operator's machine.
