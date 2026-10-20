@@ -109,9 +109,9 @@ export function replayRefused(question: string, form: unknown, after: string, fr
 }
 /** Words that open any question or instruction and so say nothing of a scene's topic. */
 const FILLER = new Set(["what", "where", "when", "who", "whom", "whose", "which", "why", "how", "does", "did", "do", "today", "ask", "about", "try", "say", "tell", "hi", "hello", "please", "your", "you", "can", "could", "would", "will", "there", "here", "some", "any", "much", "many", "often", "usually", "like", "have", "has", "get", "go"]);
-const topicWords = (text: string) => wordsOf(text).filter(w => !LIGHT.has(w) && !AUX.has(w) && !FILLER.has(w) && w.length > 2);
+const topicWords = (text: string) => wordsOf(text).filter(w => !LIGHT.has(w) && !AUX.has(w) && !FILLER.has(w) && w.length > 2).map(w => w.length > 3 ? w.replace(/s$/, "") : w);
 /**
- * Whether a replay question shares a content word with the scene's texts (goal, open step, cue). Pure; with no topic word in
+ * Whether a replay question shares a content word with the scene's texts (goal, open step, cue, the lines said so far; a plural counts as its singular). Pure; with no topic word in
  * the scene at all there is nothing to hold the question to, so it stays.
  */
 export function staysOnScene(question: string, scene: string[]): boolean {

@@ -185,7 +185,7 @@ function backRefusal(c:Conversation,json:Record<string,unknown>,after:string,fra
   const question=partnerSays(c,json.reply,undefined,json.help);
   // a redirect line or a question asked before is refused as before, never asked again (LG-4 (b))
   if(asksNothingNew(c,question))return null;
-  const why=replayRefused(question,json.form,after,frame,heldBand(c),[c.goal,...(c.mission&&!missionDone(c.mission)?[currentStep(c.mission)]:[]),...(cue?[cue]:[])]);
+  const why=replayRefused(question,json.form,after,frame,heldBand(c),[c.goal,...c.turns.map(t=>t.text),...(c.mission&&!missionDone(c.mission)?[currentStep(c.mission)]:[]),...(cue?[cue]:[])]);
   return why?{question,why:`${why} Ask again: your question must use every word in frameWords, and be short and plain enough for the learner.`}:null;
 }
 /** A Back replay line that asks nothing new: the gate's redirect line, or a question in askedBefore again. */

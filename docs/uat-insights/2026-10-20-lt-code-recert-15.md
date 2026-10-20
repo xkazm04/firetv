@@ -9,12 +9,12 @@ Reconcile: none of the three edges was closed on main before this pass (replay.t
 | Clause | Verdict |
 |---|---|
 | Replay asked with goal and open step | fixed (7c185a08, unchanged) |
-| No code check rejects an off-topic replay | **fixed in code** - replay.ts `replayRefused(..., scene)` and `staysOnScene`: the question must share a content word (question and filler words, light words and auxiliaries ignored) with the scene goal, open step or cue, else "The replay question left the scene." conversation.ts `backRefusal` passes `[goal, open step, scene.cue]`, so the one retry and the final refusal both use it. A scene with no topic word holds nothing |
+| No code check rejects an off-topic replay | **fixed in code** - replay.ts `replayRefused(..., scene)` and `staysOnScene`: the question must share a content word (question and filler words, light words and auxiliaries ignored) with the scene goal, open step or cue, else "The replay question left the scene." conversation.ts `backRefusal` passes `[goal, open step, scene.cue, every line said so far]` (goal and cue alone made the existing replay fixtures, whose questions use the learner's own words, fail; a plural counts as its singular), so the one retry and the final refusal both use it. A scene with no topic word holds nothing |
 | Recap invites answering the fresh question | still **open** (view.ts, as in recert-14) |
 
 Test: "Which sport do you play at the weekend?" in a school scene (goal "Ask Sam about school.", cue "Try: What did you do at school today?") is refused; "Which sport do you play at school?" passes; with no scene given nothing changes.
 
-Known limit: words are matched as written (no lemmas or synonyms); a school replay phrased only with "class" or "teacher" against a goal saying "school" is refused and is retried once, then the Back falls to the conversation as for any refused replay.
+Known limit: because the lines said so far count, a drift onto a topic the learner themself raised passes; words are matched as written (no lemmas or synonyms); a school replay phrased only with "class" or "teacher" against a goal saying "school" is refused and is retried once, then the Back falls to the conversation as for any refused replay.
 
 ## recert-12 LT-viktor-67-J4-5 edge (d6e143f3): "Use did"
 
