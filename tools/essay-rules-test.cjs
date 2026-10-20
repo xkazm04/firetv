@@ -2289,7 +2289,25 @@ test('L1-helena-46-EM1-4 round 3: the eight r2 leaks are tuned cases; the r3 bli
  console.log(`# EM1-4 r3 held-out: Czech refused ${cz.length}/${held.czech.length}, English refused ${en.length}/${held.english.length}`);
  assert.equal(held.czech.length,60);
  assert.equal(held.english.length,45);
- // blind figure, measured once after the rule was final (55 of 60 before the rule); the rule was not tuned on this file
- assert.equal(cz.length,57,'r3 blind Czech refused (57 of 60; 55 of 60 before the rule)');
+ // blind figure in round 3; r3 is TUNED ON from round 4 (its three leaks were read), so the current count is 60 of 60 and is no longer a held-out figure, measured once after the rule was final (55 of 60 before the rule); the rule was not tuned on this file
+ assert.equal(cz.length,60,'r3 TUNED Czech refused (60 of 60 after round 4; 57 of 60 blind in round 3)');
  assert.deepEqual(en,[],'no short English is refused');
+});
+
+test('L1-helena-46-EM1-4 round 4: the r4 blind set is pinned at its measured rate; r3 is tuned',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ // tuned on these (the three r3 leaks); not a held-out figure
+ for(const t of ['Snim o prazdninach','Prelozte tu vetu','Nemohu najit klice'])assert.equal(R.paragraphIsEnglish(t),false,t);
+ const held=JSON.parse(fs.readFileSync(path.join(__dirname,'essay-heldout-czech-short-r4.json'),'utf8'));
+ const sha=require('node:crypto').createHash('sha256').update(JSON.stringify({czech:held.czech,english:held.english})).digest('hex');
+ assert.equal(sha,held.sha256,'the r4 held-out file was edited');
+ const cz=held.czech.filter(t=>!R.paragraphIsEnglish(t)),en=held.english.filter(t=>!R.paragraphIsEnglish(t));
+ console.log(`# EM1-4 r4 held-out: Czech refused ${cz.length}/${held.czech.length}, English refused ${en.length}/${held.english.length}`);
+ assert.equal(held.czech.length,59);
+ assert.equal(held.english.length,45);
+ // blind figure, measured once: 54 of 59 before the rule, 55 of 59 after; r4 is not tuned on
+ assert.ok(cz.length>=54,'r4 blind Czech refused is at least the step-2 baseline (54 of 59)');
+ // one r4 English line was already refused before the rule change (step-2 baseline 1/45): known, reported, not tuned on
+ assert.ok(en.length<=1,'r4 English refused does not grow past the baseline of 1 of 45');
+ for(const f of ['essay-heldout-czech-short-r2.json','essay-heldout-czech-short-r3.json']){const h=JSON.parse(fs.readFileSync(path.join(__dirname,f),'utf8'));assert.deepEqual(h.english.filter(t=>!R.paragraphIsEnglish(t)),[],f+' English is not refused');}
 });
