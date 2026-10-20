@@ -593,21 +593,25 @@ Not yet walked on the stick.
 | F15 | At rest (focus −1) the first lit action is the stop the D-pad moves from, so the first Down reaches the second action (`focusStep`) | 64bce506 | `tools/linga-rules-test.cjs` (F15) |
 | F19 | A generated scene draws its place's picture (café, hotel, classroom, interview, moon) or the neutral `start`, never its skill's; the plan doors follow the same rule | 868dfccd | `tools/linga-rules-test.cjs` (F19) |
 
+### Math TV fixes (2026-10-20, after the pass)
+
+Not yet walked on the stick.
+
+| # | Finding | Commit | Test |
+|---|---|---|---|
+| F8 | A failed maths read names the TV's Select as its retry, not the phone | 474e4b6f | `tools/tv-keys-test.cjs`, `tools/desk-jobs-rules-test.cjs` |
+| F10 | Back from a paper that Down on Tonight opened returns to Tonight | 515fa619 | `tools/tv-keys-test.cjs` |
+| F18 | A withheld explain reply is the desk's own line, not the opening question again | 400156f1 | `tools/maths-tv-test.cjs` |
+| F20 | With a phone joined and no ask open, the practice card names the TV's two ways in (Snap the sheet, Type my answers) instead of saying the phone is waiting | b4d5638a | `tools/phone-panel-test.cjs` (case 14, F20) |
+
 ### Open, for the next builders (not fixed here)
 
 | # | Finding | Where |
 |---|---|---|
 | F0 | In Silk, the D-pad, Select, Back and Menu never reach the page; only Play/Pause does. The TV-led design cannot run in the stick's browser | platform: a WebView wrapper (`tv-app/`) or a Fire TV web app; operator question |
-| F14 | Choose a phrase does not answer the turn. The engine asks for the phrase "in your own reply on the phone", but LingaTV has already cancelled the reply ask and marked the turn answered, so the phone is idle | `desk/src/lib/english/conversation.ts:616`, `desk/src/english/LingaTV.tsx:46` |
-| F15 | `linga-talk` opens at focus −1 with the first action drawn lit; the first Down only moves to that same action | `desk/src/english/LingaTV.tsx:89` |
-| F19 | A generated scene draws its skill's art: the café scene shows the HOTEL sign | `desk/src/lib/english/view.ts:39` (`artOf` → `SKILL_ART`) |
-| F8 | A failed maths read says "Open Try again on the phone", but since TL-13 the retry is the TV's Select | `desk/src/maths/MathsTV.tsx:1012`. `desk/src/tv/pageLines.ts:9` is pinned as is by `tools/tv-keys-test.cjs:799-806` and `tools/desk-jobs-rules-test.cjs:598`, so its copy waits for the same decision |
-| F10 | Back from an empty paper lands on Get ready for school, not Tonight, after Down on Tonight opened it | `desk/src/tv/keys.ts:681-685`, pinned by `tools/tv-keys-test.cjs:1251` ("the next Back leaves as it did"); changing it changes a TL-13 acceptance |
 | F6 | The `rewrite` and `slot` panels carry the whole paragraph composer, with its Analyse on the TV and the shelf; section 2.2 lists one field, Dictate and Send | `desk/src/app/phone/page.tsx:857`, `:863`, pinned by `tools/phone-panel-test.cjs:1183-1208` |
 | F16 | Read it on the plan gets a 428 when the learner has not seen the text notice, and the TV shows nothing | `desk/src/app/api/analyse/route.ts:203`; `desk/src/essay/EssayTV.tsx` has no line for a refused read |
 | F17 | `essay.slot` does not close the `slot` ask: it stays open with `detail.i` 0 after all three slots, and the TV keeps "On your phone" | `desk/src/lib/session/store.ts:863` |
-| F18 | After `/api/explain` returned 200, the walk card reads "The desk replied" over the same opening question | `desk/src/maths/MathsTV.tsx:875-883` (not diagnosed) |
-| F20 | The practice card says "The phone is waiting for the sheet or your answers." with no ask open | `desk/src/maths/MathsTV.tsx:826` |
 | F21 | A phone-naming status outlives its ask. After Back cancelled the slot ask, Math Buddy's Tonight still carried "say or type slot 1, Your claim, on the phone", and Tomas's statuses carried into Ema's evening | `desk/src/lib/session/store.ts` (`ask.cancel` does not clear a `namesPhone` status) |
 | F13 | In Silk fullscreen, the learner screen painted only its top 290 px; windowed, it paints | stick render, not diagnosed |
 | F22 | The main checkout's `desk/node_modules` lacks `@next/env` and sharp's native binary, so `next dev` cannot start there | environment, `C:/Users/kazda/kiro/firetv/desk/node_modules` |
