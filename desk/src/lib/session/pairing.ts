@@ -225,9 +225,9 @@ export function liveRole(req?: Request | null): Role | null {
 
 /**
  * The Session keys a guest may see: the lobby - where the TV is, whose desk it is, and (on the profile screen only)
- * the name being typed. This is the unjoined /phone page's whole read: `screen` and `subject` word the Join panel
- * (page.tsx:377, :382), `learner` and `draft` the Profile panel (:390, :403), `phoneUrl` and `updatedAt` are the
- * lobby's own. `viewer`, `pin` and `joined` are set by view() itself.
+ * the name being typed. This is the unjoined /phone page's whole read: `screen` words the Join panel ("The TV is on ..."),
+ * `learner` and `draft` the Profile panel, `ask` the name hand-off (TL-5), `phoneUrl` and `updatedAt` are the lobby's own;
+ * `subject` has no reader on the unjoined page today. `viewer`, `pin` and `joined` are set by view() itself.
  */
 export const LOBBY = ["viewer", "pin", "joined", "phoneUrl", "learner", "subject", "screen", "updatedAt", "draft", "ask"] as const satisfies readonly (keyof Session)[];
 export type LobbyKey = (typeof LOBBY)[number];
@@ -235,7 +235,7 @@ export type LobbyKey = (typeof LOBBY)[number];
 /**
  * Every other Session key, at its empty value. The type makes tsc fail when a Session key is in neither LOBBY nor
  * here, so a new field is a guest-blank by decision, never by omission. focus, view and timer are here: the unjoined
- * page reads none of them (its only read of the timer, page.tsx:598, is on the joined Tonight panel).
+ * page reads none of them (no file under app/phone reads the timer at all).
  */
 export const GUEST_BLANK = {
   profiles: [], tasks: [], back: undefined, phonesLive: 0,
