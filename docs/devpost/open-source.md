@@ -6,8 +6,8 @@ The fields of the Open Source mini-challenge form.
 |---|---|
 | Repository URL | https://github.com/xkazm04/firetv |
 | GitHub username | xkazm04 |
-| Contribution URL | TBD by operator |
-| Standalone key-bridge repository | TBD |
+| Contribution URL | https://github.com/xkazm04/firetv-key-bridge |
+| Standalone key-bridge repository | https://github.com/xkazm04/firetv-key-bridge |
 
 ## What
 
@@ -20,6 +20,9 @@ repository: a telestrator where a phone draws on a paused video frame, and the D
   hands it the remote's keys (the D-pad, Select, Back, Menu, Play/Pause) as standard key events, with Back
   going to the page first and a held Back leaving the app. It finds its server on the /24 by itself and
   recovers when the server comes back (commits 17a3a854, 56e9db4e, 59e7e00a, fe4cb34b, d9bb3c9e).
+- **`firetv-key-bridge`** (https://github.com/xkazm04/firetv-key-bridge): a public, MIT-licensed, standalone
+  extraction of the stick-app key bridge, with 24 unit tests. It has not been tested on the device yet; the
+  on-device claims in this repository are about `stick-app/`, not about the extraction.
 - **`tools/stick-perf/`**: a probe that scores a web page's transitions on the stick from a DevTools
   trace, frame by frame in a window after each key (commit f8ba80f6;
   [STICK-PERFORMANCE-2026-10-20.md](../concepts/STICK-PERFORMANCE-2026-10-20.md)).
