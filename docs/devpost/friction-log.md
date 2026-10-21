@@ -175,17 +175,21 @@ Wi-Fi, reached with `adb connect <ip>:5555` ([POC-FINDINGS.md](../POC-FINDINGS.m
   (`had_enough_memory_to_schedule_tiles_needed_now: false`), the arriving world showed part-rastered, and
   the world was rastered again 0.72 s later: a second 0.6-0.8 s freeze. Fitting the stage with `zoom`
   instead cut the tiles to 71 MB and removed the second freeze, but changed every glyph's antialiasing
-  (25.9-35.1 dB PSNR against main).
-- **Severity.** Medium: the switch stall remains.
-- **Workaround.** None kept: the zoom fit was reverted to keep the look, and the decision is the
-  operator's (commits 64aee9aa, ba1079cf). The page's `devicePixelRatio` reads 4 on a 960 × 540 CSS
+  (25.9-35.1 dB PSNR against main). Pass 2 first dropped it for that reason.
+- **Severity.** Medium: it added a second freeze to each switch.
+- **Workaround.** The zoom fit shipped. The operator restored it outright on 2026-10-21 (commit e9c62990):
+  one lamp-move stall instead of two, landing tiles 107 to 71 MB, at the price of slightly different text
+  antialiasing. Pass 3 then drew each world's sky, hills and side cliffs once into canvases, which took a
+  lamp move's longest frame gap from 641-669 ms to 271-283 ms and Back from 500-572 ms to 228-378 ms; the
+  bitmaps stay resident inside a module, about 46 MB more GPU memory than before (commits 7b07a9ba,
+  19f57b30, cc2cbf01, 640a931f; [STICK-PERFORMANCE-2026-10-21.md](../concepts/STICK-PERFORMANCE-2026-10-21.md),
+  "Pass 3: pre-rendered stills"). The page's `devicePixelRatio` reads 4 on a 960 × 540 CSS
   viewport, and the WebView ignored a DevTools device-metrics override, so whether that costs raster is
   also unsettled.
 - **Suggestion.** Publish the tile budget a Fire TV WebView gets, and a recommended way to fit a fixed
   1920 × 1080 stage to the window that does not raster at four times.
-- **Source.** `docs/concepts/STICK-PERFORMANCE-2026-10-21.md` and commits 64aee9aa, 7bdb4468, ba1079cf,
-  df5665ae on branch `autopilot/accepted-idea-delivery-da30cfd4` (not yet on `main` when this was written);
-  the `devicePixelRatio` finding is in [STICK-PERFORMANCE-2026-10-20.md](../concepts/STICK-PERFORMANCE-2026-10-20.md),
+- **Source.** [STICK-PERFORMANCE-2026-10-21.md](../concepts/STICK-PERFORMANCE-2026-10-21.md) (pass 2, commit
+  f9a6da99; pass 3) and commits e9c62990, 7b07a9ba, 19f57b30, cc2cbf01, 640a931f; the `devicePixelRatio` finding is in [STICK-PERFORMANCE-2026-10-20.md](../concepts/STICK-PERFORMANCE-2026-10-20.md),
   "Tried and dropped".
 
 ## FL-11. Which stick runs an APK, and what Vega allows, is hard to find out

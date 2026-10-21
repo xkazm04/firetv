@@ -34,10 +34,13 @@ from; the friction behind "what needs work" is told in full in [friction-log.md]
 - **Worked well.** Fully usable over Wi-Fi with no cable at any point. The telestrator's live UI test passed
   27 of 27 on it and its overlay drew faster than on the emulator (p50 0.084 ms)
   ([POC-FINDINGS.md](../POC-FINDINGS.md), section 7). After the fixes the Study Desk landing runs at 59 fps
-  idle ([STICK-PERFORMANCE-2026-10-20.md](../concepts/STICK-PERFORMANCE-2026-10-20.md)).
+  idle ([STICK-PERFORMANCE-2026-10-20.md](../concepts/STICK-PERFORMANCE-2026-10-20.md)), and after pass 3 a
+  lamp move's longest frame gap is 271-283 ms, down from 641-669 ms
+  ([STICK-PERFORMANCE-2026-10-21.md](../concepts/STICK-PERFORMANCE-2026-10-21.md), "Pass 3: pre-rendered stills").
 - **Needs work.** Web content is GPU-bound: rastering large SVG layers takes about half a second, CSS
   filters on composited layers are very costly, and the WebView's tile budget is reached under a CSS
-  `scale()` ([FL-7](friction-log.md#fl-7-a-blank-frame-on-every-move-between-apps-gpu-raster-time),
+  `scale()`, which rasters at four times (107 MB of tiles against an 80 MB soft budget; the zoom fit that
+  replaced it shipped in e9c62990) ([FL-7](friction-log.md#fl-7-a-blank-frame-on-every-move-between-apps-gpu-raster-time),
   [FL-8](friction-log.md#fl-8-css-drop-shadow-on-a-composited-layer-costs-the-whole-frame-budget),
   [FL-10](friction-log.md#fl-10-the-webviews-gpu-tile-budget-under-a-css-scale)). None of this shows on a
   desktop browser, so the only honest meter was the device.
