@@ -21,6 +21,8 @@ jobs:
           cache: npm
           cache-dependency-path: desk/package-lock.json
       - run: npm ci --prefix desk
+      - name: Tools dependencies (tools/device.mjs imports pngjs and ws; the device suite runs inside the desk gate)
+        run: npm ci --prefix tools --omit=dev
       - name: Desk gate (typecheck + rules suites)
         run: npm --prefix desk test
 

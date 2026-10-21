@@ -136,11 +136,11 @@ design pages that `prototype/build.py` builds.
   - `/cx`, `/spark`, `/contest`, `/perfect`, `/leonardo`
 - They are registered under `agents:` in `.ai/manifest.yaml`.
 - CI (`.github/workflows/`):
-  - `ai-conformance.yml` runs `.ai/doctor.mjs` (the agent contract check) on every PR. Its exit code is red by design because of the human-owned `control.prepush` finding (`.ai/memory/0011`).
+  - `ai-conformance.yml` is the weekly conformance report only (`.ai/doctor.mjs --json`). The per-PR verdict is `conformance-gate.yml`, because the raw doctor is red on every PR by design (the human-owned `control.prepush` finding, `.ai/memory/0011`).
   - `conformance-gate.yml` is the contract verdict to read on a PR. `scripts/doctor-gate.mjs` fails on any doctor fail except the waivers it lists, each owned by a memory entry (`.ai/memory/0016`).
-  - `capabilities-pr.yml` runs every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` on each same-repo PR. It goes red when a capability fails, or when a committed `verified: true` did not hold. To set a flag, commit the write-back of a local `node .ai/doctor.mjs --run`; never hand-flip one (`.ai/memory/0016`).
+  - `capabilities-pr.yml` runs every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` when run by hand (workflow_dispatch; it does not run on PRs because test-desk exceeds the doctor's 180 s budget on a runner, issue #12). It goes red when a capability fails, or when a committed `verified: true` did not hold. To set a flag, commit the write-back of a local `node .ai/doctor.mjs --run`; never hand-flip one (`.ai/memory/0016`).
   - `quality.yml` runs the desk gate and `:core:test` on every PR.
-  - `supply-chain.yml` runs on main. It submits the Gradle dependency graph and builds and attests the debug APK.
+  - `supply-chain.yml` runs on main. It builds and attests the debug APK (it does not submit the Gradle dependency graph: that setting is off for the repository).
   - `sbom.yml` runs after each green `supply-chain` run. It attests a CycloneDX SBOM of that APK's runtime classpath against the same APK, and uploads the desk's `npm sbom` inventory (`.ai/memory/0021`).
   - `harness-drills.yml` runs on every PR and push to main. It holds `SECURITY.md` to its word, runs the SBOM converter suite, holds the committed Stick soaks to the frame budget, and runs the degraded-engine drill.
   - `capabilities.yml` runs weekly and on dispatch. It executes every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` and goes red on any failure (`.ai/memory/0012`).
