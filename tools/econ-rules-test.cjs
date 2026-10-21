@@ -41,6 +41,7 @@ test('case a2: a call with no use label has use null; a provider that reports us
  const [r]=rows();assert.equal(r.use,null);assert.equal(r.provider,'claude-cli/haiku');
  assert.deepEqual(r.tokens,{input:3,output:4,cacheRead:null,cacheWrite:5});assert.equal(r.notionalUsd,0.01);
  assert.equal(r.basis,'subscription');assert.equal(r.marginalUsd,0);
+ assert.equal(r.book,PRICE_BOOK.asOf,'the row names the price book it was costed with, so a repricing does not strand it');
 });
 
 test('case b: a throwing provider is ok false / exit; a provider past its timeout is ok false / timeout',async()=>{
