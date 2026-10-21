@@ -4,7 +4,8 @@
  *   - a check left part way is kept: opening the topics does not replace it (the home says "Your place is saved");
  *   - a judge answer whose quote is not in the learner's answer is asked for once more inside the same call, so the
  *     learner is not asked to send their answer again; a second miss is still refused;
- *   - every refusal the table gives names the stage the check is in, never a task or a question that is not there.
+ *   - every refusal the table gives names the stage the check is in, never a task or a question that is not there;
+ *   - the docs that state when a check reads high name HIGH_STRONG_PASSES, the constant the rule lives in.
  * Run with npm test in desk/ (directly: node tools/linga-level-rules-test.cjs). No model is called: the providers throw
  * and the text engine is a fixed local stub. The data directory is disposable, under the OS temp dir; never desk/data.
  */
@@ -109,4 +110,14 @@ test('every refusal names the stage the check is in: no task or question that is
   }
   assert(n >= 60, `${n} refusals walked`);
   assert.deepEqual(bad, []);
+});
+
+test('the docs that state when a check reads high name the rule in code: HIGH_STRONG_PASSES strong passes, not two', () => {
+  const P = require(src('lib/english/placement.ts'));
+  assert.equal(P.HIGH_STRONG_PASSES, 3);
+  for (const file of ['lib/english/placement.ts', 'lib/english/cert.ts']) {
+    const text = fs.readFileSync(src(file), 'utf8').replace(/\n\s*\*\s*/g, ' ');
+    assert.doesNotMatch(text, /(high only with|HIGH confidence \(placement\.ts staircase:) two strong passes/i, `${file} states the old rule`);
+    assert.match(text, /HIGH_STRONG_PASSES/, `${file} names the constant the rule lives in`);
+  }
 });
