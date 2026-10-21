@@ -184,3 +184,27 @@ test('case 13: an argument the bench cannot honour is exit 2, never a pass on th
  assert.equal(eq.status,1,'the fixture was read: B fails');
  assert.match(eq.stdout,/B\b.*fail/);
 });
+
+test('case 14: a replay file the bench would not read in full is exit 2, never a pass on the recorded set',async()=>{
+ // a misspelt section, a problem, page or query that is not in the corpus, a stage hint() never asks for: each was
+ // laid over nothing, so the run scored the recorded answers and passed - the fixture's claim was never tested
+ const q='Solve for x: 3x - 7 = 11';
+ const bad={
+  section:{hint:{[q]:{hint1:{hint:'x = 6',what_to_try_next:'Check it.'}}}},
+  problem:{hints:{'Solve for x: 3x - 7 = 12':{hint1:{hint:'x = 6',what_to_try_next:'Check it.'}}}},
+  page:{read:{math:[]}},
+  query:{picks:{'What is 15% of 250?':'none'}},
+  stage:{hints:{[q]:{hint3:{hint:'x = 6',what_to_try_next:'Check it.'}}}},
+ };
+ for(const [what,fixture] of Object.entries(bad)){
+  const f=path.join(scratch,`bad-${what}.json`);fs.writeFileSync(f,JSON.stringify(fixture));
+  const out=cli('--replay',f);
+  assert.equal(out.status,2,`${what}: exit ${out.status}, ${out.stdout.slice(-60)}`);
+  assert.match(out.stderr,/lab bench:.*replay file/,what);
+  await assert.rejects(()=>runBench({replay:fixture}),/replay/,`${what}: runBench scored a fixture it could not read`);
+ }
+ // GUARD: every key the recorded set has is still accepted
+ const ok=path.join(scratch,'ok.json');
+ fs.writeFileSync(ok,JSON.stringify({read:{maths:truthItems('maths')},hints:{[q]:{hint1:{hint:'Add 7.',what_to_try_next:'Then divide.'},reask1:{hint:'Add 7.',what_to_try_next:'.'}}},picks:{[q]:'bAerID24QJ0'}}));
+ assert.equal(cli('--replay',ok).status,0);
+});
