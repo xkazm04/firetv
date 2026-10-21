@@ -193,3 +193,12 @@ test('Essay and Math: each Character\'s "journeys:" line and each journey\'s Cha
   assert.deepEqual([...byCharacter].map(p => p.split(' ')[1]).filter(j => !journeyIds.has(j)), [], 'a Character names a journey no file defines');
   assert.equal(byCharacter.size, 23);
 });
+
+test('the rubric\'s list of gateable series ids is the registry\'s, not a copy that falls behind it', () => {
+  const rubric = fs.readFileSync(path.join(UAT, 'rubric.md'), 'utf8');
+  const listed = ids => { const m = rubric.match(/A gate names a registry series id: ([^;]+);/); assert.ok(m, 'the rubric states the gateable ids'); return [...m[1].matchAll(/`(\w+)`/g)].map(x => x[1]); };
+  assert.deepEqual(listed(), M().series().map(s => s.id));
+  // a series registered later (here one that measures an existing rubric row, so case 7 stays green) is caught here
+  const unregister = M().register({ key: 'pitchShare', series: [{ id: 'pitchShare', label: 'pitch share', rubric: 'pitch', of: () => [0, 0] }] });
+  try { assert.notDeepEqual(listed(), M().series().map(s => s.id)); } finally { unregister(); }
+});
