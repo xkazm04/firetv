@@ -286,3 +286,37 @@ test('live-ui-test and relay-test open the companion the way the QR does: #pin=,
     assert.ok(gotos.some((g) => /#pin=\$\{/.test(g)), `${t}.mjs never pairs with the PIN in the fragment`);
   }
 });
+
+// Exit codes are the harness's contract with dev.ps1 and whoever reads a run: 0 pass, 1 a measured FAIL, 2 the tool
+// could not run (no PIN: pairingPin; no socket: each tool's 'error' handler), 3 a crash (live-ui-test, relay-test).
+// A TV that refuses the PIN is a run that never started, yet pen-sim, latency-probe and tail-diag exited 1 for it -
+// the code of "the stroke did not land" and "p95 over budget". A loopback fake TV refuses every hello here.
+test('pen-sim, latency-probe and tail-diag exit 2 (could not run), not 1 (FAIL), when the TV refuses the PIN', async () => {
+  const cp = require('node:child_process');
+  const { WebSocketServer } = require('ws');
+  const wss = new WebSocketServer({ host: '127.0.0.1', port: 0 });
+  await new Promise((r) => wss.on('listening', r));
+  wss.on('connection', (ws) => ws.on('message', (raw) => {
+    const m = JSON.parse(String(raw));
+    if (m.type !== 'hello') return;
+    ws.send(JSON.stringify({ type: 'welcome', sessionId: '', videoAspect: 1.7778, accepted: false, reason: 'wrong PIN' }));
+    setTimeout(() => ws.close(1008, 'wrong PIN'), 5);
+  }));
+  const host = `127.0.0.1:${wss.address().port}`;
+  const run = (tool) => new Promise((res) => {
+    const c = cp.spawn(process.execPath, [path.join(__dirname, `${tool}.mjs`), '--host', host, '--pin', '0000', '--seconds', '1'], { stdio: ['ignore', 'pipe', 'pipe'] });
+    let err = '';
+    c.stderr.on('data', (d) => { err += d; });
+    const kill = setTimeout(() => c.kill(), 8000);
+    c.on('exit', (code) => { clearTimeout(kill); res({ code, err }); });
+  });
+  try {
+    for (const tool of ['pen-sim', 'latency-probe', 'tail-diag']) {
+      const { code, err } = await run(tool);
+      assert.equal(code, 2, `${tool} exited ${code} on a refused PIN: ${err.trim().slice(0, 120)}`);
+      assert.match(err, /rejected.*wrong PIN/, `${tool} does not say the TV refused it`);
+    }
+  } finally {
+    wss.close();
+  }
+});
