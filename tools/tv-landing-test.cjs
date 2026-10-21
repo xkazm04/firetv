@@ -177,5 +177,8 @@ test('TL-3: the phone is a stop paired or not, and the paired stop speaks of the
  for(const joined of [true,false]){const s=session({joined});assert.equal(landingStops(s).at(-1),'phone',`joined ${joined}: the phone stop is last`);assert.equal(landingView(s).phone.paired,joined);}
  const on=(p)=>landingView(session({joined:true,focus:5,...p})).caption;
  assert.equal(on({phonesLive:0}).head,'No phone here');assert.equal(on({phonesLive:2}).head,'Phone paired');
+ // paired, the screen shows no code: a screen reader hears the caption the eye reads, not an address and a code it cannot see
+ assert.equal(landingView(session({joined:true,focus:5,phonesLive:1})).say,'Phone paired. Select to pair another phone, or to forget them all.');
+ assert.equal(landingView(session({joined:true,focus:5,phonesLive:0})).say,'No phone here. Select to pair another phone, or to forget them all.');
  assert.equal(landingView(session({joined:true,focus:-1,practice:null})).at,'maths','paired: the lamp still rests on the apps');
 });

@@ -82,7 +82,9 @@ const sentence = (t: string) => t.trim().replace(/[.!?]$/, "");
 export function sayOf(v: Omit<LandingView, "say">): string {
   const parts = (xs: Array<string | null | undefined>) => xs.filter((x): x is string => !!x && !!x.trim()).map(sentence).join(". ") + ".";
   if (!v.at) return "";
-  if (v.at === "phone") return parts([v.caption.head, `Open ${v.phone.url}, then enter ${v.phone.pin.split("").join(" ")}`]);
+  // paired, no code is on screen: the caption is what the eye reads; unpaired, the postcard's address and code
+  if (v.at === "phone") return v.phone.paired ? parts([v.caption.head, v.caption.sub])
+    : parts([v.caption.head, `Open ${v.phone.url}, then enter ${v.phone.pin.split("").join(" ")}`]);
   if (v.at === "place") return parts([v.place, v.learner ? `${v.learner.name} is at the desk` : null]);
   const app = v.apps.find((a) => a.id === v.at);
   return app ? parts([app.name, app.caption.chip?.text, app.caption.head, app.caption.sub, v.primary]) : "";
