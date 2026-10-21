@@ -65,6 +65,15 @@ class LinkStateTest {
     }
 
     @Test
+    fun `case 6b - a typo then the right PIN collapses the card at once, not after the refusal runs out`() {
+        val typo = ready().on(LinkEvent.PenRefused("wrong PIN"), 10_000)
+        val paired = typo.on(LinkEvent.PenPaired("pen-a"), 11_000)
+        for (t in listOf(11_000L, 12_000L, 14_999L, 15_000L)) assertEquals(LinkView.Chip, paired.view(t))
+        // The pen leaving later is a lost pen, not an old refusal coming back.
+        assertEquals(LinkView.Lost(url, pin), paired.on(LinkEvent.PenGone("pen-a"), 11_500).view(14_600))
+    }
+
+    @Test
     fun `case 7 - a failed transport says why whatever the pen state, and a later ready clears it`() {
         val message = "port 8765 is in use by something else"
         val failed = ready().on(LinkEvent.Failed(message), 5_000)
