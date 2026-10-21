@@ -980,3 +980,18 @@ test('HF4: load() logs once for a session.json that is not JSON or fails the sha
  const b=reload(JSON.stringify({profiles:'nope',learner:null}));assert.equal(b.length,1,JSON.stringify(b));assert.match(b[0],/shape check/);assert.equal(store.getSession().learner,null);
  const n=reload(null);assert.deepEqual(n,[]);
 });
+
+test('optimize 2026-10-21: every job kind a route runs with an input is one POST /api/session/retry can ask again (derived from the runJob calls, not from the route\'s own list)',()=>{
+ const strip=(t)=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
+ // the kinds whose runJob call holds an input: the phone and the TV offer Try again on exactly these (job.input)
+ const holders=(code)=>{const out=new Set();const parts=strip(code).split(/\brunJob\(/).slice(1);for(const p of parts){const k=/^\s*"(\w+)"/.exec(p);if(k&&/\binput\s*:/.test(p))out.add(k[1]);}return out;};
+ // the canary: an input-holding call is seen, one without an input is not
+ assert.deepEqual([...holders('runJob("zz", async () => 1, { key: "a", input: { a: 1 } }); runJob("yy", async () => 2, { key: "b" });')],['zz']);
+ assert.deepEqual([...holders('// runJob("zz", f, { input: {} })')],[]);
+ const walk=(d)=>fs.readdirSync(d,{withFileTypes:true}).flatMap((e)=>e.isDirectory()?walk(path.join(d,e.name)):/\.tsx?$/.test(e.name)?[path.join(d,e.name)]:[]);
+ const kinds=new Set(walk(src('')).flatMap((f)=>[...holders(fs.readFileSync(f,'utf8'))]));
+ const retry=strip(fs.readFileSync(src('app/api/session/retry/route.ts'),'utf8'));
+ const routes=new Set([.../const ROUTES[^\n]*=\s*\{\s*\r?\n([\s\S]*?)\r?\n\};/.exec(retry)[1].matchAll(/^\s*(\w+)\s*:/gm)].map((m)=>m[1]));
+ assert.ok(kinds.size>=4,`the population is found: ${[...kinds]}`);
+ assert.deepEqual([...kinds].filter((k)=>!routes.has(k)).sort(),[],'a kind holds its input for Try again but the retry route has no way to ask it again');
+});
