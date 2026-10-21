@@ -187,6 +187,7 @@
       if (sock !== ws) return; // a socket already replaced by a PIN retry
       connected = paired = false;
       dot.classList.remove('on');
+      tvControls(false);
       // A refusal is the TV's answer, not a dropped line: the same PIN would be refused again,
       // every second, forever. Wait for the viewer to type the PIN instead. A drop comes back.
       if (refused) return;
@@ -196,6 +197,16 @@
     ws.onmessage = (e) => onMessage(JSON.parse(e.data));
   }
   function send(o) { if (connected) ws.send(JSON.stringify(o)); }
+
+  // The controls that command the TV. Until a TV welcomes this pen a press goes nowhere, so they are
+  // off rather than taking it; undo, redo and the drawing steps then wait for the TV's state as well.
+  // The pen's own tools and colours stay live: they change nothing on the TV.
+  const STATE_GATED = new Set(['btn-undo', 'btn-redo', 'btn-mark-prev', 'btn-mark-next']);
+  function tvControls(on) {
+    document.querySelectorAll('nav .row:not(#tools):not(#colors) button, #scrub')
+      .forEach((b) => { b.disabled = !on || STATE_GATED.has(b.id); });
+  }
+  tvControls(false);
 
   // A TV that is gone is redialled with a doubling wait (1 s up to 15 s), not every second for as
   // long as the tab lives; a welcome resets it. While the screen is hidden nothing is dialled, and
@@ -239,6 +250,7 @@
     if (m.type === 'welcome') {
       if (!m.accepted) {
         refused = true;
+        tvControls(false);
         // After too many wrong PINs the TV refuses every PIN, the right one too, for half a
         // minute (PairingDesk.COOLDOWN_MS): typing it at once would only be refused again.
         const locked = m.reason === 'too many wrong PINs';
@@ -262,6 +274,7 @@
         return;
       }
       paired = true;
+      tvControls(true);
       stopCountdown();
       backoff = BACKOFF_MIN_MS;
       hint.textContent = 'draw here';

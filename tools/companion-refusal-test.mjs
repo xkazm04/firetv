@@ -499,6 +499,32 @@ try {
     check('scrub GUARD: a pointer drag sends one seek', dragged.length === 1, `seeks [${dragged.join(',')}] ms`);
     await page.close();
   }
+
+  // ---- TV controls while no TV holds the pen ----------------------------------------------------------
+  // Undo, Clear all, Play, the frame and drawing steps, the rates and the scrub bar command the TV. With no
+  // welcome they go nowhere (send() drops them), so a press that looks taken is a lie: they are disabled until
+  // the TV welcomes this pen, and come back when it does. The pen's own tools and colours stay live.
+  {
+    const CMD = '#btn-undo, #btn-redo, #btn-clear, #btn-clear-all, #btn-prev, #btn-playpause, #btn-next, #btn-mark-prev, #btn-mark-next, #rates button, #scrub';
+    const live = (page) => page.evaluate((sel) => [...document.querySelectorAll(sel)].filter((b) => !b.disabled).map((b) => b.id || b.textContent.trim()), CMD);
+    const page = await browser.newPage();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false, state: { durationMs: 20000 } });
+    await page.goto(PAGE + '#pin=0000');
+    await page.waitForFunction(() => window.__tv && window.__tv.refused > 0, null, { timeout: 5000 });
+    const refusedLive = await live(page);
+    const prompt = await pinPrompt(page);
+    await prompt.fill(TV_PIN);
+    await prompt.press('Enter');
+    await page.waitForFunction(() => window.__pen.isConnected() && window.__pen.state() !== null, null, { timeout: 3000 }).catch(() => {});
+    const pairedLive = await live(page);
+    const tools = await page.evaluate(() => [...document.querySelectorAll('#tools button, #colors button')].filter((b) => b.disabled).length);
+    check(
+      'unpaired: no TV control takes a press; paired: they are back',
+      refusedLive.length === 0 && pairedLive.includes('btn-playpause') && pairedLive.includes('scrub') && pairedLive.length >= 9 && tools === 0,
+      `refused: ${refusedLive.length} live [${refusedLive.join(',')}]; paired: ${pairedLive.length} live; ${tools} pen tools disabled`,
+    );
+    await page.close();
+  }
 } finally {
   await browser.close();
 }
