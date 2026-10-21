@@ -15,6 +15,7 @@ import { LandingTV, ZOOM_MS } from "@/landing/LandingTV";
 import { MathsTV } from "@/maths/MathsTV";
 import { LingaTV } from "@/english/LingaTV";
 import { spokenLine } from "@/lib/desk/spoken";
+import { useDeskSound } from "@/tv/useDeskSound";
 import { LingaTestBar } from "@/english/LingaTestBar";
 
 /**
@@ -29,6 +30,10 @@ export default function TV() {
   const { s, connected, post } = useSession();
   const postOnly = useCallback(async (e: Event) => { await post(e); }, [post]);
   const [voice, setVoice] = useState(true);
+  /** Effects and the home/break music (lib/desk/sounds.ts). On unless this browser was told otherwise. */
+  const [sound, setSound] = useState(true);
+  useEffect(() => { try { if (localStorage.getItem("desk-sound") === "off") setSound(false); } catch { /* storage refused: sound stays on */ } }, []);
+  const toggleSound = () => setSound((v) => { try { localStorage.setItem("desk-sound", v ? "off" : "on"); } catch { /* not remembered */ } return !v; });
   const [fast, setFast] = useState(false);
   /** TEMPORARY: the Linga test answer bar, dev builds only — open with ?test=1, close with ?test=0. */
   const [testBar, setTestBar] = useState(false);
@@ -50,6 +55,8 @@ export default function TV() {
   const spoken = useRef<string>("");
   const audio = useRef<HTMLAudioElement | null>(null);
   const linkedModule = useRef(false);
+  const fx = useDeskSound(s, sound);
+  const fxNow = useRef(fx); fxNow.current = fx;
   useEffect(() => {
     if (!s || linkedModule.current || notTheTV(s)) return;
     linkedModule.current = true;
@@ -101,7 +108,8 @@ export default function TV() {
     (async () => {
       try { const r = await call("/api/speak", { text: line }); if (!r.ok) throw new Error(); const blob = await r.blob();
         const old = audio.current; old?.pause(); if (old?.src.startsWith("blob:")) URL.revokeObjectURL(old.src);
-        const next = new Audio(URL.createObjectURL(blob)); next.onended = () => URL.revokeObjectURL(next.src);
+        const next = new Audio(URL.createObjectURL(blob)); next.onended = () => { URL.revokeObjectURL(next.src); fxNow.current.duck(false); };
+        fxNow.current.duck(true);
         audio.current = next; await next.play(); }
       catch { try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(line)); } catch (e) { console.warn("desk TV: neither the voice nor the browser could say the line; it stays on screen", e); } }
     })();
@@ -132,8 +140,11 @@ export default function TV() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const s = sNow.current;
-      if (!s || notTheTV(s) || lingaOwns(s)) return;
+      if (!s || notTheTV(s)) return;
       const k = keyOf(e.key); if (!k) return;
+      // Select and Back sound on every screen, Linga's too (it keeps its own keymap); not while the landing zooms
+      if ((k === "select" || k === "back") && !zooming.current) fxNow.current.cue(k);
+      if (lingaOwns(s)) return;
       e.preventDefault();
       if (zooming.current) return;
       const step = tvKey(s, k, local.current);
@@ -157,6 +168,7 @@ export default function TV() {
         <b>Study Desk · TV</b>
         <span><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> D-pad · <kbd>Enter</kbd> Select · <kbd>Backspace</kbd> Back · <kbd>M</kbd> Menu · <kbd>Space</kbd> Play/Pause</span>
         <button aria-pressed={voice} onClick={() => setVoice((v) => !v)}>Voice</button>
+        <button aria-pressed={sound} onClick={toggleSound}>Sound</button>
         <button aria-pressed={fast} onClick={() => setFast((v) => !v)}>Clock ×60</button>
         <button onClick={() => post({ type: "reset" })}>Reset session</button>
         <button onClick={() => post({ type: "join" })}>Fake phone</button>

@@ -881,15 +881,16 @@ test('SW7: the TV speaks line after line and holds at most one audio blob URL, t
  const live=new Set();let n=0;
  const URL_={createObjectURL:()=>{const u=`blob:${++n}`;live.add(u);return u;},revokeObjectURL:(u)=>live.delete(u)};
  class Audio_{constructor(src){this.src=src;this.onended=null;}pause(){}play(){return Promise.resolve();}}
- const audio={current:null},spoken={current:''};
- const say=async(line)=>{let effect;new Function('useEffect','s','voice','spokenLine','spoken','call','audio','URL','Audio','speechSynthesis','SpeechSynthesisUtterance',js)(
-  (f)=>{effect=f;},{line},true,(s)=>s.line,spoken,async()=>({ok:true,blob:async()=>({})}),audio,URL_,Audio_,{cancel(){},speak(){}},class{});
+ const audio={current:null},spoken={current:''},ducks=[],fxNow={current:{duck:(d)=>ducks.push(d)}};
+ const say=async(line)=>{let effect;new Function('useEffect','s','voice','spokenLine','spoken','call','audio','URL','Audio','speechSynthesis','SpeechSynthesisUtterance','fxNow',js)(
+  (f)=>{effect=f;},{line},true,(s)=>s.line,spoken,async()=>({ok:true,blob:async()=>({})}),audio,URL_,Audio_,{cancel(){},speak(){}},class{},fxNow);
   effect();for(let i=0;i<5;i++)await new Promise((r)=>setImmediate(r));};
  for(const l of ['one','two','three','four'])await say(l);
  assert.equal(n,4,'four lines, four blobs');
  assert.deepEqual([...live],[audio.current.src],'only the line playing still holds its blob');
  audio.current.onended?.({currentTarget:audio.current});
  assert.equal(live.size,0,'and it is let go when it ends');
+ assert.deepEqual(ducks,[true,true,true,true,false],'the music ducks under each line and comes back when the last one ends');
 });
 
 // SW8 (scan-sweep optimize 2026-10-13): the stream's debug trace on window.__desk is bounded - the clock ticks every second
