@@ -158,9 +158,10 @@ const RUNS_DIR = path.join(uat, 'runs');
  * recertify); nothing, a flag or a Character id after it is the ledger recertify of every run. --status wins over both.
  * Any other mode also checks that every journey's gates name a registered metric (metrics.cjs) and throws if one does not,
  * so the run stops here, before a Character process is spawned or a model is called. So does `--run <id>` naming a run
- * that already holds a findings.json.
+ * that already holds a findings.json, and (given `cast`, the Characters' sims) a Character this run would spawn whose
+ * own `journeys` name a journey no file defines.
  */
-function parseArgs(args, { runs = RUNS_DIR, characters: ids = null, journeyTexts = null } = {}) {
+function parseArgs(args, { runs = RUNS_DIR, characters: ids = null, journeyTexts = null, cast = null } = {}) {
   const out = { only: [], runs, journeys: null, run: null, recertify: null, parallel: 3 };
   let status = false, ledger = false;
   const known = () => ids ?? (ids = characters().map(c => c.sim.id));
@@ -188,6 +189,10 @@ function parseArgs(args, { runs = RUNS_DIR, characters: ids = null, journeyTexts
     const ids = texts.map(t => { try { return JSON.parse(t.match(/```json\s*\n([\s\S]*?)\n```/)?.[1] ?? 'null')?.id; } catch { return undefined; } }).filter(Boolean);
     const unknown = (out.journeys ?? []).filter(j => !ids.includes(j));
     if (unknown.length) throw new Error(`--journeys ${unknown.join(',')}: no journey file defines ${unknown.length === 1 ? 'it' : 'them'}. Known: ${ids.join(', ')}`);
+    // a Character's own list naming no journey file would crash its child at that journey, after the earlier ones spent calls
+    const spawned = (cast ?? []).filter(c => !out.only.length || out.only.includes(c.id));
+    const strays = spawned.flatMap(c => (Array.isArray(c.journeys) ? c.journeys : []).filter(j => (!out.journeys || out.journeys.includes(j)) && !ids.includes(j)).map(j => `${c.id} ${j}`));
+    if (strays.length) throw new Error(`a Character's journeys name no journey file: ${strays.join('; ')}. Known: ${ids.join(', ')}`);
     const bad = texts.flatMap(V.unknownGates);
     if (bad.length) throw new Error(`unknown metric in a journey's gates: ${bad.map(g => `${g.journey} gates ${g.metric}`).join('; ')}. Known: ${M.series().map(s => s.id).join(', ')}`);
   }
@@ -212,7 +217,7 @@ function productStamp() {
 // ---------------------------------------------------------------- parent
 async function parent() {
   refuseCodexEngine();
-  const all = characters(), a = parseArgs(process.argv.slice(2), { characters: all.map(c => c.sim.id) });
+  const all = characters(), a = parseArgs(process.argv.slice(2), { characters: all.map(c => c.sim.id), cast: all.map(c => c.sim) });
   if (a.mode === 'status') {
     const out = statusCommand({ runs: a.runs });
     console.log(`${out.md}\nWrote ${path.relative(process.cwd(), out.file)}`);

@@ -120,3 +120,20 @@ test('--journeys naming a journey no file defines is refused before a Character 
   assert.deepEqual(D().parseArgs(['--journeys', 'J3,J1'], { characters: [], journeyTexts: texts }).journeys, ['J3', 'J1']);
   assert.doesNotThrow(() => D().parseArgs(['--journeys', 'J1,J2,J3,J4,J5'], { characters: [] }), 'the committed journeys J1-J5 are all known');
 });
+
+test('a Character whose own journeys name no journey file is refused before any child is spawned, never a crash mid-run', () => {
+  const texts = ['J1', 'J3'].map(id => `# ${id}\n\n\`\`\`json\n${JSON.stringify({ id, title: id, budget: 3, gates: [] })}\n\`\`\`\n`);
+  const cast = [{ id: 'ana-20', journeys: ['J1', 'J3'] }, { id: 'bo-30', journeys: ['J1', 'J9'] }];
+  const opts = { characters: cast.map(c => c.id), journeyTexts: texts, cast };
+  assert.throws(() => D().parseArgs([], opts), /bo-30 J9.*Known: J1, J3/);
+  assert.throws(() => D().parseArgs(['bo-30'], opts), /bo-30 J9/);
+  assert.doesNotThrow(() => D().parseArgs(['ana-20'], opts), 'a run of other Characters is not stopped by her list');
+  assert.doesNotThrow(() => D().parseArgs(['--journeys', 'J1'], opts), 'a --journeys run that leaves the stray journey out never reaches it');
+  assert.doesNotThrow(() => D().parseArgs(['--status'], opts), '--status spawns nothing');
+  // the committed Characters, read as the parent reads them, all name known journeys
+  const all = fs.readdirSync(path.join(UAT, 'characters')).filter(f => f.endsWith('.md')).map(f => JSON.parse(fs.readFileSync(path.join(UAT, 'characters', f), 'utf8').match(/```json\s*\n([\s\S]*?)\n```/)[1]));
+  assert.ok(all.length >= 10);
+  assert.doesNotThrow(() => D().parseArgs([], { characters: all.map(c => c.id), cast: all }));
+  const src = fs.readFileSync(path.join(DRIVER, 'linga-text.cjs'), 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '');
+  assert.match(src, /parseArgs\(process\.argv\.slice\(2\), \{[^}]*cast: all\.map\(c => c\.sim\)/, 'parent() hands parseArgs the cast it will spawn');
+});
