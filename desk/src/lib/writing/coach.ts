@@ -58,7 +58,8 @@ export async function coachNote(draft: string, band: Band, prompt: WritingPrompt
   const fallback = codeNote(draft, band);
   try {
     const r = await ask({
-      system: COACH_SYSTEM, schema: SCHEMA, model: "fast", use: "writing-coach",
+      // one short note while the TV says the desk is reading it: no hidden reasoning (lib/engines/text.ts childEnv)
+      system: COACH_SYSTEM, schema: SCHEMA, model: "fast", thinking: false, use: "writing-coach",
       prompt: `Student band: ${band}. Task: ${prompt.ask}\nFocus: ${focusOf(draft)} (${fallback})\n\nParagraph:\n${draft}`,
     });
     const said = typeof r.json?.note === "string" ? r.json.note.trim() : "";

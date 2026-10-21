@@ -63,6 +63,8 @@ test('the coaching never contains a full model sentence',async()=>{
     assert.ok(C.codeNote(d,band).length<=C.NOTE_MAX_CHARS,'every code line fits the cap it falls back to');
   // the engine was asked with a schema, the writing-coach use, and a system that forbids handing over a sentence
   assert.ok(asked.every(a=>a.schema&&a.use==='writing-coach'&&/Never write a sentence/.test(a.system)));
+  // one short note while the TV says the desk is reading: asked without hidden reasoning, as every short 'fast' call here is (lib/engines/text.ts childEnv: 4-6 s off against 52-90 s on)
+  assert.ok(asked.length>0&&asked.every(a=>a.model==='fast'&&a.thinking===false),'the coach asks with thinking off');
   // a failing engine, an empty note, a non-string note: the code line, no throw
   for(const bad of [()=>Promise.reject(new Error('down')),()=>Promise.resolve({json:{note:''}}),()=>Promise.resolve({json:{note:7}}),()=>Promise.resolve({})]){
     r=await C.coachNote(DRAFT,'teen',prompt,bad);assert.equal(r.source,'code');
