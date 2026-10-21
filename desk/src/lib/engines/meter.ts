@@ -42,12 +42,20 @@ export function meter(r: { kind: EngineKind; use?: string; prompt?: string; prov
     try { size = statSync(file).size; } catch { /* no file yet */ }
     if (size > cap) {
       const old = path.join(path.dirname(file), "usage.1.jsonl");
-      try { unlinkSync(old); } catch { /* none */ }
-      renameSync(file, old);
+      // a rotation that fails keeps the row: the file grows past its cap and says so, it never stops booking calls
+      try {
+        try { unlinkSync(old); } catch { /* none */ }
+        renameSync(file, old);
+      } catch (e) { say("could not be rotated", e); }
     }
     appendFileSync(file, JSON.stringify(row) + "\n");
   } catch (e) {
-    const why = String((e as { message?: unknown } | null)?.message ?? e).split(/\r?\n/)[0];
-    if (!logged.has(why)) { logged.add(why); console.error(`[engines] the usage ledger could not be written: ${why}`); }
+    say("could not be written", e);
   }
+}
+
+/** Said once per distinct reason, so a ledger that keeps failing does not flood the log. */
+function say(what: string, e: unknown): void {
+  const why = String((e as { message?: unknown } | null)?.message ?? e).split(/\r?\n/)[0];
+  if (!logged.has(why)) { logged.add(why); console.error(`[engines] the usage ledger ${what}: ${why}`); }
 }

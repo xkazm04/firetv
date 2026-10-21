@@ -152,6 +152,22 @@ test('case g: past the cap the ledger rotates to usage.1.jsonl, replacing the ol
  assert(fs.readFileSync(old,'utf8').startsWith('xxx'));assert.equal(rows().length,1);
 });
 
+test('case g2: a rotation that fails still books the row: the ledger grows past its cap and says so once, it never goes quiet',async()=>{
+ process.env.DESK_USAGE_MAX_BYTES='10';
+ const old=path.join(data,'usage.1.jsonl');
+ // a non-empty directory where the older copy goes: it can be neither unlinked nor renamed over, on Windows or POSIX
+ fs.mkdirSync(path.join(old,'held'),{recursive:true});
+ const errs=[],orig=console.error;console.error=(...a)=>errs.push(a.join(' '));
+ try{
+  stub('stub');
+  fs.writeFileSync(LEDGER,'x'.repeat(50)+'\n');
+  for(let i=0;i<3;i++)await text({system:'s',prompt:'p',use:'rot'});
+ }finally{console.error=orig;fs.rmSync(old,{recursive:true,force:true});}
+ const r=fs.readFileSync(LEDGER,'utf8').split('\n').filter((l)=>l.startsWith('{')).map((l)=>JSON.parse(l));
+ assert.deepEqual(r.map((x)=>x.use),['rot','rot','rot'],'every call is booked although the ledger could not rotate');
+ assert.equal(errs.length,1,'the failed rotation is said once, not once per call');assert.match(errs[0],/usage ledger/);
+});
+
 // ---- case h: the labelled call sites, through stubs
 const LESSON='jWpiMu5LNdg';
 const stamp=(s)=>`00:${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}.000`;
