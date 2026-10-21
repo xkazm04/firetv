@@ -983,7 +983,7 @@ function logWatched(w: Watch): void {
 
 // ---- the singleton, HMR-proof ----
 type Sub = (s: Session) => void;
-interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; /** whether the last practice.settle restate of the learner file landed (WD9); a missing value reads as landed */ settled?: boolean; /** whether the last hint count write landed (WD12); a missing value reads as counted */ counted?: boolean; /** where an unusable session.json is still to be put aside: the load could not rename it, so no save may write over it until it is */ aside?: string; }
+interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; /** when session.json was last written, so the clock's ticks rewrite it at most once in TICK_SAVE_MS */ wroteAt?: number; /** whether the last practice.settle restate of the learner file landed (WD9); a missing value reads as landed */ settled?: boolean; /** whether the last hint count write landed (WD12); a missing value reads as counted */ counted?: boolean; /** where an unusable session.json is still to be put aside: the load could not rename it, so no save may write over it until it is */ aside?: string; }
 const g = globalThis as unknown as { __desk?: Store };
 function load(): Session {
   if (!existsSync(FILE())) return fresh();
@@ -1239,11 +1239,16 @@ export function dispatch(e: Event): Session {
     }
   }
   if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) store.session = { ...store.session, week: weekRead(store.session) };
-  writeSession();
+  // the running clock's tick alone rewrites the file at most once in TICK_SAVE_MS (it carries every page photo); a tick that turns
+  // the phase, a write that failed last time, and every other event write at once, so a restart loses at most that much clock
+  const tickOnly = e.type === "timer.tick" && before.timer.phase === store.session.timer.phase && store.saved !== false && Date.now() - (store.wroteAt ?? 0) < TICK_SAVE_MS;
+  if (!tickOnly) writeSession();
   notify();
   if (e.type === "job.start" || (e.type === "writing.busy" && e.busy)) workBegins();
   return store.session;
 }
+/** How often the running clock's ticks alone may rewrite session.json (dispatch): a restart loses at most this much of the clock. */
+const TICK_SAVE_MS = 30_000;
 /**
  * The one way session.json is written: a temp file beside it, then a rename over it, so a crash mid-write leaves the old
  * file whole (the way learners.ts writeBook does). Whether it landed is kept for the read route (HF4). The log speaks on a
@@ -1267,7 +1272,7 @@ function writeSession(): void {
     writeFileSync(tmp, JSON.stringify(store.session));
     renameSync(tmp, FILE());
     if (store.saved === false) console.error("desk session: session.json is being written again");
-    store.saved = true;
+    store.saved = true; store.wroteAt = Date.now();
   } catch (e) {
     try { rmSync(tmp, { force: true }); } catch { /* best effort: the write's own failure is logged just below */ }
     if (store.saved !== false) console.error("desk session: session.json could not be written, so the session will not survive a restart:", e instanceof Error ? e.message : e);

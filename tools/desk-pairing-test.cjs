@@ -1102,6 +1102,19 @@ test('lite r2 (g): phones.forget from a phone or a guest is still 403',async()=>
  assert.equal((await post({type:'phones.forget'},'guest')).status,403);
  assert.equal(pairing().isPhone(cookie.slice('desk-phone='.length)),true,'the phone is still listed');
 });
+// session.json carries every page photo, and the running clock ticks once a second: a tick alone does not rewrite the file each time
+test('a timer.tick rewrites session.json at most once in TICK_SAVE_MS; the next other event, and a phase that turns, write it at once',()=>{
+ const file=path.join(data,'session.json'),onDisk=()=>JSON.parse(fs.readFileSync(file,'utf8'));
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});store.dispatch({type:'timer.start'});
+ const left0=onDisk().timer.left;assert.equal(left0,store.getSession().timer.left);
+ for(let i=0;i<10;i++)store.dispatch({type:'timer.tick',seconds:1});
+ assert.equal(store.getSession().timer.left,left0-10);
+ assert.equal(onDisk().timer.left,left0,'ten ticks inside the window wrote nothing');
+ store.dispatch({type:'focus',focus:1});assert.equal(onDisk().timer.left,left0-10,'the next other event writes the clock as it stands');
+ store.dispatch({type:'timer.tick',seconds:1});// inside the window again: not written
+ globalThis.__desk.session={...store.getSession(),timer:{...store.getSession().timer,left:1}};store.dispatch({type:'timer.tick',seconds:1});
+ assert.equal(onDisk().timer.phase,'break','a tick that turns the phase is written at once');
+});
 // the desk's own notes on a learner (lib/desk/memory.ts) are for its prompts: no screen reads them, so no message carries them
 test('the desk\'s notes on a learner ride on no session: not after a re-read, not to the TV, not to a phone',async()=>{
  const L=require(src('lib/session/learners.ts'));store.dispatch({type:'reset'});
