@@ -204,7 +204,7 @@ class PenConversation(
             PairingDesk.PinCheck.WRONG -> Unit
         }
 
-        val effects = mutableListOf<PenEffect>(refusal(WRONG_PIN))
+        val effects = mutableListOf<PenEffect>()
         val current = hello
         if (current != null) {
             // The pen that was paired no longer is. Taking a generation as well means nothing that
@@ -213,6 +213,9 @@ class PenConversation(
             generation = desk.nextGeneration()
             effects += PenEffect.Unpaired(current.clientId)
         }
+        // The unpairing goes first: a refusal while a pen holds the link is hidden from the TV
+        // (LinkState), so in the other order the card showed a Wi-Fi blink instead of the reason.
+        effects += refusal(WRONG_PIN)
         return effects
     }
 
