@@ -272,3 +272,17 @@ test('the companion suite has a runner: a tools/ npm script and dev.ps1\'s unit 
   assert.ok(at >= 0, 'dev.ps1\'s unit stage does not run companion-refusal-test.mjs');
   assert.match(unit.slice(at), /\$LASTEXITCODE/, 'dev.ps1 runs the companion suite without judging its exit code');
 });
+
+// The TV's QR carries the PIN in the fragment (core PairingUrl: <page>#pin=NNNN), so no relay or proxy can log it
+// from the request line; ?pin= is only the page's fallback for QR codes printed before that. live-ui-test and
+// relay-test paired through the fallback, so the path every real phone takes never ran against a real TV or relay.
+test('live-ui-test and relay-test open the companion the way the QR does: #pin=, never ?pin=', () => {
+  const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+  for (const t of ['live-ui-test', 'relay-test']) {
+    const src = strip(fs.readFileSync(path.join(__dirname, `${t}.mjs`), 'utf8'));
+    const gotos = src.match(/\.goto\([^)]*\)/g) || [];
+    assert.ok(gotos.length > 0, `${t}.mjs opens no page`);
+    for (const g of gotos) assert.doesNotMatch(g, /\?pin=/, `${t}.mjs pairs through the legacy query: ${g}`);
+    assert.ok(gotos.some((g) => /#pin=\$\{/.test(g)), `${t}.mjs never pairs with the PIN in the fragment`);
+  }
+});
