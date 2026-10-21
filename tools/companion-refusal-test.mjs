@@ -30,7 +30,7 @@ const TV_PIN = '4821';
 
 /** Replaces window.WebSocket with a TV that holds [cfg.pin]. Runs inside the page. */
 function fakeTv(cfg) {
-  const log = (window.__tv = { opened: 0, refused: 0, welcomed: 0, firstRefusalAt: null, openedAt: [], urls: [] });
+  const log = (window.__tv = { opened: 0, refused: 0, welcomed: 0, firstRefusalAt: null, openedAt: [], urls: [], sent: [] });
   class FakeTvSocket {
     constructor(url) {
       this.url = url;
@@ -47,6 +47,7 @@ function fakeTv(cfg) {
     }
     send(text) {
       const m = JSON.parse(text);
+      if (this.readyState === 1) log.sent.push(m);
       if (m.type !== 'hello' || this.readyState !== 1) return;
       if (m.pin !== cfg.pin) {
         log.refused++;
@@ -58,6 +59,8 @@ function fakeTv(cfg) {
       }
       log.welcomed++;
       this.deliver({ type: 'welcome', sessionId: 's-' + this.n, videoAspect: 1.7778, accepted: true });
+      // A heartbeat, as the TV's Heartbeat sends one: paused, with the clip's length and its playback rate.
+      if (cfg.state) this.deliver({ type: 'state', t: 0, paused: true, rate: 1, annotationCount: 0, durationMs: 20000, marks: [], ...cfg.state });
       if (cfg.dropFirst && this.n === 1) setTimeout(() => this.drop(1006, ''), 300);
     }
     deliver(o) {
@@ -415,6 +418,45 @@ try {
     );
     check('a11y: every control is at least 24 px on a phone', small.length === 0, `${small.length} small ${small.join(' | ')}`);
     await page.close();
+  }
+
+  // ---- a second finger while drawing --------------------------------------------------------------
+  // A palm or a second finger lands while the first is still drawing. That must not start a second
+  // stroke over the first (the TV drops a live stroke on a new 'down') or leave a 60 Hz flush timer
+  // running for as long as the tab lives. Real multi-touch through CDP, with intervals counted.
+  {
+    const context = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 412, height: 800 } });
+    const page = await context.newPage();
+    await page.addInitScript(() => {
+      const live = (window.__intervals = new Set());
+      const si = window.setInterval.bind(window), ci = window.clearInterval.bind(window);
+      window.setInterval = (...a) => { const id = si(...a); live.add(id); return id; };
+      window.clearInterval = (id) => { live.delete(id); return ci(id); };
+    });
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false });
+    await page.goto(PAGE + '#pin=' + TV_PIN);
+    await page.waitForFunction(() => window.__pen.isConnected(), null, { timeout: 3000 });
+    const box = await page.locator('#pad').boundingBox();
+    const at = (fx, fy, id) => ({ x: box.x + box.width * fx, y: box.y + box.height * fy, id, radiusX: 6, radiusY: 6, force: 0.7 });
+    const cdp = await context.newCDPSession(page);
+    const touch = (type, touchPoints) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints });
+    await touch('touchStart', [at(0.2, 0.5, 1)]);
+    await touch('touchMove', [at(0.3, 0.5, 1)]);
+    await touch('touchStart', [at(0.3, 0.5, 1), at(0.7, 0.3, 2)]);
+    await touch('touchMove', [at(0.4, 0.5, 1), at(0.72, 0.32, 2)]);
+    await touch('touchEnd', []);
+    await page.waitForTimeout(100);
+    const after = await page.evaluate(() => ({
+      downs: window.__tv.sent.filter((m) => m.type === 'pen' && m.phase === 'down').length,
+      ups: window.__tv.sent.filter((m) => m.type === 'pen' && m.phase === 'up').length,
+      intervals: window.__intervals.size,
+    }));
+    check(
+      'two fingers: one stroke reaches the TV and no flush timer outlives it',
+      after.downs === 1 && after.ups === 1 && after.intervals === 0,
+      `${after.downs} down, ${after.ups} up, ${after.intervals} intervals still running`,
+    );
+    await context.close();
   }
 } finally {
   await browser.close();

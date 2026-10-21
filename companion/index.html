@@ -402,6 +402,9 @@
   }
 
   pad.addEventListener('pointerdown', (e) => {
+    // One pen at a time: a second finger or a palm while a stroke is open would start a stroke over
+    // it (the TV drops a live stroke on a new down) and orphan its 60 Hz flush timer.
+    if (drawing) return;
     if (tagbox.classList.contains('show')) return;
     // Nothing reaches the TV before it welcomes this pen, so ink here would be a lie. Say why.
     if (!paired) {
