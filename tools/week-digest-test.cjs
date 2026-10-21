@@ -608,3 +608,16 @@ test('MB-B1 digest: cleanDigest keeps skipped as a whole count inside the set, a
  assert.deepEqual(D.mathsEntry(UNIT,[{verdict:'unsure',studentAnswer:''},{verdict:'unsure'}],false,5),{at:5,kind:'maths',topic:UNIT,right:0,notSure:0,total:2,skipped:2});
  assert.deepEqual(D.mathsEntry(UNIT,[{verdict:'right'},{verdict:'unsure',studentAnswer:'4/22'},{verdict:'unsure',studentAnswer:''},{verdict:'wrong',slip:'top-not-scaled'}],false,5),{at:5,kind:'maths',topic:UNIT,right:1,notSure:1,total:4,skipped:1,slip:'top-not-scaled',slipN:1});
 });
+
+// ------------------------------------------------------------------ a pitched scene (v2 L3) is a Linga conversation too
+test('pitch: a finished conversation on a pitched scene (an id minted as conversation.ts mints it) is kept in the digest, and the Sunday page counts it without naming it',()=>{
+ const {PITCH_PREFIX}=require(src('lib/english/pitch.ts'));
+ const id=`${PITCH_PREFIX}${require('node:crypto').randomUUID().slice(0,8)}`,at=Date.now()-3600000;
+ const entry={at,kind:'english',sceneId:id,skill:'negotiate',turns:5};
+ assert.deepEqual(D.cleanEntry({...entry,title:'My own premise'}),entry,'kept: the scene id, its skill and the replies, never the title');
+ assert.deepEqual(learners.withDigest({digest:[]},entry).digest,[entry],'the finish writes it');
+ for(const bad of ['pitch-','pitch-0a1b2c3','pitch-0a1b2c3d9','pitch-0A1B2C3D','pitch-zzzzzzzz','Pitch-0a1b2c3d','pitch-0a1b2c3d '])assert.equal(D.cleanEntry({...entry,sceneId:bad}),null,`dropped: ${JSON.stringify(bad)}`);
+ const lines=W.sundayWords(W.sundayPage({digest:D.cleanDigest([entry]),english:{plan:null,pitches:[{id,title:'My own premise'}]}},{name:'Ada'},Date.now()));
+ assert.ok(lines.some((l)=>l.section==='english'&&l.text==='One conversation.'),JSON.stringify(lines));
+ assert.ok(!JSON.stringify(lines).includes('premise'),'a pitched scene is never named: its title is the learner\'s own');
+});
