@@ -1392,3 +1392,21 @@ test('optimize 2026-10-21: a refusal the desk answered is never reported as a se
   assert.equal(said(m,'Msg').at(-1),'The desk could not read it (502).');assert.equal(m.calls.filter(([k])=>k==='Phase').at(-1)[1],'failed');
  });
 });
+
+// The Essay panel's What is it? radios (Message, Email, Essay) sat 17 px above their words at 360 and 414 px (stick
+// deadline walk 2026-10-21, F2; a headless Chromium probe measured the centres): `.field input` gives every input in a
+// .field 44 px of height, and the radio's label was a plain line box, so the word sat on the box's baseline.
+test('optimize 2026-10-21: a radio or checkbox in a phone field is centred on its words, and its label keeps the 44 px target',()=>{
+ const css=fs.readFileSync(path.join(SRC,'app/globals.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+ const rule=(sel)=>{const out=[];for(const m of css.matchAll(/([^{}]+)\{([^}]*)\}/g)){if(m[1].split(',').map((x)=>x.trim()).includes(sel))out.push(m[2]);}return out.join(';');};
+ assert.match(rule('.field input'),/min-height:\s*44px/,'control: text inputs in a field keep 44 px');
+ const label=rule('.pkeep label');
+ assert.match(label,/display:\s*flex/,'the radio label lays its box and its words in one row');
+ assert.match(label,/align-items:\s*center/,'centred on each other');
+ assert.match(label,/min-height:\s*44px/,'the whole label is the 44 px target');
+ assert.match(rule('label.pkeep'),/min-height:\s*44px/,'so is the Keep it on my shelf checkbox label, itself a .pkeep');
+ for(const t of ['radio','checkbox']){
+  const r=rule(`.pkeep input[type="${t}"]`);
+  assert.match(r,/min-height:\s*0/,`a ${t} drops the text box's 44 px height`);assert.match(r,/flex:\s*none/,`a ${t} does not stretch`);
+ }
+});
