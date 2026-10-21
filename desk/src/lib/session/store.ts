@@ -365,8 +365,11 @@ export interface Session {
   skills: Record<string, SkillRecord>;
   /** the same measured record per Essay Master lens, hydrated the same way */
   writing: Record<string, SkillRecord>;
-  /** what the desk noticed about this learner, and what actually happened, hydrated the same way */
-  memory: string[]; history: HistoryEntry[];
+  /**
+   * what actually happened, hydrated the same way. The desk's own notes on the learner (lib/desk/memory.ts) are not here:
+   * they are for its prompts, which read the learner file; no screen reads them, so no message carries them.
+   */
+  history: HistoryEntry[];
   /**
    * The Sunday page (Family W9, rules/week): the seated learner's past seven days as the phone's Parent tab words it,
    * assembled on the server from their own digest at the dispatch boundary (weekOf). Only these lines travel - the digest
@@ -632,7 +635,7 @@ export function fresh(): Session {
     pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
     hint: null, lesson: null, noLesson: false, lessonPaused: false,
     english: null, englishLearning: emptyEnglish(), conversation: null, check: null, essay: null, essayType: null, essayAt: null,
-    topic: null, practice: null, walkIx: 0, skills: {}, writing: {}, memory: [], history: [],
+    topic: null, practice: null, walkIx: 0, skills: {}, writing: {}, history: [],
     jobs: {}, status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, updatedAt: Date.now(),
   };
 }
@@ -984,6 +987,8 @@ function load(): Session {
   } catch (e) { bad = `it could not be read (${e instanceof Error ? e.message : e})`; }
   if (bad) return setAside(bad);
   try {
+    // a session.json written while the session carried the desk's notes on the learner: they are not the session's
+    delete j.memory;
     const log = "log" in j ? keptLog(j.log) : undefined;
     return settleOwners({ ...fresh(), ...j, ...(log === undefined ? {} : { log }), profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phonesLive: 0, ask: null, status: namesPhone(String(j.status ?? "")) ? "" : j.status ?? "", phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
   } catch (e) { return setAside(`its repair failed (${e instanceof Error ? e.message : e})`); }
@@ -1212,14 +1217,14 @@ export function dispatch(e: Event): Session {
     const id = store.session.learner?.id;
     if (id) try {
       const l = readLearner(id);
-      store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory.map((n) => n.text), history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null, ...(store.session.status === LEARNER_UNREAD ? { status: "" } : {}) };
+      store.session = { ...store.session, skills: l.skills, writing: l.writing, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null, ...(store.session.status === LEARNER_UNREAD ? { status: "" } : {}) };
       rehydrateTold = "";
     } catch (err) {
       tellRehydrate(err instanceof Error ? err.message : String(err));
       // the same learner keeps its own records (WD13); a learner switched to never shows the previous learner's (WD14a)
       if (before.learner?.id !== id) {
         const b = blank(id);
-        store.session = { ...store.session, skills: b.skills, writing: b.writing, memory: b.memory.map((n) => n.text), history: b.history, englishLearning: b.english, paper: null, status: LEARNER_UNREAD };
+        store.session = { ...store.session, skills: b.skills, writing: b.writing, history: b.history, englishLearning: b.english, paper: null, status: LEARNER_UNREAD };
       }
     }
   }

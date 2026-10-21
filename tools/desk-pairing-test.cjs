@@ -42,13 +42,13 @@ const setCookie=(r,name)=>{const all=r.headers.getSetCookie?r.headers.getSetCook
 const through=async(url,{method='POST',cookie,headers={}}={})=>{const r=await proxyOf().proxy(new NextRequest('http://desk'+url,{method,headers:{...headers,...(cookie?{cookie}:{})}}));
  return {status:r.status,passed:r.headers.get('x-middleware-next')==='1',role:r.headers.get('x-middleware-request-x-desk-role'),res:r};};
 
-/** A desk with a learner's evening on it: a page, a practice set, a conversation, history, memory. */
+/** A desk with a learner's evening on it: a page, a practice set, a conversation, history. */
 function evening(screen='landing'){
  store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
  const s=store.getSession();
  globalThis.__desk.session={...s,screen,subject:'maths',draft:{id:'p1',name:'Ada',type:'elementary',modules:['english']},
   pages:[{id:'m1',subject:'maths',title:'Sheet',img:'data:image/jpeg;base64,AAAA',w:10,h:10,items:[{n:1,text:'2x+3=11',cx:0,cy:0,band:[0,1],key:'k1'}]}],
-  history:[{at:Date.now(),kind:'practice',label:'Linear',detail:'4 of 6 right'}],memory:['Ema rushes the second step.'],
+  history:[{at:Date.now(),kind:'practice',label:'Linear',detail:'4 of 6 right'}],
   conversation:{id:'c1',sceneId:'rover',turns:[{role:'learner',text:'Where is the rover?'}]},
   practice:{topic:'linear-one-step',items:[{n:1,question:'2x+3=11',studentAnswer:'4'}],marked:false},
   englishLearning:{...emptyEnglish(),notes:['likes space']}};
@@ -57,7 +57,7 @@ function evening(screen='landing'){
 const firstMessage=async(role)=>{mock.timers.enable({apis:['setInterval']});try{const r=(await streamRoute().GET(req('/api/session/stream',{role}))).body.getReader();
  const m=JSON.parse(new TextDecoder().decode((await r.read()).value).replace(/^data: /,''));await r.cancel();return m;}finally{mock.timers.reset();}};
 const LOBBY_EMPTY=(v)=>{assert.equal(v.viewer,'guest');assert.equal(v.pin,'');assert.equal(v.joined,false);
- assert.deepEqual(v.pages,[]);assert.deepEqual(v.history,[]);assert.deepEqual(v.memory,[]);assert.equal(v.conversation,null);assert.equal(v.practice,null);assert.deepEqual(v.englishLearning,emptyEnglish());};
+ assert.deepEqual(v.pages,[]);assert.deepEqual(v.history,[]);assert.equal('memory' in v,false);assert.equal(v.conversation,null);assert.equal(v.practice,null);assert.deepEqual(v.englishLearning,emptyEnglish());};
 
 test('case 1: a guest sees the lobby - no pin, not joined, the evening emptied - and the TV sees the whole session with its pin',async()=>{
  const s=evening('landing');
@@ -1101,6 +1101,15 @@ test('lite r2 (g): phones.forget from a phone or a guest is still 403',async()=>
  assert.equal((await post({type:'phones.forget'},'phone',cookie)).status,403);
  assert.equal((await post({type:'phones.forget'},'guest')).status,403);
  assert.equal(pairing().isPhone(cookie.slice('desk-phone='.length)),true,'the phone is still listed');
+});
+// the desk's own notes on a learner (lib/desk/memory.ts) are for its prompts: no screen reads them, so no message carries them
+test('the desk\'s notes on a learner ride on no session: not after a re-read, not to the TV, not to a phone',async()=>{
+ const L=require(src('lib/session/learners.ts'));store.dispatch({type:'reset'});
+ L.saveLearner({...L.getLearner('ema'),memory:[{text:'Ema rushes the second step.',at:1,source:'nightly'}]});
+ store.dispatch({type:'learner.set',id:'ema'});
+ assert.equal('memory' in store.getSession(),false,'the re-read does not put the notes on the session');
+ const cookie=await phoneCookie();store.dispatch({type:'learner.set',id:'ema'});
+ for(const role of ['tv','phone'])assert.equal(JSON.stringify((await (await sessionRoute().GET(req('/api/session',{role,cookie}))).json())).includes('rushes the second step'),false,role);
 });
 // ---- TL-11: the phone answers asks and does not move the TV
 const PHONE_REFUSED=[{type:'nav',screen:'page'},{type:'focus',focus:1},{type:'subject',subject:'english'},{type:'item',itemIx:0},{type:'page.select',pageIx:0},{type:'walk',ix:1},
