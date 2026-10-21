@@ -22,7 +22,13 @@ const files=walk(src).map(f=>({file:rel(f),text:fs.readFileSync(f,'utf8')}));
 const ENGINES='src/lib/engines/';
 
 // ---- 1. the seam
-const PROVIDERS=['claudeCli','codexCli','codexText','ollamaVision','ollamaEmbed','piper','elevenlabs'];
+/**
+ * The provider objects an engine module exports (`export const x: Provider<...>`), read from lib/engines rather than
+ * kept here by hand, so a new provider is covered the day it is exported; plus codexText, the one engine function that
+ * skips the registry on purpose (the UAT driver's codex roles).
+ */
+const providersIn=(list)=>[...new Set(list.flatMap((f)=>[...f.text.matchAll(/export\s+const\s+(\w+)\s*:\s*Provider\s*</g)].map((m)=>m[1])))].sort();
+const PROVIDERS=[...providersIn(files.filter((f)=>f.file.startsWith(ENGINES))),'codexText'];
 const BYPASS=[
  [new RegExp(`import[^;]*\\b(${PROVIDERS.join('|')})\\b[^;]*from\\s*["'][^"']*engines/`),'imports a provider object instead of its engine'],
  [/import[^;]*\b(provider|useProvider)\b[^;]*from\s*["'][^"']*engines\/registry["']/,'looks a provider up in the registry'],
@@ -36,6 +42,8 @@ test('seam canary: each bypass shape is caught by its predicate, and an engine c
  assert.deepEqual(bypasses('import { spawn } from "node:child_process";'),['starts a child process']);
  assert.deepEqual(bypasses('await fetch("http://127.0.0.1:11434/api/generate",{method:"POST"})'),['fetches a model host']);
  assert.deepEqual(bypasses('import { text } from "@/lib/engines/text";'),[]);
+ assert.deepEqual(providersIn([{text:'export const gemini: Provider<TextRequest, unknown> = {'}]),['gemini'],'a newly exported provider is found');
+ for(const p of ['claudeCli','codexCli','ollamaVision','ollamaEmbed','piper','elevenlabs'])assert(PROVIDERS.includes(p),`${p} is read from lib/engines`);
 });
 test('the engine seam is the only way to a model: nothing outside lib/engines bypasses it',()=>{
  const found=files.filter(f=>!f.file.startsWith(ENGINES)).flatMap(f=>bypasses(f.text).map(why=>`${f.file}: ${why}`));
