@@ -87,6 +87,22 @@ test('a finished episode lands in the seated learner record',()=>{
   assert.equal(L.getLearner('kid-2').history.length,0);
 });
 
+test('the revision is read again: punctuation-only is refused, evidence added holds, none added still needs',()=>{
+  const coachedEp=()=>{let r=E.pick(E.START,'screens');return E.coached(r.episode,DRAFT,'a note').episode;};
+  const punct=E.revised(coachedEp(),DRAFT.replace('bed.','bed!')+' ');
+  assert.equal(punct.ok,false);assert.match(punct.error,/change some of your words/i);
+  assert.equal(E.revised(coachedEp(),DRAFT.replace(/ /g,'  ').toUpperCase()).ok,false,'case and spacing alone are no revision');
+  const done=(rev)=>{const r=E.revised(coachedEp(),rev);assert.ok(r.ok,JSON.stringify(r));return E.finished(r.episode,1).episode;};
+  const good=done(REVISED);assert.equal(good.focus,'evidence');assert.equal(good.holds,true);
+  assert.match(E.checkLine(good),/coached on evidence; the revision now gives evidence/);
+  const bad=done(DRAFT.replace('fun','nice'));assert.equal(bad.holds,false);
+  assert.match(E.checkLine(bad),/the revision still needs evidence/);
+  assert.equal(E.checkLine({}),'coached; the revision was not checked');
+  assert.doesNotMatch(S.saveEpisode('kid-3',bad).detail,/revised/);
+  assert.equal(E.focusHolds('length','Short one here. Another short one.'),true);
+  assert.equal(E.focusHolds('length',Array(40).fill('word').join(' ')+'. Ok then.'),false);
+});
+
 test('the /writing page paints its own ground: its dark text is not left on the desk\'s dark body (stick walk 2026-10-21)',()=>{
   const src=fs.readFileSync(path.join(root,'src/writing/WritingEpisode.tsx'),'utf8');
   const main=src.match(/<main style=\{\{([^}]*)\}\}/);

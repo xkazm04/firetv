@@ -35,7 +35,7 @@ function finishOnTv(revision: unknown): Response {
     const saved = saveEpisode(who.id, done.episode);
     if (!saved.ok) return NextResponse.json({ error: saved.error }, { status: 500 });
     dispatch({ type: "writing.finished", revision: done.episode.revision!, saved: saved.detail, by: who.id });
-    return NextResponse.json({ episode: done.episode, saved: saved.detail });
+    return NextResponse.json({ episode: done.episode, saved: saved.detail, focus: done.episode.focus, holds: done.episode.holds });
   } finally {
     dispatch({ type: "writing.busy", busy: false, by: who.id });
   }
@@ -55,5 +55,5 @@ export async function POST(req: Request) {
   if (!step.ok) return NextResponse.json({ error: step.error }, { status: 400 });
   const saved = saveEpisode(who.id, step.episode);
   if (!saved.ok) return NextResponse.json({ error: saved.error }, { status: 500 });
-  return NextResponse.json({ episode: step.episode, saved: saved.detail });
+  return NextResponse.json({ episode: step.episode, saved: saved.detail, focus: step.episode.focus, holds: step.episode.holds });
 }

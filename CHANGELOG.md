@@ -23,6 +23,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Writing: the finish step re-reads the revision with the same code that picked the coaching focus. A revision that only moves spaces or punctuation is refused, the episode stores whether the focus now holds, and the history line says so ("coached on evidence; the revision now gives evidence" or "still needs evidence") instead of claiming a revision it did not check.
 
 - Faster module switching on the stick, passes 2 and 3: the stage is fitted with `zoom` again (landing GPU tiles 107 to 71 MB), and each world's sky, hills and side cliffs are drawn once into canvases instead of rastered on every move. A lamp move's longest frame gap fell from 641-669 ms to 271-283 ms and Back from 500-572 ms to 228-378 ms; the bitmaps stay resident inside a module (about 46 MB more GPU memory). See [STICK-PERFORMANCE-2026-10-21.md](docs/concepts/STICK-PERFORMANCE-2026-10-21.md).
 - Writing on the TV: a Writing stop on the landing and a remote-driven Writing screen inside /tv (prompt list, chosen prompt, progress and the coaching note). The paragraph and the revision are typed on the phone through a named `writing` hand-off, and the episode is saved to the learner's record. No APK change. See [TV-WRITING-SCREEN-2026-10-21.md](docs/concepts/TV-WRITING-SCREEN-2026-10-21.md).

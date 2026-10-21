@@ -171,7 +171,7 @@ test('the phone\'s paragraph is coached through the writing ask: a refusal keeps
  r=await call('finish',{askId:tv.ask.id,revision:REVISED});
  assert.equal(r.status,200,JSON.stringify(await r.clone().json()));
  s=store.getSession();
- assert.equal(s.writingTv.stage,'finished');assert.match(s.writingTv.saved,/sentences, coached and revised once/);assert.equal(s.ask,null);
+ assert.equal(s.writingTv.stage,'finished');assert.match(s.writingTv.saved,/sentences, coached on evidence; the revision now gives evidence/);assert.equal(s.ask,null);
  assert.match(W.writingLine(s),/^Saved to your record: /);
  // the learner file under the scratch data dir holds the episode
  const L=require(src('lib/session/learners.ts'));const l=L.getLearner('wtv-ema');
