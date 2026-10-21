@@ -3,7 +3,7 @@
  * and — once computed — an embedding per window. Retrieval is "choose from the syllabus":
  * the model picks a lesson id or 'none', then the nearest window inside it is the seek target.
  */
-import { readFileSync, existsSync, writeFileSync, mkdirSync, renameSync, rmSync } from "node:fs";
+import { readFileSync, existsSync, writeFileSync, mkdirSync, renameSync, rmSync, statSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { parseVtt, windows, type Cue } from "./vtt";
@@ -15,16 +15,20 @@ import { LESSONS } from "./lessons.data";
 export { LESSONS };
 export type { Lesson } from "./lessons.data";
 
-const cache = new Map<string, Cue[]>();
+const cache = new Map<string, { stamp: string; w: Cue[] }>();
 let vectors: Map<string, number[][]> | null = null;
+/** The digest of the windows each published vector set was computed from (build), so a replaced transcript rebuilds. */
+const vectorDigests = new Map<string, string>();
 
 export function lessonWindows(id: string): Cue[] {
-  if (cache.has(id)) return cache.get(id)!;
   const f = path.join(dataDir(), "lessons", `${id}.en.vtt`);
   // a missing transcript is not remembered: one that is placed later is read on the next pick
   if (!existsSync(f)) return [];
+  // a transcript replaced on disk (captions fetched again) is read again: the cache holds the file's size and time
+  const st = statSync(f), stamp = `${st.size}:${st.mtimeMs}`, had = cache.get(id);
+  if (had && had.stamp === stamp) return had.w;
   const w = windows(parseVtt(readFileSync(f, "utf8")), WINDOW_SECONDS);
-  cache.set(id, w); return w;
+  cache.set(id, { stamp, w }); return w;
 }
 
 /** The window size the transcripts are cut at, in seconds; part of what the vector cache is keyed on. */
@@ -82,6 +86,7 @@ async function build(): Promise<Map<string, number[][]>> {
     next.set(l.id, { digest, vectors: json }); out.set(l.id, json); changed = true;
   }
   if (changed || old.size !== next.size) writeCache(f, next);
+  vectorDigests.clear(); for (const [id, e] of next) vectorDigests.set(id, e.digest);
   return out;
 }
 
@@ -107,8 +112,9 @@ export async function bestWindow(lessonId: string, query: string): Promise<{ t: 
   const w = lessonWindows(lessonId); if (!w.length) return null;
   try {
     let all = await ensureVectors();
-    // a lesson that gained windows after the map was published: rebuild once (the disk cache keeps the others)
-    if (!all.has(lessonId) && LESSONS.some((l) => l.id === lessonId && l.youtube)) { vectors = null; all = await ensureVectors(); }
+    // a lesson that gained windows, or whose transcript was replaced, after the map was published: rebuild once (the disk
+    // cache keeps the others)
+    if ((!all.has(lessonId) || vectorDigests.get(lessonId) !== digestOf(w)) && LESSONS.some((l) => l.id === lessonId && l.youtube)) { vectors = null; all = await ensureVectors(); }
     const vecs = all.get(lessonId); if (!vecs) return { t: w[0].t, text: w[0].text, score: 0 };
     const [q] = (await embed({ texts: [query], use: "lesson-window" })).json;
     let best = 0, bs = -1;

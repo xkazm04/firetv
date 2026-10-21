@@ -74,6 +74,18 @@ test('LATE-1: a transcript placed after the first pick is used by the next pick,
  assert.ok(b&&b.t>0,'the late transcript seeks past 0:00: '+JSON.stringify(b));
 });
 
+test('LATE-2: a transcript replaced while the desk runs is read again, not served from the first read',async()=>{
+ const L=lib('library/lessons.ts'),ID='u1SAo2GiX8A',f=path.join(data,'lessons',`${ID}.en.vtt`);
+ fs.writeFileSync(f,['WEBVTT\n',cue(0,'the old captions')].join('\n'));
+ assert.equal(L.lessonWindows(ID)[0].text,'the old captions');
+ assert.equal((await L.bestWindow(ID,'divide')).t,0,'one window: its vectors are built');
+ fs.writeFileSync(f,['WEBVTT\n',cue(0,'welcome back, captions fetched again'),cue(50,'divide both sides')].join('\n'));
+ const t=new Date(Date.now()+5000);fs.utimesSync(f,t,t);
+ assert.deepEqual(L.lessonWindows(ID).map((w)=>w.text),['welcome back, captions fetched again','divide both sides']);
+ const b=await L.bestWindow(ID,'divide');
+ assert.deepEqual([b.t,b.degraded],[50,undefined],'the new windows are embedded and the seek lands in them: '+JSON.stringify(b));
+});
+
 test('DEGRADED-1: an embedding engine that fails opens the picked lesson at its first window, said once, never a lost lesson',async()=>{
  const L=lib('library/lessons.ts'),reg=lib('engines/registry.ts');
  // a lesson whose vectors are not built yet: the build itself fails
