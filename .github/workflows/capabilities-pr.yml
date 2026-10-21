@@ -63,7 +63,7 @@ jobs:
       - name: Hold the committed verified flags to this run
         if: always()
         run: node scripts/doctor-gate.mjs doctor.out --claims "$RUNNER_TEMP/committed-manifest.yaml"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: capabilities-pr-${{ github.run_id }}
