@@ -15,7 +15,7 @@
 import { NextResponse } from "next/server";
 import { getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { roleFrom } from "@/lib/session/pairing";
-import { addPiece, FORMAT_NEEDED_LINE, hasFormat, addVersion, deleteAll, deletePiece, getPiece, listPieces, markNoticed, noticed, TEXT_NOTICE } from "@/lib/session/texts";
+import { addPiece, TEXT_NOT_SAVED, FORMAT_NEEDED_LINE, hasFormat, addVersion, deleteAll, deletePiece, getPiece, listPieces, markNoticed, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { inflateRawSync } from "node:zlib";
 import { docxText } from "@/lib/rules/docx";
 import { dispatch } from "@/lib/session/store";
@@ -63,7 +63,10 @@ export async function POST(req: Request) {
   }
   if (typeof body.id !== "string" && !hasFormat(body.format)) return NextResponse.json({ error: FORMAT_NEEDED_LINE }, { status: 400 });
   const input = { text, source: body.docx !== undefined ? "file" : body.source, format: body.format, title: body.title };
-  const r = typeof body.id === "string" ? addVersion(who.id, body.id, input) : addPiece(who.id, input);
+  let r: ReturnType<typeof addPiece>;
+  // a disk that refuses the write is said in the desk's sentence, never a bare 500; texts.ts has already removed its temp file
+  try { r = typeof body.id === "string" ? addVersion(who.id, body.id, input) : addPiece(who.id, input); }
+  catch (e) { console.error("desk texts: a piece could not be written:", e instanceof Error ? e.message : e); return NextResponse.json({ error: TEXT_NOT_SAVED }, { status: 500 }); }
   if (r.ok) refresh(who.id);
   return r.ok ? NextResponse.json(r.value) : NextResponse.json({ error: r.error }, { status: r.status });
 }

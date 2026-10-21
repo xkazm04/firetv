@@ -237,3 +237,17 @@ test('matchPiece reads each kept piece once: a shelf of 10 with no match costs 1
   assert.ok(n <= 10 + 10, `${n} reads for two matches over 10 pieces`);
   assert.equal(T.getPiece(id, same).title, 'Piece 4');
 });
+
+test('a piece or a twin file that cannot be written leaves no temp file behind, and the route says so in a sentence (500)', async () => {
+  dispatch({ type: 'reset' }); seat('ema'); await route.POST(req('POST', '', { notice: true }));
+  const orig = fs.renameSync, mine = path.join('texts', 'ema'), temps = () => fs.readdirSync(folder('ema')).filter((f) => f.endsWith('.tmp'));
+  fs.renameSync = function (a, b) { if (String(b).includes(mine)) { const e = new Error('EPERM: operation not permitted, rename'); e.code = 'EPERM'; throw e; } return orig.call(this, a, b); };
+  let r;
+  try {
+    assert.throws(() => T.writeTwinFile('ema', '{}'));
+    r = await route.POST(req('POST', '', { text: 'A piece the disk refuses.', format: 'essay' }));
+  } finally { fs.renameSync = orig; }
+  assert.deepEqual(temps(), [], 'no temp file is left beside the pieces');
+  assert.equal(r.status, 500); assert.equal((await r.json()).error, T.TEXT_NOT_SAVED);
+  assert.equal(T.listPieces('ema').some((c) => c.title.includes('refuses')), false, 'and nothing was kept');
+});

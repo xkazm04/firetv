@@ -66,13 +66,19 @@ function readPiece(learnerId: string, id: string): Piece | null {
     return p;
   } catch (e) { tell(`desk texts: ${fileOf(learnerId, id)} is not readable JSON, so it is left off the shelf: ${whyNot(e)}`); return null; }
 }
-/** Written to a temporary name, then renamed over: a crash mid-write leaves the old version, never half a file. */
-function writePiece(learnerId: string, p: Piece): void {
+/** What the route answers when a piece could not be written: nothing was kept, and sending it again may work. */
+export const TEXT_NOT_SAVED = "The desk could not save that just now, so nothing was kept. Send it again.";
+/**
+ * Written whole to a temporary name, then renamed over: a crash mid-write leaves the old file, never half a file. A write
+ * that fails takes its temporary file with it and throws (as learners.ts writeBook and the session's writeSession do).
+ */
+function writeWhole(learnerId: string, to: string, json: string): void {
   mkdirSync(folder(learnerId), { recursive: true });
-  const to = fileOf(learnerId, p.id), tmp = `${to}.${process.pid}.tmp`;
-  writeFileSync(tmp, JSON.stringify(p));
-  renameSync(tmp, to);
+  const tmp = `${to}.${process.pid}.tmp`;
+  try { writeFileSync(tmp, json); renameSync(tmp, to); }
+  catch (e) { try { rmSync(tmp, { force: true }); } catch { /* best effort: the write's own failure is thrown just below */ } throw e; }
 }
+function writePiece(learnerId: string, p: Piece): void { writeWhole(learnerId, fileOf(learnerId, p.id), JSON.stringify(p)); }
 function ids(learnerId: string): string[] {
   try { return readdirSync(folder(learnerId)).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5)).filter((id) => PIECE_ID.test(id)); }
   catch (e) { if ((e as NodeJS.ErrnoException)?.code !== "ENOENT") tell(`desk texts: ${folder(learnerId)} could not be listed, so the shelf shows nothing: ${whyNot(e)}`); return []; }
@@ -186,13 +192,10 @@ export function markNoticed(learnerId: string, now = Date.now()): boolean {
  * the write is here, because this module owns the learner's text folder and the session is the only state.
  */
 export const twinFileOf = (learnerId: string) => path.join(folder(learnerId), "twin.json");
-/** Written whole to a temporary name, then renamed over (as writePiece): a crash mid-write leaves the old state, never half a file. */
+/** Written whole (writeWhole, as a piece is): a crash mid-write leaves the old state, never half a file, and a failed write no temp file. */
 export function writeTwinFile(learnerId: string, json: string): void {
   if (!LEARNER_ID.test(learnerId)) throw new Error("no learner");
-  mkdirSync(folder(learnerId), { recursive: true });
-  const to = twinFileOf(learnerId), tmp = `${to}.${process.pid}.tmp`;
-  writeFileSync(tmp, json);
-  renameSync(tmp, to);
+  writeWhole(learnerId, twinFileOf(learnerId), json);
 }
 /** An unreadable twin file, renamed beside itself and never written over; the new path, or a throw when it could not be moved. */
 export function setAsideTwinFile(learnerId: string, now = Date.now()): string {
