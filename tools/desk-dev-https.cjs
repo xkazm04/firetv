@@ -28,7 +28,11 @@ function make(){
  process.exit(1);
 }
 
-if(!fs.existsSync(cert)||!fs.existsSync(key))make();
+// make() writes a 365-day certificate. One with 30 days or less left, or one that is not a readable certificate, is made
+// again: a lapsed certificate is a hard error on the phone, with no way past it.
+function current(){try{return Date.parse(new (require('node:crypto').X509Certificate)(fs.readFileSync(cert)).validTo)-Date.now()>30*864e5;}catch{return false;}}
+const had=fs.existsSync(cert);
+if(!fs.existsSync(key)||!current()){make();if(had)console.log('desk-dev-https: the old certificate had expired, was about to, or could not be read: made a new one. A phone that trusted the old one must trust this one once (see below).');}
 console.log('desk-dev-https: certificate for '+names.join(', ')+' in '+dir);
 console.log('desk-dev-https: how a phone trusts it once: docs/DESK-HTTPS-ON-THE-LAN.md');
 if(process.argv.includes('--cert-only'))process.exit(0);
