@@ -142,7 +142,7 @@ design pages that `prototype/build.py` builds.
   - `quality.yml` runs the desk gate and `:core:test` on every PR.
   - `supply-chain.yml` runs on main. It builds and attests the debug APK (it does not submit the Gradle dependency graph: that setting is off for the repository).
   - `sbom.yml` runs after each green `supply-chain` run. It attests a CycloneDX SBOM of that APK's runtime classpath against the same APK, and uploads the desk's `npm sbom` inventory (`.ai/memory/0021`).
-  - `harness-drills.yml` runs on every PR and push to main. It holds `SECURITY.md` to its word, runs the SBOM converter suite, holds the committed Stick soaks to the frame budget, and runs the degraded-engine drill.
+  - `harness-drills.yml` runs on every PR and push to main. It holds `SECURITY.md` to its word, runs the SBOM converter suite, and holds the committed Stick soaks to the frame budget. Its degraded-engine job is not wired (a fixture row fails on the current desk), so run `node tools/engine-degraded-test.cjs` yourself.
   - `capabilities.yml` runs weekly and on dispatch. It executes every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` and goes red on any failure (`.ai/memory/0012`).
   - `model-drift.yml` runs its suite on every PR. Weekly, it goes red when the committed live-quality record in `uat/drift/` drifted, is missing, or is older than 21 days (`.ai/memory/0014`).
   - `model-drift-pr.yml` runs on every PR. A PR that touches the live surface goes red unless it adds a live record that measured its code and does not alert against the base branch's newest one (`.ai/memory/0017`).

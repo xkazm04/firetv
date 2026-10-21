@@ -45,9 +45,9 @@ Run the gate for every surface you touched and record its exit code. The table i
 | a TV screen | the desk gate, plus a Playwright capture (or name the capture as owed) |
 | `deathride/` | `:core:test :link:test` from `deathride/` |
 
-`node .ai/doctor.mjs` checks the agent contract (`.ai/manifest.yaml`, memory, guidance). It runs on
-every pull request in `.github/workflows/ai-conformance.yml`, and its exit code is red by design on the
-human-owned `control.prepush` finding. The verdict to read is `.github/workflows/conformance-gate.yml`
+`node .ai/doctor.mjs` checks the agent contract (`.ai/manifest.yaml`, memory, guidance). Its exit code is red by
+design on the human-owned `control.prepush` finding (`.github/workflows/ai-conformance.yml` only reports it
+weekly). The verdict to read on a pull request is `.github/workflows/conformance-gate.yml`
 (`scripts/doctor-gate.mjs`), which fails only outside the documented waivers.
 `.github/workflows/capabilities-pr.yml` runs every manifest capability when run by hand (not on PRs: test-desk exceeds the doctor's 180 s budget, issue #12). If you
 commit a `verified: true`, it must come from the write-back of a local `node .ai/doctor.mjs --run`,
