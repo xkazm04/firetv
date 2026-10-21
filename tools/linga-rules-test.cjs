@@ -4104,3 +4104,11 @@ test('teaching notes: the phone\'s Set up form refuses what the server refuses, 
  const save8=eight.slice(eight.lastIndexOf('<button',eight.indexOf('Save preferences')),eight.indexOf('Save preferences'));
  assert.doesNotMatch(save8,/disabled/,'eight notes: Save as before');assert(!eight.includes(refusedWith));
 });
+test('a Linga command answered with a page that is not JSON (a crash, a proxy) leaves a desk sentence on the TV, never a parser error',async()=>{
+ const {replyError}=require(path.join(root,'src/english/useEnglish.ts'));
+ assert.equal(await replyError(new Response('<!DOCTYPE html><html>Internal Server Error</html>',{status:500})),'That did not reach the tutor.');
+ assert.equal(await replyError(new Response('',{status:502})),'That did not reach the tutor.');
+ assert.equal(await replyError(new Response(JSON.stringify({error:'Wait for the current turn, or cancel it first.'}),{status:409})),'Wait for the current turn, or cancel it first.');
+ assert.equal(await replyError(new Response(JSON.stringify({screen:'linga'}),{status:200})),null);
+ assert.equal(await replyError(new Response('not json',{status:200})),null,'a 2xx is done whatever its body');
+});
