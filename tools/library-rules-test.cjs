@@ -65,3 +65,21 @@ test('LATE-1: a transcript placed after the first pick is used by the next pick,
  const b=await L.bestWindow(LATE,'divide');
  assert.ok(b&&b.t>0,'the late transcript seeks past 0:00: '+JSON.stringify(b));
 });
+
+test('DEGRADED-1: an embedding engine that fails opens the picked lesson at its first window, said once, never a lost lesson',async()=>{
+ const L=lib('library/lessons.ts'),reg=lib('engines/registry.ts');
+ // a lesson whose vectors are not built yet: the build itself fails
+ const NEW='qsL_5Y8uWPU';
+ fs.writeFileSync(path.join(data,'lessons',`${NEW}.en.vtt`),['WEBVTT\n',cue(0,'how many solutions'),cue(50,'no solution at all'),cue(100,'infinitely many')].join('\n'));
+ reg.useProvider('embed',{name:'stub',run:async()=>{throw new Error('ollama is not running');}});
+ const lines=[];mock.method(console,'error',(...a)=>lines.push(a.join(' ')));
+ let built,query;
+ try{
+  built=await L.bestWindow(NEW,'no solution');
+  // a lesson already embedded (LATE-1): only the query's own embedding fails
+  query=await L.bestWindow('bAerID24QJ0','divide');
+ }finally{mock.restoreAll();}
+ assert.deepEqual(built,{t:0,text:'how many solutions',score:0,degraded:true},'the build failed: the lesson opens at its start, marked degraded');
+ assert.deepEqual(query,{t:0,text:'welcome to linear equations',score:0,degraded:true},'the query failed: the same');
+ assert.equal(lines.filter((l)=>/embedding engine/.test(l)).length,2,'each degraded seek is said once in the server log: '+lines.join('|'));
+});

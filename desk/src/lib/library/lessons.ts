@@ -98,15 +98,24 @@ export async function ensureVectors(): Promise<Map<string, number[][]>> {
   return building;
 }
 
-/** Nearest window in a lesson to a query — the seek target. */
-export async function bestWindow(lessonId: string, query: string): Promise<{ t: number; text: string; score: number } | null> {
+/**
+ * Nearest window in a lesson to a query — the seek target. The embedding engine is the optional half: when it cannot
+ * place the lesson or the query, the lesson the pick chose still opens, at its first window, marked `degraded` and said
+ * in the server log. An engine outage is a degraded seek, never "no lesson covers this one".
+ */
+export async function bestWindow(lessonId: string, query: string): Promise<{ t: number; text: string; score: number; degraded?: true } | null> {
   const w = lessonWindows(lessonId); if (!w.length) return null;
-  let all = await ensureVectors();
-  // a lesson that gained windows after the map was published: rebuild once (the disk cache keeps the others)
-  if (!all.has(lessonId) && LESSONS.some((l) => l.id === lessonId && l.youtube)) { vectors = null; all = await ensureVectors(); }
-  const vecs = all.get(lessonId); if (!vecs) return { t: w[0].t, text: w[0].text, score: 0 };
-  const [q] = (await embed({ texts: [query], use: "lesson-window" })).json;
-  let best = 0, bs = -1;
-  vecs.forEach((v, i) => { const s = cosine(q, v); if (s > bs) { bs = s; best = i; } });
-  return { t: w[best].t, text: w[best].text, score: bs };
+  try {
+    let all = await ensureVectors();
+    // a lesson that gained windows after the map was published: rebuild once (the disk cache keeps the others)
+    if (!all.has(lessonId) && LESSONS.some((l) => l.id === lessonId && l.youtube)) { vectors = null; all = await ensureVectors(); }
+    const vecs = all.get(lessonId); if (!vecs) return { t: w[0].t, text: w[0].text, score: 0 };
+    const [q] = (await embed({ texts: [query], use: "lesson-window" })).json;
+    let best = 0, bs = -1;
+    vecs.forEach((v, i) => { const s = cosine(q, v); if (s > bs) { bs = s; best = i; } });
+    return { t: w[best].t, text: w[best].text, score: bs };
+  } catch (e) {
+    console.error(`desk library: the embedding engine could not place ${lessonId}, so it opens at its first window: ${e instanceof Error ? e.message : e}`);
+    return { t: w[0].t, text: w[0].text, score: 0, degraded: true };
+  }
 }
