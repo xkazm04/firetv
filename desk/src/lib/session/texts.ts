@@ -96,13 +96,18 @@ function titleOf(text: string, format: string, learnerId: string): string {
   return `Untitled ${format} ${Math.max(0, ...used) + 1}`;
 }
 
-export function listPieces(learnerId: string): PieceCard[] {
+/** Every piece the learner kept, each file read once, the most recently kept first (the shelf's order). */
+export function allPieces(learnerId: string): Piece[] {
   if (!LEARNER_ID.test(learnerId)) return [];
-  return ids(learnerId).flatMap((id) => {
-    const p = readPiece(learnerId, id); if (!p) return [];
+  return ids(learnerId).flatMap((id) => { const p = readPiece(learnerId, id); return p ? [p] : []; })
+    .sort((a, b) => b.versions.at(-1)!.at - a.versions.at(-1)!.at);
+}
+
+export function listPieces(learnerId: string): PieceCard[] {
+  return allPieces(learnerId).map((p) => {
     const last = p.versions.at(-1)!;
-    return [{ id: p.id, format: p.format, title: p.title, versions: p.versions.length, paragraphs: paragraphsOf(last.text).length, updated: last.at }];
-  }).sort((a, b) => b.updated - a.updated);
+    return { id: p.id, format: p.format, title: p.title, versions: p.versions.length, paragraphs: paragraphsOf(last.text).length, updated: last.at };
+  });
 }
 
 export function getPiece(learnerId: string, id: string): Piece | null {
@@ -132,10 +137,11 @@ export function matchPiece(learnerId: string, text: string, format?: unknown): s
   const first = (paragraphsOf(text)[0] ?? "").trim();
   const heading = /^#{1,6}\s+\S/.test(first) ? first.replace(/^#{1,6}\s+/, "").slice(0, 80) : null;
   const mine = paragraphsOf(text).map((x) => x.trim());
-  for (const c of listPieces(learnerId)) {
+  // each piece is read once (allPieces): the list and its last version are the same read
+  for (const c of allPieces(learnerId)) {
     if (typeof format === "string" && format && c.format !== format) continue;
     if (heading !== null && c.title === heading) return c.id;
-    const last = getPiece(learnerId, c.id)?.versions.at(-1);
+    const last = c.versions.at(-1);
     if (!last) continue;
     const theirs = paragraphsOf(last.text).map((x) => x.trim());
     const shared = theirs.filter((x) => mine.includes(x)).length;

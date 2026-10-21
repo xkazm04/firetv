@@ -224,3 +224,16 @@ test('the Workroom diffs a piece once per version: an unchanged piece is not re-
   assert.equal(diffOf(w3, b.id), diffOf(w1, b.id));
   T.deleteAll('memo');
 });
+
+test('matchPiece reads each kept piece once: a shelf of 10 with no match costs 10 file reads, not 20', () => {
+  const id = 'mp-reads';
+  for (let i = 0; i < 10; i++) T.addPiece(id, { text: `# Piece ${i}\n\nA paragraph about thing ${i}.`, format: 'essay' }, 2000 + i);
+  const orig = fs.readFileSync, mine = path.join('texts', id); let n = 0;
+  fs.readFileSync = function (p, ...rest) { if (String(p).includes(mine)) n++; return orig.call(this, p, ...rest); };
+  let hit, same;
+  try { hit = T.matchPiece(id, 'Nothing like any of them at all.', 'essay'); same = T.matchPiece(id, '# Piece 4\n\nSomething else now.', 'essay'); }
+  finally { fs.readFileSync = orig; }
+  assert.equal(hit, null); assert.match(same, /^t-/, 'a heading still matches its piece');
+  assert.ok(n <= 10 + 10, `${n} reads for two matches over 10 pieces`);
+  assert.equal(T.getPiece(id, same).title, 'Piece 4');
+});
