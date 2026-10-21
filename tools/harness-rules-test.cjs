@@ -25,7 +25,7 @@ const SLOW = "require('node:test').test('slow',async()=>{await new Promise(r=>se
 function run(list, env = {}) {
   const lf = path.join(dir, `list-${Math.random().toString(36).slice(2)}.json`);
   fs.writeFileSync(lf, JSON.stringify(list));
-  const r = spawnSync(process.execPath, [RUNNER, '--list', lf], { cwd: DESK, encoding: 'utf8', env: { ...process.env, ...env } });
+  const r = spawnSync(process.execPath, [RUNNER, '--list', lf], { cwd: DESK, encoding: 'utf8', env: { ...process.env, RULES_JOBS: '', ...env } });
   return { code: r.status, out: r.stdout + r.stderr };
 }
 const tableLine = (out, name) => out.split('\n').find(l => l.startsWith(name) && /\b(green|RED)\b/.test(l)) || '';
@@ -88,6 +88,48 @@ test('a duplicate, an empty list and a missing list are refused before anything 
   assert.equal(run([]).code, 1);
   const none = spawnSync(process.execPath, [RUNNER, '--list', path.join(dir, 'absent.json')], { cwd: DESK, encoding: 'utf8' });
   assert.equal(none.status, 1);
+});
+
+// --jobs N runs up to N suites at once; each suite's output is printed whole when it ends, and the table stays in list order.
+const NAP = ms => `require('node:test').test('nap',async()=>{await new Promise(r=>setTimeout(r,${ms}));});`;
+// A suite that records when its test started and ended, so overlap is read from the clock, not from a load-sensitive wall time.
+const SPAN = (rec, ms) => `require('node:test').test('span',async()=>{const t0=Date.now();await new Promise(r=>setTimeout(r,${ms}));require('node:fs').writeFileSync(${JSON.stringify(rec)},JSON.stringify([t0,Date.now()]));});`;
+const spans = recs => recs.map(f => JSON.parse(fs.readFileSync(f, 'utf8')));
+
+test('--jobs 3 runs three suites at the same time (their spans overlap), the table in list order', () => {
+  const recs = ['j-a', 'j-b', 'j-c'].map(n => path.join(dir, `${n}.span`));
+  const names = recs.map((rec, i) => write(`j-${'abc'[i]}.cjs`, SPAN(rec, 3000)));
+  const seq = spans((run(names), recs));
+  assert.ok(Math.max(...seq.map(s => s[0])) >= Math.min(...seq.map(s => s[1])), 'without --jobs the suites overlapped');
+  const lf = path.join(dir, 'list-jobs.json'); fs.writeFileSync(lf, JSON.stringify(names));
+  const p = spawnSync(process.execPath, [RUNNER, '--list', lf, '--jobs', '3'], { cwd: DESK, encoding: 'utf8' });
+  const out = p.stdout + p.stderr, par = spans(recs);
+  assert.equal(p.status, 0, out);
+  assert.ok(Math.max(...par.map(s => s[0])) < Math.min(...par.map(s => s[1])), `--jobs 3 did not overlap the suites: ${JSON.stringify(par)}`);
+  const at = names.map(n => out.indexOf(tableLine(out, n)));
+  assert.ok(at.every(i => i > 0) && at[0] < at[1] && at[1] < at[2], 'table rows out of list order');
+  assert.match(out, /totals: 3 green, 0 red/);
+});
+
+test('--jobs: a red suite is still red, its whole output sits under its own header, and the run exits 1', () => {
+  const names = [write('jr-fail.cjs', FAIL), write('jr-ok.cjs', NAP(300))];
+  const lf = path.join(dir, 'list-jobs-red.json'); fs.writeFileSync(lf, JSON.stringify(names));
+  const p = spawnSync(process.execPath, [RUNNER, '--list', lf, '--jobs', '2'], { cwd: DESK, encoding: 'utf8' });
+  const out = p.stdout + p.stderr;
+  assert.equal(p.status, 1, out);
+  assert.match(tableLine(out, names[0]), /RED/);
+  assert.match(tableLine(out, names[1]), /green/);
+  const block = out.slice(out.indexOf(`# run-rules: ${names[0]}`), out.indexOf(`# run-rules: ${names[1]}`) > out.indexOf(`# run-rules: ${names[0]}`) ? out.indexOf(`# run-rules: ${names[1]}`) : undefined);
+  assert.match(block, /not ok .* bad/, 'the failing suite\'s TAP is not under its own header');
+});
+
+test('--jobs refuses a value that is not a positive whole number', () => {
+  const g = write('jn-green.cjs', GREEN), lf = path.join(dir, 'list-jobs-bad.json'); fs.writeFileSync(lf, JSON.stringify([g]));
+  for (const v of ['0', 'x', '1.5']) {
+    const p = spawnSync(process.execPath, [RUNNER, '--list', lf, '--jobs', v], { cwd: DESK, encoding: 'utf8' });
+    assert.equal(p.status, 1, `--jobs ${v}`);
+    assert.match(p.stderr, /--jobs/);
+  }
 });
 
 test('the real list in desk/package.json has 63+ unique suites, each a file, with this suite last', () => {
