@@ -30,8 +30,9 @@ raw = open(os.path.join(here, "data.json"), encoding="utf-8").read()
 
 # The click-through: the whole data set as one script literal.
 src = open(os.path.join(here, "src", "index.html"), encoding="utf-8").read()
-# A closing script tag inside a JSON string would end the block early; there is none, but be sure.
-write(os.path.join(here, "study-desk.html"), src.replace("/*__DATA__*/null", raw.replace("</script", "<\\/script")))
+# A closing script tag inside a JSON string would end the block early; there is none, but be sure. HTML ends the
+# block on any case of the tag name, so the guard ignores case too.
+write(os.path.join(here, "study-desk.html"), src.replace("/*__DATA__*/null", re.sub(r"</(script)", r"<\/\1", raw, flags=re.I)))
 
 # The On Air identity: page 2's "read as" panel shows the maths sample photo (data.json pages, id "math").
 math = next(p for p in json.loads(raw)["pages"] if p["id"] == "math")
