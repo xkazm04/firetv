@@ -177,8 +177,9 @@ test('the phone\'s paragraph is coached through the writing ask: a refusal keeps
  const L=require(src('lib/session/learners.ts'));const l=L.getLearner('wtv-ema');
  assert.equal(l.history.at(-1).kind,'writing');assert.equal(l.history.at(-1).label,'Screens before bed');
  assert.ok(fs.existsSync(path.join(data,'learners.json')),'learners.json in the scratch dir');
- // the landing now says what was written
- const w=landingView({...s,screen:'landing',writingTv:null,history:l.history}).apps.find((a)=>a.id==='writing');
+ // the session re-reads the record on writing.finished (REHYDRATE): the landing says what was written without another event
+ assert.equal(s.history.at(-1)?.label,'Screens before bed','the session\'s history holds the episode');
+ const w=landingView({...s,screen:'landing',writingTv:null}).apps.find((a)=>a.id==='writing');
  assert.deepEqual([w.kind,w.caption.head,w.art.done],['last','Screens before bed',1]);
  // a second send after the save answers nothing
  r=await call('finish',{askId:tv.ask.id,revision:REVISED+' More.'});assert.equal(r.status,409);

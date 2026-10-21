@@ -148,13 +148,24 @@ function Postcard({ view }: { view: LandingView }) {
   );
 }
 
+/**
+ * Where the tiles stand on the shelf: their pitch, the first one's centre, and the caption's width. Four tiles (the three
+ * apps and Writing) fit between the caption and the actions only with a tighter pitch and a narrower caption: the lit tile
+ * grows to about 150 px with its rings, and must not reach the big action at x 1296.
+ */
+function railOf(n: number): { pitch: number; cx: number; capW?: number } {
+  if (n >= 4) return { pitch: 150, cx: 965 - ((n - 1) * 150) / 2, capW: 560 };
+  const pitch = n >= 3 ? 176 : 200;
+  return { pitch, cx: 1010 - ((n - 1) * pitch) / 2 };
+}
+
 function Shelf({ view }: { view: LandingView }) {
-  const { apps, at, world } = view, n = apps.length, pitch = n >= 3 ? 176 : 200, cx = 1010 - ((n - 1) * pitch) / 2;
+  const { apps, at, world } = view, { pitch, cx, capW } = railOf(apps.length);
   const cap = view.caption;
   return (
     <div className="pp-ledge">
       <div className="pp-ledge-paper" />
-      <div className="pp-cap" data-role="desk-caption" key={cap.head + cap.sub}>
+      <div className="pp-cap" data-role="desk-caption" key={cap.head + cap.sub} style={capW ? { width: capW } : undefined}>
         {cap.chip && <span className="pp-chip">{WHEN_ICON[cap.chip.icon]}{cap.chip.text}</span>}
         <div className="pp-cl">{cap.head}</div>
         <div className="pp-cd">{cap.sub}</div>
@@ -199,7 +210,7 @@ function Chrome({ view }: { view: LandingView }) {
 function originOf(view: LandingView, stop: LandingStop): [number, number] {
   if (stop === "place") return [1560, 991];
   if (stop === "phone") return [1524, 438];
-  const n = view.apps.length, pitch = n >= 3 ? 176 : 200, cx = 1010 - ((n - 1) * pitch) / 2, i = Math.max(0, view.apps.findIndex((a) => a.id === stop));
+  const { pitch, cx } = railOf(view.apps.length), i = Math.max(0, view.apps.findIndex((a) => a.id === stop));
   return [Math.round(cx + i * pitch), 900];
 }
 

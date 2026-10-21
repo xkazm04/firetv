@@ -41,7 +41,7 @@ export function WritingTV({ s }: { s: Session }) {
     <div className="band band-corner" />
     <main className="content-full" data-role="writing-tv" data-phase={ph} data-asking={ask ? ask.phase : undefined} data-busy={ep.busy || undefined}>
       <div className="eyebrow">Writing · {prompt?.title ?? "your prompt"}</div>
-      <div className="cap-text" data-role="writing-ask" style={{ maxWidth: 1400, fontSize: 40, lineHeight: 1.3, marginTop: 18 }}>{prompt?.ask}</div>
+      <div className="cap-text" data-role="writing-ask" style={{ maxWidth: 1180, fontSize: 40, lineHeight: 1.3, marginTop: 18 }}>{prompt?.ask}</div>
       <ol data-role="writing-progress" aria-label="Progress" style={{ display: "flex", gap: 28, listStyle: "none", padding: 0, margin: "34px 0 0", fontSize: 30 }}>
         {WRITING_STEPS.map((w, i) => (
           <li key={w} data-done={i < done || undefined} style={{ display: "flex", alignItems: "center", gap: 12, opacity: i < done || i === done ? 1 : 0.55 }}>
