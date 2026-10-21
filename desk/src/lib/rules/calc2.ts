@@ -18,7 +18,7 @@
  * calc.ts (which imports this file). A few lines of calc.ts are written again here for that reason (num, BAD_SPEC).
  */
 import { compile, integrate, limitInf, toPlain, type Expr } from "./calc-expr";
-import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, czechNames, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, czechNames, decimalCall, decimalNumeral, infinityOf, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
 /** A comma system writes its decimals with a comma (taskText.ts commaSystem, written again here: this file imports no taskText, calc2-seam-test pins it). */
 const commaSystem = (system?: string) => system === "cz" || system === "de";
 
@@ -231,11 +231,7 @@ const unwrapAll = (s: string) => { while (wrapped(s)) s = s.slice(1, -1); return
  * Does the answer read as a decimal (ruling 28)? With spaces, one leading sign and enclosing brackets removed it is a decimal
  * numeral: '0.6956', '-0.6956', '-(0.6956)', '(0.6956)'.
  */
-function readsAsDecimal(ans: string): boolean {
-  let s = unwrapAll(ans.replace(/\s+/g, ""));
-  s = unwrapAll(s.replace(/^[+\-−]/, ""));
-  return !/^[+\-−]/.test(s) && isDecimal(s);
-}
+const readsAsDecimal = (ans: string): boolean => decimalNumeral(ans) !== null;
 
 /**
  * The verdict on a learner's answer, decided from the spec alone - the value is recomputed, never stored.
@@ -494,8 +490,10 @@ function sequenceQuestion(spec: SequenceSpec): { plain: string } | null {
 
 /** Calculus 1's limit comparison (calc.ts judgeNumber, limit row): a decimal goes to the one rule both call, calc-read's decimalCall (MB-B28, D2 R1a). */
 function judgeLimit(truth: number, s: number, written: string): Calc2Verdict {
-  if (isDecimal(written)) {
-    const c = decimalCall(written, s, truth, { exact: LIMIT_EXACT, rounded: LIMIT_ROUNDED, close: ROUNDED_CLOSE });
+  // a decimal in brackets or behind a sign is the same decimal (calc-read decimalNumeral, ruling 28)
+  const numeral = decimalNumeral(written);
+  if (numeral !== null) {
+    const c = decimalCall(numeral, s, truth, { exact: LIMIT_EXACT, rounded: LIMIT_ROUNDED, close: ROUNDED_CLOSE });
     return c === "right" ? verdict("right", WHY.right) : c === "rounded" ? verdict("unsure", WHY.rounded) : c === "sign" ? verdict("wrong", WHY.sign, "sign") : verdict("wrong", WHY.wrong);
   }
   if (withinRel(s, truth, LIMIT_EXACT)) return verdict("right", WHY.right);

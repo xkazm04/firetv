@@ -17,7 +17,7 @@
  */
 import { commaSystem, readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
-import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, czechNames, decimalCall, infinityOf, isDecimal, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, systemLogs, withinRel } from "./calc-read";
+import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, czechNames, decimalCall, decimalNumeral, infinityOf, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, systemLogs, withinRel } from "./calc-read";
 import { agreesWhereBoth, compile, derivativeAt, evalNode, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, type Expr, type Limit, type Node } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -415,9 +415,10 @@ const called = (c: ReturnType<typeof decimalCall>): CalcVerdict =>
   c === "right" ? verdict("right", WHY.right) : c === "rounded" ? verdict("unsure", WHY.rounded) : c === "sign" ? verdict("wrong", WHY.sign, "sign") : verdict("wrong", WHY.wrong);
 
 function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, written: string): CalcVerdict {
-  const decimal = isDecimal(written);
+  // a decimal in brackets or behind a sign is the same decimal ('(0.38)', '-(0.38)': calc-read decimalNumeral, ruling 28)
+  const numeral = decimalNumeral(written), decimal = numeral !== null;
   // a limit or an integral: a decimal is decided by the one rule calc2's sequence limit also calls (MB-B28, D2 R1a)
-  if (decimal && (shape === "limit" || shape === "definite-integral")) return called(decimalCall(written, s, truth, { ...TOLERANCE[shape], close: ROUNDED_CLOSE }));
+  if (numeral !== null && (shape === "limit" || shape === "definite-integral")) return called(decimalCall(numeral, s, truth, { ...TOLERANCE[shape], close: ROUNDED_CLOSE }));
   const tol = decimal ? TOLERANCE[shape].rounded : TOLERANCE[shape].exact;
   if (withinRel(s, truth, tol)) return verdict("right", WHY.right);
   if (!withinRel(0, truth, tol) && withinRel(-s, truth, tol)) return verdict("wrong", WHY.sign, "sign");

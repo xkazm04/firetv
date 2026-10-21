@@ -107,6 +107,32 @@ export const infinityOf = (s: string): 1 | -1 | null => {
 export const DNE = /^(dne|does not exist|no limit|undefined)$/i;
 /** A plain decimal numeral (0.333, 16.0, .5): the learner rounded. */
 export const isDecimal = (s: string) => /^[+\-−]?(\d+\.\d*|\.\d+)$/.test(s.replace(/\s+/g, ""));
+const PAIR: Record<string, string> = { "(": ")", "[": "]", "{": "}" };
+/** The text with every bracket pair ( ), [ ] or { } that wraps the whole of it taken off ('((0.5))' is '0.5'); a pair that closes early stays. */
+const unwrapAll = (s: string) => {
+  for (;;) {
+    const open = s[0], close = PAIR[open];
+    if (s.length < 2 || !close) return s;
+    let depth = 0, closes = -1;
+    for (let i = 0; i < s.length; i++) {
+      if (s[i] === open) depth++;
+      else if (s[i] === close && --depth === 0) { closes = i; break; }
+    }
+    if (closes !== s.length - 1) return s;
+    s = s.slice(1, -1);
+  }
+};
+/**
+ * The decimal numeral an answer is, or null (calc2 ruling 28, for every limit and integral): with spaces, enclosing brackets
+ * and one leading sign set aside it is a decimal - '0.38', '(0.38)', '-(0.38)', '(-0.38)' are each one numeral, returned bare
+ * with its sign ('-0.38'), so its written decimals and figures are read off the numeral and not off a bracket.
+ */
+export const decimalNumeral = (ans: string): string | null => {
+  let s = unwrapAll(ans.replace(/\s+/g, ""));
+  const sign = /^[+\-−]/.exec(s)?.[0] ?? "";
+  s = unwrapAll(s.slice(sign.length));
+  return !/^[+\-−]/.test(s) && isDecimal(s) ? `${sign === "-" || sign === "−" ? "-" : ""}${s}` : null;
+};
 /** The digits a decimal is written to, trailing zeros counted (2.718 is 3, 3.00 is 2); a point or a comma; 0 for a numeral with neither. */
 export const placesOf = (s: string) => /[.,](\d*)$/.exec(s.replace(/\s+/g, ""))?.[1].length ?? 0;
 /** Is `s` the `truth` correctly rounded at `places` decimals (halfway: either neighbour; a hair of slack for the truth's own numerics)? */

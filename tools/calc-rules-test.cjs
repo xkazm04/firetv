@@ -819,3 +819,12 @@ test('MB-B36 in the leak check: a hint written in Czech notation (tg, cotg, arct
  for(const [s,line,want] of [[anti,'Vzpomeňte si, čemu se rovná derivace tg x.',true],[der,'Derivujte vnější funkci ln, pak vnitřní cos x.',false],[anti,'The answer is tan x + C.',true],[der,'Použijte tg x jen na kontrolu.',false],[der,'Use tan x only as a check.',false]])
   assert.equal(C.leaksCalc(s,line),want,line);
 });
+
+test('a decimal in brackets or behind a sign is the same decimal (calc2 ruling 28, now every limit and integral): (0.38) is judged as 0.38',()=>{
+ const L={shape:'limit',f:'3x/(8x+1)',at:'inf'},I={shape:'definite-integral',f:'x^2',a:0,b:1},S={shape:'sequence-limit',f:'3x/(8x+1)'},E={shape:'limit',f:'(1+1/x)^x',at:'inf'};
+ const forms=[['(0.38)','0.38'],['-(0.38)','-0.38'],['(-0.38)','-0.38'],['( 0.38 )','0.38'],['(0.3)','0.3'],['(0.375)','0.375']];
+ for(const s of [L,S])for(const [wrapped,bare] of forms)assert.deepEqual(C.checkAnswer(s,wrapped),C.checkAnswer(s,bare),`${s.shape}: ${wrapped}`);
+ for(const [wrapped,bare] of [['(0.33)','0.33'],['(0.333)','0.333'],['-(0.33)','-0.33']])assert.deepEqual(C.checkAnswer(I,wrapped),C.checkAnswer(I,bare),wrapped);
+ for(const [wrapped,bare] of [['(2.7)','2.7'],['(2.72)','2.72'],['(2.8)','2.8']])assert.deepEqual(C.checkAnswer(E,wrapped),C.checkAnswer(E,bare),wrapped);
+ assert.equal(C.checkAnswer(L,'(0.38)').verdict,'right','a correct rounding in brackets is right');
+});
