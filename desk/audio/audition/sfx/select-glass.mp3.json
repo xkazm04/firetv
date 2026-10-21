@@ -1,0 +1,32 @@
+{
+  "id": "be4da1df-cd19-4f27-ac95-6350af374947",
+  "ts": "2026-10-21T10:33:55.497Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/select-glass.mp3",
+  "seconds": 0.5,
+  "request": {
+    "text": "UI sound effect, small glass bell and celesta, airy, light reverb: a short, gentle confirming tap for pressing a button; slightly brighter than a focus tick, quick decay. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 0.5,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134421,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 8820,
+  "providerCredits": 6,
+  "sha256": "a346404a1e7423fdcdd5ea9ef0386cf7620217787589ae49fb17bc14249e393d",
+  "completedAt": "2026-10-21T10:34:01.737Z",
+  "creditsAfter": 134421,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 500
+}

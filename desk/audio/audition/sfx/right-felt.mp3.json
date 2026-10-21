@@ -1,0 +1,32 @@
+{
+  "id": "75371bc0-f76a-4975-9c1e-8bf04ec47d31",
+  "ts": "2026-10-21T10:36:07.807Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/right-felt.mp3",
+  "seconds": 1.2,
+  "request": {
+    "text": "UI sound effect, felt piano and soft analog synth pad, round, intimate: a gentle, satisfied rising two-note chime for a correct answer; modest, not a fanfare. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134306,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 20105,
+  "providerCredits": 13,
+  "sha256": "b6f1571353b467a4c477ac43a2504a23115afd322f4b51d46afa2fd6234addb7",
+  "completedAt": "2026-10-21T10:36:17.349Z",
+  "creditsAfter": 134306,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1800
+}
