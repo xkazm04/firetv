@@ -38,8 +38,8 @@ enum class Hold(val ms: Long) {
 class PenEngine(
     private val clipId: String,
     private val videoAspect: Double = 16.0 / 9.0,
-    /** Hold window used when a message does not ask for a specific one. */
-    var defaultHold: Hold = Hold.Default,
+    /** Hold window used when a message does not ask for a specific one. Fixed: a setter would write outside the lock. */
+    val defaultHold: Hold = Hold.Default,
 ) {
     /** Kept for tests and callers that want a plain millisecond window. */
     constructor(clipId: String, videoAspect: Double = 16.0 / 9.0, holdMs: Long) :
