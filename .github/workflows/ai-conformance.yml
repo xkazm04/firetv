@@ -1,13 +1,13 @@
 # .ai conformance: the hard-pass BACKSTOP for the .ai/ standard, plus a scheduled
 # CONTINUOUS re-check so the score doesn't go stale between PRs.
-# The SAME command runs in your pre-push hook (primary) and here on the merge gate (backstop):
-# the agent self-certifies locally, CI only confirms. The doctor exits non-zero on a hard failure,
-# which blocks the merge (pull_request job only; a scheduled run must not fail the merge queue).
+# This workflow is the scheduled report only. It has no pull_request job: the raw doctor exits 1 on every PR
+# for the deliberate, human-owned control.prepush finding (.ai/memory/0011), so that job was red by design and
+# said nothing about the change. The per-PR verdict is conformance-gate.yml, which judges the same doctor
+# through scripts/doctor-gate.mjs and its waivers.
 # Add --run to also execute capability commands (heavier; the repo's own test/build CI usually
 # already does that).
 name: ai-conformance
 on:
-  pull_request:
   schedule:
     # Weekly, off-peak UTC. Re-reports conformance even when the repo has no open PRs, so a
     # dashboard viewer never sees a score that's silently weeks stale.
@@ -20,16 +20,6 @@ on:
 permissions:
   contents: read
 jobs:
-  conformance:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-      - name: .ai conformance gate
-        run: node .ai/doctor.mjs
   # Scheduled/manual re-check: never fails the run (report-only), and self-reports to Ascent via
   # doctor.mjs's own --json path when the two secrets below are set.
   #
