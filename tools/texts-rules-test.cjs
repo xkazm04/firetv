@@ -208,3 +208,19 @@ test('route: a .docx from the PC page is read through the route\'s own inflater 
   assert.deepEqual(p.versions.map((v) => [v.source, v.text]), [['file', 'Sleep matters.\n\nSo start later.']]);
   T.deleteAll('ema');
 });
+
+test('the Workroom diffs a piece once per version: an unchanged piece is not re-diffed on the next refresh, a new version is', () => {
+  // workroomOf runs on every keep and every /api/twin call; at the caps (50 pieces of 100 KB) a full re-diff took ~2.8 s of the server's one thread
+  const { workroomOf } = require(src('lib/twin/workroom.ts'));
+  const a = T.addPiece('memo', { text: 'One. Two.\n\nThree.', format: 'essay' }).value, b = T.addPiece('memo', { text: 'Four. Five.', format: 'essay' }).value;
+  T.addVersion('memo', a.id, { text: 'One. Two!\n\nThree.' }); T.addVersion('memo', b.id, { text: 'Four. Five. Six.' });
+  const diffOf = (w, id) => w.pieces.find((p) => p.id === id).diff;
+  const w1 = workroomOf('memo'), w2 = workroomOf('memo');
+  assert.deepEqual(diffOf(w1, b.id).sentences, { kept: 2, changed: 0, added: 1, removed: 0 });
+  assert.equal(diffOf(w2, a.id), diffOf(w1, a.id), 'the same version pair: the same diff, not a second LCS');
+  T.addVersion('memo', a.id, { text: 'One. Two!\n\nThree. Four.' });
+  const w3 = workroomOf('memo');
+  assert.deepEqual(diffOf(w3, a.id).sentences, { kept: 3, changed: 0, added: 1, removed: 0 }, 'a new version is diffed against the one before it');
+  assert.equal(diffOf(w3, b.id), diffOf(w1, b.id));
+  T.deleteAll('memo');
+});

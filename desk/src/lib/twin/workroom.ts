@@ -12,6 +12,25 @@ import type { Dims } from "../rules/style";
 export interface WorkroomPiece { id: string; title: string; format: string; versions: number; paragraphs: number; updated: number; diff: VersionDiff | null }
 export interface Workroom { owner: string; pieces: WorkroomPiece[]; channels: { channel: TwinChannel; pieces: number; born: boolean; words: { dim: keyof Dims; level: number; word: string }[] }[]; born: boolean; need: number }
 
+/**
+ * The last change of a piece, diffed once per version pair. workroomOf runs on every keep and every /api/twin call, and the
+ * LCS is quadratic in sentences: at the caps (50 pieces, 100 KB a version) a full re-diff held the server's one thread
+ * for ~2.8 s each time. Versions only append (texts.ts), so the piece id, the version count and the last version's time
+ * name a pair; the memo is bounded and derived, never state.
+ */
+const DIFFS = new Map<string, VersionDiff>(), DIFFS_MAX = 500;
+function lastDiff(id: string, v: { at: number; text: string }[]): VersionDiff | null {
+  if (v.length < 2) return null;
+  const before = v[v.length - 2], after = v[v.length - 1], key = `${id}:${v.length}:${after.at}:${before.text.length}:${after.text.length}`;
+  let d = DIFFS.get(key);
+  if (!d) {
+    d = versionDiff(before.text, after.text);
+    if (DIFFS.size >= DIFFS_MAX) DIFFS.delete(DIFFS.keys().next().value as string);
+    DIFFS.set(key, d);
+  }
+  return d;
+}
+
 export function workroomOf(learnerId: string): Workroom {
   const cards = listPieces(learnerId);
   const full = cards.map((c) => getPiece(learnerId, c.id)).filter((p): p is NonNullable<typeof p> => !!p);
@@ -19,8 +38,8 @@ export function workroomOf(learnerId: string): Workroom {
   return {
     owner: learnerId,
     pieces: cards.map((c) => {
-      const p = full.find((x) => x.id === c.id), v = p?.versions ?? [];
-      return { ...c, diff: v.length >= 2 ? versionDiff(v[v.length - 2].text, v[v.length - 1].text) : null };
+      const p = full.find((x) => x.id === c.id);
+      return { ...c, diff: lastDiff(c.id, p?.versions ?? []) };
     }),
     channels: portrait.channels.map((c) => ({ channel: c.channel, pieces: c.pieces, born: c.born, words: c.dims ? levelWords(c.dims) : [] })),
     born: portrait.born, need: TWIN_BORN,
