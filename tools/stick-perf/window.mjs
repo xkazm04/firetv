@@ -7,7 +7,8 @@ import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
 import path from "node:path";
 
-const WIN = 1200;
+// WIN=2000 widens the window to also take the frame after the leaving world is dropped (0.72 s after a lamp move)
+const WIN = Number(process.env.WIN || 1200);
 for (const dir of process.argv.slice(2)) {
   const out = {};
   for (const f of readdirSync(dir).filter((f) => f.endsWith(".trace.json.gz")).sort()) {
@@ -23,7 +24,7 @@ for (const dir of process.argv.slice(2)) {
     const avg = (k) => +(per.reduce((s, p) => s + p[k], 0) / per.length).toFixed(1);
     out[f.replace(".trace.json.gz", "")] = { keys: per.length, fps: avg("fps"), maxGap: Math.max(...per.map((p) => p.maxGap)), over33: avg("over33"), per };
   }
-  writeFileSync(path.join(dir, "windows.json"), JSON.stringify(out, null, 2));
+  writeFileSync(path.join(dir, WIN === 1200 ? "windows.json" : `windows-${WIN}.json`), JSON.stringify(out, null, 2));
   console.log(dir);
   for (const [k, v] of Object.entries(out)) console.log(`  ${k.padEnd(14)} keys ${v.keys}  fps ${String(v.fps).padStart(5)}  longest gap ${String(v.maxGap).padStart(4)} ms  gaps>33ms ${v.over33}`);
 }
