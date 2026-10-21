@@ -1,0 +1,32 @@
+{
+  "id": "bde6cf48-d119-4742-9655-d5bb6f2250b9",
+  "ts": "2026-10-21T10:35:09.372Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/hint-wood.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "UI sound effect, soft wooden marimba and felt mallet, warm, dry room: a soft, curious single shimmer as a new card appears; neutral, implies neither right nor wrong. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134367,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 17179,
+  "providerCredits": 11,
+  "sha256": "05bf49d19dd3c231b037b2e4847daf34bed9246e7f201436422b522317244363",
+  "completedAt": "2026-10-21T10:35:14.946Z",
+  "creditsAfter": 134367,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1300
+}

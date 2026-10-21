@@ -1,0 +1,18 @@
+# Feature requests
+
+Each request follows from one entry in [friction-log.md](friction-log.md) and names it. None is asked
+for without a friction behind it.
+
+| # | Request | From | Why it matters |
+|---|---|---|---|
+| FR-1 | A page-level opt-in in Silk (a manifest field or meta tag) that hands the D-pad, Select, Back and Menu to a web page that asks for them, plus a clear doc line on which path gives a page the remote today | [FL-1](friction-log.md#fl-1-silk-passes-only-playpause-to-a-web-page) | A web-first TV app could ship without a wrapper APK. Study Desk had to build `stick-app/` only to pass keys through |
+| FR-2 | A fix, or a known-issue note, for partial paint in Silk fullscreen | [FL-2](friction-log.md#fl-2-silk-fullscreen-paints-only-the-top-of-one-screen) | The same screen painted only its top 290 px in fullscreen and in full everywhere else |
+| FR-3 | Advertise the stick for adb over Wi-Fi by mDNS while ADB debugging is on, and show the current IP on the Developer options screen | [FL-3](friction-log.md#fl-3-the-sticks-address-moves-and-nothing-on-the-stick-tells-the-computer) | The stick's DHCP address moved between sessions; builders scanned the /24 for port 5555 |
+| FR-4 | A Windows note in the "connect with adb" guide: `adb pull` for binary output, and adb's stderr is not failure | [FL-4](friction-log.md#fl-4-adb-on-a-windows-shell-corrupts-screencaps-and-reads-success-as-failure) | Corrupt screencaps and false failures cost scripting time |
+| FR-5 | A guideline that companion-device input does not count as activity, so a phone-driven app must hold the screen on | [FL-5](friction-log.md#fl-5-the-screensaver-reclaimed-an-app-the-user-was-watching) | The screensaver reclaimed a live session the user was watching |
+| FR-6 | A documented pattern or system service for pairing a TV app with a companion phone (the TV shows a code, the phone hands the app a token) | [FL-6](friction-log.md#fl-6-a-secret-has-no-comfortable-way-onto-the-stick) | Linking the stick to its desk is the one step that still needs adb |
+| FR-7 | Performance guidance for web content on the stick's GPU: the raster cost of large SVG and composited layers, and what shows when tiles are missing during an animation | [FL-7](friction-log.md#fl-7-a-blank-frame-on-every-move-between-apps-gpu-raster-time) | A 450-600 ms bare frame on every switch, found only by frame-by-frame capture |
+| FR-8 | A "costly on Fire TV" list for web content (CSS filters on composited layers first), and a trace flag for per-frame offscreen passes | [FL-8](friction-log.md#fl-8-css-drop-shadow-on-a-composited-layer-costs-the-whole-frame-budget) | One CSS property held the idle landing at 8.7 fps |
+| FR-9 | Document how to read `dumpsys gfxinfo` for a WebView app, or report WebView frames in their own row | [FL-9](friction-log.md#fl-9-gfxinfos-janky--does-not-fit-webview-frames) | 43 % janky at 60 fps points the work at the wrong screens |
+| FR-10 | Publish the Fire TV WebView's tile budget and a recommended way to fit a fixed 1920 × 1080 stage to the window without rastering at four times | [FL-10](friction-log.md#fl-10-the-webviews-gpu-tile-budget-under-a-css-scale) | Under `scale(.5)` the landing used 107 MB of tiles against an 80 MB soft budget, which added a second freeze to each switch |
+| FR-11 | Show the OS (Fire OS or Vega) on each device's product page, and state in the Vega docs whether an app may accept inbound LAN connections | [FL-11](friction-log.md#fl-11-which-stick-runs-an-apk-and-what-vega-allows-is-hard-to-find-out) | The wrong stick will not run an APK at all, and an app that listens on the LAN may not port to Vega |

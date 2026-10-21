@@ -59,7 +59,7 @@ function hillD(base: number, amp: number, seed: number, step: number) {
 /** A rolling hill with a pale rim: the seed fixes its shape. */
 export function Hill({ base, amp, seed, fill, hi = "rgba(255,255,255,.45)", step = 340 }: { base: number; amp: number; seed: number; fill: string; hi?: string; step?: number }) {
   const d = hillD(base, amp, seed, step);
-  return <><path d={d} fill={fill} /><path d={d} fill="none" stroke={hi} strokeWidth="3" transform="translate(0 -1.5)" /></>;
+  return <g><path d={d} fill={fill} /><path d={d} fill="none" stroke={hi} strokeWidth="3" transform="translate(0 -1.5)" /></g>;
 }
 
 export function Rr({ x, y, w, h, r = 0, fill, opacity }: { x: number; y: number; w: number; h: number; r?: number; fill: string; opacity?: number }) {
@@ -88,8 +88,8 @@ export function Tree({ x, y, s, c1, c2 }: { x: number; y: number; s: number; c1:
     </g>
   );
 }
-/** A slow drift, for clouds and floating symbols. */
+/** A slow drift, for clouds and floating symbols. What drifts casts its layer's shadow from inside (pp-each, worlds.tsx). */
 export function Drift({ dur, delay = 0, children }: { dur: number; delay?: number; children: ReactNode }) {
   const style: CSSProperties = { animationDuration: `${dur}s`, animationDelay: `${delay}s` };
-  return <g className="pp-drift" style={style}>{children}</g>;
+  return <g className="pp-drift pp-each" style={style}>{children}</g>;
 }
