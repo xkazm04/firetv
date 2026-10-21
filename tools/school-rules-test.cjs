@@ -2163,3 +2163,12 @@ test('optimize 2026-10-21: storyOf, topFormOf and workedAnswer route a checker f
  }finally{console.error=was;}
  for (const where of ['school.storyOf','school.topFormOf','school.workedAnswer']) assert.ok(said.some((l)=>l.includes(`checker fault in ${where}:`)),`${where} reaches the log: ${said.join(' | ')}`);
 });
+test('optimize 2026-10-21: school.ts and kinds.ts ask taskText commaSystem which systems write a decimal comma, never a copy of the list',()=>{
+ const strip=(t)=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:])\/\/.*$/gm,'$1');
+ const copy=/===\s*"cz"\s*\|\|\s*[\w.]+\s*===\s*"de"|===\s*"de"\s*\|\|\s*[\w.]+\s*===\s*"cz"/;
+ // the canary: the matcher sees an inline copy and ignores one in a comment
+ assert.ok(copy.test('const c = system === "cz" || system === "de";'));assert.ok(!copy.test(strip('// system === "cz" || system === "de"')));
+ for (const f of ['school.ts','kinds.ts']) assert.ok(!copy.test(strip(fs.readFileSync(path.join(root,'src/lib/rules',f),'utf8'))),`${f} names the comma systems itself`);
+ // and the behaviour is the one rule's: cz and de read a lone decimal comma, uk and us do not
+ assert.equal(S.workedAnswer(cs('4.35 + 2.8'),'cz'),'7,15');assert.equal(S.workedAnswer(cs('4.35 + 2.8'),'uk'),'7.15');
+});

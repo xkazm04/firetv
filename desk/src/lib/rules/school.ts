@@ -4607,7 +4607,7 @@ export function workedAnswer(spec: unknown, system: unknown = DEFAULT_SCHOOL_SYS
   const withUnit = (c: string) => (!unit ? [] : unit === "Kč" ? after(c) : isMoney(unit) && commaSystem(system as SchoolSystem) ? [...after(c), `${unit}${cents(c)}`, `${unit}${c}`]
     : ["€", "$", "£"].includes(unit) ? [`${unit}${cents(c)}`, `${unit}${c}`, `${c} ${unit}`] : [`${c} ${unit}`]);
   // a decimal is written the way the learner's school writes it: a comma first where the system uses one (cz, de)
-  const comma = system === "cz" || system === "de";
+  const comma = commaSystem(system as SchoolSystem);
   const local = (c: string) => (/\d\.\d/.test(c) ? (comma ? [c.replace(".", ","), c] : [c, c.replace(".", ",")]) : [c]);
   // with its unit first where it has one (30 m2, not a bare 30), then bare
   for (const c of candidates.flatMap(local).flatMap((c) => [...withUnit(c), c])) if (check(spec, c, system).verdict === "right") return c;
