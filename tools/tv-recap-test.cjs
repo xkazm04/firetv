@@ -1075,3 +1075,16 @@ test('optimize 2026-10-21: every On Air size is on the type scale - a 20-22 px l
  // the scan bites, and a size that only a comment names is not counted
  assert.deepEqual(onAirSizes('.a { font-size: 24px; } /* .b { font-size: 23px; } */ .c { font: 600 25px/1 x; }'),[['.a',24],['.c',25]]);
 });
+
+// On Air: "motion: cuts, not fades". Every rule of the sheet that transitions is named in the reduced-motion block, which
+// turns its transition off - derived from the sheet, so a new transition is held to the preference too (registry: motion).
+test('optimize 2026-10-21: every On Air transition is cut under prefers-reduced-motion',()=>{
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+ const mq=/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{([\s\S]*?\}\s*)\}/.exec(css);
+ assert.ok(mq,'control: the sheet has its reduced-motion block');
+ const cut=new Set();for(const m of mq[1].matchAll(/([^{}]+)\{([^}]*)\}/g))if(/transition:\s*none/.test(m[2]))m[1].split(',').forEach((x)=>cut.add(x.trim()));
+ const outside=css.replace(mq[0],'');
+ const moving=[];for(const m of outside.matchAll(/([^{}]+)\{([^}]*)\}/g))if(/(^|;)\s*transition:/.test(m[2])&&!/transition:\s*none/.test(m[2]))m[1].split(',').forEach((x)=>moving.push(x.trim()));
+ assert.ok(moving.includes('.btn'),'control: the focus skew\'s transition is read');
+ assert.deepEqual(moving.filter((x)=>!cut.has(x)),[],'a transition the preference does not cut');
+});

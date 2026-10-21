@@ -121,7 +121,7 @@
 .rule dd { margin: 0; } .rule .warn { grid-column: 1 / -1; color: var(--tint); }
 
 /* ---- motion: cuts, not fades ---- */
-@media (prefers-reduced-motion: reduce) { .btn, .read .img { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .btn, .read .img, .read .focus-band, .rc .rc-tile { transition: none; } }
 
 /* ---- the learner switcher's band: the corner its card row stands under ---- */
 .band-corner { right: -200px; top: -54px; width: 980px; height: 340px; clip-path: polygon(0 0, 100% 0, 100% 100%); }
