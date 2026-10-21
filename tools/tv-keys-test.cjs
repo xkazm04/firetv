@@ -1380,3 +1380,30 @@ test('optimize 2026-10-21: a reopen the stream had scheduled before the page wen
  const live=runUseSession();live.streams[0].onerror();live.timers.splice(0).forEach((t)=>t.fn());
  assert.equal(live.streams.length,2,'a mounted page reopens after an error');assert.equal(live.streams[1].closed,false);
 });
+
+/**
+ * Who draws a screen: the TV page's own owners (the landing, Essay Master, Math Buddy, the paper, Linga) or a case of its
+ * ScreenFor switch. A screen none of them draws falls to `default: return null`, a blank stage; derived from the store's
+ * Screen union, not from a list kept here.
+ */
+function undrawn(pageSrc){
+ const {essayOwns,mathsOwns,paperOwns,lingaOwns}=keys();
+ const strip=pageSrc.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
+ const body=strip.slice(strip.indexOf('function ScreenFor'));
+ const cases=[...body.matchAll(/case "([^"]+)": return </g)].map((m)=>m[1]);
+ const gaps=[];
+ for(const screen of SCREENS)for(const subject of ['maths','english','essay']){
+  const s=session({screen,subject});
+  if(!(screen==='landing'||essayOwns(s)||mathsOwns(s)||paperOwns(s)||lingaOwns(s)||cases.includes(screen)))gaps.push(`${screen}/${subject}`);
+ }
+ return {cases,gaps};
+}
+test('optimize 2026-10-21: every screen of the store is drawn on the TV for every subject - none falls to a blank stage',()=>{
+ const page=fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8');
+ const {cases,gaps}=undrawn(page);
+ assert.ok(cases.length>=10&&cases.includes('recap'),'control: the switch\'s cases were read');
+ assert.deepEqual(gaps,[],'a screen no owner and no case draws');
+ // the check bites: the same page with one case gone leaves that screen blank for every subject
+ const seeded=undrawn(page.replace(/case "break": return [^\n]*\n/,''));
+ assert.deepEqual(seeded.gaps,['break/maths','break/english','break/essay']);
+});
