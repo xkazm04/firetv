@@ -19,10 +19,10 @@ import path from "node:path";
 import { codexCli } from "./codex";
 import { provider, register } from "./registry";
 import { answer } from "./shape";
-import { EngineError, findBinary, type Again, type EngineResult, type Provider, type TextRequest, type Usage } from "./types";
+import { EngineError, findBinary, type Again, type CallContext, type EngineResult, type Provider, type TextRequest, type Usage } from "./types";
 
-const BIN = process.env.CLAUDE_BIN || "claude";
-const MODELS = { fast: process.env.CLAUDE_FAST_MODEL || "haiku", best: process.env.CLAUDE_BEST_MODEL || "sonnet" };
+export const BIN = process.env.CLAUDE_BIN || "claude";
+export const MODELS = { fast: process.env.CLAUDE_FAST_MODEL || "haiku", best: process.env.CLAUDE_BEST_MODEL || "sonnet" };
 
 /**
  * The child's environment. `thinking: false` sets MAX_THINKING_TOKENS=0, the CLI's switch for hidden reasoning
@@ -55,6 +55,42 @@ export function stopOf(envelope: { stop_reason?: unknown; is_error?: unknown; su
   return null;
 }
 
+/**
+ * Start the claude CLI once: no shell (claude is a real executable on PATH, claude.exe on Windows), so every argv entry
+ * arrives intact, and `input` goes in on stdin. Resolves with stdout on exit 0. On the call core's abort the child is
+ * killed and the call ends as a timeout; a spawn failure is unreachable, any other non-zero exit is exit, with the spend
+ * the envelope on stdout reported, when it printed one. The text and vision providers both run the CLI through it.
+ */
+export function spawnClaude(args: string[], input: string, reported: string, cwd: string, env: NodeJS.ProcessEnv, ctx?: CallContext): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const child = spawn(BIN, args, { cwd, windowsHide: true, env });
+    // The deadline is the call core's (call.ts); on its abort the child is killed and the call ends as a timeout.
+    const stop = () => child.kill();
+    ctx?.signal.addEventListener("abort", stop, { once: true });
+    let stdout = "", stderr = "";
+    child.stdout.on("data", (d) => (stdout += d));
+    child.stderr.on("data", (d) => (stderr += d));
+    child.on("error", (e) => { reject(new EngineError("unreachable", reported, `claude could not start: ${e.message}`)); });
+    child.on("close", (code) => {
+      ctx?.signal.removeEventListener("abort", stop);
+      if (code === 0) return resolve(stdout);
+      // a failed run can still print its envelope, and with it what the attempt cost: the ledger books that spend
+      const failed = new EngineError(ctx?.signal.aborted ? "timeout" : "exit", reported, `claude exited ${code}: ${stderr.slice(0, 400)}`);
+      try { failed.usage = usageOf(envelopeOf(stdout)); } catch { /* no envelope on stdout: the spend is unknown (null), never 0 */ }
+      reject(failed);
+    });
+    child.stdin.on("error", (e) => { reject(new EngineError("exit", reported, `claude closed its input: ${e.message}`)); });
+    child.stdin.end(input);
+  });
+}
+
+/** The envelope of a CLI run, or a throw: the whole stdout for --output-format json, its last non-empty line for stream-json. */
+export function envelopeOf(out: string): unknown {
+  try { return JSON.parse(out); } catch { /* stream-json: one event per line, the result envelope last */ }
+  const lines = out.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+  return JSON.parse(lines.length ? lines[lines.length - 1] : "");
+}
+
 export const claudeCli: Provider<TextRequest, unknown> = {
   name: "claude-cli",
   async run(req, ctx) {
@@ -73,28 +109,8 @@ export const claudeCli: Provider<TextRequest, unknown> = {
     // directly; text() holds both kinds of answer to the same schema.
     if (req.schema && !req.isolated) args.push("--json-schema", JSON.stringify(req.schema));
 
-    const out = await new Promise<string>((resolve, reject) => {
-      // claude is a real executable on PATH (claude.exe on Windows), so no shell: the JSON schema
-      // arrives as one argv entry intact, and the prompt goes in on stdin.
-      const child = spawn(BIN, args, { cwd: dir, windowsHide: true, env: childEnv(req) });
-      // The deadline is the call core's (call.ts); on its abort the child is killed and the call ends as a timeout.
-      const stop = () => child.kill();
-      ctx?.signal.addEventListener("abort", stop, { once: true });
-      let stdout = "", stderr = "";
-      child.stdout.on("data", (d) => (stdout += d));
-      child.stderr.on("data", (d) => (stderr += d));
-      child.on("error", (e) => { reject(new EngineError("unreachable", reported, `claude could not start: ${e.message}`)); });
-      child.on("close", (code) => {
-        ctx?.signal.removeEventListener("abort", stop);
-        if (code === 0) return resolve(stdout);
-        // a failed run can still print its envelope, and with it what the attempt cost: the ledger books that spend
-        const failed = new EngineError(ctx?.signal.aborted ? "timeout" : "exit", reported, `claude exited ${code}: ${stderr.slice(0, 400)}`);
-        try { failed.usage = usageOf(JSON.parse(stdout)); } catch { /* no envelope on stdout: the spend is unknown (null), never 0 */ }
-        reject(failed);
-      });
-      child.stdin.on("error", (e) => { reject(new EngineError("exit", reported, `claude closed its input: ${e.message}`)); });
-      child.stdin.end(req.prompt);
-    }).finally(() => rm(dir, { recursive: true, force: true }).catch((e) => console.warn(`[engines] claude left its temp dir ${dir}: ${e instanceof Error ? e.message : e}`)));
+    const out = await spawnClaude(args, req.prompt, reported, dir, childEnv(req), ctx)
+      .finally(() => rm(dir, { recursive: true, force: true }).catch((e) => console.warn(`[engines] claude left its temp dir ${dir}: ${e instanceof Error ? e.message : e}`)));
 
     let envelope: { structured_output?: unknown; result?: unknown; stop_reason?: unknown; is_error?: unknown; subtype?: unknown };
     try { envelope = JSON.parse(out); } catch { throw new EngineError("exit", reported, `claude answered without its JSON envelope: ${out.slice(0, 200)}`); }
