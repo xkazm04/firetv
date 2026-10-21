@@ -2203,8 +2203,11 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
     // is the right number in the wrong form, or a slip: the desk does not guess, and never calls it right
     if ((K.k === "pct-of" || K.k === "pct-change" || K.k === "pct-top") && form === "percent" && (eq(mul(v, qi(BigInt(100))), t) || eq(v, t))) return { verdict: "unsure", form, why: WHY.amountAsPercent };
     // W7 batch 3: an amount of these units is never a percentage (unsure, the desk does not guess what was meant); a cost's
-    // value in cents or pence written bare (560 for €5.60) is the answer in another unit or a slip, and the desk does not guess
-    if ((K.k === "rate" || K.k === "area" || K.k === "stat" || K.k === "pyth" || K.k === "pyth-dp") && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    // value in cents or pence written bare (560 for €5.60) is the answer in another unit or a slip, and the desk does not guess.
+    // A fraction of an amount, a missing number and a computation in a unit are amounts too (2400% is not 24 kg; optimize
+    // 2026-10-21), as a missing ratio term is in checkRatio; a bare computation still takes any equal form (75% for 3/4)
+    const amount = K.k === "rate" || K.k === "area" || K.k === "stat" || K.k === "pyth" || K.k === "pyth-dp" || K.k === "of" || K.k === "missing" || (K.k === "compute" && unit !== undefined);
+    if (amount && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
     if (K.k === "pyth-dp") return checkRounded(r, K, reading);
     if (K.k === "rate" && K.measure === "cost" && !reading.unit && !eq(v, t) && eq(v, mul(t, qi(BigInt(100))))) return { verdict: "unsure", form, why: WHY.pence };
     const simplest = K.k === "simplify" || (r.spec.shape === "compute" && r.spec.form === "simplest");

@@ -2129,3 +2129,18 @@ test('MB-B4 readNumber and check: Kč is a unit; cm squared, sq cm and square cm
  assert.deepEqual(S.specFromQuestion('Work out €4.35 + €2.80.'),cs('4.35 + 2.80',{unit:'€'}));
  assert.deepEqual(S.specFromQuestion('5 pens cost 3,50 Kč. What do 8 pens cost?','cz'),{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'Kč'});
 });
+test('optimize 2026-10-21: an amount, a missing number or a unit answer written as a percentage is unsure, never right or wrong, as on every amount unit',()=>{
+ // the rule (school.ts check) held on percent-of, percent-change, rate, area, stat, Pythagoras and a missing ratio term, and not on
+ // a fraction of an amount, a missing number or a computation with a unit: 2400% read right for 3/5 of 40 kg and 24% read wrong
+ const OF={shape:'fraction-of',expr:'3/5 of 40',unit:'kg'},OF0={shape:'fraction-of',expr:'3/5 of 40'},MS={shape:'missing',expr:'3/4 = ?/12'};
+ const MONEY=cs('4.35 + 2.8',{unit:'€'});
+ for (const [s,w] of [[OF,'2400%'],[OF,'24%'],[OF0,'2400%'],[OF0,'24%'],[MS,'900%'],[MS,'9%'],[MONEY,'715%'],[MONEY,'7.15%'],[U,'125%']]) {
+  const v=S.check(s,w,'uk');
+  assert.equal(v.verdict,'unsure',`${JSON.stringify(s)} ${w}`);assert.equal(v.why,'This is written as a percentage; the question asks for an amount, and the desk does not guess.');
+ }
+ // the same values written as amounts are judged as before, and a bare computation still takes any equal form
+ assert.equal(S.check(OF,'24 kg','uk').verdict,'right');assert.equal(S.check(OF0,'24','uk').verdict,'right');assert.equal(S.check(MS,'9','uk').verdict,'right');
+ assert.equal(S.check(MONEY,'€7.15','uk').verdict,'right');assert.equal(S.check(C,'75%','us').verdict,'right');
+ // the worked answer still finds a writing the desk marks right
+ assert.equal(S.workedAnswer(OF,'uk'),'24 kg');assert.equal(S.workedAnswer(MS,'uk'),'9');
+});
