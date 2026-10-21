@@ -208,3 +208,19 @@ test('case 14: a replay file the bench would not read in full is exit 2, never a
  fs.writeFileSync(ok,JSON.stringify({read:{maths:truthItems('maths')},hints:{[q]:{hint1:{hint:'Add 7.',what_to_try_next:'Then divide.'},reask1:{hint:'Add 7.',what_to_try_next:'.'}}},picks:{[q]:'bAerID24QJ0'}}));
  assert.equal(cli('--replay',ok).status,0);
 });
+
+test('case 15: ACCEPT is judged against the library production picks from - the lab\'s TITLES are desk\'s maths lessons',()=>{
+ // ACCEPT says which lessons teach each query, judged over the lab's eight TITLES. pickLesson() picks from desk's
+ // library. A maths lesson added there (or one the lab names that desk dropped) leaves ACCEPT judged over a different
+ // menu: a right pick of the new lesson scores as wrong, and 'none' stops being the only right answer for the two
+ // uncovered queries. The two lists are one list; when they part, ACCEPT is re-judged before the bench is believed.
+ const py=fs.readFileSync(path.join(REPO,'vision/poc_retrieval.py'),'utf8');
+ const titles=(/^TITLES = \{([\s\S]*?)^\}/m.exec(py)||[])[1]||'';
+ const lab=[...titles.matchAll(/^\s*"([\w-]{11})":/gm)].map((m)=>m[1]).sort();
+ const ts=fs.readFileSync(path.join(REPO,'desk/src/lib/library/lessons.data.ts'),'utf8');
+ const desk=[...ts.matchAll(/\bid: "([\w-]+)", subject: "maths"/g)].map((m)=>m[1]).sort();
+ assert.ok(lab.length>0&&desk.length>0,`read ${lab.length} lab titles and ${desk.length} desk maths lessons; the extraction is broken`);
+ assert.deepEqual(desk,lab,'desk\'s maths library and the lab\'s TITLES differ: re-judge ACCEPT in vision/poc_retrieval.py');
+ for(const q of corpus.queries)for(const id of q.accept)assert.ok(desk.includes(id),`ACCEPT names ${id} for ${q.q}; desk has no such lesson`);
+ for(const [q,id] of Object.entries(corpus.run3))if(id!=='none')assert.ok(desk.includes(id),`RUN3 picks ${id} for ${q}; desk has no such lesson`);
+});
