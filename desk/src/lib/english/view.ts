@@ -18,7 +18,7 @@ import { isPitchId } from "./pitch";
 import { NOTE_LABEL } from "./notes";
 import { CHECK_TITLE, focusParts, originLabel } from "./line";
 import { modeOf } from "../rules/mode";
-import { accepts, refusal, turnState } from "./turn";
+import { accepts, AT_CAP, atCap, refusal, turnState } from "./turn";
 import { runningTake, takeSpent } from "./take";
 import { lostLine, type LostTask } from "./lostfound";
 import { showOpen } from "./repair";
@@ -738,6 +738,11 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
         const done = "Mission done. See what you did tonight.";
         actions = [act("finish", "See what you did", done, cmd("finish"), { disabled: refused("finish") }), ...actions.slice(0, 1)];
         if (!c.cue && !c.capture && captionTag !== "Used again") caption = done;
+      }
+      // The scene has had its replies (turn.ts atCap): the turn table takes no more, so the phone is not asked and Finish leads
+      if (st === "your-turn" && atCap(c) && actions[0]?.id !== "finish") {
+        actions = [act("finish", "See what you did", AT_CAP, cmd("finish"), { disabled: refused("finish") }), ...actions.slice(0, 1)];
+        caption = AT_CAP; captionTag = "What next";
       }
     }
   } else { caption = "Choose a situation to begin."; actions = [chooseSituation(caption)]; }

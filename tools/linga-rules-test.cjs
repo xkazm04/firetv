@@ -4036,3 +4036,18 @@ test('linga-level hand-off: while a check is part way the menu draws My topics d
  install(fx);
  await assert.rejects(command(shown.run.command.action),e=>e.status===409&&e.message===shown.help);
 });
+test('the reply cap is a row of the turn table: at 24 replies the phone is not asked, the TV leads to Finish, and the server refuses before any call',async()=>{
+ const T=turn(),V=view();
+ const talk=n=>{const turns=[];for(let i=0;i<n;i++)turns.push({id:'p'+i,role:'partner',text:'And then?'},{id:'l'+i,role:'learner',text:'I booked a room.',mode:'text'});turns.push({id:'p'+n,role:'partner',text:'What else?'});return convo({turns});};
+ const under=talk(23),at=talk(24);
+ assert.equal(T.accepts(under,'turn'),true,'23 replies: the turn is open');assert.equal(T.accepts(under,'capture'),true);
+ assert.equal(T.accepts(at,'turn'),false,'24 replies: the table refuses the turn');assert.equal(T.accepts(at,'capture'),false,'and the microphone for it');
+ assert.equal(T.refusal(at,'turn'),T.AT_CAP);
+ assert.notEqual(V.lingaView(withReply(sessionOf(fixture('linga-talk',{conversation:under})))).answer,null);
+ const v=V.lingaView(withReply(sessionOf(fixture('linga-talk',{conversation:at}))));
+ assert.equal(v.answer,null,'the phone draws no reply box it would then refuse');
+ assert.equal(v.actions[0].id,'finish','Finish is the way on');assert.equal(v.baseCaption,T.AT_CAP);
+ install(fixture('linga-talk',{conversation:at}));let calls=0;answer=async()=>{calls++;throw new Error('no model call at the cap');};
+ await assert.rejects(command('turn',{text:'One more.',mode:'text',lastTurnId:'p24'}),e=>e.status===409&&e.message===T.AT_CAP);
+ assert.equal(calls,0);
+});

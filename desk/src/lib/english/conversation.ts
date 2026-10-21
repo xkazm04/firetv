@@ -632,7 +632,7 @@ export async function englishCommand(raw:unknown){
     // F14 (stick pass 2026-10-20): a right pick from the TV row (asTurn) is the learner's turn, sent as a typed reply is, so
     // a remote alone carries the scene. Its line is marked "choice" and helped, so it never counts as speaking on its own.
     // A duet's beat, a running take and a scene at its turn cap keep the cue to say it on the phone.
-    if(input.asTurn===true&&correct&&!c.duet&&!runningTake(c)&&accepts(c,"turn",deskMode)&&c.turns.filter(t=>t.role==="learner").length<24){
+    if(input.asTurn===true&&correct&&!c.duet&&!runningTake(c)&&accepts(c,"turn",deskMode)){
       c={...c,supported:true,quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false},evidence:[...c.evidence,e]};
       chosen=picked;action="turn";
     }
@@ -676,7 +676,7 @@ export async function englishCommand(raw:unknown){
   }
   if(action==="turn"&&runningTake(c))return takeTurn(c,input,commandId);
   // what is left is turn, coach or replay: each asks the model
-  if(c.turns.filter(t=>t.role==="learner").length>=24&&action==="turn")throw new ConversationError("A good place to pause. Finish this rehearsal and start a new scene.");
+  // the reply cap (turn.ts REPLY_CAP) is the table's: a turn past it was refused above, before any call
   let reply="",mode:EvidenceMode="text";
   // L2 (duet.ts): in a duet the learner's line is held, with no call, until the co-star's; the pair then takes the turn's one call
   let pair:DuetPair|null=null;
