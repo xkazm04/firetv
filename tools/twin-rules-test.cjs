@@ -225,3 +225,14 @@ test('keys: the Workroom is Essay Master\'s; Up/Down walk the pieces, Right goes
   assert.equal(nav(keys.tvKey(s, 'select', LOCAL)), undefined, 'Select on a piece does nothing yet');
   assert.equal(nav(keys.tvKey(s, 'back', LOCAL)), 'landing');
 });
+test('the Workroom says where the review happens: the PC page, the only surface that lists the exemplars; and every kind of piece counts', () => {
+  const { renderToStaticMarkup } = require(path.join(root, 'node_modules/react-dom/server')), { createElement } = require(path.join(root, 'node_modules/react'));
+  const { WorkroomScreen } = require(src('essay/Workroom.tsx'));
+  const html = renderToStaticMarkup(createElement(WorkroomScreen, { s: base({ screen: 'workroom', workroom: { owner: 'm', pieces: [], channels: [], born: false, need: 3 } }), focus: 0 }));
+  const empty = (html.match(/<aside[\s\S]*?<\/aside>/)?.[0] ?? '').replace(/<[^>]*>/g, '');
+  assert.match(empty, /review on the PC page/, empty);
+  assert.doesNotMatch(empty, /on your phone/, 'the phone has no twin review: only /drop fetches /api/twin');
+  assert.match(empty, /messages, emails or essays/, 'an essay channel is born at three as well (channelOf: generic)');
+  const phone = fs.readdirSync(src('app/phone')).map((f) => fs.readFileSync(path.join(src('app/phone'), f), 'utf8')).join('\n');
+  assert.doesNotMatch(phone, /\/api\/twin/, 'if the phone gains the review, this copy may name it again');
+});
