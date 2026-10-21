@@ -67,7 +67,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Unreleased
 
-- Nothing yet.
+- A debug-only voice probe in `tv-app` (speaks six desk lines at two rates, tries the remote mic through `SpeechRecognizer`, writes `voice-probe.json`) and the native voice design it serves: [NATIVE-VOICE-STACK.md](docs/concepts/NATIVE-VOICE-STACK.md). The Stick run is the operator's.
 
 ### 2026-10-05: Relay pairing follows the socket
 
