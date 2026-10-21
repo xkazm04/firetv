@@ -1346,3 +1346,37 @@ test('optimize 2026-10-21: the learner switcher names the remote\'s Select, neve
   if(focus<2)assert.match(h,/Select (goes back to the desk|to sit at this desk)/,`focus ${focus}: the caption names Select`);
  }
 });
+
+/**
+ * useSession run outside React: its own source, transpiled, with a three-hook stand-in for react (state, ref, effect),
+ * a fake EventSource that counts what is open, and a timer queue the test runs by hand. Returns the hook's mount and
+ * unmount, the streams made, and the pending timers.
+ */
+function runUseSession(){
+ const {transpile,options}=require('./ts-load.cjs');
+ const file=path.join(root,'src/tv/useSession.ts');
+ const js=transpile(fs.readFileSync(file,'utf8'),{...options,fileName:file}).outputText;
+ const effects=[];
+ const react={useState:(v)=>[typeof v==='function'?v():v,()=>{}],useRef:(v)=>({current:v}),useEffect:(fn)=>{effects.push(fn);}};
+ const streams=[],timers=[];
+ class FakeES{constructor(url){this.url=url;this.closed=false;this.readyState=0;streams.push(this);}close(){this.closed=true;this.readyState=2;}}
+ const g={window:{},EventSource:FakeES,setTimeout:(fn,ms)=>{timers.push({fn,ms});return timers.length;},clearTimeout:()=>{},fetch:()=>Promise.resolve({ok:true}),Date};
+ const mod={exports:{}};
+ new Function('require','module','exports',...Object.keys(g),js)((id)=>id==='react'?react:require(id),mod,mod.exports,...Object.values(g));
+ mod.exports.useSession();
+ const cleanups=effects.map((fn)=>fn()).filter((x)=>typeof x==='function');
+ return {streams,timers,unmount:()=>cleanups.forEach((c)=>c())};
+}
+test('optimize 2026-10-21: a reopen the stream had scheduled before the page went does not open a stream nobody owns (realtime-events subscription-lifecycle)',()=>{
+ const h=runUseSession();
+ assert.equal(h.streams.length,1,'control: mounting opens one stream');
+ h.streams[0].onerror();
+ assert.equal(h.timers.length,1,'control: an error schedules the reopen');
+ h.unmount();
+ assert.ok(h.streams.every((x)=>x.closed),'unmounting closes the stream it holds');
+ h.timers.splice(0).forEach((t)=>t.fn());
+ assert.deepEqual(h.streams.filter((x)=>!x.closed).map((x)=>x.url),[],'the late reopen leaves no stream open after the unmount');
+ // while mounted the same error still reopens: the guard is for a dead owner only
+ const live=runUseSession();live.streams[0].onerror();live.timers.splice(0).forEach((t)=>t.fn());
+ assert.equal(live.streams.length,2,'a mounted page reopens after an error');assert.equal(live.streams[1].closed,false);
+});

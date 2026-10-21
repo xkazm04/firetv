@@ -23,6 +23,9 @@ export function useSession() {
     const dbg = (window as unknown as { __desk: { events: string[] } }).__desk = { events: [] as string[] };
     const trace = (line: string) => { dbg.events.push(line); if (dbg.events.length > TRACE_MAX) dbg.events.splice(0, dbg.events.length - TRACE_MAX); };
     const open = () => {
+      // a reopen scheduled by onerror can fire after the page went (cleanup set dead): it opens nothing, or the stream
+      // would have no owner to close it - from a phone it keeps that phone counted as here (lib/session/streams.ts presence)
+      if (dead) return;
       es = new EventSource("/api/session/stream");
       trace("open " + Date.now());
       es.onmessage = (m) => { trace("msg " + m.data.length); try { setS(JSON.parse(m.data)); attempt = 0; setConnected(true); } catch (e) { trace("parse " + String(e)); } };
