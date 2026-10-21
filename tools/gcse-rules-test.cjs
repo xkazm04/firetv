@@ -11,7 +11,7 @@ const src = (f) => path.join(root, 'src', f);
 const G = require(src('lib/library/gcse.ts'));
 const { topicsOf } = require(src('lib/library/paths.ts'));
 
-test('the subject content is complete: N1-16, A1-25, R1-16, G1-25, P1-9, S1-6, in order, each with a source', () => {
+test('the subject content is complete: N1-16, A1-28 (A26-28 are the host additions), R1-16, G1-25, P1-9, S1-6, in order, each with a source', () => {
   const want = { N: 16, A: 28, R: 16, G: 25, P: 9, S: 6 };
   for (const [prefix, count] of Object.entries(want)) {
     const area = Object.entries(G.AREAS).find(([, v]) => v.prefix === prefix)[0];
