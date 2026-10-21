@@ -438,3 +438,18 @@ test('draft 1 (hand-off maths-school 2026-10-21): Send clears the Paper draft on
   assert.deepEqual(r.sets,[],'a send the record does not hold keeps the draft');
  }
 });
+
+test('draft 2 (the phone\'s send rule): a refused Paper send says the desk\'s own line, one that never arrived says it did not reach the desk',async()=>{
+ const {sendPaper}=require(src('app/phone/PaperPanel.tsx'));
+ const {addPaper}=require(src('lib/session/learners.ts'));
+ const {rawOf}=require(src('lib/rules/paperEntry.ts'));
+ const rows=[{q:'1',marks:'2',outOf:'3',codes:[]}];
+ const kept=addPaper('scratch-draft-2',rawOf(rows));
+ const json=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
+ const said=async(answer)=>sendPaper(rows,async()=>{if(answer instanceof Error)throw answer;return answer;},()=>{},'ask-2');
+ assert.equal(await said(json({error:'The TV is not asking for that now.'},409)),'The TV is not asking for that now.','a refusal says its own line');
+ assert.equal(await said(json({},403)),'The desk did not take that paper. Try again.','a refusal with no line says the fallback');
+ assert.equal(await said(new Error('Failed to fetch')),'That did not reach the desk.','no answer: the plain line, never the browser\'s error');
+ assert.equal(await said(json({paper:kept,status:''})),'','a kept paper says nothing more: the TV shows it');
+ assert.equal(await said(json({paper:null,status:'The desk kept no question from that paper.'})),'','a paper the desk answered is the session\'s status to say');
+});
