@@ -30,7 +30,7 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Install (desk) | `npm ci --prefix desk` | In an autopilot worktree, `npm test`'s pretest links `desk/node_modules` from the main checkout instead. |
 | Install (live probes) | `npm ci --prefix tools` | Only for `tools/*.mjs` (Playwright, ws). The rules suites need nothing here. |
 | Test: telestrator core | `node tools/gradlew.cjs :core:test` | Pure JVM, seconds, no device. |
-| Test: Study Desk | `npm --prefix desk test` | `tsc --noEmit`, then every rules suite in `desk/package.json` `test:rules`. |
+| Test: Study Desk | `npm --prefix desk test` | `tsc --noEmit`, then every rules suite in `desk/package.json` `rulesSuites` (`tools/run-rules.cjs`). |
 | Typecheck: Study Desk | `npm --prefix desk run test:types` | |
 | Evals (AI output, deterministic) | the `evals` command in `.ai/manifest.yaml` | A subset of the desk gate: the maths judge and marking, withholding, and the UAT verdict, metrics, ledger and surface suites. Model roles are stubbed. See `docs/AI_HARNESS.md`. |
 | Compile: tv-app | `node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin` | Needs `local.properties` (SDK path) and the generated `tv-app/src/main/res/raw/fixture_clip.mp4` (see `fixtures/README.md`). |
@@ -154,6 +154,6 @@ design pages that `prototype/build.py` builds.
 
 A rules change in the desk:
 1. Edit one file in `desk/src/lib/rules/`.
-2. Extend its `tools/<area>-rules-test.cjs` suite, or append a new suite at the end of `test:rules`.
+2. Extend its `tools/<area>-rules-test.cjs` suite, or add a new suite to `desk/package.json` `rulesSuites` just before `harness-rules-test.cjs`, which stays last.
 3. Run `npm --prefix desk test` (exit 0).
 4. Write one commit scoped to those paths, with the attribution trailer. If the change settled a question someone would otherwise reopen, add a `.ai/memory` entry.

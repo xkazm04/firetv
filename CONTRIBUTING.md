@@ -58,7 +58,7 @@ and that PR's run must pass it ([0016](.ai/memory/0016-capabilities-proven-per-p
 A change is done when **all** of these hold:
 
 - [ ] The gate for every touched surface exits 0, run after the last edit, and the PR states the command and the exit code.
-- [ ] A behaviour change has a test that fails without it (rules suites in `tools/`, unit tests in `core/`). A new desk suite is appended at the end of `test:rules`.
+- [ ] A behaviour change has a test that fails without it (rules suites in `tools/`, unit tests in `core/`). A new desk suite goes into `desk/package.json` `rulesSuites` just before `harness-rules-test.cjs`, which stays last.
 - [ ] Nothing in a gate calls a live model. Nothing reads or writes `desk/data/`. No secret, `.env*` or keystore is staged.
 - [ ] A change to a TV surface either has a screenshot, or the PR names the capture that is still owed (device or Playwright) so it is not lost.
 - [ ] Docs that describe the changed behaviour are updated in the same change (`AGENTS.md`, a product README, or `docs/`).
