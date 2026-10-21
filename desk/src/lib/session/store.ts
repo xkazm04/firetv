@@ -3,7 +3,8 @@
  *
  * The phone POSTs events; the TV (and the phone) subscribe over SSE. The reducer is pure; engine
  * work happens in the route handlers and lands as further events. Kept on globalThis so Next's
- * dev reloads do not lose the desk mid-session; persisted as JSON on every change.
+ * dev reloads do not lose the desk mid-session; persisted as JSON on every change (the running clock's tick alone at most
+ * once in TICK_SAVE_MS, see dispatch).
  */
 import { RETRYABLE, type JobFailure } from "../desk/failure";
 import type { Workroom } from "../twin/workroom";
