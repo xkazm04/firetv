@@ -183,6 +183,13 @@ object Plan {
         return if (source == Source.DEFAULT) Step.Setup("No desk answered at ${tried.label} or anywhere on this network.")
         else Step.Down(tried, why)
     }
+
+    /**
+     * The source of the address being tried once a desk has answered at it. The default that answered is kept (it is
+     * the kept desk after a restart), so it is SAVED from then on: setup is for a stick that never found a desk, and a
+     * search from the waiting screen (which skips the desk it probes) must not send a found desk there.
+     */
+    fun answered(source: Source): Source = if (source == Source.DEFAULT) Source.SAVED else source
 }
 
 /**

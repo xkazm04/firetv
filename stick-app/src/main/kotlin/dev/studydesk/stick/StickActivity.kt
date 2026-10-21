@@ -234,12 +234,13 @@ class StickActivity : Activity() {
         when (step) {
             is Step.Open -> {
                 keep(step.desk)
+                source = Plan.answered(source)
                 mode = Mode.WEB
                 heartbeat.reset()
                 panel.visibility = View.GONE
                 web.loadUrl(step.desk.tv(step.key))
             }
-            is Step.Unpaired -> { keep(step.desk); show(Mode.UNPAIRED) }
+            is Step.Unpaired -> { keep(step.desk); source = Plan.answered(source); show(Mode.UNPAIRED) }
             is Step.Scan -> scan(quiet = false)
             is Step.Down -> { why = step.why; if (mode == Mode.WEB) web.stopLoading(); show(Mode.DOWN) }
             is Step.Setup -> showSetup(step.why)

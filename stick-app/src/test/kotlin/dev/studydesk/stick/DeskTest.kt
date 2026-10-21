@@ -141,6 +141,20 @@ class DeskTest {
     }
 
     @Test
+    fun `a desk that answered at the default is the kept desk, so a later search never ends on setup`() {
+        // first launch: the default answers (paired or not) and is kept; then the desk goes quiet, or the pairing
+        // screen waits a minute. The waiting screen's search skips the desk it is probing, so it finds nothing.
+        val now = Plan.answered(Source.DEFAULT)
+        assertEquals(Step.Down(real, "x"), Plan.afterScan(real, emptyList(), now, "x"))
+        assertEquals(Step.Scan, Plan.afterProbe(real, down, now, null, scanned = false))
+        assertEquals(Step.Down(real, "connection refused"), Plan.afterProbe(real, down, now, null, scanned = true))
+        // the same desk after a restart is SAVED: one rule for one desk, whether or not the app restarted
+        assertEquals(Plan.afterScan(real, emptyList(), Source.SAVED, "x"), Plan.afterScan(real, emptyList(), now, "x"))
+        // every other source keeps its own rule
+        for (s in listOf(Source.GIVEN, Source.PICKED, Source.FOUND, Source.SAVED)) assertEquals(s, Plan.answered(s))
+    }
+
+    @Test
     fun `the waiting screen searches the LAN every twelfth tick`() {
         val r = Recovery()
         val scans = (1..24).filter { r.tick() }
