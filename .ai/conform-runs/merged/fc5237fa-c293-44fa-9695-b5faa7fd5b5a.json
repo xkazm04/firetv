@@ -1,0 +1,159 @@
+{
+ "schema": "conform-run/1",
+ "worker": "fc5237fa-c293-44fa-9695-b5faa7fd5b5a",
+ "subject": "invariant-placement",
+ "evaluatedAt": "2026-10-21T22:42:18.894994+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "maths-school",
+   "subject": "invariant-placement",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "desk/src/lib/rules/marks.ts:19 Mark-list completeness is enforced during compilation, but no negative compilation artifact was found to detect removal of that structural constraint.",
+   "techniques": [
+    {
+     "technique": "build-time-evaluation-of-cross-value-invariants",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/rules/marks.ts:19 The compiler checks the relationship between the declared mark set and the maintained list."
+    },
+    {
+     "technique": "completeness-at-emission",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/rules/kinds.ts:186 The Judged-returning function supplies all three required result fields together before returning."
+    },
+    {
+     "technique": "constraint-deletion-is-silent",
+     "verdict": "deviation",
+     "evidence": "tools/maths-rules-test.cjs:798 This checks runtime contents, not compiler rejection; removing the totality constraint leaves this assertion unchanged, and no corresponding negative compilation fixture was found."
+    },
+    {
+     "technique": "consumption-bounds-at-most-once",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/slips.ts:21 The reviewed rules process ordinary observations; searches found no single-use capability or consumption encoding."
+    },
+    {
+     "technique": "derived-properties-cannot-be-forged",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/rules/marks.ts:28 Skipped is recomputed from verdict and answer contents rather than maintained as an independent stored assertion."
+    },
+    {
+     "technique": "initialization-proof-tokens",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/school.ts:85 These rules expose computations over supplied values; no mandatory subsystem bring-up or readiness protocol was identified in the listed files."
+    },
+    {
+     "technique": "occurrence-is-not-a-type",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/rules/saidValue.ts:76 Whether the proposed value's digits actually occurred in order is checked against the transcript at runtime."
+    },
+    {
+     "technique": "placement-precedes-gate",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/rules/school.ts:410 The rate-specific requirement for a unit lives in its data shape rather than solely in a separate checker."
+    },
+    {
+     "technique": "shape-with-a-not-applicable-member",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/rules/school.ts:3696 Failed generator resolution returns null outside the real generator set."
+    }
+   ]
+  },
+  {
+   "context": "linga-level",
+   "subject": "invariant-placement",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "desk/src/lib/english/placement.ts:332 Placement cleaning can discard every malformed task while retaining the evidence-derived band and high confidence, leaving the guarantee intact after its supporting parts disappear.",
+   "techniques": [
+    {
+     "technique": "completeness-at-emission",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/english/cert.ts:134 The single issuance door refuses the certificate if any required skill lacks acceptable evidence before emitting the complete snapshot."
+    },
+    {
+     "technique": "constraint-deletion-is-silent",
+     "verdict": "conformant",
+     "evidence": "tools/cert-rules-test.cjs:265 An explicit negative artifact requires the issuance door to refuse tampered quotes, alongside a positive acceptance case."
+    },
+    {
+     "technique": "consumption-bounds-at-most-once",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/english/cert.ts:128 Uniqueness is per stored band-and-requirement identity, which the technique explicitly distinguishes from consuming a nonduplicable value."
+    },
+    {
+     "technique": "derived-properties-cannot-be-forged",
+     "verdict": "deviation",
+     "evidence": "desk/src/lib/english/placement.ts:332 The cleaner copies confidence after filtering tasks without recomputing or invalidating it; an in-memory probe retained C2/high with zero surviving tasks."
+    },
+    {
+     "technique": "occurrence-is-not-a-type",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/english/check.ts:82 Identity and pending-call freshness are rechecked at use time instead of being inferred from the LevelCheck type."
+    },
+    {
+     "technique": "placement-precedes-gate",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/english/check.ts:378 Command admissibility depends on changing session state and is enforced at the command's point of use through one decision table."
+    },
+    {
+     "technique": "repairing-check-erases-its-evidence",
+     "verdict": "not-applicable",
+     "evidence": "tools/cert-rules-test.cjs:136 For this coercion, clamping is the documented cleaner contract and is exercised with an explicit negative date, rather than defending an allegedly impossible input."
+    },
+    {
+     "technique": "shape-with-a-not-applicable-member",
+     "verdict": "conformant",
+     "evidence": "desk/src/lib/english/cert.ts:71 An unavailable certifiable band is represented by an optional wrapper rather than a fake member of Band."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-21T22:42:18.894994+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "invariant-placement"
+   ],
+   "techniques": [
+    "build-time-evaluation-of-cross-value-invariants",
+    "completeness-at-emission",
+    "constraint-deletion-is-silent",
+    "consumption-bounds-at-most-once",
+    "derived-properties-cannot-be-forged",
+    "initialization-proof-tokens",
+    "occurrence-is-not-a-type",
+    "placement-precedes-gate",
+    "shape-with-a-not-applicable-member"
+   ],
+   "deviations": 1,
+   "context": "maths-school",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-21T22:42:18.894994+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "invariant-placement"
+   ],
+   "techniques": [
+    "completeness-at-emission",
+    "constraint-deletion-is-silent",
+    "consumption-bounds-at-most-once",
+    "derived-properties-cannot-be-forged",
+    "occurrence-is-not-a-type",
+    "placement-precedes-gate",
+    "repairing-check-erases-its-evidence",
+    "shape-with-a-not-applicable-member"
+   ],
+   "deviations": 1,
+   "context": "linga-level",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

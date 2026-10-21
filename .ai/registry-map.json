@@ -759,7 +759,11 @@
           "revision": 9,
           "changedAt": "2026-09-21",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/english/placement.ts:332 Placement cleaning can discard every malformed task while retaining the evidence-derived band and high confidence, leaving the guarantee intact after its supporting parts disappear.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:c6563834f502429c",
+          "evaluatedRevision": 9
         },
         {
           "subject": "quality-gates",
@@ -1502,7 +1506,11 @@
           "revision": 9,
           "changedAt": "2026-09-21",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/rules/marks.ts:19 Mark-list completeness is enforced during compilation, but no negative compilation artifact was found to detect removal of that structural constraint.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:c6563834f502429c",
+          "evaluatedRevision": 9
         },
         {
           "subject": "voice-io",
