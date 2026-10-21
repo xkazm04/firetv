@@ -71,6 +71,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Unreleased
 
+- The TV makes sound: Select and Back, the phone joining, a hint card arriving, the walk's verdict (only as the card shows it) and the break each have a short effect, and a calm track plays on the desk home and the break, ducked under the voice. A Sound button on the bench turns it off. The owner's picks from [the audition](desk/audio/audition/index.html), levelled into `desk/public/audio`; the rule is `desk/src/lib/desk/sounds.ts`.
 - A debug-only voice probe in `tv-app` (speaks six desk lines at two rates, tries the remote mic through `SpeechRecognizer`, writes `voice-probe.json`) and the native voice design it serves: [NATIVE-VOICE-STACK.md](docs/concepts/NATIVE-VOICE-STACK.md). The Stick run is the operator's.
 
 ### 2026-10-05: Relay pairing follows the socket
