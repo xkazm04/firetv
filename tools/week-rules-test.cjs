@@ -551,3 +551,18 @@ test('no-reply take: a Linga take finished with no reply is not a conversation o
  // the digest keeps the entry as written: the page reads past it
  assert.equal(D.cleanDigest([E(24,18,'teacher','repair',0)]).length,1);
 });
+
+// ------------------------------------------------------------------ every authored scene (Speaking practice included) reads as one sentence
+test('scene names: every authored scene (ENGLISH_SCENES and Speaking practice) and a plan title ending in a question mark close the Linga line with one stop, never "?."',()=>{
+ const {AUTHORED_SCENES}=require(src('lib/english/curriculum.ts'));
+ assert.ok(AUTHORED_SCENES.length>ENGLISH_SCENES.length,'Speaking practice is authored too');
+ for(const s of AUTHORED_SCENES){
+  const x=words([E(24,18,s.id,s.skill,3)]).find((y)=>y.section==='english'&&!y.head).text;
+  assert.equal(x,`One conversation: ${s.name}${/[.!?]$/.test(s.name)?'':'.'}`,s.id);
+  assert.doesNotMatch(x,/[.!?]\.$/,`${s.id}: one stop`);assert.ok(W.wordsIn(x)<=W.LINE_WORDS,x);
+ }
+ const plan={at:1,band:'A2',topics:[{id:'plan-0a1b2c3d',title:'What would you do?',goal:'g',why:'w',skill:'negotiate',audience:'all',partner:'p',premise:'x',cue:'c',quiz:{question:'q',options:['a','b'],correct:0}}]};
+ assert.ok(lingaOf(words({digest:[E(24,18,'plan-0a1b2c3d','negotiate',3)],english:{plan}})).includes('One conversation: What would you do?'));
+ // a question in the middle of the list keeps its own mark and the line its stop
+ assert.ok(lingaOf(words({digest:[E(24,18,'plan-0a1b2c3d','negotiate',3),E(25,18,'teacher','repair',3)],english:{plan}})).includes('Two conversations: Say that again, please · What would you do?'));
+});

@@ -276,11 +276,15 @@ const LADDER: Trim[] = [
   { units: 1, scenes: false, stepNames: false, hints: false, name: false },
 ];
 
-/** Scene names that fit a line after `head`: as many as fit, then "and N more"; none when not even one fits. */
+/**
+ * Scene names that fit a line after `head`: as many as fit, then "and N more"; none when not even one fits. A line that
+ * already ends in a name's own stop ("what do you think?") takes no second one.
+ */
 function namesLine(head: string, names: string[]): string {
   for (let k = names.length; k >= 1; k--) {
     const more = names.length - k;
-    const line = `${head}: ${names.slice(0, k).join(" · ")}${more ? `, and ${num(more)} more` : ""}.`;
+    const body = `${head}: ${names.slice(0, k).join(" · ")}${more ? `, and ${num(more)} more` : ""}`;
+    const line = /[.!?]$/.test(body) ? body : `${body}.`;
     if (wordsIn(line) <= LINE_WORDS) return line;
   }
   return `${head}.`;
