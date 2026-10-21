@@ -708,7 +708,7 @@ test('P16 sendSecond(): a reply that returns after the learner or the walk item 
   m.seat.current={id:'jakub',ix:1};g.open(Promise.reject(new Error('net')));await p.catch(()=>{});
   assert.equal(full(m.calls).length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
   const m2=make(seatedA,()=>Promise.reject(new Error('net')));await m2.sendSecond();
-  assert.equal(full(m2.calls).length,1);assert.match(full(m2.calls)[0][1],/^That did not reach the desk: /);
+  assert.equal(full(m2.calls).length,1);assert.equal(full(m2.calls)[0][1],'That did not reach the desk.');assert.doesNotMatch(full(m2.calls)[0][1],/net|Error/,'not the raw error');
  });
  await t.test('it is sent for the item that was open at send time',async()=>{
   let sent;const m=make(seatedA,(u,b)=>{sent=b;return reply({});});await m.sendSecond();assert.equal(sent.n,11);
@@ -1340,4 +1340,15 @@ test('F6 (stick pass): the rewrite and slot panels are one field, Dictate and Se
   for(const gone of ['pasteField()','pieceRead()','pasteSend()','shelf()'])assert.ok(!p.includes(gone),role+' drops '+gone);
  }
  assert.match(panel('essay-paragraph'),/\{shelf\(\)\}/,'the paragraph panel keeps the composer');
+});
+
+test('optimize 2026-10-21: a send that never reached the desk says so in the plain line, never with the browser\'s raw error (error-handling user-facing-mapping)',()=>{
+ const src=code(PAGE);
+ const plain=(src.match(/That did not reach the desk\./g)??[]).length;
+ assert.ok(plain>=9,`control: the plain line is the page's own (${plain} sites)`);
+ // a TypeError: Failed to fetch, or an AbortError, is the browser talking to itself: it is not shown on the phone
+ const raw=[...src.matchAll(/set(?:Msg|Note)\(`[^`]*\$\{\s*String\(\s*\w+\s*\)\s*\}[^`]*`\)/g)].map((m)=>m[0]);
+ assert.deepEqual(raw,[],'no message on the phone interpolates a caught error');
+ // the scan bites
+ assert.equal([...'setMsg(`That did not reach the desk: ${String(e)}`)'.matchAll(/set(?:Msg|Note)\(`[^`]*\$\{\s*String\(\s*\w+\s*\)\s*\}[^`]*`\)/g)].length,1);
 });

@@ -249,7 +249,7 @@ export default function Phone() {
       if (moved()) return;
       // a run that failed is on the desk with its sentence and a Try again (its body says failure); only a refusal needs the line here
       if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(deskLine(j, `The desk could not read it (${r.status}).`)); }
-    } catch (e) { if (!moved()) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
+    } catch { if (!moved()) { setPhase("failed"); setMsg("That did not reach the desk."); } } finally { setBusy(false); }
   };
   const toJpeg = (src: HTMLVideoElement | HTMLImageElement, sw: number, sh: number) => {
     const w = 1280, h = Math.round((sh / sw) * 1280); const c = document.createElement("canvas"); c.width = w; c.height = h;
@@ -408,7 +408,7 @@ export default function Phone() {
   const ask = async () => { if (!page) return; const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("");
     try { const r = await call("/api/hint", { askedQ: q, itemIx: ring?.ix ?? s?.itemIx }); if (moved()) return; setQ("");
       if (!r.ok) { const j = await r.json().catch(() => null); if (moved()) return; setMsg(deskLine(j, `The desk could not ask (${r.status}).`)); } }
-    catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); } };
+    catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   /** The Say panel's button: the sentence to the TV. */
   const checkSentence = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("sending…");
     try { const r = await call("/api/analyse", { kind: "english", sentence }); if (moved()) return;
@@ -430,7 +430,7 @@ export default function Phone() {
       if (moved()) return;
       if (kind === "read") setPhase(r.ok ? "sent" : "failed");
       if (!r.ok) setMsg(deskLine(j, `The desk could not try again (${r.status}).`));
-    } catch (e) { if (!moved()) { if (kind === "read") setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
+    } catch { if (!moved()) { if (kind === "read") setPhase("failed"); setMsg("That did not reach the desk."); } } finally { setBusy(false); }
   };
   /** A Mic press is listening: the phone does not move away from the field it is filling. */
   const hearing = useRef(false);
@@ -459,7 +459,7 @@ export default function Phone() {
       if (moved()) return;
       if (r.ok) setPhase("sent");
       else { setPhase("failed"); setMsg(r.status === 404 ? "The desk cannot mark yet — that part is still being built." : (j.error ?? `The desk could not mark it (${r.status}).`)); }
-    } catch (e) { if (!moved()) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
+    } catch { if (!moved()) { setPhase("failed"); setMsg("That did not reach the desk."); } } finally { setBusy(false); }
   };
   /**
    * The typed answers, one string per question in order (a blank for one left). Code marks them at once on the desk; the
@@ -478,7 +478,7 @@ export default function Phone() {
       if (moved()) return;
       if (r.ok) setPhase("sent");
       else { setPhase("failed"); setMsg(j.error ?? `The desk could not mark it (${r.status}).`); }
-    } catch (e) { if (!moved()) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
+    } catch { if (!moved()) { setPhase("failed"); setMsg("That did not reach the desk."); } } finally { setBusy(false); }
   };
   // the set came back marked: the sheet has done its job, so the review clears itself
   useEffect(() => { if (screen === "practice" && s?.practice?.marked) { setShot(null); setPhase("idle"); } }, [s?.practice?.marked]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -538,7 +538,7 @@ export default function Phone() {
       if (moved()) return;
       if (r.ok) { setReply(j.reply ?? "The desk heard you."); setHeard(""); setTypedExplain(""); setTyping(false); }
       else setMsg(r.status === 404 ? "The desk cannot listen back yet — that part is still being built." : (j.error ?? `The desk could not use that (${r.status}).`));
-    } catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+    } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); }
   };
   /** One typed second go on the ringed item in hand: the TV draws what it came to; a refusal is the desk's own sentence. */
   const sendSecond = async () => {
@@ -553,7 +553,7 @@ export default function Phone() {
       const j = await r.json().catch(() => ({} as { error?: string }));
       if (moved()) return;
       if (r.ok) setAgain(""); else setMsg(j.error ?? `The desk could not take that (${r.status}).`);
-    } catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+    } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); }
   };
 
   // The phone follows the TV (panelFor.ts): when the TV's screen changes into a hand-off, the phone moves once to
