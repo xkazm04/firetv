@@ -142,6 +142,14 @@ test('the real list in desk/package.json has 63+ unique suites, each a file, wit
   assert.equal(list[list.length - 1], 'harness-rules-test.cjs');
 });
 
+test('desk/AGENTS.md tells an agent where a new suite goes: rulesSuites, before harness-rules-test.cjs', () => {
+  const doc = fs.readFileSync(path.join(DESK, 'AGENTS.md'), 'utf8');
+  const gate = doc.split('\n').find(l => /new suite/i.test(l)) || '';
+  assert.match(gate, /rulesSuites/, gate);
+  assert.match(gate, /before `harness-rules-test\.cjs`/, gate);
+  assert.doesNotMatch(gate, /at the end/i, gate);
+});
+
 // EC1a: the usage ledger (desk/src/lib/engines/meter.ts) must never land in desk/data. This suite itself runs under
 // the runner, so its own env carries DESK_USAGE_FILE: runUsage deletes it from the env it hands the runner unless the
 // case sets it, else the cases would test the pass-through branch and prove nothing.

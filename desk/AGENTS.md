@@ -14,7 +14,7 @@ The repo-wide authority is [../AGENTS.md](../AGENTS.md): commands, the architect
 constraints and the Definition of Done. When the two disagree, that file wins. The block above is
 written by `next dev`. Edit only below it.
 
-- Gate: `npm test` here (`tsc --noEmit`, then every rules suite in `test:rules`). A new suite is appended at the end of `test:rules`.
+- Gate: `npm test` here (`tsc --noEmit`, then every rules suite in `test:rules`). A new suite goes into `rulesSuites` in `package.json`, just before `harness-rules-test.cjs`, which stays last (`tools/harness-rules-test.cjs` checks it).
 - Decisions stay in `src/lib/rules/`. Engines stay behind `src/lib/engines/`. `src/lib/session/store.ts` is the only state.
   `node ../tools/desk-boundaries.cjs` holds all three:
   - an engine loads nothing else in the desk, and callers load only its entry modules (text, vision, embed, voice, listen, health, shape, types);
