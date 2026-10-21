@@ -1140,6 +1140,24 @@ test('TL-11 (OD4 b): a phone\'s task.add and task.done stay allowed',async()=>{
  assert.equal((await post({type:'task.done',id:t.id,done:true},'phone',cookie)).status,200);
  assert.equal(store.getSession().tasks.find((x)=>x.id===t.id).done,true);
 });
+// tonight's list is the phone's (OD4 b), and every task rides in every message and in session.json: a name, a length and a list are bounded
+test('task.add: a name past TASK_NAME_MAX, minutes that are not a whole 1 to TASK_MIN_MAX, or a list at TASKS_MAX changes nothing',async()=>{
+ const cookie=await phoneCookie();evening('tonight');const {TASK_NAME_MAX,TASK_MIN_MAX,TASKS_MAX,TASKS_FULL}=store;
+ assert.equal(typeof TASK_NAME_MAX,'number');assert.equal(typeof TASKS_MAX,'number');
+ for(const e of [{name:'x'.repeat(TASK_NAME_MAX+1),min:10},{name:'Read',min:0},{name:'Read',min:2.5},{name:'Read',min:TASK_MIN_MAX+1},{name:'Read',min:-5}]){
+  const before=JSON.stringify(store.getSession().tasks);const r=await post({type:'task.add',sub:'english',...e},'phone',cookie);
+  assert.equal(r.status,400,JSON.stringify(e).slice(0,60));assert.equal(JSON.stringify(store.getSession().tasks),before);
+ }
+ assert.equal((await post({type:'task.add',name:'x'.repeat(TASK_NAME_MAX),sub:'english',min:TASK_MIN_MAX},'phone',cookie)).status,200,'at the bounds is kept');
+ while(store.getSession().tasks.length<TASKS_MAX)assert.equal((await post({type:'task.add',name:'Read',sub:'english',min:10},'phone',cookie)).status,200);
+ const full=JSON.stringify(store.getSession().tasks);
+ await post({type:'task.add',name:'One more',sub:'english',min:10},'phone',cookie);
+ assert.equal(JSON.stringify(store.getSession().tasks),full,'a full list of open tasks takes no more');assert.equal(store.getSession().status,TASKS_FULL);
+ // a ticked task makes room: the oldest ticked one goes, the list stays at TASKS_MAX
+ const t2=store.getSession().tasks[2];assert.equal((await post({type:'task.done',id:t2.id,done:true},'phone',cookie)).status,200);
+ await post({type:'task.add',name:'One more',sub:'english',min:10},'phone',cookie);
+ const now=store.getSession().tasks;assert.equal(now.length,TASKS_MAX);assert.equal(now.at(-1).name,'One more');assert.equal(now.some((t)=>t.id===t2.id),false,'the ticked one made room');
+});
 // TL-11 as an allowlist (authorization: dispatch-chokepoint-gating, default deny): what a phone may post is named, and the
 // ground truth is the phone's own sources - every type they send must be on the list, and every other type the door takes is 403
 const PHONE_SOURCES=['app/phone','english/LingaPhone.tsx'];

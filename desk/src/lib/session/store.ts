@@ -460,6 +460,14 @@ const f = {
   object: ((v) => !!v && typeof v === "object" && !Array.isArray(v)) as Field,
 };
 const maybe = (c: Field): Field => (v) => v === undefined || c(v);
+/**
+ * Tonight's list is the phone's to add to (OD4 b), and every task rides in every message to every screen and in session.json,
+ * so a task is bounded where it comes in: a name of at most TASK_NAME_MAX letters, whole minutes from 1 to TASK_MIN_MAX, and at
+ * most TASKS_MAX on one learner's list: a new task past it takes the place of the oldest ticked one, and with none ticked the
+ * reducer says TASKS_FULL and adds nothing.
+ */
+export const TASK_NAME_MAX = 80, TASK_MIN_MAX = 180, TASKS_MAX = 20;
+export const TASKS_FULL = `Tonight's list holds ${TASKS_MAX} tasks still to do. Tick one off first.`;
 const lessonPick: Field = (v) => v === null || (f.object(v) && ["id", "title", "text", "why"].every((k) => f.str((v as Record<string, unknown>)[k])) && f.num((v as Record<string, unknown>).t) && maybe(f.str)((v as Record<string, unknown>).youtube));
 const askDetailOk: Field = (v) => {
   if (!f.object(v)) return false;
@@ -473,7 +481,7 @@ const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { ty
   "lesson.set": { lesson: lessonPick, key: maybe(f.str) }, "lesson.pause": { paused: f.bool },
   "essay.type": { essayType: f.str, owner: maybe(f.str) }, "essay.at": { n: (v) => v === null || f.int(v) }, "essay.clear": { owner: maybe(f.str) }, "essay.plan": { lens: f.str }, "essay.slot": { i: f.int, text: f.str },
   "paper.enter": { rows: () => true, askId: maybe(f.name) },
-  "task.add": { name: f.name, sub: f.subject, min: f.num }, "task.done": { id: f.str, done: f.bool },
+  "task.add": { name: (v) => f.name(v) && (v as string).length <= TASK_NAME_MAX, sub: f.subject, min: (v) => f.int(v) && (v as number) >= 1 && (v as number) <= TASK_MIN_MAX }, "task.done": { id: f.str, done: f.bool },
   "timer.start": {}, "timer.pause": {}, "timer.tick": { seconds: f.num }, "timer.skipbreak": {},
   "topic.open": { topic: f.str, stay: maybe(f.bool) }, walk: { ix: f.int }, "practice.clear": {},
   status: { text: f.str, essayRefused: maybe(f.bool) }, "session.end": {}, reset: {},
@@ -892,8 +900,10 @@ function step(s: Session, e: Event): Session {
     case "essay.at": n.essayAt = e.n !== null && s.essay?.sentences.some((x) => x.n === e.n) ? e.n : null; break;
     // an id no task anywhere on the desk has (this learner's list, and every learner's in `away`), so a tick that names
     // one learner's task can never land on another's - even two added in the same millisecond, across a learner switch
-    case "task.add": { const id = newTaskId(s);
-      n.tasks = [...s.tasks, { id, sub: e.sub, name: e.name, min: e.min, done: false }]; break; }
+    case "task.add": { let kept = s.tasks;
+      if (kept.length >= TASKS_MAX) { const old = kept.findIndex((t) => t.done); if (old < 0) { n.status = TASKS_FULL; break; } kept = kept.filter((_, i) => i !== old); }
+      const id = newTaskId(s);
+      n.tasks = [...kept, { id, sub: e.sub, name: e.name, min: e.min, done: false }]; break; }
     case "task.done": n.tasks = s.tasks.map((t) => (t.id === e.id ? { ...t, done: e.done } : t)); break;
     case "timer.start": n.timer = { ...s.timer, running: true }; if (!s.log.started) n.log = { ...s.log, started: Date.now() }; break;
     case "timer.pause": n.timer = { ...s.timer, running: false }; break;
