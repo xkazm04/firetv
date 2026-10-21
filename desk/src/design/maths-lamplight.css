@@ -373,6 +373,9 @@
 .maths-tv .mb-detail .tally { display: flex; gap: 10px; margin-top: 4px; }
 .maths-tv .mb-detail .tally svg { width: 48px; height: 48px; }
 .maths-tv .mb-detail .tally path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+/* a held second go: the tick drawn over the item's own mark, in the same 48 px, so the tally keeps its width */
+.maths-tv .mb-detail .tally .held { position: relative; display: block; width: 48px; height: 48px; }
+.maths-tv .mb-detail .tally .held svg + svg { position: absolute; left: 0; top: 0; }
 .maths-tv .mb-ok { margin-top: 30px; display: flex; align-items: center; gap: 14px; opacity: 0; transform: translateY(8px); transition: opacity .3s, transform .3s var(--mb-ease); }
 .maths-tv .mb-ok .ok { text-transform: uppercase; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-size: 20px; font-weight: 800; letter-spacing: .06em; background: var(--mb-navy); color: var(--mb-amber); }
 .maths-tv .mb-ok .mb-lab { color: var(--mb-navy); }

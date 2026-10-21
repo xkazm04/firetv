@@ -1435,3 +1435,23 @@ test('TL-13: the paper screen draws Type a paper, lit on the stop past the rows,
  assert.ok(drawMaths('PaperScreen',{...s,phonesLive:0}).includes('No phone is connected. Up: pair a phone. Back: cancel.'));
  assert.ok(!drawMaths('PaperScreen',{...s,ask:askAt('paper','tonight')}).includes(CHIP),'an ask from another screen draws nothing');
 });
+
+test('second 5: Tonight\'s Marked card draws a held second go as the sheet does - the ring stays, a tick, not "look again"',()=>{
+ const boxesOf=(html)=>html.split('<div class="mb-box" ').slice(1).map((c)=>c.slice(0,c.indexOf('</div>')));
+ const fixed=drawMaths('Tonight',secondSession('right','tonight',{focus:0})),plain=drawMaths('Tonight',secondSession(null,'tonight',{focus:0}));
+ const [b2,b4]=[boxesOf(fixed)[1],boxesOf(fixed)[3]];
+ assert.match(b2,/data-second="right"/,'box 2 carries the second go, as the sheet\'s number does');
+ assert.match(b2,/class="ring"/,'the ring stays: the record is the first attempt');
+ assert.doesNotMatch(b2,/look again/,'a fixed item is not sent back to look again');
+ assert.match(b2,/class="tk"/,'it wears the tick');
+ assert.match(b4,/look again/,'the unfixed ringed item still says look again');
+ assert.doesNotMatch(boxesOf(plain)[1],/data-second|class="tk"/,'no second go draws as before');
+ // the tally under the title: one tick more than the same set with no second go, on item 2
+ const tally=(html)=>{const i=html.indexOf('<span class="tally"');return html.slice(i,html.indexOf('</span></div>',i));};
+ const marks=(html)=>(tally(html).match(/<span(?: class="held")?>/g)??[]).length;
+ const strokes=(html)=>(tally(html).match(/#FFB13D/g)??[]).length;
+ assert.equal(strokes(fixed),strokes(plain)+1,'the tally adds the tick for the held second go');
+ assert.equal(marks(fixed),marks(plain),'one tally mark per item either way');
+ assert.equal((tally(fixed).match(/class="held"/g)??[]).length,1,'the held item\'s mark is the one that carries the tick');
+ assert.match(cssSrc(),/\.tally \.held svg \+ svg \{[^}]*position: absolute/,'the tick is drawn over the mark, so the tally keeps its width');
+});
