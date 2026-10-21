@@ -24,6 +24,8 @@ const declared = new Map<string, Decl>();
 const baked = new Map<string, Baked>();
 const waiting = new Map<string, Array<() => void>>();
 const queue: string[] = [];
+/** Stills whose last bake failed: how many times, and the last error (they show live). */
+const failed = new Map<string, { n: number; error: string }>();
 let px = 0, warmed = false;
 /** The still being baked (from its idle wait to its bitmap), or null: one bake at a time, and never the same one twice. */
 let inflight: string | null = null;
@@ -34,9 +36,10 @@ export function still(id: string, kind: StillKind, d: number, node: ReactNode, s
   return <Still id={id} />;
 }
 
-/** The declared stills and the bitmaps made so far (for the perf kit: window.__ppStills). */
+/** The declared stills, the bitmaps made so far and the ones that failed (for the perf kit: window.__ppStills). */
 export function stillStats() {
   return { declared: [...declared.keys()], px, baked: [...baked.entries()].map(([id, b]) => ({ id, w: b.canvas.width, h: b.canvas.height, bytes: b.bytes })),
+    failed: [...failed.entries()].map(([id, f]) => ({ id, ...f })),
     bytes: [...baked.values()].reduce((s, b) => s + b.bytes, 0) };
 }
 
@@ -113,7 +116,10 @@ function pump() {
   inflight = id;
   const idle = (cb: () => void) => ("requestIdleCallback" in window ? window.requestIdleCallback(cb, { timeout: 1500 }) : setTimeout(cb, 50));
   idle(() => {
-    bake(id).catch(() => { /* a still that cannot bake stays live */ }).finally(() => {
+    // a still that cannot bake stays live; the failure is kept for the perf kit (stillStats), and a later mount retries it
+    bake(id).then(() => { failed.delete(id); }, (e: unknown) => {
+      failed.set(id, { n: (failed.get(id)?.n ?? 0) + 1, error: e instanceof Error ? e.message : String(e) });
+    }).finally(() => {
       inflight = null;
       for (const done of waiting.get(id) ?? []) done();
       waiting.delete(id);

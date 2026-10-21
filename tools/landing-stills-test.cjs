@@ -113,6 +113,9 @@ test('a still asked for again while its bake is in flight (a world remounted mid
   for(let i=0;i<10&&idles.length;i++){idles.shift()();await new Promise((r)=>setTimeout(r,0));}
   assert.equal(started,1,`the still was baked ${started} times for one bitmap`);
   assert.equal(done,2,'both askers hear it settle');
+  // a still that could not bake stays live, and the perf kit's stats (window.__ppStills) say which and why
+  const f=(S.stillStats().failed||[]).find((x)=>x.id===id);
+  assert.ok(f&&f.n===1&&/no DOM here/.test(f.error),`a failed bake is on the record: ${JSON.stringify(S.stillStats().failed)}`);
  }finally{global.window=was.window;global.document=was.document;}
 });
 
