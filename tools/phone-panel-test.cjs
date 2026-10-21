@@ -1466,3 +1466,20 @@ test('optimize 2026-10-21: every door on the PC page says what came back - nothi
   assert.equal(await settle(p.pick(bad)),null);assert.equal(p.said().length,1);assert.doesNotMatch(p.said()[0],/NotReadable/);
  });
 });
+
+// The bar's Cancel-only asks (phoneBar.ts PANEL_SUBMITS) are the kinds whose panel sends from its own button. The ground
+// truth is the page's primary switch: a kind it has no case for has no bar primary to press. Derived from the store's
+// AskKind (ASK_PANEL holds every kind, type-checked) and the comment-stripped switch, not from the list itself.
+test('optimize 2026-10-21: the bar holds Cancel alone for exactly the asks the page gives no primary - derived, not listed',()=>{
+ const {ASK_PANEL}=P();
+ const {PANEL_SUBMITS}=require(path.join(SRC,'app/phone/phoneBar.ts'));
+ const kinds=Object.keys(ASK_PANEL);
+ const casesIn=(src)=>{const body=src.slice(src.indexOf('switch (handoff.kind)'));const end=body.indexOf('default:');return [...body.slice(0,end).matchAll(/case "([^"]+)":/g)].map((m)=>m[1]);};
+ const src=code(PAGE),cases=casesIn(src);
+ assert.ok(kinds.length>=15&&cases.length>=10,'control: the kinds and the switch were read');
+ assert.deepEqual(cases.filter((k)=>!kinds.includes(k)),[],'every case is an ask kind');
+ assert.deepEqual([...PANEL_SUBMITS].sort(),kinds.filter((k)=>!cases.includes(k)).sort(),'Cancel-only = the kinds with no primary case');
+ // it bites: a page that drops its "slot" case would leave slot with a dead primary unless the list grows too
+ const seeded=casesIn(src.replace(/case "slot":[^\n]*\n/,''));
+ assert.notDeepEqual([...PANEL_SUBMITS].sort(),kinds.filter((k)=>!seeded.includes(k)).sort());
+});
