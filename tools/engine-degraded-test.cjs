@@ -1,10 +1,11 @@
 /**
  * The degraded-engine drill: what the desk does at the TV when a live engine answers with nonsense, nothing, or not at
  * all. Every row of tools/engine-degraded-fixtures.json is one provider answer (prose, an empty object, wrong types,
- * empty strings, centres outside the photo, an unknown lesson id, or a timeout / unreachable / exit) put through the real
- * route: POST /api/read, POST /api/hint and the lesson pick behind it. The row's `expect` is the fallback the learner is
- * owed: a desk sentence (never the engine's words or the answer), the page not stuck on "reading", the hint screen not
- * entered, "no lesson" instead of an endless wait, and a retry that works once the engine is back.
+ * empty strings, centres outside the photo, an unknown lesson id, or a thrown timeout / unreachable / exit / cutoff /
+ * declined) put through the real route: POST /api/read, POST /api/hint and the lesson pick behind it. The row's `expect`
+ * is the fallback the learner is owed: a desk sentence (never the engine's words or the answer), the page not stuck on
+ * "reading", the hint screen not entered, "no lesson" instead of an endless wait, and a retry that works once the engine
+ * is back - or, for a ceiling or a refusal (`again: false`), no second run at all, since asking again ends the same way.
  *
  * engines-rules-test.cjs holds the engine contract (shape, timeout, exit) one call at a time, and desk-jobs-rules-test.cjs
  * holds the job lifecycle with a few failures. This suite is the matrix between them, at the screen.
@@ -33,6 +34,7 @@ const reg=require(src('lib/engines/registry.ts'));
 require(src('lib/engines/text.ts'));require(src('lib/engines/embed.ts'));require(src('lib/engines/vision.ts'));
 const {EngineError}=require(src('lib/engines/types.ts'));
 const {leaks}=require(src('lib/rules/maths.ts'));
+const {NOT_AGAIN}=require(src('lib/desk/job.ts'));
 const store=require(src('lib/session/store.ts'));
 const route=(name)=>require(src(`app/api/${name}/route.ts`));
 const post=(name,body)=>route(name).POST(new Request(`http://desk/api/${name}`,{method:'POST',body:JSON.stringify(body)}));
@@ -85,6 +87,17 @@ function saidOnly(s,sentence){
  assert(!/x\s*=\s*4|\b4\b/.test(s.status),`the status line carries the answer: ${s.status}`);
 }
 
+/**
+ * A failure that asking again would only repeat (a ceiling, a refusal: `again: false` on the row) is not offered Try
+ * again: the retry is refused with the desk's sentence, the job stays failed and the engine is not asked a second time.
+ */
+async function refusedAgain(kind){
+ const before=store.getSession(),r=await retry(kind),body=await r.json();
+ assert.equal(r.status,409,'Try again is refused: it would end the same way');assert.equal(body.error,NOT_AGAIN);
+ const t=store.getSession();
+ assert.equal(t.jobs[kind].phase,'failed');assert.equal(t.jobs[kind].id,before.jobs[kind].id,'no second run was started');
+}
+
 // ---- the page read ----
 for(const row of FIX.read){
  test(`read: ${row.name}`,opts(row),async()=>{
@@ -98,6 +111,7 @@ for(const row of FIX.read){
    assert.equal(s.jobs.read.phase,'failed');assert.equal(s.jobs.read.error,e.fails);saidOnly(s,e.fails);
    assert.deepEqual(page.items,[],'the failed page stays on the desk, empty');assert.equal(page.provider,'error');
    stubVision(FIX.good.read);
+   if(e.again===false)return refusedAgain('read');
    const again=await retry('read');
    assert.equal(again.status,200,'a retry reads the same page once the engine is back');
    const t=store.getSession();assert.equal(t.pages.length,1);assert.equal(t.pages[0].id,page.id);assert.equal(t.pages[0].items.length,2);
@@ -125,6 +139,7 @@ for(const row of FIX.hint){
    assert.equal(s.jobs.hint.phase,'failed');assert.equal(s.jobs.hint.error,e.fails);saidOnly(s,e.fails);
    assert.equal(s.screen,'page','the TV stays on the page');assert.equal(s.hint,null,'no hint card');assert.equal(s.log.hints,0,'a failed hint is not counted');
    stubText({});
+   if(e.again===false)return refusedAgain('hint');
    const again=await retry('hint');
    assert.equal(again.status,200,'a retry asks again once the engine is back');await drain();
    assert.equal(store.getSession().hint?.hint1?.hint,FIX.good.hint.hint);
@@ -163,8 +178,23 @@ for(const row of FIX.lesson){
  });
 }
 
-test('GUARD: the matrix covers every pipeline and every engine failure kind',()=>{
+/**
+ * Every way an attempt can end without an answer to judge, read from the EngineErrorKind union in types.ts (comments
+ * stripped) rather than kept here by hand: a kind added there is a row owed here. `shape` is not thrown - it is what the
+ * engine makes of a malformed raw answer, and the prose / empty / wrong-type rows are its cases.
+ */
+function attemptKinds(){
+ const t=fs.readFileSync(src('lib/engines/types.ts'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
+ const m=/export\s+type\s+EngineErrorKind\s*=\s*([^;]+);/.exec(t);
+ assert(m,'types.ts declares EngineErrorKind');
+ return [...m[1].matchAll(/"([a-z]+)"/g)].map((x)=>x[1]).filter((k)=>k!=='shape');
+}
+test('GUARD: the matrix covers every pipeline, and the read and the hint each meet every way an attempt can fail',()=>{
  for(const k of ['read','hint','lesson'])assert(FIX[k].length>0,`no ${k} rows`);
- const thrown=new Set(FIX.read.concat(FIX.hint).map((r)=>r.answer&&r.answer.$throw).filter(Boolean));
- for(const kind of ['timeout','unreachable','exit'])assert(thrown.has(kind),`no row where the engine fails with ${kind}`);
+ const kinds=attemptKinds();
+ assert(kinds.length>=3&&kinds.includes('timeout'),`the EngineErrorKind union was not read: ${kinds}`);
+ for(const pipe of ['read','hint']){
+  const thrown=new Set(FIX[pipe].map((r)=>r.answer&&r.answer.$throw).filter(Boolean));
+  for(const kind of kinds)assert(thrown.has(kind),`no ${pipe} row where the engine fails with ${kind}`);
+ }
 });
