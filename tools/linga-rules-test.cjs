@@ -4019,3 +4019,20 @@ test('LT-petra-38-J4-3: the band hold is unchanged: an A1 partner line over 8 wo
  assert.equal(fitsBand(long,'A1'),false);assert.equal(bandLine(long,'A1'),'What is yours like?');
  assert.equal(bandLine('Hello! What do you like?','A1'),'Hello! What do you like?');
 });
+test('linga-level hand-off: while a check is part way the menu draws My topics disabled, its help the refusal the server gives',async()=>{
+ const V=view();let partWays=0;
+ for(const [name,k] of Object.entries(CHECK_STATES)){
+  if(k.pending)continue;
+  for(const screen of ['linga',checkScreen(k)]){
+   const a=V.lingaView(sessionOf(fixture(screen,{placement:placed(),plan:planned('p-a'),check:{...k,parked:screen==='linga'}})),{menu:true}).actions.find(x=>x.id==='my-topics');
+   const partWay=k.stage==='about'||k.stage==='tasks';partWays+=partWay?1:0;
+   assert.equal(!!a.disabled,partWay,`${name} on ${screen}: My topics is ${partWay?'refused, so drawn disabled':'taken, so enabled'}`);
+  }
+ }
+ assert(partWays>=10,`checked ${partWays} part-way menus`);
+ // the pair: the server refuses the same action, in the words the disabled action shows
+ const fx=fixture('linga',{placement:placed(),plan:planned('p-a'),check:{...CHECK_STATES['about asked'],parked:true}});
+ const shown=V.lingaView(sessionOf(fx),{menu:true}).actions.find(x=>x.id==='my-topics');
+ install(fx);
+ await assert.rejects(command(shown.run.command.action),e=>e.status===409&&e.message===shown.help);
+});
