@@ -29,6 +29,7 @@ import { leaksCalc, withheldCalc } from "../rules/calc";
 import { leaksSchool, unitOf, withheldSchool } from "../rules/school";
 import { readQuestion, type ItemKind, type Question } from "../rules/kinds";
 import { inequalityOf, lineOf, sequenceTermOf } from "../rules/maturita";
+import { commaSystem } from "../rules/taskText";
 import { calcWordsOf, judgeOf, topicIn, type MathPath } from "../library/paths";
 import { voiceOf, withManner, type Voice } from "../rules/voice";
 import { SCHOOL_SLIPS } from "../rules/school";
@@ -135,7 +136,7 @@ function leakedIn(problem: string, spec: Specs, said: Said, system?: SchoolSyste
  */
 export function groundFor(problem: string, who: { id: string; system: SchoolSystem }): string {
   const parts: string[] = [];
-  if (who.system === "cz" || who.system === "de") parts.push(notationLine(who.system));
+  if (commaSystem(who.system)) parts.push(notationLine(who.system));
   const school = readQuestion(problem, who.system).school;
   const unit = school ? unitOf(school) : null;
   if (unit) {
