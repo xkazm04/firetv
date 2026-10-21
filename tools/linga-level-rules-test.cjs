@@ -4,6 +4,7 @@
  *   - a check left part way is kept: opening the topics does not replace it (the home says "Your place is saved");
  *   - a judge answer whose quote is not in the learner's answer is asked for once more inside the same call, so the
  *     learner is not asked to send their answer again; a second miss is still refused;
+ *   - every refusal the table gives names the stage the check is in, never a task or a question that is not there.
  * Run with npm test in desk/ (directly: node tools/linga-level-rules-test.cjs). No model is called: the providers throw
  * and the text engine is a fixed local stub. The data directory is disposable, under the OS temp dir; never desk/data.
  */
@@ -81,4 +82,31 @@ test('a judge quote that is not in the answer is asked for once more inside the 
   assert.equal(calls.judge, 2, 'one re-ask, never more');
   assert.match(getSession().check.error, /send it again/);
   assert.equal(getSession().check.tasks.length, 1, 'nothing judged on a misquote');
+});
+
+test('every refusal names the stage the check is in: no task or question that is not there', () => {
+  const base = { id: 'k', learnerId: 'l', turns: [], selfBand: null, goal: '', interest: '', read: '', task: null, tasks: [], placement: null, topics: [], pending: null, error: '', commands: [], audioNonce: 0, startedAt: 0 };
+  const say = { id: 'x', band: 'A2', kind: 'say', prompt: 'p', line: '', options: [], revealed: false };
+  const states = {
+    'about-empty': { ...base, stage: 'about' }, 'about-asked': { ...base, stage: 'about', turns: [{ id: 't', role: 'tutor', text: 'q' }] },
+    'tasks-between': { ...base, stage: 'tasks' }, say: { ...base, stage: 'tasks', task: say }, listen: { ...base, stage: 'tasks', task: { ...say, kind: 'listen' } }, choose: { ...base, stage: 'tasks', task: { ...say, kind: 'choose' } },
+    verdict: { ...base, stage: 'verdict' }, 'plan-goal': { ...base, stage: 'plan', askGoal: true }, 'plan-topics': { ...base, stage: 'plan', topics: [TOPIC] }, 'plan-empty': { ...base, stage: 'plan' },
+  };
+  assert.deepEqual(Object.keys(states).sort(), A.CHECK_STATES.filter((s) => s !== 'reading' && s !== 'parked').sort(), 'every idle state is walked');
+  const bad = [];
+  let n = 0;
+  for (const [state, k] of Object.entries(states)) {
+    assert.equal(A.checkState(k), state);
+    for (const action of A.CHECK_COMMANDS) {
+      if (A.checkAccepts(k, action)) continue;
+      n++;
+      const line = A.checkRefusal(k, action);
+      if (k.stage !== 'tasks' && /\btasks?\b/i.test(line) && !/listening task/.test(line)) bad.push(`${state} ${action}: "${line}" (no task here)`);
+      if (k.stage !== 'about' && /question/i.test(line) && !/questions are done/.test(line)) bad.push(`${state} ${action}: "${line}" (no question here)`);
+      if (k.stage !== 'plan' && /plan for/i.test(line)) bad.push(`${state} ${action}: "${line}" (no plan here)`);
+      if (/Carry on with the tasks/.test(line) && k.stage !== 'tasks') bad.push(`${state} ${action}: "${line}" (the tasks are not next)`);
+    }
+  }
+  assert(n >= 60, `${n} refusals walked`);
+  assert.deepEqual(bad, []);
 });
