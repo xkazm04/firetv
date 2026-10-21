@@ -129,6 +129,7 @@ The agent contract, CI and the evals that cover every product.
 
 ### Unreleased
 
+- Governance sweep (2026-10-21): `tools/gradlew.cjs` starts the wrapper by its absolute path (it failed before Gradle started under `NoDefaultCurrentDirectoryInExePath`); the desk layering check runs in `repo-guardrails.yml` again, its three breaks on main listed as owed; `quality.yml` also runs on main and runs the stick app's tests; the never-commit guardrail sees `desk/.env.local` and keystores; `SECURITY.md` ticks only what a workflow runs; `scripts/model-drift.ps1` survives an engine warning on stderr; every `tools/*-test.cjs` must run somewhere (`tools/suite-wiring-test.cjs`).
 - CI repair after the ascent/runner harvest (issue #12): `supply-chain.yml` no longer has the dependency-graph job (the repository's dependency graph is off), `ai-conformance.yml` is the weekly report only (`conformance-gate.yml` is the per-PR verdict), `capabilities-pr.yml` runs by hand only (test-desk exceeds the doctor's 180 s budget), and the `quality.yml` desk job installs `tools/` dependencies; two Windows-only assumptions in `tools/maths-rules-test.cjs` and `tools/engines-rules-test.cjs` now hold on Linux too.
 - A live model-drift watch:
   - `tools/model-drift.cjs` records each live lab-bench run in [uat/drift/](uat/drift/README.md) and compares it with the last one.
