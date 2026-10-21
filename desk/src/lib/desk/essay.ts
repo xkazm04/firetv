@@ -220,7 +220,8 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
     if (para === of - 1 && piece.read.length) { verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed, voice.band); }
     onProgress(now());
   }
-  if (!piece.read.length) throw lastError ?? new Error(notEnglish.length ? NOT_ENGLISH_LINE : "no paragraph of the piece came back");
+  // a piece with no English paragraph fails with the desk's own sentence (DeskSaid), as the piece door refuses one
+  if (!piece.read.length) throw lastError ?? (notEnglish.length ? new DeskSaid(NOT_ENGLISH_LINE) : new Error("no paragraph of the piece came back"));
   if (!reader.noSave) record(learnerId, lens, ruledSentences(sentences, pieceNow()).length, verdicts.filter((v) => v.verdict === "faulty").length, of);
   return now();
 }
