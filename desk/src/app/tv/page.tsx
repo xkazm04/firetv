@@ -73,13 +73,19 @@ export default function TV() {
   /** The stage this screen is drawn on. The landing is one picture with nothing more to fit, so it keeps the TV's. */
   const shown: Display = s?.screen === "landing" ? "tv" : display;
 
-  // fit the whole stage in its box (width and height), centred; the box is what the bar leaves of the window
+  // fit the whole stage in its box (width and height), centred; the box is what the bar leaves of the window.
+  // The fit is a zoom, not a scale(): Chrome rasters a composited layer (an animated or will-change one) at no less
+  // than its own scale 1, so under a scale(.5) stage every such layer on the stick was rastered at four times its
+  // pixels - 107 MB of the WebView's 80 MB tile budget on the landing, and a second raster after each lamp move. Under a
+  // zoom the layers are laid out at the window's resolution and rastered once at it
+  // (docs/concepts/STICK-PERFORMANCE-2026-10-21.md). The translate is in the stage's zoomed px, hence the / k.
   useEffect(() => {
     const { w, h } = STAGE[shown];
     const fit = () => {
       if (!frame.current || !stage.current) return;
       const r = frame.current.getBoundingClientRect(), k = Math.min(r.width / w, r.height / h);
-      stage.current.style.transform = `translate(${Math.round((r.width - w * k) / 2)}px, ${Math.round((r.height - h * k) / 2)}px) scale(${k})`;
+      stage.current.style.zoom = String(k);
+      stage.current.style.transform = `translate(${Math.round((r.width - w * k) / 2) / k}px, ${Math.round((r.height - h * k) / 2) / k}px)`;
     };
     fit(); const ro = new ResizeObserver(fit); if (frame.current) ro.observe(frame.current); return () => ro.disconnect();
   }, [s?.screen, shown]);
