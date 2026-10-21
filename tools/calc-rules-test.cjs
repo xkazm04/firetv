@@ -810,3 +810,12 @@ test('one answer-key vocabulary: every Calculus shape refuses a spec carrying an
   }
  }
 });
+
+test('MB-B36 in the leak check: a hint written in Czech notation (tg, cotg, arctg) gives the answer away as its English form does',()=>{
+ const anti={shape:'antiderivative',f:'1/cos(x)^2'},der={shape:'derivative',f:'ln(cos(x))'},val={shape:'evaluate',f:'x^2 + 1',at:'pi/4'},seq={shape:'sequence-limit',f:'x*tan(1/x)'};
+ for(const [s,line] of [[anti,'Výsledek je tg x + C.'],[anti,'tg(x) + K'],[der,'Derivace je -tg x.'],[seq,'the limit equals tg(pi/4)']])
+  assert.equal(C.leaksCalc(s,line),true,line);
+ // a Czech name that is not the answer, and the English line, are read as before
+ for(const [s,line,want] of [[anti,'Vzpomeňte si, čemu se rovná derivace tg x.',true],[der,'Derivujte vnější funkci ln, pak vnitřní cos x.',false],[anti,'The answer is tan x + C.',true],[der,'Použijte tg x jen na kontrolu.',false],[der,'Use tan x only as a check.',false]])
+  assert.equal(C.leaksCalc(s,line),want,line);
+});

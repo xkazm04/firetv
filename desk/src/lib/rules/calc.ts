@@ -17,7 +17,7 @@
  */
 import { commaSystem, readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
-import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, systemLogs, withinRel } from "./calc-read";
+import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, czechNames, decimalCall, infinityOf, isDecimal, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, systemLogs, withinRel } from "./calc-read";
 import { agreesWhereBoth, compile, derivativeAt, evalNode, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, type Expr, type Limit, type Node } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -647,9 +647,13 @@ const LONG_WINDOW = 24;
  * too. One reads the line as scan reads it, the other the line as it was before the question's own pieces were set
  * aside (that step can erase a term of the answer). Both only add hits.
  * For a number, one more pass reads the line again with a lone digit,digit as a point ('2,72' is 2.72), for every learner (MK4).
+ * Any line in Czech notation (tg, cotg, arctg, arccotg) is also read with the engine's names, for every learner (MB-B36).
  */
 export function leaksCalc(spec: unknown, line: unknown): boolean {
   if (isCalc2Spec(spec)) return calc2LeaksCalc(spec, line);
+  // a hint in Czech notation (tg, cotg, arctg, arccotg: calc-read czechNames, MB-B36) is read again with the names the
+  // engine knows, for every learner: the cz hint prompt names that notation, and the judge reads it in a cz answer
+  if (typeof line === "string") { const named = czechNames(line); if (named !== line && leaksCalc(spec, named)) return true; }
   if (isImplicitSpec(spec)) return leaksImplicit(spec, line) || (typeof line === "string" && pointForComma(line) !== line && leaksImplicit(spec, pointForComma(line)));
   if (leaksCalcOnce(spec, line)) return true;
   if (typeof line !== "string") return false;

@@ -18,7 +18,7 @@
  * calc.ts (which imports this file). A few lines of calc.ts are written again here for that reason (num, BAD_SPEC).
  */
 import { compile, integrate, limitInf, toPlain, type Expr } from "./calc-expr";
-import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, czechNames, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
 /** A comma system writes its decimals with a comma (taskText.ts commaSystem, written again here: this file imports no taskText, calc2-seam-test pins it). */
 const commaSystem = (system?: string) => system === "cz" || system === "de";
 
@@ -291,10 +291,13 @@ export function calc2LeaksCalc(spec: unknown, line: unknown): boolean {
   if (isSequence(spec)) return withPointed(line, (l) => sequenceLeaks(spec, l));
   return withPointed(line, (l) => approxLeaks(spec, l));
 }
-/** A leak check run on the line, then once more on the line with a lone digit,digit read as a point (MK4); never more than twice. */
+/** A leak check run on the line, then on the line with the Czech function names read (MB-B36), then with a lone digit,digit read as a point (MK4); at most four runs. */
 function withPointed(line: unknown, leaks: (l: unknown) => boolean): boolean {
   if (leaks(line)) return true;
   if (typeof line !== "string") return false;
+  // a line in Czech notation (tg, cotg, arctg: calc-read czechNames, MB-B36) is read with the engine's names too, as calc.ts does
+  const named = czechNames(line);
+  if (named !== line && withPointed(named, leaks)) return true;
   const pointed = pointForComma(line);
   return pointed !== line && leaks(pointed);
 }
