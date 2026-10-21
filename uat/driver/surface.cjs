@@ -23,14 +23,12 @@
 const fs = require('node:fs'), path = require('node:path'), Module = require('node:module');
 const desk = path.resolve(__dirname, '../../desk');
 
-/** Controls that take no action in the Linga screen model, and why. */
-const BY_DESIGN_UNMAPPED = {
-  'Talk': 'the phone tab that holds this screen',
-  'Set up': 'phone setup (interests, goals, preferences): outside the journeys the LT run covers',
-  'My map': 'the learning map on the phone: read-only evidence',
-  'Help with a sentence': 'Say it, a different module',
-  'Linga on the TV': 'brings the TV back to Linga; the LT run is always on Linga',
-};
+/**
+ * Controls that take no action in the Linga screen model, and why: label -> reason. Empty since the TV-led phone
+ * (TL-12) stopped drawing the five it held (Talk, Set up, My map, Help with a sentence, Linga on the TV). An entry
+ * must name a control some Linga state still draws (tools/uat-surface-test.cjs), or it would excuse a future stray.
+ */
+const BY_DESIGN_UNMAPPED = {};
 
 // ---------------------------------------------------------------- loading desk TS and TSX in node
 let installed = false;
