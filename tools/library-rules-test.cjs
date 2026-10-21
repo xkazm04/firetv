@@ -34,6 +34,14 @@ test('VTT-3: a timing line without hours (mm:ss.ttt, as the WebVTT format allows
  assert.deepEqual(parseVtt(['WEBVTT','','01:00:02.000 --> 01:00:04.000','late line',''].join('\n')),[{t:3602,text:'late line'}],'an hour is still an hour');
 });
 
+test('VTT-4: a NOTE, STYLE or REGION block - its header line and every line under it, up to the blank line - is not caption text',()=>{
+ const raw=['WEBVTT','','STYLE','::cue { color: yellow }','','REGION','id:fred width:40%','',
+  '00:00:01.000 --> 00:00:04.000','first line','','NOTE this cue was checked','by hand in October','',
+  '00:00:05.000 --> 00:00:08.000','second line','','NOTE','a comment on two','lines of its own','',
+  '00:00:09.000 --> 00:00:10.000','third line',''].join('\n');
+ assert.deepEqual(parseVtt(raw),[{t:1,text:'first line'},{t:5,text:'second line'},{t:9,text:'third line'}]);
+});
+
 // ---- the vector cache ----
 const LESSON='jWpiMu5LNdg';
 const stamp=(s)=>`00:${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}.000`;
