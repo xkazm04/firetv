@@ -1,0 +1,32 @@
+{
+  "id": "1d167ef7-e0eb-45c4-ba12-48c7f28a476c",
+  "ts": "2026-10-21T10:35:23.203Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/hint-glass.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "UI sound effect, small glass bell and celesta, airy, light reverb: a soft, curious single shimmer as a new card appears; neutral, implies neither right nor wrong. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134367,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 17179,
+  "providerCredits": 11,
+  "sha256": "4ef5fdee7f9cdbc7cbd63c324311d4a170a5e1a8fdaf4b6745431deef302e9bd",
+  "completedAt": "2026-10-21T10:35:26.321Z",
+  "creditsAfter": 134367,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1400
+}

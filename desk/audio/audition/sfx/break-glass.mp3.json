@@ -1,0 +1,32 @@
+{
+  "id": "d3e61256-35b4-4fcb-be38-e2426e4b06e9",
+  "ts": "2026-10-21T10:37:09.931Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/break-glass.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "UI sound effect, small glass bell and celesta, airy, light reverb: a relaxed, slow descending arpeggio that says it is time for a break; calm, breathing space. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134256,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 33061,
+  "providerCredits": 22,
+  "sha256": "cb757f905ed184230668d79679d7c97acb3bb4acdc3e221ae325faf7d75d5e29",
+  "completedAt": "2026-10-21T10:37:13.456Z",
+  "creditsAfter": 134256,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 2300
+}

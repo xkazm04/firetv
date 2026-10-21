@@ -1,0 +1,32 @@
+{
+  "id": "04940367-3eff-4f60-a7f5-bb03b9bc9250",
+  "ts": "2026-10-21T10:34:12.474Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/back-glass.mp3",
+  "seconds": 0.5,
+  "request": {
+    "text": "UI sound effect, small glass bell and celesta, airy, light reverb: a short, soft downward two-note tap for going back; lower and calmer than the confirm. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 0.5,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134421,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 8820,
+  "providerCredits": 6,
+  "sha256": "3f9e83dba63fa0302b092e1be634b573fe2bb07d4a4c63094334ca23111be734",
+  "completedAt": "2026-10-21T10:34:18.739Z",
+  "creditsAfter": 134421,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 800
+}
