@@ -37,7 +37,7 @@ stubbed at the `provider` seam (`desk/src/lib/engines/`), and data goes to a tem
 `.github/workflows/quality.yml` runs on every pull request. A red suite blocks the merge. To run
 only these, use the `evals` capability in `.ai/manifest.yaml`, which calls the same files from the
 repo root. `.github/workflows/capabilities-pr.yml` runs every manifest capability, including `evals`,
-through `node .ai/doctor.mjs --run` on each same-repo pull request, and `capabilities.yml` repeats it
+through `node .ai/doctor.mjs --run` when run by hand (not on pull requests, issue #12), and `capabilities.yml` repeats it
 once a week. On a PR, `scripts/doctor-gate.mjs --claims` also holds every committed `verified: true`
 to that run. See
 [../.ai/memory/0016-capabilities-proven-per-pr.md](../.ai/memory/0016-capabilities-proven-per-pr.md).
@@ -156,9 +156,9 @@ Durable lessons from past runs are in `.ai/memory/` (format: [../.ai/memory/READ
   for the gate commands, their exit codes and the DoD.
 - **CI:**
   - `quality.yml` runs the desk gate (including the evals above) and `:core:test` on every PR.
-  - `ai-conformance.yml` runs the agent-contract doctor on every PR. It is red by design on `control.prepush` (0011).
+  - `ai-conformance.yml` is the weekly conformance report only; the per-PR verdict is `conformance-gate.yml` (the raw doctor is red by design on `control.prepush`, 0011).
   - `conformance-gate.yml` judges the same doctor through `scripts/doctor-gate.mjs` on every PR. It goes red on any fail outside the waivers, each of which is owned by a memory entry.
-  - `capabilities-pr.yml` proves the manifest commands on every same-repo PR and checks the committed `verified` flags against that run. `capabilities.yml` repeats the proof every week.
+  - `capabilities-pr.yml` proves the manifest commands and checks the committed `verified` flags against that run, by hand only (it is not run on PRs: test-desk exceeds the doctor's 180 s budget, issue #12). `capabilities.yml` repeats the proof every week.
   - `model-drift.yml` watches the committed live-quality records every week and runs the drift suite on every PR.
   - `model-drift-pr.yml` holds a PR that changes the live surface to a fresh live record, compared with the base's newest one.
   - `changelog.yml` keeps `CHANGELOG.md`'s shape and links on every PR.

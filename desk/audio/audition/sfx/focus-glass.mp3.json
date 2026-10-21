@@ -1,0 +1,32 @@
+{
+  "id": "1ab7684c-a68a-4ef1-999c-403cd5a30920",
+  "ts": "2026-10-21T10:33:42.065Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/focus-glass.mp3",
+  "seconds": 0.5,
+  "request": {
+    "text": "UI sound effect, small glass bell and celesta, airy, light reverb: a single, very soft and short tick for moving focus between buttons; heard dozens of times a minute, so barely there, no tail. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 0.5,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134421,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 8820,
+  "providerCredits": 6,
+  "sha256": "6fd41ed6928b107c9c054c5f72d0d72cd06807b250613138006bfb9ac8331b57",
+  "completedAt": "2026-10-21T10:33:45.049Z",
+  "creditsAfter": 134421,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 200
+}

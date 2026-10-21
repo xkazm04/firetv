@@ -1,0 +1,100 @@
+{
+ "schema": "conform-run/1",
+ "worker": "4627e5f7-e358-4642-b900-3dbc8b8c911a",
+ "subject": "translation-quality-measurement",
+ "evaluatedAt": "2026-10-20T21:23:33.660265+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "engines",
+   "subject": "translation-quality-measurement",
+   "bundle": "localization",
+   "state": "not-applicable",
+   "evidence": "desk/src/lib/engines/text.ts:114 The inspected configuration selects a general text provider; searches found no translation workflow in the context and no termbase, glossary or post-edit machinery in repository operational files, so translation-quality measurement has no identified workload here.",
+   "techniques": [
+    {
+     "technique": "context-sufficiency-signals",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/engines/codex.ts:50 This assembles a general model request; no translated-unit review or translation-context assessment was identified."
+    },
+    {
+     "technique": "cost-and-licence-of-measurement",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/engines/text.ts:42 Usage accounting records generation costs; no translation estimator is being chosen or licensed."
+    },
+    {
+     "technique": "deterministic-checks-before-estimates",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/engines/shape.ts:135 The deterministic checks enforce caller JSON schemas, with no machine-translated store or translation-estimation stage."
+    },
+    {
+     "technique": "engine-quality-from-reviewer-corrections",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/engines/shape.ts:145 Correction here is an automated length-repair request; no human approval or post-editing of machine pretranslations was identified."
+    },
+    {
+     "technique": "error-typology-over-a-single-score",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/engines/types.ts:62 These classify model-call failures, rather than findings from translation review."
+    },
+    {
+     "technique": "human-review-sampling-under-a-budget",
+     "verdict": "not-applicable",
+     "evidence": "tools/engines-rules-test.cjs:48 The suite checks tutoring-engine contracts; no translated corpus requiring a human review sample was identified."
+    },
+    {
+     "technique": "language-scoped-check-exemptions",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/engines/shape.ts:51 This enforces a supplied character budget; no translation punctuation or language-convention check requiring exemptions was identified."
+    },
+    {
+     "technique": "per-pair-engine-selection",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/engines/registry.ts:22 Registration organizes general providers by engine kind; no machine-translation engine selection for a language pair was identified."
+    },
+    {
+     "technique": "reference-free-quality-estimation",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/engines/embed.ts:22 The embedding provider embeds supplied texts; it does not estimate source-to-translation quality or prioritize translation review."
+    },
+    {
+     "technique": "regression-detection-under-a-moving-engine",
+     "verdict": "not-applicable",
+     "evidence": "tools/engines-rules-test.cjs:412 The tested regeneration concerns embedding vectors; no translated store regenerated under a changing translation configuration was identified."
+    }
+   ],
+   "absenceTerms": [
+    "termbase",
+    "glossary",
+    "post-edit"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-20T21:23:33.660265+00:00",
+   "bundle": "localization",
+   "subjects": [
+    "translation-quality-measurement"
+   ],
+   "techniques": [
+    "context-sufficiency-signals",
+    "cost-and-licence-of-measurement",
+    "deterministic-checks-before-estimates",
+    "engine-quality-from-reviewer-corrections",
+    "error-typology-over-a-single-score",
+    "human-review-sampling-under-a-budget",
+    "language-scoped-check-exemptions",
+    "per-pair-engine-selection",
+    "reference-free-quality-estimation",
+    "regression-detection-under-a-moving-engine"
+   ],
+   "deviations": 0,
+   "context": "engines",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

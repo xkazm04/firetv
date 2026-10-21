@@ -60,7 +60,8 @@ export function WritingEpisode() {
   const box = { width: "100%", minHeight: 180, fontSize: 18, padding: 12, boxSizing: "border-box" as const };
   const btn = { fontSize: 18, padding: "10px 20px", marginTop: 12, cursor: "pointer" };
   return (
-    <main style={{ maxWidth: 720, margin: "0 auto", padding: 24, fontFamily: "var(--body)", color: "#111" }}>
+    <main style={{ minHeight: "100vh", background: "#f7f7f5", color: "#111", fontFamily: "var(--body)" }}>
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: 24 }}>
       <h1>Writing</h1>
       {error && <p role="alert" style={{ color: "#a00" }}>{error}</p>}
 
@@ -97,6 +98,7 @@ export function WritingEpisode() {
           <button style={btn} onClick={() => { setStage("start"); setPrompt(null); setDraft(""); setNote(""); setRevision(""); setSaved(""); }}>Write another</button>
         </section>
       )}
+      </div>
     </main>
   );
 }
