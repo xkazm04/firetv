@@ -171,7 +171,7 @@
   let color = '#FFD400';
   let sticky = false;
   let ws = null, connected = false, paired = false, refused = false;
-  let lastState = null, scrubbing = false, seekSent = null, tvDoc = null, prevT = null;
+  let lastState = null, scrubbing = false, seekSent = null, tvDoc = null;
 
   // ---- transport -----------------------------------------------------------
   function connect() {
@@ -333,7 +333,6 @@
         .forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.rate) === m.rate)));
     }
     $('scrub-t').textContent = (m.t / 1000).toFixed(1) + 's';
-    if (m.t !== (prevT ?? -1)) { prevT = m.t; }
     if (!scrubbing && m.durationMs > 0) {
       $('scrub').value = Math.round((m.t / m.durationMs) * 1000);
       seekSent = null; // the TV has moved the bar: the same spot can be sought again
