@@ -1,0 +1,32 @@
+{
+  "id": "55a49a6b-3ff6-4816-967f-1b4000b8d835",
+  "ts": "2026-10-21T10:36:21.357Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/again-wood.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "UI sound effect, soft wooden marimba and felt mallet, warm, dry room: an encouraging, soft neutral two-note figure for 'try again'; never a buzzer, no sadness, no dissonance. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134306,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 17179,
+  "providerCredits": 11,
+  "sha256": "394550cec42d90f2634d8aa99a86f902f98b9230ebf0d12dd621dd1d4f50e98b",
+  "completedAt": "2026-10-21T10:36:26.852Z",
+  "creditsAfter": 134256,
+  "observedAccountDelta": 50,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1900
+}

@@ -1,0 +1,32 @@
+{
+  "id": "7f8e1dcd-9aa4-4c07-ade3-0e3eba4f8c69",
+  "ts": "2026-10-21T10:36:34.681Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/again-glass.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "UI sound effect, small glass bell and celesta, airy, light reverb: an encouraging, soft neutral two-note figure for 'try again'; never a buzzer, no sadness, no dissonance. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134256,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 17179,
+  "providerCredits": 11,
+  "sha256": "349aec8f595b733a94aaac2f6af167bcac75e66eb5c8761659b3a75815dacafc",
+  "completedAt": "2026-10-21T10:36:37.768Z",
+  "creditsAfter": 134256,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 2000
+}

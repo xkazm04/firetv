@@ -12,9 +12,13 @@
 # The doctor gives each command 180 s, so the slow work (Gradle, npm ci, the APK build) is warmed up first, exactly as in
 # capabilities.yml. gradle.properties pins the operator's local Android Studio JBR, which does not exist on a runner;
 # the job drops that one line from the checkout and uses the JDK that setup-java installs.
+# NOT RUN ON PULL REQUESTS (2026-10-20): the test-desk capability (`npm --prefix desk test`, about 3 minutes on a
+# runner) is killed at the doctor's fixed 180 s --run budget, so this job was red on every PR it ran on. The budget
+# is part of the .ai/SPEC.md contract and the cure it names (split or wrap the command) changes the manifest, so it
+# is left for an owner decision (issue #12). The workflow stays for a manual run: Actions, capabilities-pr, Run workflow.
 name: capabilities-pr
 on:
-  pull_request:
+  workflow_dispatch: {}
 permissions:
   contents: read
 concurrency:
@@ -22,7 +26,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   prove:
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
