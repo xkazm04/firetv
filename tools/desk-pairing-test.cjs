@@ -297,13 +297,15 @@ const TOO_MANY='Too many wrong codes. Wait five minutes, then type the code agai
 process.env.DESK_JOIN_DELAY_MS='0';
 test('PR2: a wrong code is refused after the delay, and the right code still joins',async()=>{
  evening('pair');DESK_JOIN();const pin=store.getSession().pin;
- process.env.DESK_JOIN_DELAY_MS='150';
+ // the delay is wide enough that a busy machine (four suites at once) cannot push the undelayed join past the line: one run
+ // in three read the right code at >= 120 ms against a 150 ms delay while sibling suites ran
+ process.env.DESK_JOIN_DELAY_MS='1000';
  try{
   for(const body of [{type:'join',code:wrongOf(pin)},{type:'join'}]){
    const t0=Date.now();const r=await post(body,'guest');const ms=Date.now()-t0;
-   assert.equal(r.status,403);assert(ms>=120,`refused after ${ms} ms, not at once`);
+   assert.equal(r.status,403);assert(ms>=900,`refused after ${ms} ms, not at once`);
   }
-  const t0=Date.now();const r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);assert(Date.now()-t0<120,'the right code is not delayed');
+  const t0=Date.now();const r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);assert(Date.now()-t0<900,'the right code is not delayed');
  }finally{process.env.DESK_JOIN_DELAY_MS='0';}
 });
 test('PR2: 10 wrong codes start a five-minute cooldown; the right code is refused in it and joins after it',async()=>{
