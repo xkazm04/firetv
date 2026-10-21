@@ -45,6 +45,8 @@ const THANKS = /\b(?:thanks|thank you|thx|ty|grateful|appreciate)\b/gi;
 const FORMAL = /\b(?:regarding|furthermore|moreover|therefore|kindly|sincerely|please find|hereby|accordingly|pursuant|attached|herewith|i would like to|we would like to)\b/gi;
 const SLANG = /\b(?:gonna|wanna|gotta|kinda|sorta|yeah|yep|nope|ok|okay|cool|awesome|btw|tbh|imo|omg|u|ur)\b/gi;
 const LIST = /^\s*(?:[-*•]|\d+[.)])\s+/m;
+/** A clause dash: a spaced hyphen, en or em dash, or any em dash. The sheet's dash rate and the card's dash_policy (twin/card.ts) read this one rule. */
+export const CLAUSE_DASH = /\s[-–—]\s|—/;
 
 const WROTE_LINE = /^\s*(?:On\b.{0,200}\bwrote:|-{2,}\s*Original Message\s*-{2,}|Dne\b.{0,200}napsal\(a\)?:)\s*$/i;
 /**
@@ -101,7 +103,7 @@ export function styleSheet(texts: string[]): StyleSheet {
     wps: stats(sents.map((s) => words(s).length)), wpm: stats(msgs.map((m) => words(m).length)),
     rates: {
       question: pm(sents.filter((s) => /\?\s*$/.test(s)).length, S), exclaim: pm(sents.filter((s) => /!\s*$/.test(s)).length, S),
-      connector: pm(count(all, CONNECTORS), S), hedge: pm(count(all, HEDGES), S), dash: pm(count(all, /\s[-–—]\s|—/g), S),
+      connector: pm(count(all, CONNECTORS), S), hedge: pm(count(all, HEDGES), S), dash: pm(count(all, new RegExp(CLAUSE_DASH.source, "g")), S),
       lowerStart: pm(sents.filter((s) => /^[a-z]/.test(s)).length, S), contraction: pm(count(all, CONTRACTION), W),
       emoji: pm(count(all, EMOJI), M), laugh: pm(count(all, LAUGH), M), greeting: pm(msgs.filter((m) => GREETING.test(m.trim())).length, M),
       signoff: pm(msgs.filter((m) => SIGNOFF.test(m.trim())).length, M), thanks: pm(count(all, THANKS), M),

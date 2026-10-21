@@ -15,7 +15,7 @@
  * canonical form of each part (SPEC 9); every number in a part is an integer.
  */
 import { createHash } from "node:crypto";
-import { ownText, styleSheet, twinDims, type Dims } from "../rules/style";
+import { CLAUSE_DASH, ownText, styleSheet, twinDims, type Dims } from "../rules/style";
 import type { Piece } from "../session/texts";
 
 export const TWIN_BORN = 3;
@@ -106,7 +106,7 @@ export function buildCard(input: CardInput): Record<string, unknown> | null {
   const born = portrait.channels.filter((c) => c.born && c.dims);
   if (!born.length) return null;
   const allEx = born.flatMap((c) => c.exemplars.map((e) => e.text));
-  const dash = allEx.some((t) => /\s[-–—]\s|\w—\w/.test(t)) ? "allow" : "avoid";
+  const dash = allEx.some((t) => CLAUSE_DASH.test(t)) ? "allow" : "avoid";
   const starts = new Set(allEx.map((t) => t.trim().toLowerCase()));
   const fillers = FILLERS.filter((f) => ![...starts].some((s) => s.startsWith(f)));
   const identity = { name: input.name, role: null, bio: null, languages: input.languages ?? ["en"] };

@@ -114,6 +114,13 @@ test('the card: schema-valid, hashes over each part, allowances from the person\
   const bad = JSON.parse(JSON.stringify(card)); bad.voice.channels[0].style.dims.humor = 7; bad.voice.channels[0].exemplars[0].source = 'invented'; bad.surprise = 1;
   assert(validate(SCHEMA, bad).length >= 2, 'the validator rejects a broken card'); assert(!integrityOk(bad), 'and the hash no longer holds');
 });
+test('one clause-dash rule: the card allows dashes exactly when the style meter counts one in the exemplars', () => {
+  const S = require(src('lib/rules/style.ts'));
+  for (const t of ['ok — see you', 'ok—see you', 'ok— see you', 'ok —see you', 'well, —fine', 'ok - see you', 'ok – see you', 'e-mail me at nine', 'see you at nine']) {
+    const card = C.buildCard({ name: 'M', pieces: [piece('t-0000000000d1', 'message', t), piece('t-0000000000d2', 'message', 'yes'), piece('t-0000000000d3', 'message', 'on my way')], cardId: '6f1c1f39-0000-4000-8000-000000000000', createdAt: '2026-10-07T10:00:00Z', exportedAt: '2026-10-07T10:00:00Z' });
+    assert.equal(card.voice.quality_rules.dash_policy, S.styleSheet([t]).rates.dash > 0 ? 'allow' : 'avoid', JSON.stringify(t));
+  }
+});
 
 // ------------------------------------------------------------------ routes
 const R = (url, method, body, role = 'phone') => new Request(`http://desk${url}`, { method, headers: role ? { 'x-desk-role': role } : {}, ...(body !== undefined ? { body: JSON.stringify(body) } : {}) });
