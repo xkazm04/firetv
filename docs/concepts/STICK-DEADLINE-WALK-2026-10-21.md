@@ -51,6 +51,17 @@ Verdicts: PASS, FAIL (wrong but not stopping the demo), BLOCKER (stops it), NOT 
 | 29 | phone 360 and 414: /writing, pick a prompt | Writing | The prompt list | The three prompts show; no sideways scroll; **the heading and "Pick a prompt." cannot be read** (dark on dark, B2) | BLOCKER (B2, fixed in the tree) | `writing-360-joined`, `writing-414-joined` |
 | 30 | phone 360 and 414: choose Screens before bed, type a paragraph | Writing | The write screen | The textarea and "Get one note" show; the prompt text is unreadable (B2) | BLOCKER (B2) | `writing-360-write`, `writing-414-write` |
 | 31 | phone 360: Get one note (one claude call) | Writing | One note that shows the way and does not write the sentence | "Your reasons, "bright" and "fun," describe how screens feel, but nothing in them can be checked. What could a reader verify ...?" A question, no model sentence. "Revise your paragraph once" is unreadable (B2). Finish was not pressed: it would save a record for the real learner | PASS (note), BLOCKER (B2 text) | `writing-360-coached` |
+| 32 | Writing on the stick: Back to the landing, Right to the end of the shelf (stick, :3000) | Writing | A Writing tile after the three apps, its own caption | Math Buddy, Linga, Essay Master, **Writing** lit: "Not started. Write one paragraph on your phone and get one coaching note on the TV." Start as Ema. B1 is closed on the landing. Empty world under the title, as built | PASS | `wr01-landing`, `wr04-right3` |
+| 33 | Select on Writing (stick) | Writing | The prompt list for the learner's band | "Pick a prompt": Screens before bed, School uniform, Cars in the city centre; the lit one's task under it; no focus lost | PASS | `wr05-prompt-list` |
+| 34 | Down, Select (stick) | Writing | The chosen prompt, progress, two actions | School uniform: the task, Write / Coached / Revised and saved, "Write it on your phone" lit, "Another prompt" | PASS | `wr06-list-down`, `wr07-chosen` |
+| 35 | Up, Select with no phone joined (stick) | Writing | An ask opens and says why nothing happens | The ask opened ("The phone has it now."); the caption says "No phone is connected. Pair one from the desk. Back cancels." | PASS | `wr08-handoff-open` |
+| 36 | Back, Back (stick) | Writing | Cancel the ask, then the landing on Writing | Ask gone (`ask` null), landing with Writing lit and "Left mid-way: School uniform. Picked. Your paragraph is next." | PASS | `wr09-handoff-cancelled`, `wr10-landing-writing-lit` |
+| 37 | Pair a headless phone (code from the pair screen), Back, Right x3, Select, Select | Writing, Pairing | The same episode, the `writing` ask open for the phone | Joined ("Ema · TV: the paired screen"); the episode resumed at School uniform; session `screen: writing`, ask kind `writing` open | PASS | `wr11-pair-screen`, `phone-360-b-joined`, `wr16-resume-chosen`, `wr17-handoff-phone-joined` |
+| 38 | phone 360 and 414: the write panel | Writing hand-off | The prompt, one text box, a Send, a way out | "Ema · TV: Writing", SCHOOL UNIFORM, the task, a text box, "At least two sentences. The TV shows one note about it.", SEND PARAGRAPH, Cancel in the bar. Overflow 0 px at both widths. Readable (B2's dark-on-dark is not here) | PASS | `wr-phone-360-panel`, `wr-phone-360-typed`, `wr-phone-414-panel`, `wr-phone-414-typed` |
+| 39 | phone: Send paragraph (the coach call) | Writing hand-off | One note on the TV; the save on Revise | NOT WALKED. Stopped before Send on the operator's :3000 so nothing reaches Ema's record. The note and the save are covered by `tools/writing-tv-test.cjs` and the 2026-10-21 dev-server captures | NOT WALKED | none |
+| 40 | Back, Back (stick) | Writing | Cancel the ask, then the landing | `ask` null, then the landing on Writing | PASS | `wr19-ask-cancelled`, `wr20-back-landing` |
+| 41 | Select, Down, Select, Back (stick): Another prompt | Writing | The episode is cleared | The list, then the landing: "Not started" again, as before the walk | PASS | `wr21-another-prompt-list`, `wr22-landing-after-clear` |
+| 42 | Up, Select, Right, Select (stick): Forget every phone | Pairing | The phone is forgotten | "No phone here", a fresh code; Back to the landing; `phonesLive` 0 | PASS | `wr23-forget-focus`, `wr24-after-forget`, `wr25-landing-end` |
 
 ## Findings
 
@@ -85,3 +96,21 @@ Yesterday's [stick walk](STICK-APK-WALK-2026-10-20.md) found every key reaches e
 - **Writing on the stick** (B1): the APK path list, key handling on `/writing`, and a rebuilt APK; or keep Writing a computer or phone page for the demo.
 - **Rebuild :3000** (operator): B2's fix reaches the desk only on `next build`.
 - **The consent** for the Essay read (step 22) is the operator's one tap on the phone.
+
+## Writing on the stick (17:xx)
+
+Run by a headless builder at about 17:04 to 17:10 stick time, rows 32 to 42. The walk was against the operator's :3000 desk, not a temp desk.
+
+- **Which desk.** The :3000 `next start` already serves the Writing stop. `.next/BUILD_ID` is dated 15:30 today, the `/tv` page's chunks contain `case"writing"` and "Write it on your phone" (GET only, no key), and the stick showed the tile. So there was no finding to record about a stale build and no temp desk was needed.
+- **B1 is closed on the device**, as far as the walk goes: landing, Writing, the prompt list, a chosen prompt, the hand-off opened and cancelled, and Back out, all with the remote's keys on the unchanged APK (`StickActivity` still loads /tv). The phone panel reads at 360 and 414 px with no sideways scroll. **What B1 did not get on the device:** the Send, the note on the TV, the revise and the save (row 39). Those are a model call and a write to the real learner's record, so they stop here on :3000. B2's fix is also in this build: the panel text reads.
+- **No fix was needed.** Nothing stopped landing -> Writing -> hand-off -> Back, so no file in `desk/src/` was touched.
+- **Findings (cosmetic, not fixed; the Writing look waits until after 10-23).**
+  - **W1.** With a phone joined, the TV's caption on the hand-off still says "No phone is connected. Pair one from the desk." (`wr17`). The headless page had closed, so `phonesLive` was 0 (the same disagreement as F3). A real phone with its page open should read connected; this walk did not have one.
+  - **W2.** The headless phone panel was walked after the TV ask opened with no phone (row 35) and then re-opened; a phone joined while an ask is open was not tried.
+  - **W3.** Back from the pair screen puts the lamp on Linga, not where the learner came from (`wr13`). Minor.
+  - **W4.** The Writing landing tile shows the empty world under the title (as built, a Writing world is a follow-up).
+- **The desk's state after this walk.**
+  - **:3000** is on the landing, Ema seated, no ask, no phone listed (Forgot every phone), Writing "Not started" (the episode was cleared with Another prompt). Before the walk the session screen was `essaytype` (the earlier walk's); one Back took it to the landing, so that is now the landing.
+  - **Not changed:** no model call, no Send, no finished episode, no record written, nothing under `desk/data/`.
+  - **The stick** is on `10.0.0.141:3000` with `dev.studydesk.stick` in focus (`wr-restore-probe.txt`: probe `10.0.0.141:3000: Answered(viewer=tv)` at 17:09:52, `mCurrentFocus=...dev.studydesk.stick/.StickActivity`). The lock was released.
+- **Tools.** `tools/stick-walk/flow-writing.sh` records the key sequence in order (it was run step by step, not as one script, and is not re-run end to end) and `tools/stick-walk/writing-panel.cjs` takes the two panel captures without pressing Send.
