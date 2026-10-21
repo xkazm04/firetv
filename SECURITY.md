@@ -42,13 +42,15 @@ Out of scope:
 ## Automated guardrails we run
 
 - [x] Dependency scanning: Dependabot version and security updates for every manifest (`.github/dependabot.yml`). They
-  cover the Gradle builds, the npm projects and the GitHub Actions. The resolved Gradle graphs of both Gradle builds
-  are submitted by `.github/workflows/supply-chain.yml`, so alerts see Ktor, Media3 and Compose.
+  cover the Gradle builds, the npm projects and the GitHub Actions. The resolved Gradle graph is not submitted:
+  GitHub's dependency graph is switched off for this repository (the note in `.github/workflows/supply-chain.yml`),
+  and turning it on is the owner's call.
 - [x] Signed, attested build artifacts: the TV APK's build provenance is attested in
   `.github/workflows/supply-chain.yml`. Its CycloneDX SBOM is attested against the same APK in
   `.github/workflows/sbom.yml`. CONTRIBUTING.md, "Verifying a TV APK", shows both checks.
 - [x] Committed secrets: the `secrets.neverCommit` patterns in `.ai/guardrails.yaml` are a hard fail of the doctor on
-  every pull request (`.github/workflows/ai-conformance.yml`). Keys come only from the environment.
+  every pull request (`.github/workflows/conformance-gate.yml`, which judges the doctor through
+  `scripts/doctor-gate.mjs`). Keys come only from the environment.
 - [ ] SAST (CodeQL or Semgrep) on every pull request: not yet.
 - [ ] Secret scanning of history in CI (gitleaks or similar): not yet. The local pre-push hook is the owner's call
   (`.ai/memory/0011-lint-and-prepush-hook-operator-gated.md`).
@@ -66,3 +68,7 @@ in any of these cases:
 - a ticked guardrail cites a file that does not exist;
 - a ticked guardrail is not actually run: an SBOM with no `attest-sbom`, provenance with no `attest-build-provenance`,
   SAST with no CodeQL or Semgrep step, pinning with a ref that still floats.
+- a ticked guardrail is only described in a workflow comment, or claims "every pull request" while the workflow it
+  cites does not run on pull requests;
+- the never-commit patterns miss a secret file AGENTS.md names (`desk/.env.local`, a keystore), checked by running
+  the doctor on a scratch index that tracks them.

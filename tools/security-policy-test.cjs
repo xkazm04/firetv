@@ -33,7 +33,11 @@ function checklist(text){
 }
 /** Repository paths a line cites in backticks. */
 const cited=(text)=>[...text.matchAll(/`([^`\s]+)`/g)].map((m)=>m[1]).filter((p)=>/^(\.github|\.ai|scripts|tools|desk|deathride|tv-app|core|companion)\//.test(p)||/^[A-Z][\w-]*\.md$/.test(p));
-const workflows=()=>fs.readdirSync(path.join(REPO,'.github','workflows')).filter((f)=>/\.ya?ml$/.test(f)).map((f)=>({f,text:read('.github','workflows',f)}));
+/** A workflow's YAML with its comments removed: a step a comment describes (or one that was unwired) runs nothing. */
+const code=(yaml)=>yaml.split(/\r?\n/).filter((l)=>!/^\s*#/.test(l)).map((l)=>l.replace(/\s+#\s.*$/,'')).join('\n');
+const workflows=()=>fs.readdirSync(path.join(REPO,'.github','workflows')).filter((f)=>/\.ya?ml$/.test(f)).map((f)=>({f,text:code(read('.github','workflows',f))}));
+/** The events a workflow's `on:` block names. */
+const triggersOf=(text)=>{const m=/^on:\s*\n((?:[ \t]+.*\n?)*)/m.exec(text);return m?[...m[1].matchAll(/^ {2}(\w+):/gm)].map((x)=>x[1]):[];};
 const anyWorkflow=(re)=>workflows().some((w)=>re.test(w.text));
 
 test('case 1: no template placeholder is left',()=>{
@@ -67,6 +71,11 @@ test('case 4: a ticked claim is one a workflow actually makes',()=>{
  if(ticked(/provenance/i))assert.ok(anyWorkflow(/actions\/attest-build-provenance@/),'provenance is ticked but no workflow attests it');
  if(ticked(/\bSAST\b|CodeQL|Semgrep/))assert.ok(anyWorkflow(/github\/codeql-action|semgrep/i),'SAST is ticked but no workflow runs CodeQL or Semgrep');
  if(ticked(/gitleaks|trufflehog|secret scanning of history/i))assert.ok(anyWorkflow(/gitleaks|trufflehog/i),'history secret scanning is ticked but no workflow runs it');
+ if(ticked(/graphs?\b[^.]{0,60}\b(?:are|is) submitted|dependency-submission/i))assert.ok(anyWorkflow(/dependency-submission@/),'a submitted dependency graph is ticked but no workflow runs dependency-submission');
+ for(const i of items.filter((x)=>x.ticked&&/every pull request/i.test(x.text))){
+  const cites=cited(i.text).filter((p)=>p.startsWith('.github/workflows/'));
+  assert.ok(cites.some((p)=>has(p)&&triggersOf(code(read(p))).includes('pull_request')),`"${i.text.slice(0,70)}" claims every pull request, but none of ${cites.join(', ')||'(no workflow cited)'} runs on pull_request`);
+ }
  if(ticked(/\bDependabot\b/))assert.ok(has('.github/dependabot.yml'),'Dependabot is ticked but .github/dependabot.yml is missing');
  if(ticked(/pinned/i)){
   const floating=workflows().flatMap((w)=>[...w.text.matchAll(/^\s*-?\s*uses:\s*[\w.-]+\/[\w.-]+(?:\/[^@\s]+)?@([^\s#]+)/gm)].filter((m)=>!/^[0-9a-f]{40}$/.test(m[1])).map((m)=>`${w.f}: ${m[0].trim()}`));
