@@ -72,8 +72,11 @@ test('a missing file exits 1 and the suite after it still ran', () => {
   assert.match(tableLine(r.out, rel('m-after.cjs')), /green/);
 });
 
+// The bound applies to every suite in the list, so it must clear a green suite's start on a loaded machine: t-after
+// took 1705 ms under four agents on 2026-10-21 and was killed at 1500. It spends 2 s before its test; the bound is 8 s.
+const LATE_GREEN = `{const t=Date.now();while(Date.now()-t<2000);}${GREEN}`;
 test('a suite past RULES_SUITE_TIMEOUT_MS is killed and is red', () => {
-  const r = run([write('t-slow.cjs', SLOW), write('t-after.cjs', GREEN)], { RULES_SUITE_TIMEOUT_MS: '1500' });
+  const r = run([write('t-slow.cjs', SLOW), write('t-after.cjs', LATE_GREEN)], { RULES_SUITE_TIMEOUT_MS: '8000' });
   assert.equal(r.code, 1);
   assert.match(tableLine(r.out, rel('t-slow.cjs')), /RED.*timeout/);
   assert.match(tableLine(r.out, rel('t-after.cjs')), /green/);
