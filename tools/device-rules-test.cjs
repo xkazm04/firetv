@@ -257,3 +257,18 @@ test('device.mjs countInk: one classifier on a synthetic frame; no tool keeps it
     assert.doesNotMatch(src, /function countInk|const isInk|const INK|function tvScreenshot/, `${t}.mjs keeps its own pixel classifier or capture`);
   }
 });
+
+// The companion's offline suite (tools/companion-refusal-test.mjs: a real browser and a fake TV, no device) pins the
+// page's refusal, reconnect, multi-touch, rate and scrub behaviour, and nothing ran it: no npm script, no dev.ps1 stage,
+// no workflow. dev.ps1's unit stage now runs it beside :core:test, judged by its exit code, and tools/ names it.
+test('the companion suite has a runner: a tools/ npm script and dev.ps1\'s unit stage, judged by exit code', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'));
+  assert.ok(Object.values(pkg.scripts || {}).some((s) => /companion-refusal-test\.mjs/.test(s)), 'no tools/ npm script runs companion-refusal-test.mjs');
+  const ps = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'dev.ps1'), 'utf8')
+    .replace(/<#[\s\S]*?#>/g, '').replace(/(^|\s)#.*$/gm, '$1');
+  const unit = (/if \(& \$run 'unit'\) \{([\s\S]*?)\n\}/.exec(ps) || [])[1] || '';
+  assert.ok(unit, 'dev.ps1 has no unit stage');
+  const at = unit.indexOf('companion-refusal-test.mjs');
+  assert.ok(at >= 0, 'dev.ps1\'s unit stage does not run companion-refusal-test.mjs');
+  assert.match(unit.slice(at), /\$LASTEXITCODE/, 'dev.ps1 runs the companion suite without judging its exit code');
+});
