@@ -1,0 +1,31 @@
+{
+  "id": "96ccc189-91f5-4310-abc2-2983a2310232",
+  "ts": "2026-10-21T10:38:23.341Z",
+  "session": "desk-a1-music",
+  "status": "complete",
+  "kind": "music",
+  "out": "desk/audio/audition/music/break.mp3",
+  "seconds": 20,
+  "request": {
+    "prompt": "Relaxing instrumental loop for a short study break. Soft Rhodes electric piano, gentle vinyl warmth, mellow lo-fi brushed beat, 70 BPM, cosy and unhurried. Seamless loop, no vocals, no sudden changes.",
+    "music_length_ms": 20000,
+    "force_instrumental": true,
+    "model_id": "music_v1"
+  },
+  "endpoint": "/v1/music",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 1200,
+  "budgetCharge": 1200,
+  "creditsBefore": 134157,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 6000,
+  "bytes": 321036,
+  "providerCredits": null,
+  "sha256": "0edd4dc5becf3f58342dc5106ac93ae769969b7362a172becc5d90358c6bb07d",
+  "completedAt": "2026-10-21T10:38:37.211Z",
+  "creditsAfter": 133057,
+  "observedAccountDelta": 1100,
+  "spendBasis": "Account delta may include concurrent use or omit delayed billing; conservative estimate retained.",
+  "sessionBudgetUsed": 6000
+}

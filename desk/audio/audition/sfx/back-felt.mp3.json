@@ -1,0 +1,32 @@
+{
+  "id": "fde9e532-a804-46e2-a451-37055aec0db6",
+  "ts": "2026-10-21T10:34:20.271Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/back-felt.mp3",
+  "seconds": 0.5,
+  "request": {
+    "text": "UI sound effect, felt piano and soft analog synth pad, round, intimate: a short, soft downward two-note tap for going back; lower and calmer than the confirm. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 0.5,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134421,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 8820,
+  "providerCredits": 6,
+  "sha256": "c0e221c70dbe467a6d4ca4cff85053b07f615bdf06a4e1bc891058f6aa833192",
+  "completedAt": "2026-10-21T10:34:25.508Z",
+  "creditsAfter": 134421,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 900
+}

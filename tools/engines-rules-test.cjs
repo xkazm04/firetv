@@ -462,7 +462,9 @@ test('sweep case 2: findBinary finds what a spawn without a shell would start: o
   fs.writeFileSync(path.join(dir,'deskshim'),'#!/bin/sh\necho hi\n');
   fs.writeFileSync(path.join(dir,'deskreal.exe'),'');
   process.env.PATH=dir;if(priorW!==undefined)process.env.Path=dir;
-  assert.equal(findBinary('deskreal'),path.join(dir,'deskreal.exe'),'a bare name finds its .exe');
+  // Only Windows appends .exe to a bare name; elsewhere a spawn starts exactly the name it is given.
+  if(process.platform==='win32')assert.equal(findBinary('deskreal'),path.join(dir,'deskreal.exe'),'a bare name finds its .exe');
+  else assert.equal(findBinary('deskreal'),null,'off Windows a bare name does not find name.exe');
   assert.equal(findBinary('deskreal.exe'),path.join(dir,'deskreal.exe'),'a name with its extension is found as it is');
   if(process.platform==='win32')assert.equal(findBinary('deskshim'),null,'spawn("deskshim") is ENOENT on Windows, so the probe must not say installed');
   else assert.equal(findBinary('deskshim'),path.join(dir,'deskshim'));
