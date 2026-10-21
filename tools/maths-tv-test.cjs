@@ -1455,3 +1455,9 @@ test('second 5: Tonight\'s Marked card draws a held second go as the sheet does 
  assert.equal((tally(fixed).match(/class="held"/g)??[]).length,1,'the held item\'s mark is the one that carries the tick');
  assert.match(cssSrc(),/\.tally \.held svg \+ svg \{[^}]*position: absolute/,'the tick is drawn over the mark, so the tally keeps its width');
 });
+
+test('leaf: Math Buddy\'s television does not load the On Air screens module (it takes day from tv/day, as screens itself does)',()=>{
+ const tv=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:])\/\/.*$/gm,'$1');
+ assert.doesNotMatch(tv,/from\s+"@\/tv\/screens"/,'MathsTV imports nothing from tv/screens (162 modules and qrcode to load it, 86 without)');
+ assert.match(tv,/import \{ day \} from "@\/tv\/day"/);
+});

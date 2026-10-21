@@ -30,7 +30,7 @@ import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } fr
 import { systemOf } from "@/tv/profileRows";
 import { leftOutLine, lostLabel, offCountLine, offSummary, paperCaption, paperNone, paperTypeAt, paperView, paperWindow, scoreLine, beyondFlag } from "@/tv/paperRows";
 import { fmt } from "@/tv/useSession";
-import { day } from "@/tv/screens";
+import { day } from "@/tv/day";
 import { missingLine } from "@/tv/pageLines";
 import { failedReadLine, markedLine } from "@/tv/pageLines";
 import { MathsMark as Mark } from "@/tv/marks";
