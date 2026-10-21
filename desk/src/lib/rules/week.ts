@@ -10,7 +10,7 @@
  *      (three at most, then "and N more"), the last set's count right and, when above 0, not sure (MB5-8); a step up in
  *      words; the practice papers typed in;
  *   c. one thing to look at: the week's most frequent code-detected slip, by its plain name, only when it came twice;
- *   d. Linga: how many conversations, and the situations' names (authored scene names, or a plan topic's own title);
+ *   d. Linga: how many conversations (a take finished with no reply is none, and no evening), and the situations' names (authored scene names, or a plan topic's own title);
  *      and, when a taught phrase came back this week (english/review.ts set its reusedAt inside the window), that one
  *      phrase: the taught `better` of the latest reused item - never the slip it corrected (`said`) and never the
  *      learner's reply (`reusedQuote`) - kept off a page whose desk has adult content off when it came from an adult
@@ -211,7 +211,8 @@ export type SundayProfile = Pick<Profile, "name"> & Partial<Pick<Profile, "age" 
 /** The week's rows from this learner's own digest. Deterministic: the same learner, profile and `now` give the same page. */
 export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile: SundayProfile | null | undefined, now: number): SundayPage {
   const from = weekStart(now);
-  const week = (learner.digest ?? []).filter((e: DigestEntry) => e.at >= from && e.at <= now);
+  // a Linga take finished with no reply is not a conversation (every other kind is on file only with a count above 0)
+  const week = (learner.digest ?? []).filter((e: DigestEntry) => e.at >= from && e.at <= now && !(e.kind === "english" && e.turns === 0));
   const name = profile?.name?.trim() || "Your learner";
   const page: SundayPage = { name, empty: !week.length, evenings: new Set(week.map((e) => dayKey(e.at))).size, units: [], stepUps: [], homework: null, papers: 0, slip: null, english: null, essay: null, tryIt: null };
   if (page.empty) return page;

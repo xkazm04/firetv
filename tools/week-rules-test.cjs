@@ -538,3 +538,16 @@ test('S3: a taught phrase reused this week is named on the Linga and English try
  assert.deepEqual(D.cleanDigest([dirty]),[{at:dirty.at,kind:'english',sceneId:'meet',skill:'contact',turns:6}]);
  assert.equal(calls,0,'no model');
 });
+
+// ------------------------------------------------------------------ a take with no reply is not a conversation (every other kind needs a count above 0)
+test('no-reply take: a Linga take finished with no reply is not a conversation or an evening on the page; beside a real one it is not counted',()=>{
+ assert.deepEqual(words([E(24,18,'teacher','repair',0)]),[{section:'week',text:'Nothing this week.'}],'alone: the empty week');
+ const both=texts(words([E(24,18,'teacher','repair',0),E(25,18,'meet','contact',3)]));
+ assert.equal(both[0],'Mia worked on one evening.');
+ assert.deepEqual(lingaOf(words([E(24,18,'teacher','repair',0),E(25,18,'meet','contact',3)])),['One conversation: The first hello.']);
+ assert.ok(!both.some((t)=>/Say that again/.test(t)),'the scene with no reply is not named');
+ // a phrase that came back is still said only beside a conversation that had replies
+ assert.ok(!words({digest:[E(24,18,'teacher','repair',0)],english:{plan:null,taught:[T('nr','meet','tomatoes are',25)]}}).some((l)=>/tomatoes/.test(l.text)));
+ // the digest keeps the entry as written: the page reads past it
+ assert.equal(D.cleanDigest([E(24,18,'teacher','repair',0)]).length,1);
+});
