@@ -120,6 +120,9 @@ Run each gate in its own invocation, `&&`-chained, with the output redirected to
 - Pathspec only: `git commit -q -F <msgfile> -- <path> <path>`. For a NEW file: `git add <file>` first, then the
   same pathspec commit. Never `git add -A` / `.` / `-u`, never `git stash`, `git reset`, `git checkout --` on any file
   you did not write in this round. Before each commit, `git diff --cached --name-only` must list only your files.
+- NEVER `git commit --amend`, `rebase`, `reset` or `update-ref` here: another agent may have committed on top of
+  you, and an amend rewrites their commit under your message. A wrong figure in a body is corrected in the findings
+  file and your reply, not in history.
 - Message: `fix(<context>): <finding title>`. The body names the lens and gives Before -> After, re-measured, plus
   the gates you ran with their exit codes. End with exactly:
   `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`
