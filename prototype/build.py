@@ -27,6 +27,11 @@ def write(path, out):
 
 
 raw = open(os.path.join(here, "data.json"), encoding="utf-8").read()
+# The On Air page needs the maths sample photo: looked up before anything is written, so a data.json without it stops
+# the build with its reason and leaves no half-built pair of outputs.
+math = next((p for p in json.loads(raw)["pages"] if p.get("id") == "math"), None)
+if not math or not math.get("img"):
+    raise SystemExit('build: data.json has no page with id "math" and an img; on-air.html shows that photo')
 
 # The click-through: the whole data set as one script literal.
 src = open(os.path.join(here, "src", "index.html"), encoding="utf-8").read()
@@ -35,6 +40,5 @@ src = open(os.path.join(here, "src", "index.html"), encoding="utf-8").read()
 write(os.path.join(here, "study-desk.html"), src.replace("/*__DATA__*/null", re.sub(r"</(script)", r"<\/\1", raw, flags=re.I)))
 
 # The On Air identity: page 2's "read as" panel shows the maths sample photo (data.json pages, id "math").
-math = next(p for p in json.loads(raw)["pages"] if p["id"] == "math")
 src = open(os.path.join(here, "identity", "on-air.src.html"), encoding="utf-8").read()
 write(os.path.join(here, "identity", "on-air.html"), src.replace("__MATH_IMG__", math["img"]))
