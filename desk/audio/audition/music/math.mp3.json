@@ -1,0 +1,31 @@
+{
+  "id": "a1700c3e-eeaa-4ae0-beb7-df6dfbbcb1d1",
+  "ts": "2026-10-21T10:37:58.731Z",
+  "session": "desk-a1-music",
+  "status": "complete",
+  "kind": "music",
+  "out": "desk/audio/audition/music/math.mp3",
+  "seconds": 20,
+  "request": {
+    "prompt": "Focused, calm instrumental loop for a maths practice app. Soft plucked synth arpeggio, warm pad, sparse glassy bells, 72 BPM, steady and patient, clear and uncluttered. Seamless loop, no vocals, no drums, no tension.",
+    "music_length_ms": 20000,
+    "force_instrumental": true,
+    "model_id": "music_v1"
+  },
+  "endpoint": "/v1/music",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 1200,
+  "budgetCharge": 1200,
+  "creditsBefore": 134157,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 6000,
+  "bytes": 321036,
+  "providerCredits": null,
+  "sha256": "84c09a8c4e9e433f1442ebb2b5221ea0e85d81c41e1c6c54b00ad54d04806172",
+  "completedAt": "2026-10-21T10:38:05.202Z",
+  "creditsAfter": 134157,
+  "observedAccountDelta": 0,
+  "spendBasis": "Account delta may include concurrent use or omit delayed billing; conservative estimate retained.",
+  "sessionBudgetUsed": 3600
+}
