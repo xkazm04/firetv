@@ -19,7 +19,7 @@ import { DESK_FONTS } from "@/landing/fonts";
 import { Defs } from "./shapes";
 import { HouseMark, Icon, PhoneGlyph, PostcardArt } from "./glyphs";
 import { Stamp } from "./stamps";
-import { worldFor, type Layer } from "./worlds";
+import { skyBackdrop, worldFor, type Layer } from "./worlds";
 import { afterFonts } from "@/lib/afterFonts";
 
 /** Each app's colours (its own deep, its shadow, its highlight, the letters' extrusion, the motes' glow). */
@@ -38,7 +38,7 @@ function WorldSet({ layers, back, mode, dir }: { layers: Layer[]; back: boolean;
     <div className="pp-wset" data-mode={mode} style={{ "--dir": dir } as CSSProperties}>
       {layers.map((l, i) => l.back === back && (
         <div key={i} className="pp-layer" data-k={l.k} style={{ "--d": l.d, "--i": i } as CSSProperties}>
-          <svg viewBox="-140 0 2200 1080" width="2200" height="1080" aria-hidden="true">{l.node}</svg>
+          <svg viewBox="-140 0 2200 1080" width="2200" height="1080" aria-hidden="true"><g className="pp-cast">{l.node}</g></svg>
         </div>
       ))}
     </div>
@@ -103,20 +103,28 @@ function Motes({ glow }: { glow: string }) {
   return <canvas ref={cv} className="pp-fx" width={960} height={540} aria-hidden="true" />;
 }
 
-/** Paper grain and a soft vignette: one 160 px tile, deterministic. */
+/**
+ * Paper grain and a soft vignette: one 160 px tile, deterministic. The tile is made once per page load: on the stick,
+ * reading a canvas back into a data URL held the main thread ~40 ms each time the landing came back from an app.
+ */
+let grainTile: string | null = null;
 function Grain() {
   const el = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const c = document.createElement("canvas"); c.width = c.height = 160;
-    const x = c.getContext("2d"); if (!x || !el.current) return;
-    const d = x.createImageData(160, 160);
-    let r = 7; const rnd = () => { r = (r * 16807) % 2147483647; return r / 2147483647; };
-    for (let i = 0; i < d.data.length; i += 4) {
-      const dark = rnd() < 0.5;
-      d.data[i] = dark ? 40 : 255; d.data[i + 1] = dark ? 25 : 250; d.data[i + 2] = dark ? 12 : 235; d.data[i + 3] = rnd() * 15;
+    if (!el.current) return;
+    if (!grainTile) {
+      const c = document.createElement("canvas"); c.width = c.height = 160;
+      const x = c.getContext("2d"); if (!x) return;
+      const d = x.createImageData(160, 160);
+      let r = 7; const rnd = () => { r = (r * 16807) % 2147483647; return r / 2147483647; };
+      for (let i = 0; i < d.data.length; i += 4) {
+        const dark = rnd() < 0.5;
+        d.data[i] = dark ? 40 : 255; d.data[i + 1] = dark ? 25 : 250; d.data[i + 2] = dark ? 12 : 235; d.data[i + 3] = rnd() * 15;
+      }
+      x.putImageData(d, 0, 0);
+      grainTile = c.toDataURL();
     }
-    x.putImageData(d, 0, 0);
-    el.current.style.backgroundImage = `url(${c.toDataURL()}),radial-gradient(ellipse at 50% 46%,rgba(0,0,0,0) 56%,rgba(45,25,12,.26) 100%)`;
+    el.current.style.backgroundImage = `url(${grainTile}),radial-gradient(ellipse at 50% 46%,rgba(0,0,0,0) 56%,rgba(45,25,12,.26) 100%)`;
   }, []);
   return <div ref={el} className="pp-grain" aria-hidden="true" />;
 }
@@ -230,11 +238,12 @@ function Intro() {
 
 export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
   const { world, apps, at } = view, unpaired = !view.phone.paired;
-  // the world that is leaving slides out while the new one slides in
-  const [st, setSt] = useState<{ world: Subject | null; prev: { id: Subject; dir: number } | null; seq: number }>({ world, prev: null, seq: 0 });
+  // the world that is leaving slides out while the new one slides in. The move's direction is kept after the leaving
+  // world goes: read from it, the lit world turned "fade" 0.72 s after each move and played its rise a second time
+  const [st, setSt] = useState<{ world: Subject | null; prev: { id: Subject; dir: number } | null; dir: number; seq: number }>({ world, prev: null, dir: 0, seq: 0 });
   if (st.world !== world) {
     const ids = apps.map((a) => a.id), was = st.world, dir = was && world && ids.includes(was) ? (ids.indexOf(world) > ids.indexOf(was) ? 1 : -1) : 0;
-    setSt({ world, prev: was && ids.includes(was) ? { id: was, dir } : null, seq: st.seq + 1 });
+    setSt({ world, prev: was && ids.includes(was) ? { id: was, dir } : null, dir, seq: st.seq + 1 });
   }
   useEffect(() => {
     if (!st.prev) return;
@@ -246,7 +255,7 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
   const artKey = JSON.stringify([art(st.world), st.prev && art(st.prev.id)]);
   const cur = useMemo(() => worldFor(art(st.world)), [st.world, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const old = useMemo(() => (st.prev ? worldFor(art(st.prev.id)) : null), [st.prev, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  const first = st.seq === 0, dir = st.prev?.dir ?? 0;
+  const first = st.seq === 0, dir = st.dir;
   const mode = first ? (boot ? "arrive" : "none") : dir ? "choose" : "fade";
 
   const held = zoom === "place" || zoom === "phone" ? "house" : world ?? "house";
@@ -257,6 +266,9 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
   return (
     <div className={`desk-tv pp ${DESK_FONTS}`} data-role="desk-scene" data-theme="paper" data-lit={at} data-boot={boot || undefined} data-unpaired={unpaired || undefined} data-empty={view.empty || undefined} data-zoom={zoom ? "true" : undefined} style={theme}>
       <Defs />
+      {/* the world's sky under everything: until the GPU has rastered a world's layers (or the arrival's reveal has
+          reached them), the stage shows that sky, not the bare paper */}
+      <div className="pp-sky" aria-hidden="true" style={{ background: skyBackdrop(st.world ?? "maths") }} />
       {boot && <Intro />}
       <div className="pp-worlds">
         <div className="pp-host pp-back">

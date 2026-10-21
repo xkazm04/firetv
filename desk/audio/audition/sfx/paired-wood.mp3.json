@@ -1,0 +1,32 @@
+{
+  "id": "2f5f9db8-b730-48ef-b6e1-d43f42ed3d76",
+  "ts": "2026-10-21T10:34:33.778Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/paired-wood.mp3",
+  "seconds": 1.2,
+  "request": {
+    "text": "UI sound effect, soft wooden marimba and felt mallet, warm, dry room: a friendly rising three-note welcome when a phone connects to the TV; warm, unhurried. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134367,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 20105,
+  "providerCredits": 13,
+  "sha256": "9dbe2c6868e28c51b93598a08cd87ec1510b34a06cfad2a44dbdce6c7c7a7cfb",
+  "completedAt": "2026-10-21T10:34:39.046Z",
+  "creditsAfter": 134367,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1000
+}

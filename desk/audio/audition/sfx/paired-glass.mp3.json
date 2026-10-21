@@ -1,0 +1,32 @@
+{
+  "id": "6cf62b64-a2d5-478d-a6b1-bf8ce9ee4f07",
+  "ts": "2026-10-21T10:34:47.104Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/paired-glass.mp3",
+  "seconds": 1.2,
+  "request": {
+    "text": "UI sound effect, small glass bell and celesta, airy, light reverb: a friendly rising three-note welcome when a phone connects to the TV; warm, unhurried. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134367,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 20105,
+  "providerCredits": 13,
+  "sha256": "265cf17986f17f978b8d308e288078ff4fdc0fd6941bd327a1937f9b911feb60",
+  "completedAt": "2026-10-21T10:34:50.608Z",
+  "creditsAfter": 134367,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1100
+}
