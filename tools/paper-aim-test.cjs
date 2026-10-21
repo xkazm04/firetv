@@ -453,3 +453,19 @@ test('draft 2 (the phone\'s send rule): a refused Paper send says the desk\'s ow
  assert.equal(await said(json({paper:kept,status:''})),'','a kept paper says nothing more: the TV shows it');
  assert.equal(await said(json({paper:null,status:'The desk kept no question from that paper.'})),'','a paper the desk answered is the session\'s status to say');
 });
+
+test('draft 3 (registry draft-editing / draft-model: clean is decided against what was sent): rows edited while the send was in flight are kept',async()=>{
+ const {sendPaper}=require(src('app/phone/PaperPanel.tsx'));
+ const {addPaper}=require(src('lib/session/learners.ts'));
+ const {rawOf}=require(src('lib/rules/paperEntry.ts'));
+ const rows=[{q:'1',marks:'2',outOf:'3',codes:[]}];
+ const kept=addPaper('scratch-draft-3',rawOf(rows));
+ const ok=async()=>new Response(JSON.stringify({paper:kept,status:''}),{status:200,headers:{'Content-Type':'application/json'}});
+ // the learner typed a second question while the first paper was on its way: that row is not the sent paper's, so nothing is cleared
+ const moved=[...rows,{q:'2',marks:'',outOf:'',codes:[]}],sets=[];
+ await sendPaper(rows,ok,(r)=>sets.push(r),'ask-3',()=>moved);
+ assert.deepEqual(sets,[],'a draft that moved during the send is not cleared');
+ // the rows as sent are still the draft: cleared
+ await sendPaper(rows,ok,(r)=>sets.push(r),'ask-3',()=>rows.map((r)=>({...r,codes:[...r.codes]})));
+ assert.equal(sets.length,1,'an unchanged draft is cleared');
+});
