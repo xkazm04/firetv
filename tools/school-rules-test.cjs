@@ -1574,8 +1574,8 @@ const B3_BAD={
   [ra('60 in 2:3','parsec'),'unit is not'],
  ],
  'unit-rate':[
-  [rt('1 pens cost 3.50, 8','€'),'already gives'],[rt('5 pens cost 3.50, 5','€'),'same number'],[rt('5 pens cost 3.50, 8','km'),'euros or pounds'],[rt('240 km in 3 h, 5','€'),'euros or pounds'],
-  [{shape:'rate',expr:'5 pens cost 3.50, 8'},'euros or pounds'],[rt('5 pens cost 3.5, 8','€'),'cannot read'],[rt('5 sweets cost 3.50, 8','€'),'cannot read'],[rt('3 pens cost 1, 1','€'),'two decimal places'],
+  [rt('1 pens cost 3.50, 8','€'),'already gives'],[rt('5 pens cost 3.50, 5','€'),'same number'],[rt('5 pens cost 3.50, 8','km'),'euros, pounds or crowns'],[rt('240 km in 3 h, 5','€'),'euros, pounds or crowns'],
+  [{shape:'rate',expr:'5 pens cost 3.50, 8'},'euros, pounds or crowns'],[rt('5 pens cost 3.5, 8','€'),'cannot read'],[rt('5 sweets cost 3.50, 8','€'),'cannot read'],[rt('3 pens cost 1, 1','€'),'two decimal places'],
   [rt('4 pens cost 8, 2','€'),'print its own answer'],[rt('5 pens cost 0, 8','€'),'zero'],[rt('5 pens cost 2000, 8','€'),'larger'],[rt('240 km in 3 hours, 5','km'),'cannot read'],
   [{...RC1,answer:'5.60'},'no answer field'],[{...RC1,form:'decimal'},'does not take'],[rt('5 pens cost 3.50, 8','parsec'),'unit is not'],
  ],
@@ -2171,4 +2171,9 @@ test('optimize 2026-10-21: school.ts and kinds.ts ask taskText commaSystem which
  for (const f of ['school.ts','kinds.ts']) assert.ok(!copy.test(strip(fs.readFileSync(path.join(root,'src/lib/rules',f),'utf8'))),`${f} names the comma systems itself`);
  // and the behaviour is the one rule's: cz and de read a lone decimal comma, uk and us do not
  assert.equal(S.workedAnswer(cs('4.35 + 2.8'),'cz'),'7,15');assert.equal(S.workedAnswer(cs('4.35 + 2.8'),'uk'),'7.15');
+});
+test('optimize 2026-10-21: a rate cost in crowns is well formed, and the reason a cost unit is refused names every currency it takes',()=>{
+ assert.deepEqual(S.wellFormed({shape:'rate',expr:'5 pens cost 3.50, 8',unit:'Kč'}),{ok:true});
+ const why=S.wellFormed({shape:'rate',expr:'5 pens cost 3.50, 8',unit:'$'}).why;
+ assert.match(why,/euros, pounds or crowns/);assert.doesNotMatch(why,/euros or pounds/);
 });

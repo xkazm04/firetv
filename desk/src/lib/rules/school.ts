@@ -582,7 +582,7 @@ const REJECT = {
   notWholeRatio: "No whole number makes the two ratios equal.",
   rateOne: "The question already gives the value of a single one: there is nothing to find.",
   sameRate: "The question asks about the same number it gives: there is nothing to work out.",
-  rateUnit: "A cost is in euros or pounds and a distance in km, and the spec names the one it is.",
+  rateUnit: "A cost is in euros, pounds or crowns and a distance in km, and the spec names the one it is.",
   areaUnit: "An area names its square unit, cm2 or m2.",
   sameList: "Every number in the list is the same: there is nothing to work out.",
   pythUnit: "A side is in mm, cm or metres, and the spec names which.",
@@ -673,7 +673,6 @@ const AREA_RES: [RegExp, "rectangle" | "triangle" | "composite"][] = [
   [new RegExp(String.raw`^triangle base ${SIDE_SRC} height ${SIDE_SRC}$`), "triangle"],
   [new RegExp(String.raw`^rectangles ${SIDE_SRC} by ${SIDE_SRC} and ${SIDE_SRC} by ${SIDE_SRC}$`), "composite"],
 ];
-/** W7 batch 3: "mean 4, 7, 9, 10" or "range 12, 5, 9, 20, 7": three to ten whole numbers, a comma and a space between. */
 /** M2b: the colours a bag holds, closed so a spec never carries free text. */
 export const PROB_COLOURS = ["red", "blue", "green", "yellow", "white", "black", "orange", "purple", "pink"] as const;
 const COL = `(?:${PROB_COLOURS.join("|")})`;
@@ -682,6 +681,7 @@ const PROB_BAG_RE = new RegExp(String.raw`^bag (${COL} [1-9]\d?(?:, ${COL} [1-9]
 const PROB_COMP_RE = new RegExp(String.raw`^complement (${COL}) (0\.(?:[1-9]\d?|0[1-9])|[1-9]\d?%)$`);
 /** M2b: "longest 6 8" (the shorter sides given) or "shorter 10 6" (the longest and a shorter side given): sides of up to three digits. */
 const PYTH_RE = /^(longest|shorter) ([1-9]\d{0,2}) ([1-9]\d{0,2})$/;
+/** W7 batch 3: "mean 4, 7, 9, 10" or "range 12, 5, 9, 20, 7": three to ten whole numbers, a comma and a space between. */
 const STAT_RE = /^(mean|range) ((?:0|[1-9]\d{0,2})(?:, (?:0|[1-9]\d{0,2})){2,9})$/;
 const sideQ = (x: string): Q => { const [w, f = ""] = x.split("."); return mk(BigInt(w + f), pow10(f.length))!; };
 const fracNode = (n: bigint, d: bigint): Node => ({ k: "frac", n, d });
@@ -1296,10 +1296,17 @@ const specUnit = (s: SchoolSpec): Unit | undefined => (s.shape === "compute" || 
  * (a top at most 1000, a bottom 2 to 100) and not the given one's own; `simplify` "a/b", proper and not yet in lowest
  * terms; none of them takes a form or a sign flag. W7 batch 3: `ratio` "12:18" not in lowest terms, "T in a:b" with a:b in
  * lowest terms, a ≠ b, whole shares neither printed, or "a:b = ?:k" / "a:b = k:?" with a whole missing term the question
- * does not print; numbers at most 1000. `rate` "q1 noun cost p, q2" (€ or £) or "D km in h1 h, q2" (km): q1 at least 2,
+ * does not print; numbers at most 1000. `rate` "q1 noun cost p, q2" (€, £ or Kč) or "D km in h1 h, q2" (km): q1 at least 2,
  * q2 not q1, a value to two places at most that the question does not print. `area` a rectangle, a triangle (base and
  * height) or two rectangles, sides whole or a half above nothing, `unit` cm2 or m2. `stat` a mean or range of three to ten
- * whole numbers 0..999, not all the same, a mean to two places at most.
+ * whole numbers 0..999, not all the same, a mean to two places at most. W7 batch 2: `convert` a terminating fraction in
+ * lowest terms, decimal or percent, never whole, asked in another form (`to`); `percent-of` "p% of N" and `percent-change`
+ * "increase/decrease B by p%", the value to two places at most and not a number the question prints. v2 M2b:
+ * `pythagoras` "longest x y" / "shorter x y", whole sides at most 100 and a whole missing side, `unit` mm, cm or m;
+ * `probability` a bag of two to four colours (at most 20 counters) or a stated probability's complement, strictly between
+ * 0 and 1. MB-B20 top rungs (a story's id first where it is one): a compute on mixed numbers, a reverse percentage, two
+ * changes or a change over years, a Pythagoras side rounded to 1 or 2 places, and two events. Each shape's own rules and
+ * reasons are in `readKind` and REJECT.
  */
 export function wellFormed(spec: unknown): { ok: true } | { ok: false; why: string } {
   try {
@@ -1597,8 +1604,8 @@ function printQuestion(spec: unknown, system?: SchoolSystem): { plain: string; t
 
 // ------------------------------------------------------------------ the slips a closed form can detect
 
-/** `name` is the slip's title, `says` the desk's line, `points` where to look: none carries a value. */
 /**
+ * `name` is the slip's title, `says` the desk's line, `points` where to look: none carries a value.
  * `short`: the slip's label under the TV recap's ring (tv/recapRows `slippedOf`) - lowercase, at most four words, no value,
  * a faithful compression of `name`; every slip carries one (cycle 21; the linear and Calculus tables too), and no two slips a
  * unit can name (SCHOOL_UNIT_SLIPS with its SCHOOL_TOP_SLIPS) share one. English only, like the titles.
@@ -4465,7 +4472,10 @@ export const specFromQuestion = (text: unknown, system?: SchoolSystem): SchoolSp
  * fractions, a product or quotient of two fractions multiply and divide fractions (W7), a fraction of an amount its own
  * unit, a missing number or a simplify equivalent fractions; two numbers with a decimal among them added, subtracted or
  * multiplied the decimals unit (W7 batch 2); any `ratio` spec "Ratio and sharing", any `rate` spec "Unit rates and direct
- * proportion", any `area` spec its unit, any `stat` spec "Mean and range" (W7 batch 3).
+ * proportion", any `area` spec its unit, any `stat` spec "Mean and range" (W7 batch 3); any `convert` spec "dec-convert",
+ * `percent-of` "pct-of-amount", `percent-change` (its top rung too) "pct-change" (W7 batch 2); any `pythagoras` spec
+ * (its top rung too) "pythagoras" and any `probability` spec (two events too) "probability" (v2 M2b, MB-B20). The
+ * `compute` and `fraction-of` cases are as above, a mixed number counting as a fraction (MB-B20).
  */
 export function unitOf(spec: unknown): string | null {
   try {
