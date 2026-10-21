@@ -105,6 +105,32 @@ const enFrac = (w: string): number | null => own(EN_ORD, w) ? EN_ORD[w] : w === 
 export function figuresOfEnglish(line: string): string {
   const toks = [...line.matchAll(/\d+|\p{L}+/gu)].map((m) => ({ w: m[0].toLowerCase(), s: m.index ?? 0, e: (m.index ?? 0) + m[0].length }));
   const near = (i: number) => i >= 0 && i + 1 < toks.length && /^[\s-]+$/.test(line.slice(toks[i].e, toks[i + 1].s));
+  type C = { n: number; j: number };
+  /** A cardinal below a hundred at token i: 'seven', 'forty-five', 'forty five'. */
+  const below100 = (i: number): C | null => {
+    const n = i < toks.length ? enNum(toks[i].w) : null;
+    if (n === null) return null;
+    if (n >= 20 && n % 10 === 0 && near(i)) { const u = enNum(toks[i + 1].w); if (u !== null && u >= 1 && u <= 9) return { n: n + u, j: i + 2 }; }
+    return { n, j: i + 1 };
+  };
+  /** What follows 'hundred' or 'thousand' at token j (after an optional 'and'), read by `part`, added on; else nothing. */
+  const rest = (c: C, part: (i: number) => C | null): C => {
+    if (!near(c.j - 1)) return c;
+    const k = toks[c.j].w === "and" && near(c.j) ? c.j + 1 : c.j, r = part(k);
+    return r && r.n >= 1 ? { n: c.n + r.n, j: r.j } : c;
+  };
+  /** 1..999 said as words: 'three hundred', 'a hundred and twenty', 'nine hundred ninety-nine', or below a hundred. */
+  const hundreds = (i: number): C | null => {
+    const a = toks[i]?.w === "a" && near(i) && toks[i + 1].w === "hundred" ? { n: 1, j: i + 1 } : below100(i);
+    if (!a || !(a.n >= 1 && a.n <= 9) || !near(a.j - 1) || toks[a.j].w !== "hundred") return a;
+    return rest({ n: a.n * 100, j: a.j + 1 }, below100);
+  };
+  /** A cardinal said as words up to 999 999 (X5: a spoken answer of a hundred or more, as the Czech 'sto' and the leak reader read it). */
+  const cardinal = (i: number): C | null => {
+    const a = toks[i]?.w === "a" && near(i) && toks[i + 1].w === "thousand" ? { n: 1, j: i + 1 } : hundreds(i);
+    if (!a || !(a.n >= 1 && a.n <= 999) || !near(a.j - 1) || toks[a.j].w !== "thousand") return a;
+    return rest({ n: a.n * 1000, j: a.j + 1 }, hundreds);
+  };
   let out = "", from = 0;
   for (let i = 0; i < toks.length;) {
     const w = toks[i].w;
@@ -113,12 +139,10 @@ export function figuresOfEnglish(line: string): string {
       const d = near(i) ? enFrac(toks[i + 1].w) : null;
       if (d !== null) { rep = `${w}/${d}`; j = i + 2; }
     } else {
-      let n = enNum(w);
-      if (n !== null) {
-        if (n >= 20 && n % 10 === 0 && near(i)) {
-          const u = enNum(toks[i + 1].w);
-          if (u !== null && u >= 1 && u <= 9) { n += u; j = i + 2; }
-        }
+      const c = cardinal(i);
+      if (c !== null) {
+        const n = c.n;
+        j = c.j;
         if (near(j - 1) && toks[j].w === "point") {
           let k = j + 1, ds = "";
           while (k < toks.length && near(k - 1)) {

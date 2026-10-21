@@ -2177,3 +2177,12 @@ test('optimize 2026-10-21: a rate cost in crowns is well formed, and the reason 
  const why=S.wellFormed({shape:'rate',expr:'5 pens cost 3.50, 8',unit:'$'}).why;
  assert.match(why,/euros, pounds or crowns/);assert.doesNotMatch(why,/euros or pounds/);
 });
+test('optimize 2026-10-21: a value of a hundred or more said in English words is heard, as the Czech sto and the leak reader already read it',()=>{
+ const N=require(path.join(root,'src/lib/rules/numberWords.ts')),V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const rows=[['I got one hundred and eighty','I got 180'],['three hundred','300'],['a hundred and twenty','120'],['two thousand four hundred','2400'],['a thousand','1000'],
+  ['one hundred and five point two','105.2'],['nine hundred ninety-nine','999'],['forty-five','45'],['one hundred and then I stopped','100 and then I stopped']];
+ for (const [w,f] of rows) assert.equal(N.figuresOfEnglish(w),f,`figuresOfEnglish: ${w}`);
+ for (const [t,v] of [['I got one hundred and eighty','180'],['the answer is a hundred and twenty','120'],['I got two thousand four hundred','2400'],['I got three hundred kilograms','300 kg']]) assert.equal(V.saidIn(v,t),true,`heard: ${t} / ${v}`);
+ // still closed: a different number, and the hundreds of one value are not another's
+ for (const [t,v] of [['I got one hundred and eighty','18'],['I got one hundred and eighty','108'],['three hundred','30']]) assert.equal(V.saidIn(v,t),false,`not heard: ${t} / ${v}`);
+});
