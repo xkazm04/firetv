@@ -577,7 +577,7 @@ function schoolSet(topicId: string, n: number, seed: number, mix: Mix, stretch: 
       if (storyOf(spec)) stories++;
     }
   }
-  return { items: kept.slice(0, n).map((k, ix) => ({ n: ix + 1, question: k.question, spec: k.spec, tier: k.tier, ...(stretch ? { stretch: true as const } : {}) })), provider: "code", ms: Date.now() - t0, tries: 0 };
+  return { items: schoolOut(kept, n, stretch), provider: "code", ms: Date.now() - t0, tries: 0 };
 }
 
 /** A drawn item of an aimed set: its spec, printed question, tier, seed offset, and whether it is one the aim asked for. */
