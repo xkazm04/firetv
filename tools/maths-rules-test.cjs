@@ -603,10 +603,12 @@ test('learners case 2: a valid file still round-trips; a missing or empty file s
 });
 test('learners case 3: a write that fails throws, and is logged where the book is unreadable',()=>{
  const good=fs.readFileSync(booked());
- fs.chmodSync(booked(),0o444);
+ // Windows refuses a rename over a read-only file; POSIX renames over it, and refuses a write into a read-only directory.
+ const dir=path.dirname(booked());
+ fs.chmodSync(booked(),0o444);fs.chmodSync(dir,0o555);
  let logged;
  try{logged=quietly(()=>assert.throws(()=>recordAttempt('maths-book-keep','linear-one-step',true),/learners\.json could not be written/));}
- finally{fs.chmodSync(booked(),0o666);fs.writeFileSync(booked(),good);}
+ finally{fs.chmodSync(dir,0o777);fs.chmodSync(booked(),0o666);fs.writeFileSync(booked(),good);}
  assert.deepEqual(fs.readFileSync(booked()),good,'the book is as it was');
 });
 

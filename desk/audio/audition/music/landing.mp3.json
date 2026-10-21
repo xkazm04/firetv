@@ -1,0 +1,31 @@
+{
+  "id": "71ae8a9e-eeb2-4b29-b079-1eb7beefd0ea",
+  "ts": "2026-10-21T10:37:34.629Z",
+  "session": "desk-a1-music",
+  "status": "complete",
+  "kind": "music",
+  "out": "desk/audio/audition/music/landing.mp3",
+  "seconds": 20,
+  "request": {
+    "prompt": "Calm, warm instrumental loop for the home screen of a family homework app on a living-room TV. Felt piano, soft upright bass, brushed light percussion, 80 BPM, major key, gentle and welcoming. Seamless loop, no build-up, no vocals, no sudden changes.",
+    "music_length_ms": 20000,
+    "force_instrumental": true,
+    "model_id": "music_v1"
+  },
+  "endpoint": "/v1/music",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 1200,
+  "budgetCharge": 1200,
+  "creditsBefore": 134157,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 6000,
+  "bytes": 320200,
+  "providerCredits": null,
+  "sha256": "d8a03a621872ac5c5fe11410f530e660751d86f1aa9aab009657047dda273aaf",
+  "completedAt": "2026-10-21T10:37:40.585Z",
+  "creditsAfter": 134157,
+  "observedAccountDelta": 0,
+  "spendBasis": "Account delta may include concurrent use or omit delayed billing; conservative estimate retained.",
+  "sessionBudgetUsed": 1200
+}

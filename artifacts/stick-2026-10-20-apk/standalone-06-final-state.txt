@@ -1,0 +1,13 @@
+$ adb reverse --list
+
+(empty)
+$ adb shell run-as dev.studydesk.stick cat shared_prefs/stick.xml
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<map>
+    <string name="desk">10.0.0.141:3000</string>
+</map>
+$ adb shell dumpsys package dev.studydesk.stick | grep -E "versionName|lastUpdateTime"
+    versionName=0.1
+    lastUpdateTime=2026-10-20 16:52:03
+$ adb shell dumpsys activity activities | grep -E "mResumedActivity|topResumedActivity"
+    mResumedActivity: ActivityRecord{113516a u0 dev.studydesk.stick/.StickActivity t592}

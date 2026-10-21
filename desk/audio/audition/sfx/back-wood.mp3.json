@@ -1,0 +1,32 @@
+{
+  "id": "bf65ccb8-e193-4b03-948d-95ab8234304d",
+  "ts": "2026-10-21T10:34:07.702Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/back-wood.mp3",
+  "seconds": 0.5,
+  "request": {
+    "text": "UI sound effect, soft wooden marimba and felt mallet, warm, dry room: a short, soft downward two-note tap for going back; lower and calmer than the confirm. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 0.5,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134421,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 8820,
+  "providerCredits": 6,
+  "sha256": "aa86c26bb0b6deff7861950fb9fc37f04598032e2084ea33c6296662bcd676b2",
+  "completedAt": "2026-10-21T10:34:10.924Z",
+  "creditsAfter": 134421,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 700
+}
