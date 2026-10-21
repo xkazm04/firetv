@@ -93,9 +93,10 @@ export default function Phone() {
   const [sentence, setSentence] = useState(FRESH_SENTENCE);
   /**
    * The Essay panel's text: a file or a message split into paragraphs (rules/essay paragraphsOf), and the one the
-   * textarea shows. The desk reads ONE paragraph at a time; Next steps to the next. All of it lives in this page's
-   * state: a picked file is read here in the browser and never uploaded, stored or kept, and it is gone when the
-   * phone page closes. Only the current paragraph goes to the desk, when Analyse is pressed.
+   * textarea shows; Next steps to the next. It lives in this page's state: a picked file is read here in the browser,
+   * never uploaded as a file, and it is gone when the phone page closes. What goes to the desk is the learner's choice:
+   * the paragraph showing (analyseParagraph), or the whole piece (readPiece), which the desk keeps on the learner's
+   * shelf when "Keep it on my shelf" is ticked.
    */
   const [paras, setParas] = useState<string[]>(FRESH_PARAS);
   const [pix, setPix] = useState(0);
