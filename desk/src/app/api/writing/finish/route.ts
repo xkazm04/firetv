@@ -5,11 +5,13 @@
  *
  * On the TV (TV-WRITING-SCREEN-2026-10-21) the phone answers the TV's `writing` ask with the revision alone: a body with an
  * `askId` goes through the ask door (lib/session/phoneAsk.ts), the prompt, paragraph and note are the TV episode's, and
- * the save goes through the same saveEpisode; the TV shows the saved line (writing.finished).
+ * the save goes through the same saveEpisode; the TV shows the saved line (writing.finished). A phone always goes through
+ * that door, so one that leaves the askId out saves nothing (TL-11).
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { withPhoneAsk } from "@/lib/session/phoneAsk";
+import { roleFrom } from "@/lib/session/pairing";
 import { coached, finished, pick, revised, START } from "@/lib/writing/episode";
 import { saveEpisode } from "@/lib/writing/save";
 
@@ -44,7 +46,7 @@ function finishOnTv(revision: unknown): Response {
 export async function POST(req: Request) {
   // read from a clone: the ask door reads the body again
   const body = (await req.clone().json().catch(() => null)) as { promptId?: unknown; draft?: unknown; note?: unknown; revision?: unknown } | null;
-  if (body && typeof body === "object" && "askId" in body) return withPhoneAsk(req, ["writing"], async () => finishOnTv(body.revision));
+  if (roleFrom(req) === "phone" || (body && typeof body === "object" && "askId" in body)) return withPhoneAsk(req, ["writing"], async () => finishOnTv(body?.revision));
   if (!body || typeof body !== "object" || typeof body.note !== "string") return NextResponse.json({ error: NO_BODY }, { status: 400 });
   const who = getSession().learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });

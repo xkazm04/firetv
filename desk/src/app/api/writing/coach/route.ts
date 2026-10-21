@@ -4,11 +4,13 @@
  *
  * On the TV (TV-WRITING-SCREEN-2026-10-21) the phone answers the TV's `writing` ask: a body with an `askId` goes through
  * the ask door (lib/session/phoneAsk.ts, which checks the ask's id AND its kind), the prompt is the TV episode's, and the
- * note lands on the session (writing.coached) for the TV to show. A body with no askId is the /writing page, as before.
+ * note lands on the session (writing.coached) for the TV to show. A phone always goes through that door, so one that leaves
+ * the askId out is refused (TL-11); a body with no askId from the TV or an in-process caller is the /writing page, as before.
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { withPhoneAsk } from "@/lib/session/phoneAsk";
+import { roleFrom } from "@/lib/session/pairing";
 import { bandOf, learnerAge } from "@/lib/rules/voice";
 import { text } from "@/lib/engines/text";
 import { coachNote, type AskNote } from "@/lib/writing/coach";
@@ -44,7 +46,7 @@ export async function POST(req: Request) {
   // read from a clone: the ask door reads the body again
   const body = (await req.clone().json().catch(() => null)) as { promptId?: unknown; draft?: unknown } | null;
   if (!body || typeof body !== "object") return NextResponse.json({ error: NO_BODY }, { status: 400 });
-  if ("askId" in body) return withPhoneAsk(req, ["writing"], () => coachOnTv(body.draft));
+  if ("askId" in body || roleFrom(req) === "phone") return withPhoneAsk(req, ["writing"], () => coachOnTv(body.draft));
   const s = getSession();
   if (!s.learner) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const picked = pick(START, body.promptId);

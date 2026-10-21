@@ -143,8 +143,16 @@ test('the ask door checks the ask\'s KIND as well as its id: an id of another mo
  assert.equal(store.getSession().ask?.id,s.ask.id,'the other module\'s ask is left as it was');
  const w=seat({promptId:'screens',stage:'write'});
  r=await call('coach',{askId:'not-it',draft:DRAFT});assert.equal(r.status,409,'a stale id');
- r=await call('coach',{draft:DRAFT,promptId:'screens'});assert.equal(r.status,200,'no askId: the /writing page, stateless as before');
+ r=await call('coach',{draft:DRAFT,promptId:'screens'},'tv');assert.equal(r.status,200,'no askId from the TV or an in-process caller: the /writing page, stateless as before');
  assert.equal(store.getSession().writingTv.stage,'write','the page\'s coaching leaves the TV episode alone');
+ // a phone that leaves the askId out does not walk round the door (TL-11: a phone answers the open ask and nothing else)
+ noted=0;r=await call('coach',{draft:DRAFT,promptId:'screens'});
+ assert.equal(r.status,409,'a phone with no askId is refused at the coach route');assert.equal(noted,0,'and spends no model call');
+ const L=require(src('lib/session/learners.ts')),lines=L.getLearner('wtv-ema').history.length;
+ r=await call('finish',{promptId:'screens',draft:DRAFT,note:'a note',revision:REVISED});
+ assert.equal(r.status,409,'a phone with no askId is refused at the finish route');
+ assert.equal(L.getLearner('wtv-ema').history.length,lines,'and writes nothing to the learner\'s record');
+ assert.equal(store.getSession().ask?.id,w.ask.id,'the open writing ask is left as it was');
  const lib=fs.readFileSync(src('lib/session/phoneAsk.ts'),'utf8');
  assert.match(lib,/fields\.askId !== ask\.id \|\| !answers\.includes\(ask\.kind\)/,'the door checks the id and the kind, for every kind');
  assert.ok(w.ask);
