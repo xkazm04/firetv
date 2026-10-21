@@ -209,3 +209,28 @@ test('the TV draws the Writing screen in the On Air shell, and nothing typed: th
  assert.equal(captions.length,2,'one caption per phase');
  for(const c of captions)assert.match(c,/aria-live="polite"/,c);
 });
+
+test('a failing engine at the coach route: the code\'s own note lands on the TV, the ask closes, nothing stays busy; the page path answers the same',async()=>{
+ reg.useProvider('text',{name:'stub',run:async()=>{noted++;throw new Error('down');}});noted=0;
+ const s=seat({promptId:'screens',stage:'write'});
+ let r=await call('coach',{askId:s.ask.id,draft:DRAFT});
+ assert.equal(r.status,200,'a failed engine is no failed coaching: the code words the note');
+ const body=await r.json();assert.equal(body.source,'code');assert.ok(noted>=1,'the engine was asked');
+ const now=store.getSession();
+ assert.equal(now.writingTv.stage,'coached');assert.equal(now.writingTv.busy,false,'busy is cleared');assert.equal(now.ask,null,'the answer closes the ask');
+ const {codeNote}=require(src('lib/writing/coach.ts'));assert.equal(now.writingTv.note,codeNote(DRAFT,'teen'));
+ r=await call('coach',{promptId:'screens',draft:DRAFT},'tv');
+ assert.equal(r.status,200);assert.equal((await r.json()).source,'code','the /writing page gets the code note too');
+});
+
+test('the /writing page path saves a whole episode from its body to the seated learner, and refuses one that skips the revision',async()=>{
+ store.dispatch({type:'reset'});store.dispatch({type:'profile.draft',patch:{id:'wtv-page',name:'Page',type:'high-school',age:16}});store.dispatch({type:'profile.save'});
+ const L=require(src('lib/session/learners.ts'));
+ let r=await call('finish',{promptId:'screens',draft:DRAFT,note:'a note',revision:DRAFT},'tv');
+ assert.equal(r.status,400,'an unchanged paragraph is no revision');assert.equal(L.getLearner('wtv-page').history.length,0);
+ r=await call('finish',{promptId:'screens',draft:DRAFT,note:'a note',revision:REVISED},'tv');
+ assert.equal(r.status,200);const b=await r.json();
+ assert.equal(b.focus,'evidence');assert.equal(b.holds,true);assert.match(b.saved,/coached on evidence; the revision now gives evidence/);
+ const h=L.getLearner('wtv-page').history;assert.equal(h.length,1);assert.deepEqual([h[0].kind,h[0].label],['writing','Screens before bed']);
+ assert.equal(store.getSession().writingTv??null,null,'the page path leaves the TV episode alone');
+});
