@@ -31,9 +31,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         compose = true
     }
@@ -56,6 +53,10 @@ android {
     androidResources {
         noCompress += "mp4"
     }
+}
+
+kotlin {
+    compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
 }
 
 dependencies {
@@ -99,7 +100,7 @@ dependencies {
  */
 val companionAssetsDir = layout.buildDirectory.dir("generated/companionAssets").get().asFile
 
-val syncCompanion by tasks.registering(Copy::class) {
+val syncCompanion = tasks.register<Copy>("syncCompanion") {
     from(rootProject.layout.projectDirectory.dir("companion"))
     into(File(companionAssetsDir, "companion"))
 }
