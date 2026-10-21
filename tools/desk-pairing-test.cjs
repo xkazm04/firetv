@@ -856,9 +856,10 @@ test('OPT-5: a watched lesson whose line cannot be written to the learner file s
 test('OPT-7: a lesson chosen on a screen (no key) is a library lesson, played from the library\'s own video - a posted id or video the library does not hold never reaches the TV',async()=>{
  store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
  const {LESSONS}=require(src('lib/library/lessons.data.ts'));const lib=LESSONS.find((l)=>l.youtube);
- let r=await post({type:'lesson.set',lesson:{id:'not-a-lesson',title:'Anything',t:0,text:'',why:'',youtube:'aaaaaaaaaaa'}},'phone');assert.equal(r.status,200);
+ // the TV's lesson pick (tv/keys.ts); a phone's is refused (TL-11, PHONE_MAY)
+ let r=await post({type:'lesson.set',lesson:{id:'not-a-lesson',title:'Anything',t:0,text:'',why:'',youtube:'aaaaaaaaaaa'}},'tv');assert.equal(r.status,200);
  assert.equal(store.getSession().lesson,null,'an id the library does not hold is not put on the desk');
- r=await post({type:'lesson.set',lesson:{id:lib.id,title:'Other title',t:12,text:'x',why:'y',youtube:'aaaaaaaaaaa'}},'phone');
+ r=await post({type:'lesson.set',lesson:{id:lib.id,title:'Other title',t:12,text:'x',why:'y',youtube:'aaaaaaaaaaa'}},'tv');
  const l=store.getSession().lesson;assert.equal(l.id,lib.id);assert.equal(l.youtube,lib.youtube,'the library\'s video, not the posted one');assert.equal(l.title,lib.title,'the library\'s title');assert.equal(l.t,12);
  store.dispatch({type:'lesson.set',lesson:null});assert.equal(store.getSession().lesson,null,'no lesson still clears');
 });
@@ -1128,4 +1129,31 @@ test('TL-11 (OD4 b): a phone\'s task.add and task.done stay allowed',async()=>{
  const t=store.getSession().tasks.find((x)=>x.name==='Reading');assert.ok(t,'the task is on the list');
  assert.equal((await post({type:'task.done',id:t.id,done:true},'phone',cookie)).status,200);
  assert.equal(store.getSession().tasks.find((x)=>x.id===t.id).done,true);
+});
+// TL-11 as an allowlist (authorization: dispatch-chokepoint-gating, default deny): what a phone may post is named, and the
+// ground truth is the phone's own sources - every type they send must be on the list, and every other type the door takes is 403
+const PHONE_SOURCES=['app/phone','english/LingaPhone.tsx'];
+const stripComments=(t)=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:\\])\/\/.*$/gm,'$1');
+const phoneSends=()=>{const out=new Set();
+ for(const p of PHONE_SOURCES){const at=src(p),files=fs.statSync(at).isDirectory()?fs.readdirSync(at).filter((f)=>/\.tsx?$/.test(f)).map((f)=>path.join(at,f)):[at];
+  for(const f of files)for(const m of stripComments(fs.readFileSync(f,'utf8')).matchAll(/\btype: ?"([a-z][a-z.]*)"/g))out.add(m[1]);}
+ return out;};
+test('TL-11: every event type the phone\'s sources post is one a phone may post',()=>{
+ const {PHONE_MAY}=pairing();assert.ok(PHONE_MAY instanceof Set,'pairing.ts names what a phone may post');
+ // nav is the unjoined Join panel's "Show the code on the TV": a guest's post (guestMay), never a joined phone's
+ const sent=[...phoneSends()].filter((t)=>store.POSTABLE.includes(t)&&t!=='nav');
+ assert.ok(sent.length>=8,`the phone sources were read (${sent})`);
+ for(const t of sent)assert.ok(PHONE_MAY.has(t),`the phone sends ${t}, and the list refuses it`);
+});
+test('TL-11: a phone posting a type the phone never sends - view, page.ask, lesson.set, essay.clear, status... - is 403 and the session is byte-identical',async()=>{
+ const {PHONE_MAY}=pairing();const cookie=await phoneCookie();
+ const SAMPLE={view:{view:'overview'},'page.ask':{subject:'english'},'page.unask':{},'lesson.set':{lesson:{id:'x',title:'x',t:0,text:'x',why:'x'}},'lesson.pause':{paused:true},
+  'essay.type':{essayType:'argument'},'essay.clear':{},'essay.plan':{lens:'argument'},status:{text:'Look at the phone now'}};
+ const refused=store.POSTABLE.filter((t)=>!PHONE_MAY.has(t));
+ for(const t of Object.keys(SAMPLE))assert.ok(refused.includes(t),`${t} is not a phone's post`);
+ for(const t of refused){
+  evening('forensic');const before=JSON.stringify(store.getSession());
+  const r=await post({type:t,...(SAMPLE[t]??{})},'phone',cookie);
+  assert.equal(r.status,403,t);assert.equal(JSON.stringify(store.getSession()),before,`${t} changed the session`);
+ }
 });

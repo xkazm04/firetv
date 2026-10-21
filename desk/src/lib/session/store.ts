@@ -474,6 +474,8 @@ const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { ty
   "ask.open": { kind: (v) => typeof v === "string" && ASK_KINDS.has(v), detail: maybe(askDetailOk) }, "ask.cancel": { id: f.name }, "ask.sent": { id: f.name },
   "writing.pick": { promptId: f.name }, "writing.clear": {},
 };
+/** Every type a screen or phone may post at all (the door's own list): what a caller's allowlist is checked against. */
+export const POSTABLE = Object.keys(SHAPES) as Event["type"][];
 /** Why a posted event is refused, or null when it may go to the reducer. */
 export function badPost(e: unknown): string | null {
   const type = (e as { type?: unknown } | null)?.type;

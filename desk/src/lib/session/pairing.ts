@@ -290,6 +290,15 @@ export function guestMay(s: Session, e: Event): boolean {
   return false;
 }
 
+/**
+ * What a joined phone may post to the session (TL-11), as an allowlist: a type not named here is refused, so a new event
+ * is the TV's until someone decides otherwise (authorization: default deny). The join and leave; the learner's name and
+ * profile (OD1 b, the route refuses a patch that names an id); tonight's list (OD4 b); one plan sentence; a typed paper
+ * (the route checks its ask); the cancel of a hand-off. tools/desk-pairing-test.cjs reads the phone's sources and fails
+ * when they post a type this list refuses.
+ */
+export const PHONE_MAY: ReadonlySet<string> = new Set<Event["type"]>(["join", "leave", "profile.draft", "profile.save", "task.add", "task.done", "essay.slot", "paper.enter", "ask.cancel"]);
+
 /** The TV's address, as the desk prints it at start. */
 export function tvAddress(): string {
   return getSession().phoneUrl.replace(/\/phone$/, "/tv") + "?key=" + encodeURIComponent(tvKey());

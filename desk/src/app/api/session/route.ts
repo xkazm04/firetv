@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { answerAsk, badPost, dispatch, getSession, type Event } from "@/lib/session/store";
 import { NOT_ASKING } from "@/lib/session/phoneAsk";
-import { COOKIE, JOIN_FIRST, JOIN_NOT_SAVED, LEAVE_NOT_SAVED, NO_CODE, RESET_NOT_SAVED, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinClear, joinCooling, joinDelay, joinSucceeded, joinWrongCode, cookiesOf, forgetAllPhones, forgetPhone, mintPhone, roleFrom, view } from "@/lib/session/pairing";
+import { COOKIE, JOIN_FIRST, JOIN_NOT_SAVED, LEAVE_NOT_SAVED, NO_CODE, RESET_NOT_SAVED, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, PHONE_MAY, joinClear, joinCooling, joinDelay, joinSucceeded, joinWrongCode, cookiesOf, forgetAllPhones, forgetPhone, mintPhone, roleFrom, view } from "@/lib/session/pairing";
 import { closePhoneStreams, phoneKey } from "@/lib/session/streams";
 
 export const dynamic = "force-dynamic";
@@ -27,14 +27,6 @@ const SERVER_ONLY: Partial<Record<Event["type"], string>> = {
   "phone.presence": "The desk counts the phones that are here.",
   "ask.sent": "The desk marks a hand-off answered when the answer arrives.",
 };
-
-/**
- * The events a phone may not post (TL-11); every other refusal and allowance is as it was. Seating a learner, leaving the
- * profile, opening a topic and clearing a set move the TV too (lite r3): they are the TV's. A typed paper is the phone's
- * answer to the TV's paper ask, below; task.* (OD4 b), profile.draft and profile.save (OD1 b) stay the phone's.
- */
-const PHONE_NEVER = new Set<string>(["nav", "focus", "subject", "item", "page.select", "walk", "essay.at", "timer.start", "timer.pause", "timer.tick", "timer.skipbreak", "session.end",
-  "learner.set", "profile.discard", "topic.open", "practice.clear", "writing.pick", "writing.clear"]);
 
 /** One line for a pairing write that failed, in the shape of pairing.ts's last-seen line; the caller answers 500 and changes nothing. */
 const notSaved = (what: string, e: unknown) => console.error(`desk pairing: ${what} could not be written to pairing.json (${e instanceof Error ? e.message : e}); nothing was changed`);
@@ -68,8 +60,6 @@ export async function POST(req: Request) {
   if (e?.type === "lesson.set" && e.key !== undefined) return NextResponse.json({ error: "Ask for a hint on /api/hint." }, { status: 403 });
   // the TV's own acts: wiping the desk, and starting an edit of a profile that is already made (a patch that names an id)
   if (role === "phone" && e?.type === "ask.open") return NextResponse.json({ error: "Only the TV can ask the phone for something." }, { status: 403 });
-  // the phone answers the TV's asks and does not move it (TL-11): navigation, focus, picks, the walk, the clock and the end of the session are the TV's. Tonight's list (task.*) stays the phone's (OD4)
-  if (role === "phone" && typeof e?.type === "string" && PHONE_NEVER.has(e.type)) return NextResponse.json({ error: "Only the TV moves the desk." }, { status: 403 });
   // a phone's typed paper answers the TV's open paper ask, by its id, or it changes nothing (as the result routes' door, lib/session/phoneAsk.ts)
   if (role === "phone" && e?.type === "paper.enter") {
     const ask = getSession().ask;
@@ -77,6 +67,9 @@ export async function POST(req: Request) {
   }
   if (role === "phone" && e?.type === "reset") return NextResponse.json({ error: "Only the TV can reset the desk." }, { status: 403 });
   if (role === "phone" && e?.type === "profile.draft" && e.patch && typeof e.patch === "object" && Object.hasOwn(e.patch, "id")) return NextResponse.json({ error: "Only the TV can start editing a profile." }, { status: 403 });
+  // the phone answers the TV's asks and does not move it (TL-11): it posts only what lib/session/pairing.ts PHONE_MAY names -
+  // the join, its name and profile, tonight's list (OD4 b), a plan sentence, a typed paper and a cancel. Everything else is the TV's
+  if (role === "phone" && typeof e?.type === "string" && !PHONE_MAY.has(e.type)) return NextResponse.json({ error: "Only the TV moves the desk." }, { status: 403 });
   if (role === "guest" && !guestMay(getSession(), e)) return NextResponse.json({ error: JOIN_FIRST }, { status: 403 });
   // one door for every field a screen or phone posts: a request the reducer was not built for never reaches it
   const bad = badPost(e);

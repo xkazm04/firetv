@@ -111,8 +111,9 @@ test('the hand-off: the writing ask has its own phone panel, which fits a phone 
 test('the door: only the TV moves the episode - a phone may not pick or clear, and no screen or phone may post coached, finished or busy',()=>{
  for(const type of ['writing.coached','writing.finished','writing.busy'])assert.match(badPost({type,draft:'x',note:'y',revision:'z',saved:'s',busy:true,by:'ema'}),/does not know/,type);
  assert.equal(badPost({type:'writing.pick',promptId:'screens'}),null);assert.equal(badPost({type:'writing.clear'}),null);
- const route=fs.readFileSync(src('app/api/session/route.ts'),'utf8');
- assert.match(route,/"writing\.pick", "writing\.clear"\]\)/,'a phone posting a pick or a clear is refused (PHONE_NEVER)');
+ // a phone posting a pick or a clear is refused: neither is on the phone's allowlist (lib/session/pairing.ts PHONE_MAY)
+ const {PHONE_MAY}=require(src('lib/session/pairing.ts'));
+ for(const type of ['writing.pick','writing.clear'])assert.equal(PHONE_MAY.has(type),false,type);
  // the routes' results land only on the learner they were for, at the stage they answer
  const s=base({writingTv:{promptId:'screens',stage:'write'}});
  assert.equal(reduce(s,{type:'writing.coached',draft:DRAFT,note:'n',by:'kid'}),s,'another learner\'s note is dropped');
