@@ -1330,3 +1330,19 @@ test('stick pass 2026-10-20: the rewrite status names the phone, not the Essay t
  // the status stays a phone-naming one, so a desk restart still drops it (store.ts namesPhone, D2)
  assert.match(rewriteStatus(2),/\bphone\b/i);
 });
+
+test('optimize 2026-10-21: the learner switcher names the remote\'s Select, never a keyboard key the remote does not have',()=>{
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server'));
+ const {createElement}=require(path.join(root,'node_modules/react'));
+ for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){
+  const file=path.join(root,'src',f);if(require.cache[file])continue;const m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
+ const {Learner}=require(path.join(root,'src/tv/screens.tsx'));
+ const JAKUB={id:'jakub',name:'Jakub',type:'other',modules:['english']};
+ const s=session({screen:'learner',profiles:[...session().profiles,JAKUB]});
+ // the seated learner's card, the other learner's card, and Add a learner: every caption the screen can draw
+ for(const focus of [0,1,2]){
+  const h=renderToStaticMarkup(createElement(Learner,{s,focus}));
+  assert.doesNotMatch(h,/\bEnter\b/,`focus ${focus}: the Fire TV remote has no Enter key`);
+  if(focus<2)assert.match(h,/Select (goes back to the desk|to sit at this desk)/,`focus ${focus}: the caption names Select`);
+ }
+});
