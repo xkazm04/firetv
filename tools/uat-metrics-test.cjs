@@ -167,3 +167,29 @@ test('the README Character template carries every field a committed Character ca
   const have = new Set(keys(template)), missing = [...new Set(sims.flatMap(s => keys(s)))].filter(k => !have.has(k)).sort();
   assert.deepEqual(missing, [], `the template lacks ${missing.join(', ')}`);
 });
+
+test('Essay and Math: each Character\'s "journeys:" line and each journey\'s Characters section name the same pairs', () => {
+  const ids = new Set(), byCharacter = new Set(), byJourney = new Set(), journeyIds = new Set();
+  for (const mod of ['essay', 'maths']) {
+    for (const f of fs.readdirSync(path.join(UAT, 'characters', mod)).filter(f => f.endsWith('.md'))) {
+      const id = f.replace(/\.md$/, ''), line = fs.readFileSync(path.join(UAT, 'characters', mod, f), 'utf8').match(/^module: [^\n]*· journeys: ([^·\n]+)/m);
+      assert.ok(line, `${mod}/${f}: no "module: … · journeys: …" line`);
+      ids.add(id);
+      for (const j of line[1].split(',').map(s => s.trim()).filter(Boolean)) byCharacter.add(`${id} ${j}`);
+    }
+    for (const f of fs.readdirSync(path.join(UAT, 'journeys', mod)).filter(f => f.endsWith('.md'))) {
+      const j = f.match(/^([A-Z]+\d+)-/)[1], text = fs.readFileSync(path.join(UAT, 'journeys', mod, f), 'utf8');
+      journeyIds.add(j);
+      const section = text.split(/^## Characters\s*$/m)[1];
+      assert.ok(section, `${mod}/${f}: no "## Characters" section`);
+      const listed = section.split(/^## /m)[0].split(/\n\s*\n/).find(p => p.trim()) ?? '';
+      for (const m of listed.matchAll(/[a-z]+-\d+/g)) byJourney.add(`${m[0]} ${j}`);
+    }
+  }
+  const only = (a, b) => [...a].filter(x => !b.has(x)).sort();
+  assert.deepEqual(only(byCharacter, byJourney), [], 'pairs a Character lists that its journey does not');
+  assert.deepEqual(only(byJourney, byCharacter), [], 'pairs a journey lists that its Character does not');
+  assert.deepEqual([...byJourney].map(p => p.split(' ')[0]).filter(c => !ids.has(c)), [], 'a journey names a Character no file defines');
+  assert.deepEqual([...byCharacter].map(p => p.split(' ')[1]).filter(j => !journeyIds.has(j)), [], 'a Character names a journey no file defines');
+  assert.equal(byCharacter.size, 23);
+});
