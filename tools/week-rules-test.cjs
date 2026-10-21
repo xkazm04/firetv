@@ -1,7 +1,7 @@
 /**
  * THE SUNDAY PAGE (Family W9): the parent's week in words, written by code from the learner's own digest (rules/week
  * sundayPage + sundayWords, over rules/digest), no model. A fixed week gives fixed words (snapshotted below as literals);
- * an empty week is exactly "Nothing this week."; one everyday act per school unit (DO_IT, all 15 ids of the real path);
+ * an empty week is exactly "Nothing this week."; one everyday act per school unit (DO_IT, every topic id of the school path, read from the library);
  * the slip line only for a slip seen twice or more; at most three units then "and N more"; a step up only when a
  * step-up set was marked; never a percent sign, a ranking, praise, another learner, a question or an answer; the same
  * inputs give the same words; every line within LINE_WORDS and the page within PAGE_WORDS. Through the store: the page
