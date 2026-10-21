@@ -472,6 +472,33 @@ try {
     check('rate: the pressed rate is the one the TV reports', pressed.length === 1 && pressed[0] === '0.25', `pressed [${pressed.join(',')}], TV at 0.25`);
     await page.close();
   }
+
+  // ---- the scrub bar without a pointer --------------------------------------------------------------
+  // A keyboard, a switch or TalkBack's swipe moves a range input with no pointerdown. The seek must
+  // still reach the TV; and a pointer drag still sends exactly one seek, not one per event.
+  {
+    const page = await browser.newPage();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false, state: { durationMs: 20000 } });
+    await page.goto(PAGE + '#pin=' + TV_PIN);
+    await page.waitForFunction(() => window.__pen.state() !== null, null, { timeout: 3000 }).catch(() => {});
+    const seeks = () => page.evaluate(() => window.__tv.sent.filter((m) => m.type === 'transport' && m.cmd === 'seek').map((m) => Math.round(m.value)));
+    await page.focus('#scrub');
+    for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(50);
+    const keyed = await seeks();
+    check('scrub: arrow keys on the scrub bar seek the TV', keyed.length >= 1 && keyed.at(-1) === 100, `seeks [${keyed.join(',')}] ms, want the last at 100`);
+
+    const bar = await page.locator('#scrub').boundingBox();
+    const n0 = keyed.length;
+    await page.mouse.move(bar.x + bar.width * 0.25, bar.y + bar.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(bar.x + bar.width * 0.5, bar.y + bar.height / 2, { steps: 5 });
+    await page.mouse.up();
+    await page.waitForTimeout(50);
+    const dragged = (await seeks()).slice(n0);
+    check('scrub GUARD: a pointer drag sends one seek', dragged.length === 1, `seeks [${dragged.join(',')}] ms`);
+    await page.close();
+  }
 } finally {
   await browser.close();
 }

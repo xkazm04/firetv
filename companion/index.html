@@ -171,7 +171,7 @@
   let color = '#FFD400';
   let sticky = false;
   let ws = null, connected = false, paired = false, refused = false;
-  let lastState = null, scrubbing = false, tvDoc = null, prevT = null;
+  let lastState = null, scrubbing = false, seekSent = null, tvDoc = null, prevT = null;
 
   // ---- transport -----------------------------------------------------------
   function connect() {
@@ -336,6 +336,7 @@
     if (m.t !== (prevT ?? -1)) { prevT = m.t; }
     if (!scrubbing && m.durationMs > 0) {
       $('scrub').value = Math.round((m.t / m.durationMs) * 1000);
+      seekSent = null; // the TV has moved the bar: the same spot can be sought again
     }
     // The thumbnail is the whole point of aiming: without it the pad is a blank rectangle and
     // the viewer is drawing from memory.
@@ -608,15 +609,20 @@
     if (!lastState || !lastState.durationMs) return;
     $('scrub-t').textContent = ((scrub.value / 1000) * lastState.durationMs / 1000).toFixed(1) + 's';
   });
+  // A pointer drag ends in a pointerup and a change for the same value: one seek, not two.
+  const seekTo = () => {
+    if (!lastState || !lastState.durationMs || scrub.value === seekSent) return;
+    seekSent = scrub.value;
+    send({ type: 'transport', cmd: 'seek', value: (scrub.value / 1000) * lastState.durationMs });
+  };
   const endScrub = () => {
     if (!scrubbing) return;
     scrubbing = false;
-    if (lastState && lastState.durationMs) {
-      send({ type: 'transport', cmd: 'seek', value: (scrub.value / 1000) * lastState.durationMs });
-    }
+    seekTo();
   };
   scrub.addEventListener('pointerup', endScrub);
-  scrub.addEventListener('change', endScrub);
+  // A keyboard, a switch or a screen reader moves the bar with no pointerdown: its change is the seek.
+  scrub.addEventListener('change', () => (scrubbing ? endScrub() : seekTo()));
 
   // Exposed so the Playwright live UI test can drive the page without guessing at internals.
   window.__pen = {
