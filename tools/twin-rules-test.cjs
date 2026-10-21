@@ -176,6 +176,21 @@ test('routes: leave a piece out and put it back; the card follows; workroom.set 
   dispatch({ type: 'workroom.set', workroom: { owner: 'someone-else', pieces: [], channels: [], born: false, need: 3 } });
   assert.equal(getSession().workroom.owner, 'martin', 'another learner\'s Workroom never lands');
 });
+test('the review lists every exemplar the card exports: leaving one out never exports a piece the learner was not shown (SPEC 14)', async () => {
+  await keepAll(['monday works, 7 at mine', 'saw the match? unreal', 'running the 10k sunday, come cheer']);
+  const shown = (v) => v.channels[0].exemplars;
+  const v1 = await (await twin.GET(R('/api/twin', 'GET'))).json();
+  assert.equal(shown(v1).length, 5, 'seven pieces: the newest five are up for review');
+  const out = shown(v1)[0].pieceId;
+  await twin.POST(R('/api/twin', 'POST', { exclude: out, on: true }));
+  const v2 = await (await twin.GET(R('/api/twin', 'GET'))).json();
+  const card = await (await cardRoute.GET(R('/api/twin/card', 'GET'))).json();
+  const exported = card.voice.channels[0].exemplars.map((e) => e.text);
+  assert.equal(exported.length, 5, 'the card still carries five');
+  for (const t of exported) assert.ok(shown(v2).some((e) => e.included && e.text === t), `exported but never shown for review: ${JSON.stringify(t)}`);
+  assert.equal(shown(v2).find((e) => e.pieceId === out)?.included, false, 'the left-out piece is still listed, so it can go back');
+  await twin.POST(R('/api/twin', 'POST', { exclude: out, on: false }));
+});
 test('routes: delete-all leaves no file, the Workroom empties, and nobody seated is refused', async () => {
   await twin.POST(R('/api/twin', 'POST', { open: true }, 'tv'));
   await texts.DELETE(R('/api/texts?all=1', 'DELETE'));

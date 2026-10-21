@@ -51,6 +51,23 @@ export function portraitOf(pieces: Piece[], excluded: ReadonlySet<string> = new 
   return { channels, born: channels.some((c) => c.born), pieces: pieces.length };
 }
 
+export interface ReviewItem { pieceId: string; text: string; included: boolean }
+/**
+ * The review step (SPEC 14), per channel, newest first: exactly the exemplars the card exports (included) and every piece
+ * the learner left out (not included, so it can go back). Leaving one out shows the piece that takes its place before
+ * anything is exported; a list of the newest five alone would export a sixth the learner never saw.
+ */
+export function reviewOf(pieces: Piece[], excluded: ReadonlySet<string>): Map<TwinChannel, ReviewItem[]> {
+  const exported = new Set(portraitOf(pieces, excluded).channels.flatMap((c) => c.exemplars.map((e) => e.pieceId)));
+  const at = (p: Piece) => p.versions[p.versions.length - 1].at, out = new Map<TwinChannel, ReviewItem[]>();
+  for (const p of [...pieces].sort((a, b) => at(b) - at(a))) {
+    const included = exported.has(p.id), own = ownText(p.versions[p.versions.length - 1].text);
+    if (!own || (!included && !excluded.has(p.id))) continue;
+    const c = channelOf(p.format); out.set(c, [...(out.get(c) ?? []), { pieceId: p.id, text: cutAt(own), included }]);
+  }
+  return out;
+}
+
 // ---- RFC 8785 (JSON Canonicalization Scheme) for the values a card holds: strings, integers, booleans, null, arrays, objects
 
 /** Canonical JSON: object keys sorted by UTF-16 code units, no whitespace, strings as JSON.stringify writes them (RFC 8785 3.2.2.2), integers only. */
