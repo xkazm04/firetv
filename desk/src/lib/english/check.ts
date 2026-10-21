@@ -360,6 +360,8 @@ export async function checkCommand(action: string, input: Record<string, unknown
     return true;
   }
   if (action === "plan-propose" || action === "plan-open") {
+    // a check left part way holds the only slot the topics would take; home promises "Your place is saved", so it is kept
+    if (open && (open.stage === "about" || open.stage === "tasks")) throw new ConversationError("Your level check is part way. Carry on with it, or start it again, before choosing topics.", 409);
     const base = open && (open.stage === "verdict" || open.stage === "plan") ? open : blank(learnerId, "plan");
     const reuse = action === "plan-open" && learning.plan?.topics.length;
     // Topics cut with no goal and no interest come out generic (second UAT run: fit fell to a third). Ask first, once.
