@@ -18,6 +18,9 @@
  *                    CLI). Anything else that writes is a second store. WRITE_ALLOW names each exception and why, and an
  *                    exception that no longer writes is reported too, so the list cannot rot.
  *
+ * OWED names the breaks main already carried when the check was wired: each is printed and does not fail until its
+ * owner decision lands, and an entry whose break is gone fails, so the list only shrinks.
+ *
  * Type-only imports are free: they load nothing at run time. The import graph comes from tools/import-graph.cjs, the
  * scanner the model-drift check uses. Reads files only: no model, no network, no desk install.
  *
@@ -39,6 +42,17 @@ const ENTRY = ["text", "vision", "embed", "voice", "listen", "health", "shape", 
 const WRITE_ALLOW = {
   "desk/src/lib/library/lessons.ts": "caches the lesson-window embeddings to <data>/embeddings.json, derived data that is rebuilt when missing, not learner state",
 };
+/**
+ * Breaks main already carried when this check was wired into CI (it landed in fc866ead, 2026-10-20, on a desk that had
+ * grown three since the check was written on 2026-10-05). Each is an open owner decision, not an acceptance: an owed
+ * break is printed and does not fail, any OTHER break of the same file still fails, and an entry whose break no longer
+ * fires fails too, so the list can only shrink. `detail` is a substring of the problem's detail.
+ */
+const OWED = [
+  { rule: "engines-leaf", file: "desk/src/lib/engines/meter.ts", detail: "desk/src/lib/dataDir.ts", why: "the usage ledger (EC1, 2026-10-10) finds the data directory through the shared helper (de7361f2); whether a leaf helper may sit under the engine seam is open" },
+  { rule: "state-in-session", file: "desk/src/lib/twin/state.ts", detail: "writes files", why: "writes twin.json, the Twin's own store (P4, 2026-10-07): a second store until it moves behind src/lib/session/ or gets a reasoned WRITE_ALLOW entry" },
+  { rule: "rules-pure", file: "desk/src/lib/rules/docx.ts", detail: "node:zlib", why: "inflates a .docx (2026-10-07): a parser that sits in rules/; moving it out of rules/ or accepting node:zlib is open" },
+];
 const BUILTIN = new Set(builtinModules.flatMap((m) => [m, `node:${m}`]));
 const isBuiltin = (spec) => spec.startsWith("node:") || BUILTIN.has(spec);
 const isSpawn = (spec) => spec === "child_process" || spec === "node:child_process";
@@ -87,10 +101,23 @@ function sourcesOf(repo) {
 }
 
 /**
- * The layering verdict for the desk at `repo`: `{ files, problems }`, one problem per broken boundary. `allow` is the
- * write allow-list (WRITE_ALLOW unless a caller, such as the suite's scratch trees, brings its own).
+ * The layering verdict for the desk at `repo`: `{ files, problems, owed }`, one problem per broken boundary, with the
+ * breaks an `owed` entry names moved from `problems` to `owed`. `allow` is the write allow-list and `owed` the known
+ * breaks (WRITE_ALLOW and OWED unless a caller, such as the suite's scratch trees, brings its own).
  */
-function check(repo = REPO, { allow = WRITE_ALLOW } = {}) {
+function check(repo = REPO, { allow = WRITE_ALLOW, owed = OWED } = {}) {
+  const raw = layering(repo, allow);
+  const problems = [], known = [], used = new Set();
+  for (const p of raw.problems) {
+    const o = owed.find((e) => e.rule === p.rule && e.file === p.file && p.detail.includes(e.detail));
+    if (o) { known.push(p); used.add(o); } else problems.push(p);
+  }
+  for (const o of owed) if (!used.has(o)) problems.push({ rule: o.rule, file: o.file, detail: `is OWED (${o.detail}) but that break no longer fires; delete its OWED entry` });
+  return { files: raw.files, problems, owed: known };
+}
+
+/** Every broken boundary of the desk at `repo`, owed or not. */
+function layering(repo, allow) {
   const abs = (f) => path.join(repo, f);
   const isFile = (f) => { try { return fs.statSync(abs(f)).isFile(); } catch { return false; } };
   const text = new Map();
@@ -135,10 +162,11 @@ function check(repo = REPO, { allow = WRITE_ALLOW } = {}) {
 }
 
 function main() {
-  const { files, problems } = check();
-  const lines = [`desk boundaries · ${files} source file(s) under ${SRC} · ${problems.length} problem(s)`];
+  const { files, problems, owed } = check();
+  const lines = [`desk boundaries · ${files} source file(s) under ${SRC} · ${problems.length} problem(s), ${owed.length} owed`];
   for (const p of problems) lines.push(`FAIL ${p.rule}: ${p.file} ${p.detail}`);
-  if (!problems.length) lines.push("ok: engines are a leaf behind their entry modules, rules load no engine or built-in, only engines spawn, only the session writes");
+  for (const p of owed) lines.push(`OWED ${p.rule}: ${p.file} ${p.detail} (an open decision; see OWED in tools/desk-boundaries.cjs)`);
+  if (!problems.length) lines.push(`ok: engines are a leaf behind their entry modules, rules load no engine or built-in, only engines spawn, only the session writes${owed.length ? `, beyond ${owed.length} owed break(s)` : ""}`);
   console.log(lines.join("\n"));
   if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, "## Desk boundaries (desk/src/lib/)\n\n" + lines.map((l) => `- ${l}`).join("\n") + "\n");
   return problems.length ? 1 : 0;
@@ -149,4 +177,4 @@ if (require.main === module) {
   catch (e) { console.error(`desk boundaries: ${e.stack || e}`); process.exitCode = 2; }
 }
 
-module.exports = { ENTRY, WRITE_ALLOW, fsWritesOf, sourcesOf, check };
+module.exports = { ENTRY, WRITE_ALLOW, OWED, fsWritesOf, sourcesOf, check };
