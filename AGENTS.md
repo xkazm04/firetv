@@ -35,6 +35,7 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Evals (AI output, deterministic) | the `evals` command in `.ai/manifest.yaml` | A subset of the desk gate: the maths judge and marking, withholding, and the UAT verdict, metrics, ledger and surface suites. Model roles are stubbed. See `docs/AI_HARNESS.md`. |
 | Compile: tv-app | `node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin` | Needs `local.properties` (SDK path) and the generated `tv-app/src/main/res/raw/fixture_clip.mp4` (see `fixtures/README.md`). |
 | Build: tv APK | `node tools/gradlew.cjs :tv-app:assembleDebug` | Same prerequisites. |
+| Test: stick app | `node tools/gradlew.cjs :stick-app:testDebugUnitTest` | JVM tests of the stick's WebView APK; some pin desk facts (`desk/src/tv/keys.ts`, `proxy.ts`, pairing, store), so a desk rename can turn them red. Needs `local.properties` (SDK path). |
 | Full telestrator cycle | `./scripts/dev.ps1` | Unit, build, emulator, deploy, live UI test (PowerShell, Windows). |
 | Death Ride | `cd deathride` then `.\gradlew.bat :core:test`, `:link:test`, `:app:assembleDebug` | Its own build. Never run it through the root wrapper. Read `deathride/AGENTS.md` first (app id, gate, owner checks). |
 | Desk layering | `node tools/desk-boundaries.cjs` | Fails when `desk/src/` breaks its layering: engines are a leaf behind their entry modules, rules load no engine or Node built-in, only engines spawn, only the session writes (`.ai/memory/0018`). The three breaks main carried when it landed are `OWED` entries: printed, not failed, until the owner settles each. Its suite is `node tools/desk-boundaries-test.cjs`. |
@@ -63,6 +64,7 @@ There is no linter or formatter wired yet. Match the surrounding style. Kotlin f
 | a module under `desk/src/` that changes what it imports or whether it writes a file | the desk gate, plus `node tools/desk-boundaries-test.cjs` |
 | `core/` | `node tools/gradlew.cjs :core:test` |
 | `tv-app/` or `companion/` | `node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin` |
+| `stick-app/`, or a desk fact it pins (`desk/src/tv/keys.ts`, `desk/src/proxy.ts`, pairing, the session store) | `node tools/gradlew.cjs :stick-app:testDebugUnitTest` |
 | a TV screen (`desk/src/tv`, `desk/src/app/tv`, `desk/src/english/LingaTV.tsx`) | the desk gate, plus a Playwright capture against a second dev server (`next dev --webpack`, its own seeded `DESK_DATA_DIR`) |
 | `uat/driver` | `node --check uat/driver/linga-text.cjs` (a live LT run spends codex calls and is the operator's call) |
 | a file on the live surface (`node tools/model-drift-pr.cjs --surface`: the hint, read and pick pipelines, the rules they import, `desk/src/lib/engines/`, the lab bench) | the desk gate, plus a live drift record the operator takes on the branch (`scripts/model-drift.ps1`) and commits in the PR. Ask for it; never run it yourself (`.ai/memory/0017`). |

@@ -9,7 +9,7 @@ The three TV products in this repository and the glue between them:
 - the Study Desk prototype (`desk/`, with its rules suites in `tools/` and UAT in `uat/`)
 - the standalone Death Ride build (`deathride/`)
 
-It also owns the root Gradle build (`settings.gradle.kts`: `:core`, `:tv-app`; versions in
+It also owns the root Gradle build (`settings.gradle.kts`: `:core`, `:tv-app`, `:stick-app`; versions in
 `gradle/libs.versions.toml`) and the agent contract in `.ai/`.
 
 ## Public contract

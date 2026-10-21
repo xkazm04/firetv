@@ -42,6 +42,7 @@ Run the gate for every surface you touched and record its exit code. The table i
 | `desk/`, `tools/*-test.cjs` | `npm --prefix desk test` |
 | `core/` | `node tools/gradlew.cjs :core:test` |
 | `tv-app/`, `companion/` | `node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin` |
+| `stick-app/` | `node tools/gradlew.cjs :stick-app:testDebugUnitTest` |
 | a TV screen | the desk gate, plus a Playwright capture (or name the capture as owed) |
 | `deathride/` | `:core:test :link:test` from `deathride/` |
 

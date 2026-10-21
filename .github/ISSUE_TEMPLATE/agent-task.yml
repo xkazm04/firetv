@@ -58,6 +58,7 @@ body:
         - "the live surface (node tools/model-drift-pr.cjs --surface): the desk gate plus a live drift record the operator takes on the branch"
         - "core/: node tools/gradlew.cjs :core:test"
         - "tv-app/ or companion/: node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin"
+        - "stick-app/ (or a desk fact it pins: keys.ts, proxy.ts, pairing, store): node tools/gradlew.cjs :stick-app:testDebugUnitTest"
         - "uat/driver: node --check uat/driver/linga-text.cjs"
         - "deathride/: :core:test :link:test from deathride/"
         - ".ai/, .github/ or scripts/: node .ai/doctor.mjs --json then node scripts/doctor-gate.mjs"
