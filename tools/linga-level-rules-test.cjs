@@ -2,6 +2,8 @@
  * LINGA LEVEL: the level check's command surface (lib/english/check.ts) and the table it is guarded by
  * (lib/english/activity.ts), driven through englishCommand as the phone and the TV drive it.
  *   - a check left part way is kept: opening the topics does not replace it (the home says "Your place is saved");
+ *   - a judge answer whose quote is not in the learner's answer is asked for once more inside the same call, so the
+ *     learner is not asked to send their answer again; a second miss is still refused;
  * Run with npm test in desk/ (directly: node tools/linga-level-rules-test.cjs). No model is called: the providers throw
  * and the text engine is a fixed local stub. The data directory is disposable, under the OS temp dir; never desk/data.
  */
@@ -58,4 +60,25 @@ test('a check left part way survives "My topics": plan-open and plan-propose do 
   // and the kept check carries on from where it was
   await command('check-resume', { checkId: kept.id });
   assert.equal(getSession().check.parked, false);
+});
+
+test('a judge quote that is not in the answer is asked for once more inside the call; the learner never resends', async () => {
+  seat('jakub');
+  const answer = 'I think it was on the bus this morning.';
+  steps = { about, task: sayTask, judge: (p, n) => ({ answered: 'yes', english: p.band, quote: n === 1 ? 'I think it were on the bus' : 'it was on the bus', heldBack: '', note: 'A clear answer.' }) };
+  await throughQuestions();
+  let k = getSession().check; assert(k.task, 'a task is on the TV');
+  calls = {};
+  await command('check-task', { checkId: k.id, taskId: k.task.id, text: answer, mode: 'text' });
+  k = getSession().check;
+  assert.equal(calls.judge, 2, 'the judge was asked once more');
+  assert.equal(k.error, '', 'no error line for the learner');
+  assert.equal(k.tasks.length, 1); assert.equal(k.tasks[0].quote, 'it was on the bus');
+  // two misses: the answer is refused as before, and the learner is told to send it again
+  steps.judge = () => ({ answered: 'yes', english: 'B1', quote: 'something they never said', heldBack: '', note: 'A clear answer.' });
+  calls = {};
+  await assert.rejects(command('check-task', { checkId: k.id, taskId: k.task.id, text: answer, mode: 'text' }), /did not quote the learner accurately/);
+  assert.equal(calls.judge, 2, 'one re-ask, never more');
+  assert.match(getSession().check.error, /send it again/);
+  assert.equal(getSession().check.tasks.length, 1, 'nothing judged on a misquote');
 });

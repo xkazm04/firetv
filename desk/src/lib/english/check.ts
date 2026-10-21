@@ -433,7 +433,7 @@ Then your read of everything so far. selfBand: your best estimate of their band 
     if (!["speech", "text"].includes(String(input.mode))) throw new ConversationError("Choose a spoken or typed answer.");
     const mode = input.mode as EvidenceMode;
     const next = await call(k, commandId, "Linga could not read that answer. Your answer is still on the phone; send it again.", async () => {
-      const r = await ask(checkSystem(profile, ctx.adult), {
+      const request = {
         step: "judge", band: task.band, kind: task.kind, bandGuide: BAND_TUTOR[task.band], taskShown: { prompt: task.prompt, ...(task.kind === "listen" ? { line: task.line, revealed: task.revealed } : {}) }, response,
         languageBands: BAND_JUDGE,
         task: `Judge this answer to a ${task.kind} task written for band ${task.band}. Two separate judgements.
@@ -442,9 +442,21 @@ english: the band the English in the response itself shows, using languageBands:
 quote: an exact excerpt of the response, copied character for character, that the english rating rests on (the whole response when it is short).
 heldBack: when the english sits below ${task.band}, an exact excerpt of the response, copied character for character, showing the one thing that kept the English below ${task.band}; empty when the english is at or above ${task.band}, or is none.
 note: one plain, kind sentence to the learner about what their answer showed; when the English sits below ${task.band}, name the one thing that held it back, never call the answer clear, strong or good then, and do not open with praise of the content. At most 160 characters, simple English.`,
-      }, judgeSchema);
+      };
+      // the quote admits the verdict, so it stays exact: a reading whose quote is not in the response is asked for once
+      // more inside this call with the miss named (booked as its next try, types.ts Again); a second miss is refused as before
+      const grounded = (j: Record<string, unknown>) => { const q = optional(j.quote, 240); return ["yes", "partly", "no"].includes(j.answered as string) && (j.english === "none" || isBand(j.english)) && !!q && response.includes(q); };
+      let r = await ask(checkSystem(profile, ctx.adult), request, judgeSchema);
+      if (!grounded(r.json)) {
+        console.info("Linga check: the judge quote is not in the answer; asked once more.");
+        try {
+          const again = await ask(checkSystem(profile, ctx.adult), { ...request, task: `${request.task}
+Your previous quote ("${optional(r.json.quote, 120)}") is not an exact excerpt of the response. Copy quote character for character from response, keeping its spelling, case and punctuation.` }, judgeSchema, 90000, r.again);
+          r = { ...again, ms: r.ms + again.ms };
+        } catch (e) { console.warn("Linga check: the quote re-ask failed:", e instanceof Error ? e.message : e); }
+      }
+      if (!grounded(r.json)) throw new Error("The judge did not quote the learner accurately.");
       const answered = r.json.answered as "yes" | "partly" | "no", english = r.json.english as Band | "none", quote = optional(r.json.quote, 240);
-      if (!["yes", "partly", "no"].includes(answered) || !(english === "none" || isBand(english)) || !quote || !response.includes(quote)) throw new Error("The judge did not quote the learner accurately.");
       // the judge's two readings are kept beside the verdict (S2): code derives the band the learner spoke from them
       const t: PlacementTask = { ...judged(verdictFor(task, answered, english), response, mode, quote, line(r.json.note, 160)), answered, english };
       const heldBack = keepHeldBack(r.json.heldBack, response, english, task.band);
