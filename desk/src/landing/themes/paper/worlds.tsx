@@ -144,15 +144,49 @@ export function mathsWorld(c: Extract<ArtState, { app: "maths" }>): Layer[] {
 
 // ---------------------------------------------------------------- Linga: a hotel reception at sunset
 
+// the still layers (stills/Still.tsx); the sky has a night form (the moon over the hotel), its stars twinkle live
+const lSky = (night: boolean) => <>
+  <defs><SkyGradient id="lSky" stops={SKY.english} />
+    {night && <mask id="pp-lMoon"><rect x="-100" y="-100" width="200" height="200" fill="#fff" /><circle cx="30" cy="-16" r="52" fill="#000" /></mask>}</defs>
+  <SkyRect id="lSky" />
+  <circle cx="960" cy="730" r="520" fill={paint("rWarm")} opacity=".8" /><Circ x={960} y={730} r={250} fill={paint("gButter")} opacity={0.95} /><Circ x={960} y={730} r={190} fill="#fff6cc" opacity={0.55} />
+  {night && <g transform="translate(1590 268)"><circle r="120" fill={paint("rCream")} opacity=".7" /><circle r="66" fill="#fff3c4" mask="url(#pp-lMoon)" /></g>}
+</>;
+const L_SKY = still("english-sky", "sky", 0.1, lSky(false));
+const L_SKY_NIGHT = still("english-sky-night", "sky", 0.1, lSky(true));
+const L_HILL_BACK = still("english-hill-34", "hill", 0.34, <g><Hill base={650} amp={34} seed={31} fill="#ef9b82" /><Hill base={700} amp={30} seed={12} fill="#e1798a" /></g>);
+const L_HILL_FRONT = still("english-hill-60", "hill", 0.6, <g><Hill base={760} amp={36} seed={41} fill="#bd5578" /><Hill base={812} amp={26} seed={17} fill="#93406a" /></g>);
+// the doorway behind the counter, with Robin the receptionist in the light
+const L_DOOR = still("english-door", "hero", 0.86, <g>
+  <path d="M976 940V650A179 179 0 0 1 1334 650V940Z" fill="#ffdf8a" opacity=".6" filter={paint("fB22")} transform="translate(0 -8)" />
+  <path d="M970 940V650A185 185 0 0 1 1340 650V940Z" fill={paint("gPlum")} />
+  <path d="M1000 940V650A155 155 0 0 1 1310 650V940Z" fill={paint("gDoor")} />
+  <path d="M1032 940V650A123 123 0 0 1 1278 650V940Z" fill="#fff8d2" opacity=".55" />
+  <polygon points="1000,940 1310,940 1420,1060 890,1060" fill="#ffe08a" opacity=".3" />
+  <path d="M1000 650A155 155 0 0 1 1310 650" fill="none" stroke="#fff7cf" strokeWidth="3" opacity=".85" transform="translate(0 2)" />
+  <path d="M970 650A185 185 0 0 1 1340 650" fill="none" stroke="#a5628f" strokeWidth="3" opacity=".8" />
+  <Rr x={1144} y={682} w={22} h={34} r={8} fill="#e9b18c" />
+  <path d="M1072 800Q1076 722 1155 712Q1234 722 1238 800Z" fill={paint("gPlum")} /><path d="M1128 714L1155 758L1182 714Z" fill="#fff5e0" />
+  <path d="M1155 730L1134 718V742ZM1155 730L1176 718V742Z" fill="#e0553c" /><Circ x={1155} y={730} r={5} fill="#c9432c" /><Circ x={1200} y={750} r={7} fill={paint("gBrass")} />
+  <Circ x={1155} y={656} r={33} fill="#f4c7a3" /><path d="M1121 652A34 34 0 0 1 1189 652Q1172 634 1155 640Q1138 634 1121 652Z" fill="#3a2233" />
+  <Circ x={1143} y={662} r={3.4} fill="#2b1d16" /><Circ x={1167} y={662} r={3.4} fill="#2b1d16" />
+  <path d="M1146 674Q1155 682 1164 674" fill="none" stroke="#2b1d16" strokeWidth="3" strokeLinecap="round" />
+  <Circ x={1135} y={672} r={6} fill="#f08c78" opacity={0.5} /><Circ x={1175} y={672} r={6} fill="#f08c78" opacity={0.5} />
+</g>, true);
+// the counter (the bell on it rings, so it stays live)
+const L_COUNTER = still("english-counter", "hero", 1.12, <g><path d="M500 796Q500 776 520 776H1580Q1600 776 1600 796V1100H500Z" fill={paint("gTerra")} />
+  <Rr x={492} y={766} w={1116} h={20} r={9} fill={paint("gCream")} /><Rr x={492} y={786} w={1116} h={8} r={3} fill={paint("gBrass")} />
+  {[0, 1, 2, 3].map((i) => <g key={i}><path d={`M${560 + i * 260} 1080V900a70 70 0 0 1 140 0V1080Z`} fill="#c9592f" opacity=".75" /><path d={`M${574 + i * 260} 1080V904a56 56 0 0 1 112 0V1080Z`} fill="#a8432a" opacity=".55" /></g>)}</g>, true);
+const L_FRONT = still("english-front", "hero", 1.25, <>
+  <Hill base={950} amp={24} seed={63} fill={paint("gPlum")} />
+  <path d="M-140 1100V520C-96 610-40 720 16 836L58 1100Z" fill={paint("gPlum")} /><path d="M2060 1100V600C2004 690 1940 780 1894 860L1850 1100Z" fill={paint("gTerra")} />
+</>);
+
 export function englishWorld(c: Extract<ArtState, { app: "english" }>): Layer[] {
   const out: Layer[] = [], resume = c.resume, tonight = c.next;
   out.push(L(0.1, "sky", true, <>
-    <defs><SkyGradient id="lSky" stops={SKY.english} />
-      <mask id="pp-lMoon"><rect x="-100" y="-100" width="200" height="200" fill="#fff" /><circle cx="30" cy="-16" r="52" fill="#000" /></mask></defs>
-    <SkyRect id="lSky" />
-    <circle cx="960" cy="730" r="520" fill={paint("rWarm")} opacity=".8" /><Circ x={960} y={730} r={250} fill={paint("gButter")} opacity={0.95} /><Circ x={960} y={730} r={190} fill="#fff6cc" opacity={0.55} />
+    {tonight ? L_SKY_NIGHT : L_SKY}
     {tonight && <>
-      <g transform="translate(1590 268)"><circle r="120" fill={paint("rCream")} opacity=".7" /><circle r="66" fill="#fff3c4" mask="url(#pp-lMoon)" /></g>
       <Star x={1440} y={210} s={0.8} fill="#fff3c4" /><Star x={1760} y={330} s={0.6} fill="#fff3c4" delay={0.9} /><Star x={1470} y={340} s={0.5} fill="#fff3c4" delay={1.7} />
     </>}
   </>));
@@ -160,25 +194,9 @@ export function englishWorld(c: Extract<ArtState, { app: "english" }>): Layer[] 
     <Drift dur={21}><Cloud x={330} y={300} s={0.7} fill="#ffe9d2" /></Drift>
     <Drift dur={25} delay={-8}><Cloud x={1640} y={400} s={0.55} fill="#ffe4c8" /></Drift>
   </>));
-  out.push(L(0.34, "hill", true, <g><Hill base={650} amp={34} seed={31} fill="#ef9b82" /><Hill base={700} amp={30} seed={12} fill="#e1798a" /></g>));
-  out.push(L(0.6, "hill", true, <g><Hill base={760} amp={36} seed={41} fill="#bd5578" /><Hill base={812} amp={26} seed={17} fill="#93406a" /></g>));
-  // the doorway behind the counter, with Robin the receptionist in the light
-  out.push(L(0.86, "hero", false, <g>
-    <path d="M976 940V650A179 179 0 0 1 1334 650V940Z" fill="#ffdf8a" opacity=".6" filter={paint("fB22")} transform="translate(0 -8)" />
-    <path d="M970 940V650A185 185 0 0 1 1340 650V940Z" fill={paint("gPlum")} />
-    <path d="M1000 940V650A155 155 0 0 1 1310 650V940Z" fill={paint("gDoor")} />
-    <path d="M1032 940V650A123 123 0 0 1 1278 650V940Z" fill="#fff8d2" opacity=".55" />
-    <polygon points="1000,940 1310,940 1420,1060 890,1060" fill="#ffe08a" opacity=".3" />
-    <path d="M1000 650A155 155 0 0 1 1310 650" fill="none" stroke="#fff7cf" strokeWidth="3" opacity=".85" transform="translate(0 2)" />
-    <path d="M970 650A185 185 0 0 1 1340 650" fill="none" stroke="#a5628f" strokeWidth="3" opacity=".8" />
-    <Rr x={1144} y={682} w={22} h={34} r={8} fill="#e9b18c" />
-    <path d="M1072 800Q1076 722 1155 712Q1234 722 1238 800Z" fill={paint("gPlum")} /><path d="M1128 714L1155 758L1182 714Z" fill="#fff5e0" />
-    <path d="M1155 730L1134 718V742ZM1155 730L1176 718V742Z" fill="#e0553c" /><Circ x={1155} y={730} r={5} fill="#c9432c" /><Circ x={1200} y={750} r={7} fill={paint("gBrass")} />
-    <Circ x={1155} y={656} r={33} fill="#f4c7a3" /><path d="M1121 652A34 34 0 0 1 1189 652Q1172 634 1155 640Q1138 634 1121 652Z" fill="#3a2233" />
-    <Circ x={1143} y={662} r={3.4} fill="#2b1d16" /><Circ x={1167} y={662} r={3.4} fill="#2b1d16" />
-    <path d="M1146 674Q1155 682 1164 674" fill="none" stroke="#2b1d16" strokeWidth="3" strokeLinecap="round" />
-    <Circ x={1135} y={672} r={6} fill="#f08c78" opacity={0.5} /><Circ x={1175} y={672} r={6} fill="#f08c78" opacity={0.5} />
-  </g>));
+  out.push(L(0.34, "hill", true, L_HILL_BACK));
+  out.push(L(0.6, "hill", true, L_HILL_FRONT));
+  out.push(L(0.86, "hero", false, L_DOOR));
   // the key board with one empty hook: the moment waiting to be tried
   const tags = ["#fefaee", "#f5b34a", "#8ec39a", "#f0866a"], keys: ReactNode[] = [];
   let k = 0;
@@ -202,9 +220,7 @@ export function englishWorld(c: Extract<ArtState, { app: "english" }>): Layer[] 
   </>));
   // the counter and the bell
   out.push(L(1.12, "hero", false, <>
-    <g><path d="M500 796Q500 776 520 776H1580Q1600 776 1600 796V1100H500Z" fill={paint("gTerra")} />
-    <Rr x={492} y={766} w={1116} h={20} r={9} fill={paint("gCream")} /><Rr x={492} y={786} w={1116} h={8} r={3} fill={paint("gBrass")} />
-    {[0, 1, 2, 3].map((i) => <g key={i}><path d={`M${560 + i * 260} 1080V900a70 70 0 0 1 140 0V1080Z`} fill="#c9592f" opacity=".75" /><path d={`M${574 + i * 260} 1080V904a56 56 0 0 1 112 0V1080Z`} fill="#a8432a" opacity=".55" /></g>)}</g>
+    {L_COUNTER}
     <g transform="translate(250 0)">
       <g className="pp-bell"><path d="M1108 766A47 47 0 0 1 1202 766Z" fill={paint("gBrass")} /><path d="M1122 758A34 34 0 0 1 1150 726" fill="none" stroke="#fff3bd" strokeWidth="5" strokeLinecap="round" /><Circ x={1155} y={712} r={8} fill={paint("gBrass")} /></g>
       <Rr x={1098} y={764} w={114} h={10} r={5} fill={paint("gBrass")} />
@@ -223,10 +239,7 @@ export function englishWorld(c: Extract<ArtState, { app: "english" }>): Layer[] 
       {[0, 1, 2].map((i) => <circle key={i} className="pp-dot pp-flat" style={{ animationDelay: `${i * 0.28}s` }} cx={450 + i * 50} cy="552" r="13" fill="#b8552e" />)}
     </g>
   </>));
-  out.push(L(1.25, "hero", false, <>
-    <Hill base={950} amp={24} seed={63} fill={paint("gPlum")} />
-    <path d="M-140 1100V520C-96 610-40 720 16 836L58 1100Z" fill={paint("gPlum")} /><path d="M2060 1100V600C2004 690 1940 780 1894 860L1850 1100Z" fill={paint("gTerra")} />
-  </>));
+  out.push(L(1.25, "hero", false, L_FRONT));
   return out;
 }
 
@@ -258,16 +271,25 @@ export function PageBars({ sent, has }: { sent: number | null; has: boolean }) {
   return <>{bars}</>;
 }
 
+// the still layers (stills/Still.tsx)
+const E_SKY = still("essay-sky", "sky", 0.1, <>
+  <defs><SkyGradient id="eSky" stops={SKY.essay} /></defs>
+  <SkyRect id="eSky" />
+  <circle cx="1660" cy="330" r="330" fill={paint("rCream")} opacity=".8" /><Circ x={1660} y={330} r={92} fill="#fff8e2" opacity={0.95} /><Circ x={1660} y={330} r={66} fill="#fffdf3" />
+</>);
+const E_HILL_BACK = still("essay-hill-34", "hill", 0.34, <><g><Hill base={650} amp={34} seed={51} fill="#b7d3a3" /><Hill base={700} amp={30} seed={9} fill="#a3c896" /></g><Tree x={240} y={690} s={0.8} c1="#6fa889" c2="#4f8c6c" /><Tree x={1780} y={700} s={0.7} c1="#6fa889" c2="#4f8c6c" /></>);
+const E_HILL_FRONT = still("essay-hill-60", "hill", 0.6, <><Hill base={764} amp={34} seed={61} fill="#8dbb8c" /><Tree x={420} y={800} s={1} c1="#58a06c" c2="#3a7d55" /><Tree x={1610} y={806} s={0.95} c1="#58a06c" c2="#3a7d55" /><Hill base={816} amp={24} seed={27} fill="#6aa57a" /></>);
+const E_FRONT = still("essay-front", "hero", 1.25, <>
+  <Hill base={950} amp={24} seed={71} fill={paint("gForest")} />
+  <path d="M-140 1100V540C-96 620-40 730 16 840L58 1100Z" fill={paint("gForest")} /><path d="M2060 1100V620C2004 700 1944 790 1898 866L1852 1100Z" fill={paint("gLeaf")} />
+</>);
+
 export function essayWorld(c: Extract<ArtState, { app: "essay" }>): Layer[] {
   const out: Layer[] = [], sent = c.sent, has = c.sent != null || c.paras > 0;
-  out.push(L(0.1, "sky", true, <>
-    <defs><SkyGradient id="eSky" stops={SKY.essay} /></defs>
-    <SkyRect id="eSky" />
-    <circle cx="1660" cy="330" r="330" fill={paint("rCream")} opacity=".8" /><Circ x={1660} y={330} r={92} fill="#fff8e2" opacity={0.95} /><Circ x={1660} y={330} r={66} fill="#fffdf3" />
-  </>));
+  out.push(L(0.1, "sky", true, E_SKY));
   out.push(L(0.22, "soft", true, <><Drift dur={22}><Cloud x={300} y={300} s={0.7} /></Drift><Drift dur={26} delay={-9}><Cloud x={1420} y={220} s={0.55} /></Drift></>));
-  out.push(L(0.34, "hill", true, <><g><Hill base={650} amp={34} seed={51} fill="#b7d3a3" /><Hill base={700} amp={30} seed={9} fill="#a3c896" /></g><Tree x={240} y={690} s={0.8} c1="#6fa889" c2="#4f8c6c" /><Tree x={1780} y={700} s={0.7} c1="#6fa889" c2="#4f8c6c" /></>));
-  out.push(L(0.6, "hill", true, <><Hill base={764} amp={34} seed={61} fill="#8dbb8c" /><Tree x={420} y={800} s={1} c1="#58a06c" c2="#3a7d55" /><Tree x={1610} y={806} s={0.95} c1="#58a06c" c2="#3a7d55" /><Hill base={816} amp={24} seed={27} fill="#6aa57a" /></>));
+  out.push(L(0.34, "hill", true, E_HILL_BACK));
+  out.push(L(0.6, "hill", true, E_HILL_FRONT));
   // the paragraphs read, stacked at the side
   if (c.paras > 0) out.push(L(0.92, "hero", false, <g>{Array.from({ length: c.paras }, (_, i) => (
     <g key={i} transform={`translate(${585 + i * 26} ${700 - i * 20}) rotate(${-9 + i * 6})`}>
@@ -290,10 +312,7 @@ export function essayWorld(c: Extract<ArtState, { app: "essay" }>): Layer[] {
     <g transform="translate(770 796) rotate(-7)"><Rr x={-290} y={-14} w={350} h={28} r={5} fill={paint("gYellow")} /><Rr x={-306} y={-14} w={18} h={28} r={6} fill="#f3a08a" /><Rr x={-292} y={-14} w={8} h={28} fill={paint("gBrass")} />
       <path d="M60-14H120Q144-14 144 0Q144 14 120 14H60Z" fill={paint("gForest")} /><Rr x={50} y={-16} w={12} h={32} r={3} fill={paint("gBrass")} /><Rr x={-286} y={-8} w={330} h={6} r={3} fill="rgba(255,255,255,.4)" /></g>
   </>));
-  out.push(L(1.25, "hero", false, <>
-    <Hill base={950} amp={24} seed={71} fill={paint("gForest")} />
-    <path d="M-140 1100V540C-96 620-40 730 16 840L58 1100Z" fill={paint("gForest")} /><path d="M2060 1100V620C2004 700 1944 790 1898 866L1852 1100Z" fill={paint("gLeaf")} />
-  </>));
+  out.push(L(1.25, "hero", false, E_FRONT));
   return out;
 }
 

@@ -14,19 +14,23 @@ export interface Box { x: number; y: number; w: number; h: number }
 export const slide = (d: number) => 1920 * Math.max(0.15, d);
 /** What the drawings span: the hills run -1400..3300 (shapes.tsx hillD), the sky's rect -460..2380 x -120..1200. */
 const ART = { x0: -1400, x1: 3300, y0: -120 };
-/** The stage's bottom edge, and a margin for the shadows' blur and the host's unpaired scale (1.05 about 1920,560). */
-const BOTTOM = 1080, PAD = 40;
+/**
+ * The stage's bottom edge; the margin a slide edge keeps (the host's unpaired scale is 1.05 about 1920,560); and the
+ * margin around a drawing's outline, which getBBox gives without its strokes, shadow or blur (fB22 reaches 66 px).
+ */
+const BOTTOM = 1080, PAD = 40, REACH = 72;
 
 /**
- * The part of a layer a bitmap must hold: the stage widened by the layer's slide on either side (a cut edge must not
- * come into view while the world slides), clipped to what is drawn, from the drawing's top (less the shadow's reach) to
+ * The part of a layer a bitmap must hold: the drawing's outline widened by what its shadow and blur reach, clipped to the
+ * stage widened by the layer's slide on either side (a cut edge must not come into view while the world slides) and to
  * the stage's bottom. A slide never shows below the stage: pp-in and pp-up lower a layer, they never raise it.
  */
-export function stillBox(d: number, top: number): Box {
+export function stillBox(d: number, drawn: Box): Box {
   const s = slide(d);
-  const x0 = Math.max(ART.x0, Math.floor(-s - PAD)), x1 = Math.min(ART.x1, Math.ceil(1920 + s + PAD));
-  const y0 = Math.max(ART.y0, Math.floor(top - PAD)), y1 = BOTTOM + PAD;
-  return { x: x0, y: y0, w: x1 - x0, h: Math.max(1, y1 - y0) };
+  const x0 = Math.max(ART.x0, Math.floor(-s - PAD), Math.floor(drawn.x - REACH));
+  const x1 = Math.min(ART.x1, Math.ceil(1920 + s + PAD), Math.ceil(drawn.x + drawn.w + REACH));
+  const y0 = Math.max(ART.y0, Math.floor(drawn.y - REACH)), y1 = Math.min(BOTTOM + PAD, Math.ceil(drawn.y + drawn.h + REACH));
+  return { x: x0, y: y0, w: Math.max(1, x1 - x0), h: Math.max(1, y1 - y0) };
 }
 
 /**
@@ -36,15 +40,22 @@ export function stillBox(d: number, top: number): Box {
  */
 export const KIND_SCALE: Record<StillKind, number> = { sky: 0.5, soft: 1, hill: 0.5, hero: 0.5 };
 
-/** Device pixels per layer unit, rounded up to a quarter step (a bitmap is never coarser than the screen), 0.25..2. */
+/**
+ * Device pixels per layer unit, rounded up to a quarter step (a bitmap is never coarser than the screen), 0.25..1. Never
+ * over 1: the stage is 1920 px and the stick shows it on a 1920 x 1080 surface, while its WebView reports a
+ * devicePixelRatio of 4 (measured 2 a unit), which made each bitmap four times its pixels.
+ */
 export function quantScale(px: number): number {
   if (!Number.isFinite(px) || px <= 0) return 1;
-  return Math.min(2, Math.max(0.25, Math.ceil(px * 4 - 1e-6) / 4));
+  return Math.min(1, Math.max(0.25, Math.ceil(px * 4 - 1e-6) / 4));
 }
 
-/** The canvas a still is drawn into: its box at the device's scale times the kind's. */
-export function stillPixels(box: Box, px: number, kind: StillKind): { w: number; h: number; scale: number } {
-  const scale = quantScale(px) * KIND_SCALE[kind];
+/**
+ * The canvas a still is drawn into: its box at the device's scale times the kind's. A small focal drawing (a face, the
+ * Linga doorway) is `sharp`: drawn at the device's own scale, as half softened its fine lines (41 dB against 45-46).
+ */
+export function stillPixels(box: Box, px: number, kind: StillKind, sharp = false): { w: number; h: number; scale: number } {
+  const scale = quantScale(px) * (sharp ? 1 : KIND_SCALE[kind]);
   return { w: Math.max(1, Math.ceil(box.w * scale)), h: Math.max(1, Math.ceil(box.h * scale)), scale };
 }
 /** GPU bytes of one still (RGBA, 4 bytes a pixel). */

@@ -33,6 +33,17 @@ test('the Math Buddy world draws its sky, both hills and its front hill and clif
  assert.deepEqual(stillsOf(by('hero',0.48).node),[]);
 });
 
+test('Linga and Essay Master draw their sky, hills and front as stills; what moves or carries the session stays live',()=>{
+ const en=(over)=>worlds.worldFor({app:'english',resume:false,next:false,...over});
+ const ids=(L)=>L.map(l=>[l.k,l.d,stillsOf(l.node)]);
+ assert.deepEqual(ids(en({})),[['sky',0.1,['english-sky']],['soft',0.22,[]],['hill',0.34,['english-hill-34']],['hill',0.6,['english-hill-60']],
+  ['hero',0.86,['english-door']],['hero',1,[]],['hero',1.12,['english-counter']],['hero',1.3,[]],['hero',1.25,['english-front']]]);
+ assert.deepEqual(stillsOf(en({next:true})[0].node),['english-sky-night'],'tonight: the sky with the moon (its stars stay live)');
+ const es=worlds.worldFor({app:'essay',sent:2,paras:2});
+ assert.deepEqual(ids(es),[['sky',0.1,['essay-sky']],['soft',0.22,[]],['hill',0.34,['essay-hill-34']],['hill',0.6,['essay-hill-60']],
+  ['hero',0.92,[]],['hero',1,[]],['hero',1.12,[]],['hero',1.25,['essay-front']]]);
+});
+
 test('a still is the same bitmap whatever the session says: the Math Buddy stills do not change with steps lit',()=>{
  const a=worlds.worldFor({app:'maths',n:0,m:6,fresh:true}),b=worlds.worldFor({app:'maths',n:6,m:6,fresh:false});
  const ids=(L)=>L.flatMap(l=>stillsOf(l.node));
@@ -49,37 +60,43 @@ test('every declared still has one id',()=>{
  assert.deepEqual(rules.duplicateIds(['a','b','a']),['a']);
 });
 
-test('a still\'s box holds the stage widened by the layer\'s whole slide, clipped to what is drawn',()=>{
+test('a still\'s box holds the stage widened by the layer\'s whole slide, clipped to what is drawn and what its shadow reaches',()=>{
+ const hills={x:-1400,y:600,w:4700,h:800};
  for(const d of [0.1,0.34,0.6,1.25]){
-  const b=rules.stillBox(d,600),s=rules.slide(d);
+  const b=rules.stillBox(d,hills),s=rules.slide(d);
   assert.ok(b.x<=Math.max(-1400,-s),`d ${d}: left edge ${b.x} would show in a slide of ${s}`);
   assert.ok(b.x+b.w>=Math.min(3300,1920+s),`d ${d}: right edge would show`);
   assert.ok(b.x>=-1400&&b.x+b.w<=3300,'no wider than the drawing');
-  assert.equal(b.y,560,'the top is the drawing\'s top less the shadow margin');
-  assert.ok(b.y+b.h>=1080,'it reaches the stage\'s bottom');
+  assert.equal(b.y,528,'the top is the drawing\'s top less what a blur reaches');
+  assert.equal(b.y+b.h,1120,'it stops at the stage\'s bottom (and its margin)');
  }
  assert.equal(rules.slide(0.1),288,'a layer slides at least 15 % of the stage');
- assert.equal(rules.stillBox(0.1,-500).y,-120,'never above the sky\'s rect');
+ assert.equal(rules.stillBox(0.1,{x:-460,y:-500,w:2840,h:1700}).y,-120,'never above the sky\'s rect');
+ // a small drawing (the Linga doorway) keeps a small box: its outline and its glow's reach
+ const door=rules.stillBox(0.86,{x:890,y:465,w:530,h:595});
+ assert.deepEqual(door,{x:818,y:393,w:674,h:727});
 });
 
-test('the bitmap scale follows the device, rounded up to a quarter, and never under 0.25 or over 2',()=>{
+test('the bitmap scale follows the device, rounded up to a quarter, and never under 0.25 or over 1 (the stick reports DPR 4 on a 1080p surface)',()=>{
  assert.equal(rules.quantScale(1),1);
  assert.equal(rules.quantScale(0.85),1);
  assert.equal(rules.quantScale(0.5),0.5);
  assert.equal(rules.quantScale(0.01),0.25);
- assert.equal(rules.quantScale(9),2);
+ assert.equal(rules.quantScale(2),1);
+ assert.equal(rules.quantScale(9),1);
  assert.equal(rules.quantScale(NaN),1);
  const p=rules.stillPixels({x:0,y:0,w:2000,h:500},1,'hill');
  assert.deepEqual([p.w,p.h],[1000,250],'half the device\'s resolution');
  assert.equal(rules.stillBytes(p),1000*250*4);
 });
 
-test('the Math Buddy stills fit in 12 MB on the stick (1 device px a stage px)',()=>{
- const tops={'maths-sky':-120,'maths-hill-34':585,'maths-hill-60':700,'maths-front':470};
- const ds={'maths-sky':0.1,'maths-hill-34':0.34,'maths-hill-60':0.6,'maths-front':1.25};
- const kinds={'maths-sky':'sky','maths-hill-34':'hill','maths-hill-60':'hill','maths-front':'hero'};
- const bytes=Object.keys(tops).reduce((s,id)=>s+rules.stillBytes(rules.stillPixels(rules.stillBox(ds[id],tops[id]),1,kinds[id])),0);
- assert.ok(bytes<12*1048576,`${(bytes/1048576).toFixed(1)} MB`);
+test('every world\'s stills fit in 40 MB on the stick (1 device px a stage px), all three worlds and the night sky',()=>{
+ const sky={x:-460,y:-120,w:2840,h:1320},hill=(top)=>({x:-1400,y:top,w:4700,h:1400-top});
+ const all=[['sky',0.1,sky],['sky',0.1,sky],['sky',0.1,sky],['sky',0.1,sky],
+  ...[585,595,595].flatMap(t=>[['hill',0.34,hill(t)],['hill',0.6,hill(t+110)],['hero',1.25,hill(470)]]),
+  ['hero',0.86,{x:890,y:465,w:530,h:595},true],['hero',1.12,{x:492,y:766,w:1116,h:334},true]];
+ const bytes=all.reduce((s,[k,d,b,sharp])=>s+rules.stillBytes(rules.stillPixels(rules.stillBox(d,b),1,k,sharp)),0);
+ assert.ok(bytes<40*1048576,`${(bytes/1048576).toFixed(1)} MB`);
 });
 
 test('the baked shadow is the one design/desk-landing.css casts, its blur a radius (deviation = half)',()=>{

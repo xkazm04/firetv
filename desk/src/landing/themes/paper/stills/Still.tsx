@@ -16,7 +16,7 @@ import { flushSync } from "react-dom";
 import { Defs } from "../shapes";
 import { SHADOW, stdDeviation, stillBox, stillPixels, type Box, type StillKind } from "./rules";
 
-interface Decl { id: string; kind: StillKind; d: number; node: ReactNode }
+interface Decl { id: string; kind: StillKind; d: number; node: ReactNode; sharp: boolean }
 interface Baked { canvas: HTMLCanvasElement; box: Box; svg: string; bytes: number }
 
 const SVGNS = "http://www.w3.org/2000/svg";
@@ -26,9 +26,9 @@ const waiting = new Map<string, Array<() => void>>();
 const queue: string[] = [];
 let px = 0, running = false, warmed = false;
 
-/** Declare a still layer node (once, at module scope). Ids are unique per drawing. */
-export function still(id: string, kind: StillKind, d: number, node: ReactNode): ReactNode {
-  declared.set(id, { id, kind, d, node });
+/** Declare a still layer node (once, at module scope). Ids are unique per drawing; `sharp` draws it at full resolution. */
+export function still(id: string, kind: StillKind, d: number, node: ReactNode, sharp = false): ReactNode {
+  declared.set(id, { id, kind, d, node, sharp });
   return <Still id={id} />;
 }
 
@@ -60,7 +60,8 @@ async function bake(id: string): Promise<void> {
   try {
     flushSync(() => root.render(<><Defs /><g data-still="">{decl.node}</g></>));
     const g = host.querySelector("g[data-still]") as SVGGElement;
-    box = stillBox(decl.d, g.getBBox().y);
+    const bb = g.getBBox();
+    box = stillBox(decl.d, { x: bb.x, y: bb.y, w: bb.width, h: bb.height });
     const sh = SHADOW[decl.kind];
     if (sh) {
       const f = document.createElementNS(SVGNS, "filter");
@@ -73,7 +74,7 @@ async function bake(id: string): Promise<void> {
       const out: Element[] = []; casters(g, 0, out);
       for (const c of out) c.setAttribute("filter", "url(#pp-still-sh)");
     }
-    const q = stillPixels(box, px || 1, decl.kind);
+    const q = stillPixels(box, px || 1, decl.kind, decl.sharp);
     host.setAttribute("width", String(q.w)); host.setAttribute("height", String(q.h));
     host.setAttribute("viewBox", `${box.x} ${box.y} ${box.w} ${box.h}`);
     host.setAttribute("preserveAspectRatio", "none");
@@ -84,7 +85,7 @@ async function bake(id: string): Promise<void> {
   }
   if (!box) return;
   const canvas = document.createElement("canvas");
-  const p = stillPixels(box, px || 1, decl.kind);
+  const p = stillPixels(box, px || 1, decl.kind, decl.sharp);
   canvas.width = p.w; canvas.height = p.h;
   canvas.style.cssText = "display:block;width:100%;height:100%";
   await paint(canvas, svg);
