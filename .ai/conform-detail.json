@@ -3014,6 +3014,57 @@
           "evidence": "desk/src/lib/rules/calc-word.ts:229 This bounded loop draws seeded question candidates; it does not repeat agent repair attempts."
         }
       ]
+    },
+    "desk-surfaces/landing/copy-quality-gates": {
+      "context": "landing",
+      "subject": "copy-quality-gates",
+      "bundle": "localization",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-21",
+      "evaluatedTs": "2026-10-21T23:35:44.552Z",
+      "worker": "b0b422e6-972b-43e8-85ea-e94c14ff50c6",
+      "techniques": [
+        {
+          "technique": "copy-contract-before-drafting",
+          "verdict": "deviation",
+          "evidence": "desk/src/landing/model.ts:4 The shared wording model and landing design document provide product principles and examples, but searches located no copy contract declaring language mechanics, a termbase, rule dispositions and copy-review ownership."
+        },
+        {
+          "technique": "deterministic-repair-classes",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/landing/model.ts:80 This normalization assembles spoken UI text; no landing gate autocorrector, repair findings or repair-report workflow was located."
+        },
+        {
+          "technique": "enforcement-at-the-write-seams",
+          "verdict": "deviation",
+          "evidence": "tools/tv-landing-live.cjs:3 The landing's browser copy checks explicitly sit outside the aggregate test command; no mandatory landing diff or end-of-session enforcement seam was located."
+        },
+        {
+          "technique": "layered-mechanical-gate",
+          "verdict": "deviation",
+          "evidence": "desk/src/tv/landingRows.ts:99 Product prose remains inline in TypeScript; inspected tests check selected wording and lengths, but no counted source-copy gate enforcing the standard's L1 catalog, typography and terminology checks was located."
+        },
+        {
+          "technique": "length-and-render-budgets",
+          "verdict": "deviation",
+          "evidence": "desk/src/design/desk-landing.css:107 Caption details occupy a clipped two-line box, but the landing tests use a 25-word cap and safe-zone measurements without checking internal text overflow or producing an overflow finding."
+        },
+        {
+          "technique": "rendered-string-extraction",
+          "verdict": "deviation",
+          "evidence": "tools/tv-keys-test.cjs:587 This wording check extracts only three forms of literal assignment from source lines; caption templates and JSX wording have no independently counted rendered-unit extraction coverage."
+        },
+        {
+          "technique": "severity-as-declared-data",
+          "verdict": "deviation",
+          "evidence": "tools/tv-landing-test.cjs:68 The caption rule's blocking disposition and threshold are implicit in an assertion, with no rule identifier or separately declared disposition; no landing severity configuration was located."
+        },
+        {
+          "technique": "source-defects-from-cross-language-agreement",
+          "verdict": "not-applicable",
+          "evidence": "docs/DESIGN-STUDY-DESK.md:123 The landing's design document declares the desk English in Phase 1, and searches located no landing target catalogs or findings across two checked languages."
+        }
+      ]
     }
   }
 }

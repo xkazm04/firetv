@@ -1996,7 +1996,11 @@
           "revision": 10,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/design/desk-landing.css:106 Landing headlines are clipped after two lines, while inspected checks measure word count and outer bounds without detecting clipped text, so passing copy can lose visible content.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:f00a2dbd4e8fdce1",
+          "evaluatedRevision": 10
         },
         {
           "subject": "prompt-assembly",
