@@ -8,6 +8,8 @@ import io.ktor.client.plugins.websocket.webSocket
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
@@ -40,16 +42,30 @@ class RelayTransport(
     private val client = HttpClient(CIO) { install(WebSockets) }
     private var job: Job? = null
 
+    private val _failure = MutableStateFlow<String?>(null)
+
+    /**
+     * Set once [FAILED_DIALS] dials in a row never reached the relay, cleared by the next one that
+     * does. Until then the QR points at a relay this TV cannot reach, and the card must not present
+     * it as an invitation; one failed dial is a blink, not news.
+     */
+    override val failure: StateFlow<String?> = _failure
+
     override fun pairingUrl(): String = phoneUrl
 
     override fun start(scope: CoroutineScope, onPen: suspend (PenChannel) -> Unit) {
         job = scope.launch {
             var backoffMs = INITIAL_BACKOFF_MS
+            var failedDials = 0
             while (isActive) {
                 val connectedAt = System.currentTimeMillis()
+                var reached = false
                 runCatching {
                     Log.i(TAG, "dialling $relayWsUrl")
                     client.webSocket(relayWsUrl) {
+                        reached = true
+                        failedDials = 0
+                        _failure.value = null
                         Log.i(TAG, "relay connected")
                         // One outbound socket carries one pen at a time, but it is not a pen: it
                         // exists before any phone and outlives each one, so its conversation is
@@ -60,6 +76,10 @@ class RelayTransport(
                 }.onFailure { Log.w(TAG, "relay connection failed: ${it.message}") }
 
                 if (!isActive) break
+                if (!reached && ++failedDials >= FAILED_DIALS) {
+                    _failure.value = UNREACHABLE
+                    Log.w(TAG, "relay unreachable after $failedDials dials")
+                }
                 // A connection that lasted a while was healthy; reset the backoff so a transient
                 // drop reconnects promptly instead of inheriting an earlier failure's penalty.
                 backoffMs = if (System.currentTimeMillis() - connectedAt > HEALTHY_MS) {
@@ -83,5 +103,9 @@ class RelayTransport(
         const val INITIAL_BACKOFF_MS = 500L
         const val MAX_BACKOFF_MS = 10_000L
         const val HEALTHY_MS = 10_000L
+
+        /** About 3.5 s of dialling at the backoff above: past a Wi-Fi blink, well before a viewer gives up. */
+        const val FAILED_DIALS = 3
+        const val UNREACHABLE = "The pen relay cannot be reached. Still trying."
     }
 }

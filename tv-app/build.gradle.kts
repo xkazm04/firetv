@@ -41,6 +41,9 @@ android {
     // tested on the JVM, like core; anything that needs the device stays in androidTest.
     testOptions {
         unitTests.all { it.useJUnitPlatform() }
+        // The transports log through android.util.Log; on the JVM that is a stub, and a stub that
+        // throws would turn every log line into a test failure.
+        unitTests.isReturnDefaultValues = true
     }
     packaging {
         resources.excludes += setOf(
