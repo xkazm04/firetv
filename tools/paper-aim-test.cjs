@@ -417,3 +417,24 @@ test('aim 16 (L1-radka-41-MB4-1): the equations prompt names the aimed statement
  assert.ok(aimBlock(['A17'],'uk').includes(can('A17'))&&aimBlock(['A17']).includes(can('A17')));
  assert.equal(aimBlock(['nope'],'cz'),'');
 });
+
+test('draft 1 (hand-off maths-school 2026-10-21): Send clears the Paper draft once the record holds exactly that paper, and only then',async()=>{
+ const {sendPaper}=require(src('app/phone/PaperPanel.tsx'));
+ const {addPaper}=require(src('lib/session/learners.ts'));
+ const {blankRow,rawOf}=require(src('lib/rules/paperEntry.ts'));
+ const rows=[{q:'1',marks:'2',outOf:'3',codes:['N1']},{q:'2',marks:'1',outOf:'4',codes:[]},blankRow()];
+ const kept=addPaper('scratch-draft-1',rawOf(rows));
+ assert.ok(kept,'the scratch paper is kept');
+ const older=addPaper('scratch-draft-1',rawOf([{q:'1',marks:'0',outOf:'3',codes:['N1']}]));
+ const run=async(answer)=>{const sets=[],posts=[];await sendPaper(rows,async(e)=>{posts.push(e);if(answer instanceof Error)throw answer;return answer;},(r)=>sets.push(r),'ask-1');return {sets,posts};};
+ const json=(body,status=200)=>new Response(JSON.stringify(body),{status,headers:{'Content-Type':'application/json'}});
+ // the desk kept this paper: the draft is cleared to one blank row, so a reload has nothing to restore and send again
+ let r=await run(json({paper:kept,status:''}));
+ assert.deepEqual(r.posts,[{type:'paper.enter',rows:rawOf(rows),askId:'ask-1'}],'the post is the one it always was');
+ assert.deepEqual(r.sets,[[blankRow()]],'a kept paper clears the draft');
+ // the desk could not write it, kept no row, refused the ask, or never heard it: the rows stay to be sent again
+ for(const a of [json({paper:older,status:'That paper was not saved'}),json({paper:null,status:'The desk kept no question from that paper.'}),json({error:'The TV is not asking for that now.'},409),new Error('offline'),json({})]){
+  r=await run(a);
+  assert.deepEqual(r.sets,[],'a send the record does not hold keeps the draft');
+ }
+});

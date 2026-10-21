@@ -16,6 +16,27 @@ import type { Event, SchoolSystem } from "@/lib/session/store";
 export const paperHeading = (name?: string) => (name ? `A paper ${name} sat` : "A paper you sat");
 export const paperSend = (kept: number, name?: string) => (kept ? `Send ${kept} ${kept === 1 ? "question" : "questions"} to ${name ? `${name}'s record` : "the TV"}` : name ? `Send to ${name}'s record` : "Send to the TV");
 
+/** The paper these rows make is the one a session's newest paper holds (the same items and unmapped questions, as cleanPaper keeps them). */
+const onRecord = (rows: readonly DraftRow[], paper: unknown): boolean => {
+  if (!paper || typeof paper !== "object") return false;
+  const { items, unmapped } = paper as { items?: unknown; unmapped?: unknown };
+  const { clean } = entryOf(rows);
+  return JSON.stringify(items) === JSON.stringify(clean.items) && JSON.stringify(unmapped) === JSON.stringify(clean.unmapped);
+};
+
+/**
+ * Send the typed rows to the desk. Once the session that answers holds exactly this paper as the learner's newest, the draft
+ * has done its work and goes back to one blank row (setRows also clears the stored draft), so a reload has no sent paper to
+ * restore and send again. A refusal, a paper the desk kept no row of or could not write, or a send that never arrived keeps the rows.
+ */
+export async function sendPaper(rows: DraftRow[], post: (e: Event) => Promise<Response>, setRows: (r: DraftRow[]) => void, askId?: string): Promise<void> {
+  let res: Response;
+  try { res = await post({ type: "paper.enter", rows: rawOf(rows), ...(askId ? { askId } : {}) }); } catch { return; }
+  if (!res.ok) return;
+  const body: unknown = await res.json().catch(() => null);
+  if (body && typeof body === "object" && onRecord(rows, (body as { paper?: unknown }).paper)) setRows([blankRow()]);
+}
+
 /** The codes of each area, whole: an area's count of picks does not shrink with the box. */
 const wholeOf = (system?: SchoolSystem) => new Map(statementChoices(system).map((g) => [g.area, g.items.map((c) => c.code)]));
 
@@ -67,7 +88,7 @@ export function PaperPanel({ rows, setRows, post, seated, status, name, system, 
       <ul>{e.drops.map((d) => <li key={d}>{d}</li>)}</ul></div>}
     {e.notes.length > 0 && <div className="ppaper-notes" data-role="paper-notes"><ul>{e.notes.map((n) => <li key={n}>{n}</li>)}</ul></div>}
     {seated
-      ? <button className="pbtn" data-signal="true" disabled={e.kept === 0} onClick={() => void post({ type: "paper.enter", rows: rawOf(rows), ...(askId ? { askId } : {}) })} data-role="paper-send">
+      ? <button className="pbtn" data-signal="true" disabled={e.kept === 0} onClick={() => void sendPaper(rows, post, setRows, askId)} data-role="paper-send">
         {paperSend(e.kept, name)}</button>
       : <p>No one is at the desk yet: choose who on the TV first.</p>}
     {status && <p style={{ fontSize: 12 }}>{status}</p>}
