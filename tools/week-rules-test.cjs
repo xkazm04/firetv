@@ -566,3 +566,15 @@ test('scene names: every authored scene (ENGLISH_SCENES and Speaking practice) a
  // a question in the middle of the list keeps its own mark and the line its stop
  assert.ok(lingaOf(words({digest:[E(24,18,'plan-0a1b2c3d','negotiate',3),E(25,18,'teacher','repair',3)],english:{plan}})).includes('Two conversations: Say that again, please · What would you do?'));
 });
+
+// ------------------------------------------------------------------ the look line, for every slip a unit can show (not only each unit's first)
+test('look line: every slip of every school unit (SCHOOL_UNIT_SLIPS, all of them) is named within LINE_WORDS, twice, three times and 12 times',()=>{
+ let n=0;
+ for(const [unit,ids] of Object.entries(S.SCHOOL_UNIT_SLIPS))for(const id of ids)for(const times of [2,3,12]){
+  const look=words([M(24,18,unit,0,12,{slip:id,slipN:times})]).filter((l)=>l.section==='look'&&!l.head).map((l)=>l.text);
+  const name=D.slipName(id);assert.ok(name,`${id}: a name in SCHOOL_SLIPS`);
+  assert.deepEqual(look,[`The most common slip, ${times===2?'twice':times===3?'three times':'12 times'}: ${name.charAt(0).toLowerCase()+name.slice(1)}.`],`${unit} ${id} x${times}`);
+  assert.ok(W.wordsIn(look[0])<=W.LINE_WORDS,`${W.wordsIn(look[0])} words: ${look[0]}`);n++;
+ }
+ assert.equal(n,3*Object.values(S.SCHOOL_UNIT_SLIPS).flat().length);
+});
