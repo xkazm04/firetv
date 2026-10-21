@@ -4086,3 +4086,21 @@ test('the speech routes are the TV\'s: a paired phone is refused 403 before any 
   assert.equal(runs,4);
  }finally{reg.resetProviders();if(had===undefined)delete process.env.ELEVENLABS_API_KEY;}
 });
+test('teaching notes: the phone\'s Set up form refuses what the server refuses, before Save, in the server\'s words',async()=>{
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),React=require(path.join(root,'node_modules/react'));
+ const {LingaPhone}=require(path.join(root,'src/english/LingaPhone.tsx'));
+ const nine=Array.from({length:9},(_,i)=>`Note ${i+1}`);
+ // the server: nine notes are refused
+ fresh();let refusedWith='';
+ try{await englishCommand({action:'preferences',learnerId:'ema',preferences:defaultPreferences(),notes:nine});}catch(e){refusedWith=e.message;}
+ assert.ok(refusedWith,'the server refuses nine notes');
+ // the form, opened by the TV's prefs ask, with nine notes in it
+ const s={...getSession(),englishLearning:{...emptyEnglish(),notes:nine},ask:{id:'ask-p',kind:'prefs',learner:'ema',screen:'linga',at:0,phase:'open'}};
+ const html=renderToStaticMarkup(React.createElement(LingaPhone,{s,post:async()=>{}}));
+ const save=html.slice(html.lastIndexOf('<button',html.indexOf('Save preferences')),html.indexOf('Save preferences'));
+ assert.match(save,/disabled/,'Save is not offered for notes the server refuses');
+ assert(html.includes(refusedWith),'and the form says why, in the server\'s words');
+ const eight=renderToStaticMarkup(React.createElement(LingaPhone,{s:{...s,englishLearning:{...emptyEnglish(),notes:nine.slice(0,8)}},post:async()=>{}}));
+ const save8=eight.slice(eight.lastIndexOf('<button',eight.indexOf('Save preferences')),eight.indexOf('Save preferences'));
+ assert.doesNotMatch(save8,/disabled/,'eight notes: Save as before');assert(!eight.includes(refusedWith));
+});

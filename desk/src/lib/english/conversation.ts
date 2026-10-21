@@ -18,7 +18,7 @@ import { EASE_INSTRUCTION, learnerLost } from "./ease";
 import { hasGrammarTerm, keepsTense, PLAIN_TASK } from "./plain";
 import { climb, isTaskOption, keepLadder, MEANING_MAX, QUIZ_MAX, quizFor, SAY_MAX, sceneCueFor, sceneTaskFor, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
-import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
+import { mergeEvidence, notesProblem, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, ownLines, partnerLines, reuseOf, reviewOf, shownLines, askedAboutFor, slipsAgain, SLIP_AGAIN_TASK, usedLine, usesForm, fossilOf, fossilMoment, FOSSIL_TASK, type SlipAgain } from "./review";
 import { clearSlip, findKey, KNOWN_FALSE_FRIENDS, slipOf } from "./slip";
 import { checkLine, forgetLine, heldLine, holdLine, keepLine, LINE_MAX, lineBack, lineFound, lineTaught, OFFER_BANDS, offerLine, quizLine, showsLine, type HiddenLine } from "./line";
@@ -449,13 +449,13 @@ export async function englishCommand(raw:unknown){
     let preferences;try{preferences=parsePreferences(input.preferences);}catch(e){throw new ConversationError((e as Error).message);}
     delete preferences.levelUnset; // Set up is a pick by hand, even when it keeps the shown A1
     if(profile.age!==undefined&&profile.age<18||profile.type!=="other"&&profile.age===undefined)preferences.adultConfirmed=false;
-    if(!Array.isArray(input.notes)||input.notes.length>8||input.notes.some(n=>typeof n!=="string"||n.length>240))throw new ConversationError("Use up to eight short teaching notes, 240 characters each.");
+    const notesRefused=notesProblem(input.notes);if(notesRefused)throw new ConversationError(notesRefused);
     // A band set by hand is the learner's own call, and says so. Either band a check gives (its read, or the band
     // conversations start at, S2) is the check's still: saving Set up after a split check is not a pick by hand.
     const placement=learning.placement&&!isPlacementBand(learning.placement,preferences.level)?{...learning.placement,band:preferences.level,source:"self" as const,confidence:"low" as const,summary:"",at:Date.now()}:learning.placement;
     // a changed band is a hand-picked one: appended to the record of checks as "self" (W10), which never certifies
     const placements=placement&&placement!==learning.placement?appendPlacement(learning.placements,placement):learning.placements;
-    saveEnglish(learnerId,{...learning,preferences,placement,placements,notes:input.notes.map((n:string)=>n.trim()).filter(Boolean)});
+    saveEnglish(learnerId,{...learning,preferences,placement,placements,notes:(input.notes as string[]).map(n=>n.trim()).filter(Boolean)});
     // Settings apply to the next scene; a changed age entitlement ends an incompatible scene now.
     const current=s.conversation,scene=current&&sceneOf(current);
     dispatch({type:"linga.changed",...(current&&(!scene||!audienceAllowed(profile,preferences,scene.audience))?{conversation:null,screen:"linga" as Screen}:{})});
