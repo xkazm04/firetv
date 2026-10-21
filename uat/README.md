@@ -2,7 +2,7 @@
 
 Simulated user acceptance testing for the Study Desk's three modules, **Linga**, **Essay Master** and **Math Buddy**, driven by the `/uat` skill (`.claude/skills/uat`, linked from `ai-registry/skills/uat`). The skill is the engine; this directory is the per-app overlay.
 
-Each module has its own Characters and journeys: Linga's at the top of `characters/` and `journeys/` (J1–J5, with the `sim` blocks the LT driver reads), Essay Master's in `characters/essay/` and `journeys/essay/` (EM1–EM5), Math Buddy's in `characters/maths/` and `journeys/maths/` (MB1–MB5). Essay and Math files carry no `sim` block (no driver reads them yet) and live in subdirectories because the LT driver throws on a top-level file without one (`driver/linga-text.cjs:51-55`, `readBlock`). A journey that wanders out of its module is a finding about the exit, not a journey into another module.
+Each module has its own Characters and journeys: Linga's at the top of `characters/` and `journeys/` (J1–J5, with the `sim` blocks the LT driver reads), Essay Master's in `characters/essay/` and `journeys/essay/` (EM1–EM5), Math Buddy's in `characters/maths/` and `journeys/maths/` (MB1–MB5). Essay and Math files carry no `sim` block (no driver reads them yet) and live in subdirectories because the LT driver throws on a top-level file without one (`readBlock` in `driver/linga-text.cjs`). A journey that wanders out of its module is a finding about the exit, not a journey into another module.
 
 ## Levels in this repo
 

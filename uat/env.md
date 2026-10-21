@@ -59,7 +59,7 @@ Would run against `npm run dev` in `desk/` at `http://localhost:3000` (`/tv` for
 
 ## Essay Master
 
-Characters in `uat/characters/essay/`, journeys EM1–EM5 in `uat/journeys/essay/`. They sit in subdirectories, without `sim` blocks, because the LT driver reads every top-level `.md` in `characters/` and `journeys/` and throws on a file with no json block (`uat/driver/linga-text.cjs:38-44`).
+Characters in `uat/characters/essay/`, journeys EM1–EM5 in `uat/journeys/essay/`. They sit in subdirectories, without `sim` blocks, because the LT driver reads every top-level `.md` in `characters/` and `journeys/` and throws on a file with no json block (`readBlock` in `uat/driver/linga-text.cjs`).
 
 ### L1 — theoretical
 

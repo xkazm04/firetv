@@ -137,3 +137,13 @@ test('a Character whose own journeys name no journey file is refused before any 
   const src = fs.readFileSync(path.join(DRIVER, 'linga-text.cjs'), 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '');
   assert.match(src, /parseArgs\(process\.argv\.slice\(2\), \{[^}]*cast: all\.map\(c => c\.sim\)/, 'parent() hands parseArgs the cast it will spawn');
 });
+
+test('the overlay docs cite driver code by symbol, never by a line number that the next driver edit moves', () => {
+  const docs = ['README.md', 'env.md', 'rubric.md', 'references.md', 'accepted-gaps.md', 'drift/README.md'];
+  const anchors = docs.flatMap(f => [...fs.readFileSync(path.join(UAT, f), 'utf8').matchAll(/driver\/[\w-]+\.cjs:\d+/g)].map(m => `${f}: ${m[0]}`));
+  assert.deepEqual(anchors, [], 'cite the function instead (`readBlock` in driver/linga-text.cjs)');
+  // the symbol the two docs name for the throw on a file without a json block exists, and is what throws
+  const src = fs.readFileSync(path.join(DRIVER, 'linga-text.cjs'), 'utf8');
+  assert.match(src, /function readBlock\(file\) \{[^}]*throw new Error\(`\$\{file\}: no json block`\)/);
+  for (const f of ['README.md', 'env.md']) assert.match(fs.readFileSync(path.join(UAT, f), 'utf8'), /`readBlock`/, `${f} names readBlock`);
+});
