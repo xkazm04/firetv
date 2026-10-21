@@ -192,6 +192,21 @@ object Plan {
     fun answered(source: Source): Source = if (source == Source.DEFAULT) Source.SAVED else source
 }
 
+/** The words of the error screen, from what the last probe said. */
+object Words {
+    const val ASK = "Is the desk running on the computer, and is the stick on the same Wi-Fi?"
+
+    /**
+     * The reason as a sentence, then the question. A reason that already ends in its own question (no route, no
+     * network) is the question: the screen does not ask about the Wi-Fi twice, nor close a question with a full stop.
+     */
+    fun downBody(why: String): String {
+        val said = why.trim().replaceFirstChar { it.uppercase() }
+        if (said.endsWith('?')) return said
+        return (if (said.endsWith('.')) said else "$said.") + "\n\n" + ASK
+    }
+}
+
 /**
  * While the error or pairing screen waits: probe the address every tick, and every [scanEvery]th tick search the LAN
  * (a desk whose computer got a new address is found again).

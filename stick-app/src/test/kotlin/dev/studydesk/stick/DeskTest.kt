@@ -172,6 +172,30 @@ class DeskTest {
         assertTrue(h.beat(down))
     }
 
+    // -- the error screen's words
+
+    @Test
+    fun `a reason that already asks its question is not asked twice or closed with a stray stop`() {
+        // DeskNet.probe's three reasons that end in a question
+        listOf(
+            "no route to it: is the stick on the same Wi-Fi as the computer?",
+            "the stick has no network: is its Wi-Fi on?",
+            "no route to 10.0.0.141: is the stick on the same Wi-Fi as the computer?",
+        ).forEach { why ->
+            val body = Words.downBody(why)
+            assertFalse(body.contains("?."), body)
+            assertEquals(1, body.split("?").size - 1, body)
+            assertTrue(body.startsWith(why.replaceFirstChar { it.uppercase() }), body)
+        }
+    }
+
+    @Test
+    fun `a plain reason is a sentence followed by the question`() {
+        assertEquals("Nothing answered at 10.0.0.141:3000.\n\nIs the desk running on the computer, and is the stick on the same Wi-Fi?",
+            Words.downBody("nothing answered at 10.0.0.141:3000"))
+        assertEquals("It broke.\n\nIs the desk running on the computer, and is the stick on the same Wi-Fi?", Words.downBody("it broke."))
+    }
+
     // -- the setup screen
 
     @Test
