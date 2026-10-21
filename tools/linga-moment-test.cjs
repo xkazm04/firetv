@@ -982,3 +982,13 @@ test('the beginner moment and coach tasks ask for the learner\'s tense and no gr
   assert.equal(keepsTense('I go to school','I went to school'),false);assert.equal(keepsTense('I want sleep','I want to sleep'),true);
   assert.equal(keepsTense('We need a room','We need a room, please'),true);assert.equal(hasGrammarTerm('Say it like this.'),false);
 });
+
+// ---- scan-sweep optimize 2026-10-21 (linga-scenes, bounty-hunter): clearSlip read its pair across a sentence end, so
+// "Thank you. Was it good?" became a held fix "you was" -> "Thank you were it good?". A clear slip stands inside one sentence.
+test('clearSlip never reads a slip across a sentence end, and still finds one inside a sentence',()=>{
+  const {clearSlip}=require(path.join(root,'src/lib/english/slip.ts'));
+  for(const ok of ['Thank you. Was it good?','Me and you. Was fun.','Yes, they. Was there a bus?','What do you want? Go home.','I know what I want. Go!','It is for you! Was it far?'])assert.equal(clearSlip(ok),null,ok);
+  assert.deepEqual(clearSlip('I like it, we was happy'),{said:'I like it, we was happy',better:'I like it, we were happy',why:'Say "we were", not "we was".'},'a comma is no sentence end');
+  assert.deepEqual(clearSlip('Thank you. We was happy.'),{said:'We was happy.',better:'We were happy.',why:'Say "we were", not "we was".'},'the slip in the next sentence is still found');
+  assert.equal(clearSlip('What do you want? I want sleep.')?.better,'I want to sleep.');
+});

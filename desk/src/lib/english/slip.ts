@@ -208,15 +208,17 @@ export function clearSlip(reply: string): ClearSlip | null {
     return said && said.length <= 180 ? { said, better: (reply.slice(from, at) + fix + reply.slice(end, to)).trim(), why } : null;
   };
   const upper = (w: string) => w.replace(/^i\b/, "I");
+  // a slip stands inside one sentence: "Thank you. Was it good?" holds no "you was"
+  const oneSentence = (from: number, to: number) => !/[.!?]/.test(reply.slice(t[from].end, t[to].at));
   for (let i = 0; i < t.length; i++) {
     if (i > 0 && LICENSORS.has(t[i - 1].word)) continue;
-    const k = KNOWN_SLIPS.find(k => runAt(words, keyWords(k), i));
+    const k = KNOWN_SLIPS.find(k => runAt(words, keyWords(k), i) && oneSentence(i, i + keyWords(k).length - 1));
     if (k) {
       const fix = KNOWN_SLIP_FIXES[k], end = t[i + keyWords(k).length - 1].end;
       const cased = /^\p{Lu}/u.test(reply[t[i].at]) ? fix[0].toUpperCase() + fix.slice(1) : upper(fix);
       return whole(t[i].at, end, cased, `Say "${upper(fix)}", not "${upper(k)}".`);
     }
-    if (WANTS.has(t[i].word) && WANT_VERB.has(t[i + 1]?.word ?? ""))
+    if (WANTS.has(t[i].word) && WANT_VERB.has(t[i + 1]?.word ?? "") && oneSentence(i, i + 1))
       return whole(t[i].at, t[i + 1].end, `${reply.slice(t[i].at, t[i].end)} to ${reply.slice(t[i + 1].at, t[i + 1].end)}`, `After "want", say "to" before the verb: "want to ${t[i + 1].word}".`);
   }
   return null;
