@@ -238,6 +238,20 @@ test('loader: changing one character of the source changes the key', () => {
   assert.equal(cacheCount(c), 4, 'another extension, another key');
 });
 
+test('loader: entries untouched for 14 days are pruned on a miss, at most once a day', () => {
+  const c = path.join(dir, 'cache-prune'); fs.mkdirSync(c, { recursive: true });
+  const old = (Date.now() - 20 * 864e5) / 1000;
+  for (const n of ['old1', 'old2', 'fresh']) fs.writeFileSync(path.join(c, `${n}.js`), 'x');
+  for (const n of ['old1', 'old2']) fs.utimesSync(path.join(c, `${n}.js`), old, old);
+  loaderRun(`L.transpile('export const p=1;',${OPTS});`, c);
+  const left = fs.readdirSync(c).filter(n => n.endsWith('.js')).sort();
+  assert.ok(!left.includes('old1.js') && !left.includes('old2.js'), `old entries survived: ${left}`);
+  assert.ok(left.includes('fresh.js'), 'a fresh entry was pruned');
+  fs.writeFileSync(path.join(c, 'old3.js'), 'x'); fs.utimesSync(path.join(c, 'old3.js'), old, old);
+  loaderRun(`L.transpile('export const p=2;',${OPTS});`, c);
+  assert.ok(fs.existsSync(path.join(c, 'old3.js')), 'pruned twice in one day');
+});
+
 test('loader: a .ts file with an angle-bracket type assertion loads', () => {
   const f = path.join(dir, 'angle.ts');
   fs.writeFileSync(f, 'export const num=(x:unknown)=><number>x;\nexport const id=<T,>(x:T)=>x;');
