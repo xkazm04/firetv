@@ -1,6 +1,7 @@
 /**
  * The chain checker: does each line of a Calculus working still hold, given the line before it? Pure, built only on
- * the numeric primitives of calc-expr (compile, derivativeAt, limitAt, limitInf, SAMPLES) and calc's own tolerances;
+ * the numeric primitives of calc-expr (compile, derivativeAt, limitAt, limitInf, SAMPLES), calc's own tolerances and
+ * calc-read's readings of an answer (czechAnswer, infinityOf, DNE), with calc2 and taskText only to tell a spec's kind and system;
  * nothing here throws, and a line it cannot read or cannot decide is null - the desk never rings what it did not check.
  *
  * A line is `{ tag, text }`, the tag naming how the line follows the one before it:

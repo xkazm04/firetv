@@ -12,7 +12,7 @@
  * (`CALC_SLIPS`, `slipsFor`): the model never decides a verdict; on an item code already judged wrong it may only
  * pick a slip id from its shape's list, as the linear pipeline does (rules/maths.ts settled()).
  *
- * Pure: imports only calc-expr.ts, calc-read.ts and calc2.ts - no engine, no session store, no TV module. A spec of a
+ * Pure: imports only calc-expr.ts, calc-read.ts, calc2.ts and the taskText leaf (calc2-seam-test 2 pins the list) - no engine, no session store, no TV module. A spec of a
  * Calculus 2 shape (rules/calc2.ts) is sent to calc2.ts on the first line of each public function below.
  */
 import { commaSystem, readTask, type SchoolSystem } from "./taskText";
