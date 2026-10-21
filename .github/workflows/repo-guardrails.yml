@@ -25,6 +25,8 @@ jobs:
       # once those are fixed or given reasoned allowances (hygiene harvest of ascent/runner, 2026-10-20).
       - name: A guidance overlay for every separate build
         run: node tools/guidance-overlay-test.cjs
+      - name: The Gradle entry starts the root wrapper from any directory
+        run: node tools/gradlew-test.cjs
 
   provenance:
     if: github.event_name == 'pull_request'

@@ -10,9 +10,11 @@ const root = path.resolve(__dirname, "..");
 const args = process.argv.slice(2);
 const win = process.platform === "win32";
 // A .bat cannot be spawned without a shell on current Node (CVE-2024-27980); Gradle task names need no quoting.
+// The wrapper is named by its quoted absolute path: with NoDefaultCurrentDirectoryInExePath set (agent harnesses set
+// it), cmd.exe does not search the current directory, and a bare `gradlew.bat` is "not recognized".
 const run = win
-  ? spawnSync("gradlew.bat", args, { cwd: root, stdio: "inherit", shell: true })
-  : spawnSync("sh", ["./gradlew", ...args], { cwd: root, stdio: "inherit" });
+  ? spawnSync(`"${path.join(root, "gradlew.bat")}"`, args, { cwd: root, stdio: "inherit", shell: true })
+  : spawnSync("sh", [path.join(root, "gradlew"), ...args], { cwd: root, stdio: "inherit" });
 if (run.error) {
   console.error("gradlew.cjs: could not start the Gradle wrapper: " + run.error.message);
   process.exit(1);
