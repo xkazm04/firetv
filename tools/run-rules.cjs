@@ -4,7 +4,8 @@
  * DESK_USAGE_FILE, a fresh <os tmpdir>/desk-usage-XXXX/usage.jsonl per suite (removed after it, best effort), unless the parent
  * already sets it. Without it meter.ts's usage ledger falls back to <cwd>/data, so a stub-engine suite would append rows
  * to desk/data, where the real learners live.
- * It never stops at the first red suite: every suite runs, then one table says which were red and why.
+ * It never stops at the first red suite: every suite runs, then one table says which were red and why, and one
+ * line names the five slowest top-level tests across every suite (from each TAP test's duration_ms).
  * --jobs N (or RULES_JOBS=N) runs up to N suites at once; each suite's stdout and stderr are then held and printed whole,
  * under its own "# run-rules:" header, when it ends, and the table stays in list order. The default is 1: one at a time,
  * streamed as it runs. A value that is not a positive whole number is refused (exit 1).
@@ -59,6 +60,17 @@ function summary(text) {
 }
 
 /** One suite. live: stream its output as it runs; otherwise hold stdout and stderr in r.log for the caller to print whole. */
+/** Every top-level test of a TAP stream with its duration_ms: an unindented "ok N - name" and the "  duration_ms:" under it. */
+function testTimes(text) {
+  const out = [], lines = text.split(/\r?\n/);
+  for (let i = 0; i < lines.length - 2; i++) {
+    const m = /^(?:not )?ok \d+ - (.*?)(?: # (?:SKIP|TODO)\b.*)?$/.exec(lines[i]);
+    const d = m && /^ {2}duration_ms: ([\d.]+)$/.exec(lines[i + 2]);
+    if (d) out.push({ name: m[1], ms: Number(d[1]) });
+  }
+  return out;
+}
+
 function runOne(name, live = true) {
   return new Promise(resolve => {
     const file = path.join(TOOLS, name), t0 = Date.now();
@@ -76,7 +88,7 @@ function runOne(name, live = true) {
     child.on('error', e => { clearTimeout(timer); cleanup(); resolve({ name, ms: Date.now() - t0, why: `spawn failed: ${e.message}`, log }); });
     child.on('close', (code, signal) => {
       clearTimeout(timer); cleanup();
-      const s = summary(text), r = { name, ms: Date.now() - t0, sum: s, log };
+      const s = summary(text), r = { name, ms: Date.now() - t0, sum: s, log, tests: testTimes(text) };
       if (timedOut) r.why = `timeout after ${TIMEOUT} ms`;
       else if (signal) r.why = `signal ${signal}`;
       else if (code !== 0) r.why = `exit ${code}`;
@@ -118,6 +130,8 @@ function runOne(name, live = true) {
   const sum = k => results.reduce((a, r) => a + ((r.sum && r.sum[k]) || 0), 0);
   const red = results.filter(r => r.why);
   console.log(`\ntotals: ${results.length - red.length} green, ${red.length} red; tests ${sum('tests')}, pass ${sum('pass')}, fail ${sum('fail')}; duration_ms sum ${Math.round(sum('duration_ms'))}; wall ${Date.now() - t0} ms; jobs ${jobs}`);
+  const slow = results.flatMap(r => (r.tests || []).map(t => ({ ...t, suite: r.name }))).sort((a, b) => b.ms - a.ms).slice(0, 5);
+  if (slow.length) console.log(`slowest tests: ${slow.map(t => `${t.suite} › ${t.name} ${(t.ms / 1000).toFixed(1)} s`).join(', ')}`);
   if (red.length) console.log(`RED: ${red.map(r => `${r.name} (${r.why})`).join(', ')}`);
   process.exit(red.length ? 1 : 0);
 })();

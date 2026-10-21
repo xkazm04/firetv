@@ -126,6 +126,15 @@ test('--jobs: a red suite is still red, its whole output sits under its own head
   assert.match(block, /not ok .* bad/, 'the failing suite\'s TAP is not under its own header');
 });
 
+test('the totals name the slowest tests across every suite, slowest first, with their suite', () => {
+  const two = "const {test}=require('node:test');test('quick one',()=>{});test('the long one',async()=>{await new Promise(r=>setTimeout(r,1200));});";
+  const names = [write('s-two.cjs', two), write('s-mid.cjs', NAP(400))];
+  const r = run(names);
+  assert.equal(r.code, 0, r.out);
+  const line = r.out.split('\n').find(l => l.startsWith('slowest tests:')) || '';
+  assert.match(line, /^slowest tests: .*s-two\.cjs › the long one \d+(\.\d+)? s, .*s-mid\.cjs › nap/, line);
+});
+
 test('--jobs refuses a value that is not a positive whole number', () => {
   const g = write('jn-green.cjs', GREEN), lf = path.join(dir, 'list-jobs-bad.json'); fs.writeFileSync(lf, JSON.stringify([g]));
   for (const v of ['0', 'x', '1.5']) {
