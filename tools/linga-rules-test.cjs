@@ -4051,3 +4051,14 @@ test('the reply cap is a row of the turn table: at 24 replies the phone is not a
  await assert.rejects(command('turn',{text:'One more.',mode:'text',lastTurnId:'p24'}),e=>e.status===409&&e.message===T.AT_CAP);
  assert.equal(calls,0);
 });
+test('a ladder a restart lost: Help me answer says what to do once, then is no longer offered, never a silent press',async()=>{
+ const V=view();
+ // the session names a ladder for the line on screen that server memory does not hold (help.ts keepLadder was never called for it)
+ const lost=convo({turns:[{id:'p-lost',role:'partner',text:'Which date did you book?'}],help:{forTurn:'p-lost',rungs:[1,2,3],rung:0,shown:false},sceneCued:true});
+ assert.equal(V.lingaView(sessionOf(fixture('linga-talk',{conversation:lost}))).actions[0].id,'cue','the TV offers the help');
+ install(fixture('linga-talk',{conversation:lost}));
+ await command('cue');
+ const c=getSession().conversation;
+ assert.ok(c.cue,'the press puts a line on screen');
+ assert(!V.lingaView(getSession()).actions.some(a=>a.id==='cue'||a.id==='quiz'),'and the help it cannot give is no longer offered');
+});

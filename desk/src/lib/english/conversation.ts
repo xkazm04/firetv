@@ -612,6 +612,9 @@ export async function englishCommand(raw:unknown){
     const band=heldBand(c),q=quizFor(c.help,c.turns.at(-1),c.partner,band,scene!.cue),options=q?q.options:c.help===undefined?scene!.quiz.options:null;
     // rework 8: at A1-A2 a second press with nothing new to offer says so, never the same pair again
     if(!options&&band&&(band==="A1"||band==="A2")&&c.help?.quizSeen?.length){commit({...c,sceneCued:true,quizOpen:false,cue:"You can type your own reply on the phone.",help:{...c.help,shown:false},commands},"linga-talk");return getSession();}
+    // a ladder a restart lost (help.ts holds it in server memory; the session still names its rungs): the press says what to do,
+    // once, and the help it can no longer give stops being offered. Before, it was a silent press offered again and again.
+    if(!options&&c.help){commit({...c,sceneCued:true,quizOpen:false,cue:"You can type your own reply on the phone.",help:null,commands},"linga-talk");return getSession();}
     if(!options){commit({...c,sceneCued:true,commands},"linga-talk");return getSession();}
     const cue=sceneCueFor(scene!.cue,heldBand(c),c.sceneCued)??"";
     // the quiz puts its options and the cue on screen: one that shows the hidden line's key words spends the find (K4)
