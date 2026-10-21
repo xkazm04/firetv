@@ -2153,3 +2153,13 @@ test('optimize 2026-10-21: a fault while leaksSchool reads the spec refuses the 
  assert.equal(S.leaksSchool({shape:'compute',expr:'3/4 +'},'The answer is 24.'),false);
  assert.equal(S.leaksSchool(cs('3/4 + 1/6'),''),false);
 });
+test('optimize 2026-10-21: storyOf, topFormOf and workedAnswer route a checker fault through checkerFault and answer null, never throw',()=>{
+ const bad={get shape(){throw new TypeError('spec defect');},get expr(){throw new TypeError('spec defect');}};
+ const said=[],was=console.error;console.error=(...a)=>said.push(a.join(' '));
+ try{
+  assert.equal(S.storyOf(bad),null);
+  assert.equal(S.topFormOf('pct-change',bad),null);
+  assert.equal(S.workedAnswer(bad,'uk'),null);
+ }finally{console.error=was;}
+ for (const where of ['school.storyOf','school.topFormOf','school.workedAnswer']) assert.ok(said.some((l)=>l.includes(`checker fault in ${where}:`)),`${where} reaches the log: ${said.join(' | ')}`);
+});

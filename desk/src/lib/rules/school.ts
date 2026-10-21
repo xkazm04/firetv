@@ -3065,7 +3065,7 @@ export function storyOf(spec: unknown): StoryId | PctStoryId | PythStoryId | Pro
     if (!st.ok) return null;
     const K = st.kind;
     return (K.k === "compute" || K.k === "pct-top" || K.k === "pyth-dp" || K.k === "prob-two") && K.story ? K.story : null;
-  } catch {
+  } catch (e) { checkerFault("school.storyOf", e);
     return null;
   }
 }
@@ -3832,7 +3832,7 @@ export function topFormOf(topicId: unknown, spec: unknown): string | null {
     const K = st.kind;
     const f = topicId === "pct-change" && K.k === "pct-top" ? K.form : topicId === "pythagoras" && K.k === "pyth-dp" ? K.find : topicId === "probability" && K.k === "prob-two" ? K.form : null;
     return f && SCHOOL_TOP_FORMS[topicId].includes(f) ? f : null;
-  } catch {
+  } catch (e) { checkerFault("school.topFormOf", e);
     return null;
   }
 }
@@ -4582,7 +4582,8 @@ function writings(t: Q): string[] {
  * spec's unit; a ratio is written a:b. Null when no writing passes, and then the lesson withholds that example.
  */
 export function workedAnswer(spec: unknown, system: unknown = DEFAULT_SCHOOL_SYSTEM): string | null {
-  const r = read(spec);
+  let r: Read;
+  try { r = read(spec); } catch (e) { checkerFault("school.workedAnswer", e); return null; }
   if (!r.ok) return null;
   const unit = specUnit(r.spec), K = r.kind;
   let candidates: string[];
