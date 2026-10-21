@@ -957,6 +957,17 @@ test('case 6c: an onFail that throws still records the failure, and its own erro
 });
 
 // last: it swaps the store module out from under the routes loaded above
+test('optimize 2026-10-21: a set written by code says it is ready without a time; a model-written set keeps its time',async()=>{
+ onPage();
+ stubText({items:()=>{throw new Error('no model call expected for a code-written unit');}});
+ let r=await post('practice',{topic:'area'});assert.equal(r.status,200);
+ assert.equal((await r.json()).provider,'code');
+ assert.equal(store.getSession().status,'6 questions ready','a code-drawn set took no measurable time: no "in 0 s"');
+ onPage();
+ stubText({items:()=>({items:STATED})});r=await post('practice',{topic:'linear-one-step'});assert.equal(r.status,200);
+ assert.match(store.getSession().status,/^6 questions ready in \d+ s$/);
+});
+
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
  const saved={...store.getSession(),jobs:{read:{id:'r1',phase:'running',startedAt:Date.now()-5000,key:PAGE.id,input:{id:PAGE.id}}}};
