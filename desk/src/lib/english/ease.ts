@@ -4,8 +4,11 @@
  * The length cap on a line is LG-56 (heldBand), not here.
  */
 const fold = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-/** Czech function words and common replies, folded; a learner who answers in them has left English. */
-const CZECH_WORDS = new Set(("ja je jsem jsi jsme ne ano jo to ten ta se si na ze co jak ale taky tady tam moc bych chci mam nemam " +
+/**
+ * Czech function words and common replies, folded; a learner who answers in them has left English. Never an English
+ * word: "to" and "ten" are left out, so "Ten." or "To school" is a short English answer, not Czech.
+ */
+const CZECH_WORDS = new Set(("ja je jsem jsi jsme ne ano jo ta se si na ze co jak ale taky tady tam moc bych chci mam nemam " +
   "nevim nerozumim nechapu ahoj dekuji prosim dobry dobre dobry den pes kocka dum skola proc kdy kde nikdo neco").split(" "));
 const NOT_UNDERSTOOD = /\b(nevim|nerozumim|nechapu|i do not know|i dont know|i don t know|do not understand|dont understand|don t understand|i do not understand|what)\b/;
 

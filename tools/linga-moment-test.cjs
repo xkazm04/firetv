@@ -1002,3 +1002,11 @@ test('keepsTense knows every irregular past the band hold knows, and leaves "lef
   for(const [said,better] of [['Where is the bank? On left','It is on the left'],['I am lose','I am lost'],['I sleep good','I sleep well'],['We swim in lake','We swim in the lake']])
     assert.equal(keepsTense(said,better),true,`${said} -> ${better}`);
 });
+
+// ---- scan-sweep optimize 2026-10-21 (linga-scenes, bounty-hunter): ease.ts's Czech list held "to" and "ten", two
+// English words, so a beginner's short English answer ("Ten.", "To school") read as Czech and eased the partner's next line.
+test('mostlyCzech: a short English answer with "to" or "ten" is English; Czech replies still are Czech',()=>{
+  const {mostlyCzech,learnerLost}=require(path.join(root,'src/lib/english/ease.ts'));
+  for(const t of ['Ten','Ten minutes.','To school','To the park, please.','Ten euros'])assert.equal(learnerLost([{text:t}]),false,t);
+  for(const t of ['To je moc dobre','Já mám psa a on je velký','Nevím','ano','Ten pes je velký'])assert.equal(mostlyCzech(t),true,t);
+});
