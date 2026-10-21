@@ -1,0 +1,32 @@
+{
+  "id": "0ea08217-eb52-48f7-b7b5-77968e8bbcf3",
+  "ts": "2026-10-21T10:35:34.053Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/hint-felt.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "UI sound effect, felt piano and soft analog synth pad, round, intimate: a soft, curious single shimmer as a new card appears; neutral, implies neither right nor wrong. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134306,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 17179,
+  "providerCredits": 11,
+  "sha256": "64da5808836113d6925685f3442f9b201b995e97001f04e1ba3c88da79152577",
+  "completedAt": "2026-10-21T10:35:37.267Z",
+  "creditsAfter": 134306,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1500
+}
