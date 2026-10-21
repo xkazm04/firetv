@@ -181,6 +181,25 @@ test('lock 2: the app cannot select it - the registry answers paper to any reque
  for(const sel of css.match(/(^|})\s*[^{}@]+\{/g)||[]){const s=sel.replace(/^[}\s]+/,'').replace(/\{$/,'').trim();if(/^((\d+(\.\d+)?%|from|to)\s*,?\s*)+$/.test(s))continue;for(const one of s.split(','))assert.match(one.trim(),/^\.desk-tv\.bp\b/,`the blueprint stylesheet stays under .desk-tv.bp: ${one.trim().slice(0,60)}`);}
 });
 
+test('every stop the D-pad walks is drawn lit in every look: the stops come from landingStops, not from a list here',()=>{
+ const {landingView}=model();const {landingStops}=require(src('tv/landingRows.ts'));const {THEMES}=themes();
+ // what a lit element is for: an app's object by its data-app, the other stops by their hook
+ const owner=(tag)=>(tag.match(/data-app="([^"]+)"/)||[])[1]||((tag.match(/data-role="desk-(place-card|phone)"/)||[])[1]==='place-card'?'place':(tag.match(/data-role="desk-phone"/)?'phone':null));
+ let walked=0;
+ for(const [k,mk] of Object.entries(SCENARIOS)){
+  const stops=landingStops(mk());
+  stops.forEach((stop,i)=>{
+   const v=landingView({...mk(),focus:i});assert.equal(v.at,stop,`${k}: focus ${i} is ${stop}`);
+   for(const id of Object.keys(THEMES)){
+    const lit=(draw(THEMES[id],v).match(/<[^>]*data-focused="true"[^>]*>/g)||[]).map(owner);
+    assert.ok(lit.length>=1,`${id}/${k}: the lamp on ${stop} is drawn on nothing`);
+    assert.deepEqual([...new Set(lit)],[stop],`${id}/${k}: only ${stop} is lit (${lit})`);walked++;
+   }
+  });
+ }
+ assert.ok(walked>=40,`${walked} stop x look x desk cases`);
+});
+
 test('GUARD: the landing view-model stays free of the filesystem-backed session modules',()=>{
  const out=transpile(fs.readFileSync(src('landing/model.ts'),'utf8'),opts).outputText;
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);
