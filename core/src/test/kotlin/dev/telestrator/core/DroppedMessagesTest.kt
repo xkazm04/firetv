@@ -32,6 +32,18 @@ class DroppedMessagesTest {
     }
 
     @Test
+    fun `a blank tag and pen input with no stroke open are counted too`() {
+        val e = PenEngine("c")
+        accept(e, """{"type":"tag","x":0.5,"y":0.5,"label":"   "}""")
+        // A move and an up whose down never arrived (or was cut by an undo or a clear mid-stroke).
+        accept(e, """{"type":"pen","phase":"move","pts":[[0.1,0.1,0.5],[0.3,0.3,0.5]]}""")
+        accept(e, """{"type":"pen","phase":"up","pts":[[0.4,0.4,0.5]]}""")
+
+        assertEquals(mapOf("pen-no-stroke" to 2, "tag-blank-label" to 1), e.droppedCounts)
+        assertEquals(0, e.annotationCount)
+    }
+
+    @Test
     fun `an engine that dropped nothing reports nothing`() {
         val e = PenEngine("c")
         accept(e, """{"type":"shape","tool":"arrow","from":[0.1,0.1],"to":[0.5,0.5]}""")
