@@ -416,8 +416,14 @@ function renderPage() {
   $("itemT").textContent = S.reading ? "" : (p.id === "essay" ? "" : it.text);
   const hasHint = !!DATA.hints[it.key] || p.id === "essay";
   $("itemAsk").textContent = S.reading ? "" : (hasHint ? "Select for a hint" : "No hint written for this one yet");
-  $("strip").innerHTML = S.pages.map((pg, i) => `<div class="thumb" data-current="${i === S.pageIx}" style="background-image:url(${pg.img})"></div>`).join("")
-    + `<div class="add">snap another</div>`;
+  // the thumbnails carry each page's photo inline, so the strip is rebuilt only when the pages change; a D-pad press
+  // only moves which thumb is current
+  const strip = $("strip"), pagesKey = S.pages.map((pg) => pg.id).join(",");
+  if (strip.dataset.pages !== pagesKey) {
+    strip.innerHTML = S.pages.map((pg) => `<div class="thumb" style="background-image:url(${pg.img})"></div>`).join("") + `<div class="add">snap another</div>`;
+    strip.dataset.pages = pagesKey;
+  }
+  strip.querySelectorAll(".thumb").forEach((t, i) => { t.dataset.current = String(i === S.pageIx); });
   renderRail();
 }
 function addPage(id) {
