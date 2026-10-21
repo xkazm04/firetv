@@ -39,7 +39,8 @@ class RelayTransport(
 
     override val name = "relay"
 
-    private val client = HttpClient(CIO) { install(WebSockets) }
+    // The relay forwards whatever the phone side sends, so its frames are held to a pen's size too.
+    private val client = HttpClient(CIO) { install(WebSockets) { maxFrameSize = MAX_PEN_FRAME_BYTES } }
     private var job: Job? = null
 
     private val _failure = MutableStateFlow<String?>(null)
