@@ -70,7 +70,10 @@ function silentCatches(text){
  // a body parse that falls back (req.json().catch(() => null)) is answered by the 400 after it, so it is not counted
  const re=/catch\s*(\([^)]*\))?\s*\{\s*\}|(?<!\.json\(\))\.catch\(\s*\(\s*\)\s*=>\s*(\{\s*\}|undefined|null|void 0)\s*\)/g;
  for(const [i,line] of lines.entries()){re.lastIndex=0;let m;while((m=re.exec(line)))out.push(i+1);}
- return out;
+ // an 'error' listener that does nothing is a catch by another name; read before strip(), which blanks the event name
+ const listener=/\.on(?:ce)?\(\s*["']error["']\s*,\s*\(\s*\w*\s*\)\s*=>\s*(\{\s*\}|undefined|null|void 0)\s*\)/g;
+ for(const [i,line] of text.split('\n').entries()){listener.lastIndex=0;let m;while((m=listener.exec(line)))out.push(i+1);}
+ return out.sort((a,b)=>a-b);
 }
 // Pinned 2026-10-15 from the dry run (node tools/error-doors-test.cjs --list). Each entry is file:count; a fixed site lowers
 // its count (and the test then asks for the lower number), a new silent catch anywhere fails.
@@ -86,6 +89,10 @@ test('silent-catch canary: an empty catch and an empty .catch are seen; a commen
  assert.equal(silentCatches('try { x(); } catch { /* the file is optional */ }').length,0);
  assert.equal(silentCatches('try { x(); } catch (e) { console.error(e); }').length,0);
  assert.equal(silentCatches('const s = "catch {}";').length,0);
+ assert.equal(silentCatches('p.stdin.on("error", () => {});').length,1,'an error listener that does nothing is silent');
+ assert.equal(silentCatches("child.once('error', (e) => {})").length,1);
+ assert.equal(silentCatches('child.stdout.on("data", () => {});').length,0,'a data listener is not an error door');
+ assert.equal(silentCatches('p.on("error", (e) => reject(e));').length,0);
 });
 test('silent catches only shrink: no new one, and a fixed one leaves the list',()=>{
  const now={};for(const f of files){const n=silentCatches(f.text).length;if(n)now[f.file]=n;}
