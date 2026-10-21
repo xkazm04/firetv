@@ -59,7 +59,7 @@ function sbomOf(report, { name, version = "unversioned", now = new Date().toISOS
     if (r.mark === "(c)") { stack.push(null); continue; }
     if (r.mark === "FAILED" || r.mark === "(n)") { unresolved.push(r.text); stack.push(null); continue; }
     let ref;
-    const project = r.text.match(/^project\s+(:\S*)$/);
+    const project = r.text.match(/^project\s+'?(:[^\s']*)'?$/);
     if (project) {
       ref = `project${project[1]}`;
       if (!components.has(ref)) components.set(ref, { type: "library", "bom-ref": ref, name: project[1], version });

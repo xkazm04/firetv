@@ -90,3 +90,8 @@ test("case 6: an unresolved module, an empty report or a missing artifact name f
   assert.throws(() => sbomOf("debugRuntimeClasspath - Resolved configuration\nNo dependencies\n", { name: "x" }), /holds no module/);
   assert.throws(() => sbomOf(REPORT, {}), /--name/);
 });
+
+test("case 7: Gradle 9 quotes a project row (project ':core'); Gradle 8 did not, and both name the same component", () => {
+  const nine = sbomOf(REPORT.replace("+--- project :core", "+--- project ':core'"), { name: "x" });
+  assert.ok(nine.components.some((c) => c["bom-ref"] === "project:core" && c.name === ":core"));
+});
