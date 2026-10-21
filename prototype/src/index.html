@@ -459,9 +459,11 @@ function openHint(askedQ) {
 // The model writes maths as LaTeX. Spoken it is noise; shown it is worse. Render the little it
 // actually uses — $…$, ^n, \frac — and leave the rest alone, so the screen is judged on what the
 // model really said rather than a cleaned transcript.
+// Inner before outer: a \sqrt inside a \frac is rewritten first, so the \frac's braces hold no braces of their own.
 function maths(s) {
-  return s.replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "($1)⁄($2)").replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\pm/g, "±")
-    .replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\^\{?(\d)\}?/g, "^$1").replace(/\$/g, "").replace(/\*\*/g, "");
+  return s.replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "($1)⁄($2)").replace(/\\pm/g, "±")
+    .replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\^\{?(\d)\}?/g, "^$1")
+    .replace(/_\{?(\d)\}?/g, (_, d) => "₀₁₂₃₄₅₆₇₈₉"[d]).replace(/\$/g, "").replace(/\*\*/g, "");
 }
 function renderHint() {
   const h = DATA.hints[S.hintKey], stage = S.hintStage, hh = stage === 1 ? h.hint1 : h.hint2;
