@@ -1410,3 +1410,59 @@ test('optimize 2026-10-21: a radio or checkbox in a phone field is centred on it
   assert.match(r,/min-height:\s*0/,`a ${t} drops the text box's 44 px height`);assert.match(r,/flex:\s*none/,`a ${t} does not stretch`);
  }
 });
+
+// The PC page (/drop) joins like a phone and keeps, toggles and opens through the same desk; each of its doors is cut
+// out of desk/src/app/drop/page.tsx and run against a stub fetch. A call that never came back says so; a refusal says the
+// desk's line (the join through the phone's own joinRefusal); nothing claims a success the desk did not answer.
+test('optimize 2026-10-21: every door on the PC page says what came back - nothing unhandled, nothing claimed (error-handling error-doors)',async(t)=>{
+ const DROP=path.join(SRC,'app/drop/page.tsx'),src=fs.readFileSync(DROP,'utf8');
+ const a=src.includes('// ---- the desk\'s doors')?src.indexOf('// ---- the desk\'s doors'):src.indexOf('const join = async'),b=src.indexOf('if (joined === null)');
+ assert.ok(a>0&&b>a,'the doors are where the test expects them');
+ const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const {joinRefusal}=P();
+ const NAMES=['join','pick','keep','accept','toggle','showOnTv'];
+ const SET=['Say','Docx','Text','Title','Notice','Tick','PieceId'];
+ const build=(respond,state={})=>{
+  const calls=[],urls=[];
+  const st={code:'1234',docx:null,format:'message',title:'',text:'Hello there.',pieceId:undefined,...state};
+  const PARAMS=['fetch','session','joinRefusal','btoa','MAX_FILE','code','docx','format','title','text','pieceId',...SET.map((n)=>'set'+n)];
+  const f=new Function(...PARAMS,`${js}\nreturn {${NAMES.join(',')}};`);
+  const out=f((u,o)=>{urls.push([u,JSON.parse(o?.body??'null')]);return respond(u,JSON.parse(o?.body??'null'));},async()=>{calls.push(['session']);},joinRefusal,(x)=>x,150*1024,
+   st.code,st.docx,st.format,st.title,st.text,st.pieceId,...SET.map((n)=>(v)=>calls.push([n,typeof v==='function'?'fn':v])));
+  return {...out,calls,urls,said:()=>calls.filter(([k,v])=>k==='Say'&&v).map(([,v])=>v)};
+ };
+ const ok=(body={})=>Promise.resolve({ok:true,status:200,json:async()=>body});
+ const no=(error,status)=>Promise.resolve({ok:false,status,json:async()=>(error===undefined?{}:{error})});
+ const lost=()=>Promise.reject(new TypeError('Failed to fetch'));
+ const settle=async(p)=>{let threw=null;try{await p;}catch(e){threw=e;}return threw;};
+ await t.test('control: a good join reloads the session; a good keep says it is kept',async()=>{
+  const j=build(()=>ok());await j.join();assert.ok(j.calls.some(([k])=>k==='session'));
+  const k=build(()=>ok({id:'p1'}));await k.keep();assert.deepEqual(k.said(),['Kept on your shelf.']);
+ });
+ await t.test('join: lost, wrong code and a desk fault each say why, as the phone does',async()=>{
+  const l=build(lost);assert.equal(await settle(l.join()),null,'no unhandled rejection');assert.deepEqual(l.said(),['That did not reach the desk.']);
+  const w=build(()=>no('That code is not on the TV.',403));await w.join();assert.deepEqual(w.said(),['That code is not on the TV.']);
+  const f=build(()=>no(undefined,500));await f.join();assert.deepEqual(f.said(),[joinRefusal({status:500,error:undefined,how:'typed'}).line]);
+ });
+ await t.test('keep: a lost call says so instead of an unhandled rejection',async()=>{
+  const l=build(lost);assert.equal(await settle(l.keep()),null);assert.deepEqual(l.said(),['That did not reach the desk.']);
+ });
+ await t.test('accept: a refused notice says the desk\'s line and does not post the piece again into the same refusal',async()=>{
+  const r=build((u,b)=>b?.notice?no('No one is at the desk.',409):ok());await r.accept();
+  assert.deepEqual(r.said(),['No one is at the desk.']);assert.deepEqual(r.urls.map(([,b])=>!!b?.notice),[true],'only the notice was posted');
+  const l=build(lost);assert.equal(await settle(l.accept()),null);assert.deepEqual(l.said(),['That did not reach the desk.']);
+ });
+ await t.test('showOnTv: the Workroom is said to be on the TV only when the desk answered ok',async()=>{
+  const r=build(()=>no('The Workroom is for Adult mode.',403));await r.showOnTv();assert.deepEqual(r.said(),['The Workroom is for Adult mode.']);
+  const l=build(lost);assert.equal(await settle(l.showOnTv()),null);assert.deepEqual(l.said(),['That did not reach the desk.']);
+  const g=build(()=>ok());await g.showOnTv();assert.deepEqual(g.said(),['The Workroom is on the TV.']);
+ });
+ await t.test('toggle: a refusal or a lost call is said, not swallowed',async()=>{
+  const r=build(()=>no('That piece is not on your shelf.',404));await r.toggle('p1',true);assert.deepEqual(r.said(),['That piece is not on your shelf.']);
+  const l=build(lost);assert.equal(await settle(l.toggle('p1',true)),null);assert.deepEqual(l.said(),['That did not reach the desk.']);
+ });
+ await t.test('pick: a file the browser cannot read says so instead of an unhandled rejection',async()=>{
+  const p=build(()=>ok());const bad={name:'a.txt',size:10,text:()=>Promise.reject(new Error('NotReadableError'))};
+  assert.equal(await settle(p.pick(bad)),null);assert.equal(p.said().length,1);assert.doesNotMatch(p.said()[0],/NotReadable/);
+ });
+});
