@@ -550,36 +550,36 @@ test('WD14a: an unreadable learners.json is said on a switch and never shows ano
  {const a=learners.getLearner(IA);learners.saveLearner({...a,memory:[...a.memory,{text:'Likes worked examples.',at:Date.now(),source:'nightly'}]});}
  const mineA=learners.getLearner(IA);
  assert.ok(mineA.history.length>0&&mineA.memory.length>0);
- // the session carries the notes' text (store.ts hydrates memory as text, for the phone)
+ // the notes are the learner file's alone: the session carries none of them (86ee71d4), whoever is seated
  const mineNotes=mineA.memory.map((n)=>n.text);
  store.dispatch({type:'learner.set',id:IA});
- assert.deepEqual(store.getSession().history,mineA.history);assert.deepEqual(store.getSession().memory,mineNotes);
+ assert.deepEqual(store.getSession().history,mineA.history);assert.equal(store.getSession().memory,undefined,'the notes stay on the learner file, never on the session (86ee71d4)');
  const whole=fs.readFileSync(FILE),short=whole.subarray(0,whole.length-5);
  fs.writeFileSync(FILE,short);
  const c=catchLog();
  try{
   store.dispatch({type:'learner.set',id:IA});
   let s=store.getSession();
-  assert.deepEqual(s.history,mineA.history,'the same learner keeps its own history');assert.deepEqual(s.memory,mineNotes,'and memory');
+  assert.deepEqual(s.history,mineA.history,'the same learner keeps its own history');assert.equal(s.memory,undefined,'and the notes stay off the session');
   assert.notEqual(s.status,store.LEARNER_UNREAD);
   assert.equal(c.errs.filter((l)=>/could not be read onto the desk/.test(l)).length,1,`one log line: ${c.errs.join(' | ')}`);
   store.dispatch({type:'learner.set',id:IB});
   s=store.getSession();const b=learners.blank(IB);
-  assert.deepEqual(s.skills,b.skills);assert.deepEqual(s.writing,b.writing);assert.deepEqual(s.memory,b.memory);assert.deepEqual(s.history,b.history);assert.deepEqual(s.englishLearning,b.english);
+  assert.deepEqual(s.skills,b.skills);assert.deepEqual(s.writing,b.writing);assert.equal(s.memory,undefined);assert.deepEqual(s.history,b.history);assert.deepEqual(s.englishLearning,b.english);
   assert.equal(s.paper,null);
-  assert.notDeepEqual(s.history,mineA.history);assert.notDeepEqual(s.memory,mineNotes);
+  assert.notDeepEqual(s.history,mineA.history);assert.equal(s.memory,undefined);
   assert.equal(s.status,store.LEARNER_UNREAD);
   assert.deepEqual(s.week,[{section:'week',text:W.WEEK_UNREAD}]);
   assert.ok(fs.readFileSync(FILE).equals(short),'learners.json on disk is the truncated bytes, untouched');
  }finally{c.done();fs.writeFileSync(FILE,whole);}
  store.dispatch({type:'learner.set',id:IA});
  let s=store.getSession();
- assert.deepEqual(s.history,mineA.history);assert.deepEqual(s.memory,mineNotes);assert.notEqual(s.status,store.LEARNER_UNREAD);
+ assert.deepEqual(s.history,mineA.history);assert.equal(s.memory,undefined);assert.notEqual(s.status,store.LEARNER_UNREAD);
  const aside=FILE+'.aside';fs.renameSync(FILE,aside);
  try{
   assert.doesNotThrow(()=>store.dispatch({type:'learner.set',id:IB}));
   s=store.getSession();const b=learners.blank(IB);
-  assert.notEqual(s.status,store.LEARNER_UNREAD);assert.deepEqual(s.history,b.history);assert.deepEqual(s.memory,b.memory);
+  assert.notEqual(s.status,store.LEARNER_UNREAD);assert.deepEqual(s.history,b.history);assert.equal(s.memory,undefined);
  }finally{fs.renameSync(aside,FILE);}
  const text=fs.readFileSync(src('lib/session/store.ts'),'utf8');
  const at=text.indexOf('if (REHYDRATE.has(e.type)) {'),block=text.slice(at,text.indexOf('weekRead(store.session)',at));
