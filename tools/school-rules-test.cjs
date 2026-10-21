@@ -2144,3 +2144,12 @@ test('optimize 2026-10-21: an amount, a missing number or a unit answer written 
  // the worked answer still finds a writing the desk marks right
  assert.equal(S.workedAnswer(OF,'uk'),'24 kg');assert.equal(S.workedAnswer(MS,'uk'),'9');
 });
+test('optimize 2026-10-21: a fault while leaksSchool reads the spec refuses the line, as a fault in its body does (the strict side)',()=>{
+ // a spec whose reading throws (a getter here; any defect in read() in life): the line is refused, never passed unchecked
+ const bad={get shape(){throw new TypeError('spec defect');}};
+ const was=console.error;console.error=()=>{};
+ try{assert.equal(S.leaksSchool(bad,'The answer is 24.'),true);}finally{console.error=was;}
+ // not a fault: a spec the desk cannot work out still has nothing to leak, and a line that is no text is no leak
+ assert.equal(S.leaksSchool({shape:'compute',expr:'3/4 +'},'The answer is 24.'),false);
+ assert.equal(S.leaksSchool(cs('3/4 + 1/6'),''),false);
+});

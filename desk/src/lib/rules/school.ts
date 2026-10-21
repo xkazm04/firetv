@@ -2653,13 +2653,14 @@ function pythRooted(k: { find: "longest" | "shorter"; x: bigint; y: bigint }, te
  * Does this hint or explanation line state the answer, or give it away? The rule is in this file's header, and each
  * shape's own part of it in `leakProfile`. Two more readings of rule 6 (W7): three numbers chained by × and ÷ whose
  * value is the answer ("12 ÷ 4 × 3" for 3/4 = ?/12, "40 ÷ 5 × 3" for 3/5 of 40), and the joining words above. False
- * for a line that is not text or a spec the desk cannot work out (there is nothing to leak); an internal fault refuses
- * the line (true), the strict side.
+ * for a line that is not text or a spec the desk cannot work out (there is nothing to leak); an internal fault, in
+ * reading the spec or in the check itself, refuses the line (true), the strict side.
  */
 export function leaksSchool(spec: unknown, hint: unknown): boolean {
   if (typeof hint !== "string" || !hint.trim()) return false;
   let r: Read;
-  try { r = read(spec); } catch (e) { checkerFault("school.leaksSchool read", e); return false; }
+  // a fault while reading the spec is a desk defect, not a spec it cannot work out: the line is refused, the strict side
+  try { r = read(spec); } catch (e) { checkerFault("school.leaksSchool read", e); return true; }
   if (!r.ok) return false;
   try {
     const pr = leakProfile(r), { T, targets } = pr;
