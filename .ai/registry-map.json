@@ -1534,7 +1534,11 @@
           "revision": 10,
           "changedAt": "2026-09-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/lib/rules/kinds.ts:108 Searches for conformance, capabilities and guardrails returned no hits in the maths rules directory and located repository checking elsewhere; this context grades learner answers and paper readings rather than repository contracts.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:58a3b7c0b9efb42c",
+          "evaluatedRevision": 10
         }
       ],
       "governance": "governed"
@@ -4630,7 +4634,11 @@
           "revision": 10,
           "changedAt": "2026-09-23",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": ".ai/doctor.mjs:250 The doctor records execution outcomes as verification booleans without the timestamp, run identity, standard version and proof rung required for durable proof.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:58a3b7c0b9efb42c",
+          "evaluatedRevision": 10
         },
         {
           "subject": "agent-runtime-assembly",

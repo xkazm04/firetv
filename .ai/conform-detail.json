@@ -2642,6 +2642,128 @@
           "evidence": "tools/engines-rules-test.cjs:412 The tested regeneration concerns embedding vectors; no translated store regenerated under a changing translation configuration was identified."
         }
       ]
+    },
+    "governance/repo-governance/conformance-checking": {
+      "context": "repo-governance",
+      "subject": "conformance-checking",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-21",
+      "evaluatedTs": "2026-10-21T21:16:16.730Z",
+      "worker": "f2c3d703-f951-43b2-b1be-e86b10bcbb01",
+      "techniques": [
+        {
+          "technique": "checker-false-positive-discipline",
+          "verdict": "deviation",
+          "evidence": ".ai/doctor.mjs:284 Any directory entry, including a README without a workflow, satisfies this CI detector and suppresses the missing-CI finding."
+        },
+        {
+          "technique": "claim-write-back",
+          "verdict": "deviation",
+          "evidence": ".ai/doctor.mjs:148 Failed execution clears true, but write-back stores only a boolean without proof provenance or expiration."
+        },
+        {
+          "technique": "declared-deviation-register",
+          "verdict": "deviation",
+          "evidence": ".ai/doctor.mjs:266 The deliberately accepted finding documented in memory 0011 remains an ordinary failure in the doctor's report and score; the downstream gate waiver does not supply an accepted-deviation outcome there."
+        },
+        {
+          "technique": "declared-then-proven",
+          "verdict": "deviation",
+          "evidence": ".ai/doctor.mjs:73 Findings record identity, severity and message but do not carry the presence, shape or execution rung."
+        },
+        {
+          "technique": "derived-expectation-needs-an-evidence-floor",
+          "verdict": "not-applicable",
+          "evidence": ".ai/doctor.mjs:370 Projection checking reads the reachable canonical artifact directly; it does not infer unavailable manifest facts through a source-pattern derivation."
+        },
+        {
+          "technique": "edition-stratified-conformance",
+          "verdict": "not-applicable",
+          "evidence": ".ai/SPEC.md:383 This contract uses semver revisions in place, rather than an accumulating edition-based upstream conformance suite."
+        },
+        {
+          "technique": "finding-severity-ladder",
+          "verdict": "deviation",
+          "evidence": ".ai/doctor.mjs:212 Tracked secrets receive the ordinary fail level; the checker continues and reports a percentage instead of short-circuiting with a distinct hard failure."
+        },
+        {
+          "technique": "fixture-repo-testing",
+          "verdict": "deviation",
+          "evidence": "tools/security-policy-test.cjs:103 The discovered whole-repository negative test consumes the doctor's stdout after an exception without asserting its exit status; the gate tests separately use fabricated doctor output."
+        },
+        {
+          "technique": "pass-ratio-comparability",
+          "verdict": "deviation",
+          "evidence": ".ai/doctor.mjs:477 The percentage is rendered unconditionally, including after tracked-secret findings or when unchecked findings dominate."
+        }
+      ]
+    },
+    "desk-subjects/maths-school/conformance-checking": {
+      "context": "maths-school",
+      "subject": "conformance-checking",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-21",
+      "evaluatedTs": "2026-10-21T21:16:16.730Z",
+      "worker": "f2c3d703-f951-43b2-b1be-e86b10bcbb01",
+      "techniques": [
+        {
+          "technique": "checker-false-positive-discipline",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/school.ts:2244 These findings classify mathematical mistakes, rather than repository conformance."
+        },
+        {
+          "technique": "claim-write-back",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/slips.ts:38 The returned state tracks learner slips and successful attempts, rather than proofs of declared commands."
+        },
+        {
+          "technique": "declared-deviation-register",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/recovery.ts:80 Exam-board claims are withheld while unverified; this is not an accepted deviation from a claimed repository standard."
+        },
+        {
+          "technique": "declared-then-proven",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/kinds.ts:121 Verification establishes a mathematical solution, rather than a repository declaration's proof rung."
+        },
+        {
+          "technique": "derived-expectation-needs-an-evidence-floor",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/paperScore.ts:58 Expected results come from an answer key, rather than source-derived expectations for an unavailable artifact."
+        },
+        {
+          "technique": "edition-stratified-conformance",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/stretch.ts:86 Difficulty selection uses learner and topic information, rather than upstream conformance-suite editions."
+        },
+        {
+          "technique": "finding-severity-ladder",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/marks.ts:28 The vocabulary distinguishes learner marks and uncertainty, rather than conformance finding severities."
+        },
+        {
+          "technique": "fixture-repo-testing",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/paperScore.ts:65 The scorer compares paper items with an answer key; its subject is not a repository tree."
+        },
+        {
+          "technique": "inline-predicate-rung-inference",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/saidValue.ts:55 This predicate grounds a learner's spoken value, rather than executing commands attached to specification claims."
+        },
+        {
+          "technique": "pass-ratio-comparability",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/paperScore.ts:84 These percentages measure paper-reading accuracy, rather than repository conformance."
+        },
+        {
+          "technique": "rule-registry-enumerated-fixtures",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/slips.ts:44 This registry enumerates learner slips exposed by mathematical tasks, rather than independent conformance rules."
+        }
+      ]
     }
   }
 }
