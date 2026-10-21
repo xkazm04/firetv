@@ -245,7 +245,8 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setPhase("sending"); setMsg("");
     try {
-      const r = await call("/api/read", { image: dataUrl, subject: sub, title, w, h }); const j = await r.json();
+      // an answer that is not JSON (a proxy's error page) is still the desk's answer: its status says why, below
+      const r = await call("/api/read", { image: dataUrl, subject: sub, title, w, h }); const j = await r.json().catch(() => null);
       if (moved()) return;
       // a run that failed is on the desk with its sentence and a Try again (its body says failure); only a refusal needs the line here
       if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(deskLine(j, `The desk could not read it (${r.status}).`)); }
@@ -303,7 +304,8 @@ export default function Phone() {
   const sendSlot = async () => { if (!onPlan) return; const r = planFill(onPlan.plan, onPlan.i, slotText); if (!r.ok) { setMsg(r.error); return; }
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setMsg("sending…");
-    try { const res = await post({ type: "essay.slot", i: onPlan.i, text: slotText }); if (moved()) return; setMsg(res.ok ? "on the TV" : "That did not reach the desk."); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
+    // a refusal reached the desk: it says the desk's own line; only a call that never came back did not reach it
+    try { const res = await post({ type: "essay.slot", i: onPlan.i, text: slotText }); if (moved()) return; const j = res.ok ? null : await res.json().catch(() => null); if (moved()) return; setMsg(res.ok ? "on the TV" : deskLine(j, "The desk did not take that sentence. Try again.")); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   useEffect(() => { if (onSentence) setRewrite(onSentence.text); }, [onSentence?.n, onSentence?.text]); // eslint-disable-line react-hooks/exhaustive-deps
   const sendRewrite = async () => { if (!onSentence) return; const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("the desk is reading it…");
     try { const r = await call("/api/analyse", { kind: "rewrite", n: onSentence.n, text: rewrite }); const j = await r.json().catch(() => ({} as { error?: string }));
@@ -357,8 +359,13 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNotice(null);
     // after a switch, readPiece here is the last learner's render: it would post their paragraphs
-    try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void readPiece(true); } catch { /* said on the next line */ }
-    if (!moved()) setNote("That did not reach the desk.");
+    let r: Response | null = null;
+    try { r = await call("/api/texts", { notice: true }); } catch { /* r stays null: it did not reach the desk */ }
+    if (moved()) return;
+    if (r?.ok) return void readPiece(true);
+    // a refusal is the desk's answer (no one seated, say): its own line, not "did not reach"
+    const j = r ? await r.json().catch(() => null) : null;
+    if (!moved()) setNote(r ? deskLine(j, "The desk did not take that. Try again.") : "That did not reach the desk.");
   };
   const openKept = (id: string, text: string, title?: string) => { const ps = paragraphsOf(text); setPieceId(id); setSource("message"); loadParagraphs(ps.length ? ps : [text], `Opened from your shelf: ${ps.length} paragraph${ps.length === 1 ? "" : "s"}. Change it, then read it again as a new version.`, title && !/^Untitled \S+ \d+$/.test(title) ? title : null); };
   /** Analyse the paragraph showing. Blank lines typed into it split it first; the desk still reads only the first part. */
@@ -385,8 +392,13 @@ export default function Phone() {
   const acceptParagraphNotice = async () => {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNotice(null);
-    try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void analyseParagraph(); } catch { /* said on the next line */ }
-    if (!moved()) setNote("That did not reach the desk.");
+    let r: Response | null = null;
+    try { r = await call("/api/texts", { notice: true }); } catch { /* r stays null: it did not reach the desk */ }
+    if (moved()) return;
+    if (r?.ok) return void analyseParagraph();
+    // a refusal is the desk's answer (no one seated, say): its own line, not "did not reach"
+    const j = r ? await r.json().catch(() => null) : null;
+    if (!moved()) setNote(r ? deskLine(j, "The desk did not take that. Try again.") : "That did not reach the desk.");
   };
   /** From the sentence rewrite panel, on to the next paragraph: the phone's own paragraph; the TV stays where it is. */
   const nextFromRewrite = () => {

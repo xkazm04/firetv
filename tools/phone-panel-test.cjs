@@ -1352,3 +1352,43 @@ test('optimize 2026-10-21: a send that never reached the desk says so in the pla
  // the scan bites
  assert.equal([...'setMsg(`That did not reach the desk: ${String(e)}`)'.matchAll(/set(?:Msg|Note)\(`[^`]*\$\{\s*String\(\s*\w+\s*\)\s*\}[^`]*`\)/g)].length,1);
 });
+
+// A desk that ANSWERED and refused is not a desk the phone could not reach. Each handler is cut out of page.tsx and run
+// against stubs, as P17 (ii) does, with the real deskLine; the refusal must say the desk's own line (or the handler's
+// fallback when the body is not JSON), and only a call that never came back says "That did not reach the desk."
+test('optimize 2026-10-21: a refusal the desk answered is never reported as a send that did not reach it (error-handling user-facing-mapping)',async(t)=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const cut=(from,to)=>{const a=src.indexOf(from),e=src.indexOf(to,a);assert.ok(a>0&&e>a,`${from} is where the test expects it`);return src.slice(a,src.lastIndexOf('\n',e));};
+ const {deskLine}=P();
+ const SETTERS=['Busy','Msg','Phase','Note','Info','Notice','ReadIx','PieceId','ShelfTick','NoticeFor'];
+ const PARAMS=['seat','call','post','onPlan','slotText','planFill','deskLine','paras','pieceProblem','etype','keep','pieceId','source','pieceFormat','essay','paragraphsOf','essayTooLong','pix','stranded','heading','assignment','titleOf','rewriteStaysLine',...SETTERS.map((n)=>'set'+n)];
+ const build=(slice,name,respond)=>{
+  const calls=[];const js=ts.transpileModule(slice,{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+  const f=new Function(...PARAMS,`${js}\nreturn {${name}};`);
+  const stubs={seat:{current:{id:'ema'}},call:(u,b)=>respond(u,b),post:(e)=>respond('post',e),onPlan:{i:0,plan:{}},slotText:'slot',planFill:()=>({ok:true}),deskLine,
+   paras:['one'],pieceProblem:()=>'',etype:'structure',keep:true,pieceId:'p1',source:'message',pieceFormat:'message',essay:'one',paragraphsOf:(x)=>[x],essayTooLong:()=>'',pix:0,stranded:0,heading:null,assignment:undefined,titleOf:()=>null,rewriteStaysLine:()=>''};
+  const out=f(...PARAMS.map((p)=>p.startsWith('set')&&SETTERS.includes(p.slice(3))?(v)=>calls.push([p.slice(3),v]):stubs[p]));
+  return {fn:out[name],calls};
+ };
+ const refused=(error,status)=>Promise.resolve({ok:false,status,json:async()=>({error})});
+ const notJson=(status)=>Promise.resolve({ok:false,status,json:async()=>{throw new SyntaxError('Unexpected token <');}});
+ const lost=()=>Promise.reject(new TypeError('Failed to fetch'));
+ const said=(m,k)=>m.calls.filter(([x,v])=>x===k&&v).map(([,v])=>v);
+ const slotS=cut('const sendSlot','useEffect(() => { if (onSentence)'),pieceS=cut('const readPiece','const openKept'),paraS=cut('const analyseParagraph','/** From the sentence rewrite'),sendS=cut('const send = async','const toJpeg');
+ await t.test('sendSlot: the forgotten phone hears the desk\'s refusal; a lost call says it did not reach',async()=>{
+  const m=build(slotS,'sendSlot',()=>refused('Join the desk first.',403));await m.fn();
+  assert.equal(said(m,'Msg').at(-1),'Join the desk first.');
+  const m2=build(slotS,'sendSlot',lost);await m2.fn();assert.equal(said(m2,'Msg').at(-1),'That did not reach the desk.');
+ });
+ for(const [name,slice] of [['acceptNotice',pieceS],['acceptParagraphNotice',paraS]]){
+  await t.test(`${name}: a refused notice says the desk's line, not that it did not reach`,async()=>{
+   const m=build(slice,name,()=>refused('No one is at the desk.',409));await m.fn();
+   assert.deepEqual(said(m,'Note'),['No one is at the desk.']);
+   const m2=build(slice,name,lost);await m2.fn();assert.deepEqual(said(m2,'Note'),['That did not reach the desk.']);
+  });
+ }
+ await t.test('send: an answer that is not JSON (a proxy\'s error page) is the desk\'s failure with its status, not a lost send',async()=>{
+  const m=build(sendS,'send',()=>notJson(502));await m.fn('d',1,2,'maths','T');
+  assert.equal(said(m,'Msg').at(-1),'The desk could not read it (502).');assert.equal(m.calls.filter(([k])=>k==='Phase').at(-1)[1],'failed');
+ });
+});
