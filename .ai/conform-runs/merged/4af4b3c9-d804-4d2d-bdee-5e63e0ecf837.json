@@ -1,0 +1,47 @@
+{
+ "schema": "conform-run/1",
+ "worker": "4af4b3c9-d804-4d2d-bdee-5e63e0ecf837",
+ "subject": "concurrent-vcs",
+ "evaluatedAt": "2026-10-21T21:44:40.328640+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "desk-tooling",
+   "subject": "concurrent-vcs",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "tools/worktree-preflight.cjs:22 The dependency preflight accepts a shared TypeScript install from its manifest alone, so an incomplete donor lacking the compiler can pass its population check.",
+   "techniques": [
+    {
+     "technique": "physical-isolation",
+     "verdict": "conformant",
+     "evidence": "tools/kpi-measure-test.cjs:57 The applicable link-removal safeguard is realized: teardown unlinks dependencies before recursive cleanup and preserves scratch if links survive."
+    },
+    {
+     "technique": "shared-resource-arbitration",
+     "verdict": "deviation",
+     "evidence": "tools/worktree-preflight.cjs:22 Donor usability checks only manifest existence; it does not verify the compiler executable, nonempty package content, compatible version, or successful execution through the link."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-21T21:44:40.328640+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "concurrent-vcs"
+   ],
+   "techniques": [
+    "physical-isolation",
+    "shared-resource-arbitration"
+   ],
+   "deviations": 1,
+   "context": "desk-tooling",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

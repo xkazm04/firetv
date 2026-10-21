@@ -2764,6 +2764,27 @@
           "evidence": "desk/src/lib/rules/slips.ts:44 This registry enumerates learner slips exposed by mathematical tasks, rather than independent conformance rules."
         }
       ]
+    },
+    "tooling/desk-tooling/concurrent-vcs": {
+      "context": "desk-tooling",
+      "subject": "concurrent-vcs",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-21",
+      "evaluatedTs": "2026-10-21T21:44:40.328Z",
+      "worker": "4af4b3c9-d804-4d2d-bdee-5e63e0ecf837",
+      "techniques": [
+        {
+          "technique": "physical-isolation",
+          "verdict": "conformant",
+          "evidence": "tools/kpi-measure-test.cjs:57 The applicable link-removal safeguard is realized: teardown unlinks dependencies before recursive cleanup and preserves scratch if links survive."
+        },
+        {
+          "technique": "shared-resource-arbitration",
+          "verdict": "deviation",
+          "evidence": "tools/worktree-preflight.cjs:22 Donor usability checks only manifest existence; it does not verify the compiler executable, nonempty package content, compatible version, or successful execution through the link."
+        }
+      ]
     }
   }
 }

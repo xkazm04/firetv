@@ -3925,7 +3925,11 @@
           "revision": 9,
           "changedAt": "2026-10-15",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "tools/worktree-preflight.cjs:22 The dependency preflight accepts a shared TypeScript install from its manifest alone, so an incomplete donor lacking the compiler can pass its population check.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:de557423d4cf3016",
+          "evaluatedRevision": 9
         },
         {
           "subject": "quality-gates",
