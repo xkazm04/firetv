@@ -1,0 +1,32 @@
+{
+  "id": "f466c097-ceb7-4635-a362-c31c36390513",
+  "ts": "2026-10-21T10:36:58.783Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/break-wood.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "UI sound effect, soft wooden marimba and felt mallet, warm, dry room: a relaxed, slow descending arpeggio that says it is time for a break; calm, breathing space. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134256,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 33061,
+  "providerCredits": 22,
+  "sha256": "27cf6080581dee8b4ea949ef028ab17507e99a7a9b575bdea872936d67b18467",
+  "completedAt": "2026-10-21T10:37:02.120Z",
+  "creditsAfter": 134256,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 2200
+}
