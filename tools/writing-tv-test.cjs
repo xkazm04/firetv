@@ -234,4 +234,9 @@ test('the /writing page path saves a whole episode from its body to the seated l
  assert.equal(b.focus,'evidence');assert.equal(b.holds,true);assert.match(b.saved,/coached on evidence; the revision now gives evidence/);
  const h=L.getLearner('wtv-page').history;assert.equal(h.length,1);assert.deepEqual([h[0].kind,h[0].label],['writing','Screens before bed']);
  assert.equal(store.getSession().writingTv??null,null,'the page path leaves the TV episode alone');
+ // the session reads the record again, as the TV path does on writing.finished: the landing and the recap show it at once
+ const s=store.getSession();assert.equal(s.history.at(-1)?.label,'Screens before bed','the session\'s history holds the page\'s episode');
+ assert.deepEqual(Object.keys(s.writing),Object.keys(L.getLearner('wtv-page').writing),'and its writing record');
+ // a re-read for a learner who is not seated changes nothing
+ assert.equal(store.reduce(s,{type:'learner.reread',by:'someone-else'}),s);
 });

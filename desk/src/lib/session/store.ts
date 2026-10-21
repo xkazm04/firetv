@@ -433,7 +433,10 @@ export type Event =
   // Writing on the TV: the TV picks a prompt and clears the episode; the writing routes alone raise busy, coached and finished
   // (they are not in SHAPES, so no screen or phone can post them); `by` is the learner the work was for
   | { type: "writing.pick"; promptId: string } | { type: "writing.clear" }
-  | { type: "writing.busy"; busy: boolean; by: string } | { type: "writing.coached"; draft: string; note: string; by: string } | { type: "writing.finished"; revision: string; saved: string; by: string };
+  | { type: "writing.busy"; busy: boolean; by: string } | { type: "writing.coached"; draft: string; note: string; by: string } | { type: "writing.finished"; revision: string; saved: string; by: string }
+  // a route that wrote the seated learner's record outside any other event (the /writing page's save) asks the desk to read it
+  // again (REHYDRATE); it moves nothing else, and is not in SHAPES, so no screen or phone can post it
+  | { type: "learner.reread"; by: string };
 
 /**
  * The one door for what a screen or phone posts (api/session POST, after the server-only refusals): for each client-postable
@@ -930,6 +933,7 @@ function step(s: Session, e: Event): Session {
     case "writing.busy": if (!s.writingTv || s.learner?.id !== e.by) return s; n.writingTv = { ...s.writingTv, busy: e.busy }; break;
     case "writing.coached": if (s.writingTv?.stage !== "write" || s.learner?.id !== e.by) return s; n.writingTv = { ...s.writingTv, stage: "coached", draft: e.draft, note: e.note, busy: false }; break;
     case "writing.finished": if (s.writingTv?.stage !== "coached" || s.learner?.id !== e.by) return s; n.writingTv = { ...s.writingTv, stage: "finished", revision: e.revision, saved: e.saved, busy: false }; break;
+    case "learner.reread": if (s.learner?.id !== e.by) return s; break;
     case "session.end": n.ask = null; n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.log = { ...s.log, endedAt: Date.now() }; break;
     case "reset": return { ...fresh(), phonesLive: s.phonesLive };
   }
@@ -1088,7 +1092,7 @@ export function getSession() { return store.session; }
  * at the desk. The reducer stays pure: the file read happens here, at the boundary that already
  * writes to disk and pushes to subscribers.
  */
-const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "page.marked", "linga.changed", "essay.set", "essay.progress", "essay.revised", "lesson.watched", "paper.enter", "writing.finished"]);
+const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "page.marked", "linga.changed", "essay.set", "essay.progress", "essay.revised", "lesson.watched", "paper.enter", "writing.finished", "learner.reread"]);
 
 /**
  * A settled item changes its set's count: the line marking wrote (the last practice line, this topic, this n)

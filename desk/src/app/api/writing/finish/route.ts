@@ -61,5 +61,7 @@ export async function POST(req: Request) {
   if (!step.ok) return NextResponse.json({ error: step.error }, { status: 400 });
   const saved = saveEpisode(who.id, step.episode);
   if (!saved.ok) return NextResponse.json({ error: saved.error }, { status: 500 });
+  // the session reads the record again (as writing.finished does on the TV path), so the landing and the recap show it at once
+  dispatch({ type: "learner.reread", by: who.id });
   return NextResponse.json({ episode: step.episode, saved: saved.detail, focus: step.episode.focus, holds: step.episode.holds });
 }

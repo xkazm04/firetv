@@ -928,6 +928,7 @@ const SAMPLES={
  'essay.clear':{type:'essay.clear'},'status':{type:'status',text:'hi'},'session.end':{type:'session.end'},'reset':{type:'reset'},'pin.turn':{type:'pin.turn'},'phone.presence':{type:'phone.presence',live:1},'phones.forget':{type:'phones.forget'},'ask.open':{type:'ask.open',kind:'page'},'ask.cancel':{type:'ask.cancel',id:'x'},'ask.sent':{type:'ask.sent',id:'x'},
  'writing.pick':{type:'writing.pick',promptId:'screens'},'writing.clear':{type:'writing.clear'},'writing.busy':{type:'writing.busy',busy:true,by:'ema'},
  'writing.coached':{type:'writing.coached',draft:'a. b.',note:'n',by:'ema'},'writing.finished':{type:'writing.finished',revision:'a. c.',saved:'s',by:'ema'},
+ 'learner.reread':{type:'learner.reread',by:'ema'},
 };
 // seats a learner, or changes nothing a slot holds: these are not owed a place in NEEDS_LEARNER
 const SEATS_OR_CLEARS=new Set(['learner.set','reset']);
