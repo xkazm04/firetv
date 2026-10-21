@@ -19,11 +19,27 @@
  */
 import { execFileSync } from 'node:child_process';
 import os from 'node:os';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
 import { PNG } from 'pngjs';
 
-export const ADB_BIN =
-  process.env.ADB ?? 'C:/Users/kazda/scoop/apps/android-clt/current/platform-tools/adb.exe';
+/** Where the operator's machine keeps adb (scripts/dev.ps1 $sdk). Only a default, and only where it exists. */
+const OPERATOR_ADB = 'C:/Users/kazda/scoop/apps/android-clt/current/platform-tools/adb.exe';
+
+/**
+ * Which adb to run: $ADB, else the operator's install where it exists, else the SDK that ANDROID_HOME or
+ * ANDROID_SDK_ROOT names, else `adb` on the PATH. A hard-coded path alone made every adb call on any other
+ * machine an ENOENT, with the environment's own SDK ignored.
+ */
+export function resolveAdb(env = process.env, exists = existsSync, platform = process.platform) {
+  if (env.ADB) return env.ADB;
+  if (exists(OPERATOR_ADB)) return OPERATOR_ADB;
+  const sdk = env.ANDROID_HOME || env.ANDROID_SDK_ROOT;
+  if (sdk) return path.join(sdk, 'platform-tools', platform === 'win32' ? 'adb.exe' : 'adb');
+  return 'adb';
+}
+
+export const ADB_BIN = resolveAdb();
 
 /** Empty means "whatever adb has attached", which is right when there is exactly one. */
 export const ADB_SERIAL = process.env.ADB_SERIAL ?? '';

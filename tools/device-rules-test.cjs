@@ -320,3 +320,17 @@ test('pen-sim, latency-probe and tail-diag exit 2 (could not run), not 1 (FAIL),
     wss.close();
   }
 });
+
+// device.mjs's adb was one hard-coded path on the operator's machine. Anywhere else every adb call (screencap,
+// logcat, keyevent) was an ENOENT, and an ANDROID_HOME the machine did declare was ignored. resolveAdb is pure here:
+// the environment and the file check are handed in.
+test('resolveAdb: $ADB, else the operator install where it exists, else ANDROID_HOME / ANDROID_SDK_ROOT, else PATH', async () => {
+  const { resolveAdb } = await load();
+  assert.equal(typeof resolveAdb, 'function', 'device.mjs exports no resolveAdb');
+  const none = () => false, all = () => true;
+  assert.equal(resolveAdb({ ADB: '/opt/adb' }, all), '/opt/adb');
+  assert.match(resolveAdb({}, all), /android-clt/, 'the operator install still wins where it exists');
+  assert.equal(resolveAdb({ ANDROID_HOME: '/sdk' }, none, 'linux'), path.join('/sdk', 'platform-tools', 'adb'));
+  assert.equal(resolveAdb({ ANDROID_SDK_ROOT: 'D:/sdk' }, none, 'win32'), path.join('D:/sdk', 'platform-tools', 'adb.exe'));
+  assert.equal(resolveAdb({}, none), 'adb', 'nothing declared: adb on the PATH, not a path that does not exist');
+});
