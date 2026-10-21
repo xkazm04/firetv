@@ -1,0 +1,32 @@
+{
+  "id": "314033e0-732e-4b54-96c5-f9bb4a018b1b",
+  "ts": "2026-10-21T10:35:44.978Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/right-wood.mp3",
+  "seconds": 1.2,
+  "request": {
+    "text": "UI sound effect, soft wooden marimba and felt mallet, warm, dry room: a gentle, satisfied rising two-note chime for a correct answer; modest, not a fanfare. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134306,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 20105,
+  "providerCredits": 13,
+  "sha256": "77c7c9e7c1d5d382efa8192a566ff1bf521f18a605302cc8771b89828428a8cb",
+  "completedAt": "2026-10-21T10:35:50.215Z",
+  "creditsAfter": 134306,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1600
+}

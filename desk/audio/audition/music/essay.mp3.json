@@ -1,0 +1,31 @@
+{
+  "id": "5a3d2f88-8a60-4bd3-a6d6-d205b4394e97",
+  "ts": "2026-10-21T10:38:08.921Z",
+  "session": "desk-a1-music",
+  "status": "complete",
+  "kind": "music",
+  "out": "desk/audio/audition/music/essay.mp3",
+  "seconds": 20,
+  "request": {
+    "prompt": "Reflective, quiet instrumental loop for a writing app. Solo felt piano with a distant string pad, 66 BPM, thoughtful and spacious, like a library at dusk. Seamless loop, no vocals, no percussion, very low dynamics.",
+    "music_length_ms": 20000,
+    "force_instrumental": true,
+    "model_id": "music_v1"
+  },
+  "endpoint": "/v1/music",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 1200,
+  "budgetCharge": 1200,
+  "creditsBefore": 134157,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 6000,
+  "bytes": 321036,
+  "providerCredits": null,
+  "sha256": "e587b9592037687b4d5621e263647ab67b7f99df60cd443f023143cc02ea6ce4",
+  "completedAt": "2026-10-21T10:38:15.546Z",
+  "creditsAfter": 134157,
+  "observedAccountDelta": 0,
+  "spendBasis": "Account delta may include concurrent use or omit delayed billing; conservative estimate retained.",
+  "sessionBudgetUsed": 4800
+}
