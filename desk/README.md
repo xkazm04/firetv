@@ -114,10 +114,16 @@ it does not test microphone hardware. Other engine caches keep their existing lo
 | engine | today | env |
 |---|---|---|
 | text — hints, lesson pick, explanations, essay verdicts | Claude Code CLI, headless (`claude -p`) | `CLAUDE_BIN`, `CLAUDE_FAST_MODEL`, `CLAUDE_BEST_MODEL` |
-| vision — reading a captured page | `qwen3.8:27b` on Ollama | `OLLAMA_HOST`, `OLLAMA_VISION_MODEL` |
+| vision — reading a captured page | `qwen3.8:27b` on Ollama; or the Claude CLI, or codex | `DESK_VISION_ENGINE` (`ollama`, the default, `claude-cli` or `codex`), `OLLAMA_HOST`, `OLLAMA_VISION_MODEL`, `CLAUDE_VISION_MODEL` (default: `CLAUDE_BEST_MODEL`, sonnet) |
 | embeddings — lesson segment retrieval | `nomic-embed-text` on Ollama | `OLLAMA_EMBED_MODEL` |
 | voice out — the TV speaks | ElevenLabs | `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID` |
 | voice in — the phone listens | browser speech recognition | — |
+
+`DESK_VISION_ENGINE=claude-cli` reads a page with no Ollama: the photo goes to `claude -p` inline on stdin (stream-json),
+the model gets no tool and no file permission, and it runs on the subscription like the text engine. Measured 2026-10-21 on
+`public/samples/maths.jpg` through `POST /api/read`: all 10 problems read exactly, with positions, in 5-6 s on sonnet.
+`codex` is wired the same way (the photo as a temp file, `--image`) but has not been run live. The engine check
+(`/api/smoke`) names the vision provider and says what to fix.
 
 `.env.local` holds the keys and is not committed. Timings measured 2026-09-07: a page read ~25 s
 (the vision model is 17 GB and loads on first use, ~45 s once), a hint 2–8 s, a lesson pick a few
