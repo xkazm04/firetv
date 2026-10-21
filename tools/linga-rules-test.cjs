@@ -4070,3 +4070,19 @@ test('the lost jacket: the phone reply panel draws the learner\'s lost thing (Lo
  const turnPanel=phone.slice(phone.indexOf('ans.action === "turn"'),phone.indexOf('const WORDS'));
  assert.match(turnPanel,/c\.lost && !runningTake\(c\) && <LostPicture learnerId=\{s\.learner\?\.id\} episodeId=\{c\.id\} partner=\{c\.partner\} \/>/,'the turn panel draws it while the scene has a lost task');
 });
+test('the speech routes are the TV\'s: a paired phone is refused 403 before any engine is asked, the TV and in-process callers are not',async()=>{
+ const had=process.env.ELEVENLABS_API_KEY;process.env.ELEVENLABS_API_KEY||='test-key';
+ const reg=require(path.join(root,'src/lib/engines/registry.ts'));
+ const speak=require(path.join(root,'src/app/api/speak/route.ts')),listenRoute=require(path.join(root,'src/app/api/listen/route.ts'));
+ let runs=0;
+ reg.useProvider('speak',{name:'stub',run:async()=>{runs++;return {raw:Buffer.from([1,2])};}});
+ reg.useProvider('listen',{name:'stub',run:async()=>{runs++;return {raw:{text:'hi',language:'en'}};}});
+ const said=role=>speak.POST(new Request('http://desk/api/speak',{method:'POST',body:'{"text":"Which date?"}',headers:{'Content-Type':'application/json',...(role?{'x-desk-role':role}:{})}}));
+ const heard=role=>{const form=new FormData();form.append('file',new Blob(['audio']),'a.webm');return listenRoute.POST(new Request('http://desk/api/listen',{method:'POST',body:form,headers:role?{'x-desk-role':role}:{}}));};
+ try{
+  for(const ask of [said,heard]){const r=await ask('phone');assert.equal(r.status,403,'a phone is refused');}
+  assert.equal(runs,0,'no engine was asked for a phone');
+  for(const ask of [said,heard])for(const role of ['tv',null]){const r=await ask(role);assert.equal(r.status,200,`${role} is served`);}
+  assert.equal(runs,4);
+ }finally{reg.resetProviders();if(had===undefined)delete process.env.ELEVENLABS_API_KEY;}
+});
