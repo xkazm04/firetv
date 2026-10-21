@@ -9,6 +9,7 @@ import { accepts } from "@/lib/english/turn";
 import { runningTake } from "@/lib/english/take";
 import { beatOf } from "@/lib/english/duet";
 import { activeCheck, lingaView, wordsJob, type WordsJob } from "@/lib/english/view";
+import { LostPicture } from "./LostPicture";
 import { ReplyBox } from "./ReplyBox";
 import { useEnglish } from "./useEnglish";
 
@@ -75,6 +76,8 @@ function ReplyPanel({ s, run, busy }: { s: Session; run: Run; busy: boolean }) {
     const line = (runningTake(c)?.turns ?? c.turns).at(-1), duet = c.duet;
     return <>
       <div className="linga-status" aria-live="polite">{line?.text}</div>
+      {/* the lost jacket (lostfound.ts): the learner's own thing is this phone's alone; no other screen holds it */}
+      {c.lost && !runningTake(c) && <LostPicture learnerId={s.learner?.id} episodeId={c.id} partner={c.partner} />}
       {v.savedLine && <p className="linga-status" data-role="linga-saved">{v.savedLine}</p>}
       {duet && <p className="linga-status" data-role="linga-beat"><b>{duet.beat === "costar" ? `${duet.coStar}'s turn` : `${s.learner?.name ?? "Your"}'s turn`}</b></p>}
       <ReplyBox key={beatOf(c)} ready busy={busy} question={line?.id} stopWhen={!accepts(c, "capture")} onCapture={active => run("capture", { active })}

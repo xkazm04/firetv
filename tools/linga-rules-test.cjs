@@ -4062,3 +4062,11 @@ test('a ladder a restart lost: Help me answer says what to do once, then is no l
  assert.ok(c.cue,'the press puts a line on screen');
  assert(!V.lingaView(getSession()).actions.some(a=>a.id==='cue'||a.id==='quiz'),'and the help it cannot give is no longer offered');
 });
+test('the lost jacket: the phone reply panel draws the learner\'s lost thing (LostPicture), the one half of the scene no other screen holds',()=>{
+ // lostfound.ts keeps the learner's thing off the session; the phone asks for it (lost-picture, open at phoneDoor.ts). TL-12 dropped the drawing.
+ const strip=f=>fs.readFileSync(path.join(root,f),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
+ const phone=strip('src/english/LingaPhone.tsx');
+ assert.match(phone,/import \{ LostPicture \} from "\.\/LostPicture"/,'LingaPhone imports LostPicture');
+ const turnPanel=phone.slice(phone.indexOf('ans.action === "turn"'),phone.indexOf('const WORDS'));
+ assert.match(turnPanel,/c\.lost && !runningTake\(c\) && <LostPicture learnerId=\{s\.learner\?\.id\} episodeId=\{c\.id\} partner=\{c\.partner\} \/>/,'the turn panel draws it while the scene has a lost task');
+});
