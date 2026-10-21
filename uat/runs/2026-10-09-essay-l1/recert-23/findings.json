@@ -44,7 +44,7 @@
     "resolution": "closed",
     "suggested_acceptance": "Either the reading is refused for a non-English text (EM1-1), or the rules take the text's language: no code verdict on a Czech text is decided by an English-only word list.",
     "l2_priority": "With a Czech paragraph, record verdicts and notes under Argument and Structure; a Czech marker reads them (verdict agreement).",
-    "recurs": null,
+    "recurs": "2026-10-09-essay-l1/recert-22/L1-kristyna-17-EM1-1",
     "severity_prior": "blocker",
     "severity_why": "Blocker to major: the refusal now stops most Czech paragraphs before the word lists, so only a paragraph that leaks past the check is mis-ruled."
   },
@@ -90,7 +90,7 @@
     "resolution": "closed",
     "suggested_acceptance": "Whatever the language decision, the notes, moves and patterns on one page are in one language the learner chose.",
     "l2_priority": "Read a Czech paragraph live (claude-cli/sonnet): record the language of every note, fix and the summary.",
-    "recurs": null,
+    "recurs": "2026-10-09-essay-l1/recert-22/L1-kristyna-17-EM1-3",
     "severity_prior": "major",
     "severity_why": "Major to minor: only a Czech paragraph that leaks past the language check can reach the model now."
   }
