@@ -28,7 +28,7 @@ function refusedWithLine(error: string, essay = true) {
 }
 
 /** F16: the TV's Read it met the one-time text notice, which only the phone shows: the 428 stays, and the TV says what is needed (an essay refusal, so the plan captions it). */
-export const NOTICE_FIRST_LINE = "Not read yet. Open the Essay tab on your phone and read the text notice first, then press OK on Read it again.";
+const NOTICE_FIRST_LINE = "Not read yet. Open the Essay tab on your phone and read the text notice first, then press OK on Read it again.";
 
 /** The kinds of reading this route answers; a body naming none of them is not a reading. */
 const KINDS: ReadonlyArray<Body["kind"]> = ["english", "essay", "rewrite", "piece-again", "piece", "shelf-piece"];

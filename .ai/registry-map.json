@@ -1688,7 +1688,11 @@
           "revision": 6,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/lib/engines/text.ts:114 The inspected configuration selects a general text provider; searches found no translation workflow in the context and no termbase, glossary or post-edit machinery in repository operational files, so translation-quality measurement has no identified workload here.",
+          "evaluatedAt": "2026-10-20",
+          "evaluatedAgainst": "sha256-b2:126898c163a402a3",
+          "evaluatedRevision": 6
         },
         {
           "subject": "multi-provider-gateway-plane",
