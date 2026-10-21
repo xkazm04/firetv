@@ -153,6 +153,11 @@ test('the ask door checks the ask\'s KIND as well as its id: an id of another mo
  assert.equal(r.status,409,'a phone with no askId is refused at the finish route');
  assert.equal(L.getLearner('wtv-ema').history.length,lines,'and writes nothing to the learner\'s record');
  assert.equal(store.getSession().ask?.id,w.ask.id,'the open writing ask is left as it was');
+ // the /writing page's finish carries the note it was given: an empty one is a coaching step that never happened
+ for(const note of ['','   ']){
+  r=await call('finish',{promptId:'screens',draft:DRAFT,note,revision:REVISED},'tv');
+  assert.equal(r.status,400,'no note, no "coached on" line');assert.equal(L.getLearner('wtv-ema').history.length,lines,'nothing saved');
+ }
  const lib=fs.readFileSync(src('lib/session/phoneAsk.ts'),'utf8');
  assert.match(lib,/fields\.askId !== ask\.id \|\| !answers\.includes\(ask\.kind\)/,'the door checks the id and the kind, for every kind');
  assert.ok(w.ask);

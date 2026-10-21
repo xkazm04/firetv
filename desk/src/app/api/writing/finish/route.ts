@@ -19,6 +19,8 @@ export const dynamic = "force-dynamic";
 const NO_BODY = "The desk did not get your paragraph. Send it again.";
 /** What a phone is told when the TV's episode is not waiting for a revision. */
 const NOT_WAITING_REVISION = "The TV is not waiting for a revision now.";
+/** What the /writing page is told when its body carries no coaching note: the coached step never happened, so nothing says it did. */
+const NO_NOTE = "Get the coaching note on your paragraph before you finish.";
 
 /** The TV's episode: its paragraph and note, the phone's revision, saved to the learner at the desk. */
 function finishOnTv(revision: unknown): Response {
@@ -48,6 +50,8 @@ export async function POST(req: Request) {
   const body = (await req.clone().json().catch(() => null)) as { promptId?: unknown; draft?: unknown; note?: unknown; revision?: unknown } | null;
   if (roleFrom(req) === "phone" || (body && typeof body === "object" && "askId" in body)) return withPhoneAsk(req, ["writing"], async () => finishOnTv(body?.revision));
   if (!body || typeof body !== "object" || typeof body.note !== "string") return NextResponse.json({ error: NO_BODY }, { status: 400 });
+  // the history line says "coached on ..."; a body with an empty note skipped the coaching (lib/writing/save checkLine)
+  if (!body.note.trim()) return NextResponse.json({ error: NO_NOTE }, { status: 400 });
   const who = getSession().learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   let step = pick(START, body.promptId);
