@@ -12,7 +12,7 @@
  */
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import type { LandingApp, LandingStop } from "@/tv/landingRows";
-import { worldArt, type AppView, type LandingView } from "@/landing/model";
+import { handoffName, worldArt, type AppView, type LandingView } from "@/landing/model";
 import type { ThemeLandingProps } from "../types";
 import { DESK_FONTS } from "@/landing/fonts";
 import { Defs } from "./shapes";
@@ -217,7 +217,7 @@ function originOf(view: LandingView, stop: LandingStop): [number, number] {
 /** Select: the world opens - a flood in the app's colours grows from what was Selected, its picture and name settle in. */
 function Zoom({ view, stop }: { view: LandingView; stop: LandingStop }) {
   const app: AppView | undefined = view.apps.find((a) => a.id === stop), [ox, oy] = originOf(view, stop);
-  const name = app ? app.name : stop === "place" ? "Someone else" : "Pair a phone";
+  const name = handoffName(view, stop);
   return (
     <div className="pp-zoom" data-role="desk-zoom" data-app={stop} style={{ "--ox": `${ox}px`, "--oy": `${oy}px` } as CSSProperties}>
       <div className="pp-flood" />

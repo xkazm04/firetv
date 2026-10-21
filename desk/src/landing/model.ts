@@ -159,6 +159,16 @@ export function primaryLabel(name: string | null, kind: WaitKind | null): string
 }
 
 /**
+ * What Select's hand-off names for a stop: the app, the second action in the words the shelf shows ("Choose who" while
+ * no one is seated, "Someone else" with someone), or the phone. Every theme takes its hand-off words from here.
+ */
+export function handoffName(v: Pick<LandingView, "apps" | "place">, stop: LandingStop): string {
+  if (stop === "place") return v.place;
+  if (stop === "phone") return "Pair a phone";
+  return v.apps.find((a) => a.id === stop)?.name ?? APP_NAME[stop];
+}
+
+/**
  * The view for a session. `lastApp` is the app the D-pad was last on (the landing keeps it between renders, so
  * moving down to Someone else does not change the world behind).
  */

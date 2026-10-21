@@ -11,7 +11,7 @@
  */
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { LandingApp } from "@/tv/landingRows";
-import type { AppView, WhenIcon } from "@/landing/model";
+import { handoffName, type AppView, type WhenIcon } from "@/landing/model";
 import type { ThemeLandingProps } from "../types";
 import { BLUEPRINT_FONTS } from "./fonts";
 import { drawingOf } from "./drawings";
@@ -129,7 +129,8 @@ function lay(dx: number, fr: boolean, lv: 0 | 2): Place {
 
 /** Where the flood grows from, per what was Selected: the big action, the second action, the phone. */
 const FLOOD_FROM: Record<string, [number, number]> = { app: [300, 950], place: [704, 950], phone: [290, 440] };
-const ZOOM_WORD: Record<string, string> = { app: "Opening", place: "Someone else", phone: "Pair a phone" };
+/** The launch word: "Opening" for an app; the second action and the phone in the view-model's words (handoffName). */
+const zoomWord = (view: ThemeLandingProps["view"], zoom: ThemeLandingProps["zoom"]) => (zoom === "place" || zoom === "phone" ? handoffName(view, zoom) : "Opening");
 
 function splitHead(head: string): [string, string | null] {
   const i = head.indexOf(" · ");
@@ -299,7 +300,7 @@ export function BlueprintLanding({ view, zoom, boot }: ThemeLandingProps) {
       )}
 
       <div className="bp-launch" aria-hidden="true">
-        <div className="op">{ZOOM_WORD[zoom === "place" ? "place" : zoom === "phone" ? "phone" : "app"]}</div>
+        <div className="op">{zoomWord(view, zoom)}</div>
         <svg className="dimline" viewBox="0 0 640 60"><path className="d" d="M8 30H632" strokeOpacity=".25" /><path className="pr" pathLength={1} d="M8 30H632" /><path d="M8 12V48M632 12V48" /><path className="ah2" d="M8 30L26 22V38ZM632 30L614 22V38Z" /></svg>
       </div>
 
