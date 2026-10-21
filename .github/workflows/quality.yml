@@ -7,6 +7,11 @@
 name: quality
 on:
   pull_request:
+  # On main too: a pull request is checked against its own base, and a squash merge of an old branch can land green
+  # code on a main that has moved under it (fc866ead landed a check that was green on its 2026-10-05 base and red on
+  # the main it merged into). Only a run on main says main is green.
+  push:
+    branches: [main]
   workflow_dispatch: {}
 permissions:
   contents: read
