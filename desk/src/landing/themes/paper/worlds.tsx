@@ -15,6 +15,7 @@
 import type { ReactNode } from "react";
 import type { ArtState } from "@/landing/model";
 import { Circ, Cloud, Drift, Hill, Rr, SkyGradient, Star, Tree, paint } from "./shapes";
+import { still } from "./stills/Still";
 
 export interface Layer { d: number; k: "sky" | "soft" | "hill" | "hero"; back: boolean; node: ReactNode }
 const L = (d: number, k: Layer["k"], back: boolean, node: ReactNode): Layer => ({ d, k, back, node });
@@ -51,31 +52,41 @@ const Times = ({ x, y, s, r, fill }: { x: number; y: number; s: number; r: numbe
   <Drift dur={9 + (s % 3)} delay={-(x % 6)}><g transform={`translate(${x} ${y}) rotate(${r}) scale(${s / 40})`}><g transform="rotate(45)"><Rr x={-9} y={-34} w={18} h={68} r={7} fill={fill} /><Rr x={-34} y={-9} w={68} h={18} r={7} fill={fill} /></g></g></Drift>
 );
 
+// the still layers (stills/Still.tsx): drawn once per page load into a bitmap, not rastered again on each lamp move
+const M_TICKS = Array.from({ length: 31 }, (_, j) => {
+  const i = j * 6, a = i * Math.PI / 180, r2 = i % 30 === 0 ? 168 : i % 10 === 0 ? 184 : 196;
+  return <line key={i} x1={f1(Math.cos(a) * 208)} y1={f1(-Math.sin(a) * 208)} x2={f1(Math.cos(a) * r2)} y2={f1(-Math.sin(a) * r2)} stroke="#8f9de2" strokeWidth="3" strokeLinecap="round" />;
+});
+// sky, the sun as a protractor, the dotted path a learner walks
+const M_SKY = still("maths-sky", "sky", 0.1, <>
+  <defs><SkyGradient id="mSky" stops={SKY.maths} /></defs>
+  <SkyRect id="mSky" />
+  <circle cx="1560" cy="560" r="440" fill={paint("rWarm")} opacity=".75" />
+  <g transform="translate(1560 596)"><path d="M-214 0A214 214 0 0 1 214 0Z" fill={paint("gCream")} /><path d="M-162 0A162 162 0 0 1 162 0Z" fill="#fff0b0" /><path d="M-104 0A104 104 0 0 1 104 0Z" fill="#ffdc70" opacity=".7" />{M_TICKS}</g>
+  <path d="M170 770Q880 60 1760 560" fill="none" stroke="#fff" strokeOpacity=".8" strokeWidth="5" strokeDasharray="1 19" strokeLinecap="round" />
+  <Circ x={170} y={770} r={9} fill={paint("gBrass")} />
+</>);
+// the maths hills (the empty desk's too)
+const M_HILL_BACK = still("maths-hill-34", "hill", 0.34, <g><Hill base={640} amp={34} seed={11} fill="#b8c2f2" /><Hill base={690} amp={30} seed={7} fill="#a2aeed" /></g>);
+const M_HILL_FRONT = still("maths-hill-60", "hill", 0.6, <g><Hill base={752} amp={36} seed={23} fill="#8898e4" /><Hill base={806} amp={26} seed={5} fill="#6f81dc" /></g>);
+// the front hill and the side cliffs (the symbols on them drift, so they stay live)
+const M_FRONT = still("maths-front", "hero", 1.25, <>
+  <Hill base={940} amp={26} seed={91} fill={paint("gIndigo")} />
+  <path d="M-140 1100V470C-100 560-30 700 20 830L60 1100Z" fill={paint("gCobalt")} /><path d="M2060 1100V560C2000 650 1930 760 1890 850L1850 1100Z" fill={paint("gCobalt")} />
+</>);
+
 export function mathsWorld(c: Extract<ArtState, { app: "maths" }>): Layer[] {
   const known = c.n != null, n = known ? c.n! : 0, m = c.m;
   const X0 = 560, W = 160, RISE = 54, Y0 = 756;
   const out: Layer[] = [];
-  // sky, the sun as a protractor, the dotted path a learner walks
-  const ticks = [];
-  for (let i = 0; i <= 180; i += 6) {
-    const a = i * Math.PI / 180, r2 = i % 30 === 0 ? 168 : i % 10 === 0 ? 184 : 196;
-    ticks.push(<line key={i} x1={f1(Math.cos(a) * 208)} y1={f1(-Math.sin(a) * 208)} x2={f1(Math.cos(a) * r2)} y2={f1(-Math.sin(a) * r2)} stroke="#8f9de2" strokeWidth="3" strokeLinecap="round" />);
-  }
-  out.push(L(0.1, "sky", true, <>
-    <defs><SkyGradient id="mSky" stops={SKY.maths} /></defs>
-    <SkyRect id="mSky" />
-    <circle cx="1560" cy="560" r="440" fill={paint("rWarm")} opacity=".75" />
-    <g transform="translate(1560 596)"><path d="M-214 0A214 214 0 0 1 214 0Z" fill={paint("gCream")} /><path d="M-162 0A162 162 0 0 1 162 0Z" fill="#fff0b0" /><path d="M-104 0A104 104 0 0 1 104 0Z" fill="#ffdc70" opacity=".7" />{ticks}</g>
-    <path d="M170 770Q880 60 1760 560" fill="none" stroke="#fff" strokeOpacity=".8" strokeWidth="5" strokeDasharray="1 19" strokeLinecap="round" />
-    <Circ x={170} y={770} r={9} fill={paint("gBrass")} />
-  </>));
+  out.push(L(0.1, "sky", true, M_SKY));
   out.push(L(0.22, "soft", true, <>
     <Drift dur={19}><Cloud x={520} y={214} s={0.62} /></Drift>
     <Drift dur={23} delay={-6}><Cloud x={1720} y={250} s={0.6} /></Drift>
     <Drift dur={27} delay={-11}><Cloud x={120} y={620} s={0.6} /></Drift>
   </>));
-  out.push(L(0.34, "hill", true, <g><Hill base={640} amp={34} seed={11} fill="#b8c2f2" /><Hill base={690} amp={30} seed={7} fill="#a2aeed" /></g>));
-  out.push(L(0.6, "hill", true, <g><Hill base={752} amp={36} seed={23} fill="#8898e4" /><Hill base={806} amp={26} seed={5} fill="#6f81dc" /></g>));
+  out.push(L(0.34, "hill", true, M_HILL_BACK));
+  out.push(L(0.6, "hill", true, M_HILL_FRONT));
   out.push(L(0.48, "hero", true, <>
     <Plus x={790} y={152} s={62} r={-10} fill={paint("gCream")} /><Equals x={1500} y={236} s={60} r={8} fill={paint("gButter")} />
     <Times x={1120} y={176} s={50} r={0} fill={paint("gCream")} /><Plus x={1790} y={500} s={46} r={16} fill={paint("gCream")} />
@@ -125,8 +136,7 @@ export function mathsWorld(c: Extract<ArtState, { app: "maths" }>): Layer[] {
     <Drift dur={14}><Cloud x={X0 + (m - 1) * W + 92} y={Y0 - (m - 1) * RISE + 24} s={1.08} /></Drift>
   </>));
   out.push(L(1.25, "hero", false, <>
-    <Hill base={940} amp={26} seed={91} fill={paint("gIndigo")} />
-    <path d="M-140 1100V470C-100 560-30 700 20 830L60 1100Z" fill={paint("gCobalt")} /><path d="M2060 1100V560C2000 650 1930 760 1890 850L1850 1100Z" fill={paint("gCobalt")} />
+    {M_FRONT}
     <Plus x={190} y={780} s={60} r={-14} fill={paint("gButter")} /><Times x={1760} y={720} s={50} r={0} fill={paint("gCream")} />
   </>));
   return out;
@@ -291,8 +301,8 @@ export function essayWorld(c: Extract<ArtState, { app: "essay" }>): Layer[] {
 export function emptyWorld(): Layer[] {
   return [
     L(0.1, "sky", true, <><defs><SkyGradient id="mSky" stops={SKY.maths} /></defs><SkyRect id="mSky" /></>),
-    L(0.34, "hill", true, <g><Hill base={640} amp={34} seed={11} fill="#b8c2f2" /><Hill base={690} amp={30} seed={7} fill="#a2aeed" /></g>),
-    L(0.6, "hill", true, <g><Hill base={752} amp={36} seed={23} fill="#8898e4" /><Hill base={806} amp={26} seed={5} fill="#6f81dc" /></g>),
+    L(0.34, "hill", true, M_HILL_BACK),
+    L(0.6, "hill", true, M_HILL_FRONT),
     L(1.25, "hero", false, <Hill base={940} amp={26} seed={91} fill={paint("gIndigo")} />),
   ];
 }
