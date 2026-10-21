@@ -490,7 +490,7 @@ function openLesson() {
   const p = S.pages[S.pageIx], it = p.items[S.itemIx];
   $("lessonWhy").innerHTML = `Chosen because your problem — <b>${it.text}</b> — needs what this lesson teaches. Starts at the part that matters.`;
   $("caption").textContent = L.text;
-  lessonT = L.t; renderLesson(); show("lesson");
+  lessonT = L.t; S.paused = false; renderLesson(); show("lesson"); // a lesson opens from its mark, playing
   clearInterval(lessonTick); lessonTick = setInterval(() => { if (S.screen !== "lesson" || S.paused) return; lessonT = Math.min(DATA.lessons[L.vid].duration, lessonT + 1); renderLesson(); }, 1000);
 }
 function renderLesson() {
