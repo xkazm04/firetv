@@ -74,6 +74,15 @@ test('LATE-1: a transcript placed after the first pick is used by the next pick,
  assert.ok(b&&b.t>0,'the late transcript seeks past 0:00: '+JSON.stringify(b));
 });
 
+test('MISSING-1: a lesson with no transcript on disk is said once in the server log, with the path it was looked for at',()=>{
+ const L=lib('library/lessons.ts'),ID='never-looked-up';
+ const lines=[];mock.method(console,'error',(...a)=>lines.push(a.join(' ')));
+ try{assert.deepEqual(L.lessonWindows(ID),[]);assert.deepEqual(L.lessonWindows(ID),[]);}finally{mock.restoreAll();}
+ const said=lines.filter((l)=>l.includes(`${ID}.en.vtt`));
+ assert.equal(said.length,1,'once, not on every pick: '+lines.join('|'));
+ assert.match(said[0],/no transcript/);
+});
+
 test('LATE-2: a transcript replaced while the desk runs is read again, not served from the first read',async()=>{
  const L=lib('library/lessons.ts'),ID='u1SAo2GiX8A',f=path.join(data,'lessons',`${ID}.en.vtt`);
  fs.writeFileSync(f,['WEBVTT\n',cue(0,'the old captions')].join('\n'));

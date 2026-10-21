@@ -19,11 +19,16 @@ const cache = new Map<string, { stamp: string; w: Cue[] }>();
 let vectors: Map<string, number[][]> | null = null;
 /** The digest of the windows each published vector set was computed from (build), so a replaced transcript rebuilds. */
 const vectorDigests = new Map<string, string>();
+const saidMissing = new Set<string>();
 
 export function lessonWindows(id: string): Cue[] {
   const f = path.join(dataDir(), "lessons", `${id}.en.vtt`);
-  // a missing transcript is not remembered: one that is placed later is read on the next pick
-  if (!existsSync(f)) return [];
+  // a missing transcript is not remembered: one that is placed later is read on the next pick. It is said once per
+  // lesson, because transcripts are local-only and nothing else tells the operator the lesson will open at 0:00.
+  if (!existsSync(f)) {
+    if (!saidMissing.has(id)) { saidMissing.add(id); console.error(`desk library: no transcript for ${id} at ${f}, so a pick of it opens at 0:00 with no caption`); }
+    return [];
+  }
   // a transcript replaced on disk (captions fetched again) is read again: the cache holds the file's size and time
   const st = statSync(f), stamp = `${st.size}:${st.mtimeMs}`, had = cache.get(id);
   if (had && had.stamp === stamp) return had.w;
