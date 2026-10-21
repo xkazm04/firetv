@@ -87,6 +87,30 @@ class ReviewModeTest {
     }
 
     @Test
+    fun `case 6b - a seek, a hop or a step never lands past the clip's last frame`() {
+        val last = 20_000L - TransportPlan.FRAME_MS
+        assertEquals(listOf(PlayerAction.SeekTo(last)), TransportPlan.plan("seek+", positionMs = 18_000, durationMs = 20_000))
+        assertEquals(listOf(PlayerAction.SeekTo(last)), TransportPlan.plan("seek", 20_000.0, durationMs = 20_000))
+        assertEquals(listOf(PlayerAction.SeekTo(last)), TransportPlan.plan("seek", 25_000.0, durationMs = 20_000))
+        assertEquals(
+            listOf(PlayerAction.Pause, PlayerAction.SeekTo(last)),
+            TransportPlan.plan("step", 1.0, positionMs = last, durationMs = 20_000),
+        )
+        // A step count big enough to overflow the millisecond arithmetic still lands on the last frame.
+        assertEquals(
+            listOf(PlayerAction.Pause, PlayerAction.SeekTo(last)),
+            TransportPlan.plan("step", 1e18, positionMs = 1_000, durationMs = 20_000),
+        )
+        assertEquals(
+            listOf(PlayerAction.Pause, PlayerAction.SeekTo(0)),
+            TransportPlan.plan("step", -1e18, positionMs = 1_000, durationMs = 20_000),
+        )
+        // Inside the clip nothing changes, and an unknown duration (0) still clamps only at the start.
+        assertEquals(listOf(PlayerAction.SeekTo(15_000)), TransportPlan.plan("seek+", positionMs = 10_000, durationMs = 20_000))
+        assertEquals(listOf(PlayerAction.SeekTo(23_000)), TransportPlan.plan("seek+", positionMs = 18_000))
+    }
+
+    @Test
     fun `case 7 - the state message carries the marks, and older senders still decode`() {
         val json = (TvMessage.State(t = 0, paused = true, rate = 1.0, annotationCount = 2, marks = listOf(5_000, 12_000)) as TvMessage).encode()
         assertTrue(json.contains("\"marks\":[5000,12000]"), json)
