@@ -18,7 +18,7 @@
  * calc.ts (which imports this file). A few lines of calc.ts are written again here for that reason (num, BAD_SPEC).
  */
 import { compile, integrate, limitInf, toPlain, type Expr } from "./calc-expr";
-import { DNE, algebraSaid, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
 /** A comma system writes its decimals with a comma (taskText.ts commaSystem, written again here: this file imports no taskText, calc2-seam-test pins it). */
 const commaSystem = (system?: string) => system === "cz" || system === "de";
 
@@ -145,7 +145,7 @@ type Read = { ok: true; spec: ApproxSpec; f: Expr; a: number; b: number; value: 
 function structure(spec: unknown): { s: ApproxSpec; f: Expr; a: number; b: number } | string {
   if (!spec || typeof spec !== "object" || !isCalc2Spec(spec) || spec.shape !== "approx-integral") return REJECT.shape;
   const s = spec as ApproxSpec & Record<string, unknown>;
-  if (["answer", "solution", "truth", "value", "result"].some((k) => k in s)) return REJECT.answer;
+  if (carriesAnswer(s)) return REJECT.answer;
   const f = typeof s.f === "string" ? compile(s.f) : null;
   if (!f) return REJECT.read;
   if (f.constant) return REJECT.constant;
@@ -457,7 +457,7 @@ type SeqRead = { ok: true; spec: SequenceSpec; f: Expr; truth: SeqTruth } | { ok
 function sequenceStructure(spec: unknown): { s: SequenceSpec; f: Expr } | string {
   if (!isSequence(spec)) return REJECT.shape;
   const s = spec as SequenceSpec & Record<string, unknown>;
-  if (["answer", "solution", "truth", "value", "result"].some((k) => k in s)) return REJECT.answer;
+  if (carriesAnswer(s)) return REJECT.answer;
   const f = typeof s.f === "string" ? compile(s.f) : null;
   if (!f) return REJECT.read;
   if (f.constant) return REJECT.constant;

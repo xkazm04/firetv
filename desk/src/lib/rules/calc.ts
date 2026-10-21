@@ -17,7 +17,7 @@
  */
 import { commaSystem, readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
-import { DNE, algebraSaid, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, systemLogs, withinRel } from "./calc-read";
+import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, systemLogs, withinRel } from "./calc-read";
 import { agreesWhereBoth, compile, derivativeAt, evalNode, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, type Expr, type Limit, type Node } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -189,7 +189,7 @@ function newtonIterates(f: Expr, x0: number, n: number): number[] | null {
 function read(spec: unknown): Read {
   if (!spec || typeof spec !== "object" || !isShape((spec as { shape?: unknown }).shape) || isImplicitSpec(spec)) return { ok: false, why: REJECT.shape };
   const s = spec as CalcSpec & Record<string, unknown>;
-  if (["answer", "truth", "solution", "value"].some((k) => k in s)) return { ok: false, why: REJECT.answer };
+  if (carriesAnswer(s)) return { ok: false, why: REJECT.answer };
   const f = typeof s.f === "string" ? compile(s.f) : null;
   if (!f) return { ok: false, why: REJECT.read };
   if (f.constant) return { ok: false, why: REJECT.constant };
@@ -323,7 +323,7 @@ const approach = (at: Num | "inf" | "-inf", side?: "+" | "-") => (at === "inf" ?
 function printable(spec: unknown): { s: CalcSpec; f: Expr } | null {
   if (!spec || typeof spec !== "object" || !isShape((spec as { shape?: unknown }).shape) || isImplicitSpec(spec)) return null;
   const s = spec as CalcSpec & Record<string, unknown>;
-  if (["answer", "truth", "solution", "value"].some((k) => k in s)) return null;
+  if (carriesAnswer(s)) return null;
   const f = typeof s.f === "string" ? compile(s.f) : null;
   if (!f || f.constant || !f.usesX) return null;
   const has = (...n: unknown[]) => n.every((v) => num(v) !== null);
@@ -1234,7 +1234,7 @@ const IMPLICIT_SEEN_MAX = 64;
  * CURVE_LEAST points of the curve have a slope, and the slope is not the same at all of them (a straight line).
  */
 function readImplicit(spec: ImplicitSpec): ImplicitRead {
-  const key = JSON.stringify([spec.f, spec.point, ["answer", "truth", "solution", "value"].some((k) => k in spec)]);
+  const key = JSON.stringify([spec.f, spec.point, carriesAnswer(spec)]);
   const seen = IMPLICIT_SEEN.get(key);
   if (seen) return seen.ok ? { ...seen, s: spec } : seen;
   const r = readImplicitOnce(spec);
@@ -1243,7 +1243,7 @@ function readImplicit(spec: ImplicitSpec): ImplicitRead {
   return r;
 }
 function readImplicitOnce(s: ImplicitSpec): ImplicitRead {
-  if (["answer", "truth", "solution", "value"].some((k) => k in s)) return { ok: false, why: REJECT.answer };
+  if (carriesAnswer(s)) return { ok: false, why: REJECT.answer };
   const sides = sidesOf(s.f);
   if (!sides) return { ok: false, why: REJECT.equation };
   const F = readXY(`(${sides[0]}) - (${sides[1]})`);
@@ -1280,7 +1280,7 @@ function yInside(s: ImplicitSpec): boolean {
 
 /** 'Find dy/dx if x^2 + y^2 = 25.', 'Find dy/dx at (3, 4) if x^2 + y^2 = 25.' - null when the spec is malformed. */
 function implicitQuestion(s: ImplicitSpec): { plain: string } | null {
-  if (["answer", "truth", "solution", "value"].some((k) => k in s)) return null;
+  if (carriesAnswer(s)) return null;
   const sides = sidesOf(s.f), at = pointOf(s);
   if (!sides || at === undefined) return null;
   const [l, r] = sides;

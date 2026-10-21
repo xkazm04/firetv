@@ -92,6 +92,13 @@ export const czechAnswer = (ans: string, system?: string) => {
 export const naturalAsLn = (text: string) => text.replace(BARE_LOG, "ln");
 /** A lone digit,digit in a line read as a point ('2,72' is 2.72); a list ('1,2,3', '1, 2') is left alone (maths.ts decimalComma's pattern). */
 export const pointForComma = (line: string) => line.replace(/(?<!\d,|[\d.])(\d+),(\d+)(?!,\d|\d)/g, "$1.$2");
+/**
+ * The fields no Calculus spec may carry (calc.ts, calc2.ts): the desk works the answer out itself, so a spec with any of these
+ * is refused and never printed. One list, so a key added for one course is refused by every shape.
+ */
+export const ANSWER_KEYS: readonly string[] = ["answer", "truth", "solution", "value", "result"];
+/** Does this spec carry an answer field (ANSWER_KEYS)? */
+export const carriesAnswer = (spec: object) => ANSWER_KEYS.some((k) => k in spec);
 /** An infinity as a learner writes it: inf, infinity, ∞, with an optional sign. */
 export const infinityOf = (s: string): 1 | -1 | null => {
   const m = /^([+\-−]?)\s*(inf|infinity|∞)$/i.exec(s.replace(/\s+/g, " ").trim());

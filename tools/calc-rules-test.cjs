@@ -798,3 +798,15 @@ test('L1-matyas-19-MB3-3 3: a hint that states the slope is refused - the expres
   assert.equal(C.leaksCalc(s,C.question(s).plain),false,'the question quoted back never leaks');
  }
 });
+
+test('one answer-key vocabulary: every Calculus shape refuses a spec carrying answer, truth, solution, value or result (calc2 has refused result since M3b-3b)',()=>{
+ const base=[{shape:'derivative',f:'x^2'},{shape:'evaluate',f:'x^2',at:2},{shape:'limit',f:'sin(x)/x',at:0},{shape:'implicit-derivative',f:'x^2 + y^2 = 25'},{shape:'sequence-limit',f:'x/(x+1)'},{shape:'approx-integral',f:'1/x',a:1,b:2,pieces:4,rule:'trapezoid'}];
+ for(const s of base){
+  assert.equal(C.wellFormed(s).ok,true,`base: ${s.shape}`);
+  for(const k of ['answer','truth','solution','value','result']){
+   const w=C.wellFormed({...s,[k]:'1'});
+   assert.equal(w.ok,false,`${s.shape} with ${k}`);
+   assert.equal(w.why,'A spec carries no answer field: the desk works the answer out itself.',`${s.shape} with ${k}`);
+  }
+ }
+});
