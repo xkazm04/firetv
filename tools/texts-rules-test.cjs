@@ -193,3 +193,18 @@ test('EM5-2 (recert-5/L1-helena-46-EM5-2): a new piece must name its format: non
   assert.equal(T.listPieces('ema')[0].format, 'email');
   T.deleteAll('ema');
 });
+
+test('route: a .docx from the PC page is read through the route\'s own inflater (rules/docx loads no zlib) and kept as a file version', async () => {
+  const zlib = require('node:zlib');
+  const xml = Buffer.from('<w:document><w:body><w:p><w:r><w:t>Sleep matters.</w:t></w:r></w:p><w:p><w:r><w:t>So start later.</w:t></w:r></w:p></w:body></w:document>');
+  const data = zlib.deflateRawSync(xml), name = Buffer.from('word/document.xml');
+  const lh = Buffer.alloc(30); lh.writeUInt32LE(0x04034b50, 0); lh.writeUInt16LE(8, 8); lh.writeUInt32LE(data.length, 18); lh.writeUInt32LE(xml.length, 22); lh.writeUInt16LE(name.length, 26);
+  const ch = Buffer.alloc(46); ch.writeUInt32LE(0x02014b50, 0); ch.writeUInt16LE(8, 10); ch.writeUInt32LE(data.length, 20); ch.writeUInt32LE(xml.length, 24); ch.writeUInt16LE(name.length, 28);
+  const end = Buffer.alloc(22); end.writeUInt32LE(0x06054b50, 0); end.writeUInt16LE(1, 8); end.writeUInt16LE(1, 10); end.writeUInt32LE(46 + name.length, 12); end.writeUInt32LE(30 + name.length + data.length, 16);
+  const docx = Buffer.concat([lh, name, data, ch, name, end]).toString('base64');
+  seat('ema'); await route.POST(req('POST', '', { notice: true }));
+  const r = await route.POST(req('POST', '', { docx, format: 'essay' })); assert.equal(r.status, 200, JSON.stringify(await r.clone().json()));
+  const p = T.getPiece('ema', (await r.json()).id);
+  assert.deepEqual(p.versions.map((v) => [v.source, v.text]), [['file', 'Sleep matters.\n\nSo start later.']]);
+  T.deleteAll('ema');
+});
