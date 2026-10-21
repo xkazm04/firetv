@@ -158,3 +158,12 @@ test('the README layout counts each Character and journey directory as it is, no
   }
   assert.deepEqual(seen.sort(), ['characters', 'characters/essay', 'characters/maths', 'journeys', 'journeys/essay', 'journeys/maths'], 'every Character and journey directory has its count line');
 });
+
+test('the README Character template carries every field a committed Character carries, so a new one written from it is complete', () => {
+  const readme = fs.readFileSync(path.join(UAT, 'README.md'), 'utf8');
+  const template = JSON.parse(readme.slice(readme.indexOf('## Character template')).match(/```json\s*\n([\s\S]*?)\n```/)[1]);
+  const sims = fs.readdirSync(path.join(UAT, 'characters')).filter(f => f.endsWith('.md')).map(f => JSON.parse(fs.readFileSync(path.join(UAT, 'characters', f), 'utf8').match(/```json\s*\n([\s\S]*?)\n```/)[1]));
+  const keys = (o, pre = '') => Object.entries(o).flatMap(([k, v]) => v && typeof v === 'object' && !Array.isArray(v) ? [`${pre}${k}`, ...keys(v, `${pre}${k}.`)] : [`${pre}${k}`]);
+  const have = new Set(keys(template)), missing = [...new Set(sims.flatMap(s => keys(s)))].filter(k => !have.has(k)).sort();
+  assert.deepEqual(missing, [], `the template lacks ${missing.join(', ')}`);
+});

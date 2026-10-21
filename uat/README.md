@@ -71,7 +71,7 @@ Every Character file has the prose the skill asks for (an Essay or Math Characte
 
 ```json
 {
-  "id": "slug", "name": "First name", "trueBand": "A2",
+  "id": "slug", "name": "First name", "trueBand": "A2", "mode": "speech|text",
   "profile": { "type": "elementary|high-school|other", "age": 13, "adultConfirmed": false },
   "preferences": { "correction": "as-needed", "creativity": "familiar", "challenge": "supportive", "interest": "", "goal": "" },
   "journeys": ["J1", "J2", "J3"],
@@ -81,7 +81,7 @@ Every Character file has the prose the skill asks for (an Essay or Math Characte
 }
 ```
 
-`trueBand` is the ground truth the placement is scored against. `play` is what the Character model is told; it never sees `criteria`. The judge sees both.
+`trueBand` is the ground truth the placement is scored against. `mode` is how the Character answers: `text` types on the phone, anything else (`speech`, the default when it is left out) speaks and is transcribed. `play` is what the Character model is told; it never sees `criteria`. The judge sees both.
 
 ## Drain homes
 
