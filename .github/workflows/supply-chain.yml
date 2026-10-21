@@ -50,7 +50,7 @@ jobs:
           mkdir -p dist
           cp tv-app/build/outputs/apk/debug/tv-app-debug.apk dist/tv-app-debug.apk
           cd dist && sha256sum tv-app-debug.apk > SHA256SUMS && cat SHA256SUMS
-      - uses: actions/attest-build-provenance@v2
+      - uses: actions/attest-build-provenance@v4
         with:
           subject-path: dist/tv-app-debug.apk
       - uses: actions/upload-artifact@v4
