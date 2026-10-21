@@ -24,7 +24,9 @@ const declared = new Map<string, Decl>();
 const baked = new Map<string, Baked>();
 const waiting = new Map<string, Array<() => void>>();
 const queue: string[] = [];
-let px = 0, running = false, warmed = false;
+let px = 0, warmed = false;
+/** The still being baked (from its idle wait to its bitmap), or null: one bake at a time, and never the same one twice. */
+let inflight: string | null = null;
 
 /** Declare a still layer node (once, at module scope). Ids are unique per drawing; `sharp` draws it at full resolution. */
 export function still(id: string, kind: StillKind, d: number, node: ReactNode, sharp = false): ReactNode {
@@ -106,23 +108,28 @@ async function paint(canvas: HTMLCanvasElement, svg: string) {
 
 /** Bake the queue one still per idle slot, so a bake never sits in a frame the D-pad is waiting on. */
 function pump() {
-  if (running) return;
+  if (inflight) return;
   const id = queue.shift(); if (!id) return;
-  running = true;
+  inflight = id;
   const idle = (cb: () => void) => ("requestIdleCallback" in window ? window.requestIdleCallback(cb, { timeout: 1500 }) : setTimeout(cb, 50));
   idle(() => {
     bake(id).catch(() => { /* a still that cannot bake stays live */ }).finally(() => {
-      running = false;
+      inflight = null;
       for (const done of waiting.get(id) ?? []) done();
       waiting.delete(id);
       pump();
     });
   });
 }
-function request(id: string, done: () => void) {
+/**
+ * Ask for a still's bitmap; `done` runs once it is baked or has failed. Every lamp move remounts the worlds, so a still
+ * is asked for again while its own bake is waiting or running: that asker joins the bake in flight, it does not queue a
+ * second one (exported for tools/landing-stills-test.cjs).
+ */
+export function requestStill(id: string, done: () => void) {
   if (baked.has(id)) { done(); return; }
   waiting.set(id, [...(waiting.get(id) ?? []), done]);
-  if (!queue.includes(id)) { queue.unshift(id); pump(); }
+  if (inflight !== id && !queue.includes(id)) { queue.unshift(id); pump(); }
 }
 function warmAll() {
   if (warmed) return; warmed = true;
@@ -141,7 +148,7 @@ function Still({ id }: { id: string }) {
     }
     if (typeof window !== "undefined") (window as unknown as { __ppStills: typeof stillStats }).__ppStills = stillStats;
     let on = true;
-    if (!baked.has(id)) request(id, () => { if (on && baked.has(id)) setReady(true); });
+    if (!baked.has(id)) requestStill(id, () => { if (on && baked.has(id)) setReady(true); });
     warmAll();
     return () => { on = false; };
   }, [id]);

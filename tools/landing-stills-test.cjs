@@ -99,6 +99,23 @@ test('every world\'s stills fit in 40 MB on the stick (1 device px a stage px), 
  assert.ok(bytes<40*1048576,`${(bytes/1048576).toFixed(1)} MB`);
 });
 
+test('a still asked for again while its bake is in flight (a world remounted mid-bake) is baked once',async()=>{
+ // the queue with no DOM: each idle slot is held here, and a bake that starts (createElementNS) is counted, then fails
+ const S=require(path.join(src,'landing/themes/paper/stills/Still.tsx'));
+ const idles=[];let started=0;const was={window:global.window,document:global.document};
+ global.window={requestIdleCallback:(cb)=>{idles.push(cb);return idles.length;}};
+ global.document={createElementNS:()=>{started++;throw new Error('no DOM here');}};
+ try{
+  let done=0;const id='essay-front';
+  S.requestStill(id,()=>done++);
+  assert.equal(idles.length,1,'its bake waits for an idle slot');
+  S.requestStill(id,()=>done++); // every lamp move remounts the worlds (WorldSet keys), so its Still asks again
+  for(let i=0;i<10&&idles.length;i++){idles.shift()();await new Promise((r)=>setTimeout(r,0));}
+  assert.equal(started,1,`the still was baked ${started} times for one bitmap`);
+  assert.equal(done,2,'both askers hear it settle');
+ }finally{global.window=was.window;global.document=was.document;}
+});
+
 test('the baked shadow is the one design/desk-landing.css casts, its blur a radius (deviation = half)',()=>{
  const css=require('node:fs').readFileSync(path.join(src,'design/desk-landing.css'),'utf8');
  for(const k of ['hill','hero','soft']){
