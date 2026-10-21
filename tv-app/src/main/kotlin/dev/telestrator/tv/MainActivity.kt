@@ -138,22 +138,34 @@ class MainActivity : ComponentActivity() {
             session.linkEvent(LinkEvent.Peek)
             return true
         }
-        val cmd = when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
-            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> "toggle"
-            KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_DPAD_RIGHT -> "seek+"
-            KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_LEFT -> "seek-"
-            KeyEvent.KEYCODE_DPAD_UP -> "undo"
-            KeyEvent.KEYCODE_DPAD_DOWN -> "clear"
-            else -> null
-        }
-        if (cmd != null) {
-            session.accept(PenMessage.Transport(cmd))
-            return true
-        }
-        return super.onKeyDown(keyCode, event)
+        // A key this screen owns is consumed on every repeat, including the repeats it ignores.
+        if (remoteCommand(keyCode, 0) == null) return super.onKeyDown(keyCode, event)
+        remoteCommand(keyCode, event?.repeatCount ?: 0)?.let { session.accept(PenMessage.Transport(it)) }
+        return true
     }
 }
+
+/**
+ * The transport command a remote key asks for, or null for a key this screen leaves alone.
+ *
+ * A held key arrives as a press and then a repeat every ~50 ms ([repeatCount] > 0). Only the scrub
+ * keys follow a hold; every other key acts on the press alone, or a long press on OK flips play and
+ * pause at random and a held Up undoes the whole review.
+ */
+internal fun remoteCommand(keyCode: Int, repeatCount: Int): String? {
+    val cmd = when (keyCode) {
+        KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
+        KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> "toggle"
+        KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_DPAD_RIGHT -> "seek+"
+        KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_LEFT -> "seek-"
+        KeyEvent.KEYCODE_DPAD_UP -> "undo"
+        KeyEvent.KEYCODE_DPAD_DOWN -> "clear"
+        else -> return null
+    }
+    return if (repeatCount == 0 || cmd in REPEATING_COMMANDS) cmd else null
+}
+
+private val REPEATING_COMMANDS = setOf("seek+", "seek-")
 
 @UnstableApi
 @Composable
