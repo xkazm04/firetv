@@ -784,3 +784,11 @@ test('the live harness tools/essay-ui-test.cjs parses, so the EssayTV source pin
   const f = path.resolve(__dirname, 'essay-ui-test.cjs');
   assert.doesNotThrow(() => new (require('node:vm').Script)(Module.wrap(fs.readFileSync(f, 'utf8')), { filename: f }), 'tools/essay-ui-test.cjs is not valid JavaScript');
 });
+
+test('the shelf: each row\'s buttons name their piece, so a screen reader does not hear "Open" once per row with nothing to tell them apart', () => {
+  const shelf = fs.readFileSync(path.join(root, 'src/app/phone/EssayShelf.tsx'), 'utf8');
+  const row = /<li key=\{c\.id\}[\s\S]*?<\/li>/.exec(shelf)?.[0] ?? '';
+  const buttons = row.match(/<button\b[^>]*>/g) ?? [];
+  assert.equal(buttons.length, 2, 'Open and Delete');
+  for (const b of buttons) assert.match(b, /aria-label=\{`[^`]*\$\{c\.title\}`\}/, b);
+});

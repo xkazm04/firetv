@@ -139,7 +139,7 @@ async function adultPass(){
    return{tvText:body.slice(0,400),workroom:s.workroom};});
   await check('E5 read it: open from the phone shelf and read the whole piece on the TV (real model, 3 paragraphs)',async()=>{
    await phone.getByRole('button',{name:'Essay',exact:true}).click();await phone.locator('[data-role="essay-paragraph"]').waitFor();
-   await phone.locator('[data-role="essay-shelf-piece"]').first().getByRole('button',{name:'Open',exact:true}).click();
+   await phone.locator('[data-role="essay-shelf-piece"]').first().getByRole('button',{name:/^Open /}).click();
    await phone.waitForFunction(()=>document.querySelector('[data-role="essay-paras"]'));
    const t0=Date.now();
    await phone.locator('[data-role="essay-read-piece"]').click();
