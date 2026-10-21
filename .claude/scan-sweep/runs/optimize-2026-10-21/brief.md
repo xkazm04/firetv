@@ -102,7 +102,9 @@ Run each gate in its own invocation, `&&`-chained, with the output redirected to
   (`:tv-app:compileDebugKotlin :tv-app:testDebugUnitTest` for tv-app,
   `:stick-app:testDebugUnitTest` for stick-app). Only ONE gradle run at a time across agents: take the lock with
   `mkdir C:/Users/kazda/AppData/Local/Temp/firetv-sweep21-gradle.lock` (fails if held: retry after a minute) and
-  `rmdir` it when done, even on failure.
+  `rmdir` it when done, even on failure. In PowerShell, `Remove-Item` on that path is refused by the harness;
+  release it with `[System.IO.Directory]::Delete('C:\Users\kazda\AppData\Local\Temp\firetv-sweep21-gradle.lock')`
+  in a `finally` block (or `rmdir` from bash).
 - `uat/driver`: `node --check <file>`. Never run a live LT run.
 - **A red whole-tree gate is probably not yours.** Another agent is mid-edit in the same tree. Compare the failing
   paths against your files before you treat a red as yours. If none are yours, say so, scope the check to your files.
