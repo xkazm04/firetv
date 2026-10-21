@@ -1713,7 +1713,11 @@
           "revision": 8,
           "changedAt": "2026-10-09",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/lib/rules/calc-expr.ts:10 Context and repository searches found no continuation hooks serving this context: its course data, mathematical checkers and seeded generators do not control agent turn boundaries.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:b0eabf78abd856a4",
+          "evaluatedRevision": 8
         },
         {
           "subject": "eval-harness",
@@ -2889,7 +2893,11 @@
           "revision": 8,
           "changedAt": "2026-10-09",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/lib/session/store.ts:4 Context and repository searches found no continuation hooks serving this context: it manages learner application state and SSE subscriptions rather than a coding-agent turn boundary.",
+          "evaluatedAt": "2026-10-21",
+          "evaluatedAgainst": "sha256-b2:b0eabf78abd856a4",
+          "evaluatedRevision": 8
         },
         {
           "subject": "voice-io",
