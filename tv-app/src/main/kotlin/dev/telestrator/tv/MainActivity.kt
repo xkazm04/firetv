@@ -1,5 +1,6 @@
 package dev.telestrator.tv
 
+import android.content.pm.ApplicationInfo
 import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
@@ -106,19 +107,16 @@ class MainActivity : ComponentActivity() {
      *     --es phone_url http://HOST:9787/
      */
     private fun chooseTransport(): PenTransport {
-        val requested = intent?.getStringExtra("transport") ?: "lan"
-        if (requested != "relay") {
-            return LanTransport(
+        val debuggable = (applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+        val relay = relayRequest({ intent?.getStringExtra(it) }, debuggable)
+            ?: return LanTransport(
                 context = applicationContext,
                 pin = session.pin,
                 healthJson = { healthJson(session, "lan") },
             )
-        }
-        val relayUrl = intent?.getStringExtra("relay_url") ?: DEFAULT_RELAY_WS
-        val phoneUrl = intent?.getStringExtra("phone_url") ?: DEFAULT_RELAY_PHONE
         return RelayTransport(
-            relayWsUrl = relayUrl,
-            phoneUrl = PairingUrl.of(phoneUrl, session.pin),
+            relayWsUrl = relay.relayWsUrl,
+            phoneUrl = PairingUrl.of(relay.phoneUrl, session.pin),
         )
     }
 
@@ -143,6 +141,24 @@ class MainActivity : ComponentActivity() {
         remoteCommand(keyCode, event?.repeatCount ?: 0)?.let { session.accept(PenMessage.Transport(it)) }
         return true
     }
+}
+
+/** Where a relay launch dials, and where it sends the phone. */
+internal data class RelayRequest(val relayWsUrl: String, val phoneUrl: String)
+
+/**
+ * The relay a launch asked for through its extras, or null for the LAN transport.
+ *
+ * This activity is exported, so any app on the TV can start it with extras, and these choose where
+ * the TV dials and which page the pairing QR (PIN included) sends the phone to. They are the
+ * harness's switch (tools/relay-test.mjs drives a debug build); a release build ignores them.
+ */
+internal fun relayRequest(extra: (String) -> String?, debuggable: Boolean): RelayRequest? {
+    if (!debuggable || extra("transport") != "relay") return null
+    return RelayRequest(
+        relayWsUrl = extra("relay_url") ?: DEFAULT_RELAY_WS,
+        phoneUrl = extra("phone_url") ?: DEFAULT_RELAY_PHONE,
+    )
 }
 
 /**
