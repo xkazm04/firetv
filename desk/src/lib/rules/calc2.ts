@@ -18,7 +18,7 @@
  * calc.ts (which imports this file). A few lines of calc.ts are written again here for that reason (num, BAD_SPEC).
  */
 import { compile, integrate, limitInf, toPlain, type Expr } from "./calc-expr";
-import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, algebraSaid, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
 /** A comma system writes its decimals with a comma (taskText.ts commaSystem, written again here: this file imports no taskText, calc2-seam-test pins it). */
 const commaSystem = (system?: string) => system === "cz" || system === "de";
 
@@ -64,6 +64,8 @@ const DEGENERATE = 1e-4;
 const MIN_PIECES = 2, MAX_PIECES = 10;
 /** Most tokens a window of a line may span (calc.ts WINDOW). */
 const WINDOW = 6;
+/** Most tokens the long pass reads as one expression (calc.ts LONG_WINDOW). */
+const LONG_WINDOW = 24;
 
 // ------------------------------------------------------------------ the desk's lines (no value in any)
 
@@ -543,19 +545,23 @@ function sequencePieces(s: SequenceSpec, f: Expr): string[] {
  * Does this hint or explanation line state the limit? Calculus 1's rule for a limit (calc.ts leaksCalc, copied): an infinite
  * limit leaks by naming infinity at all; a finite one by any window of up to six tokens, after the question's own notation is
  * set aside, that reads as a number within 5e-3 of the limit (or a negative number whose size is the limit), or as a decimal
- * the judge would call right (D2 R1a).
+ * the judge would call right (D2 R1a). The line is read said as algebra (calc-read algebraSaid: 'e squared'), and a long
+ * pass reads windows of seven up to LONG_WINDOW tokens, with and without the question's pieces, as calc.ts does.
  */
 function sequenceLeaks(spec: SequenceSpec, line: unknown): boolean {
   if (typeof line !== "string" || !line.trim()) return false;
   const r = readSequence(spec);
   if (!r.ok) return false;
   const { truth } = r;
-  let text = spoken(line);
+  // read as calc.ts reads a line: said as algebra too ('e squared' is e^2, 'three halves minus one' is 3/2 - 1)
+  let text = algebraSaid(spoken(line));
   if (truth.kind === "inf") return /infinit|∞|\binf\b/.test(text);
+  const raw = text;
   for (const p of sequencePieces(r.spec, r.f)) text = text.replace(piecePattern(p.toLowerCase()), " ");
-  const tokens = text.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/)
-    .map((t) => t.replace(/\.+$/, ""))
+  const tokenize = (t: string): string[] => t.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/)
+    .map((w) => w.replace(/\.+$/, ""))
     .filter(Boolean);
+  const tokens = tokenize(text);
   const single = (t: string): Expr | null => {
     const e = compile(t);
     if (e) return e;
@@ -583,7 +589,18 @@ function sequenceLeaks(spec: SequenceSpec, line: unknown): boolean {
     if (hit) return true;
     i += Math.max(1, took);
   }
-  return false;
+  // calc.ts's long pass: a window of WINDOW + 1 up to LONG_WINDOW tokens that reads as the limit, over the line with and
+  // without the question's own pieces
+  const longRight = (toks: string[]): boolean => {
+    for (let i = 0; i < toks.length; i++) {
+      for (let n = WINDOW + 1; n <= Math.min(LONG_WINDOW, toks.length - i); n++) {
+        const said = toks.slice(i, i + n).join(" "), e = compile(said);
+        if (e && numberRight(e, toks[i], said)) return true;
+      }
+    }
+    return false;
+  };
+  return longRight(tokens) || (raw !== text && longRight(tokenize(raw)));
 }
 
 // ------------------------------------------------------------------ reading a printed sequence question back into a spec

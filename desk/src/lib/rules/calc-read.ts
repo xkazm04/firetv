@@ -142,7 +142,17 @@ export const spoken = (line: string) => figuresOfCzech(line.toLowerCase()).repla
   .replace(/\b(?:minus|negative)\s*(?=\d)/g, "-")
   .replace(/(^|[^\s\da-z)\]²])(\s*)-\s+(?=\d)/g, "$1$2-");
 
-export const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/**
+ * An answer said in words as its symbols (HL3): 'x squared' is x^2, 'x cubed' x^3, 'to the power of 4' ^4, 'plus' +, 'minus' -
+ * (a minus before a figure is already read), 'times' *. 'three x squared plus two x' is then '3 x^2 + 2 x', a window the engine
+ * reads. Applied after `spoken`, by every Calculus leak check that reads a line (calc.ts, calc2.ts's sequence limit).
+ */
+export const algebraSaid = (t: string) => t
+  .replace(/\s+(?:to\s+the\s+power\s+of|to\s+the)\s+(-?\d+)\b/g, "^$1")
+  .replace(/\s+squared\b/g, "^2").replace(/\s+cubed\b/g, "^3")
+  .replace(/\s+plus\s+/g, " + ").replace(/\s+minus\s+/g, " - ").replace(/\s+times\s+/g, " * ");
+
+export const escapeRe =(s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 /**
  * A piece of the question as a pattern: spacing free, '->' also as '→', and only as a whole - not inside a larger
  * expression (the function 'x' is not the x of 'x^2/2', 'x^2 + 1' is not the start of 'x^2 + 10').
