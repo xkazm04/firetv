@@ -327,6 +327,11 @@
     editButton('btn-undo', 'Undo', m.canUndo, m.undoAtMs);
     editButton('btn-redo', 'Redo', m.canRedo, m.redoAtMs);
     $('btn-playpause').textContent = m.paused ? 'Play' : 'Pause';
+    // The TV's rate, not the last tap: it outlives this phone (a reload, a second phone, the remote).
+    if (typeof m.rate === 'number') {
+      document.querySelectorAll('#rates [data-rate]')
+        .forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.rate) === m.rate)));
+    }
     $('scrub-t').textContent = (m.t / 1000).toFixed(1) + 's';
     if (m.t !== (prevT ?? -1)) { prevT = m.t; }
     if (!scrubbing && m.durationMs > 0) {

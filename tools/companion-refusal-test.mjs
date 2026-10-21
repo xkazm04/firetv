@@ -458,6 +458,20 @@ try {
     );
     await context.close();
   }
+
+  // ---- the rate the TV is playing at --------------------------------------------------------------
+  // The TV keeps its rate across phones (Session.rate). A phone that opens on a TV already in slow
+  // motion must show the TV's rate pressed, not the 1x it was born with: state.rate is the truth.
+  {
+    const page = await browser.newPage();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false, state: { rate: 0.25 } });
+    await page.goto(PAGE + '#pin=' + TV_PIN);
+    await page.waitForFunction(() => window.__pen.state() !== null, null, { timeout: 3000 }).catch(() => {});
+    const pressed = await page.evaluate(() =>
+      [...document.querySelectorAll('#rates [data-rate]')].filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.dataset.rate));
+    check('rate: the pressed rate is the one the TV reports', pressed.length === 1 && pressed[0] === '0.25', `pressed [${pressed.join(',')}], TV at 0.25`);
+    await page.close();
+  }
 } finally {
   await browser.close();
 }
