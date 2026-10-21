@@ -30,12 +30,12 @@ uat/
   rubric.md              dimensions, Linga / Essay Master / Math Buddy metrics (with their units), impact scoring, finding schema
   env.md                 how to run each level; engine switches; data isolation
   accepted-gaps.md       known and accepted issues
-  characters/*.md        ten Characters; each has a `sim` JSON block the LT driver reads
+  characters/*.md        fourteen Linga Characters; each has a `sim` JSON block the LT driver reads
   journeys/*.md          five Linga journeys: goals and definitions of done, not scripts
   characters/essay/*.md  five Essay Master Characters (no `sim` block)
   characters/maths/*.md  five Math Buddy Characters (no `sim` block)
-  journeys/essay/*.md    Essay Master journeys EM1–EM5
-  journeys/maths/*.md    Math Buddy journeys MB1–MB5
+  journeys/essay/*.md    five Essay Master journeys, EM1–EM5
+  journeys/maths/*.md    five Math Buddy journeys, MB1–MB5
   driver/linga-text.cjs  the LT driver
   driver/surface.cjs     what a Character sees and can do: LingaTV and LingaPhone rendered for the session
   driver/recertify.cjs   recertify from a run's own data: open pairs, metric deltas, confounds, write-back

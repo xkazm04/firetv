@@ -147,3 +147,14 @@ test('the overlay docs cite driver code by symbol, never by a line number that t
   assert.match(src, /function readBlock\(file\) \{[^}]*throw new Error\(`\$\{file\}: no json block`\)/);
   for (const f of ['README.md', 'env.md']) assert.match(fs.readFileSync(path.join(UAT, f), 'utf8'), /`readBlock`/, `${f} names readBlock`);
 });
+
+test('the README layout counts each Character and journey directory as it is, not as it was', () => {
+  const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+  const readme = fs.readFileSync(path.join(UAT, 'README.md'), 'utf8'), seen = [];
+  for (const m of readme.matchAll(/^ {2}((?:characters|journeys)(?:\/\w+)?)\/\*\.md +(\w+) /gm)) {
+    const [, dir, word] = m, n = fs.readdirSync(path.join(UAT, dir)).filter(f => f.endsWith('.md')).length;
+    assert.equal(WORDS.indexOf(word), n, `README layout: ${dir}/*.md says "${word}", the directory holds ${n}`);
+    seen.push(dir);
+  }
+  assert.deepEqual(seen.sort(), ['characters', 'characters/essay', 'characters/maths', 'journeys', 'journeys/essay', 'journeys/maths'], 'every Character and journey directory has its count line');
+});
