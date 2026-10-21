@@ -181,4 +181,16 @@ test('TL-3: the phone is a stop paired or not, and the paired stop speaks of the
  assert.equal(landingView(session({joined:true,focus:5,phonesLive:1})).say,'Phone paired. Select to pair another phone, or to forget them all.');
  assert.equal(landingView(session({joined:true,focus:5,phonesLive:0})).say,'No phone here. Select to pair another phone, or to forget them all.');
  assert.equal(landingView(session({joined:true,focus:-1,practice:null})).at,'maths','paired: the lamp still rests on the apps');
+ // the paired phone is a stop, so every look marks it when the lamp is on it, as it marks the postcard unpaired
+ const lit=landingView(session({joined:true,focus:5,phonesLive:1}));assert.equal(lit.at,'phone');
+ const {THEMES}=themes();
+ for(const id of ['paper','blueprint']){
+  const h=draw(THEMES[id],lit),phones=h.match(/<[^>]*data-role="desk-phone"[^>]*>/g)||[];
+  assert.equal(phones.length,1,`${id}: one phone`);assert.match(phones[0],/data-paired="true"/,`${id}: the paired phone`);
+  assert.match(phones[0],/data-focused="true"/,`${id}: the lamp on the paired phone is drawn on it`);
+  assert.doesNotMatch(draw(THEMES[id],landingView(session({joined:true,focus:0}))).match(/<[^>]*data-role="desk-phone"[^>]*>/)[0],/data-focused="true"/,`${id}: and only then`);
+ }
+ const strip=(f)=>fs.readFileSync(src(f),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+ assert.match(strip('design/desk-landing.css'),/\.pp-ph\[data-focused="true"\]\s*\{/,'paper draws the ring on the phone chip');
+ assert.match(strip('design/desk-landing-blueprint.css'),/\.tc\[data-focused="true"\]\s*\{/,'blueprint draws it on its phone plate');
 });

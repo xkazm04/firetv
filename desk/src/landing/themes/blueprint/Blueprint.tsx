@@ -316,7 +316,7 @@ export function BlueprintLanding({ view, zoom, boot }: ThemeLandingProps) {
 
       <div className="bp-title">
         <div className="tc"><div className="mono-c">{letter}</div><span className="nm">{learner?.name ?? "Nobody yet"}</span></div>
-        <div className="tc" style={{ padding: "0 12px" }} data-role={fr ? undefined : "desk-phone"} data-paired={fr ? undefined : "true"}>
+        <div className="tc" style={{ padding: "0 12px" }} data-role={fr ? undefined : "desk-phone"} data-paired={fr ? undefined : "true"} data-focused={!fr && at === "phone" ? "true" : undefined}>
           {phone.paired
             ? <svg className="pen" viewBox="0 0 200 70" aria-label="Phone paired"><path className="lit" d="M26 56L58 22L72 34L40 68Z" /><path className="lit" d="M26 56L20 68L40 68" /><path className="lit" d="M92 26Q102 18 112 26M86 16Q102 2 118 16" /><rect x="138" y="8" width="42" height="54" rx="8" /><path d="M152 55h14" /></svg>
             : <svg className="pen" viewBox="0 0 200 70" aria-label="Phone not paired"><g className="dim"><path d="M26 56L58 22L72 34L40 68Z" /><path d="M40 68L20 68" /><path d="M50 28L64 40" /></g><path className="dotl" d="M84 40H130" /><rect x="138" y="8" width="42" height="54" rx="8" /><path d="M152 55h14" /></svg>}

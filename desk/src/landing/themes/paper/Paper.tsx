@@ -193,7 +193,7 @@ function Chrome({ view }: { view: LandingView }) {
     <div className="pp-chrome">
       <div className="pp-brand" data-role="desk-wordmark"><HouseMark size={64} /><span className="pp-wm">Study Desk</span></div>
       <div className="pp-badge">
-        {view.phone.paired && <div className="pp-ph" data-role="desk-phone" data-paired={true}><PhoneGlyph paired /><span className="pp-sr">Phone paired</span></div>}
+        {view.phone.paired && <div className="pp-ph" data-role="desk-phone" data-paired={true} data-focused={view.at === "phone" ? "true" : undefined}><PhoneGlyph paired /><span className="pp-sr">Phone paired</span></div>}
         {!view.phone.paired && <div className="pp-ph"><PhoneGlyph paired={false} /><span className="pp-sr">No phone paired</span></div>}
         {learner && <div className="pp-disc" style={{ background: LEARNER_TONE[learner.tone] }} aria-hidden="true">{learner.initial}</div>}
         <div className="pp-who">{learner ? learner.name : "Whose desk?"}</div>
