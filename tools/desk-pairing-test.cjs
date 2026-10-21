@@ -925,6 +925,8 @@ const SAMPLES={
  'practice.settle':{type:'practice.settle',n:1,reply:'2',verdict:'right'},
  'job.start':{type:'job.start',kind:'read',id:'j1'},'job.done':{type:'job.done',kind:'read',id:'j1'},'job.failed':{type:'job.failed',kind:'read',id:'j1',error:'x'},
  'essay.clear':{type:'essay.clear'},'status':{type:'status',text:'hi'},'session.end':{type:'session.end'},'reset':{type:'reset'},'pin.turn':{type:'pin.turn'},'phone.presence':{type:'phone.presence',live:1},'phones.forget':{type:'phones.forget'},'ask.open':{type:'ask.open',kind:'page'},'ask.cancel':{type:'ask.cancel',id:'x'},'ask.sent':{type:'ask.sent',id:'x'},
+ 'writing.pick':{type:'writing.pick',promptId:'screens'},'writing.clear':{type:'writing.clear'},'writing.busy':{type:'writing.busy',busy:true,by:'ema'},
+ 'writing.coached':{type:'writing.coached',draft:'a. b.',note:'n',by:'ema'},'writing.finished':{type:'writing.finished',revision:'a. c.',saved:'s',by:'ema'},
 };
 // seats a learner, or changes nothing a slot holds: these are not owed a place in NEEDS_LEARNER
 const SEATS_OR_CLEARS=new Set(['learner.set','reset']);
@@ -971,6 +973,7 @@ const JUNK={
  'topic.open':{topic:{ok:{topic:'fractions'},bad:[{},7,null]},stay:{ok:{topic:'fractions',stay:true},bad:['a',{},1]}},
  walk:{ix:{ok:{ix:0},bad:['a',1.5,{},null]}},
  status:{text:{ok:{text:'x'},bad:[{},7,null]}},
+ 'writing.pick':{promptId:{ok:{promptId:'screens'},bad:[{},7,null,'']}},
 };
 const junkPosts=()=>{const rows=[];for(const [type,fields] of Object.entries(JUNK))for(const [field,{ok,bad}] of Object.entries(fields))for(const v of bad)rows.push({type,field,e:{type,...ok,[field]:v}});
  rows.push({type:'bogus',field:'type',e:{type:'bogus'}});return rows;};

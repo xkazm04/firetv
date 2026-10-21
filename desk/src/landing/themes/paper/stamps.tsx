@@ -3,7 +3,7 @@
  * shelf for each app, and the biggest of them is the emblem in the hand-off (the world opening). Same art states as
  * the full worlds (worlds.tsx), so a stamp says what its world says.
  */
-import type { ArtState } from "@/landing/model";
+import type { AppArt, ArtState } from "@/landing/model";
 import { Circ, Rr, UnitGradient, paint } from "./shapes";
 
 function MathsStamp({ c }: { c: Extract<ArtState, { app: "maths" }> }) {
@@ -53,11 +53,25 @@ function EssayStamp({ c }: { c: Extract<ArtState, { app: "essay" }> }) {
   </>;
 }
 
+/** Writing: a lined sheet and a pencil; a finished episode is a sheet on the pile (up to five), one left mid-way a line half-written. */
+function WritingStamp({ c }: { c: Extract<AppArt, { app: "writing" }> }) {
+  return <>
+    <defs><UnitGradient id="sWs" stops={[[0, "#8a6bb8"], [0.6, "#cdb9e4"], [1, "#f6ecd9"]]} /></defs>
+    <rect width="112" height="112" fill={paint("sWs")} />
+    <path d="M0 98Q30 86 60 94T112 88V112H0Z" fill="#9a84c4" />
+    {Array.from({ length: c.done }, (_, i) => <g key={i} transform={`translate(${30 + i * 3} ${62 - i * 2}) rotate(${-10 + i * 3})`}><Rr x={-20} y={-26} w={40} h={52} r={3} fill="#e9dcc4" /></g>)}
+    <g transform="translate(52 58) rotate(-3)"><Rr x={-30} y={-38} w={60} h={76} r={5} fill={paint("gPage")} />
+      {[0, 1, 2, 3, 4].map((i) => <Rr key={i} x={-22} y={-26 + i * 12} w={c.fresh ? 44 : i === 4 && c.open ? 22 : 44 - (i % 2) * 8} h={4} r={2} fill={c.fresh ? "rgba(60,37,82,.18)" : "#7d63a8"} />)}
+    </g>
+    <g transform="translate(84 70) rotate(38)"><Rr x={-5} y={-30} w={10} h={46} r={2} fill="#f1b53f" /><path d="M-5 16L0 28L5 16Z" fill="#2b1d16" /><Rr x={-5} y={-34} w={10} h={6} r={2} fill="#e2603f" /></g>
+  </>;
+}
+
 /** The arched window's picture, filling its box. */
-export function Stamp({ art }: { art: ArtState }) {
+export function Stamp({ art }: { art: AppArt }) {
   return (
     <svg viewBox="0 0 112 112" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      {art.app === "maths" ? <MathsStamp c={art} /> : art.app === "english" ? <EnglishStamp c={art} /> : <EssayStamp c={art} />}
+      {art.app === "maths" ? <MathsStamp c={art} /> : art.app === "english" ? <EnglishStamp c={art} /> : art.app === "writing" ? <WritingStamp c={art} /> : <EssayStamp c={art} />}
     </svg>
   );
 }

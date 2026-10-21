@@ -36,7 +36,7 @@ import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck 
 import { STATEMENTS } from "../library/gcse";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "essayplan" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "paper" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs" | "worked" | "workroom";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "essayplan" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "paper" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs" | "worked" | "workroom" | "writing";
 
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
@@ -293,8 +293,8 @@ export interface EssayAnalysis { text: string; type: string; sentences: Sentence
 
 /** What the TV can ask the phone for (TV-led design, section 0): one job at a time, named in the session. */
 export type AskKind = "name" | "page" | "sheet" | "answers" | "question" | "explain" | "second" | "paper"
-  | "paragraph" | "rewrite" | "slot" | "sentence" | "reply" | "words" | "prefs" | "private";
-const ASK_KINDS: ReadonlySet<string> = new Set<AskKind>(["name", "page", "sheet", "answers", "question", "explain", "second", "paper", "paragraph", "rewrite", "slot", "sentence", "reply", "words", "prefs", "private"]);
+  | "paragraph" | "rewrite" | "slot" | "sentence" | "reply" | "words" | "prefs" | "private" | "writing";
+const ASK_KINDS: ReadonlySet<string> = new Set<AskKind>(["name", "page", "sheet", "answers", "question", "explain", "second", "paper", "paragraph", "rewrite", "slot", "sentence", "reply", "words", "prefs", "private", "writing"]);
 /** The hand-off the TV has open: the phone shows that panel and nothing else (TL-5). */
 export interface Ask {
   /** Minted by the desk on ask.open; the phone answers this id. */
@@ -309,6 +309,14 @@ export interface Ask {
   phase: "open" | "sent";
   detail?: { subject?: Subject; n?: number; i?: number; walkIx?: number; turnId?: string };
 }
+
+/**
+ * The Writing episode on the TV (docs/concepts/TV-WRITING-SCREEN-2026-10-21.md): the prompt the learner picked, then the
+ * paragraph the phone sent and its one coaching note, then the revision and the line the save wrote. The steps are
+ * lib/writing/episode's; only /api/writing/coach and /api/writing/finish move it past `write` (they are the server's
+ * events, never a screen's). `busy` is set while the desk coaches or saves what the phone sent.
+ */
+export interface WritingTv { promptId: string; stage: "write" | "coached" | "finished"; draft?: string; note?: string; revision?: string; saved?: string; busy?: boolean }
 
 /** The learner sitting at the desk: a profile's id and name. */
 export interface AtDesk { id: string; name: string }
@@ -351,6 +359,8 @@ export interface Session {
   worked?: Worked | null;
   /** The Workroom as the TV may see it (v2 T2, lib/twin/workroom.ts): titles, counts, marks, level words; never text. */
   workroom?: Workroom | null;
+  /** The Writing episode on the TV for the learner at the desk, or none (a switch of learner drops it; nothing is saved until it is finished). */
+  writingTv?: WritingTv | null;
   /** the current learner's measured skills, hydrated at the dispatch boundary from data/learners.json */
   skills: Record<string, SkillRecord>;
   /** the same measured record per Essay Master lens, hydrated the same way */
@@ -419,7 +429,11 @@ export type Event =
   // TL-3: how many phones have a stream open (the stream route raises it), and the TV's forget of every phone (the session route answers it; no reducer change)
   | { type: "phone.presence"; live: number } | { type: "phones.forget" }
   // TL-5: the TV opens a hand-off (ask.open, TV only), the TV or a phone cancels it, the desk marks it answered (ask.sent, server only)
-  | { type: "ask.open"; kind: AskKind; detail?: Ask["detail"] } | { type: "ask.cancel"; id: string } | { type: "ask.sent"; id: string };
+  | { type: "ask.open"; kind: AskKind; detail?: Ask["detail"] } | { type: "ask.cancel"; id: string } | { type: "ask.sent"; id: string }
+  // Writing on the TV: the TV picks a prompt and clears the episode; the writing routes alone raise busy, coached and finished
+  // (they are not in SHAPES, so no screen or phone can post them); `by` is the learner the work was for
+  | { type: "writing.pick"; promptId: string } | { type: "writing.clear" }
+  | { type: "writing.busy"; busy: boolean; by: string } | { type: "writing.coached"; draft: string; note: string; by: string } | { type: "writing.finished"; revision: string; saved: string; by: string };
 
 /**
  * The one door for what a screen or phone posts (api/session POST, after the server-only refusals): for each client-postable
@@ -427,7 +441,7 @@ export type Event =
  * reducer sees it. Ranges are the reducer's (a focus or a walk index may be -1 or past the end); this checks the kind of value.
  * paper.enter's rows are unchecked on purpose: the desk's own cleanPaper decides what stands.
  */
-const SCREENS: Record<Screen, true> = { landing: true, pair: true, joined: true, tonight: true, units: true, calendar: true, page: true, hint: true, lesson: true, sentence: true, headtohead: true, essaytype: true, essayplan: true, forensic: true, playbook: true, xray: true, break: true, recap: true, learner: true, profile: true, topics: true, prepare: true, paper: true, practice: true, sheet: true, walk: true, linga: true, "linga-scenes": true, "linga-map": true, "linga-talk": true, "linga-coach": true, "linga-recap": true, "linga-check": true, "linga-verdict": true, "linga-plan": true, "linga-moment": true, "linga-cert": true, "linga-certs": true, worked: true, workroom: true };
+const SCREENS: Record<Screen, true> = { landing: true, pair: true, joined: true, tonight: true, units: true, calendar: true, page: true, hint: true, lesson: true, sentence: true, headtohead: true, essaytype: true, essayplan: true, forensic: true, playbook: true, xray: true, break: true, recap: true, learner: true, profile: true, topics: true, prepare: true, paper: true, practice: true, sheet: true, walk: true, linga: true, "linga-scenes": true, "linga-map": true, "linga-talk": true, "linga-coach": true, "linga-recap": true, "linga-check": true, "linga-verdict": true, "linga-plan": true, "linga-moment": true, "linga-cert": true, "linga-certs": true, worked: true, workroom: true, writing: true };
 type Field = (v: unknown) => boolean;
 const f = {
   str: ((v) => typeof v === "string") as Field,
@@ -458,6 +472,7 @@ const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { ty
   "topic.open": { topic: f.str, stay: maybe(f.bool) }, walk: { ix: f.int }, "practice.clear": {},
   status: { text: f.str, essayRefused: maybe(f.bool) }, "session.end": {}, reset: {},
   "ask.open": { kind: (v) => typeof v === "string" && ASK_KINDS.has(v), detail: maybe(askDetailOk) }, "ask.cancel": { id: f.name }, "ask.sent": { id: f.name },
+  "writing.pick": { promptId: f.name }, "writing.clear": {},
 };
 /** Why a posted event is refused, or null when it may go to the reducer. */
 export function badPost(e: unknown): string | null {
@@ -697,7 +712,7 @@ function askDetail(d: Ask["detail"] | undefined): Ask["detail"] | undefined {
 /** The learner at the desk changed: what belonged to the one who left is cleared, and so are the failed runs and the analyse run in flight (a failed read is not the next learner's to retry; a late reading is dropped by its id). */
 function switchedFrom(s: Session, n: Session): void {
   n.ask = null; if (namesPhone(n.status)) n.status = "";
-  n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null; if (s.paperAim) n.paperAim = null;
+  n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null; n.writingTv = null; if (s.paperAim) n.paperAim = null;
   const jobs = { ...(s.jobs ?? {}) } as Jobs;
   for (const k of Object.keys(jobs) as JobKind[]) {
     const j = jobs[k];
@@ -906,6 +921,13 @@ function step(s: Session, e: Event): Session {
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; n.essayRefused = e.essayRefused ? e.text : undefined; break;
+    // Writing on the TV: a pick starts an episode (the prompt is checked by the screen's own list); a clear goes back to the list
+    case "writing.pick": if (!s.learner) return s; n.writingTv = { promptId: e.promptId, stage: "write" }; if (s.ask?.kind === "writing") n.ask = null; break;
+    case "writing.clear": n.writingTv = null; if (s.ask?.kind === "writing") n.ask = null; break;
+    // the routes' results land only on the episode of the learner they were for, at the stage they answer
+    case "writing.busy": if (!s.writingTv || s.learner?.id !== e.by) return s; n.writingTv = { ...s.writingTv, busy: e.busy }; break;
+    case "writing.coached": if (s.writingTv?.stage !== "write" || s.learner?.id !== e.by) return s; n.writingTv = { ...s.writingTv, stage: "coached", draft: e.draft, note: e.note, busy: false }; break;
+    case "writing.finished": if (s.writingTv?.stage !== "coached" || s.learner?.id !== e.by) return s; n.writingTv = { ...s.writingTv, stage: "finished", revision: e.revision, saved: e.saved, busy: false }; break;
     case "session.end": n.ask = null; n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.log = { ...s.log, endedAt: Date.now() }; break;
     case "reset": return { ...fresh(), phonesLive: s.phonesLive };
   }
@@ -1198,7 +1220,7 @@ export function dispatch(e: Event): Session {
   if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) store.session = { ...store.session, week: weekRead(store.session) };
   writeSession();
   notify();
-  if (e.type === "job.start") workBegins();
+  if (e.type === "job.start" || (e.type === "writing.busy" && e.busy)) workBegins();
   return store.session;
 }
 /**

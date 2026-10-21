@@ -34,7 +34,7 @@ const SERVER_ONLY: Partial<Record<Event["type"], string>> = {
  * answer to the TV's paper ask, below; task.* (OD4 b), profile.draft and profile.save (OD1 b) stay the phone's.
  */
 const PHONE_NEVER = new Set<string>(["nav", "focus", "subject", "item", "page.select", "walk", "essay.at", "timer.start", "timer.pause", "timer.tick", "timer.skipbreak", "session.end",
-  "learner.set", "profile.discard", "topic.open", "practice.clear"]);
+  "learner.set", "profile.discard", "topic.open", "practice.clear", "writing.pick", "writing.clear"]);
 
 /** One line for a pairing write that failed, in the shape of pairing.ts's last-seen line; the caller answers 500 and changes nothing. */
 const notSaved = (what: string, e: unknown) => console.error(`desk pairing: ${what} could not be written to pairing.json (${e instanceof Error ? e.message : e}); nothing was changed`);

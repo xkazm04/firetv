@@ -45,9 +45,9 @@ const SCENARIOS={
 test('view 1: only the profile\'s apps lie on the shelf, in the desk\'s order, and the stops are the D-pad\'s',()=>{
  const {landingView}=model();const {landingStops,landingAt}=require(src('tv/landingRows.ts'));
  const r=landingView(SCENARIOS.returning());
- assert.deepEqual(r.apps.map(a=>a.id),['maths','english','essay']);
- assert.deepEqual(landingView(SCENARIOS.someoneElse()).apps.map(a=>a.id),['english','essay'],'an adult with two apps: only those two');
- assert.deepEqual(landingView(session({profiles:[{...EMA,modules:['essay','maths']}]})).apps.map(a=>a.id),['maths','essay'],'the desk\'s order whatever order the profile lists');
+ assert.deepEqual(r.apps.map(a=>a.id),['maths','english','essay','writing'],'Writing lies last while Essay Master is on');
+ assert.deepEqual(landingView(SCENARIOS.someoneElse()).apps.map(a=>a.id),['english','essay','writing'],'an adult with two apps: only those two, and Writing');
+ assert.deepEqual(landingView(session({profiles:[{...EMA,modules:['essay','maths']}]})).apps.map(a=>a.id),['maths','essay','writing'],'the desk\'s order whatever order the profile lists');
  for(const k of Object.keys(SCENARIOS)){const s=SCENARIOS[k]();const v=landingView(s);assert.deepEqual(v.stops,landingStops(s),k);assert.equal(v.at,landingStops(s)[landingAt(s)],`${k}: the view is on the stop the keys are on`);}
  assert.equal(landingView(session({profiles:[{...EMA,modules:[]}]})).empty,true,'a profile with no app: an empty desk, said so');
  assert.equal(landingView(session({profiles:[{...EMA,modules:[]}]})).world,null);
@@ -56,10 +56,10 @@ test('view 1: only the profile\'s apps lie on the shelf, in the desk\'s order, a
 test('view 2: the light rests on what was left, and the world stays on the last app while the D-pad is on Someone else',()=>{
  const {landingView}=model();
  const r=landingView(SCENARIOS.returning());
- assert.equal(r.world,'maths','a marked set beats a reading');assert.deepEqual(r.apps.map(a=>a.tagged),[true,false,false],'the CONTINUE tag is on the marked set');
- const onPlace=landingView({...SCENARIOS.returning(),focus:3},'essay');
+ assert.equal(r.world,'maths','a marked set beats a reading');assert.deepEqual(r.apps.map(a=>a.tagged),[true,false,false,false],'the CONTINUE tag is on the marked set');
+ const onPlace=landingView({...SCENARIOS.returning(),focus:4},'essay');
  assert.equal(onPlace.at,'place');assert.equal(onPlace.world,'essay','moving down to Someone else keeps the world behind');
- assert.equal(landingView({...SCENARIOS.returning(),focus:3}).world,'maths','with no history of moves, the CONTINUE app');
+ assert.equal(landingView({...SCENARIOS.returning(),focus:4}).world,'maths','with no history of moves, the CONTINUE app');
  assert.equal(landingView({...SCENARIOS.returning(),focus:1}).world,'english','the app the D-pad is on is the world');
 });
 
@@ -70,7 +70,7 @@ test('view 3: the words are about 25 in the caption slot, and never invented - a
  assert.equal(r.apps[0].caption.head,'Two-step equations · 3 of 4 right','the set as the session has it');assert.equal(r.apps[0].caption.sub,'The marked set is still on the desk.');
  assert.deepEqual(r.apps[0].art,{app:'maths',fresh:false,n:3,m:4},'the stairs are lit by what came back right, of what was asked');
  const n=landingView(session());
- assert.deepEqual(n.apps.map(a=>[a.kind,a.caption.head]),[['none','Not started'],['none','Not started'],['none','Nothing read']],'nothing waiting: two words, as the rows say');
+ assert.deepEqual(n.apps.map(a=>[a.kind,a.caption.head]),[['none','Not started'],['none','Not started'],['none','Nothing read'],['none','Not started']],'nothing waiting: two words, as the rows say');
  assert.deepEqual(n.apps[0].art,{app:'maths',fresh:true,n:null,m:6},'no invented steps lit');
  for(const a of n.apps)assert.equal(/\d/.test(a.caption.head),false,`${a.id}: no number on an empty desk`);
  const j=landingView(SCENARIOS.someoneElse());
@@ -92,7 +92,7 @@ test('view 4: the actions say what Select does; the phone carries the real code 
  assert.equal(primaryLabel('Ema','marked'),'Continue as Ema');
  // the lamp is drawn, not focused: `say` is what a screen reader hears for the stop it is on, in the words the eye reads
  assert.equal(landingView(SCENARIOS.returning()).say,'Math Buddy. Marked. Two-step equations · 3 of 4 right. The marked set is still on the desk. Continue as Ema.');
- assert.equal(landingView({...SCENARIOS.returning(),focus:3}).say,'Someone else. Ema is at the desk.');
+ assert.equal(landingView({...SCENARIOS.returning(),focus:4}).say,'Someone else. Ema is at the desk.');
  assert.equal(f.say,'Pair your phone. Open 10.0.0.7:3000/phone, then enter 4 7 1 1.','the code digit by digit');
  assert.equal(nb.say.includes('Choose who is studying'),true,'no one seated: the app stop says Select asks who');
 });
@@ -103,10 +103,10 @@ test('paper 1: the default look draws each scenario with its hooks and its real 
  const html=(k,zoom)=>draw(PAPER,landingView(SCENARIOS[k]()),zoom);
  const r=html('returning');
  assert.match(r,/data-role="desk-scene"[^>]*data-theme="paper"|data-theme="paper"[^>]*data-role="desk-scene"/);
- assert.equal((r.match(/data-role="desk-object"/g)||[]).length,3);assert.match(r,/data-app="maths"[^>]*data-focused="true"|data-focused="true"[^>]*data-app="maths"/,'the focus ring is on the lit app');
+ assert.equal((r.match(/data-role="desk-object"/g)||[]).length,4);assert.match(r,/data-app="maths"[^>]*data-focused="true"|data-focused="true"[^>]*data-app="maths"/,'the focus ring is on the lit app');
  assert.match(r,/Two-step equations · 3 of 4 right/);assert.match(r,/Continue as Ema/);assert.match(r,/data-role="desk-place-card"/);
  assert.doesNotMatch(r,/data-role="desk-pin"/,'a paired phone shows no code');
- assert.equal((html('someoneElse').match(/data-role="desk-object"/g)||[]).length,2);
+ assert.equal((html('someoneElse').match(/data-role="desk-object"/g)||[]).length,3);
  const f=html('firstRun');assert.match(f,/data-role="desk-pin"[^>]*>4711</,'the pairing code is the session\'s');assert.match(f,/10\.0\.0\.7:3000\/phone/);
  // a screen reader hears "Code 4711": the label is a hidden word, not an aria-label on a plain div (ARIA drops those)
  assert.match(f,/class="pp-sr">Code <\/span><div class="pp-pin"/);assert.doesNotMatch(f,/aria-label="Code/);
@@ -130,7 +130,7 @@ test('lock 1: the blueprint theme renders when a test instantiates it explicitly
  for(const k of ['returning','someoneElse','firstRun']){
   const html=draw(bp,landingView(SCENARIOS[k]()));
   assert.match(html,/data-theme="blueprint"/,k);assert.match(html,/data-role="desk-scene"/,k);
-  const apps=(html.match(/data-role="desk-object"/g)||[]).length;assert.equal(apps,k==='someoneElse'?2:3,`${k}: one entry per app on the profile`);
+  const apps=(html.match(/data-role="desk-object"/g)||[]).length;assert.equal(apps,k==='someoneElse'?3:4,`${k}: one entry per app on the profile`);
  }
  const f=draw(bp,landingView(SCENARIOS.firstRun()));assert.match(f,/data-role="desk-pin"/);assert.match(f,/4711/);assert.match(f,/<span>PIN<\/span>/,'its visible PIN label names the code');
  assert.match(f,/class="bp-sr" data-role="desk-announce" aria-live="polite"[^>]*>Pair your phone\./,'the same spoken line as paper');
@@ -175,7 +175,7 @@ test('GUARD: the landing view-model stays free of the filesystem-backed session 
 test('TL-3: the phone is a stop paired or not, and the paired stop speaks of the phones that are here',()=>{
  const {landingView}=model();const {landingStops}=require(src('tv/landingRows.ts'));
  for(const joined of [true,false]){const s=session({joined});assert.equal(landingStops(s).at(-1),'phone',`joined ${joined}: the phone stop is last`);assert.equal(landingView(s).phone.paired,joined);}
- const on=(p)=>landingView(session({joined:true,focus:4,...p})).caption;
+ const on=(p)=>landingView(session({joined:true,focus:5,...p})).caption;
  assert.equal(on({phonesLive:0}).head,'No phone here');assert.equal(on({phonesLive:2}).head,'Phone paired');
  assert.equal(landingView(session({joined:true,focus:-1,practice:null})).at,'maths','paired: the lamp still rests on the apps');
 });

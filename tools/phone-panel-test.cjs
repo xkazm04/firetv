@@ -124,6 +124,7 @@ const FIXTURES={
 FIXTURES['linga-talk']={s:session({screen:'linga-talk',subject:'english',ask:askOf('reply')}),panel:'linga',why:'Linga: answer on your phone (ask reply)'};
 FIXTURES['linga-plan']={s:session({screen:'linga-plan',subject:'english',ask:askOf('words')}),panel:'linga',why:'Linga: type the words on your phone (ask words)'};
 FIXTURES['linga']={s:session({screen:'linga',subject:'english',ask:askOf('prefs')}),panel:'linga',why:'Linga: set up on your phone (ask prefs)'};
+FIXTURES['writing']={s:session({screen:'writing',ask:askOf('writing')}),panel:'write',why:'Writing: write the paragraph on your phone (ask writing)'};
 /** Hand-offs the TV makes that no phone panel does: the phone stays, and the gap is named. */
 const NO_PANEL={};// the lesson's "circle on the phone" ask left both TVs (shell 79ed1a38, Math Buddy 2026-10-13): lesson asks nothing of the phone and is covered by case 3
 
@@ -142,7 +143,7 @@ test('case 1 (TL-9, replaces the old case 1 "the hand-off screens are derived fr
  console.log(`# ask kinds (${ASK_KINDS.length}): ${ASK_KINDS.join(', ')}`);
  assert.ok(ASK_KINDS.length>=16,'the scan finds the store ask kinds');
  assert.deepEqual(Object.keys(ASK_PANEL).sort(),[...ASK_KINDS].sort(),'one entry per kind: none missing, none extra');
- const PANELS=['join','joined','capture','practice','point','say','paste','tonight','parent','profile','linga','paper'];
+ const PANELS=['join','joined','capture','practice','point','say','paste','tonight','parent','profile','linga','paper','write'];
  for(const k of ASK_KINDS){
   assert.ok(PANELS.includes(ASK_PANEL[k]),`${k} has a panel the phone draws`);
   assert.equal(panelFor(session({screen:'units',ask:askOf(k)})),ASK_PANEL[k],`${k}: whatever the TV screen, the ask picks the panel`);

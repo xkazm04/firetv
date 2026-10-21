@@ -8,8 +8,8 @@
  * Select hand-off (it plays the zoom, waits ZOOM_MS, then runs the step). The look is "paper" today (themes/index.ts).
  */
 import { useEffect, useRef, useState } from "react";
-import type { Session, Subject } from "@/lib/session/store";
-import type { LandingStop } from "@/tv/landingRows";
+import type { Session } from "@/lib/session/store";
+import type { LandingApp, LandingStop } from "@/tv/landingRows";
 import { landingView } from "@/landing/model";
 import { themeFor } from "@/landing/themes";
 
@@ -22,10 +22,10 @@ export function LandingTV({ s, zoom }: { s: Session; zoom: LandingStop | null })
   const who = s.learner?.id ?? "";
   const [boot] = useState(() => litFor !== who);
   useEffect(() => { litFor = who; }, [who]);
-  const last = useRef<Subject | null>(null);
+  const last = useRef<LandingApp | null>(null);
   const view = landingView(s, last.current);
   const at = view.at;
-  useEffect(() => { if (at === "maths" || at === "english" || at === "essay") last.current = at; }, [at]);
+  useEffect(() => { if (at === "maths" || at === "english" || at === "essay" || at === "writing") last.current = at; }, [at]);
   // an app Selected before anyone sat down opens the switcher: the hand-off says so, on the second action
   const stop = zoom && !s.learner && zoom !== "phone" ? "place" : zoom;
   const Theme = themeFor();

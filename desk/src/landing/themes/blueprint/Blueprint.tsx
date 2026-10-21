@@ -10,15 +10,15 @@
  * Select's hand-off is view-only here: props.zoom floods the sheet with the app's colour and inverts the linework.
  */
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import type { Subject } from "@/lib/session/store";
+import type { LandingApp } from "@/tv/landingRows";
 import type { AppView, WhenIcon } from "@/landing/model";
 import type { ThemeLandingProps } from "../types";
 import { BLUEPRINT_FONTS } from "./fonts";
 import { drawingOf } from "./drawings";
 import { afterFonts } from "@/lib/afterFonts";
 
-const ACC: Record<Subject, string> = { maths: "#ffe45c", english: "#ff7d6e", essay: "#62e8b4" };
-const GL: Record<Subject, string> = { maths: "255,228,92", english: "255,125,110", essay: "98,232,180" };
+const ACC: Record<LandingApp, string> = { maths: "#ffe45c", english: "#ff7d6e", essay: "#62e8b4", writing: "#c9a8ff" };
+const GL: Record<LandingApp, string> = { maths: "255,228,92", english: "255,125,110", essay: "98,232,180", writing: "201,168,255" };
 
 // ---------------------------------------------------------------- icons (24/30 px line glyphs)
 const I = {

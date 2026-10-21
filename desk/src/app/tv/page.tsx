@@ -9,6 +9,7 @@ import { useSession, call } from "@/tv/useSession";
 import type { Event, Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
 import { EssayTV } from "@/essay/EssayTV";
+import { WritingTV } from "@/writing/WritingTV";
 import { essayOwns, keyOf, landingAt, landingStops, lingaOwns, mathsOwns, paperOwns, runStep, tvKey, LOCAL, type LandingStop, type Local } from "@/tv/keys";
 import { LandingTV, ZOOM_MS } from "@/landing/LandingTV";
 import { MathsTV } from "@/maths/MathsTV";
@@ -212,6 +213,7 @@ function ScreenFor({ s }: { s: Session }) {
     case "headtohead": return <S.HeadToHead s={s} />;
     case "break": return <S.BreakScreen s={s} />;
     case "recap": return <S.Recap s={s} focus={f} />;
+    case "writing": return <WritingTV s={s} />;
     default: return null;
   }
 }

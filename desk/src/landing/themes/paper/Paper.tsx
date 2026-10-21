@@ -11,9 +11,8 @@
  * (`.desk-tv.pp`, `pp-` classes). Sizes are for the 1920 x 1080 stage; the stage scales as a whole.
  */
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import type { Subject } from "@/lib/session/store";
-import type { LandingStop } from "@/tv/landingRows";
-import type { AppView, LandingView } from "@/landing/model";
+import type { LandingApp, LandingStop } from "@/tv/landingRows";
+import { worldArt, type AppView, type LandingView } from "@/landing/model";
 import type { ThemeLandingProps } from "../types";
 import { DESK_FONTS } from "@/landing/fonts";
 import { Defs } from "./shapes";
@@ -23,10 +22,12 @@ import { skyBackdrop, worldFor, type Layer } from "./worlds";
 import { afterFonts } from "@/lib/afterFonts";
 
 /** Each app's colours (its own deep, its shadow, its highlight, the letters' extrusion, the motes' glow). */
-const THEME: Record<Subject | "house", { deep: string; deepLo: string; hi: string; ex: string; glow: string }> = {
+const THEME: Record<LandingApp | "house", { deep: string; deepLo: string; hi: string; ex: string; glow: string }> = {
   maths: { deep: "#2b3fa8", deepLo: "#1b2778", hi: "#6a82ea", ex: "#22337c", glow: "255,236,150" },
   english: { deep: "#ad4529", deepLo: "#762b1f", hi: "#f08c64", ex: "#8a3a2a", glow: "255,222,150" },
   essay: { deep: "#1f5140", deepLo: "#123528", hi: "#54967a", ex: "#1a4636", glow: "255,250,222" },
+  // Writing has no world of its own yet (the empty world stands behind it): an ink plum for its letters and its hand-off
+  writing: { deep: "#5b3a78", deepLo: "#3c2552", hi: "#9a78c4", ex: "#4a2f63", glow: "255,236,200" },
   house: { deep: "#4a3324", deepLo: "#2b1d16", hi: "#8b6a54", ex: "#3a271b", glow: "255,236,170" },
 };
 const LEARNER_TONE = ["#e2603f", "#2f7a63", "#5a55c8", "#c9932d"];
@@ -240,7 +241,7 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
   const { world, apps, at } = view, unpaired = !view.phone.paired;
   // the world that is leaving slides out while the new one slides in. The move's direction is kept after the leaving
   // world goes: read from it, the lit world turned "fade" 0.72 s after each move and played its rise a second time
-  const [st, setSt] = useState<{ world: Subject | null; prev: { id: Subject; dir: number } | null; dir: number; seq: number }>({ world, prev: null, dir: 0, seq: 0 });
+  const [st, setSt] = useState<{ world: LandingApp | null; prev: { id: LandingApp; dir: number } | null; dir: number; seq: number }>({ world, prev: null, dir: 0, seq: 0 });
   if (st.world !== world) {
     const ids = apps.map((a) => a.id), was = st.world, dir = was && world && ids.includes(was) ? (ids.indexOf(world) > ids.indexOf(was) ? 1 : -1) : 0;
     setSt({ world, prev: was && ids.includes(was) ? { id: was, dir } : null, dir, seq: st.seq + 1 });
@@ -251,7 +252,8 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
     return () => clearTimeout(t);
   }, [st.seq, st.prev]);
 
-  const art = (id: Subject | null) => apps.find((a) => a.id === id)?.art ?? null;
+  // the world is drawn from an app's art; Writing's is the empty world (worldArt), never a world of its own
+  const art = (id: LandingApp | null) => worldArt(apps.find((a) => a.id === id)?.art);
   const artKey = JSON.stringify([art(st.world), st.prev && art(st.prev.id)]);
   const cur = useMemo(() => worldFor(art(st.world)), [st.world, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const old = useMemo(() => (st.prev ? worldFor(art(st.prev.id)) : null), [st.prev, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -268,7 +270,7 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
       <Defs />
       {/* the world's sky under everything: until the GPU has rastered a world's layers (or the arrival's reveal has
           reached them), the stage shows that sky, not the bare paper */}
-      <div className="pp-sky" aria-hidden="true" style={{ background: skyBackdrop(st.world ?? "maths") }} />
+      <div className="pp-sky" aria-hidden="true" style={{ background: skyBackdrop(st.world && st.world !== "writing" ? st.world : "maths") }} />
       {boot && <Intro />}
       <div className="pp-worlds">
         <div className="pp-host pp-back">

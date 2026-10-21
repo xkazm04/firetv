@@ -23,6 +23,7 @@ import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
 import { markCounts } from "@/lib/rules/marks";
 import { itemName, partPlace } from "@/lib/rules/calc-word";
 import { PaperPanel } from "./PaperPanel";
+import { WritingPanel } from "./WritingPanel";
 import { ExplainTalk } from "./ExplainTalk";
 import { recogniserLangFor } from "./recogniserLang";
 import { blankRow, type DraftRow } from "@/lib/rules/paperEntry";
@@ -40,7 +41,7 @@ const TV_WORDS: Record<Session["screen"], string> = {
   landing: "the desk", pair: "the pairing code", joined: "the paired screen", tonight: "Math Buddy", learner: "the learners", profile: "the learner's picks",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
   headtohead: "head to head", essaytype: "Essay Master", essayplan: "your plan", forensic: "your paragraph", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
-  topics: "Math Buddy's topics", prepare: "getting ready for school", paper: "your paper", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item", worked: "a worked lesson", workroom: "the Workroom",
+  topics: "Math Buddy's topics", prepare: "getting ready for school", paper: "your paper", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item", worked: "a worked lesson", workroom: "the Workroom", writing: "Writing",
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation", "linga-cert": "your certificate", "linga-certs": "your certificates",
 };
 /** The desk refuses a name longer than this (PROFILE_NAME_MAX in the session store, which is server-only and cannot be imported here); the input stops at it so the phone shows what the TV keeps. */
@@ -701,6 +702,7 @@ export default function Phone() {
 
         {screen === "paper" && <PaperPanel rows={paperRows} setRows={editPaperRows} post={post} seated={!!s?.learner} status={s?.status ?? ""} kept={!!s?.paper} name={s?.learner?.name} system={s?.learner ? s.profiles?.find((p) => p.id === s.learner?.id)?.system : undefined} askId={s?.ask?.kind === "paper" ? askId : undefined} />}
 
+        {screen === "write" && s && s.ask?.kind === "writing" && <WritingPanel key={s.ask.id} s={s} ask={s.ask} />}
         {screen === "capture" && (() => {
           const reading = phase === "sending" || (phase === "sent" && !!s?.reading);
           const done = phase === "sent" && !reading;

@@ -310,17 +310,18 @@ const readIt={at:Date.UTC(2026,8,21),kind:'writing',label:'Argument',detail:'1 o
 
 test('landing 1: the stops are the apps on the profile, left to right, then the place card, then the phone - always (TL-3)',()=>{
  const {landingStops}=rows();
- assert.deepEqual(landingStops(desk()),['maths','english','essay','place','phone'],'paired: the phone stop stays');
- assert.deepEqual(landingStops(desk({joined:false})),['maths','english','essay','place','phone']);
- assert.deepEqual(landingStops(desk({learner:{id:'jakub',name:'Jakub'}})),['english','essay','place','phone'],'only the apps on Jakub\'s profile');
- assert.deepEqual(landingStops(desk({profiles:[{...EMA,modules:['essay','maths']}]})),['maths','essay','place','phone'],'the desk keeps its left-to-right order whatever order the profile lists');
+ assert.deepEqual(landingStops(desk()),['maths','english','essay','writing','place','phone'],'paired: the phone stop stays; Writing lies after the apps while Essay Master is on');
+ assert.deepEqual(landingStops(desk({joined:false})),['maths','english','essay','writing','place','phone']);
+ assert.deepEqual(landingStops(desk({learner:{id:'jakub',name:'Jakub'}})),['english','essay','writing','place','phone'],'only the apps on Jakub\'s profile');
+ assert.deepEqual(landingStops(desk({profiles:[{...EMA,modules:['essay','maths']}]})),['maths','essay','writing','place','phone'],'the desk keeps its left-to-right order whatever order the profile lists');
+ assert.deepEqual(landingStops(desk({profiles:[{...EMA,modules:['maths','english']}]})),['maths','english','place','phone'],'no Essay Master on the profile: no Writing');
  assert.deepEqual(landingStops(desk({profiles:[{...EMA,modules:[]}],joined:false})),['place','phone']);
  const {LANDING_STOPS}=keys();assert.equal(LANDING_STOPS,undefined,'no fixed stop list with a Continue button is left');
 });
 
 test('TL-3: Select on the paired phone stop opens pair with the landing behind it; on pair, Down then Select forgets every phone',()=>{
  const {tvKey}=keys();
- const at=desk({focus:4});
+ const at=desk({focus:5});
  assert.deepEqual(tvKey(at,'select',LOCAL).events,[{type:'nav',screen:'pair',focus:0,from:'landing'}],'paired: the phone stop opens pair');
  const pair=desk({screen:'pair',focus:0,back:'landing'});
  assert.deepEqual(tvKey(pair,'select',LOCAL).events,[],'Pair another: the code is already up');
@@ -360,25 +361,26 @@ test('landing rows: a waiting field stays only when a theme reads it',()=>{
 test('landing 3: the D-pad moves the lamp between the objects, and Select opens what is lit',()=>{
  const {tvKey}=keys();
  const at=(focus,patch={})=>desk({focus,...patch});
- assert.equal(focusAfter(at(0),tvKey(at(0),'right',LOCAL)),1);assert.equal(focusAfter(at(2),tvKey(at(2),'right',LOCAL)),2,'Right on the last app stays');
+ assert.equal(focusAfter(at(0),tvKey(at(0),'right',LOCAL)),1);assert.equal(focusAfter(at(2),tvKey(at(2),'right',LOCAL)),3,'Right from Essay Master is Writing');assert.equal(focusAfter(at(3),tvKey(at(3),'right',LOCAL)),3,'Right on the last app stays');
  assert.equal(focusAfter(at(0),tvKey(at(0),'left',LOCAL)),0);
- assert.equal(focusAfter(at(1),tvKey(at(1),'down',LOCAL)),3,'Down is Someone else (the place)');
- assert.equal(focusAfter(at(3),tvKey(at(3),'up',LOCAL)),1,'Up from Someone else is the app above it');
- assert.deepEqual(tvKey(at(3),'left',LOCAL).events,[]);
- assert.equal(focusAfter(at(1),tvKey(at(1),'up',LOCAL)),4,'a paired phone is a stop too (TL-3)');
+ assert.equal(focusAfter(at(1),tvKey(at(1),'down',LOCAL)),4,'Down is Someone else (the place)');
+ assert.equal(focusAfter(at(4),tvKey(at(4),'up',LOCAL)),1,'Up from Someone else is the app above it');
+ assert.deepEqual(tvKey(at(4),'left',LOCAL).events,[]);
+ assert.equal(focusAfter(at(1),tvKey(at(1),'up',LOCAL)),5,'a paired phone is a stop too (TL-3)');
  const fresh=(f)=>at(f,{joined:false});
- assert.equal(focusAfter(fresh(0),tvKey(fresh(0),'up',LOCAL)),4,'Up reaches the unpaired phone (top right)');
- assert.equal(focusAfter(fresh(4),tvKey(fresh(4),'down',LOCAL)),2);
- assert.deepEqual(tvKey(fresh(4),'select',LOCAL).events,[{type:'nav',screen:'pair',focus:0,from:'landing'}],'the phone opens the pairing screen');
+ assert.equal(focusAfter(fresh(0),tvKey(fresh(0),'up',LOCAL)),5,'Up reaches the unpaired phone (top right)');
+ assert.equal(focusAfter(fresh(5),tvKey(fresh(5),'down',LOCAL)),3,'Down from the phone is the last app on the shelf');
+ assert.deepEqual(tvKey(fresh(5),'select',LOCAL).events,[{type:'nav',screen:'pair',focus:0,from:'landing'}],'the phone opens the pairing screen');
  for(const [f,sub,home] of [[0,'maths','tonight'],[1,'english','linga'],[2,'essay','essaytype']])
   assert.deepEqual(tvKey(at(f),'select',LOCAL).events,[{type:'subject',subject:sub},{type:'nav',screen:home,focus:0}],sub);
- assert.deepEqual(tvKey(at(3),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'the place card hands the desk to someone else');
+ assert.deepEqual(tvKey(at(3),'select',LOCAL).events,[{type:'nav',screen:'writing',focus:0}],'Writing opens its own screen: no subject, it is no Subject');
+ assert.deepEqual(tvKey(at(4),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'the place card hands the desk to someone else');
  const rest=desk({focus:-1,history:[readIt]});
  assert.deepEqual(tvKey(rest,'select',LOCAL).events,[{type:'subject',subject:'essay'},{type:'nav',screen:'essaytype',focus:1}],'at rest Select opens the CONTINUE object, the lamp on the lens last read (Argument)');
  assert.equal(focusAfter(rest,tvKey(rest,'left',LOCAL)),1,'at rest the arrows move from the CONTINUE object');
- assert.equal(focusAfter(at(3,{history:[readIt]}),tvKey(at(3,{history:[readIt]}),'back',LOCAL)),2,'Back brings the lamp home to the CONTINUE object');
+ assert.equal(focusAfter(at(4,{history:[readIt]}),tvKey(at(4,{history:[readIt]}),'back',LOCAL)),2,'Back brings the lamp home to the CONTINUE object');
  const j=(f)=>desk({focus:f,learner:{id:'jakub',name:'Jakub'}});
- assert.equal(focusAfter(j(1),tvKey(j(1),'right',LOCAL)),1,'Jakub has two apps');assert.equal(focusAfter(j(2),tvKey(j(2),'up',LOCAL)),0);
+ assert.equal(focusAfter(j(1),tvKey(j(1),'right',LOCAL)),2,'Jakub has two apps, then Writing');assert.equal(focusAfter(j(2),tvKey(j(2),'right',LOCAL)),2);assert.equal(focusAfter(j(3),tvKey(j(3),'up',LOCAL)),1,'Up from his place card: the middle of three objects');
  assert.deepEqual(tvKey(j(0),'select',LOCAL).events,[{type:'subject',subject:'english'},{type:'nav',screen:'linga',focus:0}]);
 });
 
@@ -422,9 +424,9 @@ test('landing 4: Back from each app, the switcher and the pairing screen lands o
  const {tvKey}=keys();
  assert.deepEqual(tvKey(session({screen:'tonight'}),'back',LOCAL).events,[{type:'nav',screen:'landing',focus:0}],'Math Buddy -> the sheet');
  assert.deepEqual(tvKey(session({screen:'essaytype',subject:'essay',profiles:[EMA,JAKUB],learner:{id:'jakub',name:'Jakub'}}),'back',LOCAL).events,[{type:'nav',screen:'landing',focus:1}],'Jakub\'s essay card is his second object');
- assert.deepEqual(tvKey(session({screen:'learner',back:'landing'}),'back',LOCAL).events,[{type:'nav',screen:'landing',focus:3}],'the switcher -> the place card');
+ assert.deepEqual(tvKey(session({screen:'learner',back:'landing'}),'back',LOCAL).events,[{type:'nav',screen:'landing',focus:4}],'the switcher -> the place card');
  assert.deepEqual(tvKey(session({screen:'learner',back:'tonight'}),'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}]);
- assert.deepEqual(tvKey(session({screen:'pair',back:'landing',joined:false}),'back',LOCAL).events,[{type:'nav',screen:'landing',focus:4}],'pairing -> the phone');
+ assert.deepEqual(tvKey(session({screen:'pair',back:'landing',joined:false}),'back',LOCAL).events,[{type:'nav',screen:'landing',focus:5}],'pairing -> the phone');
  assert.deepEqual(tvKey(session({screen:'pair',back:'profile',joined:false}),'back',LOCAL).events,[{type:'nav',screen:'profile',focus:0}]);
  const linga=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
  assert.match(linga,/screen:"landing",focus:landingFocus\(s,"english"\)/,'Linga\'s home Back lands on Linga\'s card');
@@ -441,11 +443,11 @@ test('landing 5 (S34 T5): with nothing waiting and no phone paired the lamp rest
  const {landingAt,landingStops,restStop}=rows();const {tvKey}=keys();
  const unpaired=desk({joined:false});
  assert.equal(landingStops(unpaired)[landingAt(unpaired)],'phone','a fresh, unpaired desk: the lamp is on the phone');
- assert.equal(restStop(unpaired),4);
+ assert.equal(restStop(unpaired),5);
  assert.equal(landingAt(desk()),0,'paired, nothing waiting: the first app, unchanged');
  assert.equal(landingAt(desk({joined:false,history:[readIt]})),2,'something waiting beats the phone: the CONTINUE object');
  assert.equal(landingAt(desk({joined:false,focus:1})),1,'a named stop is kept');
- assert.equal(focusAfter(desk({joined:false,focus:0}),tvKey(desk({joined:false,focus:0}),'back',LOCAL)),4,'Back on the desk goes home to the phone while nothing is waiting');
+ assert.equal(focusAfter(desk({joined:false,focus:0}),tvKey(desk({joined:false,focus:0}),'back',LOCAL)),5,'Back on the desk goes home to the phone while nothing is waiting');
  const none=desk({joined:false,learner:null});
  assert.equal(landingStops(none)[landingAt(none)],'phone','a desk no one sits at yet rests on the phone too');
  assert.equal(landingAt(desk({learner:null})),0,'...and paired, on the first app');
@@ -456,10 +458,10 @@ test('landing 5 (S34 T5): with nothing waiting and no phone paired the lamp rest
 test('landing 6 (S34 T4): a desk with no one at it - every app is on it, empty, and any Select asks who is at the desk first',()=>{
  const {landingStops,deskWaiting}=rows();const {tvKey}=keys();
  const none=(patch={})=>desk({learner:null,...patch});
- assert.deepEqual(landingStops(none()),['maths','english','essay','place','phone'],'no profile to read: all three apps lie on the desk');
+ assert.deepEqual(landingStops(none()),['maths','english','essay','writing','place','phone'],'no profile to read: all three apps lie on the desk, and Writing');
  assert.deepEqual(deskWaiting(none()).map(w=>w.empty),['Not started','Not started','Nothing read'],'no one\'s work: each object says so in two words');
- for(const f of [0,1,2])assert.deepEqual(tvKey(none({focus:f}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'an app opens the learner switcher first, never the app');
- assert.deepEqual(tvKey(none({focus:3}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'the place card opens the switcher');
+ for(const f of [0,1,2,3])assert.deepEqual(tvKey(none({focus:f}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'an app opens the learner switcher first, never the app');
+ assert.deepEqual(tvKey(none({focus:4}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'the place card opens the switcher');
  {const m=tvKey(none({focus:0}),'menu',LOCAL);assert.deepEqual([m.events,m.calls],[[],[]],'no one\'s evening to end');}
  const {landingView}=require(path.join(root,'src/landing/model.ts'));
  {const v=landingView(none()),w=landingView(desk());assert.deepEqual([v.place,v.primary],['Choose who','Choose who is studying'],'the second action invites when no one sits at the desk');assert.deepEqual([w.place,w.primary],['Someone else','Start as Ema'],'and offers someone else when one does');}
@@ -475,7 +477,7 @@ test('GUARD: the landing rows stay free of the filesystem-backed session modules
 test('nav 1 (T14): Back on the learner switcher never returns to a profile screen it was left from - the loop Profile > Pair > Profile > switcher',()=>{
  const {tvKey}=keys();
  // the switcher's Menu edits a profile, the profile's Menu opens the pair screen (back = profile), Back from there and from the profile: the switcher still holds back = profile
- assert.deepEqual(tvKey(session({screen:'learner',back:'profile'}),'back',LOCAL).events,[{type:'nav',screen:'landing',focus:3}],'the desk, the lamp on the place card');
+ assert.deepEqual(tvKey(session({screen:'learner',back:'profile'}),'back',LOCAL).events,[{type:'nav',screen:'landing',focus:4}],'the desk, the lamp on the place card');
  for(const back of ['pair','essaytype','forensic'])assert.equal(tvKey(session({screen:'learner',back}),'back',LOCAL).events[0].screen,'landing',back);
  assert.deepEqual(tvKey(session({screen:'learner',back:'tonight'}),'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}],'opened from Tonight, Back is Tonight');
 });
