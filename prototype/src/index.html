@@ -342,6 +342,8 @@ const S = {
   focus: 0, role: "student", pscreen: "join",
 };
 const $ = (id) => document.getElementById(id);
+// a task name is typed on the phone: it goes into markup escaped, as linga-conversations.html escapes every string
+const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const stage = $("stage");
 const say = (t) => { if ($("tts").getAttribute("aria-pressed") !== "true" || !("speechSynthesis" in window)) return;
   try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/\$|\\frac|\\sqrt|\*/g, "")); u.rate = .95; speechSynthesis.speak(u); } catch (e) {} };
@@ -373,7 +375,7 @@ function press(el, fn) { el.dataset.pressed = "true"; setTimeout(() => { el.data
 
 // ---------- rail ----------
 function renderRail() {
-  $("chips").innerHTML = S.tasks.map(t => `<div class="chip" data-on="${S.pages[S.pageIx]?.subject === t.sub}">${t.sub}</div>`).join("");
+  $("chips").innerHTML = S.tasks.map(t => `<div class="chip" data-on="${S.pages[S.pageIx]?.subject === t.sub}">${esc(t.sub)}</div>`).join("");
   $("railHint").style.display = S.screen === "page" ? "block" : "none";
 }
 
@@ -383,7 +385,7 @@ function renderTonight() {
   const n = S.tasks.filter(t => !t.done).length;
   $("tonightTitle").textContent = n ? `${["One thing","Two things","Three things","Four things","Five things"][n-1] || n + " things"}, about ${total} minutes` : "Everything done";
   $("tasks").innerHTML = S.tasks.map((t, i) => `<div class="task" data-focusable data-done="${t.done}" data-ix="${i}">
-      <div><div class="sub">${t.sub}</div><div class="name">${t.name}</div></div>
+      <div><div class="sub">${esc(t.sub)}</div><div class="name">${esc(t.name)}</div></div>
       <div class="meta"><span>${t.min} min</span></div></div>`).join("");
   $("quiet").textContent = S.pages.length ? "Select a task, or Down to the page." : "Point your phone at the page to begin.";
   renderFocus();
@@ -615,7 +617,7 @@ $("mirror").addEventListener("pointerdown", (e) => {
 });
 $("askBtn").onclick = () => { if (!S.pages.length) return; const q = $("question").value.trim(); openHint(q); $("question").value = ""; };
 
-function renderPTasks() { $("ptasks").innerHTML = S.tasks.map((t, i) => `<label><input type="checkbox" data-ix="${i}" ${t.done ? "checked" : ""}><span>${t.name}</span><small>${t.min}m</small></label>`).join("");
+function renderPTasks() { $("ptasks").innerHTML = S.tasks.map((t, i) => `<label><input type="checkbox" data-ix="${i}" ${t.done ? "checked" : ""}><span>${esc(t.name)}</span><small>${t.min}m</small></label>`).join("");
   $("ptasks").querySelectorAll("input").forEach(c => c.onchange = () => { S.tasks[+c.dataset.ix].done = c.checked; renderTonight(); }); }
 $("addTask").onclick = () => { const v = $("newTask").value.trim(); if (!v) return; S.tasks.push({ sub: "Other", name: v, min: 10, done: false, page: null }); $("newTask").value = ""; renderPTasks(); renderTonight(); };
 $("startTimer").onclick = () => { startTimer(); status("timer started from the phone"); };
