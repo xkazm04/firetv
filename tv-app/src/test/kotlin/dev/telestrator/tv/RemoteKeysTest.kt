@@ -35,6 +35,18 @@ class RemoteKeysTest {
         assertEquals(listOf("clear"), hold(KeyEvent.KEYCODE_DPAD_DOWN, 12))
     }
 
+    /**
+     * A TV's own remote reaches the stick over HDMI-CEC, and its separate Play and Pause buttons
+     * arrive as their own key codes. Core plans "play" and "pause" (TransportPlan); a remote that
+     * says which one it wants must not be a dead key, nor a toggle that pauses on Play.
+     */
+    @Test
+    fun `separate Play and Pause keys say which one they mean`() {
+        assertEquals("play", remoteCommand(KeyEvent.KEYCODE_MEDIA_PLAY, 0))
+        assertEquals("pause", remoteCommand(KeyEvent.KEYCODE_MEDIA_PAUSE, 0))
+        assertEquals(listOf("pause"), hold(KeyEvent.KEYCODE_MEDIA_PAUSE, 12))
+    }
+
     @Test
     fun `a held scrub key keeps scrubbing`() {
         assertEquals(13, hold(KeyEvent.KEYCODE_DPAD_RIGHT, 12).count { it == "seek+" })

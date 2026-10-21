@@ -156,6 +156,9 @@ internal fun remoteCommand(keyCode: Int, repeatCount: Int): String? {
     val cmd = when (keyCode) {
         KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
         KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> "toggle"
+        // A TV's own remote over HDMI-CEC has separate Play and Pause buttons.
+        KeyEvent.KEYCODE_MEDIA_PLAY -> "play"
+        KeyEvent.KEYCODE_MEDIA_PAUSE -> "pause"
         KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_DPAD_RIGHT -> "seek+"
         KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_LEFT -> "seek-"
         KeyEvent.KEYCODE_DPAD_UP -> "undo"
