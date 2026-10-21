@@ -1,0 +1,32 @@
+{
+  "id": "6a2ff1ad-b950-4cb4-8703-8c160415e8a0",
+  "ts": "2026-10-21T10:36:45.594Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/again-felt.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "UI sound effect, felt piano and soft analog synth pad, round, intimate: an encouraging, soft neutral two-note figure for 'try again'; never a buzzer, no sadness, no dissonance. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134256,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 17179,
+  "providerCredits": 11,
+  "sha256": "30ae9559353b70e6f6b2a8e1a1c19bc56cdd2578a3216f4315aa89c02a253707",
+  "completedAt": "2026-10-21T10:36:50.835Z",
+  "creditsAfter": 134256,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 2100
+}

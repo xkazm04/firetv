@@ -86,3 +86,10 @@ test('a finished episode lands in the seated learner record',()=>{
   // a second learner is untouched
   assert.equal(L.getLearner('kid-2').history.length,0);
 });
+
+test('the /writing page paints its own ground: its dark text is not left on the desk\'s dark body (stick walk 2026-10-21)',()=>{
+  const src=fs.readFileSync(path.join(root,'src/writing/WritingEpisode.tsx'),'utf8');
+  const main=src.match(/<main style=\{\{([^}]*)\}\}/);
+  assert.ok(main,'the page has a main with a style');
+  assert.match(main[1],/background:\s*"#[0-9a-f]{3,6}"/i,'a page that sets its own text colour sets its own background too');
+});

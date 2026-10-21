@@ -1,0 +1,31 @@
+{
+  "id": "60940a95-aa0e-4209-a323-b3e69292c38b",
+  "ts": "2026-10-21T10:37:44.299Z",
+  "session": "desk-a1-music",
+  "status": "complete",
+  "kind": "music",
+  "out": "desk/audio/audition/music/linga.mp3",
+  "seconds": 20,
+  "request": {
+    "prompt": "Light, friendly instrumental loop for a children's English conversation app. Nylon-string guitar, soft marimba, light shaker, 90 BPM, sunny and curious, like a cafe in the morning. Seamless loop, no vocals, low dynamics, nothing that competes with a speaking voice.",
+    "music_length_ms": 20000,
+    "force_instrumental": true,
+    "model_id": "music_v1"
+  },
+  "endpoint": "/v1/music",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 1200,
+  "budgetCharge": 1200,
+  "creditsBefore": 134157,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 6000,
+  "bytes": 320200,
+  "providerCredits": null,
+  "sha256": "d94328b0308453dd5bd7aef21b3f7901a426bf0ba6b220f4f67a13f09f7ab300",
+  "completedAt": "2026-10-21T10:37:50.927Z",
+  "creditsAfter": 134157,
+  "observedAccountDelta": 0,
+  "spendBasis": "Account delta may include concurrent use or omit delayed billing; conservative estimate retained.",
+  "sessionBudgetUsed": 2400
+}

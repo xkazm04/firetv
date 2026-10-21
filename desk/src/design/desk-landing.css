@@ -49,6 +49,8 @@
 @keyframes pp-card { from { translate: 90px 40px; opacity: 0; rotate: 10deg; } to { translate: 0 0; opacity: 1; rotate: 0deg; } }
 
 /* ----- the world in the light ----- */
+/* the sky of the world in the light, under the arrival and the layers: what shows while a world's layers raster */
+.pp .pp-sky { position: absolute; inset: 0; z-index: 0; }
 .pp .pp-worlds { position: absolute; inset: 0; z-index: 1; }
 .pp .pp-host { position: absolute; inset: 0; transform-origin: 1920px 560px; transition: transform .8s var(--pp-ease); }
 .pp .pp-host.pp-back { z-index: 0; } .pp .pp-host.pp-front { z-index: 2; }
@@ -56,9 +58,17 @@
 .pp .pp-wset { position: absolute; inset: 0; }
 .pp .pp-layer { position: absolute; left: -140px; top: 0; width: 2200px; height: 1080px; will-change: transform, opacity; }
 .pp .pp-layer svg { display: block; width: 2200px; height: 1080px; overflow: visible; }
-.pp .pp-layer[data-k="hill"] { filter: drop-shadow(0 -5px 10px rgba(45, 25, 12, .24)); }
-.pp .pp-layer[data-k="hero"] { filter: drop-shadow(6px 12px 14px rgba(45, 25, 12, .32)); }
-.pp .pp-layer[data-k="soft"] { filter: drop-shadow(0 8px 10px rgba(45, 25, 12, .12)); }
+/* each layer's shadow sits on the drawing inside it, not on the layer: a filter on a composited layer is redrawn by the
+   compositor on every frame (the stick's GPU managed 9 fps), one on the drawing is rastered into the tiles once. Each
+   top-level piece of the drawing casts its own, as a moving piece (a drifting cloud, a swinging key) is composited on
+   its own and so is every piece painted over it, which would put a shadow on a group holding them back on the per-frame
+   path. A piece that moves casts from its still children (pp-each), one inside another's outline casts nothing (pp-flat),
+   parts that overlap are one piece (themes/paper/worlds.tsx), so the picture is the one shadow for the whole layer gave
+   (docs/concepts/STICK-PERFORMANCE-2026-10-20.md) */
+.pp .pp-layer[data-k="hill"] .pp-cast > :not(.pp-flat, .pp-each), .pp .pp-layer[data-k="hill"] .pp-cast > .pp-each > :not(.pp-flat, .pp-each) { filter: drop-shadow(0 -5px 10px rgba(45, 25, 12, .24)); }
+.pp .pp-layer[data-k="hero"] .pp-cast > :not(.pp-flat, .pp-each), .pp .pp-layer[data-k="hero"] .pp-cast > .pp-each > :not(.pp-flat, .pp-each),
+.pp .pp-layer[data-k="hero"] .pp-cast > .pp-each > .pp-each > :not(.pp-flat, .pp-each) { filter: drop-shadow(6px 12px 14px rgba(45, 25, 12, .32)); }
+.pp .pp-layer[data-k="soft"] .pp-cast > :not(.pp-flat, .pp-each), .pp .pp-layer[data-k="soft"] .pp-cast > .pp-each > :not(.pp-flat, .pp-each) { filter: drop-shadow(0 8px 10px rgba(45, 25, 12, .12)); }
 /* a world sliding in from the side the D-pad went, one sliding out the other way; layers travel by their own factor */
 .pp .pp-wset[data-mode="choose"] .pp-layer { animation: pp-in .7s var(--pp-ease) backwards; }
 .pp .pp-wset[data-mode="arrive"] .pp-layer { animation: pp-up .65s calc(.7s + var(--i) * .045s) var(--pp-ease) backwards; }

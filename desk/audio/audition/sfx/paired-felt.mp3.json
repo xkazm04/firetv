@@ -1,0 +1,32 @@
+{
+  "id": "a7f5edab-3b28-438b-b83b-4fb1e9edf852",
+  "ts": "2026-10-21T10:34:58.448Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/paired-felt.mp3",
+  "seconds": 1.2,
+  "request": {
+    "text": "UI sound effect, felt piano and soft analog synth pad, round, intimate: a friendly rising three-note welcome when a phone connects to the TV; warm, unhurried. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 1.2,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134367,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 20105,
+  "providerCredits": 13,
+  "sha256": "2fbeeadc8594cea74fc9b492a8ea4b91868fb66ffe123ce6099d1fca262ec4ef",
+  "completedAt": "2026-10-21T10:35:01.576Z",
+  "creditsAfter": 134367,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1200
+}

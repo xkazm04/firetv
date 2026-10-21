@@ -1,0 +1,7 @@
+$ adb -s 10.0.0.139:5555 reverse --remove-all
+$ adb -s 10.0.0.139:5555 reverse --list
+
+(empty)
+$ adb -s 10.0.0.139:5555 forward --list
+
+(empty)
