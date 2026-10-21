@@ -17,7 +17,15 @@ test('the subject content is complete: N1-16, A1-28 (A26-28 are the host additio
     const area = Object.entries(G.AREAS).find(([, v]) => v.prefix === prefix)[0];
     assert.deepEqual(G.STATEMENTS.filter((x) => x.area === area).map((x) => x.code), Array.from({ length: count }, (_, i) => `${prefix}${i + 1}`), prefix);
   }
-  for (const st of G.STATEMENTS) { assert(st.can.length > 10 && st.can.length < 140, st.code); assert.match(st.source, /1MA1/); }
+  // a DfE subject-content code cites the specification; a host addition (A26-A28: beyond the DfE count) cites no
+  // specification, since none holds it (the honest-limits rule of gcse.ts)
+  const dfe = { N: 16, A: 25, R: 16, G: 25, P: 9, S: 6 };
+  for (const st of G.STATEMENTS) {
+    assert(st.can.length > 10 && st.can.length < 140, st.code);
+    if (+st.code.slice(1) <= dfe[st.code[0]]) assert.match(st.source, /1MA1/, st.code);
+    else { assert.doesNotMatch(st.source, /1MA1|Edexcel|DfE/, st.code + ' is not in the specification'); assert.match(st.source, /host/, st.code); }
+  }
+  assert.deepEqual(G.STATEMENTS.filter((x) => !/1MA1/.test(x.source)).map((x) => x.code), ['A26', 'A27', 'A28']);
   assert.deepEqual(G.STATEMENTS.filter((x) => !x.foundation).map((x) => x.code), ['A13', 'A15', 'A16', 'A20', 'A26', 'A27', 'A28', 'R15', 'G8', 'G10', 'G22', 'G23', 'P9', 'S3'], 'the wholly higher-tier statements');
   assert(G.STATEMENTS.filter((x) => !x.foundation).every((x) => !x.touches.length), 'nothing maps onto a higher-only statement');
   assert.equal(G.FOUNDATION.length, 86);

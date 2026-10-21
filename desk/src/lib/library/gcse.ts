@@ -20,6 +20,8 @@ import { SYLLABUS } from "./syllabus";
 
 export const SPEC = { board: "Pearson Edexcel", code: "1MA1", tier: "Foundation", name: "GCSE (9-1) Mathematics",
   source: "Pearson Edexcel Level 1/Level 2 GCSE (9-1) in Mathematics (1MA1) specification, Foundation tier content; DfE GCSE mathematics subject content (2013)" } as const;
+/** The source of a statement the host added (A26-A28): no specification holds it, so none is cited. */
+export const HOST_SOURCE = "host addition (L1-vojtech-18-MB4-3): written for learners' mock papers, held by no specification or national subject content";
 /** Set true only after a person has checked every statement and mapping against the specification in SPEC.source. */
 export const VERIFIED = false;
 
@@ -29,6 +31,9 @@ export const AREAS: Record<Area, { name: string; prefix: string }> = {
   geometry: { name: "Geometry and measures", prefix: "G" }, probability: { name: "Probability", prefix: "P" }, statistics: { name: "Statistics", prefix: "S" },
 };
 export interface Statement { code: string; area: Area; can: string; foundation: boolean; touches: string[]; }
+
+/** The statements the host added beyond the DfE codes (the comment above A26 says why); each cites HOST_SOURCE. */
+export const HOST_ADDED: readonly string[] = ["A26", "A27", "A28"];
 
 const n = (code: string, can: string, touches: string[] = [], foundation = true): Statement => ({ code, area: "number", can, foundation, touches });
 const a = (code: string, can: string, touches: string[] = [], foundation = true): Statement => ({ code, area: "algebra", can, foundation, touches });
@@ -141,7 +146,7 @@ export const STATEMENTS: Statement[] = [
   s("S4", "Compare distributions with averages (mean, median, mode) and spread (range)", ["mean-range"]),
   s("S5", "Apply statistics to describe a population"),
   s("S6", "Scatter graphs, correlation, lines of best fit; correlation is not causation"),
-].map((x) => ({ ...x, source: SPEC.source })) as (Statement & { source: string })[];
+].map((x) => ({ ...x, source: HOST_ADDED.includes(x.code) ? HOST_SOURCE : SPEC.source })) as (Statement & { source: string })[];
 
 /**
  * The touched units that cover a statement WHOLE, not a part of it. `touches` claims only that a unit practises part of a

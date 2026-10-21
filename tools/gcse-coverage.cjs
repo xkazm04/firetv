@@ -16,5 +16,6 @@ for (const [k, v] of Object.entries(G.AREAS)) {
   for (const st of G.FOUNDATION.filter((x) => x.area === k)) console.log(`  ${c.topics[st.code].length ? 'yes' : 'GAP'}  ${st.code.padEnd(4)} ${st.can}  ${c.topics[st.code].join(', ')}`);
   console.log('');
 }
-console.log(`Higher tier only (not mapped): ${G.STATEMENTS.filter((x) => !x.foundation).map((x) => x.code).join(', ')}`);
+console.log(`Higher tier only (not mapped): ${G.STATEMENTS.filter((x) => !x.foundation && !G.HOST_ADDED.includes(x.code)).map((x) => x.code).join(', ')}`);
+console.log(`Host additions, in no specification (not mapped): ${G.HOST_ADDED.join(', ')}`);
 console.log(`Claim allowed: ${G.gcseClaimAllowed()}`);
