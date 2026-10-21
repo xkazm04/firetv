@@ -16,7 +16,7 @@ import { saveEpisode } from "@/lib/writing/save";
 export const dynamic = "force-dynamic";
 const NO_BODY = "The desk did not get your paragraph. Send it again.";
 /** What a phone is told when the TV's episode is not waiting for a revision. */
-export const NOT_WAITING_REVISION = "The TV is not waiting for a revision now.";
+const NOT_WAITING_REVISION = "The TV is not waiting for a revision now.";
 
 /** The TV's episode: its paragraph and note, the phone's revision, saved to the learner at the desk. */
 function finishOnTv(revision: unknown): Response {

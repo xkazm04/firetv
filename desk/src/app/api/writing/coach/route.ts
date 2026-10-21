@@ -18,7 +18,7 @@ import { promptById } from "@/lib/writing/prompts";
 export const dynamic = "force-dynamic";
 const NO_BODY = "The desk did not get your paragraph. Send it again.";
 /** What a phone is told when the TV's episode is not waiting for a paragraph (it moved on, or was cleared). */
-export const NOT_WAITING_DRAFT = "The TV is not waiting for a paragraph now.";
+const NOT_WAITING_DRAFT = "The TV is not waiting for a paragraph now.";
 
 /** The TV's episode: the paragraph for the prompt it picked, coached, and the note put on the session. */
 async function coachOnTv(draft: unknown): Promise<Response> {
