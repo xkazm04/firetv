@@ -778,3 +778,9 @@ test('route + prompt: the assignment and the last two readings under the lens ri
   assert.ok(s.every((q) => q.prompt.includes('while you judge only the sentences in front of you: "2 of 6; 3 of 7 sentences faulty"')), 'newest two of this lens only, counts only');
   assert.ok(s.every((q) => !q.prompt.includes('5 of 5') && !q.prompt.includes('9 of 9') && !/The open assignment/.test(q.prompt)), 'older or other-lens readings stay out; no assignment, no row');
 });
+
+test('the live harness tools/essay-ui-test.cjs parses, so the EssayTV source pins it carries can run at all', () => {
+  // a literal line break inside a regex literal made it unparsable on main (176f04f0); compiled, never run (it drives a live model)
+  const f = path.resolve(__dirname, 'essay-ui-test.cjs');
+  assert.doesNotThrow(() => new (require('node:vm').Script)(Module.wrap(fs.readFileSync(f, 'utf8')), { filename: f }), 'tools/essay-ui-test.cjs is not valid JavaScript');
+});
