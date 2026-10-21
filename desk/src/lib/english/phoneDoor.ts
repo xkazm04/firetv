@@ -1,5 +1,6 @@
 import type { Role } from "@/lib/session/pairing";
 import type { Session } from "@/lib/session/store";
+import type { Answer, WordsJob } from "./view";
 
 /**
  * The door a phone's Linga command comes through (TL-12 H3): the TV drives Linga, the phone only answers what the TV asked.
@@ -16,7 +17,11 @@ import type { Session } from "@/lib/session/store";
  * Any other action from a phone (the TV row's: start, cue, finish, plan-agree, level-self ...) is refused.
  */
 export const PHONE_REFUSAL = "The TV is not asking for that now.";
-const ANSWERS: Record<string, "reply" | "words" | "prefs"> = {
+/**
+ * Keyed by every command the phone posts: the view's answer actions (lingaView answer), the words panel's jobs (wordsJob) and
+ * preferences. A new answer action or words job that is not here fails the typecheck instead of being refused at the door.
+ */
+const ANSWERS: Record<Answer["action"] | WordsJob | "preferences", "reply" | "words" | "prefs"> = {
   turn: "reply", "check-answer": "reply", "check-task": "reply", "moment-try": "reply",
   "plan-goal": "words", "plan-add": "words", pitch: "words",
   preferences: "prefs",
@@ -28,7 +33,7 @@ export function phoneDoor(role: Role | null, input: unknown, ask: Session["ask"]
   const o = input && typeof input === "object" ? input as Record<string, unknown> : {};
   const action = o.action;
   if (action === "lost-picture" || (action === "capture" && o.active !== true)) return { ok: true, mark: false };
-  const kind = action === "capture" ? "reply" : typeof action === "string" && Object.hasOwn(ANSWERS, action) ? ANSWERS[action] : null;
+  const kind = action === "capture" ? "reply" : typeof action === "string" && Object.hasOwn(ANSWERS, action) ? ANSWERS[action as keyof typeof ANSWERS] : null;
   if (!kind || !ask || ask.phase !== "open" || ask.kind !== kind || typeof o.askId !== "string" || o.askId !== ask.id) return { ok: false };
   return { ok: true, ask, mark: action !== "capture" };
 }
