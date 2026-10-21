@@ -1018,3 +1018,14 @@ test('saysLost: a bare "What?" or "What do you mean?" is lost; a question the le
   for(const t of ['What?','what','Sorry, what?','What? Sorry.','Pardon, what?','What do you mean?','What does that mean?','What? I don\'t understand.','Nevím'])assert.equal(saysLost(t),true,t);
   for(const t of ['What do you sell?','What time is it?','I know what I want.','What is the price, please?','So what is your name?'])assert.equal(saysLost(t),false,t);
 });
+
+// ---- scan-sweep optimize 2026-10-21 (linga-scenes, parity-auditor): the pair of clearSlip's fix. slipStands and findKey
+// matched a key across a sentence end too ("Thank you. Was it good?" stood as the slip "you was"), so a reply could be
+// counted a slip again (review.ts slipsAgain), or a key found, by two words of two sentences.
+test('slipStands and findKey never match a key across a sentence end',()=>{
+  const {slipStands,findKey}=require(path.join(root,'src/lib/english/slip.ts'));
+  for(const [t,k] of [['Thank you. Was it good?','you was'],['I see him. Come here!','him come'],['My tomatoes. Is it big?','tomatoes is'],['It is for she. Have you got it?','she have'],['I like them. Is it ok?','them is']])
+    {assert.equal(slipStands(t,k),null,`${t} / ${k}`);assert.equal(findKey(t,k),null,`${t} / ${k}`);}
+  assert.equal(slipStands('My tomatoes is big.','tomatoes is'),'tomatoes is');assert.equal(findKey('Yes! My tomatoes are big.','tomatoes are'),'tomatoes are');
+  assert.equal(findKey('It is 3.5 metre high','one metre'),'5 metre','a decimal point is no sentence end for the word after it');
+});
