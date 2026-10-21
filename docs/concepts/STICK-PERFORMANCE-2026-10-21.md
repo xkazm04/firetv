@@ -150,7 +150,7 @@ The base is main e9c62990: pass 2 plus the zoom fit, which the operator took out
 - Back fell from 500–572 ms to 228–378 ms;
 - Select fell into Math Buddy and Essay Master, and Linga is within noise.
 
-The look is 45.7–46.6 dB against e9c62990 on the stick. The bitmaps take 36.9 MB.
+The look is 45.7–46.6 dB against e9c62990 on the stick. The bitmaps take 36.9 MB. On the landing the app's GPU memory is 1.5–5 MB lower than before; inside a module it is about 46 MB higher, because the bitmaps stay resident.
 
 ### What was built
 
@@ -228,9 +228,19 @@ Reading it:
   | On the landing after the warm-up round trip | 124.8, 124.8 | **119.8, 119.8** |
   | After the whole scenario (three modules visited, back on Essay Master's landing) | 141.4, 148.4 | 194.2, 185.4 |
 
+  **Where the difference is** (`pass3.sh … mem`: GL mtrack after six lamp moves, then after each of three Select / Back trips into Math Buddy; `mem-before/`, `mem-after/`):
+
+  | Step | before | after |
+  |---|---|---|
+  | Landing, at rest | 124.8 | 119.8 |
+  | After six lamp moves | 133.2 | 131.7 |
+  | In Math Buddy (trips 1, 2, 3) | 138.1, 89.0, 94.0 | 124.6, 140.3, 137.6 |
+  | Back on the landing (trips 1, 2, 3) | 122.7, 122.8, 122.7 | 117.8, 118.0, 117.8 |
+
   Reading it:
-  - At rest, the stills cost less than the tiles they replace.
-  - After the modules, the app holds 37–53 MB more than before. Not attributed in this pass. The likely cause is that each canvas that has been shown keeps a second (front) buffer for the compositor, which would double up to 36.9 MB. That is a follow-up (below).
+  - On the landing, the stills cost no more than the tiles they replace: 1.5–5 MB less at every step.
+  - Inside a module, before drops to 89–94 MB once the landing's tiles are let go. The bitmaps stay resident, about 46 MB more. That is the price of a Back that does not raster them again.
+  - The higher figures at the end of the scenario runs are this retention, not a leak: GL mtrack after Back stays flat over three trips.
   - The cc tile budget (80 MB soft) no longer holds these layers at all.
 
 ### Look (PSNR against e9c62990, every animation paused at the same frame, motes hidden)
@@ -257,9 +267,9 @@ So the landing captures stably. Pass 2's 30.4 dB on the kept build does not repr
 
 ### Still open
 
-- **Memory after the modules:** 37–53 MB more GL mtrack than before. Candidates:
-  - a single-buffered canvas (`bitmaprenderer` with `transferFromImageBitmap`), or an `<img>` of a blob, if either still composites as its own layer;
-  - dropping the bitmaps that are not on screen while a module is up.
+- **Memory while a module is up:** the bitmaps stay resident, about 46 MB more GL mtrack than before inside Math Buddy. If a module needs that memory, two options:
+  - drop the bitmaps a while after the landing unmounts and bake them again in idle time after Back (Back then shows live layers until they are ready);
+  - a single-buffered `bitmaprenderer` canvas, if it still composites as its own layer.
 
   Measure GL mtrack after each.
 - **What still rasters on a lamp move** (about 0.65 s of GPU): the live hero layers and the clouds. The staircase (Math Buddy) and the page (Essay Master) carry the session. They could be keyed stills on their state, but that is per-state memory.
@@ -270,4 +280,5 @@ So the landing captures stably. Pass 2's 30.4 dB on the kept build does not repr
 ### Raw outputs (`artifacts/stick-2026-10-21-perf3/`, gitignored)
 
 - `before/`, `before2/`, `after/`, `after2/`, `after-maths/`: `scenarios.sh` traces and summaries, `windows.json`, `windows-2000.json`, `meminfo-rest.txt`, `meminfo-end.txt`, `stills.json`, `restore-probe.txt` (the stick back on `10.0.0.141:3000` with the app in focus after each hold).
+- `mem-before/`, `mem-after/`: `gl.txt`, GL mtrack per step.
 - `look-before/`, `look-before2/`, `look-after/`: the stick stills. `look-desktop/`: the desktop stills, the ×10 differences and the per-still stats.

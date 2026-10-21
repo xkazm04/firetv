@@ -1,5 +1,5 @@
 #!/bin/sh
-# tools/stick-perf/pass3.sh <port> <outdir> [scenarios|look]: one measuring hold on the stick against a temp desk on
+# tools/stick-perf/pass3.sh <port> <outdir> [scenarios|look|mem]: one measuring hold on the stick against a temp desk on
 # 127.0.0.1:<port> (adb reverse), docs/concepts/STICK-PERFORMANCE-2026-10-21.md "Pass 3". Takes the shared stick lock
 # (tools/stick-walk/lib.sh), only when the stick is on the operator's desk; points the stick at the temp desk with its
 # TV link; warms the landing; runs scenarios.sh (or the look stills); records meminfo and the stills' stats; then puts
@@ -32,7 +32,13 @@ k() { adb -s $S shell input keyevent "$1"; sleep "${2:-2}"; }
 k DPAD_LEFT; k DPAD_LEFT; k DPAD_RIGHT 3; k DPAD_RIGHT 3; k DPAD_LEFT 3; k DPAD_LEFT 8
 node $HERE/cdp.mjs "window.__ppStills ? window.__ppStills() : null" > "$OUT/stills.json"
 adb -s $S shell dumpsys meminfo $APP > "$OUT/meminfo-rest.txt"
-if [ "$WHAT" = look ]; then
+if [ "$WHAT" = mem ]; then
+  # where GPU memory grows: six lamp moves, then three Select / Back trips into Math Buddy, meminfo after each set
+  gl() { adb -s $S shell dumpsys meminfo $APP | grep "GL mtrack" | awk -v t="$1" '{print t, $3}' | tee -a "$OUT/gl.txt"; }
+  gl rest; k DPAD_RIGHT 3; k DPAD_RIGHT 3; k DPAD_LEFT 3; k DPAD_LEFT 3; k DPAD_RIGHT 3; k DPAD_LEFT 6; gl after-6-moves
+  for i in 1 2 3; do k DPAD_CENTER 5; gl "in-maths-$i"; k BACK 6; gl "back-$i"; done
+  node $HERE/cdp.mjs "window.__ppStills ? window.__ppStills().bytes : null" | sed 's/^/stills-bytes /' | tee -a "$OUT/gl.txt"
+elif [ "$WHAT" = look ]; then
   for w in maths english essay; do
     node $HERE/cdp.mjs '(()=>{for(const a of document.getAnimations()){if(a.effect?.getComputedTiming().iterations===Infinity)a.currentTime=0;else a.finish();a.pause()}const s=document.createElement("style");s.id="p3f";s.textContent=".pp-fx{visibility:hidden!important}";document.head.append(s);return 1})()' >/dev/null
     sleep 2; adb -s $S exec-out screencap -p > "$OUT/look-$w.png"
