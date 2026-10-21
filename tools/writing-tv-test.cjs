@@ -204,4 +204,8 @@ test('the TV draws the Writing screen in the On Air shell, and nothing typed: th
  const screen=fs.readFileSync(src('writing/WritingTV.tsx'),'utf8');
  assert.doesNotMatch(screen,/ep\.draft|ep\.revision/,'the TV never shows the typed paragraph: the phone owns it');
  for(const role of ['writing-prompt','writing-progress','writing-note','writing-action','writing-caption'])assert.match(screen,new RegExp(`data-role="${role}"`),role);
+ // the caption is what changes as the D-pad walks: it is announced on the list as on the chosen prompt (the landing's desk-announce)
+ const captions=screen.match(/<div[^>]*data-role="writing-caption"[^>]*>/g)??[];
+ assert.equal(captions.length,2,'one caption per phase');
+ for(const c of captions)assert.match(c,/aria-live="polite"/,c);
 });
