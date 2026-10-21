@@ -995,3 +995,22 @@ test('optimize 2026-10-21: every job kind a route runs with an input is one POST
  assert.ok(kinds.size>=4,`the population is found: ${[...kinds]}`);
  assert.deepEqual([...kinds].filter((k)=>!routes.has(k)).sort(),[],'a kind holds its input for Try again but the retry route has no way to ask it again');
 });
+
+test('optimize 2026-10-21: a photo over the read cap is refused before any run on every photo door: the page read, the set mark and the page mark',async()=>{
+ const {READ_IMAGE_MAX,readImageProblem}=require(src('lib/rules/maths.ts'));
+ const big='data:image/jpeg;base64,'+'A'.repeat(READ_IMAGE_MAX);
+ assert.ok(readImageProblem(big),'the fixture is over the cap');
+ onPage();
+ // a set on the desk, so the set mark would otherwise run (it did: 200, one vision call, before the cap)
+ stubText({items:()=>({items:STATED})});assert.equal((await post('practice',{topic:'linear-one-step'})).status,200);
+ let seen=0;stubVision(()=>{seen++;return MARKS;});
+ for(const body of [{image:big},{image:big,page:PAGE.id}]){
+  const r=await post('mark',body);
+  assert.equal(r.status,400,JSON.stringify(Object.keys(body)));assert.equal((await r.json()).error,readImageProblem(big));
+ }
+ const r=await post('read',{image:big,subject:'maths',w:100,h:100});
+ assert.equal(r.status,400);assert.equal((await r.json()).error,readImageProblem(big));
+ assert.equal(seen,0,'no vision call on any door');
+ // and a photo under the cap still marks
+ const ok=await post('mark',PHOTO);assert.equal(ok.status,200);assert.equal(seen,1);
+});
