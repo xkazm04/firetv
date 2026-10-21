@@ -1,11 +1,12 @@
 /** Run with npm run test:rules in desk/ (directly: node tools/linga-moment-test.cjs). Code only: no model call, no desk/data. */
-const path=require('node:path'),assert=require('node:assert/strict'),{test,after}=require('node:test');
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),{test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
 require('./ts-load.cjs');
-process.env.DESK_DATA_DIR=path.resolve(__dirname,'../artifacts/linga-moment',String(Date.now()));
+// scratch in the OS temp dir, removed after the run: never a folder per run under the tree
+const data=fs.mkdtempSync(path.join(os.tmpdir(),'desk-linga-moment-'));process.env.DESK_DATA_DIR=data;
 const {momentAllowed}=require(path.join(root,'src/lib/english/conversation.ts'));
 const {fossilOf,slipsAgain}=require(path.join(root,'src/lib/english/review.ts'));
-after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);});
+after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);fs.rmSync(data,{recursive:true,force:true,maxRetries:5,retryDelay:100});});
 
 const learner=(n,text)=>({id:`t${n}`,role:'learner',text});
 const partner=(n,text)=>({id:`p${n}`,role:'partner',text});
