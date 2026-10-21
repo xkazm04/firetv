@@ -1010,3 +1010,11 @@ test('mostlyCzech: a short English answer with "to" or "ten" is English; Czech r
   for(const t of ['Ten','Ten minutes.','To school','To the park, please.','Ten euros'])assert.equal(learnerLost([{text:t}]),false,t);
   for(const t of ['To je moc dobre','Já mám psa a on je velký','Nevím','ano','Ten pes je velký'])assert.equal(mostlyCzech(t),true,t);
 });
+
+// ---- scan-sweep optimize 2026-10-21 (linga-scenes, bounty-hunter): saysLost matched "what" anywhere, so every question a
+// learner asked ("What do you sell?") read as "I did not understand" and eased the partner's next line.
+test('saysLost: a bare "What?" or "What do you mean?" is lost; a question the learner asks with "what" is not',()=>{
+  const {saysLost}=require(path.join(root,'src/lib/english/ease.ts'));
+  for(const t of ['What?','what','Sorry, what?','What? Sorry.','Pardon, what?','What do you mean?','What does that mean?','What? I don\'t understand.','Nevím'])assert.equal(saysLost(t),true,t);
+  for(const t of ['What do you sell?','What time is it?','I know what I want.','What is the price, please?','So what is your name?'])assert.equal(saysLost(t),false,t);
+});

@@ -10,7 +10,9 @@ const fold = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCa
  */
 const CZECH_WORDS = new Set(("ja je jsem jsi jsme ne ano jo ta se si na ze co jak ale taky tady tam moc bych chci mam nemam " +
   "nevim nerozumim nechapu ahoj dekuji prosim dobry dobre dobry den pes kocka dum skola proc kdy kde nikdo neco").split(" "));
-const NOT_UNDERSTOOD = /\b(nevim|nerozumim|nechapu|i do not know|i dont know|i don t know|do not understand|dont understand|don t understand|i do not understand|what)\b/;
+const NOT_UNDERSTOOD = /\b(nevim|nerozumim|nechapu|i do not know|i dont know|i don t know|do not understand|dont understand|don t understand|i do not understand|what do you mean|what does (?:it|that|this) mean)\b/;
+/** "What?" said alone, or with a sorry or a pardon: a "what" inside the learner's own question ("What do you sell?") is not lost. */
+const BARE_WHAT = new Set(["what", "sorry", "pardon", "eh", "huh"]);
 
 /** True when most of a reply's words are Czech (or carry Czech letters English does not use). */
 export function mostlyCzech(reply: string): boolean {
@@ -22,7 +24,8 @@ export function mostlyCzech(reply: string): boolean {
 
 /** The reply says, in so many words, that the learner did not understand or does not know. Whole words, diacritics ignored. */
 export function saysLost(reply: string): boolean {
-  return NOT_UNDERSTOOD.test(fold(reply).replace(/['’]/g, " ").replace(/[^a-z ]+/g, " ").replace(/\s+/g, " "));
+  const plain = fold(reply).replace(/['’]/g, " ").replace(/[^a-z ]+/g, " ").replace(/\s+/g, " "), words = plain.trim().split(" ");
+  return NOT_UNDERSTOOD.test(plain) || (words.includes("what") && words.every(w => BARE_WHAT.has(w)));
 }
 
 /**
