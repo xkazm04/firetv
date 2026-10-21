@@ -52,6 +52,15 @@ test('the coaching never contains a full model sentence',async()=>{
   // a note about the writing passes through
   said='Your claim has nothing a reader can check yet. What would show it is true?';
   r=await C.coachNote(DRAFT,'teen',prompt,ask);assert.equal(r.source,'model');assert.equal(r.note,said);
+  // the system asks for ONE short note of at most two sentences: a note past that is the code's line, not the TV's 46 px wall
+  assert.match(C.COACH_SYSTEM,/at most two sentences/);assert.equal(C.NOTE_MAX_SENTENCES,2);
+  said='Your claim is clear. Nothing a reader can check follows it. What would show it is true?';
+  r=await C.coachNote(DRAFT,'teen',prompt,ask);assert.equal(r.source,'code','three sentences is not the one short note asked for');
+  said='Your claim is stated clearly enough for a reader to follow, '+Array(40).fill('and').join(' ')+' it still needs a fact. What would show it?';
+  assert.ok(RE.splitSentences(said).length<=2&&said.length>C.NOTE_MAX_CHARS);
+  assert.equal((await C.coachNote(DRAFT,'teen',prompt,ask)).source,'code','a two-sentence note past the length cap is the code line');
+  for(const band of ['young','teen'])for(const d of [DRAFT,'Cats are good. Dogs are good.',Array(40).fill('word').join(' ')+'. Another short one here.'])
+    assert.ok(C.codeNote(d,band).length<=C.NOTE_MAX_CHARS,'every code line fits the cap it falls back to');
   // the engine was asked with a schema, the writing-coach use, and a system that forbids handing over a sentence
   assert.ok(asked.every(a=>a.schema&&a.use==='writing-coach'&&/Never write a sentence/.test(a.system)));
   // a failing engine, an empty note, a non-string note: the code line, no throw

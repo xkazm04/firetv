@@ -39,7 +39,15 @@ const LINES: Record<Band, Record<Focus, string>> = {
 
 export const codeNote = (draft: string, band: Band): string => LINES[band][focusOf(draft)];
 
-const SCHEMA = { type: "object", properties: { note: { type: "string" } }, required: ["note"], additionalProperties: false };
+/**
+ * The one short note COACH_SYSTEM asks for, held in code: at most this many sentences, and no longer than twice the code's
+ * own longest line. A note past either is not the note asked for, and on the TV (46 px, WritingTV) it would run past the
+ * screen, so the code's line is shown instead.
+ */
+export const NOTE_MAX_SENTENCES = 2;
+export const NOTE_MAX_CHARS = 240;
+
+const SCHEMA = { type: "object", properties: { note: { type: "string", maxLength: NOTE_MAX_CHARS } }, required: ["note"], additionalProperties: false };
 
 export const COACH_SYSTEM =
   "You coach a student's one paragraph. Reply with ONE short note (at most two sentences) about the single thing named as the focus. " +
@@ -54,7 +62,7 @@ export async function coachNote(draft: string, band: Band, prompt: WritingPrompt
       prompt: `Student band: ${band}. Task: ${prompt.ask}\nFocus: ${focusOf(draft)} (${fallback})\n\nParagraph:\n${draft}`,
     });
     const said = typeof r.json?.note === "string" ? r.json.note.trim() : "";
-    if (!said) return { note: fallback, source: "code" };
+    if (!said || said.length > NOTE_MAX_CHARS || splitSentences(said).length > NOTE_MAX_SENTENCES) return { note: fallback, source: "code" };
     const guarded = guardNote(said, splitSentences(draft).map((s) => s.text), "");
     return guarded ? { note: guarded, source: "model" } : { note: fallback, source: "code" };
   } catch {
