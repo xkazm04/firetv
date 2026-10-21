@@ -1,5 +1,6 @@
 package dev.studydesk.stick
 
+import android.view.KeyEvent
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -53,6 +54,27 @@ class KeyBridgeTest {
     fun `every key the bridge sends is one the table above names`() {
         val mapped = (0..1023).filter { KeyBridge.pageKeyOf(it) != null }.toSet()
         assertEquals(meaning.keys, mapped)
+    }
+
+    /** KeyBridge spells Android's key codes as plain ints so it runs on the JVM; each must be android.view.KeyEvent's. */
+    @Test
+    fun `the bridge's key codes are android's`() {
+        val android = mapOf(
+            KeyBridge.DPAD_UP to KeyEvent.KEYCODE_DPAD_UP,
+            KeyBridge.DPAD_DOWN to KeyEvent.KEYCODE_DPAD_DOWN,
+            KeyBridge.DPAD_LEFT to KeyEvent.KEYCODE_DPAD_LEFT,
+            KeyBridge.DPAD_RIGHT to KeyEvent.KEYCODE_DPAD_RIGHT,
+            KeyBridge.DPAD_CENTER to KeyEvent.KEYCODE_DPAD_CENTER,
+            KeyBridge.BACK to KeyEvent.KEYCODE_BACK,
+            KeyBridge.ENTER to KeyEvent.KEYCODE_ENTER,
+            KeyBridge.MENU to KeyEvent.KEYCODE_MENU,
+            KeyBridge.MEDIA_PLAY_PAUSE to KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE,
+            KeyBridge.MEDIA_PLAY to KeyEvent.KEYCODE_MEDIA_PLAY,
+            KeyBridge.MEDIA_PAUSE to KeyEvent.KEYCODE_MEDIA_PAUSE,
+            KeyBridge.NUMPAD_ENTER to KeyEvent.KEYCODE_NUMPAD_ENTER,
+        )
+        android.forEach { (ours, theirs) -> assertEquals(theirs, ours) }
+        assertEquals(meaning.keys, android.keys)
     }
 
     @Test
