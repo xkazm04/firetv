@@ -392,7 +392,6 @@ function renderTonight() {
 }
 
 // ---------- T2 page ----------
-const PHOTO_W = () => S.pages[S.pageIx].w;
 function renderPage() {
   const p = S.pages[S.pageIx]; if (!p) return;
   $("pageTitle").textContent = p.title; $("pageN").textContent = `page ${S.pageIx + 1} / ${S.pages.length}`;
