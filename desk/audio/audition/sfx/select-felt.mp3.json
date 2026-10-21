@@ -1,0 +1,32 @@
+{
+  "id": "18a055bd-1f13-4cab-9bf0-a92368143f47",
+  "ts": "2026-10-21T10:34:03.208Z",
+  "session": "desk-a1-sfx",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "desk/audio/audition/sfx/select-felt.mp3",
+  "seconds": 0.5,
+  "request": {
+    "text": "UI sound effect, felt piano and soft analog synth pad, round, intimate: a short, gentle confirming tap for pressing a button; slightly brighter than a focus tick, quick decay. Clean, no music, no voice, no background noise.",
+    "duration_seconds": 0.5,
+    "prompt_influence": 0.6,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 134421,
+  "accountTier": "creator",
+  "reserve": 8000,
+  "sessionCap": 2400,
+  "bytes": 8820,
+  "providerCredits": 6,
+  "sha256": "919cd3ec4199d54dc7e8bb761441bd2ab086d5f6208094a5bf8a379af8fd0970",
+  "completedAt": "2026-10-21T10:34:06.177Z",
+  "creditsAfter": 134421,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 600
+}
