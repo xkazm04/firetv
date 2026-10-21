@@ -294,8 +294,8 @@ export function BlueprintLanding({ view, zoom, boot }: ThemeLandingProps) {
         </div>
       ) : (
         <div className="bp-empty" data-role="desk-caption">
-          <div className="co-nothing">No apps yet</div>
-          <div className="co-tag">No apps are on this profile yet. Select {view.place} to change it.</div>
+          <div className="co-nothing">{view.caption.head}</div>
+          <div className="co-tag">{view.caption.sub}</div>
         </div>
       )}
 

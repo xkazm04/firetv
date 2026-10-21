@@ -147,6 +147,10 @@ test('lock 1: the blueprint theme renders when a test instantiates it explicitly
  assert.match(f,/class="bp-sr" data-role="desk-announce" aria-live="polite"[^>]*>Pair your phone\./,'the same spoken line as paper');
  assert.match(draw(bp,landingView(SCENARIOS.returning())),/Two-step equations/,'the same words as paper');
  assert.match(draw(bp,landingView(SCENARIOS.returning()),'maths'),/data-role="desk-zoom"|data-zoom/,'and the same hand-off');
+ // an empty desk: the caption slot carries the view-model's words in every look, never a look's own
+ const ev=landingView(session({profiles:[{...EMA,modules:[]}]}));assert.equal(ev.empty,true);
+ for(const t of [THEMES.paper,bp]){const h=draw(t,ev),cap=h.slice(h.indexOf('data-role="desk-caption"'));
+  assert.ok(cap.includes(ev.caption.head)&&cap.includes(ev.caption.sub),`${t.id}: the empty caption is the view-model's (${ev.caption.sub})`);}
 });
 
 test('lock 2: the app cannot select it - the registry answers paper to any request, and no route, query, setting or storage names a theme',()=>{
