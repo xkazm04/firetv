@@ -136,7 +136,8 @@ const sentencesOf = (text: string) => text.trim().split(/(?<=[.!?])\s+/).map(x =
 const wordsIn = (text: string) => text.match(WORDS)?.length ?? 0;
 const WH = new Set(["what", "where", "when", "who", "why", "how", "which"]);
 const PAST_AUX = /\b(?:did|didn['’]t|was|wasn['’]t|were|weren['’]t)\b/i;
-const PAST_IRREGULAR = new Set("went saw ate had made got took came said won ran found gave told thought bought left felt lost met drank swam wrote sang built caught brought began broke chose drove fell flew forgot heard kept knew sat slept spent stood taught threw wore".split(" "));
+/** Irregular past forms code can read: the one list (plain.ts keepsTense reads it too). */
+export const PAST_IRREGULAR: ReadonlySet<string> = new Set("went saw ate had made got took came said won ran found gave told thought bought left felt lost met drank swam wrote sang built caught brought began broke chose drove fell flew forgot heard kept knew sat slept spent stood taught threw wore".split(" "));
 const NOT_PAST = new Set(["need", "feed", "speed", "bleed", "breed", "seed", "weed", "shed", "hundred", "naked", "wicked", "sacred"]);
 const pastVerb = (w: string) => PAST_IRREGULAR.has(w) || (/^[a-z]{2,}ed$/.test(w) && !NOT_PAST.has(w));
 /**

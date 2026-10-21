@@ -992,3 +992,13 @@ test('clearSlip never reads a slip across a sentence end, and still finds one in
   assert.deepEqual(clearSlip('Thank you. We was happy.'),{said:'We was happy.',better:'We were happy.',why:'Say "we were", not "we was".'},'the slip in the next sentence is still found');
   assert.equal(clearSlip('What do you want? I want sleep.')?.better,'I want to sleep.');
 });
+
+// ---- scan-sweep optimize 2026-10-21 (linga-scenes, parity-auditor): plain.ts knew 17 past forms and gate.ts's band hold
+// 46, so a beginner's "I sleep well" -> "I slept well" kept its tense by plain.ts. One list now: gate.ts PAST_IRREGULAR.
+test('keepsTense knows every irregular past the band hold knows, and leaves "left" and "lost" to their other senses',()=>{
+  const {keepsTense}=require(path.join(root,'src/lib/english/plain.ts'));
+  for(const [said,better] of [['I sleep well','I slept well'],['We swim in the lake','We swam in the lake'],['I feel good','I felt good'],['I think so','I thought so'],['I meet my friend','I met my friend'],['I write a letter','I wrote a letter'],['I drink milk','I drank milk'],['He teach me','He taught me']])
+    assert.equal(keepsTense(said,better),false,`${said} -> ${better}`);
+  for(const [said,better] of [['Where is the bank? On left','It is on the left'],['I am lose','I am lost'],['I sleep good','I sleep well'],['We swim in lake','We swim in the lake']])
+    assert.equal(keepsTense(said,better),true,`${said} -> ${better}`);
+});
