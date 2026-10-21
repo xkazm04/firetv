@@ -78,3 +78,24 @@ test('case 5: the reader of the checklist is told where the check lives',()=>{
  assert.match(policy,/tools\/security-policy-test\.cjs/);
  assert.ok(anyWorkflow(/node tools\/security-policy-test\.cjs/),'no workflow runs this suite');
 });
+
+test('case 6: the doctor\'s never-commit guardrail sees every secret file AGENTS.md names (desk/.env.local, keys, keystores)',()=>{
+ const os=require('node:os'),{execFileSync}=require('node:child_process');
+ const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'never-commit-'));
+ try{
+  fs.mkdirSync(path.join(tmp,'.ai'));
+  for(const f of ['doctor.mjs','manifest.yaml','guardrails.yaml'])fs.copyFileSync(path.join(REPO,'.ai',f),path.join(tmp,'.ai',f));
+  const seeded=['desk/.env.local','desk/.env','deathride/app/release.jks','tv-app/upload.keystore','.env.local'];
+  for(const f of seeded){fs.mkdirSync(path.dirname(path.join(tmp,f)),{recursive:true});fs.writeFileSync(path.join(tmp,f),'SECRET=1\n');}
+  const git=(...a)=>execFileSync('git',a,{cwd:tmp,stdio:['ignore','pipe','pipe'],encoding:'utf8'});
+  git('init','-q');git('add','-f','--',...seeded);
+  let out='';
+  try{out=execFileSync(process.execPath,['.ai/doctor.mjs','--json'],{cwd:tmp,encoding:'utf8',stdio:['ignore','pipe','pipe'],env:{...process.env,ASCENT_CONFORMANCE_URL:'',ASCENT_CONFORMANCE_TOKEN:''}});}
+  catch(e){out=String(e.stdout||'');}
+  const summary=JSON.parse(out.trim().split(/\r?\n/).filter((l)=>l.startsWith('{')).pop());
+  const g=summary.findings.find((f)=>f.check==='guardrail.never-commit');
+  assert.ok(g,'the doctor emitted no guardrail.never-commit finding');
+  assert.equal(g.level,'fail',`the doctor passed a tree that tracks ${seeded.join(', ')}: ${g.message||g.msg}`);
+  for(const f of seeded)assert.match(g.message||g.msg,new RegExp('(^|[ :,])'+f.replace(/[.]/g,'[.]')+'(,|$)'),`the never-commit guardrail does not see ${f}`);
+ }finally{fs.rmSync(tmp,{recursive:true,force:true});}
+});
