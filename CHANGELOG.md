@@ -72,6 +72,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Unreleased
 
 - A debug-only voice probe in `tv-app` (speaks six desk lines at two rates, tries the remote mic through `SpeechRecognizer`, writes `voice-probe.json`) and the native voice design it serves: [NATIVE-VOICE-STACK.md](docs/concepts/NATIVE-VOICE-STACK.md). The Stick run is the operator's.
+- `tv-app` remote and transports: a held OK, Up or Down acts once (only the scrub keys follow a hold); a TV remote's separate Play and Pause keys work; a relay the TV cannot reach says so on the card instead of showing a QR; the pen socket drops any frame over 64 KiB unread; a release build ignores another app's relay launch extras.
 
 ### 2026-10-05: Relay pairing follows the socket
 
