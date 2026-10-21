@@ -50,7 +50,6 @@ const WRITE_ALLOW = {
  */
 const OWED = [
   { rule: "engines-leaf", file: "desk/src/lib/engines/meter.ts", detail: "desk/src/lib/dataDir.ts", why: "the usage ledger (EC1, 2026-10-10) finds the data directory through the shared helper (de7361f2); whether a leaf helper may sit under the engine seam is open" },
-  { rule: "state-in-session", file: "desk/src/lib/twin/state.ts", detail: "writes files", why: "writes twin.json, the Twin's own store (P4, 2026-10-07): a second store until it moves behind src/lib/session/ or gets a reasoned WRITE_ALLOW entry" },
 ];
 const BUILTIN = new Set(builtinModules.flatMap((m) => [m, `node:${m}`]));
 const isBuiltin = (spec) => spec.startsWith("node:") || BUILTIN.has(spec);

@@ -175,6 +175,27 @@ export function markNoticed(learnerId: string, now = Date.now()): boolean {
   return true;
 }
 
+/**
+ * The twin's own file beside the pieces (v2 P4, D6). lib/twin/state.ts decides what it holds and when it is put aside;
+ * the write is here, because this module owns the learner's text folder and the session is the only state.
+ */
+export const twinFileOf = (learnerId: string) => path.join(folder(learnerId), "twin.json");
+/** Written whole to a temporary name, then renamed over (as writePiece): a crash mid-write leaves the old state, never half a file. */
+export function writeTwinFile(learnerId: string, json: string): void {
+  if (!LEARNER_ID.test(learnerId)) throw new Error("no learner");
+  mkdirSync(folder(learnerId), { recursive: true });
+  const to = twinFileOf(learnerId), tmp = `${to}.${process.pid}.tmp`;
+  writeFileSync(tmp, json);
+  renameSync(tmp, to);
+}
+/** An unreadable twin file, renamed beside itself and never written over; the new path, or a throw when it could not be moved. */
+export function setAsideTwinFile(learnerId: string, now = Date.now()): string {
+  if (!LEARNER_ID.test(learnerId)) throw new Error("no learner");
+  const f = twinFileOf(learnerId), to = `${f}.bad-${now.toString(36)}`;
+  renameSync(f, to);
+  return to;
+}
+
 /** Everything the learner kept, gone: the folder and all it holds. True when nothing of theirs is left on disk. */
 export function deleteAll(learnerId: string): boolean {
   if (!LEARNER_ID.test(learnerId)) return false;
