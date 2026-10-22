@@ -46,26 +46,73 @@ function WorldSet({ layers, back, mode, dir }: { layers: Layer[]; back: boolean;
   );
 }
 
+/**
+ * Where a name's cut letters sit once the fonts are loaded, by name and layout: fitting one reads offsetWidth twice, and
+ * each read forces a style and layout pass over the world that has just mounted (73 ms of a 250 ms lamp move on the stick),
+ * so each is measured once and the move after reuses it.
+ */
+const fitted = new Map<string, { fs: string; transform: string }>();
+
 /** The name in huge cut letters: the biggest size that fits the free width, centred over the stage (or left of the postcard). */
 function Title({ name, unpaired, seq, still }: { name: string; unpaired: boolean; seq: number; still: boolean }) {
   const el = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const fit = () => {
       const t = el.current; if (!t) return;
+      const key = `${name}|${unpaired}`, known = fitted.get(key);
+      if (known) { t.style.fontSize = known.fs; t.style.transform = known.transform; return; }
       t.style.fontSize = "240px";
       const w = t.offsetWidth || 1, fs = Math.min(280, 240 * (unpaired ? 1060 : 1600) / w);
       t.style.fontSize = `${fs.toFixed(1)}px`;
       const tw = t.offsetWidth, x = (unpaired ? 690 : 960) - tw / 2, y = 334 - fs * 0.52;
       t.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`;
+      // only a fit made with the real fonts is kept: before they load the letters are the fallback's width
+      if (document.fonts?.status === "loaded") fitted.set(key, { fs: t.style.fontSize, transform: t.style.transform });
     };
     fit();
-    afterFonts(fit);
+    // reading document.fonts.ready is itself a forced style and layout pass: only a title not yet fitted with the real fonts asks
+    if (!fitted.has(`${name}|${unpaired}`)) afterFonts(fit);
   }, [name, unpaired, seq]);
   return (
     <div ref={el} className="pp-title" data-role="desk-title" data-still={still || undefined} aria-hidden="true" key={`${name}${seq}`}>
       {name.split("").map((ch, i) => <span key={i} className="pp-ch" style={{ "--i": i } as CSSProperties}>{ch === " " ? " " : ch}</span>)}
     </div>
   );
+}
+
+// ---------------------------------------------------------------- the ambient clock
+
+/**
+ * The landing's looping art (drifts, bobs, keys, bars, the bell...) and its motes run on one clock of AMBIENT_MS. On the
+ * stick any running animation keeps the whole scene drawing every vsync (about 4 ms a frame on Essay Master, 11 on Linga,
+ * with one cloud drifting), however little it moves. So the loops are paused and set to the clock's time by a single timer:
+ * the scene is drawn when the clock ticks, 15 times a second, not 60 (docs/concepts/STICK-PERFORMANCE-2026-10-22.md).
+ */
+const AMBIENT_MS = 66;
+const ambient = { anims: [] as Animation[], subs: new Set<(t: number) => void>(), timer: 0 };
+function ambientTick() {
+  if (document.hidden) return;
+  const t = document.timeline.currentTime as number;
+  for (const a of ambient.anims) if (a.playState === "paused") a.currentTime = t;
+  for (const f of ambient.subs) f(t);
+}
+function ambientRun() {
+  if (ambient.timer || !ambient.subs.size && !ambient.anims.length) return;
+  ambient.timer = window.setInterval(ambientTick, AMBIENT_MS);
+}
+function ambientStop() { if (ambient.timer && !ambient.subs.size && !ambient.anims.length) { clearInterval(ambient.timer); ambient.timer = 0; } }
+/** Pause every looping animation under the landing and put it on the clock (call when worlds mount or change). */
+function syncAmbient(root: Element | null) {
+  if (!root || typeof document.getAnimations !== "function") return;
+  ambient.anims = root.getAnimations({ subtree: true }).filter((a) => a.effect?.getTiming().iterations === Infinity);
+  const t = document.timeline.currentTime as number;
+  for (const a of ambient.anims) { a.pause(); a.currentTime = t; }
+  ambientRun();
+}
+/** Run `draw` on the clock's ticks (the motes). Returns the unsubscribe. */
+function onAmbient(draw: (t: number) => void) {
+  ambient.subs.add(draw); ambientRun();
+  return () => { ambient.subs.delete(draw); ambientStop(); };
 }
 
 // ---------------------------------------------------------------- the light and the paper grain
@@ -85,21 +132,19 @@ function Motes({ glow }: { glow: string }) {
     const draw = (t: number) => {
       x.clearRect(0, 0, 960, 540);
       for (const p of P) {
-        p.x += p.vx; p.y += p.vy + Math.sin(t / 1700 + p.ph) * 0.05;
+        p.x += p.vx * 4; p.y += (p.vy + Math.sin(t / 1700 + p.ph) * 0.05) * 4; // four frames of drift per draw: the same speed at a quarter of the draws
         if (p.x > 970) p.x = -10; if (p.y < -10) p.y = 550;
         x.fillStyle = `rgba(${rgb.current},${(p.a * (0.6 + 0.4 * Math.sin(t / 950 + p.ph))).toFixed(3)})`;
         x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.2832); x.fill();
       }
     };
     const reduce = matchMedia("(prefers-reduced-motion: reduce)");
-    let raf = 0;
-    const loop = (t: number) => { if (document.hidden || reduce.matches) { raf = 0; return; } draw(t); raf = requestAnimationFrame(loop); };
-    const wake = () => { if (!document.hidden && !reduce.matches && !raf) raf = requestAnimationFrame(loop); };
-    const settle = () => { if (reduce.matches) { cancelAnimationFrame(raf); raf = 0; draw(0); } else wake(); };
+    // drawn on the ambient clock, not every frame: each canvas draw is a whole-scene frame on the stick
+    const off = onAmbient((t) => { if (!reduce.matches) draw(t); });
+    const settle = () => { if (reduce.matches) draw(0); };
     still.current = () => { if (reduce.matches) draw(0); };
-    reduce.addEventListener?.("change", settle);
-    document.addEventListener("visibilitychange", wake); settle();
-    return () => { reduce.removeEventListener?.("change", settle); document.removeEventListener("visibilitychange", wake); cancelAnimationFrame(raf); still.current = null; };
+    reduce.addEventListener?.("change", settle); settle();
+    return () => { reduce.removeEventListener?.("change", settle); off(); still.current = null; };
   }, []);
   return <canvas ref={cv} className="pp-fx" width={960} height={540} aria-hidden="true" />;
 }
@@ -269,6 +314,10 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
   const cur = useMemo(() => worldFor(art(st.world)), [st.world, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const old = useMemo(() => (st.prev ? worldFor(art(st.prev.id)) : null), [st.prev, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const first = st.seq === 0, dir = st.dir;
+  const scene = useRef<HTMLDivElement>(null);
+  // after each world swap and when the art changes (a new world's loops start at their first style): one clock for the loops
+  useEffect(() => { const r = requestAnimationFrame(() => syncAmbient(scene.current)); return () => cancelAnimationFrame(r); }, [st.seq, artKey]);
+  useEffect(() => () => { ambient.anims = []; ambientStop(); }, []);
   const mode = first ? (boot ? "arrive" : "none") : dir ? "choose" : "fade";
 
   const held = zoom === "place" || zoom === "phone" ? "house" : world ?? "house";
@@ -277,7 +326,7 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
   const name = world ? apps.find((a) => a.id === world)?.name ?? "" : "Study Desk";
 
   return (
-    <div className={`desk-tv pp ${DESK_FONTS}`} data-role="desk-scene" data-theme="paper" data-lit={at} data-boot={boot || undefined} data-unpaired={unpaired || undefined} data-empty={view.empty || undefined} data-zoom={zoom ? "true" : undefined} style={theme}>
+    <div ref={scene} className={`desk-tv pp ${DESK_FONTS}`} data-role="desk-scene" data-theme="paper" data-lit={at} data-boot={boot || undefined} data-unpaired={unpaired || undefined} data-empty={view.empty || undefined} data-zoom={zoom ? "true" : undefined} style={theme}>
       <Defs />
       {/* the world's sky under everything: until the GPU has rastered a world's layers (or the arrival's reveal has
           reached them), the stage shows that sky, not the bare paper */}
