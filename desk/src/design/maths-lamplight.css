@@ -664,10 +664,14 @@
 .maths-tv .mb-worked .mb-wans { display: flex; align-items: baseline; gap: 14px; color: var(--mb-pen-d); font-size: 44px; }
 .maths-tv .mb-worked .mb-wans .eq { font-family: var(--mb-hand); font-weight: 600; }
 .maths-tv .mb-steps { margin: 18px 0 0; padding-left: 34px; display: grid; gap: 10px; font-size: 28px; line-height: 1.2; }
-/* the worked paper holds three questions and three answers in the practice paper's room: questions at 44px, answers at 38px */
-.maths-tv .mb-worked .mb-row.q .rin { font-size: 44px; }
-.maths-tv .mb-worked .mb-wans { font-size: 38px; margin-bottom: 6px; }
+/* the worked paper holds three questions and three answers in the practice paper's room: questions at 36px, answers at 34px, so the third example is whole above the paper's foot */
+.maths-tv .mb-worked .mb-row.q .rin { font-size: 36px; }
+.maths-tv .mb-worked .mb-wans { font-size: 34px; margin-bottom: 6px; }
 .maths-tv .mb-worked .mb-paper { max-height: 780px; overflow: hidden; }
+/* the idea card is a long paragraph plus three steps: set a size down from the hint card so it ends above the side's foot (922), not off the stage */
+.maths-tv .mb-card[data-role="maths-idea"] { padding: 22px 30px; }
+.maths-tv .mb-card[data-role="maths-idea"] .ht { font-size: 28px; line-height: 1.28; }
+.maths-tv .mb-card[data-role="maths-idea"] .mb-steps { margin-top: 14px; gap: 6px; font-size: 24px; }
 
 /* v2 M4a: a Calculus graph under the walk's card (maths/Plot.tsx) */
 .maths-tv .mb-plot { margin-top: 26px; padding: 14px; border-radius: 10px; background: var(--mb-paper); box-shadow: 0 10px 30px rgba(0, 0, 0, .35); transform: rotate(-.5deg); }
