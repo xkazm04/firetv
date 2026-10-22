@@ -90,16 +90,21 @@
 .pp .pp-fx { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 2; pointer-events: none; }
 
 /* ----- the shelf ----- */
+/* a lamp move changes the shelf, and every change re-rasters the 1920 x 1080 ledge layer it is painted in (the paper's wide blurred
+   shadow, the tile glows). So each piece that moves is its own layer (will-change), the paper is rastered once, and only
+   transform and opacity animate: the filter, box-shadow and colour switches are instant. On the stick this took the GPU raster
+   of a lamp move from about 590 ms to about 235 ms (docs/concepts/STICK-PERFORMANCE-2026-10-22.md) */
 .pp .pp-ledge { position: absolute; inset: 0; z-index: 5; pointer-events: none; transition: transform .7s var(--pp-ease); }
 .pp[data-zoom] .pp-ledge { transform: translateY(330px); visibility: hidden; transition: transform .7s var(--pp-ease), visibility 0s .7s; }
 .pp .pp-ledge-paper {
   position: absolute; left: 0; top: 828px; width: 1920px; height: 252px;
   background: linear-gradient(#fbf3e0 0, #f3e7cd 40%, #ead9b8 100%);
   box-shadow: 0 -16px 34px rgba(45, 25, 12, .34), 0 -3px 6px rgba(45, 25, 12, .18);
+  will-change: transform;
 }
 .pp .pp-ledge-paper::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: linear-gradient(#fffdf5, #f6ebd2); border-bottom: 2px solid rgba(255, 255, 255, .8); }
 .pp .pp-ledge-paper::after { content: ""; position: absolute; left: 0; right: 0; top: 14px; height: 30px; background: linear-gradient(rgba(120, 80, 40, .10), rgba(120, 80, 40, 0)); }
-.pp .pp-cap { position: absolute; left: 96px; top: 858px; width: 620px; pointer-events: none; animation: pp-cap-in .34s var(--pp-ease); }
+.pp .pp-cap { position: absolute; left: 96px; top: 858px; width: 620px; pointer-events: none; animation: pp-cap-in .34s var(--pp-ease); will-change: transform, opacity; }
 @keyframes pp-cap-in { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
 .pp .pp-chip { display: inline-flex; align-items: center; gap: 10px; height: 34px; padding: 0 16px 0 10px; border-radius: 17px; background: rgba(255, 253, 244, .9); box-shadow: 0 2px 4px rgba(45, 25, 12, .16); font-size: 20px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
 .pp .pp-chip svg { display: block; }
@@ -111,7 +116,8 @@
 .pp .pp-stamp .pp-win {
   position: relative; width: 112px; height: 112px; margin: 0 auto; border-radius: 56px 56px 14px 14px; overflow: hidden; background: #f6ecd9;
   border: 3px solid #fff8e8; box-shadow: 0 8px 14px rgba(45, 25, 12, .28); filter: saturate(.5) brightness(1.05); opacity: .9;
-  transition: transform .38s cubic-bezier(.2, .9, .3, 1.25), box-shadow .3s, filter .3s, opacity .3s;
+  transition: transform .38s cubic-bezier(.2, .9, .3, 1.25), opacity .3s;
+  will-change: transform, opacity;
 }
 .pp .pp-win svg { display: block; }
 .pp .pp-stamp .pp-nm { position: absolute; left: -20px; right: -20px; top: 118px; text-align: center; font-size: 28px; line-height: 34px; white-space: nowrap; color: #6a5446; font-weight: 500; transition: color .3s; }
@@ -120,7 +126,7 @@
 .pp .pp-stamp[data-focused="true"] .pp-win { transform: translateY(-36px) scale(1.32); box-shadow: 0 0 0 4px #fff7e2, 0 0 0 9px var(--pp-deep), 0 0 0 14px #f7c95a, 0 0 40px 16px rgba(247, 201, 90, .55), 0 28px 30px rgba(45, 25, 12, .4); }
 
 .pp .pp-actions { position: absolute; inset: 0; pointer-events: none; }
-.pp .pp-cont, .pp .pp-else { position: absolute; left: 1296px; width: 528px; display: flex; align-items: center; transition: background-color .5s, transform .3s cubic-bezier(.2, .9, .3, 1.25), box-shadow .3s, color .3s; }
+.pp .pp-cont, .pp .pp-else { position: absolute; left: 1296px; width: 528px; display: flex; align-items: center; transition: transform .3s cubic-bezier(.2, .9, .3, 1.25); will-change: transform; }
 .pp .pp-cont { top: 860px; height: 84px; padding: 0 34px; border-radius: 42px; background: var(--pp-deep); color: #fff8ea; font-size: 32px; font-weight: 700; justify-content: space-between; box-shadow: 0 10px 18px rgba(45, 25, 12, .32), inset 0 2px 0 rgba(255, 255, 255, .28); }
 .pp .pp-cont svg { color: #fff8ea; }
 .pp .pp-else { top: 962px; height: 58px; padding: 0 22px; border-radius: 29px; font-size: 30px; font-weight: 500; gap: 14px; color: #43322a; }

@@ -20,6 +20,22 @@ Idle landing, 5 s, per second of trace (`CrRendererMain` busy, `RenderThread` dr
 
 `desk/src/landing/themes/paper/Paper.tsx` ("the ambient clock"): after each world swap every looping CSS animation under the landing is paused and set to the document timeline's time by one `setInterval` of 66 ms, and the motes draw on the same tick. The scene is drawn 15 times a second. The keyframes, easing and delays are the CSS ones; reduced motion is unchanged (CSS turns the animations off). The title's fitted size is cached per name once the fonts are loaded, so a lamp move no longer reads `document.fonts.ready` and `offsetWidth` (a forced style and layout pass: the JS task of a move fell from 127 to 40 ms).
 
+## The bottom bar (shelf): GPU raster per lamp move 590 to 320 ms
+
+The owner saw the landing smooth with the bottom bar out of the picture and laggy with it in, and asked for the bar to be checked. It is a real cost: with the shelf hidden a lamp move rasters about 175 ms; with it, about 590 ms. A move changes the shelf (the caption, the tile that grows, the Continue button's colour), and every change re-rastered the 1920 x 1080 ledge layer it was painted in, with the paper's wide blurred shadow and the tiles' glow shadows. Measured on the stick (4 moves each, GPU raster per move, `tools/stick-perf/` plus a per-move sum of `RendererRasterWorker`):
+
+| Shelf | GPU raster per move |
+|---|---|
+| as it was | about 590 ms |
+| tile windows promoted to layers | about 490 ms |
+| + caption, buttons and paper promoted | about 450 ms |
+| + only transform and opacity animate (no filter, box-shadow or colour transitions) | about 235 ms |
+| shelf hidden (reference) | about 175 ms |
+
+Kept: the last row, in `design/desk-landing.css` (`will-change` on `.pp-ledge-paper`, `.pp-cap`, `.pp-win`, `.pp-cont`, `.pp-else`; the tile windows transition transform and opacity only, the buttons transform only). The tile's saturation, shadow and the Continue button's colour now switch at once, not over 0.3-0.5 s. On the stick after the change: about 320 ms of raster per move. The look is the same at rest.
+
+What it did not change: the first frame after the key (one 250-280 ms draw that waits on the GPU) is the same. That frame is the world swap: showing only the leaving world reproduces it, and removing the leaving world takes it to about 90-170 ms. Tried without effect on that frame: building the arriving world a layer at a time, fading the leaving world as a set, a crossfade, hiding the title, sky or grain.
+
 ## What did not move the needle (measured, not kept)
 
 - Pausing the loops only during a lamp move.
