@@ -567,6 +567,8 @@
 .maths-tv .mb-practice .mb-item .num { height: calc(var(--mb-sq) * 2); }
 .maths-tv .mb-practice .mb-row.q .rin { font-size: 52px; }
 .maths-tv .mb-practice .mb-row.gap { height: calc(var(--mb-sq) * .5); }
+/* a wrapped question keeps a margin on the paper's right edge, as a hand would: it never runs to the edge of the sheet */
+.maths-tv .mb-practice .mb-row[data-fit="wrap"] { padding-right: 48px; }
 
 /* ================= Sheet: the marked set, one item under the lamp ================= */
 .maths-tv .mb-item[data-focused="true"]::before { content: ""; position: absolute; left: 70px; right: 24px; top: -10px; bottom: -6px; border-radius: 14px; background: rgba(255, 197, 107, .22); box-shadow: 0 0 0 4px rgba(255, 177, 61, .75), 0 0 34px rgba(255, 177, 61, .45); }

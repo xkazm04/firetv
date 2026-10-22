@@ -792,9 +792,10 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
 
 /**
  * The room the Practice sheet has, in stage px: from its top (design/maths-lamplight.css .mb-practice, 150) to the
- * safe line (1026), less 12 px for the paper's tilt. All six questions are on it at once - there is nothing to pan to.
+ * top of the action row (.mb-acts, 946), less 12 px for the paper's tilt and 8 px of air, so Snap the sheet and Type
+ * my answers sit under the paper, not on it. All six questions are on it at once - there is nothing to pan to.
  */
-const PRACTICE_ROOM = 1026 - 150 - 12;
+const PRACTICE_ROOM = 946 - 150 - 12 - 8;
 
 export function PracticeScreen({ s, focus = 0 }: { s: Session; focus?: number }) {
   const p = s.practice;
