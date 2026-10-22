@@ -3269,6 +3269,82 @@
         "at": "2026-10-22T01:00:40.140097+00:00",
         "reason": "reviewer (sonnet): The not-applicable anchor, calc-expr.ts:141, is a lexer line that rejects unread letters and does not show that guest execution is absent. The context also parses user formulas into a tree and evaluates them with closures (compile, build, evalNode), which is a small guest-expression evaluator. Its b"
       }
+    },
+    "tooling/desk-tooling/measurement-honesty": {
+      "context": "desk-tooling",
+      "subject": "measurement-honesty",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T21:16:42.445Z",
+      "worker": "f3e877d4-e98b-48a2-83b9-7e1c3331aafd",
+      "techniques": [
+        {
+          "technique": "co-published-numbers-must-reconcile",
+          "verdict": "conformant",
+          "evidence": "tools/kpi-measure.cjs:115 Unresolved module errors are computed directly as a subset of total typecheck errors so the part never exceeds the whole."
+        },
+        {
+          "technique": "control-failure-is-not-a-datum-state",
+          "verdict": "not-applicable",
+          "evidence": "tools/kpi-measure.cjs:158 KPI tool runs standalone single-run checks on the local checkout without A/B comparative control arms."
+        },
+        {
+          "technique": "incomplete-not-verdict",
+          "verdict": "conformant",
+          "evidence": "tools/kpi-measure.cjs:78 Incomplete suite run returns pass: null and a descriptive note rather than an error or zero pass score."
+        },
+        {
+          "technique": "instrument-exposure-control",
+          "verdict": "not-applicable",
+          "evidence": "tools/kpi-measure.cjs:15 Tool excludes its own file from coverage candidates, but does not benchmark subjects that learn or optimize against the instrument."
+        },
+        {
+          "technique": "lower-bound-disclosure",
+          "verdict": "not-applicable",
+          "evidence": "tools/kpi-measure.cjs:147 Tally of learner history entries is a full census of records in local JSON storage, not an undercount requiring bound disclosure."
+        },
+        {
+          "technique": "minimum-sample-floors",
+          "verdict": "not-applicable",
+          "evidence": "tools/kpi-measure.cjs:197 Reports census counts of covered modules rather than derived percentage rates from varying samples."
+        },
+        {
+          "technique": "noise-band-and-hysteresis",
+          "verdict": "not-applicable",
+          "evidence": "tools/kpi-measure.cjs:191 Context outputs deterministic status checks without tracking run-over-run repeat noise bands or notification hysteresis."
+        },
+        {
+          "technique": "renormalize-over-present",
+          "verdict": "deviation",
+          "evidence": "tools/kpi-measure.cjs:167 Imputes 5 passed stages verified by hand in the past into the automated KPI reading instead of renormalizing over the observed stages."
+        },
+        {
+          "technique": "speed-figure-names-its-endpoints",
+          "verdict": "not-applicable",
+          "evidence": "tools/kpi-measure.cjs:71 SUITE_TIMEOUT governs process kill boundaries rather than publishing user-facing speed or latency benchmarks."
+        },
+        {
+          "technique": "the-baseline-is-the-untouched-path",
+          "verdict": "not-applicable",
+          "evidence": "tools/kpi-measure.cjs:73 Executes test commands directly without measuring intervention savings or reductions against baselines."
+        },
+        {
+          "technique": "tuning-corpus-disjointness",
+          "verdict": "not-applicable",
+          "evidence": "tools/kpi-measure.cjs:83 Evaluates coverage against a static module list rather than testing an artifact tuned against a training corpus."
+        },
+        {
+          "technique": "unelidable-measurement",
+          "verdict": "not-applicable",
+          "evidence": "tools/kpi-measure.cjs:109 Executes typechecking via separate tsc child process without measuring in-process execution costs subject to compiler optimization."
+        },
+        {
+          "technique": "unmeasurable-vs-zero",
+          "verdict": "conformant",
+          "evidence": "tools/kpi-measure.cjs:213 Distinguishes missing data as null/no-reading from a measured zero."
+        }
+      ]
     }
   }
 }

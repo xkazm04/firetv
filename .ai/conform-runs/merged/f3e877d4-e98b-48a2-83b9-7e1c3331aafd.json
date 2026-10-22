@@ -1,0 +1,113 @@
+{
+ "schema": "conform-run/1",
+ "worker": "f3e877d4-e98b-48a2-83b9-7e1c3331aafd",
+ "subject": "measurement-honesty",
+ "evaluatedAt": "2026-10-22T21:16:42.445732+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "desk-tooling",
+   "subject": "measurement-honesty",
+   "bundle": "software-engineering",
+   "state": "deviation",
+   "evidence": "tools/kpi-measure.cjs:167 Rather than renormalizing over the stages observed by the automated runner, the tool hardcodes five manually verified stages into the aggregate KPI count, imputing passed results for unmeasured stages.",
+   "techniques": [
+    {
+     "technique": "co-published-numbers-must-reconcile",
+     "verdict": "conformant",
+     "evidence": "tools/kpi-measure.cjs:115 Unresolved module errors are computed directly as a subset of total typecheck errors so the part never exceeds the whole."
+    },
+    {
+     "technique": "control-failure-is-not-a-datum-state",
+     "verdict": "not-applicable",
+     "evidence": "tools/kpi-measure.cjs:158 KPI tool runs standalone single-run checks on the local checkout without A/B comparative control arms."
+    },
+    {
+     "technique": "incomplete-not-verdict",
+     "verdict": "conformant",
+     "evidence": "tools/kpi-measure.cjs:78 Incomplete suite run returns pass: null and a descriptive note rather than an error or zero pass score."
+    },
+    {
+     "technique": "instrument-exposure-control",
+     "verdict": "not-applicable",
+     "evidence": "tools/kpi-measure.cjs:15 Tool excludes its own file from coverage candidates, but does not benchmark subjects that learn or optimize against the instrument."
+    },
+    {
+     "technique": "lower-bound-disclosure",
+     "verdict": "not-applicable",
+     "evidence": "tools/kpi-measure.cjs:147 Tally of learner history entries is a full census of records in local JSON storage, not an undercount requiring bound disclosure."
+    },
+    {
+     "technique": "minimum-sample-floors",
+     "verdict": "not-applicable",
+     "evidence": "tools/kpi-measure.cjs:197 Reports census counts of covered modules rather than derived percentage rates from varying samples."
+    },
+    {
+     "technique": "noise-band-and-hysteresis",
+     "verdict": "not-applicable",
+     "evidence": "tools/kpi-measure.cjs:191 Context outputs deterministic status checks without tracking run-over-run repeat noise bands or notification hysteresis."
+    },
+    {
+     "technique": "renormalize-over-present",
+     "verdict": "deviation",
+     "evidence": "tools/kpi-measure.cjs:167 Imputes 5 passed stages verified by hand in the past into the automated KPI reading instead of renormalizing over the observed stages."
+    },
+    {
+     "technique": "speed-figure-names-its-endpoints",
+     "verdict": "not-applicable",
+     "evidence": "tools/kpi-measure.cjs:71 SUITE_TIMEOUT governs process kill boundaries rather than publishing user-facing speed or latency benchmarks."
+    },
+    {
+     "technique": "the-baseline-is-the-untouched-path",
+     "verdict": "not-applicable",
+     "evidence": "tools/kpi-measure.cjs:73 Executes test commands directly without measuring intervention savings or reductions against baselines."
+    },
+    {
+     "technique": "tuning-corpus-disjointness",
+     "verdict": "not-applicable",
+     "evidence": "tools/kpi-measure.cjs:83 Evaluates coverage against a static module list rather than testing an artifact tuned against a training corpus."
+    },
+    {
+     "technique": "unelidable-measurement",
+     "verdict": "not-applicable",
+     "evidence": "tools/kpi-measure.cjs:109 Executes typechecking via separate tsc child process without measuring in-process execution costs subject to compiler optimization."
+    },
+    {
+     "technique": "unmeasurable-vs-zero",
+     "verdict": "conformant",
+     "evidence": "tools/kpi-measure.cjs:213 Distinguishes missing data as null/no-reading from a measured zero."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T21:16:42.445732+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "measurement-honesty"
+   ],
+   "techniques": [
+    "co-published-numbers-must-reconcile",
+    "control-failure-is-not-a-datum-state",
+    "incomplete-not-verdict",
+    "instrument-exposure-control",
+    "lower-bound-disclosure",
+    "minimum-sample-floors",
+    "noise-band-and-hysteresis",
+    "renormalize-over-present",
+    "speed-figure-names-its-endpoints",
+    "the-baseline-is-the-untouched-path",
+    "tuning-corpus-disjointness",
+    "unelidable-measurement",
+    "unmeasurable-vs-zero"
+   ],
+   "deviations": 1,
+   "context": "desk-tooling",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}

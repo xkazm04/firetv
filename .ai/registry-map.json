@@ -4071,7 +4071,11 @@
           "revision": 11,
           "changedAt": "2026-10-14",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "tools/kpi-measure.cjs:167 Rather than renormalizing over the stages observed by the automated runner, the tool hardcodes five manually verified stages into the aggregate KPI count, imputing passed results for unmeasured stages.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:b702c58e785c6c51",
+          "evaluatedRevision": 11
         }
       ],
       "governance": "governed"
