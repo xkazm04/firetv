@@ -295,3 +295,5 @@
 .essay-tv .em-wr-acts { position: absolute; left: 96px; bottom: 70px; display: flex; gap: 18px; }
 .essay-tv .em-act { font-size: 32px; font-weight: 600; padding: 16px 28px; border: 2px solid var(--em-hair); border-radius: 4px; }
 .essay-tv .em-act[data-focused="true"] { border-color: var(--em-cit); background: var(--em-cit); color: var(--em-bg); }
+/* four actions in a row (the read screen) end inside the 1824 safe line: a little less side room per pill */
+.essay-tv .em-acts .em-act { padding-inline: 22px; }
