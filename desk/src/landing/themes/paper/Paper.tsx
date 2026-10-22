@@ -254,7 +254,7 @@ function Chrome({ view }: { view: LandingView }) {
 /** Where the light for a hand-off starts: the tile, the second action or the postcard that was Selected. */
 function originOf(view: LandingView, stop: LandingStop): [number, number] {
   if (stop === "place") return [1560, 991];
-  if (stop === "phone") return [1524, 438];
+  if (stop === "phone") return [1588, 420];
   const { pitch, cx } = railOf(view.apps.length), i = Math.max(0, view.apps.findIndex((a) => a.id === stop));
   return [Math.round(cx + i * pitch), 900];
 }
