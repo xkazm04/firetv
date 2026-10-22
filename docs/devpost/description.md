@@ -37,8 +37,9 @@ seated ([DESIGN-STUDY-DESK.md](../DESIGN-STUDY-DESK.md)):
   ([DESIGN-ESSAY-MASTER.md](../DESIGN-ESSAY-MASTER.md); deadline walk rows 18-21 in
   [STICK-DEADLINE-WALK-2026-10-21.md](../concepts/STICK-DEADLINE-WALK-2026-10-21.md)).
 
-A fourth stop, **Writing**, stands on the landing whenever Essay Master is on the profile. It is a
-remote-driven Writing screen inside the TV page: the learner picks a prompt with the D-pad, types the
+Essay Master is the one writing tile on the landing (2026-10-22: a separate Writing tile beside it read as a
+duplicate, so it is off the desk until it is folded into Essay Master). **Writing** is built as a
+remote-driven screen inside the TV page: the learner picks a prompt with the D-pad, types the
 paragraph and the revision on the phone through a named `writing` hand-off, and the coaching note and the
 saved line come back to the TV ([TV-WRITING-SCREEN-2026-10-21.md](../concepts/TV-WRITING-SCREEN-2026-10-21.md);
 merge 30f53e33).
@@ -102,7 +103,8 @@ The device is a Fire TV Stick 4K (model AFTKM, Fire OS 8, Android 11) with Amazo
   stick, with the phone side checked at 360 and 414 px
   ([STICK-DEADLINE-WALK-2026-10-21.md](../concepts/STICK-DEADLINE-WALK-2026-10-21.md); commit e4176983).
 - **Writing reached with the remote.** The stick loads only the TV page, and nothing on the remote could
-  drive the old /writing page; Writing is now a screen inside the TV page, so the remote reaches it
+  drive the old /writing page; Writing is now a screen inside the TV page (off the desk since 2026-10-22, pending a
+  fold-in to Essay Master)
   ([TV-WRITING-SCREEN-2026-10-21.md](../concepts/TV-WRITING-SCREEN-2026-10-21.md); merge 30f53e33).
 - **Smooth on the stick's GPU.** The idle landing went from 8.7 to 59 fps and lamp moves and Back from
   6-7 fps to 22-45 fps, with the same picture, after the landing's shadows were moved inside the
@@ -133,7 +135,7 @@ p95 is 21.1 ms ([POC-FINDINGS.md](../POC-FINDINGS.md), section 7).
   271-283 ms and Back's 228-378 ms. Inside a module the pre-rendered bitmaps stay resident, about 46 MB more
   GPU memory than before ([STICK-PERFORMANCE-2026-10-21.md](../concepts/STICK-PERFORMANCE-2026-10-21.md),
   "GPU memory" and "Still open").
-- Writing on the TV was built and tested in code (`tools/writing-tv-test.cjs`); the 2026-10-21 deadline walk
+- Writing on the TV was built and tested in code (`tools/writing-tv-test.cjs`), and is off the landing since 2026-10-22; the 2026-10-21 deadline walk
   predates it, and the Math Buddy flow was not re-walked that day
   ([STICK-DEADLINE-WALK-2026-10-21.md](../concepts/STICK-DEADLINE-WALK-2026-10-21.md), B1 and B3).
 - The stick walks pressed the keys with `adb shell input keyevent`, which enters the same

@@ -21,8 +21,11 @@ export const LANDING_MODULES = ["maths", "english", "essay"] as const satisfies 
  * is a coached episode of the essay family, not a Subject of its own (tasks, recaps and the worlds stay three).
  */
 export type LandingApp = Subject | "writing";
-/** Is Writing on the desk for the learner at it: with Essay Master on their profile. */
-export function writingOn(s: Session): boolean { return onModules(s).includes("essay"); }
+/**
+ * Is Writing on the desk as an object of its own: no. Essay Master is the one writing module on the landing (2026-10-22: two
+ * tiles side by side read as a duplicate); the Writing screen stays in code, off the desk, until it is folded into Essay Master.
+ */
+export function writingOn(_s: Session): boolean { return false; }
 /** The objects on the desk, left to right: the apps on the profile, then Writing. */
 export function landingApps(s: Session): LandingApp[] {
   return writingOn(s) ? [...landingModules(s), "writing"] : landingModules(s);

@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Essay Master is the one writing tile on the landing: Writing is no longer a second tile beside it (it read as a duplicate). The Writing screen stays in code, off the desk, until it is folded into Essay Master.
 - Writing: the finish step re-reads the revision with the same code that picked the coaching focus. A revision that only moves spaces or punctuation is refused, the episode stores whether the focus now holds, and the history line says so ("coached on evidence; the revision now gives evidence" or "still needs evidence") instead of claiming a revision it did not check.
 
 - Faster module switching on the stick, passes 2 and 3: the stage is fitted with `zoom` again (landing GPU tiles 107 to 71 MB), and each world's sky, hills and side cliffs are drawn once into canvases instead of rastered on every move. A lamp move's longest frame gap fell from 641-669 ms to 271-283 ms and Back from 500-572 ms to 228-378 ms; the bitmaps stay resident inside a module (about 46 MB more GPU memory). See [STICK-PERFORMANCE-2026-10-21.md](docs/concepts/STICK-PERFORMANCE-2026-10-21.md).

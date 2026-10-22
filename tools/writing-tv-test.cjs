@@ -1,5 +1,5 @@
 /**
- * Writing on the TV (docs/concepts/TV-WRITING-SCREEN-2026-10-21.md): the landing stop, Select into the Writing screen, its
+ * Writing on the TV (docs/concepts/TV-WRITING-SCREEN-2026-10-21.md): the Writing screen (off the desk since 2026-10-22: no landing stop), its
  * key map, the `writing` hand-off to the phone, the ask door's kind check for it, the coaching and the save through the
  * writing routes (a stub text engine, a scratch DESK_DATA_DIR, never desk/data), and Back to the landing. No model.
  * Run with npm test in desk/ (directly: node tools/writing-tv-test.cjs).
@@ -29,16 +29,16 @@ const press=(s,k)=>ev(s,k).reduce((x,e)=>reduce(x,e),s);
 const DRAFT='I think screens should go away before bed. They are bright and they are fun.';
 const REVISED='I think screens should go away before bed. A 2019 study of 1,000 teenagers found screen users fell asleep 30 minutes later, because the light keeps the brain awake.';
 
-test('landing: Writing is a stop after the apps, before the place card and the phone, while Essay Master is on',()=>{
- assert.deepEqual(rows.landingStops(base()),['maths','english','essay','writing','place','phone']);
- assert.deepEqual(rows.landingStops(base({learner:{id:'kid',name:'Kid'}})),['essay','writing','place','phone']);
- assert.deepEqual(rows.landingStops(base({profiles:[{...EMA,modules:['maths']}]})),['maths','place','phone'],'no Essay Master: no Writing');
- const v=landingView(base({screen:'landing',focus:3}));
- assert.equal(v.at,'writing');assert.equal(v.world,'writing','the world follows the lamp onto Writing');
- const w=v.apps.find((a)=>a.id==='writing');
- assert.deepEqual([w.name,w.kind,w.tagged,w.caption.head],['Writing','none',false,'Not started']);
- assert.deepEqual(w.art,{app:'writing',fresh:true,done:0,open:false});
- assert.match(v.say,/^Writing\. Not started\./,'the screen reader hears the Writing stop');
+// 2026-10-22: Essay Master is the one writing tile on the landing. The Writing screen below stays in code but is off the desk
+// (no landing stop reaches it) until it is folded into Essay Master, so these cases open it by its screen name.
+test('landing: Writing is no stop beside Essay Master - the desk has the three apps, the place card and the phone',()=>{
+ assert.deepEqual(rows.landingStops(base()),['maths','english','essay','place','phone']);
+ assert.deepEqual(rows.landingStops(base({learner:{id:'kid',name:'Kid'}})),['essay','place','phone']);
+ assert.deepEqual(rows.landingStops(base({profiles:[{...EMA,modules:['maths']}]})),['maths','place','phone']);
+ assert.equal(rows.writingOn(base()),false);
+ const v=landingView(base({screen:'landing',focus:2}));
+ assert.deepEqual(v.apps.map((a)=>a.id),['maths','english','essay'],'no Writing tile beside Essay Master');
+ assert.equal(v.at,'essay');
 });
 
 test('landing: Writing has no world of its own - its art draws the empty world, and worlds.tsx is not asked for one',()=>{
@@ -49,17 +49,7 @@ test('landing: Writing has no world of its own - its art draws the empty world, 
  assert.doesNotMatch(worlds,/writing/i,'the paper worlds are perf pass 3\'s: Writing borrows the empty world');
 });
 
-test('landing: Select on Writing opens the Writing screen (no subject: Writing is no Subject); a finished episode starts over',()=>{
- const s=base({screen:'landing',focus:3});
- assert.deepEqual(ev(s,'select'),[{type:'nav',screen:'writing',focus:0}]);
- assert.deepEqual(ev({...s,learner:null},'select'),[{type:'nav',screen:'learner',focus:0,from:'landing'}],'no one seated: who first');
- assert.deepEqual(ev({...s,writingTv:{promptId:'screens',stage:'finished',saved:'x'}},'select'),[{type:'writing.clear'},{type:'nav',screen:'writing',focus:0}]);
- assert.deepEqual(ev({...s,writingTv:{promptId:'screens',stage:'coached',draft:DRAFT,note:'n'}},'select'),[{type:'nav',screen:'writing',focus:0}],'an episode left mid-way is kept');
- const lv=landingView({...s,writingTv:{promptId:'screens',stage:'coached',draft:DRAFT,note:'n'}}).apps.find((a)=>a.id==='writing');
- assert.deepEqual([lv.kind,lv.caption.head],['resume','Screens before bed']);
-});
-
-test('Writing screen: the prompt list is the band\'s, Up/Down walk it, Select picks, Back leaves for the landing on Writing',()=>{
+test('Writing screen: the prompt list is the band\'s, Up/Down walk it, Select picks, Back leaves for the landing',()=>{
  const s=base({screen:'writing',focus:0});
  assert.deepEqual(W.writingStops(s),W.writingPrompts(s).map((p)=>p.id));
  assert.deepEqual(W.writingPrompts(s).map((p)=>p.band),['teen','teen','teen'],'Ema is 16');
@@ -67,7 +57,7 @@ test('Writing screen: the prompt list is the band\'s, Up/Down walk it, Select pi
  assert.deepEqual(ev(s,'down'),[{type:'focus',focus:1}]);assert.deepEqual(ev(s,'right'),[{type:'focus',focus:1}]);
  assert.deepEqual(ev(s,'up'),[],'the first prompt stays');
  assert.deepEqual(ev({...s,focus:1},'select'),[{type:'writing.pick',promptId:W.writingPrompts(s)[1].id},{type:'focus',focus:0}]);
- assert.deepEqual(ev(s,'back'),[{type:'nav',screen:'landing',focus:3}],'Back: the landing, the lamp on Writing');
+ assert.deepEqual(ev(s,'back'),[{type:'nav',screen:'landing',focus:rows.LANDING_REST}],'Back: the landing, the lamp where it rests (Writing is no stop)');
  assert.deepEqual(ev(s,'menu'),[],'Menu on the list does nothing');
  const picked=press(s,'select');
  assert.deepEqual(picked.writingTv,{promptId:'screens',stage:'write'});assert.equal(W.writingPhase(picked),'write');
@@ -84,8 +74,8 @@ test('Writing screen: on the chosen prompt Select hands the typing to the phone 
  assert.deepEqual(ev(asking,'select'),[],'no second ask while one is open');
  assert.deepEqual(ev(asking,'back'),[{type:'ask.cancel',id:asking.ask.id}],'the first Back cancels the hand-off');
  assert.deepEqual(ev(asking,'menu'),[],'Menu does not drop the prompt under an open ask');
- assert.deepEqual(ev(s,'back'),[{type:'nav',screen:'landing',focus:3}],'with none open, Back is the landing');
- assert.equal(reduce(asking,{type:'nav',screen:'landing',focus:3}).ask,null,'leaving the screen closes the ask');
+ assert.deepEqual(ev(s,'back'),[{type:'nav',screen:'landing',focus:rows.LANDING_REST}],'with none open, Back is the landing');
+ assert.equal(reduce(asking,{type:'nav',screen:'landing',focus:rows.LANDING_REST}).ask,null,'leaving the screen closes the ask');
  // Another prompt: the list again, the lamp on the prompt that was chosen; Menu is the same
  assert.deepEqual(ev({...s,focus:1},'select'),[{type:'writing.clear'},{type:'focus',focus:0}],'the lamp back on the prompt\'s own row');
  assert.deepEqual(ev({...s,writingTv:{promptId:'uniform',stage:'write'}},'menu'),[{type:'writing.clear'},{type:'focus',focus:1}]);
@@ -193,8 +183,6 @@ test('the phone\'s paragraph is coached through the writing ask: a refusal keeps
  assert.ok(fs.existsSync(path.join(data,'learners.json')),'learners.json in the scratch dir');
  // the session re-reads the record on writing.finished (REHYDRATE): the landing says what was written without another event
  assert.equal(s.history.at(-1)?.label,'Screens before bed','the session\'s history holds the episode');
- const w=landingView({...s,screen:'landing',writingTv:null}).apps.find((a)=>a.id==='writing');
- assert.deepEqual([w.kind,w.caption.head,w.art.done],['last','Screens before bed',1]);
  // a second send after the save answers nothing
  r=await call('finish',{askId:tv.ask.id,revision:REVISED+' More.'});assert.equal(r.status,409);
 });
