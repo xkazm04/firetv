@@ -1,0 +1,82 @@
+{
+ "schema": "conform-run/1",
+ "worker": "8e95bac6-afa7-47e4-ae30-fa8a139c3067",
+ "subject": "czech",
+ "evaluatedAt": "2026-10-22T00:01:38.471742+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "essay-master",
+   "subject": "czech",
+   "bundle": "localization",
+   "state": "not-applicable",
+   "evidence": "desk/src/app/phone/recogniserLang.ts:10 Searches found English interface copy and Czech input-detection logic, but no Czech-localized Essay Master strings to which these techniques apply.",
+   "techniques": [
+    {
+     "technique": "de-anglicization-constructions",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/essay/captions.ts:4 The caption is English; Czech construction rules have no target text here."
+    },
+    {
+     "technique": "gender-neutral-forms",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/app/phone/EssayShelf.tsx:46 The title placeholder appears in an English action without Czech gender or case agreement."
+    },
+    {
+     "technique": "plural-and-count-agreement",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/essay/Workroom.tsx:41 The count labels implement English wording, so Czech plural categories are not required here."
+    },
+    {
+     "technique": "register-and-address",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/app/phone/recogniserLang.ts:12 Essay explicitly selects English independently of the learner's school system; no Czech address register is selected."
+    },
+    {
+     "technique": "terminology-and-loanwords",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/essay/Workroom.tsx:13 These are English labels, not loanword choices within Czech sentences."
+    },
+    {
+     "technique": "typography-and-spacing",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/essay/EssayTV.tsx:287 The heading uses English copy and quotation conventions on this English writing surface."
+    },
+    {
+     "technique": "ui-conventions-and-length",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/essay/EssayTV.tsx:82 The action labels are English, so Czech infinitive and wording conventions do not apply."
+    }
+   ],
+   "absenceTerms": [
+    "cs_CZ",
+    "vyk\u00e1n\u00ed",
+    "tyk\u00e1n\u00ed"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T00:01:38.471742+00:00",
+   "bundle": "localization",
+   "subjects": [
+    "czech"
+   ],
+   "techniques": [
+    "de-anglicization-constructions",
+    "gender-neutral-forms",
+    "plural-and-count-agreement",
+    "register-and-address",
+    "terminology-and-loanwords",
+    "typography-and-spacing",
+    "ui-conventions-and-length"
+   ],
+   "deviations": 0,
+   "context": "essay-master",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

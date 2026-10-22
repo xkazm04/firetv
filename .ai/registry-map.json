@@ -1275,7 +1275,11 @@
           "revision": 9,
           "changedAt": "2026-10-15",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/app/phone/recogniserLang.ts:10 Searches found English interface copy and Czech input-detection logic, but no Czech-localized Essay Master strings to which these techniques apply.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:f204eb17a3f1278e",
+          "evaluatedRevision": 9
         },
         {
           "subject": "agent-memory",

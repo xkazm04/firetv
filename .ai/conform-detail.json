@@ -3065,6 +3065,52 @@
           "evidence": "docs/DESIGN-STUDY-DESK.md:123 The landing's design document declares the desk English in Phase 1, and searches located no landing target catalogs or findings across two checked languages."
         }
       ]
+    },
+    "desk-subjects/essay-master/czech": {
+      "context": "essay-master",
+      "subject": "czech",
+      "bundle": "localization",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T00:01:38.471Z",
+      "worker": "8e95bac6-afa7-47e4-ae30-fa8a139c3067",
+      "techniques": [
+        {
+          "technique": "de-anglicization-constructions",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/captions.ts:4 The caption is English; Czech construction rules have no target text here."
+        },
+        {
+          "technique": "gender-neutral-forms",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/app/phone/EssayShelf.tsx:46 The title placeholder appears in an English action without Czech gender or case agreement."
+        },
+        {
+          "technique": "plural-and-count-agreement",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/Workroom.tsx:41 The count labels implement English wording, so Czech plural categories are not required here."
+        },
+        {
+          "technique": "register-and-address",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/app/phone/recogniserLang.ts:12 Essay explicitly selects English independently of the learner's school system; no Czech address register is selected."
+        },
+        {
+          "technique": "terminology-and-loanwords",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/Workroom.tsx:13 These are English labels, not loanword choices within Czech sentences."
+        },
+        {
+          "technique": "typography-and-spacing",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/EssayTV.tsx:287 The heading uses English copy and quotation conventions on this English writing surface."
+        },
+        {
+          "technique": "ui-conventions-and-length",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/essay/EssayTV.tsx:82 The action labels are English, so Czech infinitive and wording conventions do not apply."
+        }
+      ]
     }
   }
 }
