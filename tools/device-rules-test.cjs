@@ -257,3 +257,80 @@ test('device.mjs countInk: one classifier on a synthetic frame; no tool keeps it
     assert.doesNotMatch(src, /function countInk|const isInk|const INK|function tvScreenshot/, `${t}.mjs keeps its own pixel classifier or capture`);
   }
 });
+
+// The companion's offline suite (tools/companion-refusal-test.mjs: a real browser and a fake TV, no device) pins the
+// page's refusal, reconnect, multi-touch, rate and scrub behaviour, and nothing ran it: no npm script, no dev.ps1 stage,
+// no workflow. dev.ps1's unit stage now runs it beside :core:test, judged by its exit code, and tools/ names it.
+test('the companion suite has a runner: a tools/ npm script and dev.ps1\'s unit stage, judged by exit code', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'));
+  assert.ok(Object.values(pkg.scripts || {}).some((s) => /companion-refusal-test\.mjs/.test(s)), 'no tools/ npm script runs companion-refusal-test.mjs');
+  const ps = fs.readFileSync(path.join(__dirname, '..', 'scripts', 'dev.ps1'), 'utf8')
+    .replace(/<#[\s\S]*?#>/g, '').replace(/(^|\s)#.*$/gm, '$1');
+  const unit = (/if \(& \$run 'unit'\) \{([\s\S]*?)\n\}/.exec(ps) || [])[1] || '';
+  assert.ok(unit, 'dev.ps1 has no unit stage');
+  const at = unit.indexOf('companion-refusal-test.mjs');
+  assert.ok(at >= 0, 'dev.ps1\'s unit stage does not run companion-refusal-test.mjs');
+  assert.match(unit.slice(at), /\$LASTEXITCODE/, 'dev.ps1 runs the companion suite without judging its exit code');
+});
+
+// The TV's QR carries the PIN in the fragment (core PairingUrl: <page>#pin=NNNN), so no relay or proxy can log it
+// from the request line; ?pin= is only the page's fallback for QR codes printed before that. live-ui-test and
+// relay-test paired through the fallback, so the path every real phone takes never ran against a real TV or relay.
+test('live-ui-test and relay-test open the companion the way the QR does: #pin=, never ?pin=', () => {
+  const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+  for (const t of ['live-ui-test', 'relay-test']) {
+    const src = strip(fs.readFileSync(path.join(__dirname, `${t}.mjs`), 'utf8'));
+    const gotos = src.match(/\.goto\([^)]*\)/g) || [];
+    assert.ok(gotos.length > 0, `${t}.mjs opens no page`);
+    for (const g of gotos) assert.doesNotMatch(g, /\?pin=/, `${t}.mjs pairs through the legacy query: ${g}`);
+    assert.ok(gotos.some((g) => /#pin=\$\{/.test(g)), `${t}.mjs never pairs with the PIN in the fragment`);
+  }
+});
+
+// Exit codes are the harness's contract with dev.ps1 and whoever reads a run: 0 pass, 1 a measured FAIL, 2 the tool
+// could not run (no PIN: pairingPin; no socket: each tool's 'error' handler), 3 a crash (live-ui-test, relay-test).
+// A TV that refuses the PIN is a run that never started, yet pen-sim, latency-probe and tail-diag exited 1 for it -
+// the code of "the stroke did not land" and "p95 over budget". A loopback fake TV refuses every hello here.
+test('pen-sim, latency-probe and tail-diag exit 2 (could not run), not 1 (FAIL), when the TV refuses the PIN', async () => {
+  const cp = require('node:child_process');
+  const { WebSocketServer } = require('ws');
+  const wss = new WebSocketServer({ host: '127.0.0.1', port: 0 });
+  await new Promise((r) => wss.on('listening', r));
+  wss.on('connection', (ws) => ws.on('message', (raw) => {
+    const m = JSON.parse(String(raw));
+    if (m.type !== 'hello') return;
+    ws.send(JSON.stringify({ type: 'welcome', sessionId: '', videoAspect: 1.7778, accepted: false, reason: 'wrong PIN' }));
+    setTimeout(() => ws.close(1008, 'wrong PIN'), 5);
+  }));
+  const host = `127.0.0.1:${wss.address().port}`;
+  const run = (tool) => new Promise((res) => {
+    const c = cp.spawn(process.execPath, [path.join(__dirname, `${tool}.mjs`), '--host', host, '--pin', '0000', '--seconds', '1'], { stdio: ['ignore', 'pipe', 'pipe'] });
+    let err = '';
+    c.stderr.on('data', (d) => { err += d; });
+    const kill = setTimeout(() => c.kill(), 8000);
+    c.on('exit', (code) => { clearTimeout(kill); res({ code, err }); });
+  });
+  try {
+    for (const tool of ['pen-sim', 'latency-probe', 'tail-diag']) {
+      const { code, err } = await run(tool);
+      assert.equal(code, 2, `${tool} exited ${code} on a refused PIN: ${err.trim().slice(0, 120)}`);
+      assert.match(err, /rejected.*wrong PIN/, `${tool} does not say the TV refused it`);
+    }
+  } finally {
+    wss.close();
+  }
+});
+
+// device.mjs's adb was one hard-coded path on the operator's machine. Anywhere else every adb call (screencap,
+// logcat, keyevent) was an ENOENT, and an ANDROID_HOME the machine did declare was ignored. resolveAdb is pure here:
+// the environment and the file check are handed in.
+test('resolveAdb: $ADB, else the operator install where it exists, else ANDROID_HOME / ANDROID_SDK_ROOT, else PATH', async () => {
+  const { resolveAdb } = await load();
+  assert.equal(typeof resolveAdb, 'function', 'device.mjs exports no resolveAdb');
+  const none = () => false, all = () => true;
+  assert.equal(resolveAdb({ ADB: '/opt/adb' }, all), '/opt/adb');
+  assert.match(resolveAdb({}, all), /android-clt/, 'the operator install still wins where it exists');
+  assert.equal(resolveAdb({ ANDROID_HOME: '/sdk' }, none, 'linux'), path.join('/sdk', 'platform-tools', 'adb'));
+  assert.equal(resolveAdb({ ANDROID_SDK_ROOT: 'D:/sdk' }, none, 'win32'), path.join('D:/sdk', 'platform-tools', 'adb.exe'));
+  assert.equal(resolveAdb({}, none), 'adb', 'nothing declared: adb on the PATH, not a path that does not exist');
+});

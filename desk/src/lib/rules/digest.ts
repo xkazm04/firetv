@@ -36,7 +36,7 @@ export interface MathsDigest {
   skipped?: number;
   stretch?: true; slip?: string; slipN?: number;
 }
-/** A finished Linga conversation: the scene (an authored scene id, or a plan topic's id), its skill, the learner's replies. */
+/** A finished Linga conversation: the scene (an authored scene id, a plan topic's id or a pitched scene's id), its skill, the learner's replies. */
 export interface EnglishDigest { at: number; kind: "english"; sceneId: string; skill: SkillId; turns: number }
 /**
  * One Essay Master reading: the lens, the sentences read, how many came back to fix, and the paragraphs read (1 for a
@@ -56,6 +56,8 @@ const MAX_ITEMS = 50, MAX_TURNS = 200, MAX_SENTENCES = 500, MAX_HINTS = 500, MAX
 
 /** A plan topic's id as english/check.ts mints it: "plan-" and eight hex digits. Never words. */
 const PLAN_ID = /^plan-[0-9a-f]{8}$/;
+/** A pitched scene's id as english/conversation.ts mints it (english/pitch.ts PITCH_PREFIX and eight hex digits). Never words. */
+const PITCH_ID = /^pitch-[0-9a-f]{8}$/;
 const SKILLS = new Set<string>(ENGLISH_SKILLS.map((s) => s.id));
 const SCENES = new Set<string>(AUTHORED_SCENES.map((s) => s.id));
 const LENSES = new Set<string>(ESSAY_TYPES.map((t) => t.id));
@@ -112,7 +114,7 @@ export function cleanEntry(raw: unknown): DigestEntry | null {
     return { at, kind: "maths", topic, right, notSure, total, ...(skipped ? { skipped } : {}), ...(o.stretch === true ? { stretch: true as const } : {}), ...(slip ? { slip, slipN } : {}) };
   }
   if (o.kind === "english") {
-    const sceneId = typeof o.sceneId === "string" && (SCENES.has(o.sceneId) || PLAN_ID.test(o.sceneId)) ? o.sceneId : "";
+    const sceneId = typeof o.sceneId === "string" && (SCENES.has(o.sceneId) || PLAN_ID.test(o.sceneId) || PITCH_ID.test(o.sceneId)) ? o.sceneId : "";
     const skill = typeof o.skill === "string" && SKILLS.has(o.skill) ? (o.skill as SkillId) : null;
     const turns = whole(o.turns, MAX_TURNS);
     if (!sceneId || !skill || turns === null) return null;

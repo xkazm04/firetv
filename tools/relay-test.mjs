@@ -172,7 +172,7 @@ const run = async () => {
   const consoleErrors = [];
   page.on('pageerror', (e) => consoleErrors.push(String(e)));
 
-  await page.goto(`http://127.0.0.1:${PORT}/?pin=${pin}`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`http://127.0.0.1:${PORT}/#pin=${pin}`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.__pen && window.__pen.isConnected(), null, { timeout: 20000 });
   check('the phone loads the companion page from the relay and pairs through it, 12 s late', true);
 
@@ -223,7 +223,7 @@ const run = async () => {
   // is still paired. It must be PIN-checked and welcomed like the first.
   await page.close();
   const second = await context.newPage();
-  await second.goto(`http://127.0.0.1:${PORT}/?pin=${pin}`, { waitUntil: 'domcontentloaded' });
+  await second.goto(`http://127.0.0.1:${PORT}/#pin=${pin}`, { waitUntil: 'domcontentloaded' });
   const secondPaired = await second
     .waitForFunction(() => window.__pen && window.__pen.isConnected(), null, { timeout: 20000 })
     .then(() => true, () => false);

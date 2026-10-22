@@ -225,9 +225,9 @@ export function liveRole(req?: Request | null): Role | null {
 
 /**
  * The Session keys a guest may see: the lobby - where the TV is, whose desk it is, and (on the profile screen only)
- * the name being typed. This is the unjoined /phone page's whole read: `screen` and `subject` word the Join panel
- * (page.tsx:377, :382), `learner` and `draft` the Profile panel (:390, :403), `phoneUrl` and `updatedAt` are the
- * lobby's own. `viewer`, `pin` and `joined` are set by view() itself.
+ * the name being typed. This is the unjoined /phone page's whole read: `screen` words the Join panel ("The TV is on ..."),
+ * `learner` and `draft` the Profile panel, `ask` the name hand-off (TL-5), `phoneUrl` and `updatedAt` are the lobby's own;
+ * `subject` has no reader on the unjoined page today. `viewer`, `pin` and `joined` are set by view() itself.
  */
 export const LOBBY = ["viewer", "pin", "joined", "phoneUrl", "learner", "subject", "screen", "updatedAt", "draft", "ask"] as const satisfies readonly (keyof Session)[];
 export type LobbyKey = (typeof LOBBY)[number];
@@ -235,7 +235,7 @@ export type LobbyKey = (typeof LOBBY)[number];
 /**
  * Every other Session key, at its empty value. The type makes tsc fail when a Session key is in neither LOBBY nor
  * here, so a new field is a guest-blank by decision, never by omission. focus, view and timer are here: the unjoined
- * page reads none of them (its only read of the timer, page.tsx:598, is on the joined Tonight panel).
+ * page reads none of them (no file under app/phone reads the timer at all).
  */
 export const GUEST_BLANK = {
   profiles: [], tasks: [], back: undefined, phonesLive: 0,
@@ -244,8 +244,8 @@ export const GUEST_BLANK = {
   hint: null, lesson: null, noLesson: false, lessonPaused: false, watch: null,
   english: null, essay: null, essayType: null, essayAt: null, essayPlan: undefined,
   englishLearning: emptyEnglish(), conversation: null, check: null,
-  topic: null, practice: null, walkIx: 0, paperAim: null, worked: undefined, workroom: undefined,
-  skills: {}, writing: {}, memory: [], history: [], week: undefined, paper: undefined, jobs: {}, away: undefined,
+  topic: null, practice: null, walkIx: 0, paperAim: null, worked: undefined, workroom: undefined, writingTv: undefined,
+  skills: {}, writing: {}, history: [], week: undefined, paper: undefined, jobs: {}, away: undefined,
   status: "", essayRefused: undefined, log: { problems: [], hints: 0, hard: [], minutes: 0, started: null },
 } satisfies { [K in Exclude<keyof Session, LobbyKey>]-?: Session[K] };
 
@@ -289,6 +289,15 @@ export function guestMay(s: Session, e: Event): boolean {
   if (e.type === "profile.draft") return s.screen === "profile" && !!e.patch && Object.keys(e.patch).length === 1 && typeof e.patch.name === "string";
   return false;
 }
+
+/**
+ * What a joined phone may post to the session (TL-11), as an allowlist: a type not named here is refused, so a new event
+ * is the TV's until someone decides otherwise (authorization: default deny). The join and leave; the learner's name and
+ * profile (OD1 b, the route refuses a patch that names an id); tonight's list (OD4 b); one plan sentence; a typed paper
+ * (the route checks its ask); the cancel of a hand-off. tools/desk-pairing-test.cjs reads the phone's sources and fails
+ * when they post a type this list refuses.
+ */
+export const PHONE_MAY: ReadonlySet<string> = new Set<Event["type"]>(["join", "leave", "profile.draft", "profile.save", "task.add", "task.done", "essay.slot", "paper.enter", "ask.cancel"]);
 
 /** The TV's address, as the desk prints it at start. */
 export function tvAddress(): string {

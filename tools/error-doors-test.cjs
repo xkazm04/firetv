@@ -22,7 +22,13 @@ const files=walk(src).map(f=>({file:rel(f),text:fs.readFileSync(f,'utf8')}));
 const ENGINES='src/lib/engines/';
 
 // ---- 1. the seam
-const PROVIDERS=['claudeCli','codexCli','codexText','ollamaVision','ollamaEmbed','piper','elevenlabs'];
+/**
+ * The provider objects an engine module exports (`export const x: Provider<...>`), read from lib/engines rather than
+ * kept here by hand, so a new provider is covered the day it is exported; plus codexText, the one engine function that
+ * skips the registry on purpose (the UAT driver's codex roles).
+ */
+const providersIn=(list)=>[...new Set(list.flatMap((f)=>[...f.text.matchAll(/export\s+const\s+(\w+)\s*:\s*Provider\s*</g)].map((m)=>m[1])))].sort();
+const PROVIDERS=[...providersIn(files.filter((f)=>f.file.startsWith(ENGINES))),'codexText'];
 const BYPASS=[
  [new RegExp(`import[^;]*\\b(${PROVIDERS.join('|')})\\b[^;]*from\\s*["'][^"']*engines/`),'imports a provider object instead of its engine'],
  [/import[^;]*\b(provider|useProvider)\b[^;]*from\s*["'][^"']*engines\/registry["']/,'looks a provider up in the registry'],
@@ -36,6 +42,8 @@ test('seam canary: each bypass shape is caught by its predicate, and an engine c
  assert.deepEqual(bypasses('import { spawn } from "node:child_process";'),['starts a child process']);
  assert.deepEqual(bypasses('await fetch("http://127.0.0.1:11434/api/generate",{method:"POST"})'),['fetches a model host']);
  assert.deepEqual(bypasses('import { text } from "@/lib/engines/text";'),[]);
+ assert.deepEqual(providersIn([{text:'export const gemini: Provider<TextRequest, unknown> = {'}]),['gemini'],'a newly exported provider is found');
+ for(const p of ['claudeCli','codexCli','ollamaVision','ollamaEmbed','piper','elevenlabs'])assert(PROVIDERS.includes(p),`${p} is read from lib/engines`);
 });
 test('the engine seam is the only way to a model: nothing outside lib/engines bypasses it',()=>{
  const found=files.filter(f=>!f.file.startsWith(ENGINES)).flatMap(f=>bypasses(f.text).map(why=>`${f.file}: ${why}`));
@@ -70,7 +78,10 @@ function silentCatches(text){
  // a body parse that falls back (req.json().catch(() => null)) is answered by the 400 after it, so it is not counted
  const re=/catch\s*(\([^)]*\))?\s*\{\s*\}|(?<!\.json\(\))\.catch\(\s*\(\s*\)\s*=>\s*(\{\s*\}|undefined|null|void 0)\s*\)/g;
  for(const [i,line] of lines.entries()){re.lastIndex=0;let m;while((m=re.exec(line)))out.push(i+1);}
- return out;
+ // an 'error' listener that does nothing is a catch by another name; read before strip(), which blanks the event name
+ const listener=/\.on(?:ce)?\(\s*["']error["']\s*,\s*\(\s*\w*\s*\)\s*=>\s*(\{\s*\}|undefined|null|void 0)\s*\)/g;
+ for(const [i,line] of text.split('\n').entries()){listener.lastIndex=0;let m;while((m=listener.exec(line)))out.push(i+1);}
+ return out.sort((a,b)=>a-b);
 }
 // Pinned 2026-10-15 from the dry run (node tools/error-doors-test.cjs --list). Each entry is file:count; a fixed site lowers
 // its count (and the test then asks for the lower number), a new silent catch anywhere fails.
@@ -86,6 +97,10 @@ test('silent-catch canary: an empty catch and an empty .catch are seen; a commen
  assert.equal(silentCatches('try { x(); } catch { /* the file is optional */ }').length,0);
  assert.equal(silentCatches('try { x(); } catch (e) { console.error(e); }').length,0);
  assert.equal(silentCatches('const s = "catch {}";').length,0);
+ assert.equal(silentCatches('p.stdin.on("error", () => {});').length,1,'an error listener that does nothing is silent');
+ assert.equal(silentCatches("child.once('error', (e) => {})").length,1);
+ assert.equal(silentCatches('child.stdout.on("data", () => {});').length,0,'a data listener is not an error door');
+ assert.equal(silentCatches('p.on("error", (e) => reject(e));').length,0);
 });
 test('silent catches only shrink: no new one, and a fixed one leaves the list',()=>{
  const now={};for(const f of files){const n=silentCatches(f.text).length;if(n)now[f.file]=n;}

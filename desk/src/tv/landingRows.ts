@@ -17,10 +17,21 @@ import { summaryLine } from "@/lib/rules/essay";
 /** The three apps, left to right on the desk. A profile shows only the ones it has on, in this order. */
 export const LANDING_MODULES = ["maths", "english", "essay"] as const satisfies readonly Subject[];
 /**
- * A stop on the desk: an app's object, the place card (whose desk it is: Select hands it to someone else), and the
+ * Writing (TV-WRITING-SCREEN-2026-10-21) lies on the desk after the three apps whenever Essay Master is on the profile: it
+ * is a coached episode of the essay family, not a Subject of its own (tasks, recaps and the worlds stay three).
+ */
+export type LandingApp = Subject | "writing";
+/** Is Writing on the desk for the learner at it: with Essay Master on their profile. */
+export function writingOn(s: Session): boolean { return onModules(s).includes("essay"); }
+/** The objects on the desk, left to right: the apps on the profile, then Writing. */
+export function landingApps(s: Session): LandingApp[] {
+  return writingOn(s) ? [...landingModules(s), "writing"] : landingModules(s);
+}
+/**
+ * A stop on the desk: an app's object (Writing's too), the place card (whose desk it is: Select hands it to someone else), and the
  * phone (Select shows the pairing screen; paired, it also says how many phones are here and can forget them all).
  */
-export type LandingStop = Subject | "place" | "phone";
+export type LandingStop = LandingApp | "place" | "phone";
 /**
  * The landing's resting focus. Arriving on the landing without a stop named (a fresh desk, a nav with no focus),
  * the lamp starts on the object with something waiting - the CONTINUE object - rather than on whatever is first;
@@ -35,7 +46,7 @@ export function landingModules(s: Session): Subject[] {
 }
 /** Every stop: the apps, the place card, then the phone - always (TL-3): paired, Select on it shows who is here and pairs another. */
 export function landingStops(s: Session): LandingStop[] {
-  return [...landingModules(s), "place", "phone"];
+  return [...landingApps(s), "place", "phone"];
 }
 /** The focus index of a stop, or LANDING_REST when it is not on this desk (the lamp then starts where it rests). */
 export function landingFocus(s: Session, stop: LandingStop): number {

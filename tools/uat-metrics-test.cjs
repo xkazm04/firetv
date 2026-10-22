@@ -120,3 +120,85 @@ test('--journeys naming a journey no file defines is refused before a Character 
   assert.deepEqual(D().parseArgs(['--journeys', 'J3,J1'], { characters: [], journeyTexts: texts }).journeys, ['J3', 'J1']);
   assert.doesNotThrow(() => D().parseArgs(['--journeys', 'J1,J2,J3,J4,J5'], { characters: [] }), 'the committed journeys J1-J5 are all known');
 });
+
+test('a Character whose own journeys name no journey file is refused before any child is spawned, never a crash mid-run', () => {
+  const texts = ['J1', 'J3'].map(id => `# ${id}\n\n\`\`\`json\n${JSON.stringify({ id, title: id, budget: 3, gates: [] })}\n\`\`\`\n`);
+  const cast = [{ id: 'ana-20', journeys: ['J1', 'J3'] }, { id: 'bo-30', journeys: ['J1', 'J9'] }];
+  const opts = { characters: cast.map(c => c.id), journeyTexts: texts, cast };
+  assert.throws(() => D().parseArgs([], opts), /bo-30 J9.*Known: J1, J3/);
+  assert.throws(() => D().parseArgs(['bo-30'], opts), /bo-30 J9/);
+  assert.doesNotThrow(() => D().parseArgs(['ana-20'], opts), 'a run of other Characters is not stopped by her list');
+  assert.doesNotThrow(() => D().parseArgs(['--journeys', 'J1'], opts), 'a --journeys run that leaves the stray journey out never reaches it');
+  assert.doesNotThrow(() => D().parseArgs(['--status'], opts), '--status spawns nothing');
+  // the committed Characters, read as the parent reads them, all name known journeys
+  const all = fs.readdirSync(path.join(UAT, 'characters')).filter(f => f.endsWith('.md')).map(f => JSON.parse(fs.readFileSync(path.join(UAT, 'characters', f), 'utf8').match(/```json\s*\n([\s\S]*?)\n```/)[1]));
+  assert.ok(all.length >= 10);
+  assert.doesNotThrow(() => D().parseArgs([], { characters: all.map(c => c.id), cast: all }));
+  const src = fs.readFileSync(path.join(DRIVER, 'linga-text.cjs'), 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '');
+  assert.match(src, /parseArgs\(process\.argv\.slice\(2\), \{[^}]*cast: all\.map\(c => c\.sim\)/, 'parent() hands parseArgs the cast it will spawn');
+});
+
+test('the overlay docs cite driver code by symbol, never by a line number that the next driver edit moves', () => {
+  const docs = ['README.md', 'env.md', 'rubric.md', 'references.md', 'accepted-gaps.md', 'drift/README.md'];
+  const anchors = docs.flatMap(f => [...fs.readFileSync(path.join(UAT, f), 'utf8').matchAll(/driver\/[\w-]+\.cjs:\d+/g)].map(m => `${f}: ${m[0]}`));
+  assert.deepEqual(anchors, [], 'cite the function instead (`readBlock` in driver/linga-text.cjs)');
+  // the symbol the two docs name for the throw on a file without a json block exists, and is what throws
+  const src = fs.readFileSync(path.join(DRIVER, 'linga-text.cjs'), 'utf8');
+  assert.match(src, /function readBlock\(file\) \{[^}]*throw new Error\(`\$\{file\}: no json block`\)/);
+  for (const f of ['README.md', 'env.md']) assert.match(fs.readFileSync(path.join(UAT, f), 'utf8'), /`readBlock`/, `${f} names readBlock`);
+});
+
+test('the README layout counts each Character and journey directory as it is, not as it was', () => {
+  const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+  const readme = fs.readFileSync(path.join(UAT, 'README.md'), 'utf8'), seen = [];
+  for (const m of readme.matchAll(/^ {2}((?:characters|journeys)(?:\/\w+)?)\/\*\.md +(\w+) /gm)) {
+    const [, dir, word] = m, n = fs.readdirSync(path.join(UAT, dir)).filter(f => f.endsWith('.md')).length;
+    assert.equal(WORDS.indexOf(word), n, `README layout: ${dir}/*.md says "${word}", the directory holds ${n}`);
+    seen.push(dir);
+  }
+  assert.deepEqual(seen.sort(), ['characters', 'characters/essay', 'characters/maths', 'journeys', 'journeys/essay', 'journeys/maths'], 'every Character and journey directory has its count line');
+});
+
+test('the README Character template carries every field a committed Character carries, so a new one written from it is complete', () => {
+  const readme = fs.readFileSync(path.join(UAT, 'README.md'), 'utf8');
+  const template = JSON.parse(readme.slice(readme.indexOf('## Character template')).match(/```json\s*\n([\s\S]*?)\n```/)[1]);
+  const sims = fs.readdirSync(path.join(UAT, 'characters')).filter(f => f.endsWith('.md')).map(f => JSON.parse(fs.readFileSync(path.join(UAT, 'characters', f), 'utf8').match(/```json\s*\n([\s\S]*?)\n```/)[1]));
+  const keys = (o, pre = '') => Object.entries(o).flatMap(([k, v]) => v && typeof v === 'object' && !Array.isArray(v) ? [`${pre}${k}`, ...keys(v, `${pre}${k}.`)] : [`${pre}${k}`]);
+  const have = new Set(keys(template)), missing = [...new Set(sims.flatMap(s => keys(s)))].filter(k => !have.has(k)).sort();
+  assert.deepEqual(missing, [], `the template lacks ${missing.join(', ')}`);
+});
+
+test('Essay and Math: each Character\'s "journeys:" line and each journey\'s Characters section name the same pairs', () => {
+  const ids = new Set(), byCharacter = new Set(), byJourney = new Set(), journeyIds = new Set();
+  for (const mod of ['essay', 'maths']) {
+    for (const f of fs.readdirSync(path.join(UAT, 'characters', mod)).filter(f => f.endsWith('.md'))) {
+      const id = f.replace(/\.md$/, ''), line = fs.readFileSync(path.join(UAT, 'characters', mod, f), 'utf8').match(/^module: [^\n]*· journeys: ([^·\n]+)/m);
+      assert.ok(line, `${mod}/${f}: no "module: … · journeys: …" line`);
+      ids.add(id);
+      for (const j of line[1].split(',').map(s => s.trim()).filter(Boolean)) byCharacter.add(`${id} ${j}`);
+    }
+    for (const f of fs.readdirSync(path.join(UAT, 'journeys', mod)).filter(f => f.endsWith('.md'))) {
+      const j = f.match(/^([A-Z]+\d+)-/)[1], text = fs.readFileSync(path.join(UAT, 'journeys', mod, f), 'utf8');
+      journeyIds.add(j);
+      const section = text.split(/^## Characters\s*$/m)[1];
+      assert.ok(section, `${mod}/${f}: no "## Characters" section`);
+      const listed = section.split(/^## /m)[0].split(/\n\s*\n/).find(p => p.trim()) ?? '';
+      for (const m of listed.matchAll(/[a-z]+-\d+/g)) byJourney.add(`${m[0]} ${j}`);
+    }
+  }
+  const only = (a, b) => [...a].filter(x => !b.has(x)).sort();
+  assert.deepEqual(only(byCharacter, byJourney), [], 'pairs a Character lists that its journey does not');
+  assert.deepEqual(only(byJourney, byCharacter), [], 'pairs a journey lists that its Character does not');
+  assert.deepEqual([...byJourney].map(p => p.split(' ')[0]).filter(c => !ids.has(c)), [], 'a journey names a Character no file defines');
+  assert.deepEqual([...byCharacter].map(p => p.split(' ')[1]).filter(j => !journeyIds.has(j)), [], 'a Character names a journey no file defines');
+  assert.equal(byCharacter.size, 23);
+});
+
+test('the rubric\'s list of gateable series ids is the registry\'s, not a copy that falls behind it', () => {
+  const rubric = fs.readFileSync(path.join(UAT, 'rubric.md'), 'utf8');
+  const listed = ids => { const m = rubric.match(/A gate names a registry series id: ([^;]+);/); assert.ok(m, 'the rubric states the gateable ids'); return [...m[1].matchAll(/`(\w+)`/g)].map(x => x[1]); };
+  assert.deepEqual(listed(), M().series().map(s => s.id));
+  // a series registered later (here one that measures an existing rubric row, so case 7 stays green) is caught here
+  const unregister = M().register({ key: 'pitchShare', series: [{ id: 'pitchShare', label: 'pitch share', rubric: 'pitch', of: () => [0, 0] }] });
+  try { assert.notDeepEqual(listed(), M().series().map(s => s.id)); } finally { unregister(); }
+});

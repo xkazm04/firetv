@@ -12,12 +12,12 @@
  * (`CALC_SLIPS`, `slipsFor`): the model never decides a verdict; on an item code already judged wrong it may only
  * pick a slip id from its shape's list, as the linear pipeline does (rules/maths.ts settled()).
  *
- * Pure: imports only calc-expr.ts, calc-read.ts and calc2.ts - no engine, no session store, no TV module. A spec of a
+ * Pure: imports only calc-expr.ts, calc-read.ts, calc2.ts and the taskText leaf (calc2-seam-test 2 pins the list) - no engine, no session store, no TV module. A spec of a
  * Calculus 2 shape (rules/calc2.ts) is sent to calc2.ts on the first line of each public function below.
  */
 import { commaSystem, readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
-import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, systemLogs, withinRel } from "./calc-read";
+import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, czechNames, decimalCall, decimalNumeral, infinityOf, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, systemLogs, withinRel } from "./calc-read";
 import { agreesWhereBoth, compile, derivativeAt, evalNode, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, type Expr, type Limit, type Node } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -189,7 +189,7 @@ function newtonIterates(f: Expr, x0: number, n: number): number[] | null {
 function read(spec: unknown): Read {
   if (!spec || typeof spec !== "object" || !isShape((spec as { shape?: unknown }).shape) || isImplicitSpec(spec)) return { ok: false, why: REJECT.shape };
   const s = spec as CalcSpec & Record<string, unknown>;
-  if (["answer", "truth", "solution", "value"].some((k) => k in s)) return { ok: false, why: REJECT.answer };
+  if (carriesAnswer(s)) return { ok: false, why: REJECT.answer };
   const f = typeof s.f === "string" ? compile(s.f) : null;
   if (!f) return { ok: false, why: REJECT.read };
   if (f.constant) return { ok: false, why: REJECT.constant };
@@ -323,7 +323,7 @@ const approach = (at: Num | "inf" | "-inf", side?: "+" | "-") => (at === "inf" ?
 function printable(spec: unknown): { s: CalcSpec; f: Expr } | null {
   if (!spec || typeof spec !== "object" || !isShape((spec as { shape?: unknown }).shape) || isImplicitSpec(spec)) return null;
   const s = spec as CalcSpec & Record<string, unknown>;
-  if (["answer", "truth", "solution", "value"].some((k) => k in s)) return null;
+  if (carriesAnswer(s)) return null;
   const f = typeof s.f === "string" ? compile(s.f) : null;
   if (!f || f.constant || !f.usesX) return null;
   const has = (...n: unknown[]) => n.every((v) => num(v) !== null);
@@ -415,9 +415,10 @@ const called = (c: ReturnType<typeof decimalCall>): CalcVerdict =>
   c === "right" ? verdict("right", WHY.right) : c === "rounded" ? verdict("unsure", WHY.rounded) : c === "sign" ? verdict("wrong", WHY.sign, "sign") : verdict("wrong", WHY.wrong);
 
 function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, written: string): CalcVerdict {
-  const decimal = isDecimal(written);
+  // a decimal in brackets or behind a sign is the same decimal ('(0.38)', '-(0.38)': calc-read decimalNumeral, ruling 28)
+  const numeral = decimalNumeral(written), decimal = numeral !== null;
   // a limit or an integral: a decimal is decided by the one rule calc2's sequence limit also calls (MB-B28, D2 R1a)
-  if (decimal && (shape === "limit" || shape === "definite-integral")) return called(decimalCall(written, s, truth, { ...TOLERANCE[shape], close: ROUNDED_CLOSE }));
+  if (numeral !== null && (shape === "limit" || shape === "definite-integral")) return called(decimalCall(numeral, s, truth, { ...TOLERANCE[shape], close: ROUNDED_CLOSE }));
   const tol = decimal ? TOLERANCE[shape].rounded : TOLERANCE[shape].exact;
   if (withinRel(s, truth, tol)) return verdict("right", WHY.right);
   if (!withinRel(0, truth, tol) && withinRel(-s, truth, tol)) return verdict("wrong", WHY.sign, "sign");
@@ -626,15 +627,6 @@ function ownPieces(s: CalcSpec): string[] {
   return out;
 }
 
-/**
- * An answer said in words as its symbols (HL3): 'x squared' is x^2, 'x cubed' x^3, 'to the power of 4' ^4, 'plus' +, 'minus' -
- * (a minus before a figure is already read), 'times' *. 'three x squared plus two x' is then '3 x^2 + 2 x', a window the engine reads.
- */
-const algebraSaid = (t: string) => t
-  .replace(/\s+(?:to\s+the\s+power\s+of|to\s+the)\s+(-?\d+)\b/g, "^$1")
-  .replace(/\s+squared\b/g, "^2").replace(/\s+cubed\b/g, "^3")
-  .replace(/\s+plus\s+/g, " + ").replace(/\s+minus\s+/g, " - ").replace(/\s+times\s+/g, " * ");
-
 /** Most tokens a window of the line may span. */
 const WINDOW = 6;
 /** Most tokens the long pass reads as one expression (a right answer said whole, longer than WINDOW). */
@@ -656,9 +648,13 @@ const LONG_WINDOW = 24;
  * too. One reads the line as scan reads it, the other the line as it was before the question's own pieces were set
  * aside (that step can erase a term of the answer). Both only add hits.
  * For a number, one more pass reads the line again with a lone digit,digit as a point ('2,72' is 2.72), for every learner (MK4).
+ * Any line in Czech notation (tg, cotg, arctg, arccotg) is also read with the engine's names, for every learner (MB-B36).
  */
 export function leaksCalc(spec: unknown, line: unknown): boolean {
   if (isCalc2Spec(spec)) return calc2LeaksCalc(spec, line);
+  // a hint in Czech notation (tg, cotg, arctg, arccotg: calc-read czechNames, MB-B36) is read again with the names the
+  // engine knows, for every learner: the cz hint prompt names that notation, and the judge reads it in a cz answer
+  if (typeof line === "string") { const named = czechNames(line); if (named !== line && leaksCalc(spec, named)) return true; }
   if (isImplicitSpec(spec)) return leaksImplicit(spec, line) || (typeof line === "string" && pointForComma(line) !== line && leaksImplicit(spec, pointForComma(line)));
   if (leaksCalcOnce(spec, line)) return true;
   if (typeof line !== "string") return false;
@@ -1243,7 +1239,7 @@ const IMPLICIT_SEEN_MAX = 64;
  * CURVE_LEAST points of the curve have a slope, and the slope is not the same at all of them (a straight line).
  */
 function readImplicit(spec: ImplicitSpec): ImplicitRead {
-  const key = JSON.stringify([spec.f, spec.point, ["answer", "truth", "solution", "value"].some((k) => k in spec)]);
+  const key = JSON.stringify([spec.f, spec.point, carriesAnswer(spec)]);
   const seen = IMPLICIT_SEEN.get(key);
   if (seen) return seen.ok ? { ...seen, s: spec } : seen;
   const r = readImplicitOnce(spec);
@@ -1252,7 +1248,7 @@ function readImplicit(spec: ImplicitSpec): ImplicitRead {
   return r;
 }
 function readImplicitOnce(s: ImplicitSpec): ImplicitRead {
-  if (["answer", "truth", "solution", "value"].some((k) => k in s)) return { ok: false, why: REJECT.answer };
+  if (carriesAnswer(s)) return { ok: false, why: REJECT.answer };
   const sides = sidesOf(s.f);
   if (!sides) return { ok: false, why: REJECT.equation };
   const F = readXY(`(${sides[0]}) - (${sides[1]})`);
@@ -1289,7 +1285,7 @@ function yInside(s: ImplicitSpec): boolean {
 
 /** 'Find dy/dx if x^2 + y^2 = 25.', 'Find dy/dx at (3, 4) if x^2 + y^2 = 25.' - null when the spec is malformed. */
 function implicitQuestion(s: ImplicitSpec): { plain: string } | null {
-  if (["answer", "truth", "solution", "value"].some((k) => k in s)) return null;
+  if (carriesAnswer(s)) return null;
   const sides = sidesOf(s.f), at = pointOf(s);
   if (!sides || at === undefined) return null;
   const [l, r] = sides;

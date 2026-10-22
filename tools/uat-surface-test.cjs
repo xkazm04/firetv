@@ -322,3 +322,10 @@ test('UD-24:"done" is honoured whether or not it is offered; anything else must 
   assert.equal(S.gate(sf, { action: 'find-level' }), 'ok');
   assert.equal(S.gate(sf, { action: 'pick-level' }), 'not-offered');
 });
+
+test('GUARD: every by-design unmapped label is a control some Linga state draws, so a stale entry cannot excuse a future stray', () => {
+  const S = surface(), drawn = new Set();
+  for (const fx of Object.values(STATES)) for (const s of [sessionOf(fx), asked(sessionOf(fx))]) for (const ui of [{}, { menu: true }]) for (const c of S.surfaceOf(s, ui).controls) drawn.add(c.label);
+  const stale = Object.keys(S.BY_DESIGN_UNMAPPED).filter(label => !drawn.has(label));
+  assert.deepEqual(stale, [], `BY_DESIGN_UNMAPPED entries no state draws: ${stale.join(', ')}`);
+});

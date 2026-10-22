@@ -52,8 +52,19 @@ test('the coaching never contains a full model sentence',async()=>{
   // a note about the writing passes through
   said='Your claim has nothing a reader can check yet. What would show it is true?';
   r=await C.coachNote(DRAFT,'teen',prompt,ask);assert.equal(r.source,'model');assert.equal(r.note,said);
+  // the system asks for ONE short note of at most two sentences: a note past that is the code's line, not the TV's 46 px wall
+  assert.match(C.COACH_SYSTEM,/at most two sentences/);assert.equal(C.NOTE_MAX_SENTENCES,2);
+  said='Your claim is clear. Nothing a reader can check follows it. What would show it is true?';
+  r=await C.coachNote(DRAFT,'teen',prompt,ask);assert.equal(r.source,'code','three sentences is not the one short note asked for');
+  said='Your claim is stated clearly enough for a reader to follow, '+Array(40).fill('and').join(' ')+' it still needs a fact. What would show it?';
+  assert.ok(RE.splitSentences(said).length<=2&&said.length>C.NOTE_MAX_CHARS);
+  assert.equal((await C.coachNote(DRAFT,'teen',prompt,ask)).source,'code','a two-sentence note past the length cap is the code line');
+  for(const band of ['young','teen'])for(const d of [DRAFT,'Cats are good. Dogs are good.',Array(40).fill('word').join(' ')+'. Another short one here.'])
+    assert.ok(C.codeNote(d,band).length<=C.NOTE_MAX_CHARS,'every code line fits the cap it falls back to');
   // the engine was asked with a schema, the writing-coach use, and a system that forbids handing over a sentence
   assert.ok(asked.every(a=>a.schema&&a.use==='writing-coach'&&/Never write a sentence/.test(a.system)));
+  // one short note while the TV says the desk is reading: asked without hidden reasoning, as every short 'fast' call here is (lib/engines/text.ts childEnv: 4-6 s off against 52-90 s on)
+  assert.ok(asked.length>0&&asked.every(a=>a.model==='fast'&&a.thinking===false),'the coach asks with thinking off');
   // a failing engine, an empty note, a non-string note: the code line, no throw
   for(const bad of [()=>Promise.reject(new Error('down')),()=>Promise.resolve({json:{note:''}}),()=>Promise.resolve({json:{note:7}}),()=>Promise.resolve({})]){
     r=await C.coachNote(DRAFT,'teen',prompt,bad);assert.equal(r.source,'code');
@@ -85,6 +96,22 @@ test('a finished episode lands in the seated learner record',()=>{
   assert.ok(fs.readdirSync(process.env.DESK_DATA_DIR).length>0);
   // a second learner is untouched
   assert.equal(L.getLearner('kid-2').history.length,0);
+});
+
+test('the revision is read again: punctuation-only is refused, evidence added holds, none added still needs',()=>{
+  const coachedEp=()=>{let r=E.pick(E.START,'screens');return E.coached(r.episode,DRAFT,'a note').episode;};
+  const punct=E.revised(coachedEp(),DRAFT.replace('bed.','bed!')+' ');
+  assert.equal(punct.ok,false);assert.match(punct.error,/change some of your words/i);
+  assert.equal(E.revised(coachedEp(),DRAFT.replace(/ /g,'  ').toUpperCase()).ok,false,'case and spacing alone are no revision');
+  const done=(rev)=>{const r=E.revised(coachedEp(),rev);assert.ok(r.ok,JSON.stringify(r));return E.finished(r.episode,1).episode;};
+  const good=done(REVISED);assert.equal(good.focus,'evidence');assert.equal(good.holds,true);
+  assert.match(E.checkLine(good),/coached on evidence; the revision now gives evidence/);
+  const bad=done(DRAFT.replace('fun','nice'));assert.equal(bad.holds,false);
+  assert.match(E.checkLine(bad),/the revision still needs evidence/);
+  assert.equal(E.checkLine({}),'coached; the revision was not checked');
+  assert.doesNotMatch(S.saveEpisode('kid-3',bad).detail,/revised/);
+  assert.equal(E.focusHolds('length','Short one here. Another short one.'),true);
+  assert.equal(E.focusHolds('length',Array(40).fill('word').join(' ')+'. Ok then.'),false);
 });
 
 test('the /writing page paints its own ground: its dark text is not left on the desk\'s dark body (stick walk 2026-10-21)',()=>{

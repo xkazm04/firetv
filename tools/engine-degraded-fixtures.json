@@ -16,8 +16,10 @@
     { "name": "the engine times out", "answer": { "$throw": "timeout" }, "expect": { "fails": "The desk could not read that page. It took too long." } },
     { "name": "the engine is not running", "answer": { "$throw": "unreachable" }, "expect": { "fails": "The desk could not read that page. The engine behind it is not answering." } },
     { "name": "the engine process dies", "answer": { "$throw": "exit" }, "expect": { "fails": "The desk could not read that page. The engine behind it stopped part way." } },
-    { "name": "a page with nothing on it", "answer": { "items": [] }, "expect": { "lands": 0 } },
-    { "name": "centres outside the photo", "answer": { "items": [ { "number": 1, "text": "2x+3=11", "y": 1.4, "x": 0.5 }, { "number": 2, "text": "x-5=2", "y": -0.2, "x": 1.3 } ] }, "expect": { "inPage": true }, "todo": "read.ts trusts the model's fractions: y 1.4 gives an inverted band ([136, 100] on a 100 px page), so the TV crops nothing. The centres should be clamped into the page." },
+    { "name": "the answer is cut off at its length limit", "answer": { "$throw": "cutoff" }, "expect": { "fails": "The desk could not read that page. The answer ran past its length limit.", "again": false } },
+    { "name": "the engine declines", "answer": { "$throw": "declined" }, "expect": { "fails": "The desk could not read that page. The engine would not answer that one.", "again": false } },
+    { "name": "a page with nothing on it", "answer": { "items": [] }, "expect": { "fails": "The desk found nothing to read on that page. Try again." } },
+    { "name": "centres outside the photo", "answer": { "items": [ { "number": 1, "text": "2x+3=11", "y": 1.4, "x": 0.5 }, { "number": 2, "text": "x-5=2", "y": -0.2, "x": 1.3 } ] }, "expect": { "inPage": true } },
     { "name": "a blank item among real ones", "answer": { "items": [ { "number": 1, "text": "   ", "y": 0.2, "x": 0.5 }, { "number": 2, "text": "x-5=2", "y": 0.5, "x": 0.5 } ] }, "expect": { "noBlankItems": true }, "todo": "read.ts keeps an item whose text is only spaces, so the TV can focus an empty problem and ask a hint for nothing. A blank item should be dropped." }
   ],
   "hint": [
@@ -27,6 +29,8 @@
     { "name": "the engine times out", "answer": { "$throw": "timeout" }, "expect": { "fails": "The desk could not come up with a hint just now. It took too long." } },
     { "name": "the engine is not running", "answer": { "$throw": "unreachable" }, "expect": { "fails": "The desk could not come up with a hint just now. The engine behind it is not answering." } },
     { "name": "the engine process dies", "answer": { "$throw": "exit" }, "expect": { "fails": "The desk could not come up with a hint just now. The engine behind it stopped part way." } },
+    { "name": "the answer is cut off at its length limit", "answer": { "$throw": "cutoff" }, "expect": { "fails": "The desk could not come up with a hint just now. The answer ran past its length limit.", "again": false } },
+    { "name": "the engine declines", "answer": { "$throw": "declined" }, "expect": { "fails": "The desk could not come up with a hint just now. The engine would not answer that one.", "again": false } },
     { "name": "the answer, twice", "answer": { "hint": "So x is 4.", "what_to_try_next": "Write x = 4 under the line." }, "expect": { "withheld": true } },
     { "name": "empty strings", "answer": { "hint": "", "what_to_try_next": "" }, "expect": { "neverBlank": true }, "todo": "hint.ts's SCHEMA sets no minLength, so an empty hint lands on the TV and is read aloud as silence. It should fail as a shape break or fall back to the withheld line." },
     { "name": "whitespace only", "answer": { "hint": "   ", "what_to_try_next": "  " }, "expect": { "neverBlank": true }, "todo": "The same gap as empty strings: a hint of spaces is a blank card on the TV." }

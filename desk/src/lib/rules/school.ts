@@ -582,7 +582,7 @@ const REJECT = {
   notWholeRatio: "No whole number makes the two ratios equal.",
   rateOne: "The question already gives the value of a single one: there is nothing to find.",
   sameRate: "The question asks about the same number it gives: there is nothing to work out.",
-  rateUnit: "A cost is in euros or pounds and a distance in km, and the spec names the one it is.",
+  rateUnit: "A cost is in euros, pounds or crowns and a distance in km, and the spec names the one it is.",
   areaUnit: "An area names its square unit, cm2 or m2.",
   sameList: "Every number in the list is the same: there is nothing to work out.",
   pythUnit: "A side is in mm, cm or metres, and the spec names which.",
@@ -673,7 +673,6 @@ const AREA_RES: [RegExp, "rectangle" | "triangle" | "composite"][] = [
   [new RegExp(String.raw`^triangle base ${SIDE_SRC} height ${SIDE_SRC}$`), "triangle"],
   [new RegExp(String.raw`^rectangles ${SIDE_SRC} by ${SIDE_SRC} and ${SIDE_SRC} by ${SIDE_SRC}$`), "composite"],
 ];
-/** W7 batch 3: "mean 4, 7, 9, 10" or "range 12, 5, 9, 20, 7": three to ten whole numbers, a comma and a space between. */
 /** M2b: the colours a bag holds, closed so a spec never carries free text. */
 export const PROB_COLOURS = ["red", "blue", "green", "yellow", "white", "black", "orange", "purple", "pink"] as const;
 const COL = `(?:${PROB_COLOURS.join("|")})`;
@@ -682,6 +681,7 @@ const PROB_BAG_RE = new RegExp(String.raw`^bag (${COL} [1-9]\d?(?:, ${COL} [1-9]
 const PROB_COMP_RE = new RegExp(String.raw`^complement (${COL}) (0\.(?:[1-9]\d?|0[1-9])|[1-9]\d?%)$`);
 /** M2b: "longest 6 8" (the shorter sides given) or "shorter 10 6" (the longest and a shorter side given): sides of up to three digits. */
 const PYTH_RE = /^(longest|shorter) ([1-9]\d{0,2}) ([1-9]\d{0,2})$/;
+/** W7 batch 3: "mean 4, 7, 9, 10" or "range 12, 5, 9, 20, 7": three to ten whole numbers, a comma and a space between. */
 const STAT_RE = /^(mean|range) ((?:0|[1-9]\d{0,2})(?:, (?:0|[1-9]\d{0,2})){2,9})$/;
 const sideQ = (x: string): Q => { const [w, f = ""] = x.split("."); return mk(BigInt(w + f), pow10(f.length))!; };
 const fracNode = (n: bigint, d: bigint): Node => ({ k: "frac", n, d });
@@ -1296,10 +1296,17 @@ const specUnit = (s: SchoolSpec): Unit | undefined => (s.shape === "compute" || 
  * (a top at most 1000, a bottom 2 to 100) and not the given one's own; `simplify` "a/b", proper and not yet in lowest
  * terms; none of them takes a form or a sign flag. W7 batch 3: `ratio` "12:18" not in lowest terms, "T in a:b" with a:b in
  * lowest terms, a ≠ b, whole shares neither printed, or "a:b = ?:k" / "a:b = k:?" with a whole missing term the question
- * does not print; numbers at most 1000. `rate` "q1 noun cost p, q2" (€ or £) or "D km in h1 h, q2" (km): q1 at least 2,
+ * does not print; numbers at most 1000. `rate` "q1 noun cost p, q2" (€, £ or Kč) or "D km in h1 h, q2" (km): q1 at least 2,
  * q2 not q1, a value to two places at most that the question does not print. `area` a rectangle, a triangle (base and
  * height) or two rectangles, sides whole or a half above nothing, `unit` cm2 or m2. `stat` a mean or range of three to ten
- * whole numbers 0..999, not all the same, a mean to two places at most.
+ * whole numbers 0..999, not all the same, a mean to two places at most. W7 batch 2: `convert` a terminating fraction in
+ * lowest terms, decimal or percent, never whole, asked in another form (`to`); `percent-of` "p% of N" and `percent-change`
+ * "increase/decrease B by p%", the value to two places at most and not a number the question prints. v2 M2b:
+ * `pythagoras` "longest x y" / "shorter x y", whole sides at most 100 and a whole missing side, `unit` mm, cm or m;
+ * `probability` a bag of two to four colours (at most 20 counters) or a stated probability's complement, strictly between
+ * 0 and 1. MB-B20 top rungs (a story's id first where it is one): a compute on mixed numbers, a reverse percentage, two
+ * changes or a change over years, a Pythagoras side rounded to 1 or 2 places, and two events. Each shape's own rules and
+ * reasons are in `readKind` and REJECT.
  */
 export function wellFormed(spec: unknown): { ok: true } | { ok: false; why: string } {
   try {
@@ -1597,8 +1604,8 @@ function printQuestion(spec: unknown, system?: SchoolSystem): { plain: string; t
 
 // ------------------------------------------------------------------ the slips a closed form can detect
 
-/** `name` is the slip's title, `says` the desk's line, `points` where to look: none carries a value. */
 /**
+ * `name` is the slip's title, `says` the desk's line, `points` where to look: none carries a value.
  * `short`: the slip's label under the TV recap's ring (tv/recapRows `slippedOf`) - lowercase, at most four words, no value,
  * a faithful compression of `name`; every slip carries one (cycle 21; the linear and Calculus tables too), and no two slips a
  * unit can name (SCHOOL_UNIT_SLIPS with its SCHOOL_TOP_SLIPS) share one. English only, like the titles.
@@ -2203,8 +2210,11 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
     // is the right number in the wrong form, or a slip: the desk does not guess, and never calls it right
     if ((K.k === "pct-of" || K.k === "pct-change" || K.k === "pct-top") && form === "percent" && (eq(mul(v, qi(BigInt(100))), t) || eq(v, t))) return { verdict: "unsure", form, why: WHY.amountAsPercent };
     // W7 batch 3: an amount of these units is never a percentage (unsure, the desk does not guess what was meant); a cost's
-    // value in cents or pence written bare (560 for €5.60) is the answer in another unit or a slip, and the desk does not guess
-    if ((K.k === "rate" || K.k === "area" || K.k === "stat" || K.k === "pyth" || K.k === "pyth-dp") && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    // value in cents or pence written bare (560 for €5.60) is the answer in another unit or a slip, and the desk does not guess.
+    // A fraction of an amount, a missing number and a computation in a unit are amounts too (2400% is not 24 kg; optimize
+    // 2026-10-21), as a missing ratio term is in checkRatio; a bare computation still takes any equal form (75% for 3/4)
+    const amount = K.k === "rate" || K.k === "area" || K.k === "stat" || K.k === "pyth" || K.k === "pyth-dp" || K.k === "of" || K.k === "missing" || (K.k === "compute" && unit !== undefined);
+    if (amount && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
     if (K.k === "pyth-dp") return checkRounded(r, K, reading);
     if (K.k === "rate" && K.measure === "cost" && !reading.unit && !eq(v, t) && eq(v, mul(t, qi(BigInt(100))))) return { verdict: "unsure", form, why: WHY.pence };
     const simplest = K.k === "simplify" || (r.spec.shape === "compute" && r.spec.form === "simplest");
@@ -2650,13 +2660,14 @@ function pythRooted(k: { find: "longest" | "shorter"; x: bigint; y: bigint }, te
  * Does this hint or explanation line state the answer, or give it away? The rule is in this file's header, and each
  * shape's own part of it in `leakProfile`. Two more readings of rule 6 (W7): three numbers chained by × and ÷ whose
  * value is the answer ("12 ÷ 4 × 3" for 3/4 = ?/12, "40 ÷ 5 × 3" for 3/5 of 40), and the joining words above. False
- * for a line that is not text or a spec the desk cannot work out (there is nothing to leak); an internal fault refuses
- * the line (true), the strict side.
+ * for a line that is not text or a spec the desk cannot work out (there is nothing to leak); an internal fault, in
+ * reading the spec or in the check itself, refuses the line (true), the strict side.
  */
 export function leaksSchool(spec: unknown, hint: unknown): boolean {
   if (typeof hint !== "string" || !hint.trim()) return false;
   let r: Read;
-  try { r = read(spec); } catch (e) { checkerFault("school.leaksSchool read", e); return false; }
+  // a fault while reading the spec is a desk defect, not a spec it cannot work out: the line is refused, the strict side
+  try { r = read(spec); } catch (e) { checkerFault("school.leaksSchool read", e); return true; }
   if (!r.ok) return false;
   try {
     const pr = leakProfile(r), { T, targets } = pr;
@@ -3061,7 +3072,7 @@ export function storyOf(spec: unknown): StoryId | PctStoryId | PythStoryId | Pro
     if (!st.ok) return null;
     const K = st.kind;
     return (K.k === "compute" || K.k === "pct-top" || K.k === "pyth-dp" || K.k === "prob-two") && K.story ? K.story : null;
-  } catch {
+  } catch (e) { checkerFault("school.storyOf", e);
     return null;
   }
 }
@@ -3828,7 +3839,7 @@ export function topFormOf(topicId: unknown, spec: unknown): string | null {
     const K = st.kind;
     const f = topicId === "pct-change" && K.k === "pct-top" ? K.form : topicId === "pythagoras" && K.k === "pyth-dp" ? K.find : topicId === "probability" && K.k === "prob-two" ? K.form : null;
     return f && SCHOOL_TOP_FORMS[topicId].includes(f) ? f : null;
-  } catch {
+  } catch (e) { checkerFault("school.topFormOf", e);
     return null;
   }
 }
@@ -4461,7 +4472,10 @@ export const specFromQuestion = (text: unknown, system?: SchoolSystem): SchoolSp
  * fractions, a product or quotient of two fractions multiply and divide fractions (W7), a fraction of an amount its own
  * unit, a missing number or a simplify equivalent fractions; two numbers with a decimal among them added, subtracted or
  * multiplied the decimals unit (W7 batch 2); any `ratio` spec "Ratio and sharing", any `rate` spec "Unit rates and direct
- * proportion", any `area` spec its unit, any `stat` spec "Mean and range" (W7 batch 3).
+ * proportion", any `area` spec its unit, any `stat` spec "Mean and range" (W7 batch 3); any `convert` spec "dec-convert",
+ * `percent-of` "pct-of-amount", `percent-change` (its top rung too) "pct-change" (W7 batch 2); any `pythagoras` spec
+ * (its top rung too) "pythagoras" and any `probability` spec (two events too) "probability" (v2 M2b, MB-B20). The
+ * `compute` and `fraction-of` cases are as above, a mixed number counting as a fraction (MB-B20).
  */
 export function unitOf(spec: unknown): string | null {
   try {
@@ -4578,7 +4592,8 @@ function writings(t: Q): string[] {
  * spec's unit; a ratio is written a:b. Null when no writing passes, and then the lesson withholds that example.
  */
 export function workedAnswer(spec: unknown, system: unknown = DEFAULT_SCHOOL_SYSTEM): string | null {
-  const r = read(spec);
+  let r: Read;
+  try { r = read(spec); } catch (e) { checkerFault("school.workedAnswer", e); return null; }
   if (!r.ok) return null;
   const unit = specUnit(r.spec), K = r.kind;
   let candidates: string[];
@@ -4602,7 +4617,7 @@ export function workedAnswer(spec: unknown, system: unknown = DEFAULT_SCHOOL_SYS
   const withUnit = (c: string) => (!unit ? [] : unit === "Kč" ? after(c) : isMoney(unit) && commaSystem(system as SchoolSystem) ? [...after(c), `${unit}${cents(c)}`, `${unit}${c}`]
     : ["€", "$", "£"].includes(unit) ? [`${unit}${cents(c)}`, `${unit}${c}`, `${c} ${unit}`] : [`${c} ${unit}`]);
   // a decimal is written the way the learner's school writes it: a comma first where the system uses one (cz, de)
-  const comma = system === "cz" || system === "de";
+  const comma = commaSystem(system as SchoolSystem);
   const local = (c: string) => (/\d\.\d/.test(c) ? (comma ? [c.replace(".", ","), c] : [c, c.replace(".", ",")]) : [c]);
   // with its unit first where it has one (30 m2, not a bare 30), then bare
   for (const c of candidates.flatMap(local).flatMap((c) => [...withUnit(c), c])) if (check(spec, c, system).verdict === "right") return c;

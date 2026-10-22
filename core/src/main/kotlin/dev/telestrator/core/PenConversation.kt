@@ -1,5 +1,7 @@
 package dev.telestrator.core
 
+import java.security.MessageDigest
+
 /**
  * The pen protocol as a sans-IO state machine: pairing, the hello timeout, newest-pen-wins,
  * ping, dispatch, and the heartbeat's choice of what to send each tick.
@@ -39,6 +41,7 @@ class PairingDesk(val pin: String, val videoAspect: Double) {
     /** What one offered PIN gets. */
     internal enum class PinCheck { RIGHT, WRONG, LOCKED }
 
+    private val pinBytes = pin.toByteArray(Charsets.UTF_8)
     private var generationCounter = 0L
     private var nowMs = Long.MIN_VALUE
     private var wrongPins = 0
@@ -70,7 +73,10 @@ class PairingDesk(val pin: String, val videoAspect: Double) {
     @Synchronized
     internal fun check(offered: String): PinCheck {
         if (lockedUntilMs != null) return PinCheck.LOCKED
-        if (offered == pin) {
+        // Constant time: an early-exit compare answers sooner the earlier the first wrong digit, and
+        // a LAN client can time that. isEqual's time depends only on the offered length, which the
+        // caller already knows (registry: device-pairing / timing-defenses).
+        if (MessageDigest.isEqual(offered.toByteArray(Charsets.UTF_8), pinBytes)) {
             wrongPins = 0
             return PinCheck.RIGHT
         }
@@ -204,7 +210,7 @@ class PenConversation(
             PairingDesk.PinCheck.WRONG -> Unit
         }
 
-        val effects = mutableListOf<PenEffect>(refusal(WRONG_PIN))
+        val effects = mutableListOf<PenEffect>()
         val current = hello
         if (current != null) {
             // The pen that was paired no longer is. Taking a generation as well means nothing that
@@ -213,6 +219,9 @@ class PenConversation(
             generation = desk.nextGeneration()
             effects += PenEffect.Unpaired(current.clientId)
         }
+        // The unpairing goes first: a refusal while a pen holds the link is hidden from the TV
+        // (LinkState), so in the other order the card showed a Wi-Fi blink instead of the reason.
+        effects += refusal(WRONG_PIN)
         return effects
     }
 

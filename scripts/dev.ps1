@@ -122,6 +122,18 @@ if (& $run 'unit') {
   Step 'unit tests (core, JVM only)'
   & .\gradlew.bat :core:test --console=plain
   if ($LASTEXITCODE) { throw 'core tests failed' }
+
+  # The phone page against a fake TV in headless Chromium: refusal, reconnect, multi-touch, rate, scrub.
+  # No device, about ten seconds; it needs the same tools/ packages and Chromium as the live stage.
+  Step 'companion page (headless browser, fake TV)'
+  Push-Location tools
+  try {
+    Initialize-LiveTools (Get-Location).Path
+    $prev = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try { node companion-refusal-test.mjs } finally { $ErrorActionPreference = $prev }
+    if ($LASTEXITCODE) { throw 'companion page tests failed' }
+  } finally { Pop-Location }
 }
 
 if (& $run 'build') {

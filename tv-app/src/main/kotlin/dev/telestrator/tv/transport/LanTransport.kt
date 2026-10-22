@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import dev.telestrator.core.PairingUrl
 import io.ktor.http.ContentType
+import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.application.install
 import io.ktor.server.cio.CIO
@@ -64,7 +65,7 @@ class LanTransport(
 
     override val name = "lan"
 
-    private var server: io.ktor.server.engine.ApplicationEngine? = null
+    private var server: io.ktor.server.engine.EmbeddedServer<*, *>? = null
 
     private val _failure = MutableStateFlow<String?>(null)
     override val failure: StateFlow<String?> = _failure
@@ -109,14 +110,7 @@ class LanTransport(
                     port = port,
                     host = "0.0.0.0",
                     parentCoroutineContext = engineFailures,
-                ) {
-                    install(WebSockets)
-                    routing {
-                        get("/") { call.respondText(html, ContentType.Text.Html) }
-                        get("/health") { call.respondText(healthJson(), ContentType.Application.Json) }
-                        webSocket("/ws") { onPen(KtorPenChannel(this, "lan:${call.request.local.remoteHost}")) }
-                    }
-                }
+                ) { penServer(html, healthJson, onPen) }
                 val started = runCatching { engine.start(wait = false) }
                 if (started.isSuccess) {
                     server = engine
@@ -154,6 +148,17 @@ class LanTransport(
                     .flatMap { it.inetAddresses.toList() }
             }.getOrDefault(emptyList()),
         )
+}
+
+/** What the TV serves on its port: the companion page, /health, and the pens' WebSocket. */
+internal fun Application.penServer(html: String, healthJson: () -> String, onPen: suspend (PenChannel) -> Unit) {
+    // Anyone on the Wi-Fi reaches this socket before a PIN is checked; see MAX_PEN_FRAME_BYTES.
+    install(WebSockets) { maxFrameSize = MAX_PEN_FRAME_BYTES }
+    routing {
+        get("/") { call.respondText(html, ContentType.Text.Html) }
+        get("/health") { call.respondText(healthJson(), ContentType.Application.Json) }
+        webSocket("/ws") { onPen(KtorPenChannel(this, "lan:${call.request.local.remoteHost}")) }
+    }
 }
 
 /**

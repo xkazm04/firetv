@@ -30,7 +30,7 @@ import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } fr
 import { systemOf } from "@/tv/profileRows";
 import { leftOutLine, lostLabel, offCountLine, offSummary, paperCaption, paperNone, paperTypeAt, paperView, paperWindow, scoreLine, beyondFlag } from "@/tv/paperRows";
 import { fmt } from "@/tv/useSession";
-import { day } from "@/tv/screens";
+import { day } from "@/tv/day";
 import { missingLine } from "@/tv/pageLines";
 import { failedReadLine, markedLine } from "@/tv/pageLines";
 import { MathsMark as Mark } from "@/tv/marks";
@@ -522,16 +522,17 @@ function Hero({ s, cont, focused }: { s: Session; cont: Continue; focused: boole
       <div className="mb-sheet top"><div className="mb-tab" style={{ left: 40 }}>{cont.k}</div><div className="margin" />{head(name)}
         <div className="mb-boxes">{p.items.slice(0, 6).map((it, i) => {
           const v = markOf(it);
+          // a ringed item whose typed second go held keeps its ring and wears the tick, as on the sheet (the record is the first attempt)
           return (
-            <div key={it.n} className="mb-box" data-v={v} data-look={i === first || undefined}>
+            <div key={it.n} className="mb-box" data-v={v} data-second={it.second} data-look={i === first || undefined}>
               <span className="qx"><MathText text={it.question} voice="hand" />{v === "wrong" && RING_BOX}</span>
-              {v === "right" ? TICK_BOX : <span className="la">{MARK_DRAW[v].look}</span>}
+              {v === "right" || it.second === "right" ? TICK_BOX : <span className="la">{MARK_DRAW[v].look}</span>}
             </div>
           );
         })}</div>
       </div>
     );
-    detail = <span className="tally" aria-label={cont.d}>{p.items.map((it) => <span key={it.n}>{MARK_DRAW[markOf(it)].tally}</span>)}</span>;
+    detail = <span className="tally" aria-label={cont.d}>{p.items.map((it) => <span key={it.n} className={it.second === "right" ? "held" : undefined}>{MARK_DRAW[markOf(it)].tally}{it.second === "right" && TALLY_TICK}</span>)}</span>;
   } else if (cont.go === "practice" && p) {
     sheet = (
       <div className="mb-sheet top"><div className="mb-tab" style={{ left: 40 }}>{cont.k}</div><div className="margin" />{head(topicName(p.topic))}

@@ -5,9 +5,9 @@
  * The owner's words: "Having dry certifications as reward system would sound great. Then the topic choice would adjust
  * the certification requirements." So a certificate names a band, and it is issued only when:
  *   1. the LATEST entry of the record of checks (`placements`) is a level check (source "check", never a band picked by
- *      hand) with HIGH confidence (placement.ts staircase: two strong passes under a real ceiling); that entry's band
- *      is the band certified. A check read at medium or low confidence certifies nothing, and a band read once cannot
- *      certify alone: see 5;
+ *      hand) with HIGH confidence (placement.ts staircase: HIGH_STRONG_PASSES strong passes under a real ceiling);
+ *      that entry's band is the band certified. A check read at medium or low confidence certifies nothing, and a band
+ *      read once cannot certify alone: see 5;
  *   2. every required skill is at least "on your own" (rules.ts evidenceProgress, typed evidence counting per D4), where
  *      required = the band's base skills (BASE_SKILLS) plus the skill of every topic the learner agreed in their plan;
  *   3. every required skill has at least one of the learner's own words to show: the quote of an unsupported,

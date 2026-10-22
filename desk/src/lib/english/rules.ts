@@ -15,11 +15,17 @@ export function parsePreferences(value: unknown): EnglishPreferences {
   for (const key of ["interest", "goal"]) if (typeof v[key] !== "string" || (v[key] as string).length > 160) throw new Error("Keep interests and goals under 160 characters.");
   return { level, creativity: v.creativity, challenge: v.challenge, correction: v.correction, adultConfirmed: v.adultConfirmed, interest: (v.interest as string).trim(), goal: (v.goal as string).trim(), ...(v.levelUnset === true ? { levelUnset: true } : {}) } as EnglishPreferences;
 }
+/** The teaching notes a learner keeps (Set up on the phone): at most eight, each at most 240 characters. */
+export const TEACHING_NOTES_MAX = 8, TEACHING_NOTE_CHARS = 240;
+/** Why a list of teaching notes is refused, or null: one rule, read by the server (preferences) and the phone's form before Save. */
+export function notesProblem(notes: unknown): string | null {
+  return !Array.isArray(notes) || notes.length > TEACHING_NOTES_MAX || notes.some(n => typeof n !== "string" || n.length > TEACHING_NOTE_CHARS) ? `Use up to eight short teaching notes, ${TEACHING_NOTE_CHARS} characters each.` : null;
+}
 /** Strict enough to discard corrupt entries; never infer speech from a missing modality. */
 export function cleanEnglish(value: unknown): EnglishLearning {
   const v = obj(value), result = emptyEnglish();
   try { result.preferences = parsePreferences(v.preferences); } catch { /* old learner: no setup yet */ }
-  result.notes = Array.isArray(v.notes) ? v.notes.filter((n): n is string => typeof n === "string").map(n=>n.slice(0,240)).slice(0,8) : [];
+  result.notes = Array.isArray(v.notes) ? v.notes.filter((n): n is string => typeof n === "string").map(n=>n.slice(0,TEACHING_NOTE_CHARS)).slice(0,TEACHING_NOTES_MAX) : [];
   result.evidence = Array.isArray(v.evidence) ? v.evidence.filter((e): e is EnglishEvidence => { const x=obj(e); return isSkill(x.skill) && typeof x.id === "string" && typeof x.episodeId === "string" && typeof x.turnId === "string" && typeof x.sceneId === "string" && typeof x.at === "number" && Number.isFinite(x.at) && ["speech","text","choice"].includes(String(x.mode)) && typeof x.supported === "boolean" && typeof x.success === "boolean" && typeof x.quote === "string" && typeof x.note === "string"; }).slice(-400) : [];
   for (const [key, val] of Object.entries(obj(v.achievements))) if (isSkill(key) && PROGRESS_ORDER.includes(val as Progress)) result.achievements[key] = val as Progress;
   result.placement = cleanPlacement(v.placement);

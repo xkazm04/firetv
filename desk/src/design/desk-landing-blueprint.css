@@ -202,6 +202,8 @@
 .desk-tv.bp .bp-title .tc { display: flex; align-items: center; gap: 14px; padding: 0 18px; border-right: 1.5px solid rgba(243, 239, 228, .4); border-bottom: 1.5px solid rgba(243, 239, 228, .4); box-sizing: border-box; }
 .desk-tv.bp .bp-title .tc:nth-child(2n) { border-right: 0; }
 .desk-tv.bp .bp-title .tc:nth-child(n+3) { border-bottom: 0; }
+/* the paired phone is a stop (TL-3): the lamp on it is the ring the actions and the unpaired phone wear */
+.desk-tv.bp .bp-title .tc[data-focused="true"] { box-shadow: 0 0 0 6px rgba(var(--accg), .9), 0 0 46px rgba(var(--accg), .55); }
 .desk-tv.bp .mono-c { width: 54px; height: 54px; border-radius: 50%; border: 2.5px solid var(--cream); display: flex; align-items: center; justify-content: center; font: 400 32px/1 var(--f-display); flex: none; }
 .desk-tv.bp .bp-title .nm { font: 500 36px/1 var(--f-display); letter-spacing: .08em; text-transform: uppercase; }
 .desk-tv.bp .bp-title .pen { width: 100%; height: 70px; }

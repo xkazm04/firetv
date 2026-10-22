@@ -129,6 +129,16 @@ test('case 11: closureOf follows relative and @/ imports, resolves .ts and index
  assert.deepEqual(got,['desk/src/lib/desk/hint.ts','desk/src/lib/rules/a.ts','desk/src/lib/rules/b/index.ts']);
 });
 
+test('case 11b: resolveSpec finds a .tsx barrel (index.tsx) as tsc does, and every local import in desk/src resolves',()=>{
+ const files=new Set(['desk/src/english/art/index.tsx','desk/src/english/art/Cafe.tsx']);
+ assert.equal(P.resolveSpec('desk/src/english/LingaTV.tsx','./art',(f)=>files.has(f)),'desk/src/english/art/index.tsx');
+ const B=require('./desk-boundaries.cjs'),isFile=(f)=>{try{return fs.statSync(path.join(REPO,f)).isFile();}catch{return false;}};
+ const lost=[];
+ for(const f of B.sourcesOf(REPO))for(const s of P.importsOf(fs.readFileSync(path.join(REPO,f),'utf8')))
+  if(/^(\.\.?\/|@\/)/.test(s)&&!P.resolveSpec(f,s,isFile))lost.push(`${f} -> ${s}`);
+ assert.deepEqual(lost,[],'local imports the graph cannot follow are edges both the drift surface and the desk boundaries miss');
+});
+
 test('case 12: the real surface is the bench\'s own import graph',()=>{
  const entries=P.benchEntries(fs.readFileSync(path.join(REPO,'tools/lab-bench.cjs'),'utf8'));
  assert.ok(entries.length>=5,`the bench loads ${entries.length} desk modules`);

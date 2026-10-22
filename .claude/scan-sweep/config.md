@@ -35,8 +35,8 @@ Each runs in its own invocation, `&&`-chained, exit code asserted (SKILL.md sect
 
 **Full-tree before the last commit** (references/challenge.md section 7 step 4): `cd desk && npm
 test` always, and the gradle line whenever anything Kotlin changed. The rules suites are wired
-through `desk/package.json`'s `test:rules`; a new suite is appended at the END of `rulesSuites` in desk/package.json (run by `test:rules`, `node ../tools/run-rules.cjs`)
-under the shared-surface lock.
+through `desk/package.json`'s `test:rules`; a new suite goes into `rulesSuites` in desk/package.json just BEFORE `harness-rules-test.cjs`, which stays
+last (run by `test:rules`, `node ../tools/run-rules.cjs`; harness-rules-test holds the rule), under the shared-surface lock.
 
 A fresh worktree needs two gitignored files copied from the main checkout before the gradle
 line can pass: `local.properties` (SDK path) and `tv-app/src/main/res/raw/fixture_clip.mp4`
@@ -72,3 +72,4 @@ pathspec-scoped commits. Two more for this skill:
 - 2026-10-05: the coverage.mjs --challenge cohort listed landing at 4 files and essay-master as a rider; the scouts found real structure there anyway (landing-A touched the session seat swap). A context-map file count below 10 is not a reason to expect a thin card.
 - 2026-10-13 (--optimize, director fan-out over all 18 contexts, then one Lane B drain): give every A/B worktree BOTH junctions, desk/node_modules and tools/node_modules. Since the drain, device-rules-test (in desk's test:rules) imports pngjs and ws through tools/device.mjs, and worktree-preflight links only desk/node_modules, so a worktree without tools/node_modules reads 11 red that are not a defect (carded in desk-tooling.jsonl).
 - 2026-10-13: when a Lane B worker's verdict rests on an external behaviour no recorded reply proves (vision: "Ollama answers 400 to a rejected think key"), hold that commit on its branch and merge the rest of the group around it. A green stubbed gate cannot see an assumption about the stub.
+- 2026-10-21 (--optimize, remap + director fan-out over 26 contexts, slots refilled as rounds finished rather than strict waves): both integration reds were a COUPLED pin in another context's suite that the round never ran - linga-rules-test's thinking-off allow-list after the writing coach went thinking-off, and week-digest-test WD14a after the session dropped Session.memory. Tell every round to `grep -l` tools/*-test.cjs for each symbol and file it changed and run all of them, not only its own context's suites. Never `--amend` in the shared worktree: one round did and rewrote a sibling's commit (restored by update-ref).

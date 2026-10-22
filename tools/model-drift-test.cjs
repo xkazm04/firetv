@@ -163,6 +163,21 @@ test('case 9: two replay runs -> two records and DRIFT.md; the second, whose mod
  assert.equal(s.status,1);assert.match(s.stdout,/never measured/);
 });
 
+test('case 9b: scripts/model-drift.ps1 keeps a run that writes to stderr: the whole output reaches the log and the exit code is the run\'s',{skip:process.platform!=='win32'&&'Windows PowerShell only'},()=>{
+ const root=fresh();
+ fs.mkdirSync(path.join(root,'scripts'));fs.mkdirSync(path.join(root,'tools'));
+ fs.copyFileSync(path.join(REPO,'scripts','model-drift.ps1'),path.join(root,'scripts','model-drift.ps1'));
+ // A stand-in for the live run: an engine warning on stderr (health.ts, codex.ts and meter.ts print these), then the
+ // verdict on stdout, then exit 1 (drift). No model is called.
+ fs.writeFileSync(path.join(root,'tools','model-drift.cjs'),'console.error("[engines] live text claude failed (timeout): stub");\nconsole.log("model drift · stub record written");\nprocess.exitCode = process.env.MODEL_DRIFT_ALLOW_LIVE === "1" ? 1 : 3;\n');
+ const r=spawnSync('powershell.exe',['-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',path.join(root,'scripts','model-drift.ps1')],{encoding:'utf8',timeout:120000});
+ const log=fs.readFileSync(path.join(root,'artifacts','model-drift.log'),'utf8');
+ assert.match(log,/stub record written/,`the verdict never reached the log: ${(r.stdout+r.stderr).slice(0,300)}`);
+ assert.match(log,/live text claude failed/,'the engine warning never reached the log');
+ assert.equal(r.status,1,`the script's exit code is not the run's (1, drift): ${(r.stdout+r.stderr).slice(0,300)}`);
+ assert.match(r.stdout+r.stderr,/DRIFT: see uat\/drift\/DRIFT\.md/);
+});
+
 test('case 10 GUARD: the committed uat/drift/ is byte-identical after every case',()=>{
  assert.deepEqual(snapshot(D.DRIFT),committed);
 });

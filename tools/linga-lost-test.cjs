@@ -290,3 +290,12 @@ test('only the lost scene has the task; a restart that loses the hidden half sta
  await say('It is blue.');assert.equal(getSession().conversation.lost,null);
  assert.equal(lingaView(getSession(),{}).hero.lost,undefined,'the corridor goes back to its plain picture');
 });
+
+// scan-sweep optimize 2026-10-21 (linga-scenes, bounty-hunter): "gym bag", "PE bag" and "lunch bag" name a kind of bag, not
+// where it was lost. Read word by word they also said place gym or canteen, and narrowed the table on a place nobody said.
+test('a gym bag, a PE bag or a lunch bag is a bag, and says no place',()=>{
+ for(const t of ['My gym bag.','I lost my PE bag','Where is my lunch bag?','my blue gym bag'])assert.equal(L.readReply(t).d?.is.place,undefined,t);
+ assert.deepEqual(L.readReply('my blue gym bag').d.is,{colour:'blue',kind:'bag'});
+ assert.deepEqual(L.readReply('I left my bag in the gym').d.is,{kind:'bag',place:'gym'},'the gym as a place still reads');
+ assert.deepEqual(L.readReply('It was at lunch, in the canteen').d.is,{place:'canteen'});
+});

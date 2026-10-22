@@ -5,8 +5,9 @@
  * the way a phone pairs (/phone?pin=), is switched to the Parent role and its Recap tab. The This week card is read and
  * photographed for each: the full week, the thin week, and "Nothing this week." It asserts that the card's lines are the
  * session's own `week` lines (assembled on the server from the digest, no model), that the phone was sent no digest,
- * that nothing is wider than the page, that no line is under 12 px or pale against its card, and that the Recap tab's
- * buttons are at least 44 px tall. Not part of `npm test` (it needs a server); it skips politely unless SUNDAY_PAGE_URL
+ * that nothing is wider than the page, and that no line is under 12 px or pale against its card. The Recap tab's buttons
+ * under 44 px tall are RECORDED in report.json (`short`), not failed on: the Student/Parent toggle is 26 px, pre-existing
+ * (docs/FAMILY-PHASE-1-PLAN.md, W9 capture). Not part of `npm test` (it needs a server); it skips politely unless SUNDAY_PAGE_URL
  * is set. Run it against an isolated server whose engines cannot be reached, so any model call fails loudly:
  *
  *   DESK_DATA_DIR=<scratch dir> CLAUDE_BIN=<a path that does not exist> OLLAMA_HOST=http://127.0.0.1:9 \

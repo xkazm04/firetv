@@ -30,7 +30,7 @@ const TV_PIN = '4821';
 
 /** Replaces window.WebSocket with a TV that holds [cfg.pin]. Runs inside the page. */
 function fakeTv(cfg) {
-  const log = (window.__tv = { opened: 0, refused: 0, welcomed: 0, firstRefusalAt: null, openedAt: [], urls: [] });
+  const log = (window.__tv = { opened: 0, refused: 0, welcomed: 0, firstRefusalAt: null, openedAt: [], urls: [], sent: [] });
   class FakeTvSocket {
     constructor(url) {
       this.url = url;
@@ -47,6 +47,7 @@ function fakeTv(cfg) {
     }
     send(text) {
       const m = JSON.parse(text);
+      if (this.readyState === 1) log.sent.push(m);
       if (m.type !== 'hello' || this.readyState !== 1) return;
       if (m.pin !== cfg.pin) {
         log.refused++;
@@ -58,6 +59,8 @@ function fakeTv(cfg) {
       }
       log.welcomed++;
       this.deliver({ type: 'welcome', sessionId: 's-' + this.n, videoAspect: 1.7778, accepted: true });
+      // A heartbeat, as the TV's Heartbeat sends one: paused, with the clip's length and its playback rate.
+      if (cfg.state) this.deliver({ type: 'state', t: 0, paused: true, rate: 1, annotationCount: 0, durationMs: 20000, marks: [], ...cfg.state });
       if (cfg.dropFirst && this.n === 1) setTimeout(() => this.drop(1006, ''), 300);
     }
     deliver(o) {
@@ -414,6 +417,112 @@ try {
         .map(([name, r]) => `${name} ${Math.round(r.width)}x${Math.round(r.height)}`),
     );
     check('a11y: every control is at least 24 px on a phone', small.length === 0, `${small.length} small ${small.join(' | ')}`);
+    await page.close();
+  }
+
+  // ---- a second finger while drawing --------------------------------------------------------------
+  // A palm or a second finger lands while the first is still drawing. That must not start a second
+  // stroke over the first (the TV drops a live stroke on a new 'down') or leave a 60 Hz flush timer
+  // running for as long as the tab lives. Real multi-touch through CDP, with intervals counted.
+  {
+    const context = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 412, height: 800 } });
+    const page = await context.newPage();
+    await page.addInitScript(() => {
+      const live = (window.__intervals = new Set());
+      const si = window.setInterval.bind(window), ci = window.clearInterval.bind(window);
+      window.setInterval = (...a) => { const id = si(...a); live.add(id); return id; };
+      window.clearInterval = (id) => { live.delete(id); return ci(id); };
+    });
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false });
+    await page.goto(PAGE + '#pin=' + TV_PIN);
+    await page.waitForFunction(() => window.__pen.isConnected(), null, { timeout: 3000 });
+    const box = await page.locator('#pad').boundingBox();
+    const at = (fx, fy, id) => ({ x: box.x + box.width * fx, y: box.y + box.height * fy, id, radiusX: 6, radiusY: 6, force: 0.7 });
+    const cdp = await context.newCDPSession(page);
+    const touch = (type, touchPoints) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints });
+    await touch('touchStart', [at(0.2, 0.5, 1)]);
+    await touch('touchMove', [at(0.3, 0.5, 1)]);
+    await touch('touchStart', [at(0.3, 0.5, 1), at(0.7, 0.3, 2)]);
+    await touch('touchMove', [at(0.4, 0.5, 1), at(0.72, 0.32, 2)]);
+    await touch('touchEnd', []);
+    await page.waitForTimeout(100);
+    const after = await page.evaluate(() => ({
+      downs: window.__tv.sent.filter((m) => m.type === 'pen' && m.phase === 'down').length,
+      ups: window.__tv.sent.filter((m) => m.type === 'pen' && m.phase === 'up').length,
+      intervals: window.__intervals.size,
+    }));
+    check(
+      'two fingers: one stroke reaches the TV and no flush timer outlives it',
+      after.downs === 1 && after.ups === 1 && after.intervals === 0,
+      `${after.downs} down, ${after.ups} up, ${after.intervals} intervals still running`,
+    );
+    await context.close();
+  }
+
+  // ---- the rate the TV is playing at --------------------------------------------------------------
+  // The TV keeps its rate across phones (Session.rate). A phone that opens on a TV already in slow
+  // motion must show the TV's rate pressed, not the 1x it was born with: state.rate is the truth.
+  {
+    const page = await browser.newPage();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false, state: { rate: 0.25 } });
+    await page.goto(PAGE + '#pin=' + TV_PIN);
+    await page.waitForFunction(() => window.__pen.state() !== null, null, { timeout: 3000 }).catch(() => {});
+    const pressed = await page.evaluate(() =>
+      [...document.querySelectorAll('#rates [data-rate]')].filter((b) => b.getAttribute('aria-pressed') === 'true').map((b) => b.dataset.rate));
+    check('rate: the pressed rate is the one the TV reports', pressed.length === 1 && pressed[0] === '0.25', `pressed [${pressed.join(',')}], TV at 0.25`);
+    await page.close();
+  }
+
+  // ---- the scrub bar without a pointer --------------------------------------------------------------
+  // A keyboard, a switch or TalkBack's swipe moves a range input with no pointerdown. The seek must
+  // still reach the TV; and a pointer drag still sends exactly one seek, not one per event.
+  {
+    const page = await browser.newPage();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false, state: { durationMs: 20000 } });
+    await page.goto(PAGE + '#pin=' + TV_PIN);
+    await page.waitForFunction(() => window.__pen.state() !== null, null, { timeout: 3000 }).catch(() => {});
+    const seeks = () => page.evaluate(() => window.__tv.sent.filter((m) => m.type === 'transport' && m.cmd === 'seek').map((m) => Math.round(m.value)));
+    await page.focus('#scrub');
+    for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(50);
+    const keyed = await seeks();
+    check('scrub: arrow keys on the scrub bar seek the TV', keyed.length >= 1 && keyed.at(-1) === 100, `seeks [${keyed.join(',')}] ms, want the last at 100`);
+
+    const bar = await page.locator('#scrub').boundingBox();
+    const n0 = keyed.length;
+    await page.mouse.move(bar.x + bar.width * 0.25, bar.y + bar.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(bar.x + bar.width * 0.5, bar.y + bar.height / 2, { steps: 5 });
+    await page.mouse.up();
+    await page.waitForTimeout(50);
+    const dragged = (await seeks()).slice(n0);
+    check('scrub GUARD: a pointer drag sends one seek', dragged.length === 1, `seeks [${dragged.join(',')}] ms`);
+    await page.close();
+  }
+
+  // ---- TV controls while no TV holds the pen ----------------------------------------------------------
+  // Undo, Clear all, Play, the frame and drawing steps, the rates and the scrub bar command the TV. With no
+  // welcome they go nowhere (send() drops them), so a press that looks taken is a lie: they are disabled until
+  // the TV welcomes this pen, and come back when it does. The pen's own tools and colours stay live.
+  {
+    const CMD = '#btn-undo, #btn-redo, #btn-clear, #btn-clear-all, #btn-prev, #btn-playpause, #btn-next, #btn-mark-prev, #btn-mark-next, #rates button, #scrub';
+    const live = (page) => page.evaluate((sel) => [...document.querySelectorAll(sel)].filter((b) => !b.disabled).map((b) => b.id || b.textContent.trim()), CMD);
+    const page = await browser.newPage();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false, state: { durationMs: 20000 } });
+    await page.goto(PAGE + '#pin=0000');
+    await page.waitForFunction(() => window.__tv && window.__tv.refused > 0, null, { timeout: 5000 });
+    const refusedLive = await live(page);
+    const prompt = await pinPrompt(page);
+    await prompt.fill(TV_PIN);
+    await prompt.press('Enter');
+    await page.waitForFunction(() => window.__pen.isConnected() && window.__pen.state() !== null, null, { timeout: 3000 }).catch(() => {});
+    const pairedLive = await live(page);
+    const tools = await page.evaluate(() => [...document.querySelectorAll('#tools button, #colors button')].filter((b) => b.disabled).length);
+    check(
+      'unpaired: no TV control takes a press; paired: they are back',
+      refusedLive.length === 0 && pairedLive.includes('btn-playpause') && pairedLive.includes('scrub') && pairedLive.length >= 9 && tools === 0,
+      `refused: ${refusedLive.length} live [${refusedLive.join(',')}]; paired: ${pairedLive.length} live; ${tools} pen tools disabled`,
+    );
     await page.close();
   }
 } finally {

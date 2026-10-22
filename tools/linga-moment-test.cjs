@@ -1,11 +1,12 @@
 /** Run with npm run test:rules in desk/ (directly: node tools/linga-moment-test.cjs). Code only: no model call, no desk/data. */
-const path=require('node:path'),assert=require('node:assert/strict'),{test,after}=require('node:test');
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),{test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
 require('./ts-load.cjs');
-process.env.DESK_DATA_DIR=path.resolve(__dirname,'../artifacts/linga-moment',String(Date.now()));
+// scratch in the OS temp dir, removed after the run: never a folder per run under the tree
+const data=fs.mkdtempSync(path.join(os.tmpdir(),'desk-linga-moment-'));process.env.DESK_DATA_DIR=data;
 const {momentAllowed}=require(path.join(root,'src/lib/english/conversation.ts'));
 const {fossilOf,slipsAgain}=require(path.join(root,'src/lib/english/review.ts'));
-after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);});
+after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);fs.rmSync(data,{recursive:true,force:true,maxRetries:5,retryDelay:100});});
 
 const learner=(n,text)=>({id:`t${n}`,role:'learner',text});
 const partner=(n,text)=>({id:`p${n}`,role:'partner',text});
@@ -981,4 +982,51 @@ test('the beginner moment and coach tasks ask for the learner\'s tense and no gr
   assert.ok(C.momentTaskFor(true).includes(PLAIN_TASK));assert.ok(!C.momentTaskFor(false).includes(PLAIN_TASK));
   assert.equal(keepsTense('I go to school','I went to school'),false);assert.equal(keepsTense('I want sleep','I want to sleep'),true);
   assert.equal(keepsTense('We need a room','We need a room, please'),true);assert.equal(hasGrammarTerm('Say it like this.'),false);
+});
+
+// ---- scan-sweep optimize 2026-10-21 (linga-scenes, bounty-hunter): clearSlip read its pair across a sentence end, so
+// "Thank you. Was it good?" became a held fix "you was" -> "Thank you were it good?". A clear slip stands inside one sentence.
+test('clearSlip never reads a slip across a sentence end, and still finds one inside a sentence',()=>{
+  const {clearSlip}=require(path.join(root,'src/lib/english/slip.ts'));
+  for(const ok of ['Thank you. Was it good?','Me and you. Was fun.','Yes, they. Was there a bus?','What do you want? Go home.','I know what I want. Go!','It is for you! Was it far?'])assert.equal(clearSlip(ok),null,ok);
+  assert.deepEqual(clearSlip('I like it, we was happy'),{said:'I like it, we was happy',better:'I like it, we were happy',why:'Say "we were", not "we was".'},'a comma is no sentence end');
+  assert.deepEqual(clearSlip('Thank you. We was happy.'),{said:'We was happy.',better:'We were happy.',why:'Say "we were", not "we was".'},'the slip in the next sentence is still found');
+  assert.equal(clearSlip('What do you want? I want sleep.')?.better,'I want to sleep.');
+});
+
+// ---- scan-sweep optimize 2026-10-21 (linga-scenes, parity-auditor): plain.ts knew 17 past forms and gate.ts's band hold
+// 46, so a beginner's "I sleep well" -> "I slept well" kept its tense by plain.ts. One list now: gate.ts PAST_IRREGULAR.
+test('keepsTense knows every irregular past the band hold knows, and leaves "left" and "lost" to their other senses',()=>{
+  const {keepsTense}=require(path.join(root,'src/lib/english/plain.ts'));
+  for(const [said,better] of [['I sleep well','I slept well'],['We swim in the lake','We swam in the lake'],['I feel good','I felt good'],['I think so','I thought so'],['I meet my friend','I met my friend'],['I write a letter','I wrote a letter'],['I drink milk','I drank milk'],['He teach me','He taught me']])
+    assert.equal(keepsTense(said,better),false,`${said} -> ${better}`);
+  for(const [said,better] of [['Where is the bank? On left','It is on the left'],['I am lose','I am lost'],['I sleep good','I sleep well'],['We swim in lake','We swim in the lake']])
+    assert.equal(keepsTense(said,better),true,`${said} -> ${better}`);
+});
+
+// ---- scan-sweep optimize 2026-10-21 (linga-scenes, bounty-hunter): ease.ts's Czech list held "to" and "ten", two
+// English words, so a beginner's short English answer ("Ten.", "To school") read as Czech and eased the partner's next line.
+test('mostlyCzech: a short English answer with "to" or "ten" is English; Czech replies still are Czech',()=>{
+  const {mostlyCzech,learnerLost}=require(path.join(root,'src/lib/english/ease.ts'));
+  for(const t of ['Ten','Ten minutes.','To school','To the park, please.','Ten euros'])assert.equal(learnerLost([{text:t}]),false,t);
+  for(const t of ['To je moc dobre','Já mám psa a on je velký','Nevím','ano','Ten pes je velký'])assert.equal(mostlyCzech(t),true,t);
+});
+
+// ---- scan-sweep optimize 2026-10-21 (linga-scenes, bounty-hunter): saysLost matched "what" anywhere, so every question a
+// learner asked ("What do you sell?") read as "I did not understand" and eased the partner's next line.
+test('saysLost: a bare "What?" or "What do you mean?" is lost; a question the learner asks with "what" is not',()=>{
+  const {saysLost}=require(path.join(root,'src/lib/english/ease.ts'));
+  for(const t of ['What?','what','Sorry, what?','What? Sorry.','Pardon, what?','What do you mean?','What does that mean?','What? I don\'t understand.','Nevím'])assert.equal(saysLost(t),true,t);
+  for(const t of ['What do you sell?','What time is it?','I know what I want.','What is the price, please?','So what is your name?'])assert.equal(saysLost(t),false,t);
+});
+
+// ---- scan-sweep optimize 2026-10-21 (linga-scenes, parity-auditor): the pair of clearSlip's fix. slipStands and findKey
+// matched a key across a sentence end too ("Thank you. Was it good?" stood as the slip "you was"), so a reply could be
+// counted a slip again (review.ts slipsAgain), or a key found, by two words of two sentences.
+test('slipStands and findKey never match a key across a sentence end',()=>{
+  const {slipStands,findKey}=require(path.join(root,'src/lib/english/slip.ts'));
+  for(const [t,k] of [['Thank you. Was it good?','you was'],['I see him. Come here!','him come'],['My tomatoes. Is it big?','tomatoes is'],['It is for she. Have you got it?','she have'],['I like them. Is it ok?','them is']])
+    {assert.equal(slipStands(t,k),null,`${t} / ${k}`);assert.equal(findKey(t,k),null,`${t} / ${k}`);}
+  assert.equal(slipStands('My tomatoes is big.','tomatoes is'),'tomatoes is');assert.equal(findKey('Yes! My tomatoes are big.','tomatoes are'),'tomatoes are');
+  assert.equal(findKey('It is 3.5 metre high','one metre'),'5 metre','a decimal point is no sentence end for the word after it');
 });

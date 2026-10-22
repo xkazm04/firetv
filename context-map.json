@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "product": "Study Desk (firetv)",
-  "note": "Written 2026-09-23 when /scan-sweep was adopted; remapped 2026-09-25 after the module redesigns, when math-buddy, essay-master and landing became contexts of their own. Map order is group order, then context order. file_paths are repo-relative, as git ls-files prints them. Tests that exercise a context are listed with it. Left out on purpose: binaries and images, the Linga art illustrations (desk/src/english/art/), lockfiles, uat/runs/** (run output) and uat/.gitignore.",
+  "note": "Written 2026-09-23 when /scan-sweep was adopted; remapped 2026-09-25 after the module redesigns, when math-buddy, essay-master and landing became contexts of their own. Remapped 2026-10-21 (scan-sweep --optimize): 9 contexts added (linga-scenes, linga-level, maths-school, maths-calculus, writing, family-mode, stick-app, repo-governance) and every tracked source and test file placed; docs/, run output, deathride/ and .claude/ stay out. Map order is group order, then context order. file_paths are repo-relative, as git ls-files prints them. Tests that exercise a context are listed with it. Left out on purpose: binaries and images, the Linga art illustrations (desk/src/english/art/), lockfiles, uat/runs/** (run output) and uat/.gitignore.",
   "groups": [
     {
       "name": "desk-linga",
@@ -40,11 +40,9 @@
             "desk/src/english/ReplyBox.tsx",
             "desk/src/english/useEnglish.ts",
             "desk/src/english/useEnglishAudio.ts",
-            "desk/src/lib/english/check.ts",
             "desk/src/lib/english/conversation.ts",
             "desk/src/lib/english/curriculum.ts",
             "desk/src/lib/english/errors.ts",
-            "desk/src/lib/english/placement.ts",
             "desk/src/lib/english/rules.ts",
             "desk/src/lib/english/types.ts",
             "desk/src/lib/rules/english.ts",
@@ -61,7 +59,93 @@
             "desk/src/lib/english/review.ts",
             "tools/linga-rules-test.cjs",
             "tools/linga-ui-test.cjs",
-            "tools/linga-placement-sim.cjs"
+            "desk/src/app/phone/recogniserLang.ts",
+            "desk/src/english/LingaKeys.tsx",
+            "desk/src/english/LostPicture.tsx",
+            "desk/src/english/PhrasesYouOwn.tsx",
+            "tools/linga-company-sim.cjs",
+            "tools/linga-moment-test.cjs"
+          ]
+        },
+        {
+          "stack": [
+            "next.js",
+            "react",
+            "typescript"
+          ],
+          "file_paths": [
+            "desk/src/lib/english/credit.ts",
+            "desk/src/lib/english/duet.ts",
+            "desk/src/lib/english/ease.ts",
+            "desk/src/lib/english/gate.ts",
+            "desk/src/lib/english/line.ts",
+            "desk/src/lib/english/lostfound.ts",
+            "desk/src/lib/english/mission.ts",
+            "desk/src/lib/english/notes.ts",
+            "desk/src/lib/english/own.ts",
+            "desk/src/lib/english/phoneDoor.ts",
+            "desk/src/lib/english/pitch.ts",
+            "desk/src/lib/english/plain.ts",
+            "desk/src/lib/english/repair.ts",
+            "desk/src/lib/english/replay.ts",
+            "desk/src/lib/english/slip.ts",
+            "desk/src/lib/english/take.ts",
+            "tools/linga-credit-test.cjs",
+            "tools/adult-rules-test.cjs",
+            "tools/linga-duet-test.cjs",
+            "tools/linga-lost-test.cjs",
+            "tools/linga-mission-test.cjs"
+          ],
+          "name": "linga-scenes",
+          "description": "Linga scene mechanics decided in code: the hidden line, missions, notes at Cut, Take Two, the lost-property table, duet, self-repair and replay, slip keys, plain coaching for beginners, turn-level easing, credit for the learner's own words, owned phrases, pitched scenes, the audience gate and the phone door.",
+          "keywords": [
+            "scene",
+            "mission",
+            "notes",
+            "take two",
+            "duet",
+            "lost property",
+            "repair",
+            "replay",
+            "slip",
+            "credit",
+            "gate",
+            "audience",
+            "ease",
+            "pitch"
+          ]
+        },
+        {
+          "stack": [
+            "next.js",
+            "react",
+            "typescript"
+          ],
+          "file_paths": [
+            "desk/src/lib/english/placement.ts",
+            "desk/src/lib/english/check.ts",
+            "tools/linga-placement-sim.cjs",
+            "desk/src/lib/english/activity.ts",
+            "desk/src/lib/english/cambridge.ts",
+            "desk/src/lib/english/cert.ts",
+            "desk/src/lib/english/speaking.ts",
+            "tools/cambridge-coverage.cjs",
+            "tools/cambridge-rules-test.cjs",
+            "tools/linga-school-live.cjs",
+            "tools/cert-rules-test.cjs",
+            "tools/linga-cert-live.cjs"
+          ],
+          "name": "linga-level",
+          "description": "Linga level: the placement ladder and level check (A1-C2), the activity seat, certification (the dry plate issued by code), the Cambridge speaking map and its speaking tasks.",
+          "keywords": [
+            "placement",
+            "level check",
+            "cefr",
+            "cert",
+            "certification",
+            "cambridge",
+            "speaking",
+            "a2 key"
           ]
         }
       ]
@@ -120,7 +204,14 @@
             "tools/maths-rules-test.cjs",
             "tools/essay-rules-test.cjs",
             "tools/desk-jobs-rules-test.cjs",
-            "tools/withhold-rules-test.cjs"
+            "tools/withhold-rules-test.cjs",
+            "desk/src/app/api/second/route.ts",
+            "desk/src/app/api/worked/route.ts",
+            "desk/src/lib/desk/failure.ts",
+            "desk/src/lib/desk/paperRead.ts",
+            "desk/src/lib/desk/spoken.ts",
+            "desk/src/lib/desk/worked.ts",
+            "tools/worked-rules-test.cjs"
           ]
         },
         {
@@ -155,7 +246,29 @@
             "desk/src/tv/sheetRows.ts",
             "desk/src/design/maths-lamplight.css",
             "tools/maths-type-test.cjs",
-            "tools/tv-sheet-test.cjs"
+            "tools/tv-sheet-test.cjs",
+            "desk/src/app/phone/ExplainTalk.tsx",
+            "desk/src/app/phone/PaperPanel.tsx",
+            "desk/src/maths/MathsCollection.tsx",
+            "desk/src/maths/Plot.tsx",
+            "desk/src/maths/plotting.ts",
+            "desk/src/maths/prose.ts",
+            "desk/src/tv/collection.ts",
+            "desk/src/tv/marks.tsx",
+            "desk/src/tv/pageLines.ts",
+            "desk/src/tv/paperRows.ts",
+            "desk/src/tv/prepareRows.ts",
+            "desk/src/tv/rulerRows.ts",
+            "tools/library-rules-test.cjs",
+            "tools/maths-ruler-test.cjs",
+            "tools/maths-tv-test.cjs",
+            "tools/page-marking-test.cjs",
+            "tools/paper-aim-test.cjs",
+            "tools/plot-rules-test.cjs",
+            "tools/school-ruler-test.cjs",
+            "tools/maths-aim-test.cjs",
+            "tools/maths-second-test.cjs",
+            "tools/maths-course-test.cjs"
           ]
         },
         {
@@ -180,7 +293,215 @@
           "file_paths": [
             "desk/src/essay/EssayTV.tsx",
             "desk/src/essay/fonts.ts",
-            "desk/src/design/essay-specimen.css"
+            "desk/src/design/essay-specimen.css",
+            "desk/src/app/api/twin/card/route.ts",
+            "desk/src/app/api/twin/route.ts",
+            "desk/src/app/phone/EssayShelf.tsx",
+            "desk/src/app/phone/rewriteBack.ts",
+            "desk/src/essay/EssayCabinet.tsx",
+            "desk/src/essay/Workroom.tsx",
+            "desk/src/essay/captions.ts",
+            "desk/src/lib/rules/diff.ts",
+            "desk/src/lib/rules/docx.ts",
+            "desk/src/lib/rules/essayLang.ts",
+            "desk/src/lib/rules/style.ts",
+            "desk/src/lib/twin/card.ts",
+            "desk/src/lib/twin/state.ts",
+            "desk/src/lib/twin/workroom.ts",
+            "tools/docx-rules-test.cjs",
+            "tools/essay-file-live.cjs",
+            "tools/essay-heldout-czech-short-r2.json",
+            "tools/essay-heldout-czech-short-r3.json",
+            "tools/essay-heldout-czech-short-r4.json",
+            "tools/essay-heldout-czech-short.json",
+            "tools/essay-heldout-r3.json",
+            "tools/essay-tuning-czech-short.json",
+            "tools/essay-ui-test.cjs",
+            "tools/style-rules-test.cjs",
+            "tools/texts-rules-test.cjs",
+            "tools/twin-probe.cjs",
+            "tools/twin-rules-test.cjs",
+            "tools/essay-heldout-czech-short-r5.json",
+            "tools/essay-seat-test.cjs",
+            "tools/essay-piece-test.cjs"
+          ]
+        },
+        {
+          "stack": [
+            "next.js",
+            "react",
+            "typescript"
+          ],
+          "file_paths": [
+            "desk/src/lib/rules/kinds.ts",
+            "desk/src/lib/rules/marks.ts",
+            "desk/src/lib/rules/maturita.ts",
+            "desk/src/lib/rules/numberWords.ts",
+            "desk/src/lib/rules/paperDraft.ts",
+            "desk/src/lib/rules/paperEntry.ts",
+            "desk/src/lib/rules/paperScore.ts",
+            "desk/src/lib/rules/recovery.ts",
+            "desk/src/lib/rules/saidValue.ts",
+            "desk/src/lib/rules/school.ts",
+            "desk/src/lib/rules/slips.ts",
+            "desk/src/lib/rules/stretch.ts",
+            "desk/src/lib/rules/taskText.ts",
+            "tools/gcse-units-test.cjs",
+            "tools/maths-like-test.cjs",
+            "tools/paper-draft-test.cjs",
+            "tools/paper-probe-test.cjs",
+            "tools/paper-probe.cjs",
+            "tools/recovery-rules-test.cjs",
+            "tools/school-entrances-live.cjs",
+            "tools/school-fractions-live.cjs",
+            "tools/school-rules-test.cjs",
+            "tools/school-stretch-test.cjs",
+            "tools/school-typed-live.cjs",
+            "tools/school-units-live.cjs",
+            "tools/school-units2-live.cjs",
+            "tools/school-units3-live.cjs",
+            "tools/school-marking-test.cjs",
+            "tools/school-practice-test.cjs",
+            "tools/school-toprung-test.cjs",
+            "tools/part-names-test.cjs",
+            "tools/maths-judge-test.cjs"
+          ],
+          "name": "maths-school",
+          "description": "School maths decided in code (Family Phase 1 onward): the answer reader, fractions checker, hint leak checks, number words, said-value gate, item kinds and the one judge, marks vocabulary, slips, stretch, Maturita tasks, the paper path (entry, draft, score, recovery) and printed task text.",
+          "keywords": [
+            "school",
+            "fractions",
+            "marking",
+            "judge",
+            "kinds",
+            "stretch",
+            "paper",
+            "recovery",
+            "maturita",
+            "leak",
+            "number words"
+          ]
+        },
+        {
+          "stack": [
+            "next.js",
+            "react",
+            "typescript"
+          ],
+          "file_paths": [
+            "desk/src/lib/library/calculus1.spine.ts",
+            "desk/src/lib/library/calculus1.ts",
+            "desk/src/lib/library/calculus2.spine.ts",
+            "desk/src/lib/library/paths.ts",
+            "desk/src/lib/rules/calc-expr.ts",
+            "desk/src/lib/rules/calc-read.ts",
+            "desk/src/lib/rules/calc-word.ts",
+            "desk/src/lib/rules/calc.ts",
+            "desk/src/lib/rules/calc2.ts",
+            "desk/src/lib/rules/chain.ts",
+            "tools/calc-alias-test.cjs",
+            "tools/calc-course-test.cjs",
+            "tools/calc-expr-test.cjs",
+            "tools/calc-hint-test.cjs",
+            "tools/calc-rules-test.cjs",
+            "tools/calc-word-test.cjs",
+            "tools/calc1-frozen-gen.cjs",
+            "tools/calc2-approx-test.cjs",
+            "tools/calc2-path-test.cjs",
+            "tools/calc2-seam-test.cjs",
+            "tools/calc2-sequence-test.cjs",
+            "tools/chain-rules-test.cjs",
+            "tools/maths-calculus-live.cjs",
+            "tools/maths-paths-test.cjs",
+            "tools/calc1-frozen.json",
+            "tools/chain-fixtures.cjs",
+            "tools/calc-marking-test.cjs",
+            "tools/calc-practice-test.cjs",
+            "tools/calc-model-yield.cjs",
+            "tools/calc-sets-frozen-gen.cjs",
+            "tools/calc-sets-frozen.json",
+            "tools/maths-calculus-test.cjs"
+          ],
+          "name": "maths-calculus",
+          "description": "Calculus 1 and 2 as a first-class course path, decided in code: the expression engine, the shapes, word problems, the chain checker over a working, the course spines and paths.",
+          "keywords": [
+            "calculus",
+            "derivative",
+            "integral",
+            "limit",
+            "series",
+            "expression",
+            "chain",
+            "path",
+            "spine"
+          ]
+        },
+        {
+          "stack": [
+            "next.js",
+            "react",
+            "typescript"
+          ],
+          "file_paths": [
+            "desk/src/app/api/writing/coach/route.ts",
+            "desk/src/app/api/writing/finish/route.ts",
+            "desk/src/app/api/writing/prompts/route.ts",
+            "desk/src/app/phone/WritingPanel.tsx",
+            "desk/src/app/writing/page.tsx",
+            "desk/src/lib/writing/coach.ts",
+            "desk/src/lib/writing/episode.ts",
+            "desk/src/lib/writing/prompts.ts",
+            "desk/src/lib/writing/save.ts",
+            "desk/src/tv/writingScreen.ts",
+            "desk/src/writing/WritingEpisode.tsx",
+            "desk/src/writing/WritingTV.tsx",
+            "tools/writing-rules-test.cjs",
+            "tools/writing-tv-test.cjs"
+          ],
+          "name": "writing",
+          "description": "Writing on the TV: the writing episode, its coach and finish routes, prompts, the phone writing panel, the TV writing screen and saving the piece.",
+          "keywords": [
+            "writing",
+            "coach",
+            "episode",
+            "prompt",
+            "revision"
+          ]
+        },
+        {
+          "stack": [
+            "next.js",
+            "react",
+            "typescript"
+          ],
+          "file_paths": [
+            "desk/src/lib/rules/collect.ts",
+            "desk/src/lib/rules/digest.ts",
+            "desk/src/lib/rules/habits.ts",
+            "desk/src/lib/rules/mode.ts",
+            "desk/src/lib/rules/voice.ts",
+            "desk/src/lib/rules/week.ts",
+            "tools/collect-rules-test.cjs",
+            "tools/habits-fixtures.cjs",
+            "tools/habits-rules-test.cjs",
+            "tools/sunday-page-live.cjs",
+            "tools/week-digest-test.cjs",
+            "tools/week-rules-test.cjs",
+            "tools/mode-rules-test.cjs",
+            "tools/voice-rules-test.cjs"
+          ],
+          "name": "family-mode",
+          "description": "The desk's two modes (family and adult), the tutor voice by age, the weekly digest and Sunday page, habit detectors and collectibles.",
+          "keywords": [
+            "family",
+            "adult",
+            "mode",
+            "voice",
+            "week",
+            "digest",
+            "sunday",
+            "habits",
+            "collect"
           ]
         }
       ]
@@ -212,7 +533,27 @@
             "desk/src/landing/LandingTV.tsx",
             "desk/src/landing/fonts.ts",
             "desk/src/tv/landingRows.ts",
-            "desk/src/design/desk-landing.css"
+            "desk/src/design/desk-landing.css",
+            "desk/src/design/desk-landing-blueprint.css",
+            "desk/src/landing/model.ts",
+            "desk/src/landing/themes/blueprint/Blueprint.tsx",
+            "desk/src/landing/themes/blueprint/drawings.tsx",
+            "desk/src/landing/themes/blueprint/fonts.ts",
+            "desk/src/landing/themes/blueprint/index.ts",
+            "desk/src/landing/themes/blueprint/pen.tsx",
+            "desk/src/landing/themes/index.ts",
+            "desk/src/landing/themes/paper/Paper.tsx",
+            "desk/src/landing/themes/paper/glyphs.tsx",
+            "desk/src/landing/themes/paper/index.ts",
+            "desk/src/landing/themes/paper/shapes.tsx",
+            "desk/src/landing/themes/paper/stamps.tsx",
+            "desk/src/landing/themes/paper/stills/Still.tsx",
+            "desk/src/landing/themes/paper/stills/rules.ts",
+            "desk/src/landing/themes/paper/worlds.tsx",
+            "desk/src/landing/themes/types.ts",
+            "tools/landing-stills-test.cjs",
+            "tools/tv-landing-live.cjs",
+            "tools/tv-landing-test.cjs"
           ]
         },
         {
@@ -252,7 +593,10 @@
             "desk/src/tv/keys.ts",
             "desk/src/tv/recapRows.ts",
             "tools/tv-keys-test.cjs",
-            "tools/tv-recap-test.cjs"
+            "tools/tv-recap-test.cjs",
+            "desk/src/app/global-error.tsx",
+            "desk/src/lib/afterFonts.ts",
+            "desk/src/tv/day.ts"
           ]
         },
         {
@@ -275,7 +619,9 @@
           "file_paths": [
             "desk/src/app/phone/page.tsx",
             "desk/src/app/phone/panelFor.ts",
-            "tools/phone-panel-test.cjs"
+            "tools/phone-panel-test.cjs",
+            "desk/src/app/drop/page.tsx",
+            "desk/src/app/phone/phoneBar.ts"
           ]
         }
       ]
@@ -317,7 +663,18 @@
             "desk/src/lib/engines/voice.ts",
             "desk/src/lib/engines/registry.ts",
             "desk/src/lib/engines/shape.ts",
-            "tools/engines-rules-test.cjs"
+            "tools/engines-rules-test.cjs",
+            "desk/src/lib/engines/call.ts",
+            "desk/src/lib/engines/health.ts",
+            "desk/src/lib/engines/meter.ts",
+            "desk/src/lib/engines/prices.ts",
+            "desk/src/lib/prompt/assemble.ts",
+            "tools/error-doors-test.cjs",
+            "tools/econ-rules-test.cjs",
+            "tools/econ-sample.cjs",
+            "tools/engine-degraded-fixtures.json",
+            "tools/engine-degraded-test.cjs",
+            "tools/prompt-assembly-test.cjs"
           ]
         },
         {
@@ -349,7 +706,20 @@
             "desk/src/lib/session/pairing.ts",
             "desk/src/proxy.ts",
             "desk/src/instrumentation.ts",
-            "tools/desk-pairing-test.cjs"
+            "tools/desk-pairing-test.cjs",
+            "desk/src/app/api/fault/route.ts",
+            "desk/src/app/api/texts/route.ts",
+            "desk/src/lib/dataDir.ts",
+            "desk/src/lib/rules/fault.ts",
+            "desk/src/lib/session/lan.ts",
+            "desk/src/lib/session/phoneAsk.ts",
+            "desk/src/lib/session/streams.ts",
+            "desk/src/lib/session/texts.ts",
+            "tools/phone-shell-test.cjs",
+            "tools/handoff-test.cjs",
+            "tools/learner-switch-test.cjs",
+            "tools/learners-save-test.cjs",
+            "tools/session-link-test.cjs"
           ]
         },
         {
@@ -369,7 +739,13 @@
             "desk/src/lib/library/lessons.data.ts",
             "desk/src/lib/library/lessons.ts",
             "desk/src/lib/library/syllabus.ts",
-            "desk/src/lib/library/vtt.ts"
+            "desk/src/lib/library/vtt.ts",
+            "desk/src/lib/library/gcse-cz.ts",
+            "desk/src/lib/library/gcse.ts",
+            "desk/src/lib/library/watched.ts",
+            "desk/src/lib/library/worked.ts",
+            "tools/gcse-coverage.cjs",
+            "tools/gcse-rules-test.cjs"
           ]
         }
       ]
@@ -419,7 +795,18 @@
             "core/src/test/kotlin/dev/telestrator/core/MetricTest.kt",
             "core/src/test/kotlin/dev/telestrator/core/PenConversationTest.kt",
             "core/src/test/kotlin/dev/telestrator/core/ReviewModeTest.kt",
-            "core/src/test/kotlin/dev/telestrator/core/VisibleEditsTest.kt"
+            "core/src/test/kotlin/dev/telestrator/core/VisibleEditsTest.kt",
+            "core/build.gradle.kts",
+            "core/src/main/kotlin/dev/telestrator/core/LinkState.kt",
+            "core/src/main/kotlin/dev/telestrator/core/PairingUrl.kt",
+            "core/src/test/kotlin/dev/telestrator/core/CompanionContractTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/DroppedMessagesTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/LinkStateTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/MalformedGeometryTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/PairingGuessLimitTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/PairingUrlTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/PenEngineThreadsTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/ShapeTapTest.kt"
           ]
         },
         {
@@ -454,7 +841,20 @@
             "tv-app/src/main/kotlin/dev/telestrator/tv/transport/PenTransport.kt",
             "tv-app/src/main/kotlin/dev/telestrator/tv/transport/RelayTransport.kt",
             "tv-app/src/main/res/values/strings.xml",
-            "tv-app/src/main/res/values/themes.xml"
+            "tv-app/src/main/res/values/themes.xml",
+            "tv-app/src/debug/AndroidManifest.xml",
+            "tv-app/src/debug/kotlin/dev/telestrator/tv/voiceprobe/VoiceProbeActivity.kt",
+            "tv-app/src/main/kotlin/dev/telestrator/tv/PairingCard.kt",
+            "tv-app/src/test/kotlin/dev/telestrator/tv/OverlayAllocationTest.kt",
+            "tv-app/src/test/kotlin/dev/telestrator/tv/RenderStatsTest.kt",
+            "tv-app/src/test/kotlin/dev/telestrator/tv/ResourceEncodingTest.kt",
+            "tv-app/src/test/kotlin/dev/telestrator/tv/SessionCommandTest.kt",
+            "tv-app/src/test/kotlin/dev/telestrator/tv/SessionPenCountTest.kt",
+            "tv-app/src/test/kotlin/dev/telestrator/tv/SessionPinTest.kt",
+            "tv-app/src/test/kotlin/dev/telestrator/tv/SessionThreadingTest.kt",
+            "tv-app/src/test/kotlin/dev/telestrator/tv/ThumbnailerThreadingTest.kt",
+            "tv-app/src/test/kotlin/dev/telestrator/tv/transport/FailureMessageTest.kt",
+            "tv-app/src/test/kotlin/dev/telestrator/tv/transport/LanAddressTest.kt"
           ]
         },
         {
@@ -501,7 +901,8 @@
             "tools/device.mjs",
             "tools/tail-diag.mjs",
             "scripts/dev.ps1",
-            "tools/package.json"
+            "tools/package.json",
+            "tools/device-rules-test.cjs"
           ]
         }
       ]
@@ -559,7 +960,36 @@
             "tools/uat-surface-test.cjs",
             "tools/uat-verdict-test.cjs",
             "tools/uat-ledger-test.cjs",
-            "tools/uat-recertify-test.cjs"
+            "tools/uat-recertify-test.cjs",
+            "uat/characters/dominik-17.md",
+            "uat/characters/essay/barbora-43.md",
+            "uat/characters/essay/daniel-15.md",
+            "uat/characters/essay/eliska-12.md",
+            "uat/characters/essay/helena-46.md",
+            "uat/characters/essay/kristyna-17.md",
+            "uat/characters/hana-41.md",
+            "uat/characters/ivana-33.md",
+            "uat/characters/maths/matyas-19.md",
+            "uat/characters/maths/nela-12.md",
+            "uat/characters/maths/owen-17.md",
+            "uat/characters/maths/radka-41.md",
+            "uat/characters/maths/vojtech-18.md",
+            "uat/characters/sofie-11.md",
+            "uat/drift/README.md",
+            "uat/driver/metrics.cjs",
+            "uat/driver/product.cjs",
+            "uat/driver/raw-moments.cjs",
+            "uat/journeys/essay/EM1-what-my-paragraph-does.md",
+            "uat/journeys/essay/EM2-fix-it-myself.md",
+            "uat/journeys/essay/EM3-the-whole-essay.md",
+            "uat/journeys/essay/EM4-was-tonight-worth-it.md",
+            "uat/journeys/essay/EM5-my-writing-kept-and-known.md",
+            "uat/journeys/maths/MB1-tonights-sheet.md",
+            "uat/journeys/maths/MB2-practise-and-get-marked.md",
+            "uat/journeys/maths/MB3-my-calculus-course.md",
+            "uat/journeys/maths/MB4-where-the-marks-went.md",
+            "uat/journeys/maths/MB5-is-it-worth-keeping.md",
+            "tools/uat-metrics-test.cjs"
           ]
         },
         {
@@ -579,7 +1009,42 @@
             "tools/kpi-measure.cjs",
             "tools/kpi-measure-test.cjs",
             "tools/worktree-preflight.cjs",
-            "tools/checkout.cjs"
+            "tools/checkout.cjs",
+            "desk/.gitignore",
+            "desk/AGENTS.md",
+            "desk/CLAUDE.md",
+            "desk/README.md",
+            "desk/next.config.ts",
+            "desk/package.json",
+            "desk/tsconfig.json",
+            "tools/audio/desk-audition-report.mjs",
+            "tools/audio/desk-audition.mjs",
+            "tools/audio/elevenlabs.mjs",
+            "tools/audio/session-desk-a1-music.json",
+            "tools/audio/session-desk-a1-sfx.json",
+            "tools/desk-datadir-test.cjs",
+            "tools/desk-dev-https.cjs",
+            "tools/run-rules.cjs",
+            "tools/stick-perf/cdp.mjs",
+            "tools/stick-perf/look-desktop.mjs",
+            "tools/stick-perf/pass3.sh",
+            "tools/stick-perf/perf.mjs",
+            "tools/stick-perf/scenarios.sh",
+            "tools/stick-perf/window.mjs",
+            "tools/stick-walk/badcode.cjs",
+            "tools/stick-walk/flow-math.sh",
+            "tools/stick-walk/flow-writing.sh",
+            "tools/stick-walk/lib.sh",
+            "tools/stick-walk/page-shot.cjs",
+            "tools/stick-walk/phone-act.cjs",
+            "tools/stick-walk/phone-shot.cjs",
+            "tools/stick-walk/phone.cjs",
+            "tools/stick-walk/session.cjs",
+            "tools/stick-walk/writing-panel.cjs",
+            "tools/stick-walk/writing.cjs",
+            "tools/ts-load.cjs",
+            "tools/worktree-preflight-test.cjs",
+            "tools/harness-rules-test.cjs"
           ]
         }
       ]
@@ -638,6 +1103,129 @@
             "prototype/identity/on-air.src.html",
             "prototype/identity/variants.html",
             "prototype/linga-conversations.html"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "stick",
+      "description": "The Study Desk shell for the Fire TV Stick",
+      "contexts": [
+        {
+          "stack": [
+            "kotlin",
+            "android"
+          ],
+          "file_paths": [
+            "stick-app/build.gradle.kts",
+            "stick-app/src/main/AndroidManifest.xml",
+            "stick-app/src/main/kotlin/dev/studydesk/stick/Desk.kt",
+            "stick-app/src/main/kotlin/dev/studydesk/stick/DeskNet.kt",
+            "stick-app/src/main/kotlin/dev/studydesk/stick/KeyBridge.kt",
+            "stick-app/src/main/kotlin/dev/studydesk/stick/StickActivity.kt",
+            "stick-app/src/main/res/drawable/banner.xml",
+            "stick-app/src/main/res/values/strings.xml",
+            "stick-app/src/test/kotlin/dev/studydesk/stick/DeskTest.kt",
+            "stick-app/src/test/kotlin/dev/studydesk/stick/KeyBridgeTest.kt"
+          ],
+          "name": "stick-app",
+          "description": "The standalone Android shell that runs the Study Desk on a Fire TV Stick: the desk probe and scan, pairing screen, network bridge and D-pad key bridge.",
+          "keywords": [
+            "stick",
+            "fire tv",
+            "android",
+            "webview",
+            "d-pad",
+            "key bridge",
+            "apk"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "governance",
+      "description": "The agent contract, CI and repository guardrails",
+      "contexts": [
+        {
+          "stack": [
+            "node",
+            "github-actions",
+            "gradle"
+          ],
+          "file_paths": [
+            ".ai/SPEC.md",
+            ".ai/context-index.json",
+            ".ai/doctor.mjs",
+            ".ai/guardrails.yaml",
+            ".ai/maintain.mjs",
+            ".ai/manifest.yaml",
+            ".editorconfig",
+            ".gitattributes",
+            ".github/CODEOWNERS",
+            ".github/ISSUE_TEMPLATE/agent-task.yml",
+            ".github/ISSUE_TEMPLATE/config.yml",
+            ".github/dependabot.yml",
+            ".github/pull_request_template.md",
+            ".github/workflows/ai-conformance.yml",
+            ".github/workflows/capabilities-pr.yml",
+            ".github/workflows/capabilities.yml",
+            ".github/workflows/changelog.yml",
+            ".github/workflows/conformance-gate.yml",
+            ".github/workflows/harness-drills.yml",
+            ".github/workflows/model-drift-pr.yml",
+            ".github/workflows/model-drift.yml",
+            ".github/workflows/quality.yml",
+            ".github/workflows/repo-guardrails.yml",
+            ".github/workflows/sbom.yml",
+            ".github/workflows/supply-chain.yml",
+            ".gitignore",
+            "AGENTS.md",
+            "CHANGELOG.md",
+            "CONTEXT.md",
+            "CONTRIBUTING.md",
+            "README.md",
+            "SECURITY.md",
+            "build.gradle.kts",
+            "gradle.properties",
+            "gradle/libs.versions.toml",
+            "gradle/wrapper/gradle-wrapper.properties",
+            "gradlew",
+            "gradlew.bat",
+            "scripts/capability-proof.mjs",
+            "scripts/doctor-gate.mjs",
+            "scripts/model-drift.ps1",
+            "scripts/pin-actions.mjs",
+            "settings.gradle.kts",
+            "tools/changelog-test.cjs",
+            "tools/commit-provenance-test.cjs",
+            "tools/commit-provenance.cjs",
+            "tools/desk-boundaries-test.cjs",
+            "tools/desk-boundaries.cjs",
+            "tools/doctor-gate-test.cjs",
+            "tools/gradle-sbom-test.cjs",
+            "tools/gradle-sbom.cjs",
+            "tools/gradlew.cjs",
+            "tools/guidance-overlay-test.cjs",
+            "tools/import-graph.cjs",
+            "tools/model-drift-pr-test.cjs",
+            "tools/model-drift-pr.cjs",
+            "tools/model-drift-test.cjs",
+            "tools/model-drift.cjs",
+            "tools/security-policy-test.cjs"
+          ],
+          "name": "repo-governance",
+          "description": "The agent contract (.ai manifest, doctor, guardrails, memory index), CI workflows, gate scripts and the repository guardrail tools: desk boundaries, commit provenance, changelog shape, guidance overlays, security policy, SBOM, model drift.",
+          "keywords": [
+            "ci",
+            "workflow",
+            "doctor",
+            "manifest",
+            "guardrails",
+            "provenance",
+            "changelog",
+            "sbom",
+            "drift",
+            "boundaries"
           ]
         }
       ]

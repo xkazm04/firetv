@@ -20,11 +20,19 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      # Not wired: tools/desk-boundaries-test.cjs case 11 fails on the current desk (3 layering breaks:
-      # engines/meter.ts loads dataDir, twin/state.ts writes files, rules/docx.ts loads node:zlib). Wire it back
-      # once those are fixed or given reasoned allowances (hygiene harvest of ascent/runner, 2026-10-20).
+      # Main carried three breaks when the check landed; two are fixed. The one left (engines/meter.ts loads dataDir) is
+      # an OWED entry in tools/desk-boundaries.cjs: printed, not failed, until the owner fixes or allows it. Any other
+      # break fails, and so does an OWED entry whose break is gone.
+      - name: Desk layering suite
+        run: node tools/desk-boundaries-test.cjs
+      - name: Desk layering
+        run: node tools/desk-boundaries.cjs
       - name: A guidance overlay for every separate build
         run: node tools/guidance-overlay-test.cjs
+      - name: The Gradle entry starts the root wrapper from any directory
+        run: node tools/gradlew-test.cjs
+      - name: Every tools/*-test.cjs is run by the desk gate or a workflow
+        run: node tools/suite-wiring-test.cjs
 
   provenance:
     if: github.event_name == 'pull_request'

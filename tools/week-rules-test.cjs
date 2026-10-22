@@ -1,7 +1,7 @@
 /**
  * THE SUNDAY PAGE (Family W9): the parent's week in words, written by code from the learner's own digest (rules/week
  * sundayPage + sundayWords, over rules/digest), no model. A fixed week gives fixed words (snapshotted below as literals);
- * an empty week is exactly "Nothing this week."; one everyday act per school unit (DO_IT, all 15 ids of the real path);
+ * an empty week is exactly "Nothing this week."; one everyday act per school unit (DO_IT, every topic id of the school path, read from the library);
  * the slip line only for a slip seen twice or more; at most three units then "and N more"; a step up only when a
  * step-up set was marked; never a percent sign, a ranking, praise, another learner, a question or an answer; the same
  * inputs give the same words; every line within LINE_WORDS and the page within PAGE_WORDS. Through the store: the page
@@ -537,4 +537,44 @@ test('S3: a taught phrase reused this week is named on the Linga and English try
  assert.deepEqual(D.cleanEntry(dirty),{at:dirty.at,kind:'english',sceneId:'meet',skill:'contact',turns:6});
  assert.deepEqual(D.cleanDigest([dirty]),[{at:dirty.at,kind:'english',sceneId:'meet',skill:'contact',turns:6}]);
  assert.equal(calls,0,'no model');
+});
+
+// ------------------------------------------------------------------ a take with no reply is not a conversation (every other kind needs a count above 0)
+test('no-reply take: a Linga take finished with no reply is not a conversation or an evening on the page; beside a real one it is not counted',()=>{
+ assert.deepEqual(words([E(24,18,'teacher','repair',0)]),[{section:'week',text:'Nothing this week.'}],'alone: the empty week');
+ const both=texts(words([E(24,18,'teacher','repair',0),E(25,18,'meet','contact',3)]));
+ assert.equal(both[0],'Mia worked on one evening.');
+ assert.deepEqual(lingaOf(words([E(24,18,'teacher','repair',0),E(25,18,'meet','contact',3)])),['One conversation: The first hello.']);
+ assert.ok(!both.some((t)=>/Say that again/.test(t)),'the scene with no reply is not named');
+ // a phrase that came back is still said only beside a conversation that had replies
+ assert.ok(!words({digest:[E(24,18,'teacher','repair',0)],english:{plan:null,taught:[T('nr','meet','tomatoes are',25)]}}).some((l)=>/tomatoes/.test(l.text)));
+ // the digest keeps the entry as written: the page reads past it
+ assert.equal(D.cleanDigest([E(24,18,'teacher','repair',0)]).length,1);
+});
+
+// ------------------------------------------------------------------ every authored scene (Speaking practice included) reads as one sentence
+test('scene names: every authored scene (ENGLISH_SCENES and Speaking practice) and a plan title ending in a question mark close the Linga line with one stop, never "?."',()=>{
+ const {AUTHORED_SCENES}=require(src('lib/english/curriculum.ts'));
+ assert.ok(AUTHORED_SCENES.length>ENGLISH_SCENES.length,'Speaking practice is authored too');
+ for(const s of AUTHORED_SCENES){
+  const x=words([E(24,18,s.id,s.skill,3)]).find((y)=>y.section==='english'&&!y.head).text;
+  assert.equal(x,`One conversation: ${s.name}${/[.!?]$/.test(s.name)?'':'.'}`,s.id);
+  assert.doesNotMatch(x,/[.!?]\.$/,`${s.id}: one stop`);assert.ok(W.wordsIn(x)<=W.LINE_WORDS,x);
+ }
+ const plan={at:1,band:'A2',topics:[{id:'plan-0a1b2c3d',title:'What would you do?',goal:'g',why:'w',skill:'negotiate',audience:'all',partner:'p',premise:'x',cue:'c',quiz:{question:'q',options:['a','b'],correct:0}}]};
+ assert.ok(lingaOf(words({digest:[E(24,18,'plan-0a1b2c3d','negotiate',3)],english:{plan}})).includes('One conversation: What would you do?'));
+ // a question in the middle of the list keeps its own mark and the line its stop
+ assert.ok(lingaOf(words({digest:[E(24,18,'plan-0a1b2c3d','negotiate',3),E(25,18,'teacher','repair',3)],english:{plan}})).includes('Two conversations: Say that again, please · What would you do?'));
+});
+
+// ------------------------------------------------------------------ the look line, for every slip a unit can show (not only each unit's first)
+test('look line: every slip of every school unit (SCHOOL_UNIT_SLIPS, all of them) is named within LINE_WORDS, twice, three times and 12 times',()=>{
+ let n=0;
+ for(const [unit,ids] of Object.entries(S.SCHOOL_UNIT_SLIPS))for(const id of ids)for(const times of [2,3,12]){
+  const look=words([M(24,18,unit,0,12,{slip:id,slipN:times})]).filter((l)=>l.section==='look'&&!l.head).map((l)=>l.text);
+  const name=D.slipName(id);assert.ok(name,`${id}: a name in SCHOOL_SLIPS`);
+  assert.deepEqual(look,[`The most common slip, ${times===2?'twice':times===3?'three times':'12 times'}: ${name.charAt(0).toLowerCase()+name.slice(1)}.`],`${unit} ${id} x${times}`);
+  assert.ok(W.wordsIn(look[0])<=W.LINE_WORDS,`${W.wordsIn(look[0])} words: ${look[0]}`);n++;
+ }
+ assert.equal(n,3*Object.values(S.SCHOOL_UNIT_SLIPS).flat().length);
 });

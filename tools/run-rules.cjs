@@ -1,17 +1,21 @@
 /**
  * The rules runner (npm run test:rules in desk/): every suite listed in desk/package.json's "rulesSuites", one at a
- * time, in list order, each as its own `node --test-reporter=tap <suite>` process with cwd desk/ and the parent's env plus one addition:
+ * time (unless --jobs), in list order, each as its own `node --test-reporter=tap <suite>` process with cwd desk/ and the parent's env plus one addition:
  * DESK_USAGE_FILE, a fresh <os tmpdir>/desk-usage-XXXX/usage.jsonl per suite (removed after it, best effort), unless the parent
  * already sets it. Without it meter.ts's usage ledger falls back to <cwd>/data, so a stub-engine suite would append rows
  * to desk/data, where the real learners live.
- * It never stops at the first red suite: every suite runs, then one table says which were red and why.
+ * It never stops at the first red suite: every suite runs, then one table says which were red and why, and one
+ * line names the five slowest top-level tests across every suite (from each TAP test's duration_ms).
+ * --jobs N (or RULES_JOBS=N) runs up to N suites at once; each suite's stdout and stderr are then held and printed whole,
+ * under its own "# run-rules:" header, when it ends, and the table stays in list order. The default is 1: one at a time,
+ * streamed as it runs. A value that is not a positive whole number is refused (exit 1).
  *
  * A suite is green only when it exits 0 by itself AND its last unindented TAP summary shows tests >= 1, fail 0 and
  * cancelled 0. A non-zero exit or signal, an uncaught throw, no summary (a suite that calls process.exit(0) before
  * node:test reports), 0 tests, a missing file and a timeout (RULES_SUITE_TIMEOUT_MS, default 600000) are all red.
  * The runner refuses to start (exit 1) on a missing, empty or duplicated list.
  *
- * Usage: node ../tools/run-rules.cjs [--list <json file: an array, or an object with rulesSuites>] (cwd desk/).
+ * Usage: node ../tools/run-rules.cjs [--list <json file: an array, or an object with rulesSuites>] [--jobs N] (cwd desk/).
  * Pure: no network, no model. Suite file names in the list are relative to tools/.
  */
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), { spawn } = require('node:child_process');
@@ -36,6 +40,15 @@ function readList() {
   return list;
 }
 
+/** How many suites run at once: --jobs N, else RULES_JOBS, else 1. */
+function readJobs() {
+  const at = process.argv.indexOf('--jobs');
+  const raw = at >= 0 ? process.argv[at + 1] : process.env.RULES_JOBS;
+  if (at < 0 && (raw === undefined || raw === '')) return 1;
+  if (!/^[1-9]\d*$/.test(String(raw ?? ''))) refuse(`--jobs (or RULES_JOBS) needs a positive whole number, not ${raw ?? 'nothing'}`);
+  return Number(raw);
+}
+
 /** The last unindented "# name N" lines of a TAP stream. */
 function summary(text) {
   const out = {};
@@ -46,23 +59,36 @@ function summary(text) {
   return 'tests' in out ? out : null;
 }
 
-function runOne(name) {
+/** One suite. live: stream its output as it runs; otherwise hold stdout and stderr in r.log for the caller to print whole. */
+/** Every top-level test of a TAP stream with its duration_ms: an unindented "ok N - name" and the "  duration_ms:" under it. */
+function testTimes(text) {
+  const out = [], lines = text.split(/\r?\n/);
+  for (let i = 0; i < lines.length - 2; i++) {
+    const m = /^(?:not )?ok \d+ - (.*?)(?: # (?:SKIP|TODO)\b.*)?$/.exec(lines[i]);
+    const d = m && /^ {2}duration_ms: ([\d.]+)$/.exec(lines[i + 2]);
+    if (d) out.push({ name: m[1], ms: Number(d[1]) });
+  }
+  return out;
+}
+
+function runOne(name, live = true) {
   return new Promise(resolve => {
     const file = path.join(TOOLS, name), t0 = Date.now();
-    if (!fs.existsSync(file)) { console.error(`run-rules: missing file ${file}`); return resolve({ name, ms: 0, why: 'missing file' }); }
-    let text = '', timedOut = false, ledgerDir = null;
+    if (!fs.existsSync(file)) { const m = `run-rules: missing file ${file}`; if (live) console.error(m); return resolve({ name, ms: 0, why: 'missing file', log: `${m}\n` }); }
+    let text = '', log = '', timedOut = false, ledgerDir = null;
     const env = { ...process.env };
     if (!env.DESK_USAGE_FILE) {
       try { ledgerDir = fs.mkdtempSync(path.join(os.tmpdir(), 'desk-usage-')); env.DESK_USAGE_FILE = path.join(ledgerDir, 'usage.jsonl'); } catch { ledgerDir = null; }
     }
     const cleanup = () => { if (ledgerDir) try { fs.rmSync(ledgerDir, { recursive: true, force: true }); } catch {} };
-    const child = spawn(process.execPath, ['--test-reporter=tap', file], { cwd: DESK, env, stdio: ['ignore', 'pipe', 'inherit'] });
-    child.stdout.on('data', d => { process.stdout.write(d); text += d; });
+    const child = spawn(process.execPath, ['--test-reporter=tap', file], { cwd: DESK, env, stdio: ['ignore', 'pipe', live ? 'inherit' : 'pipe'] });
+    child.stdout.on('data', d => { if (live) process.stdout.write(d); else log += d; text += d; });
+    if (!live) child.stderr.on('data', d => { log += d; });
     const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, TIMEOUT);
-    child.on('error', e => { clearTimeout(timer); cleanup(); resolve({ name, ms: Date.now() - t0, why: `spawn failed: ${e.message}` }); });
+    child.on('error', e => { clearTimeout(timer); cleanup(); resolve({ name, ms: Date.now() - t0, why: `spawn failed: ${e.message}`, log }); });
     child.on('close', (code, signal) => {
       clearTimeout(timer); cleanup();
-      const s = summary(text), r = { name, ms: Date.now() - t0, sum: s };
+      const s = summary(text), r = { name, ms: Date.now() - t0, sum: s, log, tests: testTimes(text) };
       if (timedOut) r.why = `timeout after ${TIMEOUT} ms`;
       else if (signal) r.why = `signal ${signal}`;
       else if (code !== 0) r.why = `exit ${code}`;
@@ -76,10 +102,22 @@ function runOne(name) {
 }
 
 (async () => {
-  const list = readList(), t0 = Date.now(), results = [];
-  for (const name of list) {
-    console.log(`\n# run-rules: ${name}`);
-    results.push(await runOne(name));
+  const list = readList(), jobs = readJobs(), t0 = Date.now(), results = [];
+  if (jobs === 1) {
+    for (const name of list) {
+      console.log(`\n# run-rules: ${name}`);
+      results.push(await runOne(name));
+    }
+  } else {
+    let next = 0;
+    const worker = async () => {
+      while (next < list.length) {
+        const i = next++, r = await runOne(list[i], false);
+        process.stdout.write(`\n# run-rules: ${list[i]}\n${r.log}`);
+        results[i] = r;
+      }
+    };
+    await Promise.all(Array.from({ length: Math.min(jobs, list.length) }, worker));
   }
   const rows = results.map(r => {
     const s = r.sum || {};
@@ -91,7 +129,9 @@ function runOne(name) {
   console.log(`\n# run-rules: ${results.length} suites\n${fmt(head)}\n${rows.map(fmt).join('\n')}`);
   const sum = k => results.reduce((a, r) => a + ((r.sum && r.sum[k]) || 0), 0);
   const red = results.filter(r => r.why);
-  console.log(`\ntotals: ${results.length - red.length} green, ${red.length} red; tests ${sum('tests')}, pass ${sum('pass')}, fail ${sum('fail')}; duration_ms sum ${Math.round(sum('duration_ms'))}; wall ${Date.now() - t0} ms`);
+  console.log(`\ntotals: ${results.length - red.length} green, ${red.length} red; tests ${sum('tests')}, pass ${sum('pass')}, fail ${sum('fail')}; duration_ms sum ${Math.round(sum('duration_ms'))}; wall ${Date.now() - t0} ms; jobs ${jobs}`);
+  const slow = results.flatMap(r => (r.tests || []).map(t => ({ ...t, suite: r.name }))).sort((a, b) => b.ms - a.ms).slice(0, 5);
+  if (slow.length) console.log(`slowest tests: ${slow.map(t => `${t.suite} › ${t.name} ${(t.ms / 1000).toFixed(1)} s`).join(', ')}`);
   if (red.length) console.log(`RED: ${red.map(r => `${r.name} (${r.why})`).join(', ')}`);
   process.exit(red.length ? 1 : 0);
 })();

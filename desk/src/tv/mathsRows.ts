@@ -5,7 +5,7 @@
 import type { Ask, AskKind, Practice, SchoolSystem, Screen, Session } from "@/lib/session/store";
 import { canOf } from "@/lib/rules/paperEntry";
 import { PATHS, learnerPath, topicIn, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
-import { firstToLook } from "@/tv/sheetRows";
+import { firstToLook, lookCount } from "@/tv/sheetRows";
 import { slip as slipById } from "@/lib/rules/maths";
 import { SCHOOL_UNIT_SLIPS, topAimLine } from "@/lib/rules/school";
 import { likeTopic } from "@/lib/rules/kinds";
@@ -124,9 +124,12 @@ export function continueCard(s: Session, now = Date.now()): Continue | null {
     go: "practice", pageIx: 0, focus: 0,
   };
   // a marked set is parked on its sheet until it is put away: Enter goes back to the first item to look at
-  if (s.practice?.marked) { const n = s.practice.items.length, right = s.practice.items.filter((i) => i.verdict === "right").length; return {
+  // the line reads the first attempt (the record); where Enter lands is the sheet's own rule (firstToLook), so a set whose
+  // every ringed item held on its second go promises no first one to look at
+  if (s.practice?.marked) { const n = s.practice.items.length, right = s.practice.items.filter((i) => i.verdict === "right").length, look = lookCount(s.practice.items); return {
     k: "Marked", t: "Back to the marked set", d: `${name} · ${right} of ${n} right.`,
     cap: right === n ? "All of the marked set came back right. Enter shows it, and six more are one press away."
+      : look === 0 ? "Every one to look at is fixed now. Enter shows the set, and six more are one press away."
       : "The marked set is still on the desk. Enter shows it again, on the first one to look at.",
     go: "sheet", pageIx: 0, focus: firstToLook(s.practice.items),
   }; }

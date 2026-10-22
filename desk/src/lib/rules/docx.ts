@@ -1,5 +1,6 @@
 /**
- * The text of a .docx (v2 P4; adult plan A7): no dependency. Server-only (node:zlib).
+ * The text of a .docx (v2 P4; adult plan A7): no dependency, and no Node built-in (rules load none, .ai/memory/0018): the
+ * caller hands in the inflater (the texts route passes node:zlib inflateRawSync), so this file stays a pure rule.
  *
  * A .docx is a zip; the body is word/document.xml. This reads the zip's central directory, finds that one entry by
  * name, inflates it (stored or deflate only), and turns the XML into paragraphs: one per <w:p>, the text of its <w:t>
@@ -9,9 +10,9 @@
  * Refused, with a sentence: not a zip, no word/document.xml, an encrypted or unknown compression, an entry larger than
  * DOCX_MAX_XML when inflated (a guard against a zip bomb), and a document with no text.
  */
-import { inflateRawSync } from "node:zlib";
-
 export const DOCX_MAX_XML = 5 * 1024 * 1024;
+/** Raw DEFLATE, zlib inflateRawSync's shape: it must stop (throw) past maxOutputLength. */
+export type Inflate = (data: Buffer, opts: { maxOutputLength: number }) => Buffer;
 export type DocxResult = { ok: true; text: string } | { ok: false; error: string };
 const NOT = "That file does not open as a Word document. Save it again as .docx or .txt and send it.";
 
@@ -45,7 +46,7 @@ const decode = (s: string) => s.replace(/&(amp|lt|gt|quot|apos|#\d+|#x[0-9a-f]+)
   e[0] === "#" ? String.fromCodePoint(e[1] === "x" || e[1] === "X" ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10)) : ENT[e.toLowerCase()] ?? _);
 
 /** The document's paragraphs, joined by blank lines (rules/essay paragraphsOf reads them back). */
-export function docxText(buf: Buffer): DocxResult {
+export function docxText(buf: Buffer, inflate: Inflate): DocxResult {
   try {
     if (buf.length < 22 || buf.readUInt32LE(0) !== 0x04034b50) return { ok: false, error: NOT };
     const e = entry(buf, "word/document.xml");
@@ -53,8 +54,9 @@ export function docxText(buf: Buffer): DocxResult {
     if (e.size > DOCX_MAX_XML) return { ok: false, error: "That document is too big to read. Keep it to a few pages, or save it as .txt." };
     let xml: Buffer;
     if (e.method === 0) xml = e.data;
-    else if (e.method === 8) xml = inflateRawSync(e.data, { maxOutputLength: DOCX_MAX_XML });
+    else if (e.method === 8) xml = inflate(e.data, { maxOutputLength: DOCX_MAX_XML });
     else return { ok: false, error: NOT };
+    if (xml.length > DOCX_MAX_XML) return { ok: false, error: NOT }; // the cap holds whatever inflater the caller brought
     // a table row reads as one line (cells joined by " | "); a non-breaking hyphen reads as "-"
     const body = xml.toString("utf8").replace(/<w:tr(?:\s[^>]*)?>[\s\S]*?<\/w:tr>/g, (row) =>
       row.split(/<\/w:tc>/).slice(0, -1).map((c) => c.replace(/<\/w:p>(?=[\s\S]*<w:p[\s>])/g, "<w:t> </w:t>").replace(/<\/w:p>/g, "")).join("<w:t> | </w:t>") + "</w:p>");

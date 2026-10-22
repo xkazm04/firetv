@@ -468,7 +468,7 @@ export function Learner({ s, focus }: { s: Session; focus: number }) {
       </div>
       <div style={{ marginTop: 44 }}>
         {at
-          ? <><span className="cap">{TYPE_WORDS[at.type]}</span><div className="cap-text">{picksLine(at)} {at.id === s.learner?.id ? "Enter goes back to the desk" : "Enter to sit at this desk"}, Menu to change the picks.{switchEndsLine(s, at) && <> <b>{switchEndsLine(s, at)}</b></>}</div></>
+          ? <><span className="cap">{TYPE_WORDS[at.type]}</span><div className="cap-text">{picksLine(at)} {at.id === s.learner?.id ? "Select goes back to the desk" : "Select to sit at this desk"}, Menu to change the picks.{switchEndsLine(s, at) && <> <b>{switchEndsLine(s, at)}</b></>}</div></>
           : <><span className="cap">New learner</span><div className="cap-text">The TV takes the picks, the phone takes the name.</div></>}
       </div>
     </main>

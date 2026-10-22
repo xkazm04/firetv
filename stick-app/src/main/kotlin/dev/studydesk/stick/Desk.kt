@@ -183,6 +183,28 @@ object Plan {
         return if (source == Source.DEFAULT) Step.Setup("No desk answered at ${tried.label} or anywhere on this network.")
         else Step.Down(tried, why)
     }
+
+    /**
+     * The source of the address being tried once a desk has answered at it. The default that answered is kept (it is
+     * the kept desk after a restart), so it is SAVED from then on: setup is for a stick that never found a desk, and a
+     * search from the waiting screen (which skips the desk it probes) must not send a found desk there.
+     */
+    fun answered(source: Source): Source = if (source == Source.DEFAULT) Source.SAVED else source
+}
+
+/** The words of the error screen, from what the last probe said. */
+object Words {
+    const val ASK = "Is the desk running on the computer, and is the stick on the same Wi-Fi?"
+
+    /**
+     * The reason as a sentence, then the question. A reason that already ends in its own question (no route, no
+     * network) is the question: the screen does not ask about the Wi-Fi twice, nor close a question with a full stop.
+     */
+    fun downBody(why: String): String {
+        val said = why.trim().replaceFirstChar { it.uppercase() }
+        if (said.endsWith('?')) return said
+        return (if (said.endsWith('.')) said else "$said.") + "\n\n" + ASK
+    }
 }
 
 /**

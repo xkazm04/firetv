@@ -3,13 +3,9 @@
  * Linga scene practises, for a learner of a given age. Prints a table; no model, no server.
  *   node tools/cambridge-coverage.cjs [age]        (default 12)
  */
-const fs = require('node:fs'), path = require('node:path'), Module = require('node:module');
-const root = path.resolve(__dirname, '../desk');
-const ts = require(path.join(root, 'node_modules/typescript'));
-const resolve = Module._resolveFilename;
-Module._resolveFilename = function (id, ...args) { return resolve.call(this, id.startsWith('@/') ? path.join(root, 'src', id.slice(2)) : id, ...args); };
-require.extensions['.ts'] = (mod, file) => mod._compile(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, file);
-const C = require(path.join(root, 'src/lib/english/cambridge.ts'));
+// the rules suites' one loader (ts-load.cjs): the '@/' alias, .ts and .tsx hooks, and its disk cache of transpiles
+const path = require('node:path'), { src } = require('./ts-load.cjs');
+const C = require(path.join(src, 'lib/english/cambridge.ts'));
 const age = Number(process.argv[2] ?? 12);
 console.log(`Cambridge Speaking coverage for a learner of ${age} (authored scenes only; VERIFIED=${C.VERIFIED})\n`);
 for (const exam of Object.keys(C.EXAMS)) {

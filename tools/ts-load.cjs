@@ -38,6 +38,28 @@ const keyOf = (source, options) => crypto.createHash('sha256')
   .update(`${LOADER_VERSION}\0${tsVersion}\0${JSON.stringify({ ...options, fileName: undefined })}\0${options.fileName ? path.extname(options.fileName) : ''}\0`)
   .update(source).digest('hex');
 
+/**
+ * The cache only grows: every edit of every module is a new key (1786 entries, 70 MB, for 241 source files, measured
+ * 2026-10-21). On a miss, at most once a day (the mtime of a .pruned marker), entries not written for PRUNE_DAYS are
+ * deleted. A live entry that goes is transpiled again once on its next load. Best effort: a failure prunes nothing.
+ */
+const PRUNE_DAYS = 14, DAY = 864e5;
+let pruneChecked = false;
+function prune() {
+  if (pruneChecked) return;
+  pruneChecked = true;
+  try {
+    const marker = path.join(cacheDir, '.pruned'), now = Date.now();
+    try { if (now - fs.statSync(marker).mtimeMs < DAY) return; } catch { /* never pruned here */ }
+    fs.writeFileSync(marker, '');
+    for (const n of fs.readdirSync(cacheDir)) {
+      if (!n.endsWith('.js') && !n.endsWith('.tmp')) continue;
+      const f = path.join(cacheDir, n);
+      try { if (now - fs.statSync(f).mtimeMs > PRUNE_DAYS * DAY) fs.unlinkSync(f); } catch { /* raced or locked: leave it */ }
+    }
+  } catch { /* an unreadable cache is pruned another day */ }
+}
+
 /** ts.transpileModule(source, options), through the disk cache. Returns { outputText }. */
 function transpile(source, options = {}) {
   let file = null;
@@ -54,6 +76,7 @@ function transpile(source, options = {}) {
       const tmp = `${file}.${process.pid}.${Math.random().toString(36).slice(2)}.tmp`;
       fs.writeFileSync(tmp, outputText);
       fs.renameSync(tmp, file);
+      prune();
     } catch { /* an unwritable cache is no cache */ }
   }
   return { outputText };

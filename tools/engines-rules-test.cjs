@@ -391,7 +391,8 @@ const embedStub=(want,log)=>reg().useProvider('embed',{name:'stub',run:async({te
 test('HL4 case 1: one failed embed call is not remembered - the next call asks the engine again and finds the nearest window',async()=>{
  const L=freshLessons();const log=[];let fail=true;
  reg().useProvider('embed',{name:'stub',run:async({texts})=>{log.push(texts.length);if(fail){fail=false;throw new Error('ollama is down');}return {raw:texts.length===1?[[0,0,1,0]]:texts.map((_,i)=>[0,0,0,0].map((__,j)=>j===i?1:0))};}});
- await assert.rejects(L.bestWindow(LESSON,'q'),/ollama is down/);
+ // the failed call is a degraded seek (the lesson's first window, marked), not a thrown pick (library-rules-test DEGRADED-1)
+ const d=await L.bestWindow(LESSON,'q');assert.equal(d.degraded,true);assert.equal(d.t,L.lessonWindows(LESSON)[0].t);assert.equal(log.length,1,'the engine was asked once');
  assert.equal(fs.existsSync(path.join(data,'embeddings.json')),false,'a failed build caches nothing');
  const w=L.lessonWindows(LESSON);
  const b=await L.bestWindow(LESSON,'q');

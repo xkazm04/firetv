@@ -6,7 +6,7 @@
 import { LONG_SENTENCE_WORDS, splitSentences } from "@/lib/rules/essay";
 import { addHistory, recordWriting } from "@/lib/session/learners";
 import { promptById } from "./prompts";
-import type { Episode } from "./episode";
+import { checkLine, type Episode } from "./episode";
 
 export const WRITING_LENS = "language";
 
@@ -16,7 +16,7 @@ export function saveEpisode(learnerId: string, ep: Episode): { ok: true; detail:
   if (!p) return { ok: false, error: "The desk does not know that prompt." };
   const ss = splitSentences(ep.revision);
   const faulty = ss.filter((s) => s.words > LONG_SENTENCE_WORDS).length;
-  const detail = `${ss.length} sentences, coached and revised once`;
+  const detail = `${ss.length} sentences, ${checkLine(ep)}`;
   try {
     addHistory(learnerId, { at: ep.finishedAt, kind: "writing", label: p.title, detail });
     recordWriting(learnerId, WRITING_LENS, ss.length, faulty);

@@ -1,0 +1,38 @@
+{
+  "schema": "conform-run/1",
+  "worker": "a6965f06-e5d3-40f7-8639-b5ca57b9f9e3",
+  "subject": "generator-uncertainty-scoring",
+  "evaluatedAt": "2026-10-22T00:41:08.767299+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "generator-uncertainty-scoring",
+      "context": "maths-school",
+      "reason": "withdrawn after review: reviewer (sonnet): The not-applicable anchor paperScore.ts:65 is the `const perItem = key.map(...)` line, which doesn't show that there is no LLM generator or uncertainty signal; the claim rests on a grep absence and on technique anchors that only show deterministic scoring."
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-22T00:41:08.767299+00:00",
+      "bundle": "llm-observability",
+      "subjects": [
+        "generator-uncertainty-scoring"
+      ],
+      "techniques": [
+        "compare-gates-at-matched-coverage",
+        "generator-vs-itself",
+        "probability-calibration-is-not-agreement",
+        "score-source-ensembling",
+        "score-source-kinds",
+        "scorer-cost-class",
+        "stated-distribution-over-closed-labels"
+      ],
+      "deviations": 0,
+      "context": "maths-school",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

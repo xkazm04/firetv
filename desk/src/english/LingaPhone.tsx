@@ -5,10 +5,12 @@ import { defaultPreferences } from "@/lib/english/curriculum";
 import { BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, ABOUT_QUESTIONS, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type EnglishPreferences } from "@/lib/english/types";
 import { PITCH_MAX } from "@/lib/english/pitch";
+import { notesProblem } from "@/lib/english/rules";
 import { accepts } from "@/lib/english/turn";
 import { runningTake } from "@/lib/english/take";
 import { beatOf } from "@/lib/english/duet";
 import { activeCheck, lingaView, wordsJob, type WordsJob } from "@/lib/english/view";
+import { LostPicture } from "./LostPicture";
 import { ReplyBox } from "./ReplyBox";
 import { useEnglish } from "./useEnglish";
 
@@ -75,6 +77,8 @@ function ReplyPanel({ s, run, busy }: { s: Session; run: Run; busy: boolean }) {
     const line = (runningTake(c)?.turns ?? c.turns).at(-1), duet = c.duet;
     return <>
       <div className="linga-status" aria-live="polite">{line?.text}</div>
+      {/* the lost jacket (lostfound.ts): the learner's own thing is this phone's alone; no other screen holds it */}
+      {c.lost && !runningTake(c) && <LostPicture learnerId={s.learner?.id} episodeId={c.id} partner={c.partner} />}
       {v.savedLine && <p className="linga-status" data-role="linga-saved">{v.savedLine}</p>}
       {duet && <p className="linga-status" data-role="linga-beat"><b>{duet.beat === "costar" ? `${duet.coStar}'s turn` : `${s.learner?.name ?? "Your"}'s turn`}</b></p>}
       <ReplyBox key={beatOf(c)} ready busy={busy} question={line?.id} stopWhen={!accepts(c, "capture")} onCapture={active => run("capture", { active })}
@@ -117,7 +121,8 @@ function PrefsPanel({ s, run, busy, done }: { s: Session; run: Run; busy: boolea
   const [prefs, setPrefs] = useState<EnglishPreferences>(learning.preferences ?? defaultPreferences(profile));
   const [notes, setNotes] = useState(learning.notes.join("\n"));
   const [message, setMessage] = useState("");
-  const save = async () => { if (await run("preferences", { preferences: prefs, notes: notes.split("\n").map(n => n.trim()).filter(Boolean) })) { setMessage("Your learning preferences are saved. They apply to your next situation."); done(); } };
+  const lines = notes.split("\n").map(n => n.trim()).filter(Boolean), notesRefused = notesProblem(lines);
+  const save = async () => { if (await run("preferences", { preferences: prefs, notes: lines })) { setMessage("Your learning preferences are saved. They apply to your next situation."); done(); } };
   return <>
     <p>Choose what feels useful. English level, imagination and social challenge are separate.</p>
     <label>{learning.placement && isBand(prefs.level) && prefs.level !== learning.placement.band ? "Talk at" : "Your level"}<select value={isBand(prefs.level) ? prefs.level : "A1"} onChange={e => setPrefs({ ...prefs, level: e.target.value as Band })}>{BANDS.map(b => <option key={b} value={b}>{b} · {BAND_NAME[b]}</option>)}</select></label>
@@ -129,7 +134,9 @@ function PrefsPanel({ s, run, busy, done }: { s: Session; run: Run; busy: boolea
     {profile?.type === "other" && profile.age === undefined && <label className="linga-check"><input type="checkbox" checked={prefs.adultConfirmed} onChange={e => setPrefs({ ...prefs, adultConfirmed: e.target.checked })} /><span>I am 18 or older. Include adult social situations.</span></label>}
     <label>What helps you learn? (one note per line)<textarea value={notes} maxLength={1900} placeholder="Give me time to think. Use short examples." onChange={e => setNotes(e.target.value)} /></label>
     <p className="linga-note">Up to eight short notes. You can edit or remove them here. Preferences are remembered; raw microphone audio is not saved by this app.</p>
-    <button className="pbtn" data-signal="true" disabled={busy} onClick={save}>Save preferences</button>
+    {/* the server's own rule (rules.ts notesProblem): a list it would refuse is not sent, and the form says why */}
+    {notesRefused && <p className="linga-error" role="alert" data-role="linga-notes-refused">{notesRefused}</p>}
+    <button className="pbtn" data-signal="true" disabled={busy || !!notesRefused} onClick={save}>Save preferences</button>
     {message && <p role="status">{message}</p>}
   </>;
 }

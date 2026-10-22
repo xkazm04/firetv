@@ -23,6 +23,7 @@ import { partsFromQuestion, specFromQuestion as calcSpecFromQuestion, type CalcS
 import type { Calc2Spec } from "./calc2";
 import { DEFAULT_SCHOOL_SYSTEM, generatorFor, isSchoolSpec, specFromQuestion as schoolSpecFromQuestion, unitOf, type SchoolSpec } from "./school";
 import { slipsShown } from "./slips";
+import { commaSystem } from "./taskText";
 import { judgeOfTopic, pathOfTopic } from "../library/paths";
 import { degenerate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SchoolSystem } from "../session/store";
@@ -86,7 +87,7 @@ export interface JudgeCtx { topic: string; system?: SchoolSystem }
 const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
 
 /** A lone decimal comma between digits, as a point, for a system that writes one (cz, de); anything else is left as typed. */
-const commaValue = (v: string, system?: SchoolSystem) => (system === "cz" || system === "de") && /^-?\d+,\d+$/.test(v) ? v.replace(",", ".") : v;
+const commaValue = (v: string, system?: SchoolSystem) => commaSystem(system) && /^-?\d+,\d+$/.test(v) ? v.replace(",", ".") : v;
 
 /**
  * One item judged by its own kind, or null (the desk asks, records nothing). Never a model's verdict:

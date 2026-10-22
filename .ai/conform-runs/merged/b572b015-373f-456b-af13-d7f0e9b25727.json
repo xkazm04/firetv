@@ -1,0 +1,187 @@
+{
+ "schema": "conform-run/1",
+ "worker": "b572b015-373f-456b-af13-d7f0e9b25727",
+ "subject": "session-continuation",
+ "evaluatedAt": "2026-10-21T23:13:31.166543+00:00",
+ "provider": "codex",
+ "model": "gpt-6.1-sol",
+ "pairs": [
+  {
+   "context": "session",
+   "subject": "session-continuation",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "desk/src/lib/session/store.ts:4 Context and repository searches found no continuation hooks serving this context: it manages learner application state and SSE subscriptions rather than a coding-agent turn boundary.",
+   "techniques": [
+    {
+     "technique": "advisory-guard-fail-mode",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/proxy.ts:30 This gate authorizes HTTP callers; it is not an advisory interceptor at an agent turn boundary."
+    },
+    {
+     "technique": "boundary-applied-stop",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:1099 The running timer dispatches study-session events, without model iterations or tool batches."
+    },
+    {
+     "technique": "compaction-checkpoint",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:992 Startup reads saved application state; searches found no context-compaction checkpoint or restore hook."
+    },
+    {
+     "technique": "continuation-as-state",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:1213 Persisted state belongs to an application reducer, without a continuation record enforcing model stops."
+    },
+    {
+     "technique": "gate-state-lifetimes",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/pairing.ts:47 These counters throttle pairing attempts across the desk; they are not shared agent stop-gate counters."
+    },
+    {
+     "technique": "ordered-teardown",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:951 Ending a learner's evening clears its phone ask and clock; no stop-blocking continuation guards were found."
+    },
+    {
+     "technique": "ordered-yield-composition",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/app/api/session/stream/route.ts:53 Streaming serializes caller-specific application views, without candidate yields or competing continuation frames."
+    },
+    {
+     "technique": "sealed-stage-advance",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:948 These stages describe a learner's writing episode, not a resumable autonomous coding-agent run."
+    },
+    {
+     "technique": "single-loop-authority",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/pairing.ts:195 Authority here identifies application callers; searches found no competing continuation loops or host goal evaluator."
+    },
+    {
+     "technique": "stuck-loop-detection",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/session/store.ts:278 Interrupted application jobs become failed records; this is not an automatically resumed agent repair loop."
+    }
+   ],
+   "absenceTerms": [
+    "compaction",
+    "stop_hook",
+    "StopGate"
+   ]
+  },
+  {
+   "context": "maths-calculus",
+   "subject": "session-continuation",
+   "bundle": "software-engineering",
+   "state": "not-applicable",
+   "evidence": "desk/src/lib/rules/calc-expr.ts:10 Context and repository searches found no continuation hooks serving this context: its course data, mathematical checkers and seeded generators do not control agent turn boundaries.",
+   "techniques": [
+    {
+     "technique": "advisory-guard-fail-mode",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/calc-expr.ts:397 This parser declines unreadable mathematical expressions; it does not intercept agent stops or tool calls."
+    },
+    {
+     "technique": "boundary-applied-stop",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/calc-expr.ts:502 The limit bounds numerical integration work, without a reasoning/tool-result boundary."
+    },
+    {
+     "technique": "compaction-checkpoint",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/calc-read.ts:6 Answer-reading helpers have no conversation control state to ferry across compaction."
+    },
+    {
+     "technique": "continuation-as-state",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/calc.ts:15 These pure mathematical rules do not own a persisted agent continuation mode."
+    },
+    {
+     "technique": "gate-state-lifetimes",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/calc-expr.ts:497 The counter is local to one integration invocation, not a shared session stop gate or consumption ledger."
+    },
+    {
+     "technique": "ordered-teardown",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/calc2.ts:17 This mathematical module owns no armed continuation guards requiring cancellation teardown."
+    },
+    {
+     "technique": "ordered-yield-composition",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/chain.ts:202 The chain traverses mathematical working lines; it does not arbitrate agent candidate yields."
+    },
+    {
+     "technique": "sealed-stage-advance",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/calc-word.ts:2 Question parts are generated mathematical items, not model-driven stages of an autonomous run."
+    },
+    {
+     "technique": "single-loop-authority",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/calc.ts:12 The verdict concerns a learner's mathematical answer, not a host evaluator deciding agent completion."
+    },
+    {
+     "technique": "stuck-loop-detection",
+     "verdict": "not-applicable",
+     "evidence": "desk/src/lib/rules/calc-word.ts:229 This bounded loop draws seeded question candidates; it does not repeat agent repair attempts."
+    }
+   ],
+   "absenceTerms": [
+    "compaction",
+    "stop_hook",
+    "StopGate"
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-21T23:13:31.166543+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "session-continuation"
+   ],
+   "techniques": [
+    "advisory-guard-fail-mode",
+    "boundary-applied-stop",
+    "compaction-checkpoint",
+    "continuation-as-state",
+    "gate-state-lifetimes",
+    "ordered-teardown",
+    "ordered-yield-composition",
+    "sealed-stage-advance",
+    "single-loop-authority",
+    "stuck-loop-detection"
+   ],
+   "deviations": 0,
+   "context": "session",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  },
+  {
+   "ts": "2026-10-21T23:13:31.166543+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "session-continuation"
+   ],
+   "techniques": [
+    "advisory-guard-fail-mode",
+    "boundary-applied-stop",
+    "compaction-checkpoint",
+    "continuation-as-state",
+    "gate-state-lifetimes",
+    "ordered-teardown",
+    "ordered-yield-composition",
+    "sealed-stage-advance",
+    "single-loop-authority",
+    "stuck-loop-detection"
+   ],
+   "deviations": 0,
+   "context": "maths-calculus",
+   "via": "curator-multi:codex",
+   "model": "gpt-6.1-sol"
+  }
+ ]
+}

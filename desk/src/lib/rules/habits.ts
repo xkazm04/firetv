@@ -1,7 +1,9 @@
 /**
  * Habit detectors (Study Desk v2 T3, adult card D5): rules that find a writer's habits, so a planted habit and a proven
- * move are code's, not the model's. The twin plants a habit (D6) and checks it was planted by running its detector; a
- * Sitting (D7) calls a rule proven when the detector no longer fires in the changed paragraph. So every hit names its
+ * move are code's, not the model's. Their readers are not built yet (T4, docs/concepts/STUDY-DESK-V2-PLAN.md row 22,
+ * not started): the twin is to plant a habit (D6) and check it was planted by running its detector, and a Sitting (D7)
+ * to call a rule proven when the detector no longer fires in the changed paragraph. Until then no desk module imports
+ * this file; tools/habits-rules-test.cjs is its only caller. So every hit names its
  * sentences: { habit, n, para, quote }, `n` the splitSentences numbers (essay.ts, numbering runs on through the piece),
  * `para` the first sentence's paragraph (0 when the text has one), `quote` an exact slice of the text.
  *

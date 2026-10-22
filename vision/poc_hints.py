@@ -89,15 +89,17 @@ def hint(subject, q, previous=None):
 
 
 def leaks(text, terms):
-    t = re.sub(r"\s+", "", text.lower().replace("²", "^2").replace("−", "-"))
+    t = re.sub(r"\s+", " ", text.lower().replace("²", "^2").replace("−", "-"))
+    flat = t.replace(" ", "")
     for term in terms:
         k = re.sub(r"\s+", "", term.lower().replace("²", "^2").replace("−", "-"))
         # Bare small numbers appear in method talk ("divide both sides by 3"); only flag them in an
-        # answer-shaped context.
+        # answer-shaped context. The words are matched whole, on spaced text: with the spaces gone,
+        # "this 6-sided" read as "is 6" and "axis 3" as "is 3".
         if k.isdigit() and len(k) <= 2:
-            if re.search(rf"(x=|=|is|equals|answer)[^0-9]{{0,3}}{re.escape(k)}(?![0-9])", t):
+            if re.search(rf"(=|\bis\b|\bequals\b|\banswer\b)[^0-9]{{0,3}}{re.escape(k)}(?![0-9])", t):
                 return term
-        elif k in t:
+        elif k in flat:
             return term
     return None
 
