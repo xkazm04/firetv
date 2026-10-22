@@ -314,7 +314,7 @@ export function BreakScreen({ s }: { s: Session }) {
   return (
     <main className="content-full" style={{ display: "grid", placeItems: "center", textAlign: "center" }}>
       <div><div className="eyebrow">Break</div><div className="clock" data-phase="break" style={{ fontSize: 200, marginTop: 20 }}>{fmt(s.timer.left)}</div>
-        <div className="body" style={{ marginTop: 30, color: "var(--mute)" }}>Stand up. The page will still be here.</div><div className="chan" style={{ marginTop: 10, color: "var(--mute)" }}>Select to skip the break</div></div>
+        <div className="body" style={{ marginTop: 30, color: "var(--mute)" }}>Stand up. Your place is kept.</div><div className="chan" style={{ marginTop: 10, color: "var(--mute)" }}>Select to skip the break</div></div>
     </main>
   );
 }
