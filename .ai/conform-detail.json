@@ -3386,6 +3386,57 @@
           "evidence": "desk/src/tv/landingRows.ts:18 The landing displays a bounded set of app objects, with no heterogeneous scrolling item stream or recycling pool to key by leaf content type."
         }
       ]
+    },
+    "governance/repo-governance/repo-manifest-standard": {
+      "context": "repo-governance",
+      "subject": "repo-manifest-standard",
+      "bundle": "software-engineering",
+      "state": "conformant",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T21:55:31.522Z",
+      "worker": "bd0235e4-0a9e-43f0-b792-4e6067ce7689",
+      "techniques": [
+        {
+          "technique": "capability-not-tool-vocabulary",
+          "verdict": "conformant",
+          "evidence": ".ai/manifest.yaml:29 Capabilities are declared by capability name mapped directly to the fulfilling command rather than naming specific underlying tools in the schema."
+        },
+        {
+          "technique": "generated-from-provenance",
+          "verdict": "conformant",
+          "evidence": ".ai/manifest.yaml:9 The manifest records its generation inputs in generatedFrom alongside generatedAt, enabling doctor.mjs to detect drift against subsequent commit dates."
+        },
+        {
+          "technique": "must-ignore-unknown",
+          "verdict": "conformant",
+          "evidence": ".ai/SPEC.md:383 The specification explicitly mandates that readers across minor versions must parse manifests by ignoring unknown fields without error."
+        },
+        {
+          "technique": "pointers-not-embeds",
+          "verdict": "conformant",
+          "evidence": ".ai/manifest.yaml:40 Subsystems like the context graph, memory, and guardrails are referenced by repo-relative paths rather than embedded inside the manifest."
+        },
+        {
+          "technique": "reserved-space-must-be-unusable",
+          "verdict": "not-applicable",
+          "evidence": ".ai/SPEC.md:35 Precondition does not hold: the manifest specification defines open extensible maps without provisional or experimental reserved key namespaces."
+        },
+        {
+          "technique": "semver-additive-evolution",
+          "verdict": "conformant",
+          "evidence": ".ai/manifest.yaml:6 The manifest stamps a semantic version on the contract itself, separating schema evolution from repository code release cycles."
+        },
+        {
+          "technique": "spec-ships-with-artifact",
+          "verdict": "conformant",
+          "evidence": ".ai/manifest.yaml:7 The full specification travels inside the repository at .ai/SPEC.md and is directly referenced by the manifest."
+        },
+        {
+          "technique": "version-gate-precedes-schema-gate",
+          "verdict": "not-applicable",
+          "evidence": ".ai/doctor.mjs:174 Precondition does not hold: for multi-reader extensible contracts, must-ignore-unknown replaces version rejection gates and doctor issues only an advisory warning."
+        }
+      ]
     }
   }
 }
