@@ -673,8 +673,8 @@
 .maths-tv .mb-worked .mb-paper { max-height: 780px; overflow: hidden; }
 /* the idea card is a long paragraph plus three steps: set a size down from the hint card so it ends above the side's foot (922), not off the stage */
 .maths-tv .mb-card[data-role="maths-idea"] { padding: 22px 30px; }
-.maths-tv .mb-card[data-role="maths-idea"] .ht { font-size: 28px; line-height: 1.28; }
-.maths-tv .mb-card[data-role="maths-idea"] .mb-steps { margin-top: 14px; gap: 6px; font-size: 24px; }
+.maths-tv .mb-card[data-role="maths-idea"] .ht { font-size: 28px; line-height: 1.24; }
+.maths-tv .mb-card[data-role="maths-idea"] .mb-steps { margin-top: 12px; gap: 4px; font-size: 28px; line-height: 1.16; }
 
 /* v2 M4a: a Calculus graph under the walk's card (maths/Plot.tsx) */
 .maths-tv .mb-plot { margin-top: 26px; padding: 14px; border-radius: 10px; background: var(--mb-paper); box-shadow: 0 10px 30px rgba(0, 0, 0, .35); transform: rotate(-.5deg); }
