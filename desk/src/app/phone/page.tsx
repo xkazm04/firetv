@@ -606,6 +606,8 @@ export default function Phone() {
   const peek: "parent" | "tonight" | "week" | "how" | null = !s?.joined ? null : view ?? (["parent", "tonight"].includes(screen) ? (screen as "parent" | "tonight") : null);
   const peeking = !!peek;
   const idle = !!s?.joined && !handoff && !peek;
+  // nothing asked: a camera line from a capture that was cancelled ("No camera here...") goes, not left under the idle card
+  useEffect(() => { if (idle) setMsg((m) => (m.startsWith("No camera here") ? "" : m)); }, [idle]);
   /** The panels the phone follows to: the join and name panels before a join, the open hand-off's panel after. */
   const showPanels = (!s?.joined || asking) && !peek;
   // a hand-off opening closes any view opened from More, and a phone that stops being joined drops it
