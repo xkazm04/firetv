@@ -249,7 +249,7 @@ test('F16: a 428 on the plan Read it says on the TV what is needed (an essay ref
  seatOpen('essayplan',null);
  const r=await call('analyse',ROUTES.analyse.body,'tv');
  assert.equal(r.status,428);const j=await r.json();assert.equal(j.notice,true);assert.match(j.error,/text engine/);
- const s=store.getSession();assert.match(s.status,/text notice first/);assert.match(s.status,/phone/);assert.equal(s.essayRefused,s.status);
+ const s=store.getSession();assert.match(s.status,/read the notice/);assert.match(s.status,/phone/);assert.equal(s.essayRefused,s.status);
  assert.deepEqual(require(path.join(root,'src/lib/rules/essay.ts')).refusalCaption(s),{label:'Not read',text:s.status});
 });
 
