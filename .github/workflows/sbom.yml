@@ -44,7 +44,7 @@ jobs:
       - name: Drop the operator's local JDK pin
         run: sed -i '/^org.gradle.java.home=/d' gradle.properties
       - name: The APK this SBOM describes (built, checksummed and provenance-attested by supply-chain)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: tv-app-debug-${{ github.event.workflow_run.head_sha }}
           path: dist/apk
