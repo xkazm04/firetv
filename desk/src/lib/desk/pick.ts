@@ -11,6 +11,8 @@ import { leaksLine, type Specs } from "./hint";
 import type { LessonPick, SchoolSystem, Subject } from "../session/store";
 
 const SCHEMA = { type: "object", properties: { lesson: { type: "string" }, why: { type: "string" } }, required: ["lesson", "why"] };
+/** The pick's own deadline: past it the pick fails and the hint screen ends its wait (store.ts job.failed -> noLesson). */
+export const PICK_TIMEOUT_MS = 30000;
 
 /**
  * The "why" the TV shows under the lesson. On a maths problem it passes the hint's own leak check (hint.ts leaksLine: the
@@ -36,7 +38,13 @@ export async function pickLesson(subject: Subject, problem: string, system?: Sch
       say("ask", `Answer with the lesson id (or 'none') and one sentence saying why, phrased for the student: "chosen because your problem needs …".`),
     ],
   });
-  const { json } = await text<{ lesson: string; why: string }>({ ...asked, schema: SCHEMA, model: "fast", use: "lesson-pick" });
+  // A menu choice is a short call where speed is the product: the hint screen shows "Finding the lesson…" until it lands,
+  // and the pick only starts once the hint has. With hidden reasoning on and the CLI's extra structured-output turn, haiku
+  // took 52-90 s and timed out about one call in three (text.ts childEnv, measured on Linga turns), so on the stick the
+  // chip never settled while the hint was on screen. Thinking off and the JSON asked for directly (isolated, held to the
+  // same schema by text()), as every Linga tutor call is: 4-6 s. The deadline is the call's own, so a pick that still
+  // hangs ends as a failure within 30 s and the chip says "No lesson this time" instead of waiting on.
+  const { json } = await text<{ lesson: string; why: string }>({ ...asked, schema: SCHEMA, model: "fast", thinking: false, isolated: true, timeoutMs: PICK_TIMEOUT_MS, use: "lesson-pick" });
   // only an id from the menu that was offered counts: 'none', another subject's id and a non-string are no lesson
   const offered = LESSONS.filter((x) => x.subject === subject);
   const l = typeof json.lesson === "string" ? offered.find((x) => x.id === json.lesson.trim()) : undefined;
