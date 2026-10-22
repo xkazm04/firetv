@@ -3,8 +3,8 @@ kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarg
 java { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
 dependencies {
     api(project(":core")); api(project(":link"))
-    api("com.badlogicgames.gdx:gdx:1.13.5")
-    implementation("com.google.zxing:core:3.5.3")
+    api("com.badlogicgames.gdx:gdx:1.14.2")
+    implementation("com.google.zxing:core:3.5.4")
     testImplementation("org.junit.jupiter:junit-jupiter:6.1.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

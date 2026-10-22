@@ -5,7 +5,7 @@ Done. When the two disagree, that file wins. This file only holds what differs i
 
 ## It is a separate build
 
-- `deathride/` has its own Gradle 8.14 wrapper, `settings.gradle.kts` (`:core`, `:link`, `:game`, `:app`,
+- `deathride/` has its own Gradle 9.8.1 wrapper, `settings.gradle.kts` (`:core`, `:link`, `:game`, `:app`,
   `:desktop`) and `gradle.properties` ([.ai/memory/0009](../.ai/memory/0009-deathride-standalone-build.md)).
 - Run every task **from this directory** with this wrapper (`.\gradlew.bat` on Windows, `./gradlew` elsewhere).
   `node tools/gradlew.cjs`, the root `gradlew` and the `.ai/manifest.yaml` capabilities cover only the root build. A

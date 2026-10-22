@@ -98,7 +98,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var smokeStarted=false
     private var captured=false
     private var resultCaptured=false
-    private val uiBuilder=com.badlogic.gdx.utils.StringBuilder(512)
+    private val uiBuilder=StringBuilder(512)
     private var rankOrder=IntArray(6)
     private lateinit var profileStore: ProfileStore
     /** P13b: profile saves run on ProfileWriter's thread; this holds the pending start, settle and revert state. */
