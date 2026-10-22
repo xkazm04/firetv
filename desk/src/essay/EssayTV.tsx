@@ -151,7 +151,8 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const cap = job?.phase === "running" ? { label: READING_LABEL, text: readingAPiece(a?.piece, job.start) ? PIECE_WAIT(a?.piece) : adultSay("The desk is reading your paragraph. It lands here.", adult) }
     : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ?? adultSay("The paragraph did not come back. Send it again from the phone.", adult) }
     : refused ? refused
-    : essayHandoffLine(s) ? { label: "On your phone", text: essayHandoffLine(s) as string }
+    // "Your turn", as Writing says it: the line itself already begins "On the phone:", and the header chip says On your phone
+    : essayHandoffLine(s) ? { label: "Your turn", text: essayHandoffLine(s) as string }
     : at === "plan" ? { label: "Start from the pattern", text: withEnglish(adult ? "Write the message yourself: one sentence for each slot, on the phone." : "Write the paragraph yourself: one sentence for each slot, on the phone.") }
     : at === "write" ? { label: "Write from a prompt", text: "Pick a prompt here, write one paragraph on the phone, get one note." }
     : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: summaryLine(a) }

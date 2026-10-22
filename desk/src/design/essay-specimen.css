@@ -121,7 +121,9 @@
 .essay-tv .em-ways { display: flex; gap: 30px; margin-top: 30px; }
 .essay-tv .em-ways div { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .essay-tv .em-ways svg { width: 48px; height: 48px; }
-.essay-tv .em-caption { position: absolute; left: 1336px; top: 858px; width: 488px; height: 168px; }
+/* four lines of a lens promise plus the English-only line fit above the safe line (1026): the box starts higher and sets its text a size down */
+.essay-tv .em-caption { position: absolute; left: 1336px; top: 826px; width: 488px; height: 200px; overflow: hidden; }
+.essay-tv .em-caption .em-cap p { font-size: 32px; }
 
 /* the one caption slot: a citron label and one sentence */
 /* a new caption settles in from a faint start, never from nothing: a swap has no blank frame */
