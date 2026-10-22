@@ -65,7 +65,7 @@ class LanTransport(
 
     override val name = "lan"
 
-    private var server: io.ktor.server.engine.ApplicationEngine? = null
+    private var server: io.ktor.server.engine.EmbeddedServer<*, *>? = null
 
     private val _failure = MutableStateFlow<String?>(null)
     override val failure: StateFlow<String?> = _failure
