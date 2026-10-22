@@ -166,7 +166,7 @@ test('the phone\'s paragraph is coached through the writing ask: a refusal keeps
  s=store.getSession();
  assert.equal(s.writingTv.stage,'coached');assert.equal(s.writingTv.note,note);assert.equal(s.writingTv.draft,DRAFT);assert.equal(s.writingTv.busy,false);
  assert.equal(s.ask,null,'the answer closes the ask');assert.equal(noted,1);
- assert.equal(W.writingDone(s),1);assert.equal(W.phoneActionLabel(s),'Revise it on your phone');
+ assert.equal(W.writingDone(s),2,'the note has arrived: Write and Coached are both reached (stick take 2026-10-22: Coached showed hollow)');assert.equal(W.phoneActionLabel(s),'Revise it on your phone');
  // the revision: a second writing ask from the TV, answered by the finish route
  const tv=press({...s,focus:0},'select');assert.equal(tv.ask.kind,'writing');
  globalThis.__desk.session=tv;
@@ -197,6 +197,21 @@ test('the TV draws the Writing screen in the On Air shell, and nothing typed: th
  const captions=screen.match(/<div[^>]*data-role="writing-caption"[^>]*>/g)??[];
  assert.equal(captions.length,2,'one caption per phase');
  for(const c of captions)assert.match(c,/aria-live="polite"/,c);
+});
+
+// The demo film's stick take (2026-10-22): with the coaching note on screen, the progress row still drew Write filled and
+// Coached hollow. Drawn here: the dots filled (data-done) at each stage of an episode.
+test('the progress row: once the note has arrived, Coached is reached beside Write; the revision is the step under way',()=>{
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),{createElement}=require(path.join(root,'node_modules/react'));
+ const {WritingTV}=require(src('writing/WritingTV.tsx'));
+ const done=(writingTv)=>{
+  const html=renderToStaticMarkup(createElement(WritingTV,{s:{...base({screen:'writing',focus:0}),writingTv}}));
+  const row=/<ol[^>]*data-role="writing-progress"[^>]*>([\s\S]*?)<\/ol>/.exec(html);assert.ok(row,'the progress row is drawn');
+  return [...row[1].matchAll(/<li([^>]*)>/g)].map((m)=>/data-done="true"/.test(m[1]));
+ };
+ assert.deepEqual(done({promptId:'screens',stage:'write'}),[false,false,false],'nothing reached before the paragraph is read');
+ assert.deepEqual(done({promptId:'screens',stage:'coached',note:'What would show it is true?',draft:DRAFT}),[true,true,false],'the note has arrived: Write and Coached are reached');
+ assert.deepEqual(done({promptId:'screens',stage:'finished',note:'n',draft:DRAFT,saved:'Saved.'}),[true,true,true]);
 });
 
 test('a failing engine at the coach route: the code\'s own note lands on the TV, the ask closes, nothing stays busy; the page path answers the same',async()=>{
