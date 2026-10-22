@@ -439,7 +439,7 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setMsg(""); if (kind === "read") setPhase("sending");
     try {
-      const r = await call("/api/session/retry", kind === "practice" ? { kind, jobId: s?.jobs?.practice?.id } : { kind }); const j = await r.json().catch(() => null);
+      const r = await call("/api/session/retry", kind === "practice" || kind === "teach" ? { kind, jobId: s?.jobs?.[kind]?.id } : { kind }); const j = await r.json().catch(() => null);
       if (moved()) return;
       if (kind === "read") setPhase(r.ok ? "sent" : "failed");
       if (!r.ok) setMsg(deskLine(j, `The desk could not try again (${r.status}).`));
