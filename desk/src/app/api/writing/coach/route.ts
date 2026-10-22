@@ -45,8 +45,10 @@ async function coachOnTv(draft: unknown): Promise<Response> {
 export async function POST(req: Request) {
   // read from a clone: the ask door reads the body again
   const body = (await req.clone().json().catch(() => null)) as { promptId?: unknown; draft?: unknown } | null;
+  // a phone meets the door before anything else, even with no readable body (TL-11)
+  if (roleFrom(req) === "phone") return withPhoneAsk(req, ["writing"], () => coachOnTv(body?.draft));
   if (!body || typeof body !== "object") return NextResponse.json({ error: NO_BODY }, { status: 400 });
-  if ("askId" in body || roleFrom(req) === "phone") return withPhoneAsk(req, ["writing"], () => coachOnTv(body.draft));
+  if ("askId" in body) return withPhoneAsk(req, ["writing"], () => coachOnTv(body.draft));
   const s = getSession();
   if (!s.learner) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const picked = pick(START, body.promptId);

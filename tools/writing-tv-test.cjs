@@ -240,3 +240,19 @@ test('the /writing page path saves a whole episode from its body to the seated l
  // a re-read for a learner who is not seated changes nothing
  assert.equal(store.reduce(s,{type:'learner.reread',by:'someone-else'}),s);
 });
+
+test('a phone with no readable body, an empty body or no ask open meets the same ask door at coach and finish: 409, no model call, no save',async()=>{
+ stubNote('A note.');noted=0;
+ const L=require(src('lib/session/learners.ts'));
+ for(const withAsk of [true,false]){
+  seat({promptId:'screens',stage:'write'},withAsk?'writing':null);
+  const lines=L.getLearner('wtv-ema').history.length;
+  for(const name of ['coach','finish']){
+   for(const raw of ['{}','not json','null','[]']){
+    const r=await require(src(`app/api/writing/${name}/route.ts`)).POST(new Request(`http://desk/api/writing/${name}`,{method:'POST',headers:{'x-desk-role':'phone'},body:raw}));
+    assert.equal(r.status,409,`${name} ${raw} ask=${withAsk}`);assert.equal((await r.json()).error,'The TV is not asking for that now.');
+   }
+  }
+  assert.equal(noted,0,'no model call');assert.equal(L.getLearner('wtv-ema').history.length,lines,'nothing saved');
+ }
+});
