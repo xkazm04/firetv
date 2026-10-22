@@ -45,9 +45,15 @@ New-Item -ItemType Directory -Force (Split-Path -Parent $log) | Out-Null
 $env:MODEL_DRIFT_ALLOW_LIVE = '1'
 try {
   "==== $(Get-Date -Format o) model drift (live)" | Out-File -FilePath $log -Append -Encoding utf8
-  & node tools/model-drift.cjs --live 2>&1 | Tee-Object -FilePath $log -Append
+  # Windows PowerShell turns each stderr line of a native command under 2>&1 into an error record, and under 'Stop'
+  # the first one (an engine warning) ends the script mid-run: the record, the log and the exit code are lost. So the
+  # run itself goes under 'Continue', and each line is logged as plain text, in UTF-8 like the header above
+  # (Windows PowerShell's Tee-Object appends UTF-16, which made the log a mix of two encodings).
+  $ErrorActionPreference = 'Continue'
+  & node tools/model-drift.cjs --live 2>&1 | ForEach-Object { $line = "$_"; $line | Out-File -FilePath $log -Append -Encoding utf8; $line }
   $code = $LASTEXITCODE
 } finally {
+  $ErrorActionPreference = 'Stop'
   Remove-Item Env:MODEL_DRIFT_ALLOW_LIVE -ErrorAction SilentlyContinue
 }
 if ($code -eq 0) { Write-Host 'No drift. Commit the new uat/drift record and DRIFT.md.' }

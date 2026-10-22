@@ -123,3 +123,16 @@ test('L1-owen-17-MB2-1: the three linear units have a worked lesson in words onl
     }
   }
 });
+
+test('optimize 2026-10-21: the worked idea is asked through the prompt assembler, so its ledger row names the prompt version; the words are as they were', async () => {
+  let req; answer = async (r) => { req = r; return { json: { idea: 'A ratio splits a total into equal parts.' }, provider: 'test', ms: 1 }; };
+  await W.teachTopic('ratio-share', 12, 'uk', 42);
+  assert.equal(req.use, 'worked-idea');
+  assert.match(String(req.fingerprint), /^[0-9a-f]{12}$/, 'a fingerprint on the call (meter.ts records it as the row\'s prompt)');
+  const m = WORKED_METHODS['ratio-share'];
+  assert.equal(req.prompt, `Topic: Ratio and sharing.\nThe method the desk will show, step by step: ${m.steps.join('; ')}.\nA plain version of the idea, for reference: ${m.idea}\nWrite the idea in your own words for this learner.`);
+  assert.match(req.system, /^You are a maths tutor for .*Words only: write no digits and no worked numbers\. No praise, no questions to the learner\./s);
+  // one fingerprint per topic's authored words, the same on every ask
+  let again; answer = async (r) => { again = r; return { json: { idea: 'x' }, provider: 'test', ms: 1 }; };
+  await W.teachTopic('ratio-share', 12, 'uk', 7); assert.equal(again.fingerprint, req.fingerprint);
+});

@@ -1,9 +1,10 @@
 /** Run with npm test in desk/ (directly: node tools/linga-rules-test.cjs). Uses a disposable data directory, never desk/data. */
-const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
 require('./ts-load.cjs');
-const data=path.resolve(__dirname,'../artifacts/linga-rules',String(Date.now()));process.env.DESK_DATA_DIR=data;
+// scratch in the OS temp dir, removed after the run: never a folder per run under the tree
+const data=fs.mkdtempSync(path.join(os.tmpdir(),'desk-linga-rules-'));process.env.DESK_DATA_DIR=data;
 const {emptyEnglish}=require(path.join(root,'src/lib/english/types.ts'));
 const {eligibleScenes,defaultPreferences}=require(path.join(root,'src/lib/english/curriculum.ts'));
 const {cleanEnglish,mergeEvidence,validateObservations}=require(path.join(root,'src/lib/english/rules.ts'));
@@ -14,7 +15,7 @@ engine.text=(req,after)=>answer(req,after);
 const {englishCommand}=require(path.join(root,'src/lib/english/conversation.ts'));
 const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
 const {getLearner,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
-after(()=>clearInterval(globalThis.__desk.ticker));
+after(()=>{clearInterval(globalThis.__desk.ticker);fs.rmSync(data,{recursive:true,force:true,maxRetries:5,retryDelay:100});});
 let counter=0;
 function command(action,extra={}){const s=getSession();return englishCommand({action,learnerId:s.learner.id,episodeId:s.conversation?.id,commandId:`test-${++counter}`,...extra});}
 function fresh(){dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});dispatch({type:'subject',subject:'english'});answer=async()=>({json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1});}
@@ -1405,7 +1406,9 @@ test('thinking case 2: no text() caller outside the conversation asks for thinki
  // and the worked lesson's idea (v2 M1, 2026-10-07): its words are checked in code (lib/desk/worked.ts cleanIdea: no
  // digit, three sentences) and fall back to the authored idea, so a hasty idea costs the model's wording, never a wrong number.
  // and the evening's memory note (M4, 2026-10-09): a few plain sentences from counts, as the TV's recap also asks for it, held to nothing by the phone's End session.
- assert.deepEqual(callers,['src/lib/desk/items.ts','src/lib/desk/memory.ts','src/lib/desk/worked.ts','src/lib/english/conversation.ts']);
+ // and the Writing coach's one note (2026-10-21, 15778925): code picks the focus and holds the note to two sentences and
+ // 240 characters (lib/writing/coach.ts), falling back to its own line, so a hasty note costs the model's wording only.
+ assert.deepEqual(callers,['src/lib/desk/items.ts','src/lib/desk/memory.ts','src/lib/desk/worked.ts','src/lib/english/conversation.ts','src/lib/writing/coach.ts']);
  const items=fs.readFileSync(path.join(root,'src/lib/desk/items.ts'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
  assert.equal((items.match(/thinking\s*:\s*false/g)||[]).length,1,'items.ts asks for thinking off once: the Calculus spec writer');
  assert.match(items.split('function askCalc')[1]??'',/thinking:\s*false/,'and that one is in askCalc, not the school question writer');
@@ -4015,4 +4018,97 @@ test('LT-petra-38-J4-3: the band hold is unchanged: an A1 partner line over 8 wo
  const long='Hi, I am the new girl in your class, and I really love building houses! What is yours like?';
  assert.equal(fitsBand(long,'A1'),false);assert.equal(bandLine(long,'A1'),'What is yours like?');
  assert.equal(bandLine('Hello! What do you like?','A1'),'Hello! What do you like?');
+});
+test('linga-level hand-off: while a check is part way the menu draws My topics disabled, its help the refusal the server gives',async()=>{
+ const V=view();let partWays=0;
+ for(const [name,k] of Object.entries(CHECK_STATES)){
+  if(k.pending)continue;
+  for(const screen of ['linga',checkScreen(k)]){
+   const a=V.lingaView(sessionOf(fixture(screen,{placement:placed(),plan:planned('p-a'),check:{...k,parked:screen==='linga'}})),{menu:true}).actions.find(x=>x.id==='my-topics');
+   const partWay=k.stage==='about'||k.stage==='tasks';partWays+=partWay?1:0;
+   assert.equal(!!a.disabled,partWay,`${name} on ${screen}: My topics is ${partWay?'refused, so drawn disabled':'taken, so enabled'}`);
+  }
+ }
+ assert(partWays>=10,`checked ${partWays} part-way menus`);
+ // the pair: the server refuses the same action, in the words the disabled action shows
+ const fx=fixture('linga',{placement:placed(),plan:planned('p-a'),check:{...CHECK_STATES['about asked'],parked:true}});
+ const shown=V.lingaView(sessionOf(fx),{menu:true}).actions.find(x=>x.id==='my-topics');
+ install(fx);
+ await assert.rejects(command(shown.run.command.action),e=>e.status===409&&e.message===shown.help);
+});
+test('the reply cap is a row of the turn table: at 24 replies the phone is not asked, the TV leads to Finish, and the server refuses before any call',async()=>{
+ const T=turn(),V=view();
+ const talk=n=>{const turns=[];for(let i=0;i<n;i++)turns.push({id:'p'+i,role:'partner',text:'And then?'},{id:'l'+i,role:'learner',text:'I booked a room.',mode:'text'});turns.push({id:'p'+n,role:'partner',text:'What else?'});return convo({turns});};
+ const under=talk(23),at=talk(24);
+ assert.equal(T.accepts(under,'turn'),true,'23 replies: the turn is open');assert.equal(T.accepts(under,'capture'),true);
+ assert.equal(T.accepts(at,'turn'),false,'24 replies: the table refuses the turn');assert.equal(T.accepts(at,'capture'),false,'and the microphone for it');
+ assert.equal(T.refusal(at,'turn'),T.AT_CAP);
+ assert.notEqual(V.lingaView(withReply(sessionOf(fixture('linga-talk',{conversation:under})))).answer,null);
+ const v=V.lingaView(withReply(sessionOf(fixture('linga-talk',{conversation:at}))));
+ assert.equal(v.answer,null,'the phone draws no reply box it would then refuse');
+ assert.equal(v.actions[0].id,'finish','Finish is the way on');assert.equal(v.baseCaption,T.AT_CAP);
+ install(fixture('linga-talk',{conversation:at}));let calls=0;answer=async()=>{calls++;throw new Error('no model call at the cap');};
+ await assert.rejects(command('turn',{text:'One more.',mode:'text',lastTurnId:'p24'}),e=>e.status===409&&e.message===T.AT_CAP);
+ assert.equal(calls,0);
+});
+test('a ladder a restart lost: Help me answer says what to do once, then is no longer offered, never a silent press',async()=>{
+ const V=view();
+ // the session names a ladder for the line on screen that server memory does not hold (help.ts keepLadder was never called for it)
+ const lost=convo({turns:[{id:'p-lost',role:'partner',text:'Which date did you book?'}],help:{forTurn:'p-lost',rungs:[1,2,3],rung:0,shown:false},sceneCued:true});
+ assert.equal(V.lingaView(sessionOf(fixture('linga-talk',{conversation:lost}))).actions[0].id,'cue','the TV offers the help');
+ install(fixture('linga-talk',{conversation:lost}));
+ await command('cue');
+ const c=getSession().conversation;
+ assert.ok(c.cue,'the press puts a line on screen');
+ assert(!V.lingaView(getSession()).actions.some(a=>a.id==='cue'||a.id==='quiz'),'and the help it cannot give is no longer offered');
+});
+test('the lost jacket: the phone reply panel draws the learner\'s lost thing (LostPicture), the one half of the scene no other screen holds',()=>{
+ // lostfound.ts keeps the learner's thing off the session; the phone asks for it (lost-picture, open at phoneDoor.ts). TL-12 dropped the drawing.
+ const strip=f=>fs.readFileSync(path.join(root,f),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
+ const phone=strip('src/english/LingaPhone.tsx');
+ assert.match(phone,/import \{ LostPicture \} from "\.\/LostPicture"/,'LingaPhone imports LostPicture');
+ const turnPanel=phone.slice(phone.indexOf('ans.action === "turn"'),phone.indexOf('const WORDS'));
+ assert.match(turnPanel,/c\.lost && !runningTake\(c\) && <LostPicture learnerId=\{s\.learner\?\.id\} episodeId=\{c\.id\} partner=\{c\.partner\} \/>/,'the turn panel draws it while the scene has a lost task');
+});
+test('the speech routes are the TV\'s: a paired phone is refused 403 before any engine is asked, the TV and in-process callers are not',async()=>{
+ const had=process.env.ELEVENLABS_API_KEY;process.env.ELEVENLABS_API_KEY||='test-key';
+ const reg=require(path.join(root,'src/lib/engines/registry.ts'));
+ const speak=require(path.join(root,'src/app/api/speak/route.ts')),listenRoute=require(path.join(root,'src/app/api/listen/route.ts'));
+ let runs=0;
+ reg.useProvider('speak',{name:'stub',run:async()=>{runs++;return {raw:Buffer.from([1,2])};}});
+ reg.useProvider('listen',{name:'stub',run:async()=>{runs++;return {raw:{text:'hi',language:'en'}};}});
+ const said=role=>speak.POST(new Request('http://desk/api/speak',{method:'POST',body:'{"text":"Which date?"}',headers:{'Content-Type':'application/json',...(role?{'x-desk-role':role}:{})}}));
+ const heard=role=>{const form=new FormData();form.append('file',new Blob(['audio']),'a.webm');return listenRoute.POST(new Request('http://desk/api/listen',{method:'POST',body:form,headers:role?{'x-desk-role':role}:{}}));};
+ try{
+  for(const ask of [said,heard]){const r=await ask('phone');assert.equal(r.status,403,'a phone is refused');}
+  assert.equal(runs,0,'no engine was asked for a phone');
+  for(const ask of [said,heard])for(const role of ['tv',null]){const r=await ask(role);assert.equal(r.status,200,`${role} is served`);}
+  assert.equal(runs,4);
+ }finally{reg.resetProviders();if(had===undefined)delete process.env.ELEVENLABS_API_KEY;}
+});
+test('teaching notes: the phone\'s Set up form refuses what the server refuses, before Save, in the server\'s words',async()=>{
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),React=require(path.join(root,'node_modules/react'));
+ const {LingaPhone}=require(path.join(root,'src/english/LingaPhone.tsx'));
+ const nine=Array.from({length:9},(_,i)=>`Note ${i+1}`);
+ // the server: nine notes are refused
+ fresh();let refusedWith='';
+ try{await englishCommand({action:'preferences',learnerId:'ema',preferences:defaultPreferences(),notes:nine});}catch(e){refusedWith=e.message;}
+ assert.ok(refusedWith,'the server refuses nine notes');
+ // the form, opened by the TV's prefs ask, with nine notes in it
+ const s={...getSession(),englishLearning:{...emptyEnglish(),notes:nine},ask:{id:'ask-p',kind:'prefs',learner:'ema',screen:'linga',at:0,phase:'open'}};
+ const html=renderToStaticMarkup(React.createElement(LingaPhone,{s,post:async()=>{}}));
+ const save=html.slice(html.lastIndexOf('<button',html.indexOf('Save preferences')),html.indexOf('Save preferences'));
+ assert.match(save,/disabled/,'Save is not offered for notes the server refuses');
+ assert(html.includes(refusedWith),'and the form says why, in the server\'s words');
+ const eight=renderToStaticMarkup(React.createElement(LingaPhone,{s:{...s,englishLearning:{...emptyEnglish(),notes:nine.slice(0,8)}},post:async()=>{}}));
+ const save8=eight.slice(eight.lastIndexOf('<button',eight.indexOf('Save preferences')),eight.indexOf('Save preferences'));
+ assert.doesNotMatch(save8,/disabled/,'eight notes: Save as before');assert(!eight.includes(refusedWith));
+});
+test('a Linga command answered with a page that is not JSON (a crash, a proxy) leaves a desk sentence on the TV, never a parser error',async()=>{
+ const {replyError}=require(path.join(root,'src/english/useEnglish.ts'));
+ assert.equal(await replyError(new Response('<!DOCTYPE html><html>Internal Server Error</html>',{status:500})),'That did not reach the tutor.');
+ assert.equal(await replyError(new Response('',{status:502})),'That did not reach the tutor.');
+ assert.equal(await replyError(new Response(JSON.stringify({error:'Wait for the current turn, or cancel it first.'}),{status:409})),'Wait for the current turn, or cancel it first.');
+ assert.equal(await replyError(new Response(JSON.stringify({screen:'linga'}),{status:200})),null);
+ assert.equal(await replyError(new Response('not json',{status:200})),null,'a 2xx is done whatever its body');
 });

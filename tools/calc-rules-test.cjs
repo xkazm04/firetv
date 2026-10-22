@@ -798,3 +798,33 @@ test('L1-matyas-19-MB3-3 3: a hint that states the slope is refused - the expres
   assert.equal(C.leaksCalc(s,C.question(s).plain),false,'the question quoted back never leaks');
  }
 });
+
+test('one answer-key vocabulary: every Calculus shape refuses a spec carrying answer, truth, solution, value or result (calc2 has refused result since M3b-3b)',()=>{
+ const base=[{shape:'derivative',f:'x^2'},{shape:'evaluate',f:'x^2',at:2},{shape:'limit',f:'sin(x)/x',at:0},{shape:'implicit-derivative',f:'x^2 + y^2 = 25'},{shape:'sequence-limit',f:'x/(x+1)'},{shape:'approx-integral',f:'1/x',a:1,b:2,pieces:4,rule:'trapezoid'}];
+ for(const s of base){
+  assert.equal(C.wellFormed(s).ok,true,`base: ${s.shape}`);
+  for(const k of ['answer','truth','solution','value','result']){
+   const w=C.wellFormed({...s,[k]:'1'});
+   assert.equal(w.ok,false,`${s.shape} with ${k}`);
+   assert.equal(w.why,'A spec carries no answer field: the desk works the answer out itself.',`${s.shape} with ${k}`);
+  }
+ }
+});
+
+test('MB-B36 in the leak check: a hint written in Czech notation (tg, cotg, arctg) gives the answer away as its English form does',()=>{
+ const anti={shape:'antiderivative',f:'1/cos(x)^2'},der={shape:'derivative',f:'ln(cos(x))'},val={shape:'evaluate',f:'x^2 + 1',at:'pi/4'},seq={shape:'sequence-limit',f:'x*tan(1/x)'};
+ for(const [s,line] of [[anti,'Výsledek je tg x + C.'],[anti,'tg(x) + K'],[der,'Derivace je -tg x.'],[seq,'the limit equals tg(pi/4)']])
+  assert.equal(C.leaksCalc(s,line),true,line);
+ // a Czech name that is not the answer, and the English line, are read as before
+ for(const [s,line,want] of [[anti,'Vzpomeňte si, čemu se rovná derivace tg x.',true],[der,'Derivujte vnější funkci ln, pak vnitřní cos x.',false],[anti,'The answer is tan x + C.',true],[der,'Použijte tg x jen na kontrolu.',false],[der,'Use tan x only as a check.',false]])
+  assert.equal(C.leaksCalc(s,line),want,line);
+});
+
+test('a decimal in brackets or behind a sign is the same decimal (calc2 ruling 28, now every limit and integral): (0.38) is judged as 0.38',()=>{
+ const L={shape:'limit',f:'3x/(8x+1)',at:'inf'},I={shape:'definite-integral',f:'x^2',a:0,b:1},S={shape:'sequence-limit',f:'3x/(8x+1)'},E={shape:'limit',f:'(1+1/x)^x',at:'inf'};
+ const forms=[['(0.38)','0.38'],['-(0.38)','-0.38'],['(-0.38)','-0.38'],['( 0.38 )','0.38'],['(0.3)','0.3'],['(0.375)','0.375']];
+ for(const s of [L,S])for(const [wrapped,bare] of forms)assert.deepEqual(C.checkAnswer(s,wrapped),C.checkAnswer(s,bare),`${s.shape}: ${wrapped}`);
+ for(const [wrapped,bare] of [['(0.33)','0.33'],['(0.333)','0.333'],['-(0.33)','-0.33']])assert.deepEqual(C.checkAnswer(I,wrapped),C.checkAnswer(I,bare),wrapped);
+ for(const [wrapped,bare] of [['(2.7)','2.7'],['(2.72)','2.72'],['(2.8)','2.8']])assert.deepEqual(C.checkAnswer(E,wrapped),C.checkAnswer(E,bare),wrapped);
+ assert.equal(C.checkAnswer(L,'(0.38)').verdict,'right','a correct rounding in brackets is right');
+});

@@ -40,3 +40,14 @@ test('DD2: the data directory is derived in one place - no module reads DESK_DAT
  walk(path.join(root,'src'));
  assert.deepEqual(sites,['src/lib/dataDir.ts'],'the files that read DESK_DATA_DIR');
 });
+
+// desk/.gitignore keeps the learners' directory out of git. Anchored to desk/data only: an unanchored `data/` also hid any
+// source folder named data under src/ or public/ from git, so a new module there would never be committed.
+test('DD3: git ignores desk/data and nothing else named data under desk/',(t)=>{
+ const {spawnSync}=require('node:child_process');
+ const ignored=(p)=>spawnSync('git',['check-ignore','-q','--no-index',p],{cwd:path.resolve(root,'..')}).status;
+ if(ignored('desk/data/learners.json')===null||ignored('desk/data/learners.json')>1)return t.skip('no git here');
+ assert.equal(ignored('desk/data/learners.json'),0,'desk/data/learners.json is not ignored');
+ assert.equal(ignored('desk/data/texts/a/b.json'),0,'a file deep in desk/data is not ignored');
+ for(const p of ['desk/src/lib/data/fixtures.ts','desk/src/data/a.tsx','desk/public/data/sample.json'])assert.equal(ignored(p),1,`${p} is ignored by git`);
+});

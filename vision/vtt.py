@@ -22,9 +22,11 @@ def _raw_cues(path):
     out, cur, buf = [], None, []
     # a cue identifier is the line just before a timing line, itself the first line after a blank one: it is
     # not caption text. A line YouTube leaves blank-looking inside a cue (" ") is followed by text, never by a timing line.
-    blank_before, pushed_last, after_blank = True, False, False
+    # A NOTE, STYLE or REGION block starts after a blank line and runs to the next one: none of it is caption text.
+    blank_before, pushed_last, after_blank, in_block = True, False, False, False
+    note = re.compile(r"^(NOTE|STYLE|REGION)(\s|$)")
     for ln in raw.splitlines():
-        m = ts.match(ln)
+        m = None if in_block else ts.match(ln)
         if m:
             if pushed_last and after_blank:
                 buf.pop()
@@ -35,7 +37,12 @@ def _raw_cues(path):
             blank_before, pushed_last = False, False
             continue
         if not ln.strip():
-            blank_before, pushed_last = True, False
+            blank_before, pushed_last, in_block = True, False, False
+            continue
+        if in_block:
+            continue
+        if blank_before and note.match(ln):
+            in_block, pushed_last = True, False
             continue
         if ln.startswith(("WEBVTT", "Kind:", "Language:", "NOTE")):
             blank_before, pushed_last = False, False

@@ -114,6 +114,13 @@ test('the card: schema-valid, hashes over each part, allowances from the person\
   const bad = JSON.parse(JSON.stringify(card)); bad.voice.channels[0].style.dims.humor = 7; bad.voice.channels[0].exemplars[0].source = 'invented'; bad.surprise = 1;
   assert(validate(SCHEMA, bad).length >= 2, 'the validator rejects a broken card'); assert(!integrityOk(bad), 'and the hash no longer holds');
 });
+test('one clause-dash rule: the card allows dashes exactly when the style meter counts one in the exemplars', () => {
+  const S = require(src('lib/rules/style.ts'));
+  for (const t of ['ok — see you', 'ok—see you', 'ok— see you', 'ok —see you', 'well, —fine', 'ok - see you', 'ok – see you', 'e-mail me at nine', 'see you at nine']) {
+    const card = C.buildCard({ name: 'M', pieces: [piece('t-0000000000d1', 'message', t), piece('t-0000000000d2', 'message', 'yes'), piece('t-0000000000d3', 'message', 'on my way')], cardId: '6f1c1f39-0000-4000-8000-000000000000', createdAt: '2026-10-07T10:00:00Z', exportedAt: '2026-10-07T10:00:00Z' });
+    assert.equal(card.voice.quality_rules.dash_policy, S.styleSheet([t]).rates.dash > 0 ? 'allow' : 'avoid', JSON.stringify(t));
+  }
+});
 
 // ------------------------------------------------------------------ routes
 const R = (url, method, body, role = 'phone') => new Request(`http://desk${url}`, { method, headers: role ? { 'x-desk-role': role } : {}, ...(body !== undefined ? { body: JSON.stringify(body) } : {}) });
@@ -176,6 +183,21 @@ test('routes: leave a piece out and put it back; the card follows; workroom.set 
   dispatch({ type: 'workroom.set', workroom: { owner: 'someone-else', pieces: [], channels: [], born: false, need: 3 } });
   assert.equal(getSession().workroom.owner, 'martin', 'another learner\'s Workroom never lands');
 });
+test('the review lists every exemplar the card exports: leaving one out never exports a piece the learner was not shown (SPEC 14)', async () => {
+  await keepAll(['monday works, 7 at mine', 'saw the match? unreal', 'running the 10k sunday, come cheer']);
+  const shown = (v) => v.channels[0].exemplars;
+  const v1 = await (await twin.GET(R('/api/twin', 'GET'))).json();
+  assert.equal(shown(v1).length, 5, 'seven pieces: the newest five are up for review');
+  const out = shown(v1)[0].pieceId;
+  await twin.POST(R('/api/twin', 'POST', { exclude: out, on: true }));
+  const v2 = await (await twin.GET(R('/api/twin', 'GET'))).json();
+  const card = await (await cardRoute.GET(R('/api/twin/card', 'GET'))).json();
+  const exported = card.voice.channels[0].exemplars.map((e) => e.text);
+  assert.equal(exported.length, 5, 'the card still carries five');
+  for (const t of exported) assert.ok(shown(v2).some((e) => e.included && e.text === t), `exported but never shown for review: ${JSON.stringify(t)}`);
+  assert.equal(shown(v2).find((e) => e.pieceId === out)?.included, false, 'the left-out piece is still listed, so it can go back');
+  await twin.POST(R('/api/twin', 'POST', { exclude: out, on: false }));
+});
 test('routes: delete-all leaves no file, the Workroom empties, and nobody seated is refused', async () => {
   await twin.POST(R('/api/twin', 'POST', { open: true }, 'tv'));
   await texts.DELETE(R('/api/texts?all=1', 'DELETE'));
@@ -209,4 +231,15 @@ test('keys: the Workroom is Essay Master\'s; Up/Down walk the pieces, Right goes
   assert.equal(nav(keys.tvKey(s, 'menu', LOCAL)), 'essaytype');
   assert.equal(nav(keys.tvKey(s, 'select', LOCAL)), undefined, 'Select on a piece does nothing yet');
   assert.equal(nav(keys.tvKey(s, 'back', LOCAL)), 'landing');
+});
+test('the Workroom says where the review happens: the PC page, the only surface that lists the exemplars; and every kind of piece counts', () => {
+  const { renderToStaticMarkup } = require(path.join(root, 'node_modules/react-dom/server')), { createElement } = require(path.join(root, 'node_modules/react'));
+  const { WorkroomScreen } = require(src('essay/Workroom.tsx'));
+  const html = renderToStaticMarkup(createElement(WorkroomScreen, { s: base({ screen: 'workroom', workroom: { owner: 'm', pieces: [], channels: [], born: false, need: 3 } }), focus: 0 }));
+  const empty = (html.match(/<aside[\s\S]*?<\/aside>/)?.[0] ?? '').replace(/<[^>]*>/g, '');
+  assert.match(empty, /review on the PC page/, empty);
+  assert.doesNotMatch(empty, /on your phone/, 'the phone has no twin review: only /drop fetches /api/twin');
+  assert.match(empty, /messages, emails or essays/, 'an essay channel is born at three as well (channelOf: generic)');
+  const phone = fs.readdirSync(src('app/phone')).map((f) => fs.readFileSync(path.join(src('app/phone'), f), 'utf8')).join('\n');
+  assert.doesNotMatch(phone, /\/api\/twin/, 'if the phone gains the review, this copy may name it again');
 });

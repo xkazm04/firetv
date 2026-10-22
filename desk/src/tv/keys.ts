@@ -18,7 +18,8 @@ import { lessonStates } from "@/lib/library/watched";
 import { profileRows, locate, flat, likelyIx, AGE_RANGE } from "@/tv/profileRows";
 import { continueCard, handoffOf, likeUnit, tonightsSheet } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf, toLookAt } from "@/tv/sheetRows";
-import { LANDING_REST, essayWaiting, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
+import { LANDING_REST, essayWaiting, landingApps, landingAt, landingFocus, landingStops, restStop } from "@/tv/landingRows";
+import { writingAskOf, writingPhase, writingPrompts, writingStops } from "@/tv/writingScreen";
 import { recapStops, ownReading } from "@/tv/recapRows";
 import { pastPathEnd, prepareStops } from "@/tv/prepareRows";
 import { paperStopCount, paperTypeAt, paperView } from "@/tv/paperRows";
@@ -370,7 +371,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   // Down to Someone else (bottom right); Menu ends tonight wherever it is - what the phone's End session does: the recap,
   // and the memory written
   landing: (s, k, _, o) => {
-    const stops = landingStops(s), i = landingAt(s), at = stops[i], apps = landingModules(s).length;
+    const stops = landingStops(s), i = landingAt(s), at = stops[i], apps = landingApps(s).length;
     const to = (j: number) => { if (j >= 0 && j !== s.focus) o.ev({ type: "focus", focus: j }); };
     // no one at the desk has no evening to end
     if (k === "menu") { if (s.learner) { o.ev({ type: "session.end" }); o.calls.push({ url: "/api/memory", body: {} }); } return; }
@@ -386,8 +387,31 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (k === "up") to(stops.indexOf("phone"));
       if (k === "down") to(stops.indexOf("place"));
       // an app opened at a desk no one has sat down at asks who first: its work is somebody's (store.ts NEEDS_LEARNER)
-      if (k === "select") { if (!s.learner) { o.nav("learner", 0, "landing"); return; } o.ev({ type: "subject", subject: at }); openWaiting(s, at, o); }
+      if (k === "select") {
+        if (!s.learner) { o.nav("learner", 0, "landing"); return; }
+        // Writing is no Subject: it opens its own screen, on the episode left there; a finished one starts over at the list
+        if (at === "writing") { if (writingPhase(s) === "finished") o.ev({ type: "writing.clear" }); o.nav("writing", 0); return; }
+        o.ev({ type: "subject", subject: at }); openWaiting(s, at, o);
+      }
     }
+  },
+  // Writing (TV-WRITING-SCREEN-2026-10-21): the prompt list, then the chosen prompt. Up/Down (and Left/Right) walk the
+  // stops; Select picks a prompt, hands the typing to the phone (the writing ask) or goes back to the list; Back cancels
+  // an open hand-off first, else leaves for the desk with the lamp on Writing (the episode stays for next time); Menu on
+  // the chosen prompt is Another prompt.
+  writing: (s, k, _, o) => {
+    const stops = writingStops(s), at = stopAt(stops, s.focus), ph = writingPhase(s), ask = writingAskOf(s);
+    if (k === "back") { if (ask?.phase === "open") { o.ev({ type: "ask.cancel", id: ask.id }); return; } o.nav("landing", landingFocus(s, "writing")); return; }
+    if (k === "up" || k === "left") o.move(stops.length, -1);
+    if (k === "down" || k === "right") o.move(stops.length, 1);
+    const another = () => { const ix = writingPrompts(s).findIndex((p) => p.id === s.writingTv?.promptId); o.ev({ type: "writing.clear" }); o.focus(Math.max(0, ix)); };
+    if (ph === "list") { if (k === "select" && at) { o.ev({ type: "writing.pick", promptId: at }); o.focus(0); } return; }
+    // nothing changes under a paragraph the desk is reading or saving
+    if (s.writingTv?.busy) return;
+    if (k === "menu" && !ask) another();
+    if (k !== "select") return;
+    if (at === "another") another();
+    else if (at === "phone" && !ask) o.ev({ type: "ask.open", kind: "writing" });
   },
   pair: (s, k, _, o) => {
     // paired (TL-3): two buttons under the code - Pair another (stop 0, the code stays up) and Forget every phone (stop 1)

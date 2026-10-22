@@ -957,6 +957,17 @@ test('case 6c: an onFail that throws still records the failure, and its own erro
 });
 
 // last: it swaps the store module out from under the routes loaded above
+test('optimize 2026-10-21: a set written by code says it is ready without a time; a model-written set keeps its time',async()=>{
+ onPage();
+ stubText({items:()=>{throw new Error('no model call expected for a code-written unit');}});
+ let r=await post('practice',{topic:'area'});assert.equal(r.status,200);
+ assert.equal((await r.json()).provider,'code');
+ assert.equal(store.getSession().status,'6 questions ready','a code-drawn set took no measurable time: no "in 0 s"');
+ onPage();
+ stubText({items:()=>({items:STATED})});r=await post('practice',{topic:'linear-one-step'});assert.equal(r.status,200);
+ assert.match(store.getSession().status,/^6 questions ready in \d+ s$/);
+});
+
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
  const saved={...store.getSession(),jobs:{read:{id:'r1',phase:'running',startedAt:Date.now()-5000,key:PAGE.id,input:{id:PAGE.id}}}};
@@ -979,4 +990,38 @@ test('HF4: load() logs once for a session.json that is not JSON or fails the sha
  const a=reload('{not json');assert.equal(a.length,1,JSON.stringify(a));assert.equal(store.getSession().learner,null);
  const b=reload(JSON.stringify({profiles:'nope',learner:null}));assert.equal(b.length,1,JSON.stringify(b));assert.match(b[0],/shape check/);assert.equal(store.getSession().learner,null);
  const n=reload(null);assert.deepEqual(n,[]);
+});
+
+test('optimize 2026-10-21: every job kind a route runs with an input is one POST /api/session/retry can ask again (derived from the runJob calls, not from the route\'s own list)',()=>{
+ const strip=(t)=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
+ // the kinds whose runJob call holds an input: the phone and the TV offer Try again on exactly these (job.input)
+ const holders=(code)=>{const out=new Set();const parts=strip(code).split(/\brunJob\(/).slice(1);for(const p of parts){const k=/^\s*"(\w+)"/.exec(p);if(k&&/\binput\s*:/.test(p))out.add(k[1]);}return out;};
+ // the canary: an input-holding call is seen, one without an input is not
+ assert.deepEqual([...holders('runJob("zz", async () => 1, { key: "a", input: { a: 1 } }); runJob("yy", async () => 2, { key: "b" });')],['zz']);
+ assert.deepEqual([...holders('// runJob("zz", f, { input: {} })')],[]);
+ const walk=(d)=>fs.readdirSync(d,{withFileTypes:true}).flatMap((e)=>e.isDirectory()?walk(path.join(d,e.name)):/\.tsx?$/.test(e.name)?[path.join(d,e.name)]:[]);
+ const kinds=new Set(walk(src('')).flatMap((f)=>[...holders(fs.readFileSync(f,'utf8'))]));
+ const retry=strip(fs.readFileSync(src('app/api/session/retry/route.ts'),'utf8'));
+ const routes=new Set([.../const ROUTES[^\n]*=\s*\{\s*\r?\n([\s\S]*?)\r?\n\};/.exec(retry)[1].matchAll(/^\s*(\w+)\s*:/gm)].map((m)=>m[1]));
+ assert.ok(kinds.size>=4,`the population is found: ${[...kinds]}`);
+ assert.deepEqual([...kinds].filter((k)=>!routes.has(k)).sort(),[],'a kind holds its input for Try again but the retry route has no way to ask it again');
+});
+
+test('optimize 2026-10-21: a photo over the read cap is refused before any run on every photo door: the page read, the set mark and the page mark',async()=>{
+ const {READ_IMAGE_MAX,readImageProblem}=require(src('lib/rules/maths.ts'));
+ const big='data:image/jpeg;base64,'+'A'.repeat(READ_IMAGE_MAX);
+ assert.ok(readImageProblem(big),'the fixture is over the cap');
+ onPage();
+ // a set on the desk, so the set mark would otherwise run (it did: 200, one vision call, before the cap)
+ stubText({items:()=>({items:STATED})});assert.equal((await post('practice',{topic:'linear-one-step'})).status,200);
+ let seen=0;stubVision(()=>{seen++;return MARKS;});
+ for(const body of [{image:big},{image:big,page:PAGE.id}]){
+  const r=await post('mark',body);
+  assert.equal(r.status,400,JSON.stringify(Object.keys(body)));assert.equal((await r.json()).error,readImageProblem(big));
+ }
+ const r=await post('read',{image:big,subject:'maths',w:100,h:100});
+ assert.equal(r.status,400);assert.equal((await r.json()).error,readImageProblem(big));
+ assert.equal(seen,0,'no vision call on any door');
+ // and a photo under the cap still marks
+ const ok=await post('mark',PHOTO);assert.equal(ok.status,200);assert.equal(seen,1);
 });

@@ -12,32 +12,41 @@
  * Pure: no React, no DOM, so the node test suite can walk it (tools/tv-landing-test.cjs).
  */
 import type { Session, Subject } from "@/lib/session/store";
-import { continueStop, deskWaiting, landingAt, landingStops, type LandingStop, type Waiting, type WaitKind } from "@/tv/landingRows";
+import { continueStop, deskWaiting, landingAt, landingStops, writingOn, type LandingApp, type LandingStop, type Waiting, type WaitKind } from "@/tv/landingRows";
+import { writingWaiting, type WritingWaiting } from "@/tv/writingScreen";
 import { day } from "@/tv/day";
 
 /** How long Select's zoom plays before the app opens (app/tv/page.tsx waits this long; reduced motion does not wait). */
 export const ZOOM_MS = 560;
 
-export const APP_NAME: Record<Subject, string> = { maths: "Math Buddy", english: "Linga", essay: "Essay Master" };
+export const APP_NAME: Record<LandingApp, string> = { maths: "Math Buddy", english: "Linga", essay: "Essay Master", writing: "Writing" };
 
 /** A state of an app's key art. `fresh`: nothing on the desk for it yet. Numbers are null until the session has them. */
 export type ArtState =
   | { app: "maths"; fresh: boolean; n: number | null; m: number }
   | { app: "english"; fresh: boolean; cefr: string | null; resume: boolean; next: boolean }
   | { app: "essay"; fresh: boolean; sent: number | null; paras: number };
+/**
+ * Writing's tile art: a sheet with its lines, `done` episodes finished (up to five), `open` an episode left mid-way. Kept
+ * apart from ArtState on purpose: Writing has no world of its own yet (a theme shows the empty world behind it).
+ */
+export interface WritingArt { app: "writing"; fresh: boolean; done: number; open: boolean }
+export type AppArt = ArtState | WritingArt;
+/** The art a world is drawn from: an app's ArtState, or null (the empty world) for Writing and for no app. */
+export const worldArt = (a: AppArt | null | undefined): ArtState | null => (a && a.app !== "writing" ? a : null);
 
 export type WhenIcon = "clock" | "sun" | "moon";
 /** The caption for one app: a chip for when (a label, never the only carrier of meaning), a headline, one line under it. */
 export interface Caption { chip: { icon: WhenIcon; text: string } | null; head: string; sub: string }
 
 export interface AppView {
-  id: Subject;
+  id: LandingApp;
   name: string;
   kind: WaitKind;
   /** the app the CONTINUE tag is on: what the lamp rests on */
   tagged: boolean;
   caption: Caption;
-  art: ArtState;
+  art: AppArt;
 }
 
 export interface LandingView {
@@ -49,7 +58,7 @@ export interface LandingView {
    * The app whose world is showing: the one the D-pad is on, else the last one it was on (the shelf, the actions and
    * the phone are not apps), else the CONTINUE app. Null only on a desk with no app on it.
    */
-  world: Subject | null;
+  world: LandingApp | null;
   learner: { name: string; initial: string; tone: number } | null;
   /** an unpaired phone lies on the desk as a stop (it carries the address and the code) */
   phone: { paired: boolean; pin: string; url: string };
@@ -73,7 +82,9 @@ const sentence = (t: string) => t.trim().replace(/[.!?]$/, "");
 export function sayOf(v: Omit<LandingView, "say">): string {
   const parts = (xs: Array<string | null | undefined>) => xs.filter((x): x is string => !!x && !!x.trim()).map(sentence).join(". ") + ".";
   if (!v.at) return "";
-  if (v.at === "phone") return parts([v.caption.head, `Open ${v.phone.url}, then enter ${v.phone.pin.split("").join(" ")}`]);
+  // paired, no code is on screen: the caption is what the eye reads; unpaired, the postcard's address and code
+  if (v.at === "phone") return v.phone.paired ? parts([v.caption.head, v.caption.sub])
+    : parts([v.caption.head, `Open ${v.phone.url}, then enter ${v.phone.pin.split("").join(" ")}`]);
   if (v.at === "place") return parts([v.place, v.learner ? `${v.learner.name} is at the desk` : null]);
   const app = v.apps.find((a) => a.id === v.at);
   return app ? parts([app.name, app.caption.chip?.text, app.caption.head, app.caption.sub, v.primary]) : "";
@@ -110,6 +121,16 @@ export function captionOf(w: Waiting): Caption {
   return { chip, head: w.line, sub: `${lens} · ${w.read} ${w.read === 1 ? "paragraph" : "paragraphs"} read` };
 }
 
+/** Writing's caption: the episode on the desk or the last one finished, else what Writing is. */
+export function writingCaption(w: WritingWaiting): Caption {
+  if (w.kind === "resume") return { chip: { icon: "clock", text: "Left mid-way" }, head: w.title ?? "Writing", sub: w.line };
+  if (w.kind === "none") return { chip: null, head: w.empty ?? "Not started", sub: w.line };
+  const d = w.at ? day(w.at) : null;
+  const chip: Caption["chip"] = d ? { icon: d === "Today" || d === "Yesterday" ? "clock" : "sun", text: `Wrote ${lower(d)}` } : null;
+  return { chip, head: w.title ?? "Writing", sub: `${w.done} ${w.done === 1 ? "paragraph" : "paragraphs"} coached and revised` };
+}
+export const writingArt = (w: WritingWaiting): WritingArt => ({ app: "writing", fresh: w.kind === "none", done: Math.min(5, w.done), open: w.kind === "resume" });
+
 /** The state each app's key art draws, from what is waiting. */
 export function artOf(w: Waiting): ArtState {
   const fresh = w.kind === "none";
@@ -138,17 +159,29 @@ export function primaryLabel(name: string | null, kind: WaitKind | null): string
 }
 
 /**
+ * What Select's hand-off names for a stop: the app, the second action in the words the shelf shows ("Choose who" while
+ * no one is seated, "Someone else" with someone), or the phone. Every theme takes its hand-off words from here.
+ */
+export function handoffName(v: Pick<LandingView, "apps" | "place">, stop: LandingStop): string {
+  if (stop === "place") return v.place;
+  if (stop === "phone") return "Pair a phone";
+  return v.apps.find((a) => a.id === stop)?.name ?? APP_NAME[stop];
+}
+
+/**
  * The view for a session. `lastApp` is the app the D-pad was last on (the landing keeps it between renders, so
  * moving down to Someone else does not change the world behind).
  */
-export function landingView(s: Session, lastApp: Subject | null = null): LandingView {
+export function landingView(s: Session, lastApp: LandingApp | null = null): LandingView {
   const stops = landingStops(s), at = stops[landingAt(s)];
   const waiting = deskWaiting(s), cont = continueStop(s);
   const apps: AppView[] = waiting.map((w) => ({
     id: w.app, name: APP_NAME[w.app], kind: w.kind, tagged: !!cont?.tagged && cont.app === w.app, caption: captionOf(w), art: artOf(w),
   }));
+  // Writing never carries the CONTINUE tag (continueStop is the three apps'); it lies last on the shelf
+  if (writingOn(s)) { const w = writingWaiting(s); apps.push({ id: "writing", name: APP_NAME.writing, kind: w.kind, tagged: false, caption: writingCaption(w), art: writingArt(w) }); }
   const ids = apps.map((a) => a.id);
-  const atApp = at && ids.includes(at as Subject) ? (at as Subject) : null;
+  const atApp = at && ids.includes(at as LandingApp) ? (at as LandingApp) : null;
   const world = atApp ?? (lastApp && ids.includes(lastApp) ? lastApp : cont?.app ?? ids[0] ?? null);
   const learner = learnerOf(s), wApp = apps.find((a) => a.id === world) ?? null;
   const caption: Caption = at === "phone" && s.joined ? { chip: null, head: s.phonesLive > 0 ? "Phone paired" : "No phone here", sub: "Select to pair another phone, or to forget them all." }

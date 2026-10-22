@@ -1,6 +1,7 @@
 /**
  * The chain checker: does each line of a Calculus working still hold, given the line before it? Pure, built only on
- * the numeric primitives of calc-expr (compile, derivativeAt, limitAt, limitInf, SAMPLES) and calc's own tolerances;
+ * the numeric primitives of calc-expr (compile, derivativeAt, limitAt, limitInf, SAMPLES), calc's own tolerances and
+ * calc-read's readings of an answer (czechAnswer, infinityOf, DNE), with calc2 and taskText only to tell a spec's kind and system;
  * nothing here throws, and a line it cannot read or cannot decide is null - the desk never rings what it did not check.
  *
  * A line is `{ tag, text }`, the tag naming how the line follows the one before it:
@@ -28,7 +29,7 @@ import { checkerFault } from "./fault";
 import { compile, derivativeAt, limitAt, limitInf, SAMPLES, SAME_REL, toPlain, type Expr, type FnName, type Limit, type Node } from "./calc-expr";
 import { FUNCTION_TOL, ROUNDED_CLOSE, isImplicitSpec, type CalcSpec } from "./calc";
 import { isCalc2Spec } from "./calc2";
-import { czechAnswer } from "./calc-read";
+import { DNE, czechAnswer, infinityOf } from "./calc-read";
 import { commaSystem, type SchoolSystem } from "./taskText";
 
 export interface ChainLine {
@@ -133,8 +134,6 @@ const derivativeOf = (a: Expr, b: Expr): ChainResult => oneWay((x) => b.at(x), (
 /** `int`: the line b is an antiderivative of the line before, a (b's derivative is a). */
 const antiderivativeOf = (a: Expr, b: Expr): ChainResult => oneWay((x) => derivativeAt(b, x), (x) => a.at(x), FUNCTION_TOL);
 
-const INF = /^\s*([+-]?)\s*(?:inf|infinity|∞)\s*$/i;
-const DNE = /^\s*(?:dne|does not exist)\s*$/i;
 
 function limitOf(a: Expr, line: ChainLine): Limit | null {
   const at = line.x === "inf" || line.x === "-inf" ? line.x : constantValue(line.x);
@@ -157,9 +156,10 @@ function sameLimit(a: Expr, b: Expr, line: ChainLine): ChainResult {
 function limitLine(a: Expr, line: ChainLine, body: string): ChainResult {
   const lim = limitOf(a, line);
   if (!lim) return null;
-  const m = INF.exec(body);
-  if (m) return lim.kind === "inf" ? lim.sign === (m[1] === "-" ? -1 : 1) : false;
-  if (DNE.test(body)) return lim.kind === "dne";
+  // an infinity and a no-limit word are read as the judge reads an answer (calc-read infinityOf, DNE): one vocabulary
+  const inf = infinityOf(body);
+  if (inf !== null) return lim.kind === "inf" ? lim.sign === inf : false;
+  if (DNE.test(body.trim())) return lim.kind === "dne";
   const v = constantValue(body);
   if (v === null) return null;
   return lim.kind === "value" ? sameValue(lim.v, v, body, VALUE_TOL) : false;
@@ -394,9 +394,10 @@ export function tagLines(spec: CalcSpec, lines: readonly string[]): { lines: Cha
   const specAt: string | number | null = spec.shape === "limit" ? spec.at : null;
   const side = spec.shape === "limit" ? spec.side : undefined;
   const sameAt = (a: string): boolean => {
-    const s = a.replace(/∞/g, "inf").replace(/^\+/, "");
-    if (specAt === "inf" || specAt === "-inf") return s === specAt;
-    const u = num(s), v = specAt === null ? null : num(specAt);
+    const inf = infinityOf(a);
+    if (specAt === "inf" || specAt === "-inf") return inf !== null && (inf === 1 ? "inf" : "-inf") === specAt;
+    if (inf !== null) return false;
+    const u = num(a.replace(/^\+/, "")), v = specAt === null ? null : num(specAt);
     return u !== null && v !== null && Math.abs(u - v) <= 1e-9;
   };
   const point: string | number | null = spec.shape === "evaluate" || spec.shape === "derivative-at" ? spec.at : null;

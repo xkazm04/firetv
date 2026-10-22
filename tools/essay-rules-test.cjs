@@ -2368,3 +2368,15 @@ test('L1-helena-46-EM1-4 round 5: the r5 BLIND set is pinned at its measured rat
  assert.equal(cz.length,60,'r5 BLIND Czech refused (60 of 60)');
  assert.deepEqual(en.map(t=>held.english.indexOf(t)),[],'r5 BLIND English refused is 0 of 45');
 });
+
+test('optimize 2026-10-21: a piece with no English paragraph fails with the desk\'s own sentence, never the generic analyse line (a kept piece read from the Workroom)',async()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts')),J=require(path.join(root,'src/lib/desk/job.ts'));
+ const {analysePiece}=require(path.join(root,'src/lib/desk/essay.ts'));
+ const cz='Telefony by ve škole měly zůstat povolené. Někteří učitelé tvrdí, že rozptylují.\n\nPodle výzkumu se žáci s jasnými pravidly soustředí lépe. To ukazuje, že zákaz není nutný.';
+ seen=[];answer=async()=>{throw new Error('no model call expected');};
+ let err;await analysePiece(cz,'structure','opt-21-cz',undefined,()=>{},undefined,undefined,{noSave:true}).catch((e)=>{err=e;});
+ assert.ok(err,'the reading fails');assert.equal(seen.length,0,'no paragraph is sent');
+ // the sentence the session keeps and the failure value are the desk's own, as for a read with no items
+ assert.equal(J.jobError('analyse',err),R.NOT_ENGLISH_LINE);
+ assert.equal(J.failureOf(err),'said');
+});

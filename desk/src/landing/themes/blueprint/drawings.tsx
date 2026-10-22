@@ -6,7 +6,7 @@
  * fill), base (the inked drawing), idle (what moves on the focused one), hint (the lantern).
  */
 import type { CSSProperties, ReactElement, ReactNode } from "react";
-import type { ArtState } from "@/landing/model";
+import type { AppArt } from "@/landing/model";
 import { Pen, f } from "./pen";
 
 export interface Drawing { node: ReactElement; spot: { x: number; y: number } | null }
@@ -233,8 +233,9 @@ export function essay(none: boolean, sentIn: number | null, parasIn: number): Dr
   };
 }
 
-/** The drawing for an app's art state. */
-export function drawingOf(a: ArtState): Drawing {
+/** The drawing for an app's art state. Writing borrows Essay Master's sheet until it has a drawing of its own (this look is locked off). */
+export function drawingOf(a: AppArt): Drawing {
+  if (a.app === "writing") return essay(a.fresh, null, a.fresh ? 0 : a.done);
   if (a.app === "maths") return maths(a.n != null ? { n: a.n } : null);
   if (a.app === "english") return english(a.fresh ? "none" : a.resume ? "resume" : a.next ? "next" : "last", a.fresh ? null : a.cefr, !a.fresh && a.next);
   return essay(a.fresh, a.fresh ? null : a.sent, a.fresh ? 0 : a.paras);

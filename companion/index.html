@@ -171,7 +171,7 @@
   let color = '#FFD400';
   let sticky = false;
   let ws = null, connected = false, paired = false, refused = false;
-  let lastState = null, scrubbing = false, tvDoc = null, prevT = null;
+  let lastState = null, scrubbing = false, seekSent = null, tvDoc = null;
 
   // ---- transport -----------------------------------------------------------
   function connect() {
@@ -187,6 +187,7 @@
       if (sock !== ws) return; // a socket already replaced by a PIN retry
       connected = paired = false;
       dot.classList.remove('on');
+      tvControls(false);
       // A refusal is the TV's answer, not a dropped line: the same PIN would be refused again,
       // every second, forever. Wait for the viewer to type the PIN instead. A drop comes back.
       if (refused) return;
@@ -196,6 +197,16 @@
     ws.onmessage = (e) => onMessage(JSON.parse(e.data));
   }
   function send(o) { if (connected) ws.send(JSON.stringify(o)); }
+
+  // The controls that command the TV. Until a TV welcomes this pen a press goes nowhere, so they are
+  // off rather than taking it; undo, redo and the drawing steps then wait for the TV's state as well.
+  // The pen's own tools and colours stay live: they change nothing on the TV.
+  const STATE_GATED = new Set(['btn-undo', 'btn-redo', 'btn-mark-prev', 'btn-mark-next']);
+  function tvControls(on) {
+    document.querySelectorAll('nav .row:not(#tools):not(#colors) button, #scrub')
+      .forEach((b) => { b.disabled = !on || STATE_GATED.has(b.id); });
+  }
+  tvControls(false);
 
   // A TV that is gone is redialled with a doubling wait (1 s up to 15 s), not every second for as
   // long as the tab lives; a welcome resets it. While the screen is hidden nothing is dialled, and
@@ -239,6 +250,7 @@
     if (m.type === 'welcome') {
       if (!m.accepted) {
         refused = true;
+        tvControls(false);
         // After too many wrong PINs the TV refuses every PIN, the right one too, for half a
         // minute (PairingDesk.COOLDOWN_MS): typing it at once would only be refused again.
         const locked = m.reason === 'too many wrong PINs';
@@ -262,6 +274,7 @@
         return;
       }
       paired = true;
+      tvControls(true);
       stopCountdown();
       backoff = BACKOFF_MIN_MS;
       hint.textContent = 'draw here';
@@ -327,10 +340,15 @@
     editButton('btn-undo', 'Undo', m.canUndo, m.undoAtMs);
     editButton('btn-redo', 'Redo', m.canRedo, m.redoAtMs);
     $('btn-playpause').textContent = m.paused ? 'Play' : 'Pause';
+    // The TV's rate, not the last tap: it outlives this phone (a reload, a second phone, the remote).
+    if (typeof m.rate === 'number') {
+      document.querySelectorAll('#rates [data-rate]')
+        .forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.rate) === m.rate)));
+    }
     $('scrub-t').textContent = (m.t / 1000).toFixed(1) + 's';
-    if (m.t !== (prevT ?? -1)) { prevT = m.t; }
     if (!scrubbing && m.durationMs > 0) {
       $('scrub').value = Math.round((m.t / m.durationMs) * 1000);
+      seekSent = null; // the TV has moved the bar: the same spot can be sought again
     }
     // The thumbnail is the whole point of aiming: without it the pad is a blank rectangle and
     // the viewer is drawing from memory.
@@ -402,6 +420,9 @@
   }
 
   pad.addEventListener('pointerdown', (e) => {
+    // One pen at a time: a second finger or a palm while a stroke is open would start a stroke over
+    // it (the TV drops a live stroke on a new down) and orphan its 60 Hz flush timer.
+    if (drawing) return;
     if (tagbox.classList.contains('show')) return;
     // Nothing reaches the TV before it welcomes this pen, so ink here would be a lie. Say why.
     if (!paired) {
@@ -600,15 +621,20 @@
     if (!lastState || !lastState.durationMs) return;
     $('scrub-t').textContent = ((scrub.value / 1000) * lastState.durationMs / 1000).toFixed(1) + 's';
   });
+  // A pointer drag ends in a pointerup and a change for the same value: one seek, not two.
+  const seekTo = () => {
+    if (!lastState || !lastState.durationMs || scrub.value === seekSent) return;
+    seekSent = scrub.value;
+    send({ type: 'transport', cmd: 'seek', value: (scrub.value / 1000) * lastState.durationMs });
+  };
   const endScrub = () => {
     if (!scrubbing) return;
     scrubbing = false;
-    if (lastState && lastState.durationMs) {
-      send({ type: 'transport', cmd: 'seek', value: (scrub.value / 1000) * lastState.durationMs });
-    }
+    seekTo();
   };
   scrub.addEventListener('pointerup', endScrub);
-  scrub.addEventListener('change', endScrub);
+  // A keyboard, a switch or a screen reader moves the bar with no pointerdown: its change is the seek.
+  scrub.addEventListener('change', () => (scrubbing ? endScrub() : seekTo()));
 
   // Exposed so the Playwright live UI test can drive the page without guessing at internals.
   window.__pen = {

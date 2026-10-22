@@ -13,7 +13,9 @@ secrets:
   # DOCTOR-ENFORCED: if git tracks a file matching any of these, the conformance gate HARD FAILS.
   # Add repo-specific patterns; keep them precise (a pattern that matches a legitimate committed
   # file, e.g. .env.example, turns the gate into noise).
-  neverCommit: [.env, .env.local, "*.pem", "*.p12", "*.pfx", id_rsa, id_dsa]
+  # A pattern is a git pathspec from the root: ".env.local" is the root file only, so "*/.env.local" (any depth) is
+  # what covers desk/.env.local, the file AGENTS.md names. Keystores sign the APKs (AGENTS.md: never commit them).
+  neverCommit: [.env, .env.local, "*/.env", "*/.env.local", "*.pem", "*.p12", "*.pfx", "*.jks", "*.keystore", id_rsa, id_dsa]
   # Where secrets legitimately come from: a vault/keyring NAME, never a secret.
   from: "process environment; locally the gitignored desk/.env.local (no vault)"
 

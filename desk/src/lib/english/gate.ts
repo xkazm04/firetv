@@ -72,10 +72,11 @@ const RANK: Record<Audience, number> = { all: 0, school: 0, older: 1, adult: 2 }
 
 /** The audience the words alone ask for: "adult", "older", "all"; `null` for the never-list. */
 export function keywordAudience(text: string): Audience | null {
-  const folded = fold(text);
-  if (NEVER.test(text) || NEVER_MORE.test(text) || NEVER.test(folded) || NEVER_MORE.test(folded)) return null;
-  if (ADULT.test(text) || ADULT_PHRASES.test(text) || BAR.test(text) || ADULT_MORE.test(text) || ADULT.test(folded) || ADULT_MORE.test(folded)) return "adult";
-  return OLDER.test(text) || OLDER_PHRASES.test(text) ? "older" : "all";
+  const folded = fold(text), hit = (...lists: RegExp[]) => lists.some(re => re.test(text) || re.test(folded));
+  // every list is read on the text as written and on the folded copy: a l33t spelling is never laxer than the plain one
+  if (hit(NEVER, NEVER_MORE)) return null;
+  if (hit(ADULT, ADULT_PHRASES, BAR, ADULT_MORE)) return "adult";
+  return hit(OLDER, OLDER_PHRASES) ? "older" : "all";
 }
 
 /**
@@ -135,7 +136,8 @@ const sentencesOf = (text: string) => text.trim().split(/(?<=[.!?])\s+/).map(x =
 const wordsIn = (text: string) => text.match(WORDS)?.length ?? 0;
 const WH = new Set(["what", "where", "when", "who", "why", "how", "which"]);
 const PAST_AUX = /\b(?:did|didn['’]t|was|wasn['’]t|were|weren['’]t)\b/i;
-const PAST_IRREGULAR = new Set("went saw ate had made got took came said won ran found gave told thought bought left felt lost met drank swam wrote sang built caught brought began broke chose drove fell flew forgot heard kept knew sat slept spent stood taught threw wore".split(" "));
+/** Irregular past forms code can read: the one list (plain.ts keepsTense reads it too). */
+export const PAST_IRREGULAR: ReadonlySet<string> = new Set("went saw ate had made got took came said won ran found gave told thought bought left felt lost met drank swam wrote sang built caught brought began broke chose drove fell flew forgot heard kept knew sat slept spent stood taught threw wore".split(" "));
 const NOT_PAST = new Set(["need", "feed", "speed", "bleed", "breed", "seed", "weed", "shed", "hundred", "naked", "wicked", "sacred"]);
 const pastVerb = (w: string) => PAST_IRREGULAR.has(w) || (/^[a-z]{2,}ed$/.test(w) && !NOT_PAST.has(w));
 /**

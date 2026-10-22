@@ -8,15 +8,18 @@ export function parseVtt(raw: string): Cue[] {
   let cur: number | null = null, buf: string[] = [];
   // a cue identifier is the line just before a timing line, itself the first line after a blank one: it is not caption
   // text. A line YouTube leaves blank-looking inside a cue (" ") is followed by text, never by a timing line.
-  let blankBefore = true, pushedLast = false, afterBlank = false;
+  // a NOTE, STYLE or REGION block starts after a blank line and runs to the next one: none of it is caption text
+  let blankBefore = true, pushedLast = false, afterBlank = false, inBlock = false;
   for (const ln of raw.split(/\r?\n/)) {
-    const m = ln.match(ts);
+    const m = inBlock ? null : ln.match(ts);
     if (m) {
       if (pushedLast && afterBlank) buf.pop();
       if (cur !== null && buf.length) cues.push([cur, buf.join(" ")]);
       cur = +(m[1] ?? 0) * 3600 + +m[2] * 60 + +m[3]; buf = []; blankBefore = false; pushedLast = false; continue;
     }
-    if (!ln.trim()) { blankBefore = true; pushedLast = false; continue; }
+    if (!ln.trim()) { blankBefore = true; pushedLast = false; inBlock = false; continue; }
+    if (inBlock) continue;
+    if (blankBefore && /^(NOTE|STYLE|REGION)(\s|$)/.test(ln)) { inBlock = true; pushedLast = false; continue; }
     if (/^(WEBVTT|Kind:|Language:|NOTE)/.test(ln)) { blankBefore = false; pushedLast = false; continue; }
     const t = ln.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
     if (t) { buf.push(t); pushedLast = true; afterBlank = blankBefore; } else pushedLast = false;

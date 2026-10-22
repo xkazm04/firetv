@@ -11,9 +11,8 @@
  * (`.desk-tv.pp`, `pp-` classes). Sizes are for the 1920 x 1080 stage; the stage scales as a whole.
  */
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import type { Subject } from "@/lib/session/store";
-import type { LandingStop } from "@/tv/landingRows";
-import type { AppView, LandingView } from "@/landing/model";
+import type { LandingApp, LandingStop } from "@/tv/landingRows";
+import { handoffName, worldArt, type AppView, type LandingView } from "@/landing/model";
 import type { ThemeLandingProps } from "../types";
 import { DESK_FONTS } from "@/landing/fonts";
 import { Defs } from "./shapes";
@@ -23,10 +22,12 @@ import { skyBackdrop, worldFor, type Layer } from "./worlds";
 import { afterFonts } from "@/lib/afterFonts";
 
 /** Each app's colours (its own deep, its shadow, its highlight, the letters' extrusion, the motes' glow). */
-const THEME: Record<Subject | "house", { deep: string; deepLo: string; hi: string; ex: string; glow: string }> = {
+const THEME: Record<LandingApp | "house", { deep: string; deepLo: string; hi: string; ex: string; glow: string }> = {
   maths: { deep: "#2b3fa8", deepLo: "#1b2778", hi: "#6a82ea", ex: "#22337c", glow: "255,236,150" },
   english: { deep: "#ad4529", deepLo: "#762b1f", hi: "#f08c64", ex: "#8a3a2a", glow: "255,222,150" },
   essay: { deep: "#1f5140", deepLo: "#123528", hi: "#54967a", ex: "#1a4636", glow: "255,250,222" },
+  // Writing has no world of its own yet (the empty world stands behind it): an ink plum for its letters and its hand-off
+  writing: { deep: "#5b3a78", deepLo: "#3c2552", hi: "#9a78c4", ex: "#4a2f63", glow: "255,236,200" },
   house: { deep: "#4a3324", deepLo: "#2b1d16", hi: "#8b6a54", ex: "#3a271b", glow: "255,236,170" },
 };
 const LEARNER_TONE = ["#e2603f", "#2f7a63", "#5a55c8", "#c9932d"];
@@ -147,13 +148,24 @@ function Postcard({ view }: { view: LandingView }) {
   );
 }
 
+/**
+ * Where the tiles stand on the shelf: their pitch, the first one's centre, and the caption's width. Four tiles (the three
+ * apps and Writing) fit between the caption and the actions only with a tighter pitch and a narrower caption: the lit tile
+ * grows to about 150 px with its rings, and must not reach the big action at x 1296.
+ */
+function railOf(n: number): { pitch: number; cx: number; capW?: number } {
+  if (n >= 4) return { pitch: 150, cx: 965 - ((n - 1) * 150) / 2, capW: 560 };
+  const pitch = n >= 3 ? 176 : 200;
+  return { pitch, cx: 1010 - ((n - 1) * pitch) / 2 };
+}
+
 function Shelf({ view }: { view: LandingView }) {
-  const { apps, at, world } = view, n = apps.length, pitch = n >= 3 ? 176 : 200, cx = 1010 - ((n - 1) * pitch) / 2;
+  const { apps, at, world } = view, { pitch, cx, capW } = railOf(apps.length);
   const cap = view.caption;
   return (
     <div className="pp-ledge">
       <div className="pp-ledge-paper" />
-      <div className="pp-cap" data-role="desk-caption" key={cap.head + cap.sub}>
+      <div className="pp-cap" data-role="desk-caption" key={cap.head + cap.sub} style={capW ? { width: capW } : undefined}>
         {cap.chip && <span className="pp-chip">{WHEN_ICON[cap.chip.icon]}{cap.chip.text}</span>}
         <div className="pp-cl">{cap.head}</div>
         <div className="pp-cd">{cap.sub}</div>
@@ -181,7 +193,7 @@ function Chrome({ view }: { view: LandingView }) {
     <div className="pp-chrome">
       <div className="pp-brand" data-role="desk-wordmark"><HouseMark size={64} /><span className="pp-wm">Study Desk</span></div>
       <div className="pp-badge">
-        {view.phone.paired && <div className="pp-ph" data-role="desk-phone" data-paired={true}><PhoneGlyph paired /><span className="pp-sr">Phone paired</span></div>}
+        {view.phone.paired && <div className="pp-ph" data-role="desk-phone" data-paired={true} data-focused={view.at === "phone" ? "true" : undefined}><PhoneGlyph paired /><span className="pp-sr">Phone paired</span></div>}
         {!view.phone.paired && <div className="pp-ph"><PhoneGlyph paired={false} /><span className="pp-sr">No phone paired</span></div>}
         {learner && <div className="pp-disc" style={{ background: LEARNER_TONE[learner.tone] }} aria-hidden="true">{learner.initial}</div>}
         <div className="pp-who">{learner ? learner.name : "Whose desk?"}</div>
@@ -198,14 +210,14 @@ function Chrome({ view }: { view: LandingView }) {
 function originOf(view: LandingView, stop: LandingStop): [number, number] {
   if (stop === "place") return [1560, 991];
   if (stop === "phone") return [1524, 438];
-  const n = view.apps.length, pitch = n >= 3 ? 176 : 200, cx = 1010 - ((n - 1) * pitch) / 2, i = Math.max(0, view.apps.findIndex((a) => a.id === stop));
+  const { pitch, cx } = railOf(view.apps.length), i = Math.max(0, view.apps.findIndex((a) => a.id === stop));
   return [Math.round(cx + i * pitch), 900];
 }
 
 /** Select: the world opens - a flood in the app's colours grows from what was Selected, its picture and name settle in. */
 function Zoom({ view, stop }: { view: LandingView; stop: LandingStop }) {
   const app: AppView | undefined = view.apps.find((a) => a.id === stop), [ox, oy] = originOf(view, stop);
-  const name = app ? app.name : stop === "place" ? "Someone else" : "Pair a phone";
+  const name = handoffName(view, stop);
   return (
     <div className="pp-zoom" data-role="desk-zoom" data-app={stop} style={{ "--ox": `${ox}px`, "--oy": `${oy}px` } as CSSProperties}>
       <div className="pp-flood" />
@@ -240,7 +252,7 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
   const { world, apps, at } = view, unpaired = !view.phone.paired;
   // the world that is leaving slides out while the new one slides in. The move's direction is kept after the leaving
   // world goes: read from it, the lit world turned "fade" 0.72 s after each move and played its rise a second time
-  const [st, setSt] = useState<{ world: Subject | null; prev: { id: Subject; dir: number } | null; dir: number; seq: number }>({ world, prev: null, dir: 0, seq: 0 });
+  const [st, setSt] = useState<{ world: LandingApp | null; prev: { id: LandingApp; dir: number } | null; dir: number; seq: number }>({ world, prev: null, dir: 0, seq: 0 });
   if (st.world !== world) {
     const ids = apps.map((a) => a.id), was = st.world, dir = was && world && ids.includes(was) ? (ids.indexOf(world) > ids.indexOf(was) ? 1 : -1) : 0;
     setSt({ world, prev: was && ids.includes(was) ? { id: was, dir } : null, dir, seq: st.seq + 1 });
@@ -251,7 +263,8 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
     return () => clearTimeout(t);
   }, [st.seq, st.prev]);
 
-  const art = (id: Subject | null) => apps.find((a) => a.id === id)?.art ?? null;
+  // the world is drawn from an app's art; Writing's is the empty world (worldArt), never a world of its own
+  const art = (id: LandingApp | null) => worldArt(apps.find((a) => a.id === id)?.art);
   const artKey = JSON.stringify([art(st.world), st.prev && art(st.prev.id)]);
   const cur = useMemo(() => worldFor(art(st.world)), [st.world, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const old = useMemo(() => (st.prev ? worldFor(art(st.prev.id)) : null), [st.prev, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -268,7 +281,7 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
       <Defs />
       {/* the world's sky under everything: until the GPU has rastered a world's layers (or the arrival's reveal has
           reached them), the stage shows that sky, not the bare paper */}
-      <div className="pp-sky" aria-hidden="true" style={{ background: skyBackdrop(st.world ?? "maths") }} />
+      <div className="pp-sky" aria-hidden="true" style={{ background: skyBackdrop(st.world && st.world !== "writing" ? st.world : "maths") }} />
       {boot && <Intro />}
       <div className="pp-worlds">
         <div className="pp-host pp-back">

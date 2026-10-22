@@ -124,6 +124,7 @@ const FIXTURES={
 FIXTURES['linga-talk']={s:session({screen:'linga-talk',subject:'english',ask:askOf('reply')}),panel:'linga',why:'Linga: answer on your phone (ask reply)'};
 FIXTURES['linga-plan']={s:session({screen:'linga-plan',subject:'english',ask:askOf('words')}),panel:'linga',why:'Linga: type the words on your phone (ask words)'};
 FIXTURES['linga']={s:session({screen:'linga',subject:'english',ask:askOf('prefs')}),panel:'linga',why:'Linga: set up on your phone (ask prefs)'};
+FIXTURES['writing']={s:session({screen:'writing',ask:askOf('writing')}),panel:'write',why:'Writing: write the paragraph on your phone (ask writing)'};
 /** Hand-offs the TV makes that no phone panel does: the phone stays, and the gap is named. */
 const NO_PANEL={};// the lesson's "circle on the phone" ask left both TVs (shell 79ed1a38, Math Buddy 2026-10-13): lesson asks nothing of the phone and is covered by case 3
 
@@ -142,7 +143,7 @@ test('case 1 (TL-9, replaces the old case 1 "the hand-off screens are derived fr
  console.log(`# ask kinds (${ASK_KINDS.length}): ${ASK_KINDS.join(', ')}`);
  assert.ok(ASK_KINDS.length>=16,'the scan finds the store ask kinds');
  assert.deepEqual(Object.keys(ASK_PANEL).sort(),[...ASK_KINDS].sort(),'one entry per kind: none missing, none extra');
- const PANELS=['join','joined','capture','practice','point','say','paste','tonight','parent','profile','linga','paper'];
+ const PANELS=['join','joined','capture','practice','point','say','paste','tonight','parent','profile','linga','paper','write'];
  for(const k of ASK_KINDS){
   assert.ok(PANELS.includes(ASK_PANEL[k]),`${k} has a panel the phone draws`);
   assert.equal(panelFor(session({screen:'units',ask:askOf(k)})),ASK_PANEL[k],`${k}: whatever the TV screen, the ask picks the panel`);
@@ -707,7 +708,7 @@ test('P16 sendSecond(): a reply that returns after the learner or the walk item 
   m.seat.current={id:'jakub',ix:1};g.open(Promise.reject(new Error('net')));await p.catch(()=>{});
   assert.equal(full(m.calls).length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
   const m2=make(seatedA,()=>Promise.reject(new Error('net')));await m2.sendSecond();
-  assert.equal(full(m2.calls).length,1);assert.match(full(m2.calls)[0][1],/^That did not reach the desk: /);
+  assert.equal(full(m2.calls).length,1);assert.equal(full(m2.calls)[0][1],'That did not reach the desk.');assert.doesNotMatch(full(m2.calls)[0][1],/net|Error/,'not the raw error');
  });
  await t.test('it is sent for the item that was open at send time',async()=>{
   let sent;const m=make(seatedA,(u,b)=>{sent=b;return reply({});});await m.sendSecond();assert.equal(sent.n,11);
@@ -1339,4 +1340,146 @@ test('F6 (stick pass): the rewrite and slot panels are one field, Dictate and Se
   for(const gone of ['pasteField()','pieceRead()','pasteSend()','shelf()'])assert.ok(!p.includes(gone),role+' drops '+gone);
  }
  assert.match(panel('essay-paragraph'),/\{shelf\(\)\}/,'the paragraph panel keeps the composer');
+});
+
+test('optimize 2026-10-21: a send that never reached the desk says so in the plain line, never with the browser\'s raw error (error-handling user-facing-mapping)',()=>{
+ const src=code(PAGE);
+ const plain=(src.match(/That did not reach the desk\./g)??[]).length;
+ assert.ok(plain>=9,`control: the plain line is the page's own (${plain} sites)`);
+ // a TypeError: Failed to fetch, or an AbortError, is the browser talking to itself: it is not shown on the phone
+ const raw=[...src.matchAll(/set(?:Msg|Note)\(`[^`]*\$\{\s*String\(\s*\w+\s*\)\s*\}[^`]*`\)/g)].map((m)=>m[0]);
+ assert.deepEqual(raw,[],'no message on the phone interpolates a caught error');
+ // the scan bites
+ assert.equal([...'setMsg(`That did not reach the desk: ${String(e)}`)'.matchAll(/set(?:Msg|Note)\(`[^`]*\$\{\s*String\(\s*\w+\s*\)\s*\}[^`]*`\)/g)].length,1);
+});
+
+// A desk that ANSWERED and refused is not a desk the phone could not reach. Each handler is cut out of page.tsx and run
+// against stubs, as P17 (ii) does, with the real deskLine; the refusal must say the desk's own line (or the handler's
+// fallback when the body is not JSON), and only a call that never came back says "That did not reach the desk."
+test('optimize 2026-10-21: a refusal the desk answered is never reported as a send that did not reach it (error-handling user-facing-mapping)',async(t)=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const cut=(from,to)=>{const a=src.indexOf(from),e=src.indexOf(to,a);assert.ok(a>0&&e>a,`${from} is where the test expects it`);return src.slice(a,src.lastIndexOf('\n',e));};
+ const {deskLine}=P();
+ const SETTERS=['Busy','Msg','Phase','Note','Info','Notice','ReadIx','PieceId','ShelfTick','NoticeFor'];
+ const PARAMS=['seat','call','post','onPlan','slotText','planFill','deskLine','paras','pieceProblem','etype','keep','pieceId','source','pieceFormat','essay','paragraphsOf','essayTooLong','pix','stranded','heading','assignment','titleOf','rewriteStaysLine',...SETTERS.map((n)=>'set'+n)];
+ const build=(slice,name,respond)=>{
+  const calls=[];const js=ts.transpileModule(slice,{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+  const f=new Function(...PARAMS,`${js}\nreturn {${name}};`);
+  const stubs={seat:{current:{id:'ema'}},call:(u,b)=>respond(u,b),post:(e)=>respond('post',e),onPlan:{i:0,plan:{}},slotText:'slot',planFill:()=>({ok:true}),deskLine,
+   paras:['one'],pieceProblem:()=>'',etype:'structure',keep:true,pieceId:'p1',source:'message',pieceFormat:'message',essay:'one',paragraphsOf:(x)=>[x],essayTooLong:()=>'',pix:0,stranded:0,heading:null,assignment:undefined,titleOf:()=>null,rewriteStaysLine:()=>''};
+  const out=f(...PARAMS.map((p)=>p.startsWith('set')&&SETTERS.includes(p.slice(3))?(v)=>calls.push([p.slice(3),v]):stubs[p]));
+  return {fn:out[name],calls};
+ };
+ const refused=(error,status)=>Promise.resolve({ok:false,status,json:async()=>({error})});
+ const notJson=(status)=>Promise.resolve({ok:false,status,json:async()=>{throw new SyntaxError('Unexpected token <');}});
+ const lost=()=>Promise.reject(new TypeError('Failed to fetch'));
+ const said=(m,k)=>m.calls.filter(([x,v])=>x===k&&v).map(([,v])=>v);
+ const slotS=cut('const sendSlot','useEffect(() => { if (onSentence)'),pieceS=cut('const readPiece','const openKept'),paraS=cut('const analyseParagraph','/** From the sentence rewrite'),sendS=cut('const send = async','const toJpeg');
+ await t.test('sendSlot: the forgotten phone hears the desk\'s refusal; a lost call says it did not reach',async()=>{
+  const m=build(slotS,'sendSlot',()=>refused('Join the desk first.',403));await m.fn();
+  assert.equal(said(m,'Msg').at(-1),'Join the desk first.');
+  const m2=build(slotS,'sendSlot',lost);await m2.fn();assert.equal(said(m2,'Msg').at(-1),'That did not reach the desk.');
+ });
+ for(const [name,slice] of [['acceptNotice',pieceS],['acceptParagraphNotice',paraS]]){
+  await t.test(`${name}: a refused notice says the desk's line, not that it did not reach`,async()=>{
+   const m=build(slice,name,()=>refused('No one is at the desk.',409));await m.fn();
+   assert.deepEqual(said(m,'Note'),['No one is at the desk.']);
+   const m2=build(slice,name,lost);await m2.fn();assert.deepEqual(said(m2,'Note'),['That did not reach the desk.']);
+  });
+ }
+ await t.test('send: an answer that is not JSON (a proxy\'s error page) is the desk\'s failure with its status, not a lost send',async()=>{
+  const m=build(sendS,'send',()=>notJson(502));await m.fn('d',1,2,'maths','T');
+  assert.equal(said(m,'Msg').at(-1),'The desk could not read it (502).');assert.equal(m.calls.filter(([k])=>k==='Phase').at(-1)[1],'failed');
+ });
+});
+
+// The Essay panel's What is it? radios (Message, Email, Essay) sat 17 px above their words at 360 and 414 px (stick
+// deadline walk 2026-10-21, F2; a headless Chromium probe measured the centres): `.field input` gives every input in a
+// .field 44 px of height, and the radio's label was a plain line box, so the word sat on the box's baseline.
+test('optimize 2026-10-21: a radio or checkbox in a phone field is centred on its words, and its label keeps the 44 px target',()=>{
+ const css=fs.readFileSync(path.join(SRC,'app/globals.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+ const rule=(sel)=>{const out=[];for(const m of css.matchAll(/([^{}]+)\{([^}]*)\}/g)){if(m[1].split(',').map((x)=>x.trim()).includes(sel))out.push(m[2]);}return out.join(';');};
+ assert.match(rule('.field input'),/min-height:\s*44px/,'control: text inputs in a field keep 44 px');
+ const label=rule('.pkeep label');
+ assert.match(label,/display:\s*flex/,'the radio label lays its box and its words in one row');
+ assert.match(label,/align-items:\s*center/,'centred on each other');
+ assert.match(label,/min-height:\s*44px/,'the whole label is the 44 px target');
+ assert.match(rule('label.pkeep'),/min-height:\s*44px/,'so is the Keep it on my shelf checkbox label, itself a .pkeep');
+ for(const t of ['radio','checkbox']){
+  const r=rule(`.pkeep input[type="${t}"]`);
+  assert.match(r,/min-height:\s*0/,`a ${t} drops the text box's 44 px height`);assert.match(r,/flex:\s*none/,`a ${t} does not stretch`);
+ }
+});
+
+// The PC page (/drop) joins like a phone and keeps, toggles and opens through the same desk; each of its doors is cut
+// out of desk/src/app/drop/page.tsx and run against a stub fetch. A call that never came back says so; a refusal says the
+// desk's line (the join through the phone's own joinRefusal); nothing claims a success the desk did not answer.
+test('optimize 2026-10-21: every door on the PC page says what came back - nothing unhandled, nothing claimed (error-handling error-doors)',async(t)=>{
+ const DROP=path.join(SRC,'app/drop/page.tsx'),src=fs.readFileSync(DROP,'utf8');
+ const a=src.includes('// ---- the desk\'s doors')?src.indexOf('// ---- the desk\'s doors'):src.indexOf('const join = async'),b=src.indexOf('if (joined === null)');
+ assert.ok(a>0&&b>a,'the doors are where the test expects them');
+ const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const {joinRefusal}=P();
+ const NAMES=['join','pick','keep','accept','toggle','showOnTv'];
+ const SET=['Say','Docx','Text','Title','Notice','Tick','PieceId'];
+ const build=(respond,state={})=>{
+  const calls=[],urls=[];
+  const st={code:'1234',docx:null,format:'message',title:'',text:'Hello there.',pieceId:undefined,...state};
+  const PARAMS=['fetch','session','joinRefusal','btoa','MAX_FILE','code','docx','format','title','text','pieceId',...SET.map((n)=>'set'+n)];
+  const f=new Function(...PARAMS,`${js}\nreturn {${NAMES.join(',')}};`);
+  const out=f((u,o)=>{urls.push([u,JSON.parse(o?.body??'null')]);return respond(u,JSON.parse(o?.body??'null'));},async()=>{calls.push(['session']);},joinRefusal,(x)=>x,150*1024,
+   st.code,st.docx,st.format,st.title,st.text,st.pieceId,...SET.map((n)=>(v)=>calls.push([n,typeof v==='function'?'fn':v])));
+  return {...out,calls,urls,said:()=>calls.filter(([k,v])=>k==='Say'&&v).map(([,v])=>v)};
+ };
+ const ok=(body={})=>Promise.resolve({ok:true,status:200,json:async()=>body});
+ const no=(error,status)=>Promise.resolve({ok:false,status,json:async()=>(error===undefined?{}:{error})});
+ const lost=()=>Promise.reject(new TypeError('Failed to fetch'));
+ const settle=async(p)=>{let threw=null;try{await p;}catch(e){threw=e;}return threw;};
+ await t.test('control: a good join reloads the session; a good keep says it is kept',async()=>{
+  const j=build(()=>ok());await j.join();assert.ok(j.calls.some(([k])=>k==='session'));
+  const k=build(()=>ok({id:'p1'}));await k.keep();assert.deepEqual(k.said(),['Kept on your shelf.']);
+ });
+ await t.test('join: lost, wrong code and a desk fault each say why, as the phone does',async()=>{
+  const l=build(lost);assert.equal(await settle(l.join()),null,'no unhandled rejection');assert.deepEqual(l.said(),['That did not reach the desk.']);
+  const w=build(()=>no('That code is not on the TV.',403));await w.join();assert.deepEqual(w.said(),['That code is not on the TV.']);
+  const f=build(()=>no(undefined,500));await f.join();assert.deepEqual(f.said(),[joinRefusal({status:500,error:undefined,how:'typed'}).line]);
+ });
+ await t.test('keep: a lost call says so instead of an unhandled rejection',async()=>{
+  const l=build(lost);assert.equal(await settle(l.keep()),null);assert.deepEqual(l.said(),['That did not reach the desk.']);
+ });
+ await t.test('accept: a refused notice says the desk\'s line and does not post the piece again into the same refusal',async()=>{
+  const r=build((u,b)=>b?.notice?no('No one is at the desk.',409):ok());await r.accept();
+  assert.deepEqual(r.said(),['No one is at the desk.']);assert.deepEqual(r.urls.map(([,b])=>!!b?.notice),[true],'only the notice was posted');
+  const l=build(lost);assert.equal(await settle(l.accept()),null);assert.deepEqual(l.said(),['That did not reach the desk.']);
+ });
+ await t.test('showOnTv: the Workroom is said to be on the TV only when the desk answered ok',async()=>{
+  const r=build(()=>no('The Workroom is for Adult mode.',403));await r.showOnTv();assert.deepEqual(r.said(),['The Workroom is for Adult mode.']);
+  const l=build(lost);assert.equal(await settle(l.showOnTv()),null);assert.deepEqual(l.said(),['That did not reach the desk.']);
+  const g=build(()=>ok());await g.showOnTv();assert.deepEqual(g.said(),['The Workroom is on the TV.']);
+ });
+ await t.test('toggle: a refusal or a lost call is said, not swallowed',async()=>{
+  const r=build(()=>no('That piece is not on your shelf.',404));await r.toggle('p1',true);assert.deepEqual(r.said(),['That piece is not on your shelf.']);
+  const l=build(lost);assert.equal(await settle(l.toggle('p1',true)),null);assert.deepEqual(l.said(),['That did not reach the desk.']);
+ });
+ await t.test('pick: a file the browser cannot read says so instead of an unhandled rejection',async()=>{
+  const p=build(()=>ok());const bad={name:'a.txt',size:10,text:()=>Promise.reject(new Error('NotReadableError'))};
+  assert.equal(await settle(p.pick(bad)),null);assert.equal(p.said().length,1);assert.doesNotMatch(p.said()[0],/NotReadable/);
+ });
+});
+
+// The bar's Cancel-only asks (phoneBar.ts PANEL_SUBMITS) are the kinds whose panel sends from its own button. The ground
+// truth is the page's primary switch: a kind it has no case for has no bar primary to press. Derived from the store's
+// AskKind (ASK_PANEL holds every kind, type-checked) and the comment-stripped switch, not from the list itself.
+test('optimize 2026-10-21: the bar holds Cancel alone for exactly the asks the page gives no primary - derived, not listed',()=>{
+ const {ASK_PANEL}=P();
+ const {PANEL_SUBMITS}=require(path.join(SRC,'app/phone/phoneBar.ts'));
+ const kinds=Object.keys(ASK_PANEL);
+ const casesIn=(src)=>{const body=src.slice(src.indexOf('switch (handoff.kind)'));const end=body.indexOf('default:');return [...body.slice(0,end).matchAll(/case "([^"]+)":/g)].map((m)=>m[1]);};
+ const src=code(PAGE),cases=casesIn(src);
+ assert.ok(kinds.length>=15&&cases.length>=10,'control: the kinds and the switch were read');
+ assert.deepEqual(cases.filter((k)=>!kinds.includes(k)),[],'every case is an ask kind');
+ assert.deepEqual([...PANEL_SUBMITS].sort(),kinds.filter((k)=>!cases.includes(k)).sort(),'Cancel-only = the kinds with no primary case');
+ // it bites: a page that drops its "slot" case would leave slot with a dead primary unless the list grows too
+ const seeded=casesIn(src.replace(/case "slot":[^\n]*\n/,''));
+ assert.notDeepEqual([...PANEL_SUBMITS].sort(),kinds.filter((k)=>!seeded.includes(k)).sort());
 });

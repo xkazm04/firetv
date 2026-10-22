@@ -8,6 +8,7 @@
  */
 import { useCallback, useEffect, useState } from "react";
 import { EssayShelf, TextNotice } from "../phone/EssayShelf";
+import { joinRefusal } from "../phone/panelFor";
 
 type Words = { dim: string; level: number; word: string }[];
 interface TwinView { born: boolean; need: number; channels: { channel: string; pieces: number; born: boolean; words: Words; exemplars: { pieceId: string; text: string; included: boolean }[] }[] }
@@ -38,31 +39,61 @@ export default function DropPage() {
   useEffect(() => { void session(); }, [session]);
   useEffect(() => { if (joined) void loadTwin(); }, [joined, tick, loadTwin]);
 
+  // ---- the desk's doors: a call that never came back says so, a refusal says the desk's own line, and nothing on this
+  // page claims what the desk did not answer (as the phone's handlers do, app/phone/page.tsx)
+  const LOST = "That did not reach the desk.";
+  /** A POST to the desk: its answer, or null when it never came back. */
+  const send = async (url: string, body: unknown): Promise<Response | null> => {
+    try { return await fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }); } catch { return null; }
+  };
+  const errorOf = async (r: Response): Promise<string | undefined> => ((await r.json().catch(() => ({}))) as { error?: string }).error;
+  /** The join as the phone joins: the same refusal lines (panelFor.ts joinRefusal) for a lost call, a wrong code, a cooldown, a desk fault. */
   const join = async () => {
-    const r = await fetch("/api/session", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ type: "join", code }) });
-    if (r.ok) { setSay(""); await session(); } else setSay(((await r.json().catch(() => ({}))) as { error?: string }).error ?? "That code did not work.");
+    const r = await send("/api/session", { type: "join", code });
+    if (r?.ok) { setSay(""); await session(); return; }
+    setSay(joinRefusal({ status: r?.status, error: r ? await errorOf(r) : undefined, how: "typed" }).line);
   };
   const pick = async (f: File | undefined) => {
     if (!f) return; setSay(""); setDocx(null);
     if (f.size > MAX_FILE) return setSay("That file is too big. Keep it under 150 KB, or paste the text.");
-    if (/\.docx$/i.test(f.name)) {
-      const bytes = new Uint8Array(await f.arrayBuffer()); let bin = ""; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
-      setDocx({ name: f.name, b64: btoa(bin) }); setText(""); if (!title) setTitle(f.name.replace(/\.docx$/i, ""));
-    } else if (/\.(txt|md)$/i.test(f.name)) { setText(await f.text()); if (!title) setTitle(f.name.replace(/\.(txt|md)$/i, "")); }
-    else setSay("The desk reads .txt, .md and .docx files.");
+    try {
+      if (/\.docx$/i.test(f.name)) {
+        const bytes = new Uint8Array(await f.arrayBuffer()); let bin = ""; for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+        setDocx({ name: f.name, b64: btoa(bin) }); setText(""); if (!title) setTitle(f.name.replace(/\.docx$/i, ""));
+      } else if (/\.(txt|md)$/i.test(f.name)) { setText(await f.text()); if (!title) setTitle(f.name.replace(/\.(txt|md)$/i, "")); }
+      else setSay("The desk reads .txt, .md and .docx files.");
+    } catch { setSay("The desk could not read that file. Try another one."); }
   };
   const keep = async () => {
     setSay("");
     const body = docx ? { docx: docx.b64, format, title } : { text, format, title, source: "paste", ...(pieceId ? { id: pieceId } : {}) };
-    const r = await fetch("/api/texts", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+    const r = await send("/api/texts", body);
+    if (!r) return setSay(LOST);
     const j = (await r.json().catch(() => ({}))) as { error?: string; notice?: boolean; id?: string };
     if (r.status === 428 && j.notice) return setNotice(j.error ?? "");
     if (!r.ok) return setSay(j.error ?? "The desk could not keep that.");
     setSay(pieceId ? "Kept as a new version." : "Kept on your shelf."); setText(""); setDocx(null); setTitle(""); setPieceId(undefined); setTick((t) => t + 1);
   };
-  const accept = async () => { setNotice(null); await fetch("/api/texts", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ notice: true }) }); await keep(); };
-  const toggle = async (id: string, out: boolean) => { await fetch("/api/twin", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ exclude: id, on: out }) }); setTick((t) => t + 1); };
-  const showOnTv = async () => { await fetch("/api/twin", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ open: true }) }); setSay("The Workroom is on the TV."); };
+  // the piece is posted again only once the notice is recorded: a refused notice would only bring the notice back
+  const accept = async () => {
+    setNotice(null);
+    const r = await send("/api/texts", { notice: true });
+    if (!r) return setSay(LOST);
+    if (!r.ok) return setSay((await errorOf(r)) ?? "The desk did not take that. Try again.");
+    await keep();
+  };
+  const toggle = async (id: string, out: boolean) => {
+    const r = await send("/api/twin", { exclude: id, on: out });
+    if (!r) return setSay(LOST);
+    if (!r.ok) return setSay((await errorOf(r)) ?? "The desk could not change that. Try again.");
+    setTick((t) => t + 1);
+  };
+  const showOnTv = async () => {
+    const r = await send("/api/twin", { open: true });
+    if (!r) return setSay(LOST);
+    if (!r.ok) return setSay((await errorOf(r)) ?? "The desk could not open the Workroom. Try again.");
+    setSay("The Workroom is on the TV.");
+  };
 
   if (joined === null) return <main className="drop"><p>Looking for the desk…</p></main>;
   if (!joined) return (

@@ -2,7 +2,7 @@
  * Try again, in place: a failed run is asked again with what it was asked the first time, which the desk holds
  * on the job (`Job.input`). A read is read again on the same page id with the image the session already has -
  * no second page, no re-snap; a hint is asked again for the same item and the same question; a practice set is
- * written again on the same topic; a lesson is asked again for the same topic. The run goes through the kind's own route, so it is the same job
+ * written again on the same topic; a worked lesson (kind teach) is asked again for the same topic - the lesson pick (kind lesson) holds no input and is not asked again here. The run goes through the kind's own route, so it is the same job
  * (one at a time, a desk-worded failure, a late result dropped). The caller's role and its askId go with it, so a phone's
  * retry meets the same door as its first answer (lite r3: 409 without the open ask); the TV and an in-process retry are as before.
  */

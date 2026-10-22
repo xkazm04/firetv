@@ -342,6 +342,8 @@ const S = {
   focus: 0, role: "student", pscreen: "join",
 };
 const $ = (id) => document.getElementById(id);
+// a task name is typed on the phone: it goes into markup escaped, as linga-conversations.html escapes every string
+const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const stage = $("stage");
 const say = (t) => { if ($("tts").getAttribute("aria-pressed") !== "true" || !("speechSynthesis" in window)) return;
   try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/\$|\\frac|\\sqrt|\*/g, "")); u.rate = .95; speechSynthesis.speak(u); } catch (e) {} };
@@ -373,7 +375,7 @@ function press(el, fn) { el.dataset.pressed = "true"; setTimeout(() => { el.data
 
 // ---------- rail ----------
 function renderRail() {
-  $("chips").innerHTML = S.tasks.map(t => `<div class="chip" data-on="${S.pages[S.pageIx]?.subject === t.sub}">${t.sub}</div>`).join("");
+  $("chips").innerHTML = S.tasks.map(t => `<div class="chip" data-on="${S.pages[S.pageIx]?.subject === t.sub}">${esc(t.sub)}</div>`).join("");
   $("railHint").style.display = S.screen === "page" ? "block" : "none";
 }
 
@@ -383,14 +385,13 @@ function renderTonight() {
   const n = S.tasks.filter(t => !t.done).length;
   $("tonightTitle").textContent = n ? `${["One thing","Two things","Three things","Four things","Five things"][n-1] || n + " things"}, about ${total} minutes` : "Everything done";
   $("tasks").innerHTML = S.tasks.map((t, i) => `<div class="task" data-focusable data-done="${t.done}" data-ix="${i}">
-      <div><div class="sub">${t.sub}</div><div class="name">${t.name}</div></div>
+      <div><div class="sub">${esc(t.sub)}</div><div class="name">${esc(t.name)}</div></div>
       <div class="meta"><span>${t.min} min</span></div></div>`).join("");
   $("quiet").textContent = S.pages.length ? "Select a task, or Down to the page." : "Point your phone at the page to begin.";
   renderFocus();
 }
 
 // ---------- T2 page ----------
-const PHOTO_W = () => S.pages[S.pageIx].w;
 function renderPage() {
   const p = S.pages[S.pageIx]; if (!p) return;
   $("pageTitle").textContent = p.title; $("pageN").textContent = `page ${S.pageIx + 1} / ${S.pages.length}`;
@@ -415,8 +416,14 @@ function renderPage() {
   $("itemT").textContent = S.reading ? "" : (p.id === "essay" ? "" : it.text);
   const hasHint = !!DATA.hints[it.key] || p.id === "essay";
   $("itemAsk").textContent = S.reading ? "" : (hasHint ? "Select for a hint" : "No hint written for this one yet");
-  $("strip").innerHTML = S.pages.map((pg, i) => `<div class="thumb" data-current="${i === S.pageIx}" style="background-image:url(${pg.img})"></div>`).join("")
-    + `<div class="add">snap another</div>`;
+  // the thumbnails carry each page's photo inline, so the strip is rebuilt only when the pages change; a D-pad press
+  // only moves which thumb is current
+  const strip = $("strip"), pagesKey = S.pages.map((pg) => pg.id).join(",");
+  if (strip.dataset.pages !== pagesKey) {
+    strip.innerHTML = S.pages.map((pg) => `<div class="thumb" style="background-image:url(${pg.img})"></div>`).join("") + `<div class="add">snap another</div>`;
+    strip.dataset.pages = pagesKey;
+  }
+  strip.querySelectorAll(".thumb").forEach((t, i) => { t.dataset.current = String(i === S.pageIx); });
   renderRail();
 }
 function addPage(id) {
@@ -459,9 +466,11 @@ function openHint(askedQ) {
 // The model writes maths as LaTeX. Spoken it is noise; shown it is worse. Render the little it
 // actually uses — $…$, ^n, \frac — and leave the rest alone, so the screen is judged on what the
 // model really said rather than a cleaned transcript.
+// Inner before outer: a \sqrt inside a \frac is rewritten first, so the \frac's braces hold no braces of their own.
 function maths(s) {
-  return s.replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "($1)⁄($2)").replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\pm/g, "±")
-    .replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\^\{?(\d)\}?/g, "^$1").replace(/\$/g, "").replace(/\*\*/g, "");
+  return s.replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "($1)⁄($2)").replace(/\\pm/g, "±")
+    .replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\^\{?(\d)\}?/g, "^$1")
+    .replace(/_\{?(\d)\}?/g, (_, d) => "₀₁₂₃₄₅₆₇₈₉"[d]).replace(/\$/g, "").replace(/\*\*/g, "");
 }
 function renderHint() {
   const h = DATA.hints[S.hintKey], stage = S.hintStage, hh = stage === 1 ? h.hint1 : h.hint2;
@@ -486,7 +495,7 @@ function openLesson() {
   const p = S.pages[S.pageIx], it = p.items[S.itemIx];
   $("lessonWhy").innerHTML = `Chosen because your problem — <b>${it.text}</b> — needs what this lesson teaches. Starts at the part that matters.`;
   $("caption").textContent = L.text;
-  lessonT = L.t; renderLesson(); show("lesson");
+  lessonT = L.t; S.paused = false; renderLesson(); show("lesson"); // a lesson opens from its mark, playing
   clearInterval(lessonTick); lessonTick = setInterval(() => { if (S.screen !== "lesson" || S.paused) return; lessonT = Math.min(DATA.lessons[L.vid].duration, lessonT + 1); renderLesson(); }, 1000);
 }
 function renderLesson() {
@@ -613,7 +622,7 @@ $("mirror").addEventListener("pointerdown", (e) => {
 });
 $("askBtn").onclick = () => { if (!S.pages.length) return; const q = $("question").value.trim(); openHint(q); $("question").value = ""; };
 
-function renderPTasks() { $("ptasks").innerHTML = S.tasks.map((t, i) => `<label><input type="checkbox" data-ix="${i}" ${t.done ? "checked" : ""}><span>${t.name}</span><small>${t.min}m</small></label>`).join("");
+function renderPTasks() { $("ptasks").innerHTML = S.tasks.map((t, i) => `<label><input type="checkbox" data-ix="${i}" ${t.done ? "checked" : ""}><span>${esc(t.name)}</span><small>${t.min}m</small></label>`).join("");
   $("ptasks").querySelectorAll("input").forEach(c => c.onchange = () => { S.tasks[+c.dataset.ix].done = c.checked; renderTonight(); }); }
 $("addTask").onclick = () => { const v = $("newTask").value.trim(); if (!v) return; S.tasks.push({ sub: "Other", name: v, min: 10, done: false, page: null }); $("newTask").value = ""; renderPTasks(); renderTonight(); };
 $("startTimer").onclick = () => { startTimer(); status("timer started from the phone"); };

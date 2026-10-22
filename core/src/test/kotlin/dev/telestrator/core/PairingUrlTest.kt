@@ -22,4 +22,12 @@ class PairingUrlTest {
         assertEquals("192.168.1.20:8765/", PairingUrl.display("http://192.168.1.20:8765/#pin=4821"))
         assertEquals("192.168.1.20:8765/", PairingUrl.display("http://192.168.1.20:8765/?pin=4821"))
     }
+
+    @Test
+    fun `the card keeps the part of the address that reaches the TV, a relay's session included`() {
+        // RelayTransport: the pen side meets the TV at `/?session=abc`. Typed without it, it reaches no TV.
+        assertEquals("relay:9787/?session=a", PairingUrl.display(PairingUrl.of("http://relay:9787/?session=a", "7")))
+        assertEquals("relay:9787/?session=a", PairingUrl.display("https://relay:9787/?pin=7&session=a"))
+        assertEquals("relay:9787/?session=a&x=1", PairingUrl.display("https://relay:9787/?session=a&pin=7&x=1#pin=7"))
+    }
 }

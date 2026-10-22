@@ -1,7 +1,13 @@
 import { speak, voiceConfigured } from "@/lib/engines/voice";
+import { roleFrom } from "@/lib/session/pairing";
+
+/** Only the TV speaks a line (useEnglishAudio, the TV page): a paired phone never asks, so its call is refused before the voice engine runs. A call with no role never came through the proxy (an in-process caller). */
+const SPEAK_TV_ONLY = "Only the TV speaks the lines.";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
+  const role = roleFrom(req);
+  if (role && role !== "tv") return new Response(SPEAK_TV_ONLY, { status: 403 });
   let text: unknown;
   try {
     const body = await req.json();

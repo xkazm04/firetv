@@ -23,6 +23,7 @@ import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
 import { markCounts } from "@/lib/rules/marks";
 import { itemName, partPlace } from "@/lib/rules/calc-word";
 import { PaperPanel } from "./PaperPanel";
+import { WritingPanel } from "./WritingPanel";
 import { ExplainTalk } from "./ExplainTalk";
 import { recogniserLangFor } from "./recogniserLang";
 import { blankRow, type DraftRow } from "@/lib/rules/paperEntry";
@@ -40,7 +41,7 @@ const TV_WORDS: Record<Session["screen"], string> = {
   landing: "the desk", pair: "the pairing code", joined: "the paired screen", tonight: "Math Buddy", learner: "the learners", profile: "the learner's picks",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
   headtohead: "head to head", essaytype: "Essay Master", essayplan: "your plan", forensic: "your paragraph", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
-  topics: "Math Buddy's topics", prepare: "getting ready for school", paper: "your paper", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item", worked: "a worked lesson", workroom: "the Workroom",
+  topics: "Math Buddy's topics", prepare: "getting ready for school", paper: "your paper", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item", worked: "a worked lesson", workroom: "the Workroom", writing: "Writing",
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation", "linga-cert": "your certificate", "linga-certs": "your certificates",
 };
 /** The desk refuses a name longer than this (PROFILE_NAME_MAX in the session store, which is server-only and cannot be imported here); the input stops at it so the phone shows what the TV keeps. */
@@ -92,9 +93,10 @@ export default function Phone() {
   const [sentence, setSentence] = useState(FRESH_SENTENCE);
   /**
    * The Essay panel's text: a file or a message split into paragraphs (rules/essay paragraphsOf), and the one the
-   * textarea shows. The desk reads ONE paragraph at a time; Next steps to the next. All of it lives in this page's
-   * state: a picked file is read here in the browser and never uploaded, stored or kept, and it is gone when the
-   * phone page closes. Only the current paragraph goes to the desk, when Analyse is pressed.
+   * textarea shows; Next steps to the next. It lives in this page's state: a picked file is read here in the browser,
+   * never uploaded as a file, and it is gone when the phone page closes. What goes to the desk is the learner's choice:
+   * the paragraph showing (analyseParagraph), or the whole piece (readPiece), which the desk keeps on the learner's
+   * shelf when "Keep it on my shelf" is ticked.
    */
   const [paras, setParas] = useState<string[]>(FRESH_PARAS);
   const [pix, setPix] = useState(0);
@@ -244,11 +246,12 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setPhase("sending"); setMsg("");
     try {
-      const r = await call("/api/read", { image: dataUrl, subject: sub, title, w, h }); const j = await r.json();
+      // an answer that is not JSON (a proxy's error page) is still the desk's answer: its status says why, below
+      const r = await call("/api/read", { image: dataUrl, subject: sub, title, w, h }); const j = await r.json().catch(() => null);
       if (moved()) return;
       // a run that failed is on the desk with its sentence and a Try again (its body says failure); only a refusal needs the line here
       if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(deskLine(j, `The desk could not read it (${r.status}).`)); }
-    } catch (e) { if (!moved()) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
+    } catch { if (!moved()) { setPhase("failed"); setMsg("That did not reach the desk."); } } finally { setBusy(false); }
   };
   const toJpeg = (src: HTMLVideoElement | HTMLImageElement, sw: number, sh: number) => {
     const w = 1280, h = Math.round((sh / sw) * 1280); const c = document.createElement("canvas"); c.width = w; c.height = h;
@@ -302,7 +305,8 @@ export default function Phone() {
   const sendSlot = async () => { if (!onPlan) return; const r = planFill(onPlan.plan, onPlan.i, slotText); if (!r.ok) { setMsg(r.error); return; }
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setBusy(true); setMsg("sending…");
-    try { const res = await post({ type: "essay.slot", i: onPlan.i, text: slotText }); if (moved()) return; setMsg(res.ok ? "on the TV" : "That did not reach the desk."); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
+    // a refusal reached the desk: it says the desk's own line; only a call that never came back did not reach it
+    try { const res = await post({ type: "essay.slot", i: onPlan.i, text: slotText }); if (moved()) return; const j = res.ok ? null : await res.json().catch(() => null); if (moved()) return; setMsg(res.ok ? "on the TV" : deskLine(j, "The desk did not take that sentence. Try again.")); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   useEffect(() => { if (onSentence) setRewrite(onSentence.text); }, [onSentence?.n, onSentence?.text]); // eslint-disable-line react-hooks/exhaustive-deps
   const sendRewrite = async () => { if (!onSentence) return; const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("the desk is reading it…");
     try { const r = await call("/api/analyse", { kind: "rewrite", n: onSentence.n, text: rewrite }); const j = await r.json().catch(() => ({} as { error?: string }));
@@ -356,8 +360,13 @@ export default function Phone() {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNotice(null);
     // after a switch, readPiece here is the last learner's render: it would post their paragraphs
-    try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void readPiece(true); } catch { /* said on the next line */ }
-    if (!moved()) setNote("That did not reach the desk.");
+    let r: Response | null = null;
+    try { r = await call("/api/texts", { notice: true }); } catch { /* r stays null: it did not reach the desk */ }
+    if (moved()) return;
+    if (r?.ok) return void readPiece(true);
+    // a refusal is the desk's answer (no one seated, say): its own line, not "did not reach"
+    const j = r ? await r.json().catch(() => null) : null;
+    if (!moved()) setNote(r ? deskLine(j, "The desk did not take that. Try again.") : "That did not reach the desk.");
   };
   const openKept = (id: string, text: string, title?: string) => { const ps = paragraphsOf(text); setPieceId(id); setSource("message"); loadParagraphs(ps.length ? ps : [text], `Opened from your shelf: ${ps.length} paragraph${ps.length === 1 ? "" : "s"}. Change it, then read it again as a new version.`, title && !/^Untitled \S+ \d+$/.test(title) ? title : null); };
   /** Analyse the paragraph showing. Blank lines typed into it split it first; the desk still reads only the first part. */
@@ -384,8 +393,13 @@ export default function Phone() {
   const acceptParagraphNotice = async () => {
     const who = seat.current.id, moved = () => seat.current.id !== who;
     setNotice(null);
-    try { const r = await call("/api/texts", { notice: true }); if (moved()) return; if (r.ok) return void analyseParagraph(); } catch { /* said on the next line */ }
-    if (!moved()) setNote("That did not reach the desk.");
+    let r: Response | null = null;
+    try { r = await call("/api/texts", { notice: true }); } catch { /* r stays null: it did not reach the desk */ }
+    if (moved()) return;
+    if (r?.ok) return void analyseParagraph();
+    // a refusal is the desk's answer (no one seated, say): its own line, not "did not reach"
+    const j = r ? await r.json().catch(() => null) : null;
+    if (!moved()) setNote(r ? deskLine(j, "The desk did not take that. Try again.") : "That did not reach the desk.");
   };
   /** From the sentence rewrite panel, on to the next paragraph: the phone's own paragraph; the TV stays where it is. */
   const nextFromRewrite = () => {
@@ -407,7 +421,7 @@ export default function Phone() {
   const ask = async () => { if (!page) return; const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("");
     try { const r = await call("/api/hint", { askedQ: q, itemIx: ring?.ix ?? s?.itemIx }); if (moved()) return; setQ("");
       if (!r.ok) { const j = await r.json().catch(() => null); if (moved()) return; setMsg(deskLine(j, `The desk could not ask (${r.status}).`)); } }
-    catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); } };
+    catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   /** The Say panel's button: the sentence to the TV. */
   const checkSentence = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("sending…");
     try { const r = await call("/api/analyse", { kind: "english", sentence }); if (moved()) return;
@@ -429,7 +443,7 @@ export default function Phone() {
       if (moved()) return;
       if (kind === "read") setPhase(r.ok ? "sent" : "failed");
       if (!r.ok) setMsg(deskLine(j, `The desk could not try again (${r.status}).`));
-    } catch (e) { if (!moved()) { if (kind === "read") setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
+    } catch { if (!moved()) { if (kind === "read") setPhase("failed"); setMsg("That did not reach the desk."); } } finally { setBusy(false); }
   };
   /** A Mic press is listening: the phone does not move away from the field it is filling. */
   const hearing = useRef(false);
@@ -458,7 +472,7 @@ export default function Phone() {
       if (moved()) return;
       if (r.ok) setPhase("sent");
       else { setPhase("failed"); setMsg(r.status === 404 ? "The desk cannot mark yet — that part is still being built." : (j.error ?? `The desk could not mark it (${r.status}).`)); }
-    } catch (e) { if (!moved()) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
+    } catch { if (!moved()) { setPhase("failed"); setMsg("That did not reach the desk."); } } finally { setBusy(false); }
   };
   /**
    * The typed answers, one string per question in order (a blank for one left). Code marks them at once on the desk; the
@@ -477,7 +491,7 @@ export default function Phone() {
       if (moved()) return;
       if (r.ok) setPhase("sent");
       else { setPhase("failed"); setMsg(j.error ?? `The desk could not mark it (${r.status}).`); }
-    } catch (e) { if (!moved()) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } } finally { setBusy(false); }
+    } catch { if (!moved()) { setPhase("failed"); setMsg("That did not reach the desk."); } } finally { setBusy(false); }
   };
   // the set came back marked: the sheet has done its job, so the review clears itself
   useEffect(() => { if (screen === "practice" && s?.practice?.marked) { setShot(null); setPhase("idle"); } }, [s?.practice?.marked]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -537,7 +551,7 @@ export default function Phone() {
       if (moved()) return;
       if (r.ok) { setReply(j.reply ?? "The desk heard you."); setHeard(""); setTypedExplain(""); setTyping(false); }
       else setMsg(r.status === 404 ? "The desk cannot listen back yet — that part is still being built." : (j.error ?? `The desk could not use that (${r.status}).`));
-    } catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+    } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); }
   };
   /** One typed second go on the ringed item in hand: the TV draws what it came to; a refusal is the desk's own sentence. */
   const sendSecond = async () => {
@@ -552,7 +566,7 @@ export default function Phone() {
       const j = await r.json().catch(() => ({} as { error?: string }));
       if (moved()) return;
       if (r.ok) setAgain(""); else setMsg(j.error ?? `The desk could not take that (${r.status}).`);
-    } catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+    } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); }
   };
 
   // The phone follows the TV (panelFor.ts): when the TV's screen changes into a hand-off, the phone moves once to
@@ -701,6 +715,7 @@ export default function Phone() {
 
         {screen === "paper" && <PaperPanel rows={paperRows} setRows={editPaperRows} post={post} seated={!!s?.learner} status={s?.status ?? ""} kept={!!s?.paper} name={s?.learner?.name} system={s?.learner ? s.profiles?.find((p) => p.id === s.learner?.id)?.system : undefined} askId={s?.ask?.kind === "paper" ? askId : undefined} />}
 
+        {screen === "write" && s && s.ask?.kind === "writing" && <WritingPanel key={s.ask.id} s={s} ask={s.ask} />}
         {screen === "capture" && (() => {
           const reading = phase === "sending" || (phase === "sent" && !!s?.reading);
           const done = phase === "sent" && !reading;

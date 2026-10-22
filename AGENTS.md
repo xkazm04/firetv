@@ -30,14 +30,15 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Install (desk) | `npm ci --prefix desk` | In an autopilot worktree, `npm test`'s pretest links `desk/node_modules` from the main checkout instead. |
 | Install (live probes) | `npm ci --prefix tools` | Only for `tools/*.mjs` (Playwright, ws). The rules suites need nothing here. |
 | Test: telestrator core | `node tools/gradlew.cjs :core:test` | Pure JVM, seconds, no device. |
-| Test: Study Desk | `npm --prefix desk test` | `tsc --noEmit`, then every rules suite in `desk/package.json` `test:rules`. |
+| Test: Study Desk | `npm --prefix desk test` | `tsc --noEmit`, then every rules suite in `desk/package.json` `rulesSuites` (`tools/run-rules.cjs`). |
 | Typecheck: Study Desk | `npm --prefix desk run test:types` | |
 | Evals (AI output, deterministic) | the `evals` command in `.ai/manifest.yaml` | A subset of the desk gate: the maths judge and marking, withholding, and the UAT verdict, metrics, ledger and surface suites. Model roles are stubbed. See `docs/AI_HARNESS.md`. |
 | Compile: tv-app | `node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin` | Needs `local.properties` (SDK path) and the generated `tv-app/src/main/res/raw/fixture_clip.mp4` (see `fixtures/README.md`). |
 | Build: tv APK | `node tools/gradlew.cjs :tv-app:assembleDebug` | Same prerequisites. |
+| Test: stick app | `node tools/gradlew.cjs :stick-app:testDebugUnitTest` | JVM tests of the stick's WebView APK; some pin desk facts (`desk/src/tv/keys.ts`, `proxy.ts`, pairing, store), so a desk rename can turn them red. Needs `local.properties` (SDK path). |
 | Full telestrator cycle | `./scripts/dev.ps1` | Unit, build, emulator, deploy, live UI test (PowerShell, Windows). |
 | Death Ride | `cd deathride` then `.\gradlew.bat :core:test`, `:link:test`, `:app:assembleDebug` | Its own build. Never run it through the root wrapper. Read `deathride/AGENTS.md` first (app id, gate, owner checks). |
-| Desk layering | `node tools/desk-boundaries.cjs` | Fails when `desk/src/` breaks its layering: engines are a leaf behind their entry modules, rules load no engine or Node built-in, only engines spawn, only the session writes (`.ai/memory/0018`). Its suite is `node tools/desk-boundaries-test.cjs`. |
+| Desk layering | `node tools/desk-boundaries.cjs` | Fails when `desk/src/` breaks its layering: engines are a leaf behind their entry modules, rules load no engine or Node built-in, only engines spawn, only the session writes (`.ai/memory/0018`). Of the three breaks main carried when it landed, one is left (`engines/meter.ts` loads `lib/dataDir.ts`): an `OWED` entry, printed, not failed, until the owner settles it. Its suite is `node tools/desk-boundaries-test.cjs`. |
 | Guidance overlays | `node tools/guidance-overlay-test.cjs` | Every separate build (`desk/`, `deathride/`) has an `AGENTS.md` + `CLAUDE.md` that defers to this file. |
 | Commit provenance | `node tools/commit-provenance.cjs [<range>]` | The per-lane, per-agent authorship report, read from `Agent-Lane:` and `Co-Authored-By:` trailers. `--check <base>..<head>` lists AI commits that lack them (`.ai/memory/0019`). Its suite is `node tools/commit-provenance-test.cjs`. |
 | Model drift (live quality over time) | `node tools/model-drift.cjs --status --max-age 21` (no model); the live run is `scripts/model-drift.ps1` | The live run spends real calls and is the operator's. Its suite is `node tools/model-drift-test.cjs`. The pre-merge check is `node tools/model-drift-pr.cjs --base origin/main`, and its suite is `node tools/model-drift-pr-test.cjs`. See `uat/drift/README.md`. |
@@ -63,6 +64,7 @@ There is no linter or formatter wired yet. Match the surrounding style. Kotlin f
 | a module under `desk/src/` that changes what it imports or whether it writes a file | the desk gate, plus `node tools/desk-boundaries-test.cjs` |
 | `core/` | `node tools/gradlew.cjs :core:test` |
 | `tv-app/` or `companion/` | `node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin` |
+| `stick-app/`, or a desk fact it pins (`desk/src/tv/keys.ts`, `desk/src/proxy.ts`, pairing, the session store) | `node tools/gradlew.cjs :stick-app:testDebugUnitTest` |
 | a TV screen (`desk/src/tv`, `desk/src/app/tv`, `desk/src/english/LingaTV.tsx`) | the desk gate, plus a Playwright capture against a second dev server (`next dev --webpack`, its own seeded `DESK_DATA_DIR`) |
 | `uat/driver` | `node --check uat/driver/linga-text.cjs` (a live LT run spends codex calls and is the operator's call) |
 | a file on the live surface (`node tools/model-drift-pr.cjs --surface`: the hint, read and pick pipelines, the rules they import, `desk/src/lib/engines/`, the lab bench) | the desk gate, plus a live drift record the operator takes on the branch (`scripts/model-drift.ps1`) and commits in the PR. Ask for it; never run it yourself (`.ai/memory/0017`). |
@@ -139,10 +141,10 @@ design pages that `prototype/build.py` builds.
   - `ai-conformance.yml` is the weekly conformance report only (`.ai/doctor.mjs --json`). The per-PR verdict is `conformance-gate.yml`, because the raw doctor is red on every PR by design (the human-owned `control.prepush` finding, `.ai/memory/0011`).
   - `conformance-gate.yml` is the contract verdict to read on a PR. `scripts/doctor-gate.mjs` fails on any doctor fail except the waivers it lists, each owned by a memory entry (`.ai/memory/0016`).
   - `capabilities-pr.yml` runs every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` when run by hand (workflow_dispatch; it does not run on PRs because test-desk exceeds the doctor's 180 s budget on a runner, issue #12). It goes red when a capability fails, or when a committed `verified: true` did not hold. To set a flag, commit the write-back of a local `node .ai/doctor.mjs --run`; never hand-flip one (`.ai/memory/0016`).
-  - `quality.yml` runs the desk gate and `:core:test` on every PR.
+  - `quality.yml` runs the desk gate and `:core:test` on every PR and on every push to main.
   - `supply-chain.yml` runs on main. It builds and attests the debug APK (it does not submit the Gradle dependency graph: that setting is off for the repository).
   - `sbom.yml` runs after each green `supply-chain` run. It attests a CycloneDX SBOM of that APK's runtime classpath against the same APK, and uploads the desk's `npm sbom` inventory (`.ai/memory/0021`).
-  - `harness-drills.yml` runs on every PR and push to main. It holds `SECURITY.md` to its word, runs the SBOM converter suite, holds the committed Stick soaks to the frame budget, and runs the degraded-engine drill.
+  - `harness-drills.yml` runs on every PR and push to main. It holds `SECURITY.md` to its word, runs the SBOM converter suite, and holds the committed Stick soaks to the frame budget. Its degraded-engine job is not wired (a fixture row fails on the current desk), so run `node tools/engine-degraded-test.cjs` yourself.
   - `capabilities.yml` runs weekly and on dispatch. It executes every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` and goes red on any failure (`.ai/memory/0012`).
   - `model-drift.yml` runs its suite on every PR. Weekly, it goes red when the committed live-quality record in `uat/drift/` drifted, is missing, or is older than 21 days (`.ai/memory/0014`).
   - `model-drift-pr.yml` runs on every PR. A PR that touches the live surface goes red unless it adds a live record that measured its code and does not alert against the base branch's newest one (`.ai/memory/0017`).
@@ -154,6 +156,6 @@ design pages that `prototype/build.py` builds.
 
 A rules change in the desk:
 1. Edit one file in `desk/src/lib/rules/`.
-2. Extend its `tools/<area>-rules-test.cjs` suite, or append a new suite at the end of `test:rules`.
+2. Extend its `tools/<area>-rules-test.cjs` suite, or add a new suite to `desk/package.json` `rulesSuites` just before `harness-rules-test.cjs`, which stays last.
 3. Run `npm --prefix desk test` (exit 0).
 4. Write one commit scoped to those paths, with the attribution trailer. If the change settled a question someone would otherwise reopen, add a `.ai/memory` entry.

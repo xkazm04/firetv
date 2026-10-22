@@ -246,3 +246,14 @@ test('the TV and phone say whose turn it is; the reply box sends the beat\'s spe
     if(beat==='learner')assert.doesNotMatch(sf.phone,/Co-star helper/,'the phone holds no helper (TL-12)');
   }
 });
+
+// scan-sweep optimize 2026-10-21 (linga-scenes, copy-auditor): since TL-12 the phone holds no helper (above), and the co-star
+// helper is the TV's own help action (cue). The learner's-beat caption still sent the co-star to "the co-star helper" on the phone.
+test('the learner\'s-beat caption sends the co-star to the TV\'s help, never to a helper on the phone',()=>{
+  const c={duet:{coStar:'Mum',beat:'learner'},cue:'',capture:false,pending:false};
+  const cap=D.beatCaption(c,'Ema');
+  assert.equal(cap.tag,"Ema's turn");
+  assert.doesNotMatch(cap.text,/helper/i,'no helper is on the phone');
+  assert.match(cap.text,/^Ema answers first on the phone\. Mum can ask the TV for help.$/);
+  assert.match(D.beatCaption({...c,duet:{coStar:'Mum',beat:'costar'}},'Ema').text,/^Mum answers on the phone\./);
+});

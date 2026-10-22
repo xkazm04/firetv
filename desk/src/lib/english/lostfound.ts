@@ -118,6 +118,8 @@ export const VOCAB: ReadonlyArray<readonly [string, LostDim, string]> = [
   ["jacket", "kind", "jacket"], ["coat", "kind", "jacket"], ["hoodie", "kind", "jacket"],
   ["bottle", "kind", "bottle"], ["water bottle", "kind", "bottle"], ["flask", "kind", "bottle"],
   ["bag", "kind", "bag"], ["school bag", "kind", "bag"], ["schoolbag", "kind", "bag"], ["backpack", "kind", "bag"], ["rucksack", "kind", "bag"],
+  // a kind of bag, not where it was lost: read before "gym", "pe" and "lunch" alone
+  ["gym bag", "kind", "bag"], ["pe bag", "kind", "bag"], ["lunch bag", "kind", "bag"],
   ["red", "colour", "red"], ["blue", "colour", "blue"], ["navy", "colour", "blue"], ["green", "colour", "green"], ["yellow", "colour", "yellow"],
   ["big", "size", "big"], ["large", "size", "big"], ["huge", "size", "big"], ["small", "size", "small"], ["little", "size", "small"], ["tiny", "size", "small"],
   ["plain", "pattern", "plain"], ["no pattern", "pattern", "plain"], ["stripes", "pattern", "stripes"], ["stripe", "pattern", "stripes"], ["striped", "pattern", "stripes"], ["stripy", "pattern", "stripes"], ["stars", "pattern", "stars"], ["star", "pattern", "stars"], ["starry", "pattern", "stars"],

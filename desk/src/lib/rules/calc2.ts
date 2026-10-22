@@ -18,7 +18,7 @@
  * calc.ts (which imports this file). A few lines of calc.ts are written again here for that reason (num, BAD_SPEC).
  */
 import { compile, integrate, limitInf, toPlain, type Expr } from "./calc-expr";
-import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, algebraSaid, carriesAnswer, cleanAnswer, czechAnswer, czechNames, decimalCall, decimalNumeral, infinityOf, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
 /** A comma system writes its decimals with a comma (taskText.ts commaSystem, written again here: this file imports no taskText, calc2-seam-test pins it). */
 const commaSystem = (system?: string) => system === "cz" || system === "de";
 
@@ -64,6 +64,8 @@ const DEGENERATE = 1e-4;
 const MIN_PIECES = 2, MAX_PIECES = 10;
 /** Most tokens a window of a line may span (calc.ts WINDOW). */
 const WINDOW = 6;
+/** Most tokens the long pass reads as one expression (calc.ts LONG_WINDOW). */
+const LONG_WINDOW = 24;
 
 // ------------------------------------------------------------------ the desk's lines (no value in any)
 
@@ -143,7 +145,7 @@ type Read = { ok: true; spec: ApproxSpec; f: Expr; a: number; b: number; value: 
 function structure(spec: unknown): { s: ApproxSpec; f: Expr; a: number; b: number } | string {
   if (!spec || typeof spec !== "object" || !isCalc2Spec(spec) || spec.shape !== "approx-integral") return REJECT.shape;
   const s = spec as ApproxSpec & Record<string, unknown>;
-  if (["answer", "solution", "truth", "value", "result"].some((k) => k in s)) return REJECT.answer;
+  if (carriesAnswer(s)) return REJECT.answer;
   const f = typeof s.f === "string" ? compile(s.f) : null;
   if (!f) return REJECT.read;
   if (f.constant) return REJECT.constant;
@@ -229,11 +231,7 @@ const unwrapAll = (s: string) => { while (wrapped(s)) s = s.slice(1, -1); return
  * Does the answer read as a decimal (ruling 28)? With spaces, one leading sign and enclosing brackets removed it is a decimal
  * numeral: '0.6956', '-0.6956', '-(0.6956)', '(0.6956)'.
  */
-function readsAsDecimal(ans: string): boolean {
-  let s = unwrapAll(ans.replace(/\s+/g, ""));
-  s = unwrapAll(s.replace(/^[+\-−]/, ""));
-  return !/^[+\-−]/.test(s) && isDecimal(s);
-}
+const readsAsDecimal = (ans: string): boolean => decimalNumeral(ans) !== null;
 
 /**
  * The verdict on a learner's answer, decided from the spec alone - the value is recomputed, never stored.
@@ -289,10 +287,13 @@ export function calc2LeaksCalc(spec: unknown, line: unknown): boolean {
   if (isSequence(spec)) return withPointed(line, (l) => sequenceLeaks(spec, l));
   return withPointed(line, (l) => approxLeaks(spec, l));
 }
-/** A leak check run on the line, then once more on the line with a lone digit,digit read as a point (MK4); never more than twice. */
+/** A leak check run on the line, then on the line with the Czech function names read (MB-B36), then with a lone digit,digit read as a point (MK4); at most four runs. */
 function withPointed(line: unknown, leaks: (l: unknown) => boolean): boolean {
   if (leaks(line)) return true;
   if (typeof line !== "string") return false;
+  // a line in Czech notation (tg, cotg, arctg: calc-read czechNames, MB-B36) is read with the engine's names too, as calc.ts does
+  const named = czechNames(line);
+  if (named !== line && withPointed(named, leaks)) return true;
   const pointed = pointForComma(line);
   return pointed !== line && leaks(pointed);
 }
@@ -455,7 +456,7 @@ type SeqRead = { ok: true; spec: SequenceSpec; f: Expr; truth: SeqTruth } | { ok
 function sequenceStructure(spec: unknown): { s: SequenceSpec; f: Expr } | string {
   if (!isSequence(spec)) return REJECT.shape;
   const s = spec as SequenceSpec & Record<string, unknown>;
-  if (["answer", "solution", "truth", "value", "result"].some((k) => k in s)) return REJECT.answer;
+  if (carriesAnswer(s)) return REJECT.answer;
   const f = typeof s.f === "string" ? compile(s.f) : null;
   if (!f) return REJECT.read;
   if (f.constant) return REJECT.constant;
@@ -489,8 +490,10 @@ function sequenceQuestion(spec: SequenceSpec): { plain: string } | null {
 
 /** Calculus 1's limit comparison (calc.ts judgeNumber, limit row): a decimal goes to the one rule both call, calc-read's decimalCall (MB-B28, D2 R1a). */
 function judgeLimit(truth: number, s: number, written: string): Calc2Verdict {
-  if (isDecimal(written)) {
-    const c = decimalCall(written, s, truth, { exact: LIMIT_EXACT, rounded: LIMIT_ROUNDED, close: ROUNDED_CLOSE });
+  // a decimal in brackets or behind a sign is the same decimal (calc-read decimalNumeral, ruling 28)
+  const numeral = decimalNumeral(written);
+  if (numeral !== null) {
+    const c = decimalCall(numeral, s, truth, { exact: LIMIT_EXACT, rounded: LIMIT_ROUNDED, close: ROUNDED_CLOSE });
     return c === "right" ? verdict("right", WHY.right) : c === "rounded" ? verdict("unsure", WHY.rounded) : c === "sign" ? verdict("wrong", WHY.sign, "sign") : verdict("wrong", WHY.wrong);
   }
   if (withinRel(s, truth, LIMIT_EXACT)) return verdict("right", WHY.right);
@@ -543,19 +546,23 @@ function sequencePieces(s: SequenceSpec, f: Expr): string[] {
  * Does this hint or explanation line state the limit? Calculus 1's rule for a limit (calc.ts leaksCalc, copied): an infinite
  * limit leaks by naming infinity at all; a finite one by any window of up to six tokens, after the question's own notation is
  * set aside, that reads as a number within 5e-3 of the limit (or a negative number whose size is the limit), or as a decimal
- * the judge would call right (D2 R1a).
+ * the judge would call right (D2 R1a). The line is read said as algebra (calc-read algebraSaid: 'e squared'), and a long
+ * pass reads windows of seven up to LONG_WINDOW tokens, with and without the question's pieces, as calc.ts does.
  */
 function sequenceLeaks(spec: SequenceSpec, line: unknown): boolean {
   if (typeof line !== "string" || !line.trim()) return false;
   const r = readSequence(spec);
   if (!r.ok) return false;
   const { truth } = r;
-  let text = spoken(line);
+  // read as calc.ts reads a line: said as algebra too ('e squared' is e^2, 'three halves minus one' is 3/2 - 1)
+  let text = algebraSaid(spoken(line));
   if (truth.kind === "inf") return /infinit|∞|\binf\b/.test(text);
+  const raw = text;
   for (const p of sequencePieces(r.spec, r.f)) text = text.replace(piecePattern(p.toLowerCase()), " ");
-  const tokens = text.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/)
-    .map((t) => t.replace(/\.+$/, ""))
+  const tokenize = (t: string): string[] => t.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/)
+    .map((w) => w.replace(/\.+$/, ""))
     .filter(Boolean);
+  const tokens = tokenize(text);
   const single = (t: string): Expr | null => {
     const e = compile(t);
     if (e) return e;
@@ -583,7 +590,18 @@ function sequenceLeaks(spec: SequenceSpec, line: unknown): boolean {
     if (hit) return true;
     i += Math.max(1, took);
   }
-  return false;
+  // calc.ts's long pass: a window of WINDOW + 1 up to LONG_WINDOW tokens that reads as the limit, over the line with and
+  // without the question's own pieces
+  const longRight = (toks: string[]): boolean => {
+    for (let i = 0; i < toks.length; i++) {
+      for (let n = WINDOW + 1; n <= Math.min(LONG_WINDOW, toks.length - i); n++) {
+        const said = toks.slice(i, i + n).join(" "), e = compile(said);
+        if (e && numberRight(e, toks[i], said)) return true;
+      }
+    }
+    return false;
+  };
+  return longRight(tokens) || (raw !== text && longRight(tokenize(raw)));
 }
 
 // ------------------------------------------------------------------ reading a printed sequence question back into a spec

@@ -1,13 +1,14 @@
 /**
  * The family/adult seam (Family mode, Phase 1, W4; owner decision D1: no parent lock in Phase 1, so the seam changes
  * nothing a learner can see). What this suite pins:
- *   - PARITY: audienceAllowed answers every (age, type, adultConfirmed, audience) exactly as the function did at git HEAD
- *     b2018db, before W4. The expected value is a frozen copy written out below; the live function is only the actual.
- *   - modeOf's table: an explicit "family" always wins; a stored "adult" is NOT honoured (Phase 1), so the mode is the
- *     derived value, "adult" exactly when isAdult holds.
- *   - modeChecked drops junk from session.json and from a profile.draft patch; a patch may set only "family", never
- *     "adult"; an edit-save (the keys.ts copy list) keeps a stored "family"; reset leaves the mode unset; a session.json
- *     with no mode field loads unchanged.
+ *   - PARITY: for a profile with no stored mode, audienceAllowed answers every (age, type, adultConfirmed, audience)
+ *     exactly as the function did at git HEAD b2018db, before W4 (a frozen copy written out below; the live function is
+ *     only the actual). A stored mode moves it since v2 P6 (mode decides): a stored "family" refuses the adult audience.
+ *   - modeOf's table: an explicit "family" always wins; a stored "adult" is honoured only behind the 18+ gate (slice A5:
+ *     18 or over, or "other" with no age), otherwise the mode is the derived value, "adult" exactly when isAdult holds.
+ *   - modeChecked drops junk from session.json and from a profile.draft patch; a patch may set "adult" only where the
+ *     gate allows (A5); an edit-save (the keys.ts copy list) keeps a stored "family"; reset leaves the mode unset; a
+ *     session.json with no mode field loads unchanged.
  * Run with npm test in desk/ (directly: node tools/mode-rules-test.cjs). No model is called; a disposable data directory
  * under the OS temp dir, never desk/data.
  */

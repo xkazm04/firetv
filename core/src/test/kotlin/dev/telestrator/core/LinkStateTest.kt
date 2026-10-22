@@ -65,6 +65,39 @@ class LinkStateTest {
     }
 
     @Test
+    fun `case 6b - a typo then the right PIN collapses the card at once, not after the refusal runs out`() {
+        val typo = ready().on(LinkEvent.PenRefused("wrong PIN"), 10_000)
+        val paired = typo.on(LinkEvent.PenPaired("pen-a"), 11_000)
+        for (t in listOf(11_000L, 12_000L, 14_999L, 15_000L)) assertEquals(LinkView.Chip, paired.view(t))
+        // The pen leaving later is a lost pen, not an old refusal coming back.
+        assertEquals(LinkView.Lost(url, pin), paired.on(LinkEvent.PenGone("pen-a"), 11_500).view(14_600))
+    }
+
+    @Test
+    fun `case 6c - on the relay, a wrong PIN that unpairs the pen says why on the TV`() {
+        val relay = PairingDesk(pin, 16.0 / 9.0).open(openedAtMs = 0, shared = true)
+        var link = ready()
+        // What PenSessionHost.carryOut does with the effects, in the order they come.
+        fun carry(effects: List<PenEffect>, at: Long) {
+            for (e in effects) link = when (e) {
+                is PenEffect.Paired -> link.on(LinkEvent.PenPaired(e.clientId), at)
+                is PenEffect.Unpaired -> link.on(LinkEvent.PenGone(e.clientId), at)
+                is PenEffect.Send -> (e.message as? TvMessage.Welcome)
+                    ?.takeIf { !it.accepted && it.reason in LinkState.PIN_REFUSALS }
+                    ?.let { link.on(LinkEvent.PenRefused(it.reason.orEmpty()), at) } ?: link
+                else -> link
+            }
+        }
+        carry(relay.onText("""{"type":"hello","pin":"$pin","clientId":"pen-a"}"""), 1_000)
+        assertEquals(LinkView.Chip, link.view(1_000))
+
+        carry(relay.onText("""{"type":"hello","pin":"0000","clientId":"pen-b"}"""), 2_000)
+        assertEquals(LinkView.Refused("wrong PIN", pin), link.view(2_000))
+        assertEquals(LinkView.Refused("wrong PIN", pin), link.view(6_999))
+        assertEquals(LinkView.Lost(url, pin), link.view(7_000))
+    }
+
+    @Test
     fun `case 7 - a failed transport says why whatever the pen state, and a later ready clears it`() {
         val message = "port 8765 is in use by something else"
         val failed = ready().on(LinkEvent.Failed(message), 5_000)

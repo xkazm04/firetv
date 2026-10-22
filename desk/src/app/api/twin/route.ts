@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { roleFrom } from "@/lib/session/pairing";
 import { getPiece, listPieces } from "@/lib/session/texts";
-import { levelWords, portraitOf, TWIN_BORN } from "@/lib/twin/card";
+import { levelWords, portraitOf, reviewOf, TWIN_BORN } from "@/lib/twin/card";
 import { excludedOf, saveTwinState, twinState } from "@/lib/twin/state";
 import { workroomOf } from "@/lib/twin/workroom";
 import { modeOf } from "@/lib/rules/mode";
@@ -34,11 +34,11 @@ export async function GET(req: Request) {
   const excluded = new Set(excludedOf(who.id));
   dispatch({ type: "workroom.set", workroom: workroomOf(who.id) });
   const pieces = listPieces(who.id).map((c) => getPiece(who.id, c.id)).filter((p): p is NonNullable<typeof p> => !!p);
-  const portrait = portraitOf(pieces);
+  const portrait = portraitOf(pieces), review = reviewOf(pieces, excluded);
   return NextResponse.json({
     adult: who.adult, born: portrait.born, need: TWIN_BORN,
     channels: portrait.channels.map((c) => ({ channel: c.channel, pieces: c.pieces, born: c.born, words: c.dims ? levelWords(c.dims) : [],
-      exemplars: c.exemplars.map((e) => ({ ...e, included: !excluded.has(e.pieceId) })) })),
+      exemplars: review.get(c.channel) ?? [] })),
   });
 }
 

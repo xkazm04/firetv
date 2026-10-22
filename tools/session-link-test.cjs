@@ -7,7 +7,9 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {test}=require('node:test');
 const SRC=path.resolve(__dirname,'../desk/src');
-const read=(f)=>fs.readFileSync(path.join(SRC,f),'utf8');
+// comments are stripped first: a pin that a comment can satisfy pins nothing
+const strip=(t)=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:\\])\/\/.*$/gm,'$1');
+const read=(f)=>strip(fs.readFileSync(path.join(SRC,f),'utf8'));
 
 test('reopenDelay: 1500, 3000, 6000 ... capped at 30000; zero after a message',()=>{
   const {reopenDelay}=require(path.join(SRC,'tv/useSession.ts'));
@@ -22,7 +24,12 @@ test('the stream reopen uses reopenDelay and resets on a message',()=>{
   const t=read('tv/useSession.ts');
   assert.match(t,/setTimeout\(open, reopenDelay\(/);
   assert.doesNotMatch(t,/setTimeout\(open, 1500\)/);
-  assert.match(t,/attempt = 0/);
+  // the reset is the message handler's, not the declaration's `let ... attempt = 0`
+  assert.match(t,/onmessage[^\n]*\battempt = 0\b/);
+  // seeded: the handler's reset taken out is red, though the declaration still reads `attempt = 0`
+  const seeded=t.replace(/attempt = 0; setConnected\(true\);/,'setConnected(true);');
+  assert.notEqual(seeded,t,'the seed took the reset out');
+  assert.doesNotMatch(seeded,/onmessage[^\n]*\battempt = 0\b/);
 });
 
 test('TV: the lost-link band is inside .stage, not the bench bar',()=>{

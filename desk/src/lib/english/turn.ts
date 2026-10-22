@@ -72,6 +72,12 @@ export const ACCEPTS: Record<TurnState, readonly TurnAction[]> = {
 /** Coaching and Cut work on a reply the learner gave: the one guard the table needs from the data. */
 const hasReply = (c: Conversation) => c.turns.some(t => t.role === "learner");
 
+/** A scene takes at most this many learner replies; then the way on is Finish. A Take Two is not counted against it. */
+export const REPLY_CAP = 24;
+export const AT_CAP = "A good place to pause. Finish this rehearsal and start a new scene.";
+/** The scene has had its replies (REPLY_CAP): no further turn, and no microphone for one. */
+export const atCap = (c: Conversation) => !runningTake(c) && c.turns.filter(t => t.role === "learner").length >= REPLY_CAP;
+
 /** A running take that has had all its cast turns takes no more lines (take.ts takeSpent): only Back to the notes and Repeat. */
 const spent = (c: Conversation) => { const t = runningTake(c); return !!t && takeSpent(t); };
 
@@ -96,6 +102,7 @@ function noteRefusal(c: Conversation, note: unknown): string {
 export function accepts(c: Conversation, action: string, mode?: Mode, note?: number, speaker?: unknown): boolean {
   if (!isTurnAction(action) || !ACCEPTS[turnState(c)].includes(action)) return false;
   if ((action === "turn" || action === "capture") && spent(c)) return false;
+  if ((action === "turn" || action === "capture" && !c.moment) && atCap(c)) return false;
   if (duetRefuses(c, action, speaker)) return false;
   // on a moment, a try and its microphone while the fix moment takes a try, Show me while its fix is withheld (repair.ts)
   if (action === "moment-try" || action === "capture" && c.moment) return tryOpen(c.moment);
@@ -146,6 +153,7 @@ export function refusal(c: Conversation, action: string, mode?: Mode, note?: num
     return state === "preparing" || state === "waiting" ? BY_STATE[state] : "Take Two starts from a note at Cut.";
   }
   if ((action === "turn" || action === "capture") && spent(c)) return SPENT;
+  if ((action === "turn" || action === "capture" && !c.moment) && atCap(c) && ACCEPTS[state].includes(action)) return AT_CAP;
   if (action === "take-end" && !runningTake(c)) return "There is no take running.";
   if (action === "cut" && state === "paused") return BY_ACTION.cut!;
   if (state === "moment" && (action === "moment-try" || action === "capture")) return c.moment?.repair?.lost ? LOST : c.moment?.repair ? "That was your try. Go back to the conversation." : "This moment shows its words at once.";

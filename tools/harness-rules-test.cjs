@@ -25,7 +25,7 @@ const SLOW = "require('node:test').test('slow',async()=>{await new Promise(r=>se
 function run(list, env = {}) {
   const lf = path.join(dir, `list-${Math.random().toString(36).slice(2)}.json`);
   fs.writeFileSync(lf, JSON.stringify(list));
-  const r = spawnSync(process.execPath, [RUNNER, '--list', lf], { cwd: DESK, encoding: 'utf8', env: { ...process.env, ...env } });
+  const r = spawnSync(process.execPath, [RUNNER, '--list', lf], { cwd: DESK, encoding: 'utf8', env: { ...process.env, RULES_JOBS: '', ...env } });
   return { code: r.status, out: r.stdout + r.stderr };
 }
 const tableLine = (out, name) => out.split('\n').find(l => l.startsWith(name) && /\b(green|RED)\b/.test(l)) || '';
@@ -72,8 +72,11 @@ test('a missing file exits 1 and the suite after it still ran', () => {
   assert.match(tableLine(r.out, rel('m-after.cjs')), /green/);
 });
 
+// The bound applies to every suite in the list, so it must clear a green suite's start on a loaded machine: t-after
+// took 1705 ms under four agents on 2026-10-21 and was killed at 1500. It spends 2 s before its test; the bound is 8 s.
+const LATE_GREEN = `{const t=Date.now();while(Date.now()-t<2000);}${GREEN}`;
 test('a suite past RULES_SUITE_TIMEOUT_MS is killed and is red', () => {
-  const r = run([write('t-slow.cjs', SLOW), write('t-after.cjs', GREEN)], { RULES_SUITE_TIMEOUT_MS: '1500' });
+  const r = run([write('t-slow.cjs', SLOW), write('t-after.cjs', LATE_GREEN)], { RULES_SUITE_TIMEOUT_MS: '8000' });
   assert.equal(r.code, 1);
   assert.match(tableLine(r.out, rel('t-slow.cjs')), /RED.*timeout/);
   assert.match(tableLine(r.out, rel('t-after.cjs')), /green/);
@@ -90,11 +93,70 @@ test('a duplicate, an empty list and a missing list are refused before anything 
   assert.equal(none.status, 1);
 });
 
+// --jobs N runs up to N suites at once; each suite's output is printed whole when it ends, and the table stays in list order.
+const NAP = ms => `require('node:test').test('nap',async()=>{await new Promise(r=>setTimeout(r,${ms}));});`;
+// A suite that records when its test started and ended, so overlap is read from the clock, not from a load-sensitive wall time.
+const SPAN = (rec, ms) => `require('node:test').test('span',async()=>{const t0=Date.now();await new Promise(r=>setTimeout(r,${ms}));require('node:fs').writeFileSync(${JSON.stringify(rec)},JSON.stringify([t0,Date.now()]));});`;
+const spans = recs => recs.map(f => JSON.parse(fs.readFileSync(f, 'utf8')));
+
+test('--jobs 3 runs three suites at the same time (their spans overlap), the table in list order', () => {
+  const recs = ['j-a', 'j-b', 'j-c'].map(n => path.join(dir, `${n}.span`));
+  const names = recs.map((rec, i) => write(`j-${'abc'[i]}.cjs`, SPAN(rec, 3000)));
+  const seq = spans((run(names), recs));
+  assert.ok(Math.max(...seq.map(s => s[0])) >= Math.min(...seq.map(s => s[1])), 'without --jobs the suites overlapped');
+  const lf = path.join(dir, 'list-jobs.json'); fs.writeFileSync(lf, JSON.stringify(names));
+  const p = spawnSync(process.execPath, [RUNNER, '--list', lf, '--jobs', '3'], { cwd: DESK, encoding: 'utf8' });
+  const out = p.stdout + p.stderr, par = spans(recs);
+  assert.equal(p.status, 0, out);
+  assert.ok(Math.max(...par.map(s => s[0])) < Math.min(...par.map(s => s[1])), `--jobs 3 did not overlap the suites: ${JSON.stringify(par)}`);
+  const at = names.map(n => out.indexOf(tableLine(out, n)));
+  assert.ok(at.every(i => i > 0) && at[0] < at[1] && at[1] < at[2], 'table rows out of list order');
+  assert.match(out, /totals: 3 green, 0 red/);
+});
+
+test('--jobs: a red suite is still red, its whole output sits under its own header, and the run exits 1', () => {
+  const names = [write('jr-fail.cjs', FAIL), write('jr-ok.cjs', NAP(300))];
+  const lf = path.join(dir, 'list-jobs-red.json'); fs.writeFileSync(lf, JSON.stringify(names));
+  const p = spawnSync(process.execPath, [RUNNER, '--list', lf, '--jobs', '2'], { cwd: DESK, encoding: 'utf8' });
+  const out = p.stdout + p.stderr;
+  assert.equal(p.status, 1, out);
+  assert.match(tableLine(out, names[0]), /RED/);
+  assert.match(tableLine(out, names[1]), /green/);
+  const block = out.slice(out.indexOf(`# run-rules: ${names[0]}`), out.indexOf(`# run-rules: ${names[1]}`) > out.indexOf(`# run-rules: ${names[0]}`) ? out.indexOf(`# run-rules: ${names[1]}`) : undefined);
+  assert.match(block, /not ok .* bad/, 'the failing suite\'s TAP is not under its own header');
+});
+
+test('the totals name the slowest tests across every suite, slowest first, with their suite', () => {
+  const two = "const {test}=require('node:test');test('quick one',()=>{});test('the long one',async()=>{await new Promise(r=>setTimeout(r,1200));});";
+  const names = [write('s-two.cjs', two), write('s-mid.cjs', NAP(400))];
+  const r = run(names);
+  assert.equal(r.code, 0, r.out);
+  const line = r.out.split('\n').find(l => l.startsWith('slowest tests:')) || '';
+  assert.match(line, /^slowest tests: .*s-two\.cjs › the long one \d+(\.\d+)? s, .*s-mid\.cjs › nap/, line);
+});
+
+test('--jobs refuses a value that is not a positive whole number', () => {
+  const g = write('jn-green.cjs', GREEN), lf = path.join(dir, 'list-jobs-bad.json'); fs.writeFileSync(lf, JSON.stringify([g]));
+  for (const v of ['0', 'x', '1.5']) {
+    const p = spawnSync(process.execPath, [RUNNER, '--list', lf, '--jobs', v], { cwd: DESK, encoding: 'utf8' });
+    assert.equal(p.status, 1, `--jobs ${v}`);
+    assert.match(p.stderr, /--jobs/);
+  }
+});
+
 test('the real list in desk/package.json has 63+ unique suites, each a file, with this suite last', () => {
   const list = JSON.parse(fs.readFileSync(path.join(DESK, 'package.json'), 'utf8')).rulesSuites;
   assert.equal(new Set(list).size, list.length);
   for (const s of list) assert.ok(fs.existsSync(path.join(__dirname, s)), s);
   assert.equal(list[list.length - 1], 'harness-rules-test.cjs');
+});
+
+test('desk/AGENTS.md tells an agent where a new suite goes: rulesSuites, before harness-rules-test.cjs', () => {
+  const doc = fs.readFileSync(path.join(DESK, 'AGENTS.md'), 'utf8');
+  const gate = doc.split('\n').find(l => /new suite/i.test(l)) || '';
+  assert.match(gate, /rulesSuites/, gate);
+  assert.match(gate, /before `harness-rules-test\.cjs`/, gate);
+  assert.doesNotMatch(gate, /at the end/i, gate);
 });
 
 // EC1a: the usage ledger (desk/src/lib/engines/meter.ts) must never land in desk/data. This suite itself runs under
@@ -183,6 +245,20 @@ test('loader: changing one character of the source changes the key', () => {
   assert.equal(cacheCount(c), 3, 'other options, other key');
   loaderRun(`L.transpile('export const a=1;',{fileName:'x.ts',compilerOptions:{module:1,target:9,esModuleInterop:true}});`, c);
   assert.equal(cacheCount(c), 4, 'another extension, another key');
+});
+
+test('loader: entries untouched for 14 days are pruned on a miss, at most once a day', () => {
+  const c = path.join(dir, 'cache-prune'); fs.mkdirSync(c, { recursive: true });
+  const old = (Date.now() - 20 * 864e5) / 1000;
+  for (const n of ['old1', 'old2', 'fresh']) fs.writeFileSync(path.join(c, `${n}.js`), 'x');
+  for (const n of ['old1', 'old2']) fs.utimesSync(path.join(c, `${n}.js`), old, old);
+  loaderRun(`L.transpile('export const p=1;',${OPTS});`, c);
+  const left = fs.readdirSync(c).filter(n => n.endsWith('.js')).sort();
+  assert.ok(!left.includes('old1.js') && !left.includes('old2.js'), `old entries survived: ${left}`);
+  assert.ok(left.includes('fresh.js'), 'a fresh entry was pruned');
+  fs.writeFileSync(path.join(c, 'old3.js'), 'x'); fs.utimesSync(path.join(c, 'old3.js'), old, old);
+  loaderRun(`L.transpile('export const p=2;',${OPTS});`, c);
+  assert.ok(fs.existsSync(path.join(c, 'old3.js')), 'pruned twice in one day');
 });
 
 test('loader: a .ts file with an angle-bracket type assertion loads', () => {

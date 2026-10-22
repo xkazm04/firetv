@@ -169,7 +169,7 @@ class SharedPenConversationTest {
         pen.onText(hello("4821", "pen-a"))
 
         assertEquals(
-            listOf(refused("wrong PIN"), PenEffect.Unpaired("pen-a")),
+            listOf(PenEffect.Unpaired("pen-a"), refused("wrong PIN")),
             pen.onText(hello("0000", "pen-x")),
         )
         assertFalse(pen.isPaired)
