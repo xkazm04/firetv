@@ -38,8 +38,8 @@ enum class Hold(val ms: Long) {
 class PenEngine(
     private val clipId: String,
     private val videoAspect: Double = 16.0 / 9.0,
-    /** Hold window used when a message does not ask for a specific one. */
-    var defaultHold: Hold = Hold.Default,
+    /** Hold window used when a message does not ask for a specific one. Fixed: a setter would write outside the lock. */
+    val defaultHold: Hold = Hold.Default,
 ) {
     /** Kept for tests and callers that want a plain millisecond window. */
     constructor(clipId: String, videoAspect: Double = 16.0 / 9.0, holdMs: Long) :
@@ -184,10 +184,13 @@ class PenEngine(
                 )
                 livePoints += xyp
             }
-            "move" -> if (liveMeta != null) livePoints += xyp
+            // No stroke open: its down never came, or an undo or a clear cut it mid-gesture.
+            "move" -> if (liveMeta != null) livePoints += xyp else drop("pen-no-stroke")
             "up" -> {
                 val meta = liveMeta
-                if (meta != null) {
+                if (meta == null) {
+                    drop("pen-no-stroke")
+                } else {
                     livePoints += xyp
                     // Decimate once, on commit: the live stroke keeps every sample so the ink
                     // under the finger stays honest, but what gets stored is what gets drawn.
@@ -228,7 +231,7 @@ class PenEngine(
 
     private fun handleTag(msg: PenMessage.Tag, tMs: Long) {
         val label = msg.label.trim()
-        if (label.isEmpty()) return
+        if (label.isEmpty()) return drop("tag-blank-label")
         commit(
             Annotation.NameTag(
                 id = nextId(),

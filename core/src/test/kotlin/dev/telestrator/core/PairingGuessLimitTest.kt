@@ -79,4 +79,23 @@ class PairingGuessLimitTest {
         val wrong = desk.open(openedAtMs = 1_000 + PenConversation.COOLDOWN_MS).onText(hello("0000"))
         assertTrue(!((wrong.first() as PenEffect.Send).message as TvMessage).encode().contains("retryAfterMs"))
     }
+
+    @Test
+    fun `case 5 - the PIN meets no early-exit equality, and only the whole PIN pairs`() {
+        // An early-exit compare answers sooner the earlier the first wrong digit, which on a LAN is a
+        // measurable which-digit oracle (registry: device-pairing / timing-defenses).
+        val src = java.io.File("src/main/kotlin/dev/telestrator/core/PenConversation.kt")
+            .let { if (it.isFile) it else java.io.File("core/src/main/kotlin/dev/telestrator/core/PenConversation.kt") }
+            .readText()
+            .replace(Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL), "")
+            .replace(Regex("//[^\\n]*"), "")
+        val early = Regex("""\b(offered|pin)\s*[!=]=\s*(offered|pin)\b|\b(offered|pin)\.(equals|startsWith|contentEquals)\(""")
+        assertEquals(emptyList<String>(), early.findAll(src).map { it.value }.toList(), "early-exit PIN equality")
+        assertTrue(src.contains("MessageDigest.isEqual("), "the PIN check is a constant-time compare")
+
+        for ((offered, pairs) in listOf("4821" to true, "4820" to false, "482" to false, "48210" to false, "" to false)) {
+            val effects = PairingDesk(pin = "4821", videoAspect = aspect).open(openedAtMs = 0).onText(hello(offered))
+            assertEquals(pairs, effects.any { it is PenEffect.Paired }, "PIN '$offered'")
+        }
+    }
 }

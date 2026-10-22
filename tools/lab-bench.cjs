@@ -71,8 +71,29 @@ function sim(a, b) {
 const latex = (s) => /\$[^$]+\$|\\[a-zA-Z]+/.test(s || "");
 
 // ---- the replay: recorded answers at the provider seam ----
+/**
+ * What in a fixture names nothing the bench runs: a section, page, problem, query or hint stage outside the corpus.
+ * Such a key is laid over nothing and the run scores the recorded set instead, so a fixture is read in full or refused.
+ */
+function fixtureProblems(over) {
+  if (over === true || over == null) return [];
+  if (typeof over !== "object" || Array.isArray(over)) return ["it is not an object of read, hints and picks"];
+  const out = [], problems = new Set(corpus.problems.map((p) => p.q)), queries = new Set(corpus.queries.map((q) => q.q));
+  for (const k of Object.keys(over)) if (!["read", "hints", "picks"].includes(k)) out.push(`unknown section "${k}" (read, hints, picks)`);
+  for (const s of Object.keys(over.read || {})) if (!corpus.pages[s]) out.push(`read: no page "${s}" (${Object.keys(corpus.pages).join(", ")})`);
+  for (const [q, h] of Object.entries(over.hints || {})) {
+    if (!problems.has(q)) out.push(`hints: "${q}" is not a corpus problem`);
+    for (const stage of Object.keys(h || {})) if (!/^(hint|reask)[12]$/.test(stage)) out.push(`hints "${q}": no stage "${stage}" (hint1, hint2, reask1, reask2)`);
+  }
+  for (const q of Object.keys(over.picks || {})) if (!queries.has(q)) out.push(`picks: "${q}" is not a corpus query`);
+  return out;
+}
+const unreadable = (bad) => `lab bench: the replay file cannot be read in full - ${bad.join("; ")}`;
+
 /** The recorded answer set, with `over` (a fixture) laid on top: read per page, hints per problem, picks per query. */
 function answers(over) {
+  const bad = fixtureProblems(over);
+  if (bad.length) throw new Error(unreadable(bad));
   const a = { read: {}, hints: {}, picks: { ...corpus.run3 } };
   for (const [subject, p] of Object.entries(corpus.pages)) a.read[subject] = p.items.map((t) => ({ number: t.n, text: t.text, x: t.cx / p.w, y: t.cy / p.h }));
   for (const p of corpus.problems) a.hints[p.q] = { hint1: p.hint1, hint2: p.hint2 };
@@ -279,6 +300,8 @@ async function main(argv) {
   if (file) {
     try { replay = JSON.parse(fs.readFileSync(file, "utf8")); }
     catch (e) { console.error(`lab bench: cannot read the replay file ${file}: ${e.message}`); return 2; }
+    const bad = fixtureProblems(replay);
+    if (bad.length) { console.error(`${unreadable(bad)} (${file})`); return 2; }
   }
   const r = await runBench({ replay, live });
   if (json) { const { read, hints, retrieval, baseline, verdicts: v, providers } = r; console.log(JSON.stringify({ read, hints, retrieval, baseline, verdicts: v, providers }, null, 1)); }

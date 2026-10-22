@@ -42,13 +42,13 @@ const setCookie=(r,name)=>{const all=r.headers.getSetCookie?r.headers.getSetCook
 const through=async(url,{method='POST',cookie,headers={}}={})=>{const r=await proxyOf().proxy(new NextRequest('http://desk'+url,{method,headers:{...headers,...(cookie?{cookie}:{})}}));
  return {status:r.status,passed:r.headers.get('x-middleware-next')==='1',role:r.headers.get('x-middleware-request-x-desk-role'),res:r};};
 
-/** A desk with a learner's evening on it: a page, a practice set, a conversation, history, memory. */
+/** A desk with a learner's evening on it: a page, a practice set, a conversation, history. */
 function evening(screen='landing'){
  store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
  const s=store.getSession();
  globalThis.__desk.session={...s,screen,subject:'maths',draft:{id:'p1',name:'Ada',type:'elementary',modules:['english']},
   pages:[{id:'m1',subject:'maths',title:'Sheet',img:'data:image/jpeg;base64,AAAA',w:10,h:10,items:[{n:1,text:'2x+3=11',cx:0,cy:0,band:[0,1],key:'k1'}]}],
-  history:[{at:Date.now(),kind:'practice',label:'Linear',detail:'4 of 6 right'}],memory:['Ema rushes the second step.'],
+  history:[{at:Date.now(),kind:'practice',label:'Linear',detail:'4 of 6 right'}],
   conversation:{id:'c1',sceneId:'rover',turns:[{role:'learner',text:'Where is the rover?'}]},
   practice:{topic:'linear-one-step',items:[{n:1,question:'2x+3=11',studentAnswer:'4'}],marked:false},
   englishLearning:{...emptyEnglish(),notes:['likes space']}};
@@ -57,7 +57,7 @@ function evening(screen='landing'){
 const firstMessage=async(role)=>{mock.timers.enable({apis:['setInterval']});try{const r=(await streamRoute().GET(req('/api/session/stream',{role}))).body.getReader();
  const m=JSON.parse(new TextDecoder().decode((await r.read()).value).replace(/^data: /,''));await r.cancel();return m;}finally{mock.timers.reset();}};
 const LOBBY_EMPTY=(v)=>{assert.equal(v.viewer,'guest');assert.equal(v.pin,'');assert.equal(v.joined,false);
- assert.deepEqual(v.pages,[]);assert.deepEqual(v.history,[]);assert.deepEqual(v.memory,[]);assert.equal(v.conversation,null);assert.equal(v.practice,null);assert.deepEqual(v.englishLearning,emptyEnglish());};
+ assert.deepEqual(v.pages,[]);assert.deepEqual(v.history,[]);assert.equal('memory' in v,false);assert.equal(v.conversation,null);assert.equal(v.practice,null);assert.deepEqual(v.englishLearning,emptyEnglish());};
 
 test('case 1: a guest sees the lobby - no pin, not joined, the evening emptied - and the TV sees the whole session with its pin',async()=>{
  const s=evening('landing');
@@ -297,13 +297,15 @@ const TOO_MANY='Too many wrong codes. Wait five minutes, then type the code agai
 process.env.DESK_JOIN_DELAY_MS='0';
 test('PR2: a wrong code is refused after the delay, and the right code still joins',async()=>{
  evening('pair');DESK_JOIN();const pin=store.getSession().pin;
- process.env.DESK_JOIN_DELAY_MS='150';
+ // the delay is wide enough that a busy machine (four suites at once) cannot push the undelayed join past the line: one run
+ // in three read the right code at >= 120 ms against a 150 ms delay while sibling suites ran
+ process.env.DESK_JOIN_DELAY_MS='1000';
  try{
   for(const body of [{type:'join',code:wrongOf(pin)},{type:'join'}]){
    const t0=Date.now();const r=await post(body,'guest');const ms=Date.now()-t0;
-   assert.equal(r.status,403);assert(ms>=120,`refused after ${ms} ms, not at once`);
+   assert.equal(r.status,403);assert(ms>=900,`refused after ${ms} ms, not at once`);
   }
-  const t0=Date.now();const r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);assert(Date.now()-t0<120,'the right code is not delayed');
+  const t0=Date.now();const r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);assert(Date.now()-t0<900,'the right code is not delayed');
  }finally{process.env.DESK_JOIN_DELAY_MS='0';}
 });
 test('PR2: 10 wrong codes start a five-minute cooldown; the right code is refused in it and joins after it',async()=>{
@@ -856,9 +858,10 @@ test('OPT-5: a watched lesson whose line cannot be written to the learner file s
 test('OPT-7: a lesson chosen on a screen (no key) is a library lesson, played from the library\'s own video - a posted id or video the library does not hold never reaches the TV',async()=>{
  store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
  const {LESSONS}=require(src('lib/library/lessons.data.ts'));const lib=LESSONS.find((l)=>l.youtube);
- let r=await post({type:'lesson.set',lesson:{id:'not-a-lesson',title:'Anything',t:0,text:'',why:'',youtube:'aaaaaaaaaaa'}},'phone');assert.equal(r.status,200);
+ // the TV's lesson pick (tv/keys.ts); a phone's is refused (TL-11, PHONE_MAY)
+ let r=await post({type:'lesson.set',lesson:{id:'not-a-lesson',title:'Anything',t:0,text:'',why:'',youtube:'aaaaaaaaaaa'}},'tv');assert.equal(r.status,200);
  assert.equal(store.getSession().lesson,null,'an id the library does not hold is not put on the desk');
- r=await post({type:'lesson.set',lesson:{id:lib.id,title:'Other title',t:12,text:'x',why:'y',youtube:'aaaaaaaaaaa'}},'phone');
+ r=await post({type:'lesson.set',lesson:{id:lib.id,title:'Other title',t:12,text:'x',why:'y',youtube:'aaaaaaaaaaa'}},'tv');
  const l=store.getSession().lesson;assert.equal(l.id,lib.id);assert.equal(l.youtube,lib.youtube,'the library\'s video, not the posted one');assert.equal(l.title,lib.title,'the library\'s title');assert.equal(l.t,12);
  store.dispatch({type:'lesson.set',lesson:null});assert.equal(store.getSession().lesson,null,'no lesson still clears');
 });
@@ -925,6 +928,9 @@ const SAMPLES={
  'practice.settle':{type:'practice.settle',n:1,reply:'2',verdict:'right'},
  'job.start':{type:'job.start',kind:'read',id:'j1'},'job.done':{type:'job.done',kind:'read',id:'j1'},'job.failed':{type:'job.failed',kind:'read',id:'j1',error:'x'},
  'essay.clear':{type:'essay.clear'},'status':{type:'status',text:'hi'},'session.end':{type:'session.end'},'reset':{type:'reset'},'pin.turn':{type:'pin.turn'},'phone.presence':{type:'phone.presence',live:1},'phones.forget':{type:'phones.forget'},'ask.open':{type:'ask.open',kind:'page'},'ask.cancel':{type:'ask.cancel',id:'x'},'ask.sent':{type:'ask.sent',id:'x'},
+ 'writing.pick':{type:'writing.pick',promptId:'screens'},'writing.clear':{type:'writing.clear'},'writing.busy':{type:'writing.busy',busy:true,by:'ema'},
+ 'writing.coached':{type:'writing.coached',draft:'a. b.',note:'n',by:'ema'},'writing.finished':{type:'writing.finished',revision:'a. c.',saved:'s',by:'ema'},
+ 'learner.reread':{type:'learner.reread',by:'ema'},
 };
 // seats a learner, or changes nothing a slot holds: these are not owed a place in NEEDS_LEARNER
 const SEATS_OR_CLEARS=new Set(['learner.set','reset']);
@@ -971,6 +977,7 @@ const JUNK={
  'topic.open':{topic:{ok:{topic:'fractions'},bad:[{},7,null]},stay:{ok:{topic:'fractions',stay:true},bad:['a',{},1]}},
  walk:{ix:{ok:{ix:0},bad:['a',1.5,{},null]}},
  status:{text:{ok:{text:'x'},bad:[{},7,null]}},
+ 'writing.pick':{promptId:{ok:{promptId:'screens'},bad:[{},7,null,'']}},
 };
 const junkPosts=()=>{const rows=[];for(const [type,fields] of Object.entries(JUNK))for(const [field,{ok,bad}] of Object.entries(fields))for(const v of bad)rows.push({type,field,e:{type,...ok,[field]:v}});
  rows.push({type:'bogus',field:'type',e:{type:'bogus'}});return rows;};
@@ -1097,6 +1104,28 @@ test('lite r2 (g): phones.forget from a phone or a guest is still 403',async()=>
  assert.equal((await post({type:'phones.forget'},'guest')).status,403);
  assert.equal(pairing().isPhone(cookie.slice('desk-phone='.length)),true,'the phone is still listed');
 });
+// session.json carries every page photo, and the running clock ticks once a second: a tick alone does not rewrite the file each time
+test('a timer.tick rewrites session.json at most once in TICK_SAVE_MS; the next other event, and a phase that turns, write it at once',()=>{
+ const file=path.join(data,'session.json'),onDisk=()=>JSON.parse(fs.readFileSync(file,'utf8'));
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});store.dispatch({type:'timer.start'});
+ const left0=onDisk().timer.left;assert.equal(left0,store.getSession().timer.left);
+ for(let i=0;i<10;i++)store.dispatch({type:'timer.tick',seconds:1});
+ assert.equal(store.getSession().timer.left,left0-10);
+ assert.equal(onDisk().timer.left,left0,'ten ticks inside the window wrote nothing');
+ store.dispatch({type:'focus',focus:1});assert.equal(onDisk().timer.left,left0-10,'the next other event writes the clock as it stands');
+ store.dispatch({type:'timer.tick',seconds:1});// inside the window again: not written
+ globalThis.__desk.session={...store.getSession(),timer:{...store.getSession().timer,left:1}};store.dispatch({type:'timer.tick',seconds:1});
+ assert.equal(onDisk().timer.phase,'break','a tick that turns the phase is written at once');
+});
+// the desk's own notes on a learner (lib/desk/memory.ts) are for its prompts: no screen reads them, so no message carries them
+test('the desk\'s notes on a learner ride on no session: not after a re-read, not to the TV, not to a phone',async()=>{
+ const L=require(src('lib/session/learners.ts'));store.dispatch({type:'reset'});
+ L.saveLearner({...L.getLearner('ema'),memory:[{text:'Ema rushes the second step.',at:1,source:'nightly'}]});
+ store.dispatch({type:'learner.set',id:'ema'});
+ assert.equal('memory' in store.getSession(),false,'the re-read does not put the notes on the session');
+ const cookie=await phoneCookie();store.dispatch({type:'learner.set',id:'ema'});
+ for(const role of ['tv','phone'])assert.equal(JSON.stringify((await (await sessionRoute().GET(req('/api/session',{role,cookie}))).json())).includes('rushes the second step'),false,role);
+});
 // ---- TL-11: the phone answers asks and does not move the TV
 const PHONE_REFUSED=[{type:'nav',screen:'page'},{type:'focus',focus:1},{type:'subject',subject:'english'},{type:'item',itemIx:0},{type:'page.select',pageIx:0},{type:'walk',ix:1},
  {type:'essay.at',n:1},{type:'timer.start'},{type:'timer.pause'},{type:'timer.tick',seconds:1},{type:'timer.skipbreak'},{type:'session.end'}];
@@ -1125,4 +1154,49 @@ test('TL-11 (OD4 b): a phone\'s task.add and task.done stay allowed',async()=>{
  const t=store.getSession().tasks.find((x)=>x.name==='Reading');assert.ok(t,'the task is on the list');
  assert.equal((await post({type:'task.done',id:t.id,done:true},'phone',cookie)).status,200);
  assert.equal(store.getSession().tasks.find((x)=>x.id===t.id).done,true);
+});
+// tonight's list is the phone's (OD4 b), and every task rides in every message and in session.json: a name, a length and a list are bounded
+test('task.add: a name past TASK_NAME_MAX, minutes that are not a whole 1 to TASK_MIN_MAX, or a list at TASKS_MAX changes nothing',async()=>{
+ const cookie=await phoneCookie();evening('tonight');const {TASK_NAME_MAX,TASK_MIN_MAX,TASKS_MAX,TASKS_FULL}=store;
+ assert.equal(typeof TASK_NAME_MAX,'number');assert.equal(typeof TASKS_MAX,'number');
+ for(const e of [{name:'x'.repeat(TASK_NAME_MAX+1),min:10},{name:'Read',min:0},{name:'Read',min:2.5},{name:'Read',min:TASK_MIN_MAX+1},{name:'Read',min:-5}]){
+  const before=JSON.stringify(store.getSession().tasks);const r=await post({type:'task.add',sub:'english',...e},'phone',cookie);
+  assert.equal(r.status,400,JSON.stringify(e).slice(0,60));assert.equal(JSON.stringify(store.getSession().tasks),before);
+ }
+ assert.equal((await post({type:'task.add',name:'x'.repeat(TASK_NAME_MAX),sub:'english',min:TASK_MIN_MAX},'phone',cookie)).status,200,'at the bounds is kept');
+ while(store.getSession().tasks.length<TASKS_MAX)assert.equal((await post({type:'task.add',name:'Read',sub:'english',min:10},'phone',cookie)).status,200);
+ const full=JSON.stringify(store.getSession().tasks);
+ await post({type:'task.add',name:'One more',sub:'english',min:10},'phone',cookie);
+ assert.equal(JSON.stringify(store.getSession().tasks),full,'a full list of open tasks takes no more');assert.equal(store.getSession().status,TASKS_FULL);
+ // a ticked task makes room: the oldest ticked one goes, the list stays at TASKS_MAX
+ const t2=store.getSession().tasks[2];assert.equal((await post({type:'task.done',id:t2.id,done:true},'phone',cookie)).status,200);
+ await post({type:'task.add',name:'One more',sub:'english',min:10},'phone',cookie);
+ const now=store.getSession().tasks;assert.equal(now.length,TASKS_MAX);assert.equal(now.at(-1).name,'One more');assert.equal(now.some((t)=>t.id===t2.id),false,'the ticked one made room');
+});
+// TL-11 as an allowlist (authorization: dispatch-chokepoint-gating, default deny): what a phone may post is named, and the
+// ground truth is the phone's own sources - every type they send must be on the list, and every other type the door takes is 403
+const PHONE_SOURCES=['app/phone','english/LingaPhone.tsx'];
+const stripComments=(t)=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:\\])\/\/.*$/gm,'$1');
+const phoneSends=()=>{const out=new Set();
+ for(const p of PHONE_SOURCES){const at=src(p),files=fs.statSync(at).isDirectory()?fs.readdirSync(at).filter((f)=>/\.tsx?$/.test(f)).map((f)=>path.join(at,f)):[at];
+  for(const f of files)for(const m of stripComments(fs.readFileSync(f,'utf8')).matchAll(/\btype: ?"([a-z][a-z.]*)"/g))out.add(m[1]);}
+ return out;};
+test('TL-11: every event type the phone\'s sources post is one a phone may post',()=>{
+ const {PHONE_MAY}=pairing();assert.ok(PHONE_MAY instanceof Set,'pairing.ts names what a phone may post');
+ // nav is the unjoined Join panel's "Show the code on the TV": a guest's post (guestMay), never a joined phone's
+ const sent=[...phoneSends()].filter((t)=>store.POSTABLE.includes(t)&&t!=='nav');
+ assert.ok(sent.length>=8,`the phone sources were read (${sent})`);
+ for(const t of sent)assert.ok(PHONE_MAY.has(t),`the phone sends ${t}, and the list refuses it`);
+});
+test('TL-11: a phone posting a type the phone never sends - view, page.ask, lesson.set, essay.clear, status... - is 403 and the session is byte-identical',async()=>{
+ const {PHONE_MAY}=pairing();const cookie=await phoneCookie();
+ const SAMPLE={view:{view:'overview'},'page.ask':{subject:'english'},'page.unask':{},'lesson.set':{lesson:{id:'x',title:'x',t:0,text:'x',why:'x'}},'lesson.pause':{paused:true},
+  'essay.type':{essayType:'argument'},'essay.clear':{},'essay.plan':{lens:'argument'},status:{text:'Look at the phone now'}};
+ const refused=store.POSTABLE.filter((t)=>!PHONE_MAY.has(t));
+ for(const t of Object.keys(SAMPLE))assert.ok(refused.includes(t),`${t} is not a phone's post`);
+ for(const t of refused){
+  evening('forensic');const before=JSON.stringify(store.getSession());
+  const r=await post({type:t,...(SAMPLE[t]??{})},'phone',cookie);
+  assert.equal(r.status,403,t);assert.equal(JSON.stringify(store.getSession()),before,`${t} changed the session`);
+ }
 });

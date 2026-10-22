@@ -49,7 +49,7 @@ const run = async () => {
   const consoleErrors = [];
   page.on('pageerror', (e) => consoleErrors.push(String(e)));
 
-  await page.goto(`${BASE}/?pin=${pairingPin(args, 'live')}`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`${BASE}/#pin=${pairingPin(args, 'live')}`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.__pen && window.__pen.isConnected(), null, { timeout: 15000 });
   check('PWA loaded from the TV and paired over ws:// using the on-screen PIN', true);
 

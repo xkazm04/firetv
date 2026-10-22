@@ -66,13 +66,19 @@ function readPiece(learnerId: string, id: string): Piece | null {
     return p;
   } catch (e) { tell(`desk texts: ${fileOf(learnerId, id)} is not readable JSON, so it is left off the shelf: ${whyNot(e)}`); return null; }
 }
-/** Written to a temporary name, then renamed over: a crash mid-write leaves the old version, never half a file. */
-function writePiece(learnerId: string, p: Piece): void {
+/** What the route answers when a piece could not be written: nothing was kept, and sending it again may work. */
+export const TEXT_NOT_SAVED = "The desk could not save that just now, so nothing was kept. Send it again.";
+/**
+ * Written whole to a temporary name, then renamed over: a crash mid-write leaves the old file, never half a file. A write
+ * that fails takes its temporary file with it and throws (as learners.ts writeBook and the session's writeSession do).
+ */
+function writeWhole(learnerId: string, to: string, json: string): void {
   mkdirSync(folder(learnerId), { recursive: true });
-  const to = fileOf(learnerId, p.id), tmp = `${to}.${process.pid}.tmp`;
-  writeFileSync(tmp, JSON.stringify(p));
-  renameSync(tmp, to);
+  const tmp = `${to}.${process.pid}.tmp`;
+  try { writeFileSync(tmp, json); renameSync(tmp, to); }
+  catch (e) { try { rmSync(tmp, { force: true }); } catch { /* best effort: the write's own failure is thrown just below */ } throw e; }
 }
+function writePiece(learnerId: string, p: Piece): void { writeWhole(learnerId, fileOf(learnerId, p.id), JSON.stringify(p)); }
 function ids(learnerId: string): string[] {
   try { return readdirSync(folder(learnerId)).filter((f) => f.endsWith(".json")).map((f) => f.slice(0, -5)).filter((id) => PIECE_ID.test(id)); }
   catch (e) { if ((e as NodeJS.ErrnoException)?.code !== "ENOENT") tell(`desk texts: ${folder(learnerId)} could not be listed, so the shelf shows nothing: ${whyNot(e)}`); return []; }
@@ -96,13 +102,18 @@ function titleOf(text: string, format: string, learnerId: string): string {
   return `Untitled ${format} ${Math.max(0, ...used) + 1}`;
 }
 
-export function listPieces(learnerId: string): PieceCard[] {
+/** Every piece the learner kept, each file read once, the most recently kept first (the shelf's order). */
+export function allPieces(learnerId: string): Piece[] {
   if (!LEARNER_ID.test(learnerId)) return [];
-  return ids(learnerId).flatMap((id) => {
-    const p = readPiece(learnerId, id); if (!p) return [];
+  return ids(learnerId).flatMap((id) => { const p = readPiece(learnerId, id); return p ? [p] : []; })
+    .sort((a, b) => b.versions.at(-1)!.at - a.versions.at(-1)!.at);
+}
+
+export function listPieces(learnerId: string): PieceCard[] {
+  return allPieces(learnerId).map((p) => {
     const last = p.versions.at(-1)!;
-    return [{ id: p.id, format: p.format, title: p.title, versions: p.versions.length, paragraphs: paragraphsOf(last.text).length, updated: last.at }];
-  }).sort((a, b) => b.updated - a.updated);
+    return { id: p.id, format: p.format, title: p.title, versions: p.versions.length, paragraphs: paragraphsOf(last.text).length, updated: last.at };
+  });
 }
 
 export function getPiece(learnerId: string, id: string): Piece | null {
@@ -132,10 +143,11 @@ export function matchPiece(learnerId: string, text: string, format?: unknown): s
   const first = (paragraphsOf(text)[0] ?? "").trim();
   const heading = /^#{1,6}\s+\S/.test(first) ? first.replace(/^#{1,6}\s+/, "").slice(0, 80) : null;
   const mine = paragraphsOf(text).map((x) => x.trim());
-  for (const c of listPieces(learnerId)) {
+  // each piece is read once (allPieces): the list and its last version are the same read
+  for (const c of allPieces(learnerId)) {
     if (typeof format === "string" && format && c.format !== format) continue;
     if (heading !== null && c.title === heading) return c.id;
-    const last = getPiece(learnerId, c.id)?.versions.at(-1);
+    const last = c.versions.at(-1);
     if (!last) continue;
     const theirs = paragraphsOf(last.text).map((x) => x.trim());
     const shared = theirs.filter((x) => mine.includes(x)).length;
@@ -173,6 +185,24 @@ export function markNoticed(learnerId: string, now = Date.now()): boolean {
   mkdirSync(folder(learnerId), { recursive: true });
   writeFileSync(noticeFile(learnerId), JSON.stringify({ at: now }));
   return true;
+}
+
+/**
+ * The twin's own file beside the pieces (v2 P4, D6). lib/twin/state.ts decides what it holds and when it is put aside;
+ * the write is here, because this module owns the learner's text folder and the session is the only state.
+ */
+export const twinFileOf = (learnerId: string) => path.join(folder(learnerId), "twin.json");
+/** Written whole (writeWhole, as a piece is): a crash mid-write leaves the old state, never half a file, and a failed write no temp file. */
+export function writeTwinFile(learnerId: string, json: string): void {
+  if (!LEARNER_ID.test(learnerId)) throw new Error("no learner");
+  writeWhole(learnerId, twinFileOf(learnerId), json);
+}
+/** An unreadable twin file, renamed beside itself and never written over; the new path, or a throw when it could not be moved. */
+export function setAsideTwinFile(learnerId: string, now = Date.now()): string {
+  if (!LEARNER_ID.test(learnerId)) throw new Error("no learner");
+  const f = twinFileOf(learnerId), to = `${f}.bad-${now.toString(36)}`;
+  renameSync(f, to);
+  return to;
 }
 
 /** Everything the learner kept, gone: the folder and all it holds. True when nothing of theirs is left on disk. */

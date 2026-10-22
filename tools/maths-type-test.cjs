@@ -485,3 +485,30 @@ test('MB3-3: inf, infinity and ∞ after ^ or _ are one ∞ atom',()=>{
  for(const [s,want] of [['int_1^inf x dx','∫_(1)^(∞) x dx'],['∫_1^∞ x dx','∫_(1)^(∞) x dx'],['sum_(n=1)^infinity 1/n','∑_(n=1)^(∞) (1)/(n)'],['x^inf','x^(∞)']])
   assert.equal(flat(s),want,s);
 });
+
+/**
+ * The ten-foot law for the whole stylesheet (docs/DESIGN-MATH-BUDDY.md law 8): nothing under 28 px except 20-22 px uppercase
+ * labels. Test 19 holds the scripts and fraction parts; this holds every other rule that sets a px size. A rule is a label when
+ * it sets uppercase itself or its element carries a class whose own rule does (.mb-door .mb-kick is a .mb-kick).
+ * PAPER_DEBT is the paper screen's reading lines that were under the floor when this gate landed (2026-10-21): it may only
+ * shrink - a listed rule that reaches the floor fails until it is taken off the list.
+ */
+const PAPER_DEBT=['.maths-tv .mb-prow .from','.maths-tv .mb-poffrow .nm','.maths-tv .mb-poffrow .lost','.maths-tv .mb-poffrow .from','.maths-tv .mb-pscore .off','.maths-tv .mb-poff .c','.maths-tv .mb-poff .m'];
+test('20: the ten-foot floor over the whole stylesheet - only 20-22 px uppercase labels sit under 28 px, and the paper screen\'s debt only shrinks',()=>{
+ const css=fs.readFileSync(path.join(root,'src/design/maths-lamplight.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+ const rules=[...css.replace(/@media[^{]*\{([^{}]*\{[^{}]*\})*[^{}]*\}/g,'').matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(m=>({sels:m[1].split(',').map(s=>s.trim().replace(/\s+/g,' ')),decl:m[2]}));
+ const upper=(d)=>/(?:^|;)\s*text-transform\s*:\s*uppercase/.test(d);
+ // the classes whose own rule (.maths-tv .x) sets uppercase
+ const upperClass=new Set(rules.filter(r=>upper(r.decl)).flatMap(r=>r.sels).map(s=>/^\.maths-tv \.([\w-]+)$/.exec(s)?.[1]).filter(Boolean));
+ const isLabel=(sel,decl)=>upper(decl)||[...(sel.split(' ').pop().matchAll(/\.([\w-]+)/g))].some(m=>upperClass.has(m[1]));
+ const under=[],off=[];
+ for(const r of rules) for(const s of r.sels){
+  const m=/(?:^|;)\s*font-size\s*:\s*([\d.]+)px\s*(?:;|$)/.exec(r.decl);if(!m||+m[1]>=28)continue;
+  under.push(s);
+  if(isLabel(s,r.decl)&&+m[1]>=20&&+m[1]<=22)continue;
+  if(!PAPER_DEBT.includes(s))off.push(`${s} { font-size: ${m[1]}px }`);
+ }
+ assert.ok(under.length>=10,'the gate reads the stylesheet\'s small labels');
+ assert.deepEqual(off,[],'a rule under the 28 px floor that is not a 20-22 px uppercase label');
+ for(const s of PAPER_DEBT) assert.ok(under.includes(s),`${s} reaches the floor now: take it off PAPER_DEBT`);
+});

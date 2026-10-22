@@ -778,3 +778,17 @@ test('route + prompt: the assignment and the last two readings under the lens ri
   assert.ok(s.every((q) => q.prompt.includes('while you judge only the sentences in front of you: "2 of 6; 3 of 7 sentences faulty"')), 'newest two of this lens only, counts only');
   assert.ok(s.every((q) => !q.prompt.includes('5 of 5') && !q.prompt.includes('9 of 9') && !/The open assignment/.test(q.prompt)), 'older or other-lens readings stay out; no assignment, no row');
 });
+
+test('the live harness tools/essay-ui-test.cjs parses, so the EssayTV source pins it carries can run at all', () => {
+  // a literal line break inside a regex literal made it unparsable on main (176f04f0); compiled, never run (it drives a live model)
+  const f = path.resolve(__dirname, 'essay-ui-test.cjs');
+  assert.doesNotThrow(() => new (require('node:vm').Script)(Module.wrap(fs.readFileSync(f, 'utf8')), { filename: f }), 'tools/essay-ui-test.cjs is not valid JavaScript');
+});
+
+test('the shelf: each row\'s buttons name their piece, so a screen reader does not hear "Open" once per row with nothing to tell them apart', () => {
+  const shelf = fs.readFileSync(path.join(root, 'src/app/phone/EssayShelf.tsx'), 'utf8');
+  const row = /<li key=\{c\.id\}[\s\S]*?<\/li>/.exec(shelf)?.[0] ?? '';
+  const buttons = row.match(/<button\b[^>]*>/g) ?? [];
+  assert.equal(buttons.length, 2, 'Open and Delete');
+  for (const b of buttons) assert.match(b, /aria-label=\{`[^`]*\$\{c\.title\}`\}/, b);
+});

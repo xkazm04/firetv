@@ -309,3 +309,16 @@ test('a Character process that exits non-zero is a crash even when it saved its 
   assert.equal(rs[2].crashed, true, 'no file is a crash');
   assert.deepEqual(rs[2].journeys, []);
 });
+
+test('the rubric names the fields an LT finding row carries, as synthesize() writes them', async () => {
+  const driver = require(DRIVER), call = driver.claude.call, dir = path.join(tmp, 'synth-fields'), run = RUN_IDS[0];
+  fs.mkdirSync(dir, { recursive: true });
+  driver.claude.call = async () => { throw new Error('no synthesis in this case'); };
+  try { await D().synthesize(dir, run, resultsOf(run), [], 0); } finally { driver.claude.call = call; }
+  const rows = readJson(path.join(dir, 'findings.json'));
+  assert.ok(rows.length > 0);
+  const written = [...new Set(rows.flatMap(Object.keys))].filter(k => k !== 'recurs').sort();
+  const rubric = fs.readFileSync(path.join(UAT, 'rubric.md'), 'utf8'), m = rubric.match(/^An LT row, as `synthesize` writes it[^\n]*\n\n`\{ ([^}]+) \}`/m);
+  assert.ok(m, 'the rubric states the LT row');
+  assert.deepEqual(m[1].split(',').map(s => s.trim().replace(/\[\]$/, '')).sort(), written);
+});

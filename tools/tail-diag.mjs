@@ -84,7 +84,8 @@ ws.on('message', (raw) => {
   const m = JSON.parse(raw.toString());
   if (m.type === 'welcome' && !m.accepted) {
     console.error('[diag] pairing rejected:', m.reason);
-    process.exit(1);
+    // A refused PIN is a run that never started (2, as a missing PIN or socket), not a measured FAIL (1).
+    process.exit(2);
   }
   if (m.type === 'pong' && inflight.has(m.id)) {
     const started = inflight.get(m.id);

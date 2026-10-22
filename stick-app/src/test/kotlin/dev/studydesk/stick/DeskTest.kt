@@ -141,6 +141,20 @@ class DeskTest {
     }
 
     @Test
+    fun `a desk that answered at the default is the kept desk, so a later search never ends on setup`() {
+        // first launch: the default answers (paired or not) and is kept; then the desk goes quiet, or the pairing
+        // screen waits a minute. The waiting screen's search skips the desk it is probing, so it finds nothing.
+        val now = Plan.answered(Source.DEFAULT)
+        assertEquals(Step.Down(real, "x"), Plan.afterScan(real, emptyList(), now, "x"))
+        assertEquals(Step.Scan, Plan.afterProbe(real, down, now, null, scanned = false))
+        assertEquals(Step.Down(real, "connection refused"), Plan.afterProbe(real, down, now, null, scanned = true))
+        // the same desk after a restart is SAVED: one rule for one desk, whether or not the app restarted
+        assertEquals(Plan.afterScan(real, emptyList(), Source.SAVED, "x"), Plan.afterScan(real, emptyList(), now, "x"))
+        // every other source keeps its own rule
+        for (s in listOf(Source.GIVEN, Source.PICKED, Source.FOUND, Source.SAVED)) assertEquals(s, Plan.answered(s))
+    }
+
+    @Test
     fun `the waiting screen searches the LAN every twelfth tick`() {
         val r = Recovery()
         val scans = (1..24).filter { r.tick() }
@@ -156,6 +170,30 @@ class DeskTest {
         assertFalse(h.beat(down))
         assertFalse(h.beat(down))
         assertTrue(h.beat(down))
+    }
+
+    // -- the error screen's words
+
+    @Test
+    fun `a reason that already asks its question is not asked twice or closed with a stray stop`() {
+        // DeskNet.probe's three reasons that end in a question
+        listOf(
+            "no route to it: is the stick on the same Wi-Fi as the computer?",
+            "the stick has no network: is its Wi-Fi on?",
+            "no route to 10.0.0.141: is the stick on the same Wi-Fi as the computer?",
+        ).forEach { why ->
+            val body = Words.downBody(why)
+            assertFalse(body.contains("?."), body)
+            assertEquals(1, body.split("?").size - 1, body)
+            assertTrue(body.startsWith(why.replaceFirstChar { it.uppercase() }), body)
+        }
+    }
+
+    @Test
+    fun `a plain reason is a sentence followed by the question`() {
+        assertEquals("Nothing answered at 10.0.0.141:3000.\n\nIs the desk running on the computer, and is the stick on the same Wi-Fi?",
+            Words.downBody("nothing answered at 10.0.0.141:3000"))
+        assertEquals("It broke.\n\nIs the desk running on the computer, and is the stick on the same Wi-Fi?", Words.downBody("it broke."))
     }
 
     // -- the setup screen

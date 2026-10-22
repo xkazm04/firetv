@@ -27,11 +27,11 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: "17"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -57,7 +57,7 @@ jobs:
       - name: Show which verified flags the run would flip (never committed by CI)
         if: always()
         run: git diff -- .ai/manifest.yaml
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: capabilities-${{ github.run_id }}

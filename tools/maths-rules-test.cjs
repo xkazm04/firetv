@@ -820,3 +820,15 @@ test('L1-vojtech-18-MB1-2 (recert-2): an unspaced pair "(1,3)" is a point, so th
  }
  assert.deepEqual(T.lineOf('Najděte přímku A[1,5; 2], B[3,5; 6]'),{m:2,c:-1});
 });
+
+test('optimize 2026-10-21: the hint\'s ground asks taskText commaSystem which systems write their own notation, never a copy of the list',()=>{
+ const strip=(t)=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:])\/\/.*$/gm,'$1');
+ const copy=/===\s*"cz"\s*\|\|\s*[\w.]+\s*===\s*"de"|===\s*"de"\s*\|\|\s*[\w.]+\s*===\s*"cz"/;
+ // the canary: the matcher sees an inline copy and ignores one in a comment
+ assert.ok(copy.test('if (who.system === "cz" || who.system === "de") x();'));assert.ok(!copy.test(strip('// who.system === "cz" || who.system === "de"')));
+ assert.ok(!copy.test(strip(fs.readFileSync(path.join(root,'src/lib/desk/hint.ts'),'utf8'))),'hint.ts names the comma systems itself');
+ // and the behaviour is the one rule's: cz and de are told their notation, uk and us are not
+ const {groundFor}=require(path.join(root,'src/lib/desk/hint.ts')),{notationLine}=require(path.join(root,'src/lib/desk/read.ts'));
+ for(const system of ['cz','de'])assert.ok(groundFor('2x + 3 = 11',{id:'opt-21-ground',system}).includes(notationLine(system)),system);
+ for(const system of ['uk','us'])assert.equal(groundFor('2x + 3 = 11',{id:'opt-21-ground',system}),'',system);
+});

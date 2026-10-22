@@ -75,6 +75,14 @@ interface PenTransport {
     fun stop()
 }
 
+/**
+ * The largest frame a pen may send. A phone's messages are a few hundred bytes (a 16 ms batch of
+ * points, a hello, a name tag), and a text frame is read whole into memory before the pairing desk
+ * sees it, so without a limit any device on the Wi-Fi could ask the TV for its heap in one frame.
+ * Ktor drops the connection on a larger frame, unread.
+ */
+internal const val MAX_PEN_FRAME_BYTES: Long = 64 * 1024
+
 /** Shared empty state for transports that have no failure to report. */
 private val NoFailure: StateFlow<String?> = MutableStateFlow(null)
 

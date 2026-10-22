@@ -1,12 +1,17 @@
 # Quality: the repo's own gates (AGENTS.md, "Which gate for which change") on every pull request,
 # so a red gate blocks the merge even when an agent handed off without running it.
 #  - desk: tsc --noEmit, then every rules suite (no live model calls by repo law).
-#  - core: the pure-JVM telestrator unit tests.
+#  - core: the pure-JVM telestrator unit tests, then the stick app's JVM unit tests.
 # gradle.properties pins the operator's local Android Studio JBR, which does not exist on a runner;
 # the core job drops that one line from the checkout and uses the JDK that setup-java installs.
 name: quality
 on:
   pull_request:
+  # On main too: a pull request is checked against its own base, and a squash merge of an old branch can land green
+  # code on a main that has moved under it (fc866ead landed a check that was green on its 2026-10-05 base and red on
+  # the main it merged into). Only a run on main says main is green.
+  push:
+    branches: [main]
   workflow_dispatch: {}
 permissions:
   contents: read
@@ -15,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -30,14 +35,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: "17"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
       - name: Drop the operator's local JDK pin
         run: sed -i '/^org.gradle.java.home=/d' gradle.properties
       - name: Core unit tests
         run: node tools/gradlew.cjs :core:test --console=plain
+      # The stick app's JVM tests: some pin desk facts (desk/src/tv/keys.ts, proxy.ts, pairing.ts, store.ts), so a desk
+      # rename turns them red here and not only on the operator's machine. The runner's preinstalled Android SDK
+      # builds it, as it does the tv-app APK in supply-chain.yml.
+      - name: Stick app unit tests
+        run: node tools/gradlew.cjs :stick-app:testDebugUnitTest --console=plain

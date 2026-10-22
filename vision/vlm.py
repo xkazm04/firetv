@@ -80,6 +80,11 @@ def _post(body, timeout, final=False):
     except urllib.error.URLError as e:
         raise RuntimeError(f"ollama is not reachable at {HOST} ({e.reason}): start it with `ollama serve`, "
                            f"or point OLLAMA_HOST at it.") from None
+    except TimeoutError:
+        # Connected, then no answer in time: urllib wraps a timeout while sending, not while waiting for the
+        # reply. Not retried - the same request would wait as long again. A cold load of a large model is slow.
+        raise RuntimeError(f"ollama at {HOST} gave no answer for {MODEL} within {timeout} s: check `ollama ps` "
+                           f"(a cold load of a large model takes minutes), or pass a longer timeout.") from None
 
 
 def b64(path):

@@ -3,7 +3,8 @@
  *
  * The phone POSTs events; the TV (and the phone) subscribe over SSE. The reducer is pure; engine
  * work happens in the route handlers and lands as further events. Kept on globalThis so Next's
- * dev reloads do not lose the desk mid-session; persisted as JSON on every change.
+ * dev reloads do not lose the desk mid-session; persisted as JSON on every change (the running clock's tick alone at most
+ * once in TICK_SAVE_MS, see dispatch).
  */
 import { RETRYABLE, type JobFailure } from "../desk/failure";
 import type { Workroom } from "../twin/workroom";
@@ -36,7 +37,7 @@ import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck 
 import { STATEMENTS } from "../library/gcse";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "essayplan" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "paper" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs" | "worked" | "workroom";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "essayplan" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "paper" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs" | "worked" | "workroom" | "writing";
 
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
@@ -293,8 +294,8 @@ export interface EssayAnalysis { text: string; type: string; sentences: Sentence
 
 /** What the TV can ask the phone for (TV-led design, section 0): one job at a time, named in the session. */
 export type AskKind = "name" | "page" | "sheet" | "answers" | "question" | "explain" | "second" | "paper"
-  | "paragraph" | "rewrite" | "slot" | "sentence" | "reply" | "words" | "prefs" | "private";
-const ASK_KINDS: ReadonlySet<string> = new Set<AskKind>(["name", "page", "sheet", "answers", "question", "explain", "second", "paper", "paragraph", "rewrite", "slot", "sentence", "reply", "words", "prefs", "private"]);
+  | "paragraph" | "rewrite" | "slot" | "sentence" | "reply" | "words" | "prefs" | "private" | "writing";
+const ASK_KINDS: ReadonlySet<string> = new Set<AskKind>(["name", "page", "sheet", "answers", "question", "explain", "second", "paper", "paragraph", "rewrite", "slot", "sentence", "reply", "words", "prefs", "private", "writing"]);
 /** The hand-off the TV has open: the phone shows that panel and nothing else (TL-5). */
 export interface Ask {
   /** Minted by the desk on ask.open; the phone answers this id. */
@@ -309,6 +310,14 @@ export interface Ask {
   phase: "open" | "sent";
   detail?: { subject?: Subject; n?: number; i?: number; walkIx?: number; turnId?: string };
 }
+
+/**
+ * The Writing episode on the TV (docs/concepts/TV-WRITING-SCREEN-2026-10-21.md): the prompt the learner picked, then the
+ * paragraph the phone sent and its one coaching note, then the revision and the line the save wrote. The steps are
+ * lib/writing/episode's; only /api/writing/coach and /api/writing/finish move it past `write` (they are the server's
+ * events, never a screen's). `busy` is set while the desk coaches or saves what the phone sent.
+ */
+export interface WritingTv { promptId: string; stage: "write" | "coached" | "finished"; draft?: string; note?: string; revision?: string; saved?: string; busy?: boolean }
 
 /** The learner sitting at the desk: a profile's id and name. */
 export interface AtDesk { id: string; name: string }
@@ -351,12 +360,17 @@ export interface Session {
   worked?: Worked | null;
   /** The Workroom as the TV may see it (v2 T2, lib/twin/workroom.ts): titles, counts, marks, level words; never text. */
   workroom?: Workroom | null;
+  /** The Writing episode on the TV for the learner at the desk, or none (a switch of learner drops it; nothing is saved until it is finished). */
+  writingTv?: WritingTv | null;
   /** the current learner's measured skills, hydrated at the dispatch boundary from data/learners.json */
   skills: Record<string, SkillRecord>;
   /** the same measured record per Essay Master lens, hydrated the same way */
   writing: Record<string, SkillRecord>;
-  /** what the desk noticed about this learner, and what actually happened, hydrated the same way */
-  memory: string[]; history: HistoryEntry[];
+  /**
+   * what actually happened, hydrated the same way. The desk's own notes on the learner (lib/desk/memory.ts) are not here:
+   * they are for its prompts, which read the learner file; no screen reads them, so no message carries them.
+   */
+  history: HistoryEntry[];
   /**
    * The Sunday page (Family W9, rules/week): the seated learner's past seven days as the phone's Parent tab words it,
    * assembled on the server from their own digest at the dispatch boundary (weekOf). Only these lines travel - the digest
@@ -419,7 +433,14 @@ export type Event =
   // TL-3: how many phones have a stream open (the stream route raises it), and the TV's forget of every phone (the session route answers it; no reducer change)
   | { type: "phone.presence"; live: number } | { type: "phones.forget" }
   // TL-5: the TV opens a hand-off (ask.open, TV only), the TV or a phone cancels it, the desk marks it answered (ask.sent, server only)
-  | { type: "ask.open"; kind: AskKind; detail?: Ask["detail"] } | { type: "ask.cancel"; id: string } | { type: "ask.sent"; id: string };
+  | { type: "ask.open"; kind: AskKind; detail?: Ask["detail"] } | { type: "ask.cancel"; id: string } | { type: "ask.sent"; id: string }
+  // Writing on the TV: the TV picks a prompt and clears the episode; the writing routes alone raise busy, coached and finished
+  // (they are not in SHAPES, so no screen or phone can post them); `by` is the learner the work was for
+  | { type: "writing.pick"; promptId: string } | { type: "writing.clear" }
+  | { type: "writing.busy"; busy: boolean; by: string } | { type: "writing.coached"; draft: string; note: string; by: string } | { type: "writing.finished"; revision: string; saved: string; by: string }
+  // a route that wrote the seated learner's record outside any other event (the /writing page's save) asks the desk to read it
+  // again (REHYDRATE); it moves nothing else, and is not in SHAPES, so no screen or phone can post it
+  | { type: "learner.reread"; by: string };
 
 /**
  * The one door for what a screen or phone posts (api/session POST, after the server-only refusals): for each client-postable
@@ -427,7 +448,7 @@ export type Event =
  * reducer sees it. Ranges are the reducer's (a focus or a walk index may be -1 or past the end); this checks the kind of value.
  * paper.enter's rows are unchecked on purpose: the desk's own cleanPaper decides what stands.
  */
-const SCREENS: Record<Screen, true> = { landing: true, pair: true, joined: true, tonight: true, units: true, calendar: true, page: true, hint: true, lesson: true, sentence: true, headtohead: true, essaytype: true, essayplan: true, forensic: true, playbook: true, xray: true, break: true, recap: true, learner: true, profile: true, topics: true, prepare: true, paper: true, practice: true, sheet: true, walk: true, linga: true, "linga-scenes": true, "linga-map": true, "linga-talk": true, "linga-coach": true, "linga-recap": true, "linga-check": true, "linga-verdict": true, "linga-plan": true, "linga-moment": true, "linga-cert": true, "linga-certs": true, worked: true, workroom: true };
+const SCREENS: Record<Screen, true> = { landing: true, pair: true, joined: true, tonight: true, units: true, calendar: true, page: true, hint: true, lesson: true, sentence: true, headtohead: true, essaytype: true, essayplan: true, forensic: true, playbook: true, xray: true, break: true, recap: true, learner: true, profile: true, topics: true, prepare: true, paper: true, practice: true, sheet: true, walk: true, linga: true, "linga-scenes": true, "linga-map": true, "linga-talk": true, "linga-coach": true, "linga-recap": true, "linga-check": true, "linga-verdict": true, "linga-plan": true, "linga-moment": true, "linga-cert": true, "linga-certs": true, worked: true, workroom: true, writing: true };
 type Field = (v: unknown) => boolean;
 const f = {
   str: ((v) => typeof v === "string") as Field,
@@ -440,6 +461,14 @@ const f = {
   object: ((v) => !!v && typeof v === "object" && !Array.isArray(v)) as Field,
 };
 const maybe = (c: Field): Field => (v) => v === undefined || c(v);
+/**
+ * Tonight's list is the phone's to add to (OD4 b), and every task rides in every message to every screen and in session.json,
+ * so a task is bounded where it comes in: a name of at most TASK_NAME_MAX letters, whole minutes from 1 to TASK_MIN_MAX, and at
+ * most TASKS_MAX on one learner's list: a new task past it takes the place of the oldest ticked one, and with none ticked the
+ * reducer says TASKS_FULL and adds nothing.
+ */
+export const TASK_NAME_MAX = 80, TASK_MIN_MAX = 180, TASKS_MAX = 20;
+export const TASKS_FULL = `Tonight's list holds ${TASKS_MAX} tasks still to do. Tick one off first.`;
 const lessonPick: Field = (v) => v === null || (f.object(v) && ["id", "title", "text", "why"].every((k) => f.str((v as Record<string, unknown>)[k])) && f.num((v as Record<string, unknown>).t) && maybe(f.str)((v as Record<string, unknown>).youtube));
 const askDetailOk: Field = (v) => {
   if (!f.object(v)) return false;
@@ -453,12 +482,15 @@ const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { ty
   "lesson.set": { lesson: lessonPick, key: maybe(f.str) }, "lesson.pause": { paused: f.bool },
   "essay.type": { essayType: f.str, owner: maybe(f.str) }, "essay.at": { n: (v) => v === null || f.int(v) }, "essay.clear": { owner: maybe(f.str) }, "essay.plan": { lens: f.str }, "essay.slot": { i: f.int, text: f.str },
   "paper.enter": { rows: () => true, askId: maybe(f.name) },
-  "task.add": { name: f.name, sub: f.subject, min: f.num }, "task.done": { id: f.str, done: f.bool },
+  "task.add": { name: (v) => f.name(v) && (v as string).length <= TASK_NAME_MAX, sub: f.subject, min: (v) => f.int(v) && (v as number) >= 1 && (v as number) <= TASK_MIN_MAX }, "task.done": { id: f.str, done: f.bool },
   "timer.start": {}, "timer.pause": {}, "timer.tick": { seconds: f.num }, "timer.skipbreak": {},
   "topic.open": { topic: f.str, stay: maybe(f.bool) }, walk: { ix: f.int }, "practice.clear": {},
   status: { text: f.str, essayRefused: maybe(f.bool) }, "session.end": {}, reset: {},
   "ask.open": { kind: (v) => typeof v === "string" && ASK_KINDS.has(v), detail: maybe(askDetailOk) }, "ask.cancel": { id: f.name }, "ask.sent": { id: f.name },
+  "writing.pick": { promptId: f.name }, "writing.clear": {},
 };
+/** Every type a screen or phone may post at all (the door's own list): what a caller's allowlist is checked against. */
+export const POSTABLE = Object.keys(SHAPES) as Event["type"][];
 /** Why a posted event is refused, or null when it may go to the reducer. */
 export function badPost(e: unknown): string | null {
   const type = (e as { type?: unknown } | null)?.type;
@@ -612,7 +644,7 @@ export function fresh(): Session {
     pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
     hint: null, lesson: null, noLesson: false, lessonPaused: false,
     english: null, englishLearning: emptyEnglish(), conversation: null, check: null, essay: null, essayType: null, essayAt: null,
-    topic: null, practice: null, walkIx: 0, skills: {}, writing: {}, memory: [], history: [],
+    topic: null, practice: null, walkIx: 0, skills: {}, writing: {}, history: [],
     jobs: {}, status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, updatedAt: Date.now(),
   };
 }
@@ -697,7 +729,7 @@ function askDetail(d: Ask["detail"] | undefined): Ask["detail"] | undefined {
 /** The learner at the desk changed: what belonged to the one who left is cleared, and so are the failed runs and the analyse run in flight (a failed read is not the next learner's to retry; a late reading is dropped by its id). */
 function switchedFrom(s: Session, n: Session): void {
   n.ask = null; if (namesPhone(n.status)) n.status = "";
-  n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null; if (s.paperAim) n.paperAim = null;
+  n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null; n.writingTv = null; if (s.paperAim) n.paperAim = null;
   const jobs = { ...(s.jobs ?? {}) } as Jobs;
   for (const k of Object.keys(jobs) as JobKind[]) {
     const j = jobs[k];
@@ -869,8 +901,10 @@ function step(s: Session, e: Event): Session {
     case "essay.at": n.essayAt = e.n !== null && s.essay?.sentences.some((x) => x.n === e.n) ? e.n : null; break;
     // an id no task anywhere on the desk has (this learner's list, and every learner's in `away`), so a tick that names
     // one learner's task can never land on another's - even two added in the same millisecond, across a learner switch
-    case "task.add": { const id = newTaskId(s);
-      n.tasks = [...s.tasks, { id, sub: e.sub, name: e.name, min: e.min, done: false }]; break; }
+    case "task.add": { let kept = s.tasks;
+      if (kept.length >= TASKS_MAX) { const old = kept.findIndex((t) => t.done); if (old < 0) { n.status = TASKS_FULL; break; } kept = kept.filter((_, i) => i !== old); }
+      const id = newTaskId(s);
+      n.tasks = [...kept, { id, sub: e.sub, name: e.name, min: e.min, done: false }]; break; }
     case "task.done": n.tasks = s.tasks.map((t) => (t.id === e.id ? { ...t, done: e.done } : t)); break;
     case "timer.start": n.timer = { ...s.timer, running: true }; if (!s.log.started) n.log = { ...s.log, started: Date.now() }; break;
     case "timer.pause": n.timer = { ...s.timer, running: false }; break;
@@ -906,6 +940,14 @@ function step(s: Session, e: Event): Session {
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; n.essayRefused = e.essayRefused ? e.text : undefined; break;
+    // Writing on the TV: a pick starts an episode (the prompt is checked by the screen's own list); a clear goes back to the list
+    case "writing.pick": if (!s.learner) return s; n.writingTv = { promptId: e.promptId, stage: "write" }; if (s.ask?.kind === "writing") n.ask = null; break;
+    case "writing.clear": n.writingTv = null; if (s.ask?.kind === "writing") n.ask = null; break;
+    // the routes' results land only on the episode of the learner they were for, at the stage they answer
+    case "writing.busy": if (!s.writingTv || s.learner?.id !== e.by) return s; n.writingTv = { ...s.writingTv, busy: e.busy }; break;
+    case "writing.coached": if (s.writingTv?.stage !== "write" || s.learner?.id !== e.by) return s; n.writingTv = { ...s.writingTv, stage: "coached", draft: e.draft, note: e.note, busy: false }; break;
+    case "writing.finished": if (s.writingTv?.stage !== "coached" || s.learner?.id !== e.by) return s; n.writingTv = { ...s.writingTv, stage: "finished", revision: e.revision, saved: e.saved, busy: false }; break;
+    case "learner.reread": if (s.learner?.id !== e.by) return s; break;
     case "session.end": n.ask = null; n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.log = { ...s.log, endedAt: Date.now() }; break;
     case "reset": return { ...fresh(), phonesLive: s.phonesLive };
   }
@@ -942,7 +984,7 @@ function logWatched(w: Watch): void {
 
 // ---- the singleton, HMR-proof ----
 type Sub = (s: Session) => void;
-interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; /** whether the last practice.settle restate of the learner file landed (WD9); a missing value reads as landed */ settled?: boolean; /** whether the last hint count write landed (WD12); a missing value reads as counted */ counted?: boolean; /** where an unusable session.json is still to be put aside: the load could not rename it, so no save may write over it until it is */ aside?: string; }
+interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; /** when session.json was last written, so the clock's ticks rewrite it at most once in TICK_SAVE_MS */ wroteAt?: number; /** whether the last practice.settle restate of the learner file landed (WD9); a missing value reads as landed */ settled?: boolean; /** whether the last hint count write landed (WD12); a missing value reads as counted */ counted?: boolean; /** where an unusable session.json is still to be put aside: the load could not rename it, so no save may write over it until it is */ aside?: string; }
 const g = globalThis as unknown as { __desk?: Store };
 function load(): Session {
   if (!existsSync(FILE())) return fresh();
@@ -956,6 +998,8 @@ function load(): Session {
   } catch (e) { bad = `it could not be read (${e instanceof Error ? e.message : e})`; }
   if (bad) return setAside(bad);
   try {
+    // a session.json written while the session carried the desk's notes on the learner: they are not the session's
+    delete j.memory;
     const log = "log" in j ? keptLog(j.log) : undefined;
     return settleOwners({ ...fresh(), ...j, ...(log === undefined ? {} : { log }), profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phonesLive: 0, ask: null, status: namesPhone(String(j.status ?? "")) ? "" : j.status ?? "", phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
   } catch (e) { return setAside(`its repair failed (${e instanceof Error ? e.message : e})`); }
@@ -1064,7 +1108,7 @@ export function getSession() { return store.session; }
  * at the desk. The reducer stays pure: the file read happens here, at the boundary that already
  * writes to disk and pushes to subscribers.
  */
-const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "page.marked", "linga.changed", "essay.set", "essay.progress", "essay.revised", "lesson.watched", "paper.enter"]);
+const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "page.marked", "linga.changed", "essay.set", "essay.progress", "essay.revised", "lesson.watched", "paper.enter", "writing.finished", "learner.reread"]);
 
 /**
  * A settled item changes its set's count: the line marking wrote (the last practice line, this topic, this n)
@@ -1184,23 +1228,28 @@ export function dispatch(e: Event): Session {
     const id = store.session.learner?.id;
     if (id) try {
       const l = readLearner(id);
-      store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory.map((n) => n.text), history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null, ...(store.session.status === LEARNER_UNREAD ? { status: "" } : {}) };
+      store.session = { ...store.session, skills: l.skills, writing: l.writing, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null, ...(store.session.status === LEARNER_UNREAD ? { status: "" } : {}) };
       rehydrateTold = "";
     } catch (err) {
       tellRehydrate(err instanceof Error ? err.message : String(err));
       // the same learner keeps its own records (WD13); a learner switched to never shows the previous learner's (WD14a)
       if (before.learner?.id !== id) {
         const b = blank(id);
-        store.session = { ...store.session, skills: b.skills, writing: b.writing, memory: b.memory.map((n) => n.text), history: b.history, englishLearning: b.english, paper: null, status: LEARNER_UNREAD };
+        store.session = { ...store.session, skills: b.skills, writing: b.writing, history: b.history, englishLearning: b.english, paper: null, status: LEARNER_UNREAD };
       }
     }
   }
   if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) store.session = { ...store.session, week: weekRead(store.session) };
-  writeSession();
+  // the running clock's tick alone rewrites the file at most once in TICK_SAVE_MS (it carries every page photo); a tick that turns
+  // the phase, a write that failed last time, and every other event write at once, so a restart loses at most that much clock
+  const tickOnly = e.type === "timer.tick" && before.timer.phase === store.session.timer.phase && store.saved !== false && Date.now() - (store.wroteAt ?? 0) < TICK_SAVE_MS;
+  if (!tickOnly) writeSession();
   notify();
-  if (e.type === "job.start") workBegins();
+  if (e.type === "job.start" || (e.type === "writing.busy" && e.busy)) workBegins();
   return store.session;
 }
+/** How often the running clock's ticks alone may rewrite session.json (dispatch): a restart loses at most this much of the clock. */
+const TICK_SAVE_MS = 30_000;
 /**
  * The one way session.json is written: a temp file beside it, then a rename over it, so a crash mid-write leaves the old
  * file whole (the way learners.ts writeBook does). Whether it landed is kept for the read route (HF4). The log speaks on a
@@ -1224,7 +1273,7 @@ function writeSession(): void {
     writeFileSync(tmp, JSON.stringify(store.session));
     renameSync(tmp, FILE());
     if (store.saved === false) console.error("desk session: session.json is being written again");
-    store.saved = true;
+    store.saved = true; store.wroteAt = Date.now();
   } catch (e) {
     try { rmSync(tmp, { force: true }); } catch { /* best effort: the write's own failure is logged just below */ }
     if (store.saved !== false) console.error("desk session: session.json could not be written, so the session will not survive a restart:", e instanceof Error ? e.message : e);

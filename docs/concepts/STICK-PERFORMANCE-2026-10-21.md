@@ -140,3 +140,145 @@ Reading it:
 - `before/{prod,dev}/`, `after-zoom/prod/`, `after-grain/prod/`, `after/{prod,dev}/` (`after/dev` ran the zoom build): `*.summary.json`, `*.gfxinfo.txt`, traces, `windows.json`, `windows-2000.json`.
 - `look2/`, `look3/`: the stills and the differences.
 - `kit/`: the scripts named above. The experiment traces stayed in `C:/tmp/dp21/` (`exp*/`, `dbg*/`, `sb-*/`).
+
+## Pass 3: pre-rendered stills (2026-10-21, afternoon)
+
+The base is main e9c62990: pass 2 plus the zoom fit, which the operator took outright. This pass takes the first item under "Left open" above: the GPU rasters each world's still parts again on every lamp move and every Back.
+
+**In one line:** each world's sky, hills and side cliffs (and Linga's doorway and counter) are drawn once per page load into a canvas. The canvas sits in the layer's SVG through a `foreignObject`, and Chrome composites it as its own texture layer, with no tile raster. On the stick:
+- a lamp move's longest frame gap fell from 641–669 ms to 271–283 ms, and its second freeze is gone;
+- Back fell from 500–572 ms to 228–378 ms;
+- Select fell into Math Buddy and Essay Master, and Linga is within noise.
+
+The look is 45.7–46.6 dB against e9c62990 on the stick. The bitmaps take 36.9 MB. On the landing the app's GPU memory is 1.5–5 MB lower than before; inside a module it is about 46 MB higher, because the bitmaps stay resident.
+
+### What was built
+
+- **`desk/src/landing/themes/paper/stills/`.**
+  - `Still.tsx`: `still(id, kind, d, node, sharp?)` declares a still at module scope. Until its bitmap is ready it renders live, exactly as the layer drew it before (a `pp-each` group, so each piece still casts its CSS shadow). After that it renders a `foreignObject` (`pp-flat`, so it casts nothing) that holds the canvas.
+  - Baking: the node renders off-screen in a detached React root, is measured with `getBBox`, gets the layer's CSS shadow as an SVG `feDropShadow` on each piece the CSS would shadow, and is serialised. It is then rasterised once as an image into the canvas.
+  - Once one still has mounted, every declared still is baked, one per idle callback. So the first move to another world finds its bitmaps ready.
+  - On `contextrestored` a canvas is drawn again from its SVG.
+  - `rules.ts` holds the pure parts:
+    - the box a bitmap holds: the drawing plus what its blur reaches, clipped to the stage widened by the layer's whole slide, so no cut edge comes into view while a world slides;
+    - the scale: half the device's for every kind, and full for `sharp` stills;
+    - the shadow table mirrored from `design/desk-landing.css`;
+    - the byte cost.
+- **`worlds.tsx`.** These are stills:
+  - Math Buddy: the sky (sun, protractor and dotted path), both hill layers, and the front hill and cliffs. The floating symbols on the front stay live.
+  - Linga: the sky, with a night form that carries the moon (its stars twinkle live); both hills; the doorway with Robin (sharp); the counter (sharp; the bell rings live); and the front.
+  - Essay Master: the sky, both hills with their trees, and the front.
+  - The empty desk reuses the Math Buddy hills.
+
+  Everything that moves or carries the session stays live: the staircase and its lit steps, the lantern, the clouds, the key board, the bubbles, the page and its bars, the loupe, and the paragraphs read.
+- **Tests and tools.**
+  - `tools/landing-stills-test.cjs` (9 tests) holds:
+    - which layers are stills in each world;
+    - that a still does not change with the session;
+    - the boxes against each layer's slide;
+    - the scale cap;
+    - the shadow against the CSS;
+    - a 40 MB ceiling for all of them.
+  - `tools/stick-perf/pass3.sh` takes one measuring hold. It takes the lock and points the stick at a temp desk. Then it warms the landing, runs `scenarios.sh` or the look stills, and records `meminfo` and `window.__ppStills()`. Before it releases the lock, it puts the stick back on `10.0.0.141:3000` and checks the probe and the focus.
+  - `tools/stick-perf/cdp.mjs` evaluates one expression in the stick's page.
+  - `tools/stick-perf/look-desktop.mjs` takes the same stills on a desktop Chromium at the stick's geometry.
+
+**The stick's scale.** The stick's WebView reports `devicePixelRatio` 4 on a 1920 × 1080 surface (`dumpsys SurfaceFlinger`: the app's buffer is 1920 × 1080). The first slice therefore measured 2 device px per stage px and drew Math Buddy's four stills at 40.6 MB. The scale is now capped at 1 device px per stage px.
+
+**What did not work.** The look check above froze animations with a CSS override (`animation-play-state` plus a negative delay). That did not give the same frame twice: the drifting symbols landed in different phases. `look-desktop.mjs` and `pass3.sh` instead pause every animation through `document.getAnimations()`, finite ones at their end and endless ones at their start. Two captures of the same build then read ∞ / 88–99 dB.
+
+### Before / after on the stick (prod builds, two scenario runs each)
+
+`before` is e9c62990 on `127.0.0.1:3148` and `after` is this branch on `:3158`. Both are temp desks with copies of the same seeded data (Ema seated, the lamp on Math Buddy). The figures are the longest frame gap in ms, then the frames with a gap over 33 ms, then fps in the window. Each lamp row covers two moves.
+
+| Transition | before (run 1, run 2) | after (run 1, run 2) |
+|---|---|---|
+| Lamp right, 1.2 s window | 641 / 4 / 17.5, 655 / 3 / 19.1 | **271** / 6.5 / 32.0, **283** / 7 / 31.3 |
+| Lamp left, 1.2 s window | 658 / 3.5 / 16.3, 669 / 3 / 19.2 | **275** / 5 / 30.0, **282** / 6 / 31.6 |
+| Lamp right, 2.0 s window | 641 / 5.5 / 25.0, 655 / 4 / 25.8 | **271** / 6.5 / 43.0, **283** / 7 / 42.3 |
+| Lamp left, 2.0 s window | 658 / 4.5 / 27.0, 669 / 4.5 / 27.3 | **275** / 5 / 41.8, **282** / 6 / 43.0 |
+| Select → Math Buddy | 461 / 6 / 17.5, 428 / 6 / 19.2 | 364 / 7 / 21.7, 343 / 6 / 23.3 |
+| Select → Linga | 396 / 6 / 15.0, 459 / 5 / 13.3 | 448 / 7 / 19.2, 265 / 9 / 25.0 |
+| Select → Essay Master | 371 / 7 / 22.5, 366 / 6 / 28.3 | **208** / 8 / 33.3, **214** / 7 / 34.2 |
+| Back from Math Buddy | 513 / 3 / 27.5, 518 / 3 / 27.5 | 367 / 3 / 36.7, 378 / 3 / 36.7 |
+| Back from Linga | 572 / 4 / 15.8, 500 / 5 / 18.3 | **305** / 3 / 35.8, **261** / 4 / 35.8 |
+| Back from Essay Master | 514 / 3 / 21.7, 517 / 3 / 21.7 | **276** / 3 / 35.8, **228** / 3 / 35.8 |
+
+Reading it:
+- **A lamp move** no longer stalls twice. The 2.0 s window's longest gap is now the 1.2 s one, so the second freeze is gone, and the frames drawn nearly double.
+- **More gaps over 33 ms after.** The count is slightly higher because the stick now draws through the move instead of standing still in one long freeze.
+- **GPU work, per scenario run** (`Chrome_InProcGpuThread`, from each summary):
+  - the two lamp moves: 3.13–3.39 s → 2.20–2.34 s, of which `RendererRasterWorker` is 1.92–2.11 s → 1.28–1.33 s, about 1.0 → 0.65 s a move;
+  - each Back: 1.06–1.23 s → 0.70–0.92 s;
+  - Select: Math Buddy 1.22–1.31 s → 1.02–1.03 s, Essay Master 0.87–0.98 s → 0.82–0.85 s, Linga 0.81–0.85 s → 0.78–0.85 s.
+- **What still rasters:** the live layers (heroes, clouds, the title) and the module's own screen.
+- **The noise:** Select into Linga reads 265–448 ms after against 396–459 ms before. That is within run noise.
+- **The intermediate build.** The Math Buddy-only slice (`after-maths/`) measured before the scale cap. It already took Back from Math Buddy to 360 ms and Select into it to 368 ms. Its lamp moves were unchanged, because the Linga and Essay worlds were still live.
+
+### GPU memory
+
+- **The bitmaps** (`window.__ppStills()` on the stick, 15 stills): 36.9 MB.
+  - Each sky is 1288 × 620 (3.0 MB): Math Buddy, Linga by day and by night, and Essay Master.
+  - Each world's two hill layers take 1.8–2.2 MB each, and its front 2.9–3.2 MB.
+  - Linga's doorway and counter, drawn sharp, take 1.9 and 2.0 MB.
+- **The app's GPU memory** (`dumpsys meminfo`, GL mtrack, MB):
+
+  | When | before | after |
+  |---|---|---|
+  | On the landing after the warm-up round trip | 124.8, 124.8 | **119.8, 119.8** |
+  | After the whole scenario (three modules visited, back on Essay Master's landing) | 141.4, 148.4 | 194.2, 185.4 |
+
+  **Where the difference is** (`pass3.sh … mem`: GL mtrack after six lamp moves, then after each of three Select / Back trips into Math Buddy; `mem-before/`, `mem-after/`):
+
+  | Step | before | after |
+  |---|---|---|
+  | Landing, at rest | 124.8 | 119.8 |
+  | After six lamp moves | 133.2 | 131.7 |
+  | In Math Buddy (trips 1, 2, 3) | 138.1, 89.0, 94.0 | 124.6, 140.3, 137.6 |
+  | Back on the landing (trips 1, 2, 3) | 122.7, 122.8, 122.7 | 117.8, 118.0, 117.8 |
+
+  Reading it:
+  - On the landing, the stills cost no more than the tiles they replace: 1.5–5 MB less at every step.
+  - Inside a module, before drops to 89–94 MB once the landing's tiles are let go. The bitmaps stay resident, about 46 MB more. That is the price of a Back that does not raster them again.
+  - The higher figures at the end of the scenario runs are this retention, not a leak: GL mtrack after Back stays flat over three trips.
+  - The cc tile budget (80 MB soft) no longer holds these layers at all.
+
+### Look (PSNR against e9c62990, every animation paused at the same frame, motes hidden)
+
+| Still | stick | desktop at the stick's geometry |
+|---|---|---|
+| Landing, Math Buddy | 46.6 dB | 45.9 dB |
+| Landing, Linga | 45.9 dB | 42.5 dB |
+| Landing, Essay Master | 45.7 dB | 45.1 dB |
+
+- The differences are edge antialiasing only, along the hills' rims and the cliffs. Side by side the pictures are the same.
+- On the desktop, drawing every still at full resolution read 48.7 dB for Math Buddy against 47.4 dB at half, for 33 MB against 9.7 MB. That is why half resolution is the default.
+- Linga's doorway at half resolution softened Robin's face (41.1 dB), so the doorway and counter are drawn sharp.
+
+**The Math Buddy retake (owed from pass 2).** Two captures of the e9c62990 landing on the stick, minutes apart:
+
+| Still | PSNR |
+|---|---|
+| Math Buddy | 99.3 dB |
+| Linga | 87.9 dB |
+| Essay Master | ∞ |
+
+So the landing captures stably. Pass 2's 30.4 dB on the kept build does not reproduce under the frozen-animations method. It was most likely a drifting symbol's phase under the CSS freeze.
+
+### Still open
+
+- **Memory while a module is up:** the bitmaps stay resident, about 46 MB more GL mtrack than before inside Math Buddy. If a module needs that memory, two options:
+  - drop the bitmaps a while after the landing unmounts and bake them again in idle time after Back (Back then shows live layers until they are ready);
+  - a single-buffered `bitmaprenderer` canvas, if it still composites as its own layer.
+
+  Measure GL mtrack after each.
+- **What still rasters on a lamp move** (about 0.65 s of GPU): the live hero layers and the clouds. The staircase (Math Buddy) and the page (Essay Master) carry the session. They could be keyed stills on their state, but that is per-state memory.
+- **Back rebuilds the landing.** The bitmaps are reused, but the live layers raster again. Keeping the landing mounted under the modules would need `Paper.tsx` or `app/tv/page.tsx`, which this pass did not own.
+- **The first lamp move after a page load** bakes the stills in idle time. A very fast first move can still find a world live. Not measured.
+- **`tools/landing-stills-test.cjs` is not in `desk/package.json`'s `rulesSuites`.** That file was outside this pass's paths. Run it directly until it is listed.
+
+### Raw outputs (`artifacts/stick-2026-10-21-perf3/`, gitignored)
+
+- `before/`, `before2/`, `after/`, `after2/`, `after-maths/`: `scenarios.sh` traces and summaries, `windows.json`, `windows-2000.json`, `meminfo-rest.txt`, `meminfo-end.txt`, `stills.json`, `restore-probe.txt` (the stick back on `10.0.0.141:3000` with the app in focus after each hold).
+- `mem-before/`, `mem-after/`: `gl.txt`, GL mtrack per step.
+- `look-before/`, `look-before2/`, `look-after/`: the stick stills. `look-desktop/`: the desktop stills, the ×10 differences and the per-still stats.

@@ -16,7 +16,7 @@ const code=(file)=>{const sf=ts.createSourceFile(file,fs.readFileSync(file,'utf8
 const flat=(file)=>code(file).replace(/\s+/g,' ');
 const css=()=>fs.readFileSync(path.join(SRC,'app/globals.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
 const ruleOf=(sel)=>{const i=css().indexOf(`${sel} {`);assert.ok(i>=0,`${sel} is styled`);const c=css();return c.slice(i,c.indexOf('}',i));};
-const KINDS=['name','page','sheet','answers','question','explain','second','paper','paragraph','rewrite','slot','sentence','reply','words','prefs','private'];
+const KINDS=['name','page','sheet','answers','question','explain','second','paper','paragraph','rewrite','slot','sentence','reply','words','prefs','private','writing'];
 const CTXS=[{},{snap:true},{holding:true},{paragraphs:5},{paragraphs:1},{snap:true,holding:true,paragraphs:9}];
 
 test('TL-10: the AskKind list here is the store\'s',()=>{
@@ -53,7 +53,7 @@ test('TL-10: in every state the bar holds three items or fewer and every label i
 
 test('TL-10: the primary label of each ask, from the design table',()=>{
  const {primaryLabel}=B();
- const want={name:'Done',page:'Use page',sheet:'Send sheet',answers:'Send',question:'Ask',explain:'Send',second:'Send',paper:'Send',paragraph:'Read this',rewrite:'Send',slot:'Send',sentence:'Check',reply:'Send',words:'Send',prefs:'Save',private:'Done'};
+ const want={name:'Done',page:'Use page',sheet:'Send sheet',answers:'Send',question:'Ask',explain:'Send',second:'Send',paper:'Send',paragraph:'Read this',rewrite:'Send',slot:'Send',sentence:'Check',reply:'Send',words:'Send',prefs:'Save',private:'Done',writing:'Send'};
  for(const k of KINDS)assert.equal(primaryLabel(k),want[k],k);
  assert.equal(primaryLabel('page',{snap:true}),'Snap');assert.equal(primaryLabel('sheet',{snap:true}),'Snap');
  assert.equal(primaryLabel('explain',{holding:true}),'Listening');
@@ -150,8 +150,8 @@ test('TL-10: Recap and This week are read-only views: opening them is a state ch
 
 test('stick pass 2026-10-20: an ask whose panel holds its own submit (paper, reply, words, prefs) puts Cancel alone in the bar, never a primary that cannot be pressed',()=>{
  const {barItems,PANEL_SUBMITS}=B();
- assert.deepEqual([...PANEL_SUBMITS].sort(),['paper','prefs','reply','words']);
- for(const kind of ['paper','reply','words','prefs'])for(const primaryOff of [false,true])
+ assert.deepEqual([...PANEL_SUBMITS].sort(),['paper','prefs','reply','words','writing'],'the Writing panel sends from its own button (WritingPanel)');
+ for(const kind of ['paper','reply','words','prefs','writing'])for(const primaryOff of [false,true])
   assert.deepEqual(barItems({joined:true,ask:{kind,phase:'open'},primaryOff}).map(i=>i.id),['cancel'],kind);
  assert.deepEqual(barItems({joined:true,ask:{kind:'reply',phase:'sent'}}).map(i=>i.label),['Sent','More'],'sent is as before');
  assert.deepEqual(barItems({joined:true,ask:{kind:'rewrite',phase:'open'}}).map(i=>i.id),['cancel','primary'],'a kind the bar submits keeps its primary');

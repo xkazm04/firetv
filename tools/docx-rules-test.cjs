@@ -8,7 +8,9 @@ const fs = require('node:fs'), path = require('node:path'), assert = require('no
 const { test } = require('node:test');
 const root = path.resolve(__dirname, '../desk');
 require('./ts-load.cjs');
-const { docxText, DOCX_MAX_XML } = require(path.join(root, 'src/lib/rules/docx.ts'));
+const D = require(path.join(root, 'src/lib/rules/docx.ts')), { DOCX_MAX_XML } = D;
+/** The reader inflates through the inflater its caller hands it (the route passes node:zlib inflateRawSync), so the rule loads no built-in. */
+const docxText = (buf) => D.docxText(buf, zlib.inflateRawSync);
 const { countDiff, versionDiff } = require(path.join(root, 'src/lib/rules/diff.ts'));
 
 /** A minimal zip: each entry deflated (or stored), local headers, a central directory, the end record. */
@@ -58,6 +60,15 @@ test('refusals come with a sentence: not a zip, no document, encrypted, a zip bo
   no(zip([['word/document.xml', bomb]], { lieSize: 100 }), /does not open/);
   no(zip([['word/document.xml', doc(para(''), para('<w:t>   </w:t>'))]]), /no text/);
   const cut = zip([['word/document.xml', DOC]]); no(cut.subarray(0, cut.length - 30), /does not open/);
+});
+
+test('the reader loads no built-in: a deflated entry inflates only through the inflater it is given, capped at DOCX_MAX_XML; a stored one never calls it', () => {
+  const calls = [], spy = (data, opts) => { calls.push(opts?.maxOutputLength); return zlib.inflateRawSync(data, opts); };
+  assert.deepEqual(D.docxText(zip([['word/document.xml', DOC]]), spy), docxText(zip([['word/document.xml', DOC]])));
+  assert.deepEqual(calls, [DOCX_MAX_XML], 'one inflate, told the cap');
+  D.docxText(zip([['word/document.xml', DOC]], { method: 0 }), spy); assert.equal(calls.length, 1, 'a stored entry is not inflated');
+  const src = fs.readFileSync(path.join(root, 'src/lib/rules/docx.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+  assert.ok(!/\bfrom\s+["'](?:node:)?zlib["']|\brequire\(\s*["'](?:node:)?zlib["']/.test(src), 'rules/docx.ts loads no zlib of its own');
 });
 
 test('countDiff: kept by LCS, a leftover pair is a change, the rest added or removed; case and spacing aside', () => {

@@ -92,6 +92,13 @@ export const czechAnswer = (ans: string, system?: string) => {
 export const naturalAsLn = (text: string) => text.replace(BARE_LOG, "ln");
 /** A lone digit,digit in a line read as a point ('2,72' is 2.72); a list ('1,2,3', '1, 2') is left alone (maths.ts decimalComma's pattern). */
 export const pointForComma = (line: string) => line.replace(/(?<!\d,|[\d.])(\d+),(\d+)(?!,\d|\d)/g, "$1.$2");
+/**
+ * The fields no Calculus spec may carry (calc.ts, calc2.ts): the desk works the answer out itself, so a spec with any of these
+ * is refused and never printed. One list, so a key added for one course is refused by every shape.
+ */
+export const ANSWER_KEYS: readonly string[] = ["answer", "truth", "solution", "value", "result"];
+/** Does this spec carry an answer field (ANSWER_KEYS)? */
+export const carriesAnswer = (spec: object) => ANSWER_KEYS.some((k) => k in spec);
 /** An infinity as a learner writes it: inf, infinity, ∞, with an optional sign. */
 export const infinityOf = (s: string): 1 | -1 | null => {
   const m = /^([+\-−]?)\s*(inf|infinity|∞)$/i.exec(s.replace(/\s+/g, " ").trim());
@@ -100,6 +107,32 @@ export const infinityOf = (s: string): 1 | -1 | null => {
 export const DNE = /^(dne|does not exist|no limit|undefined)$/i;
 /** A plain decimal numeral (0.333, 16.0, .5): the learner rounded. */
 export const isDecimal = (s: string) => /^[+\-−]?(\d+\.\d*|\.\d+)$/.test(s.replace(/\s+/g, ""));
+const PAIR: Record<string, string> = { "(": ")", "[": "]", "{": "}" };
+/** The text with every bracket pair ( ), [ ] or { } that wraps the whole of it taken off ('((0.5))' is '0.5'); a pair that closes early stays. */
+const unwrapAll = (s: string) => {
+  for (;;) {
+    const open = s[0], close = PAIR[open];
+    if (s.length < 2 || !close) return s;
+    let depth = 0, closes = -1;
+    for (let i = 0; i < s.length; i++) {
+      if (s[i] === open) depth++;
+      else if (s[i] === close && --depth === 0) { closes = i; break; }
+    }
+    if (closes !== s.length - 1) return s;
+    s = s.slice(1, -1);
+  }
+};
+/**
+ * The decimal numeral an answer is, or null (calc2 ruling 28, for every limit and integral): with spaces, enclosing brackets
+ * and one leading sign set aside it is a decimal - '0.38', '(0.38)', '-(0.38)', '(-0.38)' are each one numeral, returned bare
+ * with its sign ('-0.38'), so its written decimals and figures are read off the numeral and not off a bracket.
+ */
+export const decimalNumeral = (ans: string): string | null => {
+  let s = unwrapAll(ans.replace(/\s+/g, ""));
+  const sign = /^[+\-−]/.exec(s)?.[0] ?? "";
+  s = unwrapAll(s.slice(sign.length));
+  return !/^[+\-−]/.test(s) && isDecimal(s) ? `${sign === "-" || sign === "−" ? "-" : ""}${s}` : null;
+};
 /** The digits a decimal is written to, trailing zeros counted (2.718 is 3, 3.00 is 2); a point or a comma; 0 for a numeral with neither. */
 export const placesOf = (s: string) => /[.,](\d*)$/.exec(s.replace(/\s+/g, ""))?.[1].length ?? 0;
 /** Is `s` the `truth` correctly rounded at `places` decimals (halfway: either neighbour; a hair of slack for the truth's own numerics)? */
@@ -142,7 +175,17 @@ export const spoken = (line: string) => figuresOfCzech(line.toLowerCase()).repla
   .replace(/\b(?:minus|negative)\s*(?=\d)/g, "-")
   .replace(/(^|[^\s\da-z)\]²])(\s*)-\s+(?=\d)/g, "$1$2-");
 
-export const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/**
+ * An answer said in words as its symbols (HL3): 'x squared' is x^2, 'x cubed' x^3, 'to the power of 4' ^4, 'plus' +, 'minus' -
+ * (a minus before a figure is already read), 'times' *. 'three x squared plus two x' is then '3 x^2 + 2 x', a window the engine
+ * reads. Applied after `spoken`, by every Calculus leak check that reads a line (calc.ts, calc2.ts's sequence limit).
+ */
+export const algebraSaid = (t: string) => t
+  .replace(/\s+(?:to\s+the\s+power\s+of|to\s+the)\s+(-?\d+)\b/g, "^$1")
+  .replace(/\s+squared\b/g, "^2").replace(/\s+cubed\b/g, "^3")
+  .replace(/\s+plus\s+/g, " + ").replace(/\s+minus\s+/g, " - ").replace(/\s+times\s+/g, " * ");
+
+export const escapeRe =(s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 /**
  * A piece of the question as a pattern: spacing free, '->' also as '→', and only as a whole - not inside a larger
  * expression (the function 'x' is not the x of 'x^2/2', 'x^2 + 1' is not the start of 'x^2 + 10').

@@ -1054,3 +1054,37 @@ test("MB5-3: a log from an earlier day is not tonight's - yesterday's hints do n
  assert.equal(undated.hints,0,'no day, started yesterday: it is yesterday log');assert.equal(undated.empty,'Not tonight');
  assert.equal(tonightsLog(yd({}),NOW).hints,0);assert.equal(tonightsLog(yd({day:'2026-9-24'}),NOW).hints,3);
 });
+
+/**
+ * Every font size On Air sets, by selector, with comments stripped: `font-size: Npx` and the `font:` shorthand's size.
+ * docs/DESIGN-ON-AIR.md's type scale: labels 20-22 px, small figures 26-30, everything else larger; nothing between.
+ */
+function onAirSizes(css){
+ const out=[],src=css.replace(/\/\*[\s\S]*?\*\//g,'');
+ for(const m of src.matchAll(/([^{}]+)\{([^}]*)\}/g)){
+  for(const d of m[2].matchAll(/font-size:\s*(\d+(?:\.\d+)?)px|font:\s*[^;]*?\b(\d+(?:\.\d+)?)px/g))out.push([m[1].trim(),Number(d[1]??d[2])]);
+ }
+ return out;
+}
+test('optimize 2026-10-21: every On Air size is on the type scale - a 20-22 px label or 26 px and up, as the reference page was set (0609f68c)',()=>{
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8');
+ const rows=onAirSizes(css);
+ assert.ok(rows.length>40,'control: the scan reads the sheet\'s sizes');
+ const off=rows.filter(([,px])=>px<20||(px>22&&px<26));
+ assert.deepEqual(off,[],'no size between the label band and the small figures');
+ // the scan bites, and a size that only a comment names is not counted
+ assert.deepEqual(onAirSizes('.a { font-size: 24px; } /* .b { font-size: 23px; } */ .c { font: 600 25px/1 x; }'),[['.a',24],['.c',25]]);
+});
+
+// On Air: "motion: cuts, not fades". Every rule of the sheet that transitions is named in the reduced-motion block, which
+// turns its transition off - derived from the sheet, so a new transition is held to the preference too (registry: motion).
+test('optimize 2026-10-21: every On Air transition is cut under prefers-reduced-motion',()=>{
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+ const mq=/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{([\s\S]*?\}\s*)\}/.exec(css);
+ assert.ok(mq,'control: the sheet has its reduced-motion block');
+ const cut=new Set();for(const m of mq[1].matchAll(/([^{}]+)\{([^}]*)\}/g))if(/transition:\s*none/.test(m[2]))m[1].split(',').forEach((x)=>cut.add(x.trim()));
+ const outside=css.replace(mq[0],'');
+ const moving=[];for(const m of outside.matchAll(/([^{}]+)\{([^}]*)\}/g))if(/(^|;)\s*transition:/.test(m[2])&&!/transition:\s*none/.test(m[2]))m[1].split(',').forEach((x)=>moving.push(x.trim()));
+ assert.ok(moving.includes('.btn'),'control: the focus skew\'s transition is read');
+ assert.deepEqual(moving.filter((x)=>!cut.has(x)),[],'a transition the preference does not cut');
+});

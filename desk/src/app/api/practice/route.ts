@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     // not steer names none, so the card never claims an aim the set did not take
     dispatch({ type: "practice.set", practice: { topic, items: made.items, marked: false, owner: learner, ...(stretch ? { stretch: true as const } : {}), ...(made.aim?.length ? { aim: made.aim } : {}), ...(made.topAim?.length ? { topAim: made.topAim } : {}) } });
     return made;
-  }, { key: topic, input: { topic, ...(stretch ? { stretch: 1 } : {}), ...(word ? {} : { word: 0 }) }, start: START, done: (m) => (m ? `${m.items.length} questions ready in ${(m.ms / 1000).toFixed(0)} s` : "") });
+  }, { key: topic, input: { topic, ...(stretch ? { stretch: 1 } : {}), ...(word ? {} : { word: 0 }) }, start: START, done: (m) => (m ? `${m.items.length} questions ready${m.provider === "code" ? "" : ` in ${(m.ms / 1000).toFixed(0)} s`}` : "") });
   if (!r.ok) return refused(r);
   if (!r.value) {
     // the superseded run's start line is not left saying the desk is still writing

@@ -18,7 +18,7 @@ import { isPitchId } from "./pitch";
 import { NOTE_LABEL } from "./notes";
 import { CHECK_TITLE, focusParts, originLabel } from "./line";
 import { modeOf } from "../rules/mode";
-import { accepts, refusal, turnState } from "./turn";
+import { accepts, AT_CAP, atCap, refusal, turnState } from "./turn";
 import { runningTake, takeSpent } from "./take";
 import { lostLine, type LostTask } from "./lostfound";
 import { showOpen } from "./repair";
@@ -228,6 +228,8 @@ export interface LingaView {
 /** The in-scene marker of held fixes: a count and no fix wording (the fix is withheld for the try). */
 export const savedLine = (n: number) => n > 0 ? `Saved for the end: ${n}` : "";
 
+/** The menu's My topics while a level check is part way: the server's refusal of plan-open and plan-propose there (check.ts), word for word. */
+const TOPICS_PART_WAY = "Your level check is part way. Carry on with it, or start it again, before choosing topics.";
 /** the list of certificates names the newest seven: seven doors and Back fill the list's column */
 const CERTS_SHOWN = 7;
 const TASK_TITLE = { say: "Say it", listen: "Listen and answer", choose: "Choose the reply" } as const;
@@ -737,12 +739,17 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
         actions = [act("finish", "See what you did", done, cmd("finish"), { disabled: refused("finish") }), ...actions.slice(0, 1)];
         if (!c.cue && !c.capture && captionTag !== "Used again") caption = done;
       }
+      // The scene has had its replies (turn.ts atCap): the turn table takes no more, so the phone is not asked and Finish leads
+      if (st === "your-turn" && atCap(c) && actions[0]?.id !== "finish") {
+        actions = [act("finish", "See what you did", AT_CAP, cmd("finish"), { disabled: refused("finish") }), ...actions.slice(0, 1)];
+        caption = AT_CAP; captionTag = "What next";
+      }
     }
   } else { caption = "Choose a situation to begin."; actions = [chooseSituation(caption)]; }
 
   if (menu) {
     const rehearsing = c && c.phase !== "finished";
-    const close = { menu: false };
+    const close = { menu: false }, checkPartWay = !!lc && (lc.stage === "about" || lc.stage === "tasks");
     actions = [
       act("menu-back", "Back to the scene", "Return to where you were.", { ui: close, focus: -1 }),
       act("learning-map", "Learning map", "Explore the abilities you can practise and your progress in each.", go("linga-map")),
@@ -751,7 +758,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       // the door opens for any learner with a record of checks: a held certificate opens by command, none held is the outline
       ...(l.certificates?.length ? [act("my-certificate", "My certificate", "See your newest certificate, issued by Linga from your own words.", { ...cmd("cert-open"), ui: { ...close, cert: null } })]
         : l.placements?.length ? [act("my-certificate", "My certificate", "See what a certificate still needs from you.", { ...go("linga-cert"), ui: { ...close, cert: null } })] : []),
-      act("my-topics", "My topics", "See the conversations in your plan, swap them or ask for new ones.", { ...cmd(l.plan ? "plan-open" : "plan-propose"), ui: close }),
+      // a check left part way holds the slot the topics would take, and the server refuses them there (check.ts): drawn disabled, its refusal as the help
+      act("my-topics", "My topics", checkPartWay ? TOPICS_PART_WAY : "See the conversations in your plan, swap them or ask for new ones.", { ...cmd(l.plan ? "plan-open" : "plan-propose"), ui: close }, { disabled: checkPartWay }),
       act("phone-setup", "Set up on the phone", "Set your interests, goals and learning preferences on your phone. Back cancels.", { ask: { kind: "prefs" } }),
       act("sentence-help", "Sentence help", "Open Say it on the phone for help with a particular sentence.", go("sentence")),
       ...(rehearsing ? [act("finish", "Finish rehearsal", "End this scene and save a recap.", { ...cmd("finish"), ui: close }, { disabled: refused("finish") })] : []),

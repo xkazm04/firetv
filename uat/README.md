@@ -2,7 +2,7 @@
 
 Simulated user acceptance testing for the Study Desk's three modules, **Linga**, **Essay Master** and **Math Buddy**, driven by the `/uat` skill (`.claude/skills/uat`, linked from `ai-registry/skills/uat`). The skill is the engine; this directory is the per-app overlay.
 
-Each module has its own Characters and journeys: Linga's at the top of `characters/` and `journeys/` (J1–J5, with the `sim` blocks the LT driver reads), Essay Master's in `characters/essay/` and `journeys/essay/` (EM1–EM5), Math Buddy's in `characters/maths/` and `journeys/maths/` (MB1–MB5). Essay and Math files carry no `sim` block (no driver reads them yet) and live in subdirectories because the LT driver throws on a top-level file without one (`driver/linga-text.cjs:51-55`, `readBlock`). A journey that wanders out of its module is a finding about the exit, not a journey into another module.
+Each module has its own Characters and journeys: Linga's at the top of `characters/` and `journeys/` (J1–J5, with the `sim` blocks the LT driver reads), Essay Master's in `characters/essay/` and `journeys/essay/` (EM1–EM5), Math Buddy's in `characters/maths/` and `journeys/maths/` (MB1–MB5). Essay and Math files carry no `sim` block (no driver reads them yet) and live in subdirectories because the LT driver throws on a top-level file without one (`readBlock` in `driver/linga-text.cjs`). A journey that wanders out of its module is a finding about the exit, not a journey into another module.
 
 ## Levels in this repo
 
@@ -30,12 +30,12 @@ uat/
   rubric.md              dimensions, Linga / Essay Master / Math Buddy metrics (with their units), impact scoring, finding schema
   env.md                 how to run each level; engine switches; data isolation
   accepted-gaps.md       known and accepted issues
-  characters/*.md        ten Characters; each has a `sim` JSON block the LT driver reads
+  characters/*.md        fourteen Linga Characters; each has a `sim` JSON block the LT driver reads
   journeys/*.md          five Linga journeys: goals and definitions of done, not scripts
   characters/essay/*.md  five Essay Master Characters (no `sim` block)
   characters/maths/*.md  five Math Buddy Characters (no `sim` block)
-  journeys/essay/*.md    Essay Master journeys EM1–EM5
-  journeys/maths/*.md    Math Buddy journeys MB1–MB5
+  journeys/essay/*.md    five Essay Master journeys, EM1–EM5
+  journeys/maths/*.md    five Math Buddy journeys, MB1–MB5
   driver/linga-text.cjs  the LT driver
   driver/surface.cjs     what a Character sees and can do: LingaTV and LingaPhone rendered for the session
   driver/recertify.cjs   recertify from a run's own data: open pairs, metric deltas, confounds, write-back
@@ -71,7 +71,7 @@ Every Character file has the prose the skill asks for (an Essay or Math Characte
 
 ```json
 {
-  "id": "slug", "name": "First name", "trueBand": "A2",
+  "id": "slug", "name": "First name", "trueBand": "A2", "mode": "speech|text",
   "profile": { "type": "elementary|high-school|other", "age": 13, "adultConfirmed": false },
   "preferences": { "correction": "as-needed", "creativity": "familiar", "challenge": "supportive", "interest": "", "goal": "" },
   "journeys": ["J1", "J2", "J3"],
@@ -81,7 +81,7 @@ Every Character file has the prose the skill asks for (an Essay or Math Characte
 }
 ```
 
-`trueBand` is the ground truth the placement is scored against. `play` is what the Character model is told; it never sees `criteria`. The judge sees both.
+`trueBand` is the ground truth the placement is scored against. `mode` is how the Character answers: `text` types on the phone, anything else (`speech`, the default when it is left out) speaks and is transcribed. `play` is what the Character model is told; it never sees `criteria`. The judge sees both.
 
 ## Drain homes
 

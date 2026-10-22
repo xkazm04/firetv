@@ -9,13 +9,13 @@ The three TV products in this repository and the glue between them:
 - the Study Desk prototype (`desk/`, with its rules suites in `tools/` and UAT in `uat/`)
 - the standalone Death Ride build (`deathride/`)
 
-It also owns the root Gradle build (`settings.gradle.kts`: `:core`, `:tv-app`; versions in
+It also owns the root Gradle build (`settings.gradle.kts`: `:core`, `:tv-app`, `:stick-app`; versions in
 `gradle/libs.versions.toml`) and the agent contract in `.ai/`.
 
 ## Public contract
 - The wire protocol in `core/` that the companion PWA and the TV both speak. A change there is a change on both sides of the socket.
 - The capability commands in `.ai/manifest.yaml`. Agents and CI call them by name.
-- `desk/package.json` `test:rules`, the desk gate's list of suites. New suites are appended at the end.
+- `desk/package.json` `rulesSuites`, the desk gate's list of suites (`test:rules` runs it through `tools/run-rules.cjs`). A new suite goes just before `harness-rules-test.cjs`, which stays last.
 
 ## Invariants: never break
 - `core/` stays free of Android imports.

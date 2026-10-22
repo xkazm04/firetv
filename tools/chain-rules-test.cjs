@@ -300,3 +300,17 @@ test('MB-B36 property: 200 correct Czech workings (each line equal to, or follow
   for(const [spec,base] of CZ_CORRECT)assert.ok(chainChecks(spec,base,'cz').every((v)=>v===true),`not every line read: ${JSON.stringify(base)}`);
   assert.equal(n,200);
 });
+
+test('a limit line reads an infinity and a no-limit word as the judge reads them (calc-read infinityOf, DNE): the minus sign U+2212, undefined, no limit',()=>{
+  const L=(text,x)=>({tag:'lim',text,x});
+  // -1/x^2 at 0 is -inf: the typographic minus is the same claim as the hyphen
+  for(const t of ['-inf','\u2212inf','\u2212\u221e','\u2212infinity'])assert.deepEqual(checkChain([L(t,0)],{from:'-1/x^2'}),[true],t);
+  for(const t of ['\u2212inf','\u2212\u221e'])assert.deepEqual(checkChain([L(t,0)],{from:'1/x^2'}),[false],t);
+  // a no-limit word the judge marks wrong on a limit that exists is rung; on one that does not exist it holds
+  for(const t of ['undefined','no limit','does not exist'])assert.deepEqual(checkChain([L(t,0)],{from:'sin(x)/x'}),[false],t);
+  for(const t of ['undefined','no limit'])assert.deepEqual(checkChain([L(t,'inf')],{from:'cos(x)'}),[true],t);
+  // the tagger reads the point the same way: lim_(x->\u2212\u221e) is the spec's -inf
+  const spec={shape:'limit',f:'e^x',at:'-inf'};
+  assert.deepEqual(chainChecks(spec,['lim_(x->\u2212\u221e) e^x = 0']),[true]);
+  assert.deepEqual(chainChecks({shape:'limit',f:'-1/x^2',at:0},['lim_(x->0) -1/x^2 = \u2212\u221e']),[true]);
+});

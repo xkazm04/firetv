@@ -1574,8 +1574,8 @@ const B3_BAD={
   [ra('60 in 2:3','parsec'),'unit is not'],
  ],
  'unit-rate':[
-  [rt('1 pens cost 3.50, 8','€'),'already gives'],[rt('5 pens cost 3.50, 5','€'),'same number'],[rt('5 pens cost 3.50, 8','km'),'euros or pounds'],[rt('240 km in 3 h, 5','€'),'euros or pounds'],
-  [{shape:'rate',expr:'5 pens cost 3.50, 8'},'euros or pounds'],[rt('5 pens cost 3.5, 8','€'),'cannot read'],[rt('5 sweets cost 3.50, 8','€'),'cannot read'],[rt('3 pens cost 1, 1','€'),'two decimal places'],
+  [rt('1 pens cost 3.50, 8','€'),'already gives'],[rt('5 pens cost 3.50, 5','€'),'same number'],[rt('5 pens cost 3.50, 8','km'),'euros, pounds or crowns'],[rt('240 km in 3 h, 5','€'),'euros, pounds or crowns'],
+  [{shape:'rate',expr:'5 pens cost 3.50, 8'},'euros, pounds or crowns'],[rt('5 pens cost 3.5, 8','€'),'cannot read'],[rt('5 sweets cost 3.50, 8','€'),'cannot read'],[rt('3 pens cost 1, 1','€'),'two decimal places'],
   [rt('4 pens cost 8, 2','€'),'print its own answer'],[rt('5 pens cost 0, 8','€'),'zero'],[rt('5 pens cost 2000, 8','€'),'larger'],[rt('240 km in 3 hours, 5','km'),'cannot read'],
   [{...RC1,answer:'5.60'},'no answer field'],[{...RC1,form:'decimal'},'does not take'],[rt('5 pens cost 3.50, 8','parsec'),'unit is not'],
  ],
@@ -2128,4 +2128,61 @@ test('MB-B4 readNumber and check: Kč is a unit; cm squared, sq cm and square cm
  assert.deepEqual(S.specFromQuestion('Work out 3.45 € × 4.','de'),cs('3.45 × 4',{unit:'€'}));
  assert.deepEqual(S.specFromQuestion('Work out €4.35 + €2.80.'),cs('4.35 + 2.80',{unit:'€'}));
  assert.deepEqual(S.specFromQuestion('5 pens cost 3,50 Kč. What do 8 pens cost?','cz'),{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'Kč'});
+});
+test('optimize 2026-10-21: an amount, a missing number or a unit answer written as a percentage is unsure, never right or wrong, as on every amount unit',()=>{
+ // the rule (school.ts check) held on percent-of, percent-change, rate, area, stat, Pythagoras and a missing ratio term, and not on
+ // a fraction of an amount, a missing number or a computation with a unit: 2400% read right for 3/5 of 40 kg and 24% read wrong
+ const OF={shape:'fraction-of',expr:'3/5 of 40',unit:'kg'},OF0={shape:'fraction-of',expr:'3/5 of 40'},MS={shape:'missing',expr:'3/4 = ?/12'};
+ const MONEY=cs('4.35 + 2.8',{unit:'€'});
+ for (const [s,w] of [[OF,'2400%'],[OF,'24%'],[OF0,'2400%'],[OF0,'24%'],[MS,'900%'],[MS,'9%'],[MONEY,'715%'],[MONEY,'7.15%'],[U,'125%']]) {
+  const v=S.check(s,w,'uk');
+  assert.equal(v.verdict,'unsure',`${JSON.stringify(s)} ${w}`);assert.equal(v.why,'This is written as a percentage; the question asks for an amount, and the desk does not guess.');
+ }
+ // the same values written as amounts are judged as before, and a bare computation still takes any equal form
+ assert.equal(S.check(OF,'24 kg','uk').verdict,'right');assert.equal(S.check(OF0,'24','uk').verdict,'right');assert.equal(S.check(MS,'9','uk').verdict,'right');
+ assert.equal(S.check(MONEY,'€7.15','uk').verdict,'right');assert.equal(S.check(C,'75%','us').verdict,'right');
+ // the worked answer still finds a writing the desk marks right
+ assert.equal(S.workedAnswer(OF,'uk'),'24 kg');assert.equal(S.workedAnswer(MS,'uk'),'9');
+});
+test('optimize 2026-10-21: a fault while leaksSchool reads the spec refuses the line, as a fault in its body does (the strict side)',()=>{
+ // a spec whose reading throws (a getter here; any defect in read() in life): the line is refused, never passed unchecked
+ const bad={get shape(){throw new TypeError('spec defect');}};
+ const was=console.error;console.error=()=>{};
+ try{assert.equal(S.leaksSchool(bad,'The answer is 24.'),true);}finally{console.error=was;}
+ // not a fault: a spec the desk cannot work out still has nothing to leak, and a line that is no text is no leak
+ assert.equal(S.leaksSchool({shape:'compute',expr:'3/4 +'},'The answer is 24.'),false);
+ assert.equal(S.leaksSchool(cs('3/4 + 1/6'),''),false);
+});
+test('optimize 2026-10-21: storyOf, topFormOf and workedAnswer route a checker fault through checkerFault and answer null, never throw',()=>{
+ const bad={get shape(){throw new TypeError('spec defect');},get expr(){throw new TypeError('spec defect');}};
+ const said=[],was=console.error;console.error=(...a)=>said.push(a.join(' '));
+ try{
+  assert.equal(S.storyOf(bad),null);
+  assert.equal(S.topFormOf('pct-change',bad),null);
+  assert.equal(S.workedAnswer(bad,'uk'),null);
+ }finally{console.error=was;}
+ for (const where of ['school.storyOf','school.topFormOf','school.workedAnswer']) assert.ok(said.some((l)=>l.includes(`checker fault in ${where}:`)),`${where} reaches the log: ${said.join(' | ')}`);
+});
+test('optimize 2026-10-21: school.ts and kinds.ts ask taskText commaSystem which systems write a decimal comma, never a copy of the list',()=>{
+ const strip=(t)=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:])\/\/.*$/gm,'$1');
+ const copy=/===\s*"cz"\s*\|\|\s*[\w.]+\s*===\s*"de"|===\s*"de"\s*\|\|\s*[\w.]+\s*===\s*"cz"/;
+ // the canary: the matcher sees an inline copy and ignores one in a comment
+ assert.ok(copy.test('const c = system === "cz" || system === "de";'));assert.ok(!copy.test(strip('// system === "cz" || system === "de"')));
+ for (const f of ['school.ts','kinds.ts']) assert.ok(!copy.test(strip(fs.readFileSync(path.join(root,'src/lib/rules',f),'utf8'))),`${f} names the comma systems itself`);
+ // and the behaviour is the one rule's: cz and de read a lone decimal comma, uk and us do not
+ assert.equal(S.workedAnswer(cs('4.35 + 2.8'),'cz'),'7,15');assert.equal(S.workedAnswer(cs('4.35 + 2.8'),'uk'),'7.15');
+});
+test('optimize 2026-10-21: a rate cost in crowns is well formed, and the reason a cost unit is refused names every currency it takes',()=>{
+ assert.deepEqual(S.wellFormed({shape:'rate',expr:'5 pens cost 3.50, 8',unit:'Kč'}),{ok:true});
+ const why=S.wellFormed({shape:'rate',expr:'5 pens cost 3.50, 8',unit:'$'}).why;
+ assert.match(why,/euros, pounds or crowns/);assert.doesNotMatch(why,/euros or pounds/);
+});
+test('optimize 2026-10-21: a value of a hundred or more said in English words is heard, as the Czech sto and the leak reader already read it',()=>{
+ const N=require(path.join(root,'src/lib/rules/numberWords.ts')),V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const rows=[['I got one hundred and eighty','I got 180'],['three hundred','300'],['a hundred and twenty','120'],['two thousand four hundred','2400'],['a thousand','1000'],
+  ['one hundred and five point two','105.2'],['nine hundred ninety-nine','999'],['forty-five','45'],['one hundred and then I stopped','100 and then I stopped']];
+ for (const [w,f] of rows) assert.equal(N.figuresOfEnglish(w),f,`figuresOfEnglish: ${w}`);
+ for (const [t,v] of [['I got one hundred and eighty','180'],['the answer is a hundred and twenty','120'],['I got two thousand four hundred','2400'],['I got three hundred kilograms','300 kg']]) assert.equal(V.saidIn(v,t),true,`heard: ${t} / ${v}`);
+ // still closed: a different number, and the hundreds of one value are not another's
+ for (const [t,v] of [['I got one hundred and eighty','18'],['I got one hundred and eighty','108'],['three hundred','30']]) assert.equal(V.saidIn(v,t),false,`not heard: ${t} / ${v}`);
 });

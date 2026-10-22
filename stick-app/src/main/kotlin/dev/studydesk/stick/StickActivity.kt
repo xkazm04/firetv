@@ -234,12 +234,13 @@ class StickActivity : Activity() {
         when (step) {
             is Step.Open -> {
                 keep(step.desk)
+                source = Plan.answered(source)
                 mode = Mode.WEB
                 heartbeat.reset()
                 panel.visibility = View.GONE
                 web.loadUrl(step.desk.tv(step.key))
             }
-            is Step.Unpaired -> { keep(step.desk); show(Mode.UNPAIRED) }
+            is Step.Unpaired -> { keep(step.desk); source = Plan.answered(source); show(Mode.UNPAIRED) }
             is Step.Scan -> scan(quiet = false)
             is Step.Down -> { why = step.why; if (mode == Mode.WEB) web.stopLoading(); show(Mode.DOWN) }
             is Step.Setup -> showSetup(step.why)
@@ -328,7 +329,7 @@ class StickActivity : Activity() {
             Mode.DOWN -> {
                 title.text = "The desk is not answering"
                 address.text = "Tried ${desk.origin}"
-                body.text = "${why.replaceFirstChar { it.uppercase() }}.\n\nIs the desk running on the computer, and is the stick on the same Wi-Fi?"
+                body.text = Words.downBody(why)
                 stopsRow()
                 footer.text = "The stick tries again by itself every ${RETRY_MS / 1000} s and opens the desk when it answers." +
                     (if (lastTry.isNotEmpty()) "\nLast try $lastTry" else "") + "\nBack: leave"

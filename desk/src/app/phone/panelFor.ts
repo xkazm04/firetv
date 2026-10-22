@@ -9,14 +9,14 @@
 import type { AskKind, Session } from "@/lib/session/store";
 
 /** The phone's panels. */
-export type PScreen = "join" | "joined" | "capture" | "practice" | "point" | "say" | "paste" | "tonight" | "parent" | "profile" | "linga" | "paper";
+export type PScreen = "join" | "joined" | "capture" | "practice" | "point" | "say" | "paste" | "tonight" | "parent" | "profile" | "linga" | "paper" | "write";
 
 type Seen = Pick<Session, "joined" | "screen" | "subject" | "awaiting" | "practice" | "pages" | "pageIx" | "jobs"> & Partial<Pick<Session, "english" | "ask">>;
 
 /** The one panel each kind of hand-off is done on. The camera panels, the typing panels, Linga's three: no kind has two. */
 export const ASK_PANEL: Readonly<Record<AskKind, PScreen>> = {
   name: "profile", page: "capture", sheet: "practice", answers: "practice", question: "point", explain: "practice", second: "practice", paper: "paper",
-  paragraph: "paste", rewrite: "paste", slot: "paste", sentence: "say", reply: "linga", words: "linga", prefs: "linga", private: "paste",
+  paragraph: "paste", rewrite: "paste", slot: "paste", sentence: "say", reply: "linga", words: "linga", prefs: "linga", private: "paste", writing: "write",
 };
 
 /** A hand-off: the panel it wants, and a key that changes only when the TV asks for something new. */
@@ -65,6 +65,7 @@ export const BANNER: Readonly<Record<PScreen, string>> = {
   join: "The TV is asking for the code. Type it", joined: "", capture: "The TV is asking for a photo. Take it", practice: "The TV is asking for your working. Send it",
   point: "The TV is asking for your question. Type it", say: "The TV is asking for a sentence. Say it", paste: "The TV is asking for your words. Write them",
   tonight: "", parent: "", profile: "The TV is asking for a name. Type it", linga: "The TV is asking for your answer. Say it", paper: "The TV is asking for the marks of a paper. Type them",
+  write: "The TV is asking for your paragraph. Write it",
 };
 
 /** What the phone says on a panel that needs the camera or the microphone when it was served over http (D15; OD6 decides https on the LAN). */

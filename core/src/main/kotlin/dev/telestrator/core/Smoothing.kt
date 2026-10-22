@@ -54,6 +54,9 @@ object Smoothing {
      * first and last sample rather than overshooting.
      *
      * @param tension 0 gives straight lines between points, 1 gives the classic rounded spline.
+     *
+     * The TV does not call this: its overlay fits the same spline incrementally, one span at a time
+     * as points arrive (StrokeRender in tv-app's Overlay.kt), so this is the reference it copies.
      */
     fun toCubics(points: List<List<Double>>, tension: Double = 1.0): List<Cubic> {
         if (points.size < 2) return emptyList()
@@ -79,10 +82,6 @@ object Smoothing {
         }
         return out
     }
-
-    /** Convenience: decimate then fit, which is what the renderer always wants. */
-    fun path(points: List<List<Double>>, metric: Metric, tension: Double = 1.0): List<Cubic> =
-        toCubics(decimate(points, metric), tension)
 
     /**
      * Stroke width for a sample, given the style width and the pen pressure. A stylus or a

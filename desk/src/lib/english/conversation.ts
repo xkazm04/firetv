@@ -18,7 +18,7 @@ import { EASE_INSTRUCTION, learnerLost } from "./ease";
 import { hasGrammarTerm, keepsTense, PLAIN_TASK } from "./plain";
 import { climb, isTaskOption, keepLadder, MEANING_MAX, QUIZ_MAX, quizFor, SAY_MAX, sceneCueFor, sceneTaskFor, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, conversationBand, easyBand, isBand, isPlacementBand, playBand, spokenBand, TAUGHT_CAP } from "./placement";
-import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
+import { mergeEvidence, notesProblem, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, findPhrase, keepMoment, markReused, markSlipped, offer, ownLines, partnerLines, reuseOf, reviewOf, shownLines, askedAboutFor, slipsAgain, SLIP_AGAIN_TASK, usedLine, usesForm, fossilOf, fossilMoment, FOSSIL_TASK, type SlipAgain } from "./review";
 import { clearSlip, findKey, KNOWN_FALSE_FRIENDS, slipOf } from "./slip";
 import { checkLine, forgetLine, heldLine, holdLine, keepLine, LINE_MAX, lineBack, lineFound, lineTaught, OFFER_BANDS, offerLine, quizLine, showsLine, type HiddenLine } from "./line";
@@ -449,13 +449,13 @@ export async function englishCommand(raw:unknown){
     let preferences;try{preferences=parsePreferences(input.preferences);}catch(e){throw new ConversationError((e as Error).message);}
     delete preferences.levelUnset; // Set up is a pick by hand, even when it keeps the shown A1
     if(profile.age!==undefined&&profile.age<18||profile.type!=="other"&&profile.age===undefined)preferences.adultConfirmed=false;
-    if(!Array.isArray(input.notes)||input.notes.length>8||input.notes.some(n=>typeof n!=="string"||n.length>240))throw new ConversationError("Use up to eight short teaching notes, 240 characters each.");
+    const notesRefused=notesProblem(input.notes);if(notesRefused)throw new ConversationError(notesRefused);
     // A band set by hand is the learner's own call, and says so. Either band a check gives (its read, or the band
     // conversations start at, S2) is the check's still: saving Set up after a split check is not a pick by hand.
     const placement=learning.placement&&!isPlacementBand(learning.placement,preferences.level)?{...learning.placement,band:preferences.level,source:"self" as const,confidence:"low" as const,summary:"",at:Date.now()}:learning.placement;
     // a changed band is a hand-picked one: appended to the record of checks as "self" (W10), which never certifies
     const placements=placement&&placement!==learning.placement?appendPlacement(learning.placements,placement):learning.placements;
-    saveEnglish(learnerId,{...learning,preferences,placement,placements,notes:input.notes.map((n:string)=>n.trim()).filter(Boolean)});
+    saveEnglish(learnerId,{...learning,preferences,placement,placements,notes:(input.notes as string[]).map(n=>n.trim()).filter(Boolean)});
     // Settings apply to the next scene; a changed age entitlement ends an incompatible scene now.
     const current=s.conversation,scene=current&&sceneOf(current);
     dispatch({type:"linga.changed",...(current&&(!scene||!audienceAllowed(profile,preferences,scene.audience))?{conversation:null,screen:"linga" as Screen}:{})});
@@ -612,6 +612,9 @@ export async function englishCommand(raw:unknown){
     const band=heldBand(c),q=quizFor(c.help,c.turns.at(-1),c.partner,band,scene!.cue),options=q?q.options:c.help===undefined?scene!.quiz.options:null;
     // rework 8: at A1-A2 a second press with nothing new to offer says so, never the same pair again
     if(!options&&band&&(band==="A1"||band==="A2")&&c.help?.quizSeen?.length){commit({...c,sceneCued:true,quizOpen:false,cue:"You can type your own reply on the phone.",help:{...c.help,shown:false},commands},"linga-talk");return getSession();}
+    // a ladder a restart lost (help.ts holds it in server memory; the session still names its rungs): the press says what to do,
+    // once, and the help it can no longer give stops being offered. Before, it was a silent press offered again and again.
+    if(!options&&c.help){commit({...c,sceneCued:true,quizOpen:false,cue:"You can type your own reply on the phone.",help:null,commands},"linga-talk");return getSession();}
     if(!options){commit({...c,sceneCued:true,commands},"linga-talk");return getSession();}
     const cue=sceneCueFor(scene!.cue,heldBand(c),c.sceneCued)??"";
     // the quiz puts its options and the cue on screen: one that shows the hidden line's key words spends the find (K4)
@@ -632,7 +635,7 @@ export async function englishCommand(raw:unknown){
     // F14 (stick pass 2026-10-20): a right pick from the TV row (asTurn) is the learner's turn, sent as a typed reply is, so
     // a remote alone carries the scene. Its line is marked "choice" and helped, so it never counts as speaking on its own.
     // A duet's beat, a running take and a scene at its turn cap keep the cue to say it on the phone.
-    if(input.asTurn===true&&correct&&!c.duet&&!runningTake(c)&&accepts(c,"turn",deskMode)&&c.turns.filter(t=>t.role==="learner").length<24){
+    if(input.asTurn===true&&correct&&!c.duet&&!runningTake(c)&&accepts(c,"turn",deskMode)){
       c={...c,supported:true,quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false},evidence:[...c.evidence,e]};
       chosen=picked;action="turn";
     }
@@ -676,7 +679,7 @@ export async function englishCommand(raw:unknown){
   }
   if(action==="turn"&&runningTake(c))return takeTurn(c,input,commandId);
   // what is left is turn, coach or replay: each asks the model
-  if(c.turns.filter(t=>t.role==="learner").length>=24&&action==="turn")throw new ConversationError("A good place to pause. Finish this rehearsal and start a new scene.");
+  // the reply cap (turn.ts REPLY_CAP) is the table's: a turn past it was refused above, before any call
   let reply="",mode:EvidenceMode="text";
   // L2 (duet.ts): in a duet the learner's line is held, with no call, until the co-star's; the pair then takes the turn's one call
   let pair:DuetPair|null=null;

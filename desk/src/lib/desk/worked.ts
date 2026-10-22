@@ -7,6 +7,7 @@
  * the caption, else the authored idea stands (library/worked.ts).
  */
 import { text } from "../engines/text";
+import { assemble, say } from "../prompt/assemble";
 import { makeSchoolItems } from "./items";
 import { linearWorked, workedAnswer } from "../rules/school";
 import { voiceOf, withManner } from "../rules/voice";
@@ -43,9 +44,18 @@ export async function teachTopic(topic: string, age: number | undefined, system:
   let idea = method.idea, own = false;
   try {
     const voice = voiceOf("maths", age);
+    // through the one assembler (lib/prompt/assemble.ts), so the call's ledger row names the prompt version; every part is the desk's own words
+    const asked = assemble("worked-idea", {
+      system: [say("stance", withManner(`You are a maths tutor for ${voice.who}. Explain the idea behind one topic in at most three short sentences, before the learner sees worked examples. Words only: write no digits and no worked numbers. No praise, no questions to the learner.`, voice))],
+      prompt: [
+        say("topic", `Topic: ${title}.`),
+        say("method", `The method the desk will show, step by step: ${method.steps.join("; ")}.`),
+        say("idea", `A plain version of the idea, for reference: ${method.idea}`),
+        say("ask", "Write the idea in your own words for this learner."),
+      ],
+    }, { prompt: "\n" });
     const { json } = await text<{ idea: string }>({
-      system: withManner(`You are a maths tutor for ${voice.who}. Explain the idea behind one topic in at most three short sentences, before the learner sees worked examples. Words only: write no digits and no worked numbers. No praise, no questions to the learner.`, voice),
-      prompt: `Topic: ${title}.\nThe method the desk will show, step by step: ${method.steps.join("; ")}.\nA plain version of the idea, for reference: ${method.idea}\nWrite the idea in your own words for this learner.`,
+      ...asked,
       schema: { type: "object", properties: { idea: { type: "string" } }, required: ["idea"] }, model: "fast", thinking: false, use: "worked-idea",
     });
     const clean = cleanIdea(json?.idea);

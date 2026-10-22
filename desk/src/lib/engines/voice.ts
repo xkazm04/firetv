@@ -55,7 +55,8 @@ async function piperSpeak(text: string, signal?: AbortSignal): Promise<Buffer> {
         signal?.removeEventListener("abort", stop);
         code === 0 ? resolve() : reject(new EngineError(signal?.aborted ? "timeout" : "exit", reported, `piper exited ${code}: ${err.slice(-300)}`));
       });
-      p.stdin.on("error", () => {});
+      // piper stopped taking the line before it had all of it: whatever it wrote is not that line (as text.ts and codex.ts say it)
+      p.stdin.on("error", (e) => reject(new EngineError("exit", reported, `piper closed its input: ${e.message}`)));
       p.stdin.write(text); p.stdin.end();
     });
     return readFileSync(out);

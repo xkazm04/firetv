@@ -24,7 +24,7 @@ function resolveSpec(from, spec, isFile) {
   if (spec.startsWith("@/")) base = "desk/src/" + spec.slice(2);
   else if (spec.startsWith("./") || spec.startsWith("../")) base = path.posix.join(path.posix.dirname(from), spec);
   else return null;
-  for (const f of [base, base + ".ts", base + ".tsx", base + "/index.ts"]) if (isFile(f)) return f;
+  for (const f of [base, base + ".ts", base + ".tsx", base + "/index.ts", base + "/index.tsx"]) if (isFile(f)) return f;
   return null;
 }
 

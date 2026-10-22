@@ -41,14 +41,17 @@ object TransportPlan {
         "toggle" -> listOf(if (playing) PlayerAction.Pause else PlayerAction.Play)
         "play" -> listOf(PlayerAction.Play)
         "pause" -> listOf(PlayerAction.Pause)
-        "seek+" -> listOf(PlayerAction.SeekTo(positionMs + SEEK_HOP_MS))
-        "seek-" -> listOf(PlayerAction.SeekTo((positionMs - SEEK_HOP_MS).coerceAtLeast(0)))
-        "seek" -> listOf(PlayerAction.SeekTo(value.toLong().coerceAtLeast(0)))
+        // Every seek lands inside the clip: at 0 at the start, on the last frame at the end. Past the
+        // end is not a place the plan chose; the player would decide (end, or wrap to the start).
+        "seek+" -> listOf(PlayerAction.SeekTo(inClip(positionMs + SEEK_HOP_MS, durationMs)))
+        "seek-" -> listOf(PlayerAction.SeekTo(inClip(positionMs - SEEK_HOP_MS, durationMs)))
+        // Double to Long saturates, so an absurd value cannot wrap round to some other position.
+        "seek" -> listOf(PlayerAction.SeekTo(inClip(value.toLong(), durationMs)))
         // Frame stepping only makes sense on a still picture, and seeking while playing fights
         // the playback clock, so stepping pauses first.
         "step" -> listOf(
             PlayerAction.Pause,
-            PlayerAction.SeekTo((positionMs + value.toLong() * FRAME_MS).coerceAtLeast(0)),
+            PlayerAction.SeekTo(inClip((positionMs + value.toLong().toDouble() * FRAME_MS).toLong(), durationMs)),
         )
         "rate" -> listOf(PlayerAction.SetRate(value.coerceIn(MIN_RATE, MAX_RATE)))
         // Review mode: land paused on the exact frame the ink is anchored to, so the drawing is
@@ -69,6 +72,12 @@ object TransportPlan {
         "redo" -> if (redoAtMs == null) listOf(PlayerAction.Edit(PenMessage.Redo)) else visit(redoAtMs)
         "clear" -> listOf(PlayerAction.Edit(PenMessage.Clear))
         else -> emptyList()
+    }
+
+    /** [targetMs] held to the clip: never before 0, never past the last frame when [durationMs] is known (> 0). */
+    private fun inClip(targetMs: Long, durationMs: Long): Long {
+        val lastFrame = if (durationMs > 0) (durationMs - FRAME_MS).coerceAtLeast(0) else Long.MAX_VALUE
+        return targetMs.coerceIn(0, lastFrame)
     }
 
     private fun visit(frameMs: Long): List<PlayerAction> =
