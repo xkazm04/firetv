@@ -31,8 +31,8 @@ import { draftKey, parseDraft, serialiseDraft } from "@/lib/rules/paperDraft";
 import { WEEK_EMPTY, type WeekLine } from "@/lib/rules/week";
 
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
-  { id: "maths", title: "Algebra — Exercise 4.2", file: "/samples/maths.jpg" },
-  { id: "english", title: "English — Unit 6", file: "/samples/english.jpg" },
+  { id: "maths", title: "Algebra, Exercise 4.2", file: "/samples/maths.jpg" },
+  { id: "english", title: "English, Unit 6", file: "/samples/english.jpg" },
   // no essay page: Essay Master takes text (a file or a message on the Essay panel), never a photo of handwriting
 ];
 
@@ -197,7 +197,7 @@ export default function Phone() {
     // the grant can come after the panel let the camera go (a tab picked while the browser asked): that stream is
     // stopped at once, and the one in use is stopped when the page goes, so the camera is never left on unasked
     let live = true, got: MediaStream | null = null;
-    navigator.mediaDevices?.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 } } }).then((st) => { if (!live) { st.getTracks().forEach((t) => t.stop()); return; } got = st; setCam(st); if (video.current) video.current.srcObject = st; }).catch(() => { if (live) setMsg(screen === "capture" ? "No camera here — use a sample page below." : "No camera here."); });
+    navigator.mediaDevices?.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 } } }).then((st) => { if (!live) { st.getTracks().forEach((t) => t.stop()); return; } got = st; setCam(st); if (video.current) video.current.srcObject = st; }).catch(() => { if (live) setMsg(screen === "capture" ? "No camera here. Use a sample page below." : "No camera here."); });
     return () => { live = false; got?.getTracks().forEach((t) => t.stop()); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [camWanted]);
@@ -452,7 +452,7 @@ export default function Phone() {
     type Rec = { lang: string; onresult: (ev: { results: Array<Array<{ transcript: string }>> }) => void; onerror: () => void; onend: () => void; start: () => void; stop: () => void };
     const w = window as unknown as { SpeechRecognition?: new () => Rec; webkitSpeechRecognition?: new () => Rec };
     const SR = w.SpeechRecognition ?? w.webkitSpeechRecognition;
-    if (!SR) { setMsg("No speech recognition in this browser — type instead."); return null; }
+    if (!SR) { setMsg("No speech recognition in this browser. Type instead."); return null; }
     const r = new SR(); r.lang = recogniserLangFor(tab, s); r.onresult = (ev) => into(ev.results[0][0].transcript); r.onerror = () => { hearing.current = false; setMsg("did not catch that"); }; r.onend = () => { hearing.current = false; };
     r.start(); hearing.current = true; setMsg("listening…");
     return r; // the caller may hold the button and stop it on release
@@ -471,7 +471,7 @@ export default function Phone() {
       const j = await r.json().catch(() => ({} as { error?: string }));
       if (moved()) return;
       if (r.ok) setPhase("sent");
-      else { setPhase("failed"); setMsg(r.status === 404 ? "The desk cannot mark yet — that part is still being built." : (j.error ?? `The desk could not mark it (${r.status}).`)); }
+      else { setPhase("failed"); setMsg(r.status === 404 ? "The desk cannot mark yet. That part is still being built." : (j.error ?? `The desk could not mark it (${r.status}).`)); }
     } catch { if (!moved()) { setPhase("failed"); setMsg("That did not reach the desk."); } } finally { setBusy(false); }
   };
   /**
@@ -550,7 +550,7 @@ export default function Phone() {
       const j = await r.json().catch(() => ({} as { reply?: string; error?: string }));
       if (moved()) return;
       if (r.ok) { setReply(j.reply ?? "The desk heard you."); setHeard(""); setTypedExplain(""); setTyping(false); }
-      else setMsg(r.status === 404 ? "The desk cannot listen back yet — that part is still being built." : (j.error ?? `The desk could not use that (${r.status}).`));
+      else setMsg(r.status === 404 ? "The desk cannot listen back yet. That part is still being built." : (j.error ?? `The desk could not use that (${r.status}).`));
     } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); }
   };
   /** One typed second go on the ringed item in hand: the TV draws what it came to; a refusal is the desk's own sentence. */
@@ -767,7 +767,7 @@ export default function Phone() {
           if (!pr) return <div className="pscreen"><h3>Practice</h3>
             {unwritten ? <><p>{unwritten.error}</p>
                 <button className="pbtn" data-signal="true" onClick={() => retry("practice")} disabled={busy}>Try again</button></>
-              : <p>The practice set starts on the TV — open <b>Teach me something</b> there and pick a topic. Six problems land on the big screen; you work them on paper.</p>}</div>;
+              : <p>The practice set starts on the TV. Open <b>Teach me something</b> there and pick a topic. Six problems land on the big screen; you work them on paper.</p>}</div>;
 
           // not marked: the sheet is still on the table. Two ways in: snap all six at once, or type the six answers.
           if (!pr.marked) return <div className="pscreen"><h3>Practice</h3>
@@ -799,7 +799,7 @@ export default function Phone() {
                   : <button className="pbtn" data-signal="true" onClick={sendTyped} disabled={!any || busy}>Send my answers</button>}
               </>;
             })() : <>
-              <p><b>{topicIn(pr.topic)?.name ?? "The set"}</b> — work all {pr.items.length} on paper. When every one is done, snap the whole sheet in one photo.</p>
+              <p><b>{topicIn(pr.topic)?.name ?? "The set"}</b>: work all {pr.items.length} on paper. When every one is done, snap the whole sheet in one photo.</p>
               <div className="cam">
                 {cam ? <video ref={video} autoPlay playsInline muted /> : !shot && <span>camera</span>}
                 {shot && <img src={shot.url} alt="the sheet you just snapped" />}
@@ -825,7 +825,7 @@ export default function Phone() {
           const asking = !!item && (item.verdict === "wrong" || item.verdict === "unsure" || !!reply);
           return <div className="pscreen"><h3>Practice</h3>
             <p><b>{right} right.</b> {look ? `${look} to look at${skipped ? ` (${skipped} skipped)` : ""}.` : "Nothing to look at."}</p>
-            <p>{s.screen === "walk" ? "Look at the TV — it is walking the set with you." : "Look at the TV — the whole set is on it. Pick a number there to go through it."}</p>
+            <p>{s.screen === "walk" ? "Look at the TV. It is walking the set with you." : "Look at the TV. The whole set is on it. Pick a number there to go through it."}</p>
             {(item?.verdict === "wrong" || item?.verdict === "unsure") && (item.second
               ? <p data-role="second-sent">{item.entered ? "Your typed answer is on the TV." : "Your second go is on the TV."}</p>
               : <div className="ptalk" data-role="second-go">

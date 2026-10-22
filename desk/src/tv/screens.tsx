@@ -124,7 +124,7 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
   const ovScale = H / p.h;
   // what the pipelines behind this page are doing, in the caption: a read that failed, a hint on its way or not coming
   const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
-  const pageLine = read?.phase === "failed" ? failedReadLine(p.subject, read.retry) : hj?.phase === "running" ? "thinking about a hint…" : hj?.phase === "failed" ? (hj.retry === false ? "no hint for this one" : "no hint that time — Select to try again") : p.missing?.length ? missingLine(p.missing) : p.marked ? markedLine(p.marked.items) : undefined;
+  const pageLine = read?.phase === "failed" ? failedReadLine(p.subject, read.retry) : hj?.phase === "running" ? "thinking about a hint…" : hj?.phase === "failed" ? (hj.retry === false ? "no hint for this one" : "no hint that time. Select to try again") : p.missing?.length ? missingLine(p.missing) : p.marked ? markedLine(p.marked.items) : undefined;
   return (<>
     <div className="band band-rule" />
     <main className="content-full">
@@ -191,7 +191,7 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
           {h.rule.warning && <div className="warn">{h.rule.warning}</div>}
         </dl>
       )}
-      {s.noLesson && <div className="body" style={{ marginTop: 28, color: "var(--mute)", maxWidth: "40ch" }}>{pickFailed ? `${pickFailed} The hint is all there is this time.` : <>No lesson in tonight&apos;s library covers this one. The hint is all there is — and that is fine.</>}</div>}
+      {s.noLesson && <div className="body" style={{ marginTop: 28, color: "var(--mute)", maxWidth: "40ch" }}>{pickFailed ? `${pickFailed} The hint is all there is this time.` : <>No lesson in tonight&apos;s library covers this one. The hint is all there is, and that is fine.</>}</div>}
       <div className="actions">
         <button className="btn" data-focused={at === "stuck"} data-disabled={h.stage === 2}>{h.stage === 2 ? "That's both hints" : "Still stuck"}</button>
         <button className="btn" data-focused={at === "lesson"} data-disabled={!s.lesson}>{s.lesson ? "Show me the lesson" : pickFailed !== null ? "No lesson this time" : s.noLesson ? "No lesson for this" : "Finding the lesson…"}</button>
@@ -225,7 +225,7 @@ export function LessonScreen({ s }: { s: Session }) {
       <div className="body" style={{ marginTop: 10, color: "var(--mute)" }}>{shown(l.why)}</div>
       <div style={{ position: "absolute", left: 0, top: 200, width: 1120, height: 630, background: "#000" }}>
         {src ? <iframe ref={frame} src={src} width={1120} height={630} allow="autoplay; encrypted-media" style={{ border: 0 }} title={l.title} onLoad={() => { if (paused) frame.current?.contentWindow?.postMessage(playerCommand(true), "*"); }} />
-             : <div className="body" style={{ padding: 40, color: "var(--mute)" }}>This unit has no video yet — its theory screen is the lesson. Press Menu.</div>}
+             : <div className="body" style={{ padding: 40, color: "var(--mute)" }}>This unit has no video yet. Its theory screen is the lesson. Press Menu.</div>}
       </div>
       <div style={{ position: "absolute", left: 1160, top: 200, width: 568 }}>
         <span className="cap">The part that matters · {fmt(l.t)}</span>
