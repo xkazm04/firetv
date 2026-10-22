@@ -3,6 +3,10 @@
 *The text description for the Devpost submission, ready to paste. Every claim cites the doc or
 commit it comes from; the citations can be dropped from the pasted copy.*
 
+## Demo video
+
+[VIDEO URL - operator pastes]
+
 ## What it does
 
 Study Desk turns the Fire TV in the living room into a homework desk for a family. The TV leads:
@@ -37,12 +41,17 @@ seated ([DESIGN-STUDY-DESK.md](../DESIGN-STUDY-DESK.md)):
   ([DESIGN-ESSAY-MASTER.md](../DESIGN-ESSAY-MASTER.md); deadline walk rows 18-21 in
   [STICK-DEADLINE-WALK-2026-10-21.md](../concepts/STICK-DEADLINE-WALK-2026-10-21.md)).
 
-Essay Master is the one writing tile on the landing (2026-10-22: a separate Writing tile beside it read as a
-duplicate, so it is off the desk until it is folded into Essay Master). **Writing** is built as a
-remote-driven screen inside the TV page: the learner picks a prompt with the D-pad, types the
-paragraph and the revision on the phone through a named `writing` hand-off, and the coaching note and the
-saved line come back to the TV ([TV-WRITING-SCREEN-2026-10-21.md](../concepts/TV-WRITING-SCREEN-2026-10-21.md);
-merge 30f53e33).
+Essay Master is the one writing tile on the landing. Writing is not a second tile. It opens from Essay
+Master's lens home, at the stop "Write from a prompt" (commits a80b9115, c09e0259). Writing is a
+remote-driven screen inside the TV page: the learner picks a prompt with the D-pad, types the paragraph and
+the revision on the phone through a named `writing` hand-off, and the coaching note and the saved line come
+back to the TV ([TV-WRITING-SCREEN-2026-10-21.md](../concepts/TV-WRITING-SCREEN-2026-10-21.md); merge 30f53e33).
+Back from Writing returns to the lens home.
+
+When a step needs the phone and none is paired, the TV opens a pairing page for that step. It says what the
+phone is for. When the phone joins, the TV goes back to the same screen and runs the step again
+(commit 70198651). While the TV waits for the session or for a page to be read, it is drawn in the
+learner's module look, not a grey grid (commit 0b128a73).
 
 Around the three apps is a shell for the family: choosing who is studying, pairing a phone, a break
 timer, and a recap of the evening ([DESIGN-ON-AIR.md](../DESIGN-ON-AIR.md)).
@@ -73,8 +82,8 @@ timer, and a recap of the evening ([DESIGN-ON-AIR.md](../DESIGN-ON-AIR.md)).
   (anyone else on the network, who sees only the lobby) (`desk/src/lib/session/pairing.ts`, `desk/src/proxy.ts`).
 - **Decisions in code.** The rules live in `desk/src/lib/rules/`. Models explain; they do not decide.
   The model engines (text, vision, voice, embeddings) sit behind one provider seam
-  (`desk/src/lib/engines/registry.ts`), so every one of the 104 rules suites in `tools/*-test.cjs`
-  runs with the models stubbed and no live call ([AGENTS.md](../../AGENTS.md), "Constraints").
+  (`desk/src/lib/engines/registry.ts`), so every one of the 100 rules suites that `npm run test:rules` runs
+  (2,583 tests, all passing on 2026-10-22) runs with the models stubbed and no live call ([AGENTS.md](../../AGENTS.md), "Constraints").
 - **The Fire TV app** (`stick-app/`) is a small Android app for Fire OS with no dependencies: one
   fullscreen WebView that loads the desk's TV page, launchable from the Fire TV launcher (commit
   17a3a854). Its `KeyBridge` turns each remote button into the key event the page already handles:
@@ -103,9 +112,9 @@ The device is a Fire TV Stick 4K (model AFTKM, Fire OS 8, Android 11) with Amazo
   stick, with the phone side checked at 360 and 414 px
   ([STICK-DEADLINE-WALK-2026-10-21.md](../concepts/STICK-DEADLINE-WALK-2026-10-21.md); commit e4176983).
 - **Writing reached with the remote.** The stick loads only the TV page, and nothing on the remote could
-  drive the old /writing page; Writing is now a screen inside the TV page (off the desk since 2026-10-22, pending a
-  fold-in to Essay Master)
-  ([TV-WRITING-SCREEN-2026-10-21.md](../concepts/TV-WRITING-SCREEN-2026-10-21.md); merge 30f53e33).
+  drive the old /writing page. Writing is now a screen inside the TV page, reached from Essay Master's lens
+  home ([TV-WRITING-SCREEN-2026-10-21.md](../concepts/TV-WRITING-SCREEN-2026-10-21.md); merge 30f53e33,
+  commit c09e0259).
 - **Smooth on the stick's GPU.** The idle landing went from 8.7 to 59 fps and lamp moves and Back from
   6-7 fps to 22-45 fps, with the same picture, after the landing's shadows were moved inside the
   drawing ([STICK-PERFORMANCE-2026-10-20.md](../concepts/STICK-PERFORMANCE-2026-10-20.md); commits
@@ -135,8 +144,9 @@ p95 is 21.1 ms ([POC-FINDINGS.md](../POC-FINDINGS.md), section 7).
   271-283 ms and Back's 228-378 ms. Inside a module the pre-rendered bitmaps stay resident, about 46 MB more
   GPU memory than before ([STICK-PERFORMANCE-2026-10-21.md](../concepts/STICK-PERFORMANCE-2026-10-21.md),
   "GPU memory" and "Still open").
-- Writing on the TV was built and tested in code (`tools/writing-tv-test.cjs`), and is off the landing since 2026-10-22; the 2026-10-21 deadline walk
-  predates it, and the Math Buddy flow was not re-walked that day
+- Writing on the TV is tested in code (`tools/writing-tv-test.cjs`, `tools/flow-audit-test.cjs`). The
+  2026-10-21 deadline walk predates it and the 2026-10-22 pairing page and module-look waits, and the Math Buddy flow was not
+  re-walked that day
   ([STICK-DEADLINE-WALK-2026-10-21.md](../concepts/STICK-DEADLINE-WALK-2026-10-21.md), B1 and B3).
 - The stick walks pressed the keys with `adb shell input keyevent`, which enters the same
   `dispatchKeyEvent` path as the remote; a press of the physical remote is still the operator's

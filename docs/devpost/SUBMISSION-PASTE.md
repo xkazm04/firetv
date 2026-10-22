@@ -4,11 +4,16 @@ Paste each section into the Devpost field named in its heading. Text only. The s
 files in this folder. A mark like [CHECK] is a fact the repo does not settle. Resolve each one, or
 cut the sentence, before pasting.
 
-Open [CHECK] marks:
+All three [CHECK] marks are resolved (2026-10-22). One field is left for the operator: the demo video
+URL (section 0).
 
-1. Rules-suite count (section 1, "How it was built").
-2. Key-bridge repository on-device status (section 4).
-3. The licence file is MIT, but whether GitHub detects it was not checked (section 4).
+---
+
+## 0. Demo video
+
+**Field: Video demo link.**
+
+[VIDEO URL - operator pastes]
 
 ---
 
@@ -41,8 +46,13 @@ The landing holds three modules. Each is drawn as a small world in layered paper
   conversation ends in a band from A1 to C2 that the learner can see.
 - **Essay Master (Writing).** The type is the diagram. The learner sends a paragraph from the phone.
   The TV reads it through lenses, such as structure and argument, set large enough to read from the
-  sofa. A Writing screen inside the TV page lets the remote pick a prompt. The learner types the
-  paragraph and the revision on the phone. The coaching note comes back to the TV.
+  sofa. Essay Master is the one writing tile. Its lens home ends in "Write from a prompt", which opens a
+  Writing screen inside the TV page. The remote picks a prompt. The learner types the paragraph and the
+  revision on the phone. The coaching note comes back to the TV.
+
+When a step needs the phone and none is paired, the TV opens a pairing page for that step. It says what
+the phone is for. When the phone joins, the TV goes back to the same screen and runs the step again.
+While the TV waits, it is drawn in the learner's module look, not a grey grid.
 
 Around the modules is a family shell: choose who is studying, pair a phone, a break timer and a recap
 of the evening.
@@ -63,8 +73,8 @@ of the evening.
 - Every request is classified as the TV, a phone or a guest. Only the TV holds the desk key.
 - Decisions live in code, in `desk/src/lib/rules/`. Models explain. They do not decide. The text,
   vision, voice and embedding engines sit behind one provider seam. The rules suites run with the models
-  stubbed, so no test makes a live model call. Suite count: [CHECK] (description.md says 104; the
-  repo has 111 `tools/*-test.cjs` files).
+  stubbed, so no test makes a live model call. `npm run test:rules` in `desk/` runs 100 rules suites
+  (the `rulesSuites` list in `desk/package.json`). On 2026-10-22 all 100 passed: 2,583 tests, 0 failed.
 - The Fire TV app, `stick-app/`, is a small Android app for Fire OS with no dependencies. It is one
   fullscreen WebView that loads the desk's TV page. Its key bridge turns each remote button into the key
   event the page already handles. A short Back goes to the page. A held Back leaves the app. The app
@@ -86,8 +96,8 @@ of the evening.
   computer, not on the stick.
 - Linking a stick to a desk once needs one `adb` command.
 - A module switch is shorter but not free. Pre-rendered bitmaps use about 46 MB more GPU memory.
-- Writing on the TV is tested in code. The 2026-10-21 stick walk predates it, and Math Buddy was not
-  re-walked that day.
+- Writing on the TV is tested in code. The 2026-10-21 stick walk predates it, the TV pairing page and
+  the module-look waits, and Math Buddy was not re-walked that day.
 - The walks pressed keys with `adb shell input keyevent`. A press of the physical remote is still owed.
 
 ### What is next
@@ -332,8 +342,7 @@ repository". The main repository is https://github.com/xkazm04/firetv.)
 `firetv-key-bridge` is a public, MIT-licensed, standalone extraction of the Study Desk key bridge. It
 wraps a LAN web page in a fullscreen WebView on Fire OS. It hands the page the remote's keys (D-pad,
 Select, Back, Menu, Play/Pause) as standard key events. Back goes to the page first. A held Back leaves
-the app. It has 24 unit tests. The extraction has not been tested on the device [CHECK: open-source.md
-says not yet tested on the device; confirm before pasting]. The on-device proof is for `stick-app/` in
+the app. It has 24 unit tests. The extraction has not yet been tested on the device. The on-device proof is for `stick-app/` in
 the main repository. Also in the main repository: `tools/stick-perf/`, a probe that scores a page's
 transitions on the stick frame by frame from a DevTools trace, and `tools/stick-walk/`, a scripted walk
 of the TV with remote key events and screencaps.
@@ -352,8 +361,8 @@ browser. The wrapper and the measuring tools are what it took to make one work o
 apply to any web app on Fire TV, not only this one. The friction log and the feature requests are
 written so the next builder does not have to rediscover this.
 
-**Licence note.** open-source.md (written 2026-10-21) says the main repository had no licence file. The
-worktree now has an MIT `LICENSE` (added 2026-10-21). Whether GitHub detects it: [CHECK].
+**Licence note.** The main repository has an MIT `LICENSE`. GitHub detects it: on 2026-10-22,
+`gh api repos/xkazm04/firetv/license` returned `MIT`. `firetv-key-bridge` is public and also reports MIT.
 
 ---
 

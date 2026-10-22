@@ -55,16 +55,14 @@ Wi-Fi, reached with `adb connect <ip>:5555` ([POC-FINDINGS.md](../POC-FINDINGS.m
 - **Task.** Reach the stick with `adb connect` across sessions.
 - **Steps.** `adb connect <ip>:5555`, with the IP read from Settings → My Fire TV → About → Network.
 - **Expected.** A stable way to find the stick on the LAN.
-- **Actual.** The stick was at `10.0.0.142` on 2026-09-07 and at `10.0.0.139` on 2026-10-20. The
-  Death Ride build's runbook had to tell its builders: "The Stick is at a DHCP address that changes;
-  scan the /24 for port 5555."
+- **Actual.** The stick was at `10.0.0.142` on 2026-09-07 and at `10.0.0.139` on 2026-10-20.
 - **Severity.** Low.
 - **Workaround.** Scan the /24 for port 5555. The Study Desk app does the same in the other direction:
   it searches its own /24 for the desk (commit fe4cb34b).
 - **Suggestion.** Advertise the stick for adb over Wi-Fi by mDNS when ADB debugging is on, and show the current IP on the Developer options screen itself.
 - **Source.** [POC-FINDINGS.md](../POC-FINDINGS.md), section 7 (`.142`);
   [STICK-APK-WALK-2026-10-20.md](../concepts/STICK-APK-WALK-2026-10-20.md), "Install and point it"
-  (`.139`); [DEATH-RIDE-PHASE2.md](../concepts/DEATH-RIDE-PHASE2.md), line 111.
+  (`.139`).
 
 ## FL-4. adb on a Windows shell corrupts screencaps and reads success as failure
 
