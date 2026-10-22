@@ -3213,7 +3213,11 @@
           "revision": 3,
           "changedAt": "2026-09-04",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "conformant",
+          "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:23 Telestrator manages in-session annotation reversibility with a bounded command-inverse history supporting linear undo and redo.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:6b331b14c940f6a7",
+          "evaluatedRevision": 3
         },
         {
           "subject": "embedded-preview",

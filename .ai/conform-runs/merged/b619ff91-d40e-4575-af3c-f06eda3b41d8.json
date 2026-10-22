@@ -1,0 +1,77 @@
+{
+ "schema": "conform-run/1",
+ "worker": "b619ff91-d40e-4575-af3c-f06eda3b41d8",
+ "subject": "undo-history",
+ "evaluatedAt": "2026-10-22T22:09:34.395800+00:00",
+ "provider": "agy",
+ "model": "gemini-3.8-flash-high",
+ "pairs": [
+  {
+   "context": "pen-core",
+   "subject": "undo-history",
+   "bundle": "software-engineering",
+   "state": "conformant",
+   "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:23 Telestrator manages in-session annotation reversibility with a bounded command-inverse history supporting linear undo and redo.",
+   "techniques": [
+    {
+     "technique": "undo-model-selection",
+     "verdict": "conformant",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:11 History chooses an operation-log command-inverse model (Op) over snapshots based on pen latency and allocation budgets."
+    },
+    {
+     "technique": "stack-policy",
+     "verdict": "conformant",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:42 Enforces a hard depth cap by evicting the oldest operation first with removeFirst when MAX_DEPTH is exceeded."
+    },
+    {
+     "technique": "redo-semantics",
+     "verdict": "conformant",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:40 Under linear history semantics, recording any new operation immediately clears the redo stack to discard divergent redo branches."
+    },
+    {
+     "technique": "gesture-coalescing",
+     "verdict": "conformant",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:200 Continuous pointer move events accumulate in live points and coalesce into a single committed stroke only when the up phase completes the gesture."
+    },
+    {
+     "technique": "undo-scope",
+     "verdict": "conformant",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt:71 Keeps player playback position out of the undo stack while implementing reveal-the-change to seek to off-screen ink before reverting."
+    },
+    {
+     "technique": "execution-emitted-inverse",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/History.kt:32 Precondition does not hold: history operations must be inspectable data for PenEngine and TransportPlan to determine target frame rather than unreadable closures."
+    },
+    {
+     "technique": "checkpoint-restore",
+     "verdict": "not-applicable",
+     "evidence": "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:67 Precondition does not hold: telestrator editing consists solely of fine-grained in-session strokes, shapes, and clears with no coarse workflow boundaries or bulk imports."
+    }
+   ]
+  }
+ ],
+ "declined": [],
+ "consults": [
+  {
+   "ts": "2026-10-22T22:09:34.395800+00:00",
+   "bundle": "software-engineering",
+   "subjects": [
+    "undo-history"
+   ],
+   "techniques": [
+    "checkpoint-restore",
+    "execution-emitted-inverse",
+    "gesture-coalescing",
+    "redo-semantics",
+    "stack-policy",
+    "undo-model-selection",
+    "undo-scope"
+   ],
+   "deviations": 0,
+   "context": "pen-core",
+   "via": "curator-multi:agy",
+   "model": "gemini-3.8-flash-high"
+  }
+ ]
+}
