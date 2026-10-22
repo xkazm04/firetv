@@ -23,10 +23,13 @@ import { topicIn } from "@/lib/library/paths";
 import { MOVED_ON, refused, runJob } from "@/lib/desk/job";
 import { aimOf, readerOf } from "@/lib/rules/recovery";
 import { topSlipsOf } from "@/lib/rules/school";
+import { withPhoneAsk } from "@/lib/session/phoneAsk";
 
 export const dynamic = "force-dynamic";
 const START = "writing a practice set…";
-export async function POST(req: Request) {
+// operator ruling 10-22, option (a) narrowed: no phone starts a set here; only /api/session/retry runs a phone's retry, in-process
+export function POST(req: Request) { return withPhoneAsk(req, [], () => post(req)); }
+async function post(req: Request) {
   const body = (await req.json().catch(() => null)) as { topic?: unknown; stretch?: unknown; word?: unknown } | null;
   const topic = body && typeof body === "object" ? body.topic : undefined;
   const stretch = !!body && typeof body === "object" && (body.stretch === true || body.stretch === 1);

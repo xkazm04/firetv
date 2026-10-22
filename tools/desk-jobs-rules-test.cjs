@@ -968,6 +968,50 @@ test('optimize 2026-10-21: a set written by code says it is ready without a time
  assert.match(store.getSession().status,/^6 questions ready in \d+ s$/);
 });
 
+// ---- operator ruling 10-22 (option a narrowed): a phone reaches /api/practice only through a retry of the seated learner's own failed job ----
+{
+ const NOT_ASKING='The TV is not asking for that now.';
+ const asRole=(url,role,body)=>route(url.replace('/api/','')).POST(new Request(`http://desk${url}`,{method:'POST',headers:role?{'x-desk-role':role}:{},body:JSON.stringify(body)}));
+ const failedSet=async()=>{onPage();stubText({items:()=>{throw new Error('boom');}});await post('practice',{topic:'linear-one-step'});return store.getSession().jobs.practice;};
+ const patchJob=(patch)=>{const s=store.getSession();globalThis.__desk.session={...s,jobs:{...s.jobs,practice:{...s.jobs.practice,...patch}}};};
+ test('ruling 10-22 (c): a direct phone POST /api/practice is 409 NOT_ASKING and starts no job',async()=>{
+  onPage();stubText({items:()=>({items:STATED})});
+  const r=await asRole('/api/practice','phone',{topic:'linear-one-step'});
+  assert.equal(r.status,409);assert.equal((await r.json()).error,NOT_ASKING);
+  assert.equal(store.getSession().jobs?.practice,undefined,'no job started');assert.equal(store.getSession().practice,null);
+ });
+ test('ruling 10-22 (a): a phone retry naming the seated learner\'s failed practice job runs',async()=>{
+  const job=await failedSet();assert.equal(job.phase,'failed');
+  stubText({items:()=>({items:STATED})});
+  const r=await asRole('/api/session/retry','phone',{kind:'practice',jobId:job.id});
+  assert.equal(r.status,200);assert.equal(store.getSession().jobs.practice.phase,'done');assert.equal(store.getSession().practice.items.length,6);
+ });
+ test('ruling 10-22 (b): a phone practice retry with no id, an unknown id, a foreign, unowned, running or ready job is 409 NOT_ASKING',async()=>{
+  let asked=0;
+  const job=await failedSet();
+  stubText({items:()=>{asked++;return {items:STATED};}});
+  const refuse=async(body,why)=>{const r=await asRole('/api/session/retry','phone',body);assert.equal(r.status,409,why);assert.equal((await r.json()).error,NOT_ASKING,why);};
+  await refuse({kind:'practice'},'no id');
+  await refuse({kind:'practice',jobId:'nope'},'unknown id');
+  patchJob({by:'someone-else'});await refuse({kind:'practice',jobId:job.id},'foreign job');
+  patchJob({by:undefined});await refuse({kind:'practice',jobId:job.id},'job with no owner');
+  patchJob({by:job.by,phase:'running'});await refuse({kind:'practice',jobId:job.id},'running job');
+  patchJob({phase:'done'});await refuse({kind:'practice',jobId:job.id},'ready job');
+  patchJob({phase:'failed',retry:false});await refuse({kind:'practice',jobId:job.id},'job that will not change');
+  patchJob({retry:true});store.dispatch({type:'reset'});await refuse({kind:'practice',jobId:job.id},'no seated learner');
+  assert.equal(asked,0,'no engine call');
+ });
+ test('ruling 10-22 (d): the TV\'s practice POST and the TV\'s retry work as before',async()=>{
+  onPage();stubText({items:()=>({items:STATED})});
+  assert.equal((await asRole('/api/practice','tv',{topic:'linear-one-step'})).status,200);
+  const job=await failedSet();assert.equal(job.phase,'failed');
+  stubText({items:()=>({items:STATED})});
+  assert.equal((await asRole('/api/session/retry','tv',{kind:'practice'})).status,200);
+  assert.equal(store.getSession().jobs.practice.phase,'done');
+ });
+}
+
+
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
  const saved={...store.getSession(),jobs:{read:{id:'r1',phase:'running',startedAt:Date.now()-5000,key:PAGE.id,input:{id:PAGE.id}}}};

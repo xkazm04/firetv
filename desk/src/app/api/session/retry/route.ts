@@ -10,6 +10,7 @@ import { NextResponse } from "next/server";
 import { getSession, type JobKind } from "@/lib/session/store";
 import { ROLE_HEADER } from "@/lib/session/pairing";
 import { MOVED_ON, NOTHING, NOT_AGAIN } from "@/lib/desk/job";
+import { NOT_ASKING } from "@/lib/session/phoneAsk";
 import { POST as read } from "../../read/route";
 import { POST as hint } from "../../hint/route";
 import { POST as practice } from "../../practice/route";
@@ -25,9 +26,15 @@ const ROUTES: Partial<Record<JobKind, { path: string; post: (req: Request) => Pr
 };
 
 export async function POST(req: Request) {
-  const { kind, askId } = ((await req.json().catch(() => null)) ?? {}) as { kind?: JobKind; askId?: unknown };
+  const { kind, askId, jobId } = ((await req.json().catch(() => null)) ?? {}) as { kind?: JobKind; askId?: unknown; jobId?: unknown };
   const s = getSession();
   const job = kind ? s.jobs?.[kind] : undefined;
+  // operator ruling 10-22, option (a) narrowed: a phone retries a practice set only by naming the seated learner's own failed job; it then runs in-process, without the phone role
+  if (kind === "practice" && req.headers.get(ROLE_HEADER) === "phone") {
+    const mine = !!job && typeof jobId === "string" && job.id === jobId && job.phase === "failed" && !!job.input && job.retry !== false && job.by !== undefined && job.by === s.learner?.id;
+    if (!mine) return NextResponse.json({ error: NOT_ASKING }, { status: 409 });
+    return practice(new Request(new URL("/api/practice", req.url), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(job.input) }));
+  }
   const route = kind ? ROUTES[kind] : undefined;
   if (!kind || !job || !route || job.phase !== "failed" || !job.input) return NextResponse.json({ error: NOTHING }, { status: 409 });
   // a ceiling, a refusal, a desk refusal or an unreadable learner file meets the same input the same way (failure.ts)
