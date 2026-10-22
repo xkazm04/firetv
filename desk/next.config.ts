@@ -8,6 +8,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost", "10.0.0.*", "192.168.*.*", "*.local"],
   outputFileTracingRoot: __dirname,
+  // the dev build's "N" badge sat over the phone's bottom bar (Recap, Cancel) and the TV's bottom-left corner in every capture and in the demo film
+  devIndicators: false,
 };
 
 export default nextConfig;
