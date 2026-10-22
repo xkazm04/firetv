@@ -88,6 +88,7 @@
 .stage[data-display="desk"] .linga-tv[data-layout="ladder"] .lo-stage { inset: calc(196px + var(--desk-dy)) calc(110px + var(--desk-dx)) calc(292px + var(--desk-dy)); }
 .stage[data-display="desk"] .linga-tv[data-layout="ladder"] > .lo-actions { left: calc(110px + var(--desk-dx)); right: calc(110px + var(--desk-dx)); bottom: calc(139px + var(--desk-dy)); }
 .stage[data-display="desk"] .linga-tv .lo-doors { left: calc(110px + var(--desk-dx)); right: calc(110px + var(--desk-dx)); top: calc(440px + var(--desk-dy)); }
+.stage[data-display="desk"] .linga-tv .linga-tape-col { left: calc(110px + var(--desk-dx)); right: calc(110px + var(--desk-dx)); top: calc(462px + var(--desk-dy)); }
 
 /* ---------------------------------------------------------------- header: the mark and the learner */
 .linga-tv .lo-top {
@@ -429,6 +430,13 @@
 .linga-tv .lo-panel .lo-actions[data-count="3"]:not(.lo-choice-row) .lo-primary { grid-column: 1 / 3; }
 .linga-tv .lo-panel .lo-actions[data-count="3"]:not(.lo-choice-row) .lo-secondary { height: 100px; padding: 0 26px; font-size: 28px; }
 .linga-tv .lo-panel .lo-actions[data-count="3"] .lo-action[data-focused="true"] { transform: translateX(8px); }
+/* a half-width door keeps its words: its phone badge is the phone alone (the full "On your phone" took two thirds of it) */
+.linga-tv .lo-panel .lo-actions:is([data-count="3"], [data-count="4"]):not(.lo-choice-row) .lo-secondary .lo-phone { width: 36px; }
+/* the conversation with Cut (Adult): four actions as two rows of two, so the partner's line and a try card keep their room */
+.linga-tv[data-view="linga-talk"] .lo-panel .lo-actions[data-count="4"]:not(.lo-choice-row) { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.linga-tv[data-view="linga-talk"] .lo-panel .lo-actions[data-count="4"]:not(.lo-choice-row) .lo-action { height: 87px; padding: 0 22px; font-size: 28px; }
+.linga-tv[data-view="linga-talk"] .lo-panel .lo-actions[data-count="4"]:not(.lo-choice-row) .lo-action[data-rest="true"] { padding: 0 20px; }
+.linga-tv[data-view="linga-talk"] .lo-panel .lo-actions[data-count="4"] .lo-action[data-focused="true"] { transform: translateY(-6px); }
 /* a choice: equal buttons side by side */
 .linga-tv .lo-actions.lo-choice-row { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 13px; }
 .linga-tv .lo-choice-row .lo-action { padding: 0 24px; font-size: 30px; }
@@ -628,6 +636,30 @@
 .linga-tv[data-layout="plan"] .lo-head { width: 1700px; }
 .linga-tv[data-layout="plan"] .lo-head .lo-caption > div { max-width: 1500px; }
 .linga-tv[data-layout="plan"] .lo-actions { position: absolute; left: 110px; bottom: 139px; z-index: 3; margin: 0; }
+
+/* ---------------------------------------------------------------- Cut: the notes as a tape (v2 L3), Take Two's branch (v2 L4)
+   One column under the head that flows: up to three pins side by side, each the learner's own words with the better form
+   under them, then the take drawn from its pin. The focused pin lifts; a held note's quote is struck. */
+.linga-tv .linga-tape-col { position: absolute; left: 110px; right: 110px; top: 462px; z-index: 2; display: flex; flex-direction: column; }
+.linga-tv .linga-tape { display: flex; gap: 22px; align-items: flex-start; }
+.linga-tv .linga-pin {
+  display: flex; flex: 1 1 0; flex-direction: column; min-width: 0; max-width: 560px;
+  padding: 18px 26px 20px; border-left: 7px solid var(--lo-plum-line); border-radius: 6px;
+  background: rgba(255, 249, 236, .78); box-shadow: 0 10px 22px rgba(78, 44, 47, .10);
+  transition: transform .18s, border-color .18s, background-color .18s;
+}
+.linga-tv .linga-pin small { color: var(--lo-overline); font-size: 22px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; }
+.linga-tv .linga-pin b { margin-top: 10px; color: var(--lo-plum-ink); font-family: var(--lo-serif); font-size: 32px; font-weight: 400; letter-spacing: -.3px; line-height: 1.16; }
+.linga-tv .linga-pin s { text-decoration-thickness: 3px; text-decoration-color: var(--lo-rule); }
+.linga-tv .linga-pin-better { margin-top: 12px; color: var(--lo-data); font-size: 28px; font-weight: 700; line-height: 1.25; }
+.linga-tv .linga-pin[data-selected="true"] { border-left-color: var(--lo-amber); background: #fffaf0; transform: translateY(-8px); }
+.linga-tv .linga-tape[data-selecting="true"] .linga-pin:not([data-selected="true"]) b { color: var(--lo-caption); }
+.linga-tv .linga-tape-col > .lo-data { margin-top: 22px; }
+.linga-tv .linga-branch { margin-top: 8px; }
+.linga-tv .linga-branch .lo-data { margin-top: 14px; }
+/* one line each, so the branch never runs into the action under it: the pin above already carries the verdict */
+.linga-tv .linga-branch .lo-data { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.linga-tv .linga-branch .lo-data .lo-data-key { display: inline-block; margin-right: 18px; }
 
 /* ---------------------------------------------------------------- the menu */
 .linga-tv[data-layout="menu"] .lo-head { top: 217px; width: 800px; }

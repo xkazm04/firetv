@@ -152,15 +152,18 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       <section className="lo-head"><Kicker text={h.kicker}/><Title text={h.title}/>{caption}</section>
       {/* three pins at most, the learner's own words on each; the focused pin's note is the one caption above */}
       {/* Take Two (v2 L4): a held note's quote is struck, an open one stays as it was, an undecided one says so; no count */}
-      <div className="lo-doors linga-topics linga-tape" data-role="linga-tape" data-count={h.pins.length} data-selecting={h.selected>=0}>{h.pins.map((x,i)=><div key={i} className="lo-topic" data-selected={i===h.selected} data-mark={x.mark}>
-        <small>{x.label}</small><b>{x.mark==="held"?<s data-role="linga-struck">“{x.quote}”</s>:<>“{x.quote}”</>}</b>{x.better&&<small>{x.better}</small>}{x.mark==="undecided"&&<small>Not decided</small>}
+      {/* one column under the head: the pins, the take's branch, the counts; it flows, so a long quote lowers what follows */}
+      <div className="linga-tape-col">
+      <div className="linga-tape" data-role="linga-tape" data-count={h.pins.length} data-selecting={h.selected>=0}>{h.pins.map((x,i)=><div key={i} className="linga-pin" data-selected={i===h.selected} data-mark={x.mark}>
+        <small>{x.label}{x.mark==="undecided"&&" · Not decided"}</small><b>{x.mark==="held"?<s data-role="linga-struck">“{x.quote}”</s>:<>“{x.quote}”</>}</b>{x.better&&<span className="linga-pin-better">{x.better}</span>}
       </div>)}</div>
       {/* the take, drawn as a branch from its pin: the line it forked at, then the learner's line again */}
       {h.branch&&<div className="linga-branch" data-role="linga-branch" data-pin={h.branch.pin}>
         <DataLine><span className="lo-data-key">Take Two · {h.pins[h.branch.pin]?.label}</span>{h.branch.partner.split(" · ")[0]}: “{h.branch.from}”</DataLine>
         {h.branch.again&&<DataLine><span className="lo-data-key">You again</span>“{h.branch.again}”</DataLine>}
       </div>}
-      <DataLine>{h.data}</DataLine>
+      {!h.branch&&<DataLine>{h.data}</DataLine>}
+      </div>
       {nav}
     </>}
     {layout==="menu"&&(h.kind==="menu"||h.kind==="certs")&&<>
@@ -223,8 +226,8 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
     case "choices":return <><Kicker text={h.kicker}/><h1 className="lo-prompt" data-role="linga-title">{h.prompt}</h1>
       <div className="lo-choices linga-choices">{h.options.map((x,i)=><div key={x} data-selected={focus===i}><small>0{i+1}</small>{x}</div>)}</div>{caption}</>;
     case "scene":{
-      // a scene the learner pitched (v2 L3) is marked as their own on its card
-      if(s.screen==="linga-scenes")return <><Kicker band={h.band} text={`${h.own?"Your own scene · ":""}${h.subtitle} · ${h.minutes} min`}/><Title text={h.title}/>{caption}<SentenceCard label="A sentence to take with you" text={h.sentence}/></>;
+      // a scene the learner pitched (v2 L3) is marked as their own on its card (in place of the skill: the kicker stays one line)
+      if(s.screen==="linga-scenes")return <><Kicker band={h.band} text={`${h.own?"Your own scene":h.subtitle} · ${h.minutes} min`}/><Title text={h.title}/>{caption}<SentenceCard label="A sentence to take with you" text={h.sentence}/></>;
       const kicker=h.kicker.endsWith(` · ${h.partner}`)?h.kicker.slice(0,-(h.partner.length+3)):h.kicker;
       const goal=talkGoal(h);
       return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{h.tryForm&&<SentenceCard className="lo-compact" label={TRY_TAG} text={h.tryForm} role="linga-try"/>}{caption}{v.savedLine&&<DataLine>{v.savedLine}</DataLine>}{goal&&<DataLine><span className="lo-data-key">{h.take?"Take Two of":h.kind==="scene"&&h.steps?"Now":"Goal"}</span>{goal}</DataLine>}</>;
