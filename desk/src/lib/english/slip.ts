@@ -84,6 +84,8 @@ const toks = (text: string): Tok[] => [...text.matchAll(WORD)].map(m => { const 
 const keyWords = (key: string) => toks(key).map(t => t.key);
 const runAt = (have: string[], want: string[], i: number) => want.every((w, k) => have[i + k] === w);
 const holds = (have: string[], want: string[]) => { for (let i = 0; i + want.length <= have.length; i++) if (runAt(have, want, i)) return true; return false; };
+/** Whether tokens from..to of a text stand in one sentence: no . ! ? between them ("Thank you. Was it good?" holds no "you was"). */
+const oneSentence = (text: string, t: Tok[], from: number, to: number) => !/[.!?]/.test(text.slice(t[from].end, t[to].at));
 const content = (w: string) => w !== "#" && !FUNCTION.has(w);
 
 /** Whether a slip key may write to the learner record: it holds a content word, or a pair on KNOWN_SLIPS. */
@@ -144,7 +146,8 @@ const spanSlip = (A: Tok[], s: Span) => A.slice(s[0], s[1]).map(t => t.word).joi
 export function findKey(text: string, key: string): string | null {
   const want = keyWords(key), have = toks(text), words = have.map(t => t.key);
   if (!want.length) return null;
-  for (let i = 0; i + want.length <= have.length; i++) if (runAt(words, want, i)) return text.slice(have[i].at, have[i + want.length - 1].end);
+  for (let i = 0; i + want.length <= have.length; i++)
+    if (runAt(words, want, i) && oneSentence(text, have, i, i + want.length - 1)) return text.slice(have[i].at, have[i + want.length - 1].end);
   return null;
 }
 /**
@@ -162,7 +165,7 @@ export function slipStands(text: string, slip: string): string | null {
   const want = keyWords(slip), have = toks(text), words = have.map(t => t.key);
   if (want.length < 2) return null;
   for (let i = 0; i + want.length <= have.length; i++)
-    if (runAt(words, want, i) && !(i > 0 && LICENSORS.has(have[i - 1].word))) return text.slice(have[i].at, have[i + want.length - 1].end);
+    if (runAt(words, want, i) && oneSentence(text, have, i, i + want.length - 1) && !(i > 0 && LICENSORS.has(have[i - 1].word))) return text.slice(have[i].at, have[i + want.length - 1].end);
   return null;
 }
 /** Whether a pair may write to the learner record in a scene whose partner said `partnerLines`: guarded, and never words the partner said. */
@@ -208,15 +211,16 @@ export function clearSlip(reply: string): ClearSlip | null {
     return said && said.length <= 180 ? { said, better: (reply.slice(from, at) + fix + reply.slice(end, to)).trim(), why } : null;
   };
   const upper = (w: string) => w.replace(/^i\b/, "I");
+  // a slip stands inside one sentence: "Thank you. Was it good?" holds no "you was"
   for (let i = 0; i < t.length; i++) {
     if (i > 0 && LICENSORS.has(t[i - 1].word)) continue;
-    const k = KNOWN_SLIPS.find(k => runAt(words, keyWords(k), i));
+    const k = KNOWN_SLIPS.find(k => runAt(words, keyWords(k), i) && oneSentence(reply, t, i, i + keyWords(k).length - 1));
     if (k) {
       const fix = KNOWN_SLIP_FIXES[k], end = t[i + keyWords(k).length - 1].end;
       const cased = /^\p{Lu}/u.test(reply[t[i].at]) ? fix[0].toUpperCase() + fix.slice(1) : upper(fix);
       return whole(t[i].at, end, cased, `Say "${upper(fix)}", not "${upper(k)}".`);
     }
-    if (WANTS.has(t[i].word) && WANT_VERB.has(t[i + 1]?.word ?? ""))
+    if (WANTS.has(t[i].word) && WANT_VERB.has(t[i + 1]?.word ?? "") && oneSentence(reply, t, i, i + 1))
       return whole(t[i].at, t[i + 1].end, `${reply.slice(t[i].at, t[i].end)} to ${reply.slice(t[i + 1].at, t[i + 1].end)}`, `After "want", say "to" before the verb: "want to ${t[i + 1].word}".`);
   }
   return null;

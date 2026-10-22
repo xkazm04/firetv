@@ -10,15 +10,15 @@
  * Select's hand-off is view-only here: props.zoom floods the sheet with the app's colour and inverts the linework.
  */
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import type { Subject } from "@/lib/session/store";
-import type { AppView, WhenIcon } from "@/landing/model";
+import type { LandingApp } from "@/tv/landingRows";
+import { handoffName, type AppView, type WhenIcon } from "@/landing/model";
 import type { ThemeLandingProps } from "../types";
 import { BLUEPRINT_FONTS } from "./fonts";
 import { drawingOf } from "./drawings";
 import { afterFonts } from "@/lib/afterFonts";
 
-const ACC: Record<Subject, string> = { maths: "#ffe45c", english: "#ff7d6e", essay: "#62e8b4" };
-const GL: Record<Subject, string> = { maths: "255,228,92", english: "255,125,110", essay: "98,232,180" };
+const ACC: Record<LandingApp, string> = { maths: "#ffe45c", english: "#ff7d6e", essay: "#62e8b4", writing: "#c9a8ff" };
+const GL: Record<LandingApp, string> = { maths: "255,228,92", english: "255,125,110", essay: "98,232,180", writing: "201,168,255" };
 
 // ---------------------------------------------------------------- icons (24/30 px line glyphs)
 const I = {
@@ -129,7 +129,8 @@ function lay(dx: number, fr: boolean, lv: 0 | 2): Place {
 
 /** Where the flood grows from, per what was Selected: the big action, the second action, the phone. */
 const FLOOD_FROM: Record<string, [number, number]> = { app: [300, 950], place: [704, 950], phone: [290, 440] };
-const ZOOM_WORD: Record<string, string> = { app: "Opening", place: "Someone else", phone: "Pair a phone" };
+/** The launch word: "Opening" for an app; the second action and the phone in the view-model's words (handoffName). */
+const zoomWord = (view: ThemeLandingProps["view"], zoom: ThemeLandingProps["zoom"]) => (zoom === "place" || zoom === "phone" ? handoffName(view, zoom) : "Opening");
 
 function splitHead(head: string): [string, string | null] {
   const i = head.indexOf(" · ");
@@ -293,13 +294,13 @@ export function BlueprintLanding({ view, zoom, boot }: ThemeLandingProps) {
         </div>
       ) : (
         <div className="bp-empty" data-role="desk-caption">
-          <div className="co-nothing">No apps yet</div>
-          <div className="co-tag">No apps are on this profile yet. Select {view.place} to change it.</div>
+          <div className="co-nothing">{view.caption.head}</div>
+          <div className="co-tag">{view.caption.sub}</div>
         </div>
       )}
 
       <div className="bp-launch" aria-hidden="true">
-        <div className="op">{ZOOM_WORD[zoom === "place" ? "place" : zoom === "phone" ? "phone" : "app"]}</div>
+        <div className="op">{zoomWord(view, zoom)}</div>
         <svg className="dimline" viewBox="0 0 640 60"><path className="d" d="M8 30H632" strokeOpacity=".25" /><path className="pr" pathLength={1} d="M8 30H632" /><path d="M8 12V48M632 12V48" /><path className="ah2" d="M8 30L26 22V38ZM632 30L614 22V38Z" /></svg>
       </div>
 
@@ -316,7 +317,7 @@ export function BlueprintLanding({ view, zoom, boot }: ThemeLandingProps) {
 
       <div className="bp-title">
         <div className="tc"><div className="mono-c">{letter}</div><span className="nm">{learner?.name ?? "Nobody yet"}</span></div>
-        <div className="tc" style={{ padding: "0 12px" }} data-role={fr ? undefined : "desk-phone"} data-paired={fr ? undefined : "true"}>
+        <div className="tc" style={{ padding: "0 12px" }} data-role={fr ? undefined : "desk-phone"} data-paired={fr ? undefined : "true"} data-focused={!fr && at === "phone" ? "true" : undefined}>
           {phone.paired
             ? <svg className="pen" viewBox="0 0 200 70" aria-label="Phone paired"><path className="lit" d="M26 56L58 22L72 34L40 68Z" /><path className="lit" d="M26 56L20 68L40 68" /><path className="lit" d="M92 26Q102 18 112 26M86 16Q102 2 118 16" /><rect x="138" y="8" width="42" height="54" rx="8" /><path d="M152 55h14" /></svg>
             : <svg className="pen" viewBox="0 0 200 70" aria-label="Phone not paired"><g className="dim"><path d="M26 56L58 22L72 34L40 68Z" /><path d="M40 68L20 68" /><path d="M50 28L64 40" /></g><path className="dotl" d="M84 40H130" /><rect x="138" y="8" width="42" height="54" rx="8" /><path d="M152 55h14" /></svg>}

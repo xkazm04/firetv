@@ -48,7 +48,7 @@
 .title { font-family: var(--display); font-size: 72px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: .95; margin-top: 8px; text-wrap: balance; }
 .headline { font-size: 52px; font-weight: 500; line-height: 1.2; }
 .body { font-size: 32px; line-height: 1.4; }
-.chan { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+.chan { font-family: var(--display); font-size: 26px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
 
 /* ---- lower-third, caption, ticker ---- */
 .lt { display: grid; grid-template-columns: auto 1fr; }
@@ -89,12 +89,12 @@
 .cards { display: grid; gap: 28px; }
 .card { border: 2px solid var(--line); padding: 28px 32px; display: flex; flex-direction: column; gap: 10px; min-height: 260px; }
 .card[data-focused="true"] { background: #fff; color: var(--ink); border-color: #fff; transform: skewX(-4deg); box-shadow: 14px 14px 0 var(--signal); }
-.card .k { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+.card .k { font-family: var(--display); font-size: 26px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
 .card[data-focused="true"] .k { color: var(--signal); }
 .card .t { font-family: var(--display); font-size: 44px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1; }
 .card .d { font-size: 28px; line-height: 1.3; color: var(--mute); } .card[data-focused="true"] .d { color: #3A3F47; }
 .card[data-focused="true"] .m { color: #3A3F47; }
-.card .m { margin-top: auto; font-family: var(--display); font-size: 24px; letter-spacing: .08em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+.card .m { margin-top: auto; font-family: var(--display); font-size: 26px; letter-spacing: .08em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
 
 /* ---- page bands ---- */
 .read { position: relative; overflow: hidden; background: #E9E6DF; }
@@ -121,7 +121,7 @@
 .rule dd { margin: 0; } .rule .warn { grid-column: 1 / -1; color: var(--tint); }
 
 /* ---- motion: cuts, not fades ---- */
-@media (prefers-reduced-motion: reduce) { .btn, .read .img { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .btn, .read .img, .read .focus-band, .rc .rc-tile { transition: none; } }
 
 /* ---- the learner switcher's band: the corner its card row stands under ---- */
 .band-corner { right: -200px; top: -54px; width: 980px; height: 340px; clip-path: polygon(0 0, 100% 0, 100% 100%); }

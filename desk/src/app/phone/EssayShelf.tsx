@@ -43,7 +43,7 @@ export function EssayShelf({ learnerId, refresh, onOpen, onGone, where }: { wher
       {cards.length ? <ul>{cards.map((c) => (
         <li key={c.id} data-role="essay-shelf-piece">
           <span><b>{c.title}</b><small data-role="essay-shelf-format">{FORMAT_LABEL[c.format] ?? c.format} · {c.paragraphs} paragraph{c.paragraphs === 1 ? "" : "s"} · version {c.versions} · {when(c.updated)}</small></span>
-          <button className="pbtn" data-secondary="true" onClick={() => void open(c.id)}>Open</button>
+          <button className="pbtn" data-secondary="true" aria-label={`Open ${c.title}`} onClick={() => void open(c.id)}>Open</button>
           <button className="pbtn" data-secondary="true" aria-label={`Delete ${c.title}`} onClick={() => void remove(`id=${encodeURIComponent(c.id)}`, "Deleted.", c.id)}>Delete</button>
         </li>))}</ul> : <p>{where === "pc" ? "Nothing kept yet. Pieces you keep with \"Keep it\" on this page land here." : "Nothing kept yet. Pieces you read on the TV with \"Keep it on my shelf\" land here."}</p>}
       {cards.length > 0 && (sure

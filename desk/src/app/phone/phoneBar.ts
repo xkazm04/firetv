@@ -15,15 +15,15 @@ export const BAR_MAX_LABEL = 12;
 /** The primary button's word for each ask. The ones with two states are in primaryLabel. */
 export const PRIMARY: Record<AskKind, string> = {
   name: "Done", page: "Use page", sheet: "Send sheet", answers: "Send", question: "Ask", explain: "Send", second: "Send", paper: "Send",
-  paragraph: "Read this", rewrite: "Send", slot: "Send", sentence: "Check", reply: "Send", words: "Send", prefs: "Save", private: "Done",
+  paragraph: "Read this", rewrite: "Send", slot: "Send", sentence: "Check", reply: "Send", words: "Send", prefs: "Save", private: "Done", writing: "Send",
 };
 
 /**
- * The asks whose panel carries its own submit, where the bar has no hook into it yet (PaperPanel, and LingaPhone's reply,
+ * The asks whose panel carries its own submit, where the bar has no hook into it yet (PaperPanel, WritingPanel, and LingaPhone's reply,
  * words and preferences): the bar holds Cancel alone. A primary there could never be pressed, and next to the panel's own
  * Send it read as a second, dead Send (stick pass 2026-10-20).
  */
-export const PANEL_SUBMITS: ReadonlySet<AskKind> = new Set<AskKind>(["paper", "reply", "words", "prefs"]);
+export const PANEL_SUBMITS: ReadonlySet<AskKind> = new Set<AskKind>(["paper", "reply", "words", "prefs", "writing"]);
 
 /** What changes a primary label while the learner works: a shot still to take, a button held, a piece of several paragraphs. */
 export interface PrimaryContext { snap?: boolean; holding?: boolean; paragraphs?: number }

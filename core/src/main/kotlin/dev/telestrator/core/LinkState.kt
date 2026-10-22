@@ -48,7 +48,9 @@ data class LinkState(
     fun on(event: LinkEvent, atMs: Long): LinkState = when (event) {
         is LinkEvent.Ready -> copy(url = event.url, pin = event.pin, failure = null)
         is LinkEvent.Failed -> copy(failure = event.message)
-        is LinkEvent.PenPaired -> copy(current = event.clientId, goneAtMs = null)
+        // A pen that pairs answers any refusal before it: a typo then the right PIN is a pairing,
+        // and the refusal must not stay over the picture for the rest of its five seconds.
+        is LinkEvent.PenPaired -> copy(current = event.clientId, goneAtMs = null, refusal = null)
         is LinkEvent.PenGone ->
             if (event.clientId == current) copy(current = null, goneAtMs = atMs) else this
         // A neighbour's wrong guess must not cover the picture of the person drawing.

@@ -1,5 +1,6 @@
 package dev.telestrator.tv
 
+import android.content.pm.ApplicationInfo
 import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
@@ -106,19 +107,16 @@ class MainActivity : ComponentActivity() {
      *     --es phone_url http://HOST:9787/
      */
     private fun chooseTransport(): PenTransport {
-        val requested = intent?.getStringExtra("transport") ?: "lan"
-        if (requested != "relay") {
-            return LanTransport(
+        val debuggable = (applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
+        val relay = relayRequest({ intent?.getStringExtra(it) }, debuggable)
+            ?: return LanTransport(
                 context = applicationContext,
                 pin = session.pin,
                 healthJson = { healthJson(session, "lan") },
             )
-        }
-        val relayUrl = intent?.getStringExtra("relay_url") ?: DEFAULT_RELAY_WS
-        val phoneUrl = intent?.getStringExtra("phone_url") ?: DEFAULT_RELAY_PHONE
         return RelayTransport(
-            relayWsUrl = relayUrl,
-            phoneUrl = PairingUrl.of(phoneUrl, session.pin),
+            relayWsUrl = relay.relayWsUrl,
+            phoneUrl = PairingUrl.of(relay.phoneUrl, session.pin),
         )
     }
 
@@ -138,22 +136,55 @@ class MainActivity : ComponentActivity() {
             session.linkEvent(LinkEvent.Peek)
             return true
         }
-        val cmd = when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
-            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> "toggle"
-            KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_DPAD_RIGHT -> "seek+"
-            KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_LEFT -> "seek-"
-            KeyEvent.KEYCODE_DPAD_UP -> "undo"
-            KeyEvent.KEYCODE_DPAD_DOWN -> "clear"
-            else -> null
-        }
-        if (cmd != null) {
-            session.accept(PenMessage.Transport(cmd))
-            return true
-        }
-        return super.onKeyDown(keyCode, event)
+        // A key this screen owns is consumed on every repeat, including the repeats it ignores.
+        if (remoteCommand(keyCode, 0) == null) return super.onKeyDown(keyCode, event)
+        remoteCommand(keyCode, event?.repeatCount ?: 0)?.let { session.accept(PenMessage.Transport(it)) }
+        return true
     }
 }
+
+/** Where a relay launch dials, and where it sends the phone. */
+internal data class RelayRequest(val relayWsUrl: String, val phoneUrl: String)
+
+/**
+ * The relay a launch asked for through its extras, or null for the LAN transport.
+ *
+ * This activity is exported, so any app on the TV can start it with extras, and these choose where
+ * the TV dials and which page the pairing QR (PIN included) sends the phone to. They are the
+ * harness's switch (tools/relay-test.mjs drives a debug build); a release build ignores them.
+ */
+internal fun relayRequest(extra: (String) -> String?, debuggable: Boolean): RelayRequest? {
+    if (!debuggable || extra("transport") != "relay") return null
+    return RelayRequest(
+        relayWsUrl = extra("relay_url") ?: DEFAULT_RELAY_WS,
+        phoneUrl = extra("phone_url") ?: DEFAULT_RELAY_PHONE,
+    )
+}
+
+/**
+ * The transport command a remote key asks for, or null for a key this screen leaves alone.
+ *
+ * A held key arrives as a press and then a repeat every ~50 ms ([repeatCount] > 0). Only the scrub
+ * keys follow a hold; every other key acts on the press alone, or a long press on OK flips play and
+ * pause at random and a held Up undoes the whole review.
+ */
+internal fun remoteCommand(keyCode: Int, repeatCount: Int): String? {
+    val cmd = when (keyCode) {
+        KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
+        KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> "toggle"
+        // A TV's own remote over HDMI-CEC has separate Play and Pause buttons.
+        KeyEvent.KEYCODE_MEDIA_PLAY -> "play"
+        KeyEvent.KEYCODE_MEDIA_PAUSE -> "pause"
+        KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_DPAD_RIGHT -> "seek+"
+        KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_LEFT -> "seek-"
+        KeyEvent.KEYCODE_DPAD_UP -> "undo"
+        KeyEvent.KEYCODE_DPAD_DOWN -> "clear"
+        else -> return null
+    }
+    return if (repeatCount == 0 || cmd in REPEATING_COMMANDS) cmd else null
+}
+
+private val REPEATING_COMMANDS = setOf("seek+", "seek-")
 
 @UnstableApi
 @Composable

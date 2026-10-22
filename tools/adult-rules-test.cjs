@@ -421,3 +421,13 @@ test('UD-5: dueTaught skips an item taught in an adult-audience scene when adult
   assert.equal(dueTaught([taught[0]], 'ep', taughtAllowed(family, prefs, learning)), null, 'nothing else due');
   assert.equal(dueTaught(taught, 'ep').id, 'a', 'no filter given: unchanged');
 });
+
+// scan-sweep optimize 2026-10-21 (linga-scenes, parity-auditor): every list is read on the text as written AND on the
+// folded copy (diacritics off, l33t digits mapped back). The phrase lists, the bar rule and the older lists were read on
+// the raw text only, so "a second d4te" or "a j0b interview" passed as "all" while their plain spellings did not.
+test('keywordAudience reads every list on the folded copy too: a l33t spelling is as strict as the plain one', () => {
+  const pairs = [['a second date', 'a second d4te'], ['we place bets', 'we place b3ts'], ['meet at the bar', 'meet at the b4r'],
+    ['a job interview', 'a j0b interview'], ['argue with my boss', 'argu3 with my boss'], ['beer', 'b33r'], ['a kiss', 'a k1ss']];
+  for (const [plain, leet] of pairs) assert.equal(keywordAudience(leet), keywordAudience(plain), `"${leet}" reads as "${plain}"`);
+  for (const ok of ['Take 3 tickets, 4 friends', 'a bar of chocolate', 'Room 101 at 5 pm']) assert.equal(keywordAudience(ok), 'all', ok);
+});

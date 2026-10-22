@@ -83,6 +83,12 @@ test('4: every Calculus topic has at least one shape, each one of the ten the en
   assert.deepEqual(t.shapes,want[t.id],`${t.id} shapes`);
  }
  assert.deepEqual([...new Set(CALC1_SPINE.flatMap(t=>t.shapes))].sort(),[...SHAPES].sort(),'every one of the ten shapes is practised somewhere');
+ // the contract's other side: the list here is calc.ts's own CALC_SHAPES, so a shape added or renamed there fails here too
+ // (read from its source, comments stripped: requiring a rule here would put rules/ in the cache test 12 holds clean)
+ const decl=/CALC_SHAPES\s*:[^=]*=\s*\[([^\]]*)\]/.exec(code(path.join(root,'src/lib/rules/calc.ts')));
+ assert.ok(decl,'rules/calc.ts declares CALC_SHAPES as a literal list');
+ const CALC_SHAPES=[...decl[1].matchAll(/"([^"]+)"/g)].map(m=>m[1]);
+ assert.deepEqual([...CALC_SHAPES].sort(),[...SHAPES].sort(),'rules/calc CALC_SHAPES and the spine contract list the same shapes');
 });
 
 test('5: the spine is small and carries no examples or answers - exactly the eight spine fields per topic',()=>{

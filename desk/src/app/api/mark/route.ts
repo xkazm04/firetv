@@ -18,7 +18,7 @@ import { withPhoneAsk } from "@/lib/session/phoneAsk";
 import { dispatch, getSession, NOBODY_AT_DESK, type Page, type Practice } from "@/lib/session/store";
 import { markPage, markSet, markTyped, pageSpecs } from "@/lib/desk/mark";
 import { MOVED_ON, refused, runJob } from "@/lib/desk/job";
-import { typedAnswersProblem } from "@/lib/rules/maths";
+import { readImageProblem, typedAnswersProblem } from "@/lib/rules/maths";
 import { markCounts } from "@/lib/rules/marks";
 import { learnerSystem } from "@/lib/rules/school";
 
@@ -57,6 +57,9 @@ async function post(req: Request) {
   const image = typeof body.image === "string" ? body.image : "";
   // a photo that is not text, or has no data once the data-URL prefix is off, is no photo: no job, no model call
   if (hasImage && !image.replace(/^data:image\/\w+;base64,/, "").trim()) return NextResponse.json({ error: NO_PHOTO }, { status: 400 });
+  // a photo over the read's cap is refused here too, before any job or vision call (rules/maths readImageProblem: the one cap for every photo door)
+  const heavy = hasImage ? readImageProblem(image) : null;
+  if (heavy) return NextResponse.json({ error: heavy }, { status: 400 });
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   if (body.page !== undefined) return markPageRoute(body.page, typed, image, s, who.id);

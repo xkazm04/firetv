@@ -125,6 +125,10 @@ As the skill defines it, with `cert_level` set to the level the row was found at
 
 `{ id, journey, character, cert_level, type, severity, impact, dimension, title, expected, got, evidence[], code_check, verdict, resolution, ceiling, recurrence, suggested_acceptance, engine }`
 
+An LT row, as `synthesize` writes it (`uat/driver/linga-text.cjs`), has no `ceiling`: `scope_note` says what LT cannot vouch for in its place, `rank` is the impact product below, and a rerun's row that restates an open gap adds `recurs` (the gap's id). A recertify later stamps `recertify_*` fields on it (env.md, *Recertify*):
+
+`{ id, journey, character, cert_level, type, severity, rank, impact, dimension, title, expected, got, evidence[], code_check, verdict, scope_note, resolution, recurrence, suggested_acceptance, engine }`
+
 - `evidence[]` at LT: a transcript quote with its step number, plus `file:line` of the prompt or rule that produced it when the judge can name it.
 - `engine`: the model and role that produced the output under judgement, e.g. `claude-cli/sonnet (tutor)`.
 - A finding may be a **strength** (`type: "strength"`) — those protect what works.

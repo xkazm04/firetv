@@ -95,7 +95,11 @@ const BY_ACTION: Partial<Record<CheckCommand, string>> = {
 export function checkRefusal(k: LevelCheck, action: string): string {
   const state = checkState(k);
   if (BY_STATE[state]) return BY_STATE[state]!;
-  if (action === "check-answer") return k.stage === "about" ? "Linga has not asked a question yet." : "The questions are done. Carry on with the tasks.";
+  // past the tasks there is no question or task to answer, and before the plan nothing to plan for: say where the check is
+  const done = "The level check is done. Carry on from the TV.";
+  if (action === "check-answer") return k.stage === "about" ? "Linga has not asked a question yet." : k.stage === "tasks" ? "The questions are done. Carry on with the tasks." : done;
+  if (action === "check-task" && k.stage !== "tasks") return k.stage === "about" ? "Answer Linga's questions first." : done;
+  if (action === "plan-goal" && k.stage !== "plan") return "Find your level before choosing topics.";
   if (action === "plan-swap" || action === "plan-add" || action === "plan-renew") return k.stage !== "plan" ? "Find your level before choosing topics." : state === "plan-goal" ? "Say what you would like to practise first, or let Linga pick." : "There is no topic to change yet.";
   return BY_ACTION[action as CheckCommand] ?? "The level check does not take that now.";
 }

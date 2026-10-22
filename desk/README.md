@@ -9,7 +9,8 @@ Design rules: [../docs/DESIGN-ON-AIR.md](../docs/DESIGN-ON-AIR.md).
 
 ```
 npm run dev              # http://localhost:3000
-npm test                 # the gate: type check, then the rules suites
+npm run dev:https        # the same over HTTPS for this PC's LAN address, so a phone's microphone works (docs/DESK-HTTPS-ON-THE-LAN.md)
+npm test                 # the gate: type check, then the rules suites (node ../tools/run-rules.cjs --jobs 4 runs them four at a time)
 npm run measure          # the KPI readings, as numbers (--json for a machine)
 ```
 

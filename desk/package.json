@@ -104,16 +104,23 @@
     "prompt-assembly-test.cjs",
     "linga-lost-test.cjs",
     "linga-duet-test.cjs",
+    "writing-tv-test.cjs",
+    "landing-stills-test.cjs",
+    "linga-level-rules-test.cjs",
+    "paper-draft-test.cjs",
+    "desk-dev-https-test.cjs",
+    "audio/elevenlabs-test.mjs",
+    "desk-sounds-test.cjs",
     "harness-rules-test.cjs"
   ],
   "dependencies": {
-    "next": "16.3.4",
+    "next": "16.4.2",
     "qrcode": "^1.5.4",
-    "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^26",
     "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",

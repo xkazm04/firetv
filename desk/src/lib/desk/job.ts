@@ -1,5 +1,5 @@
 /**
- * One runner for every homework pipeline (read, hint, lesson, explain, mark, practice, analyse, memory).
+ * One runner for every homework pipeline (read, hint, lesson, explain, mark, practice, analyse, memory, teach).
  *
  * A pipeline is 5-60 s of model work inside a request. `runJob` gives each one the same lifecycle in the
  * session's `jobs` record (store.ts `Job`): `job.start`, then `job.done` or `job.failed` with a sentence the

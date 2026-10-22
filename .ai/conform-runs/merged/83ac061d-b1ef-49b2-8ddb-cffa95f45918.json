@@ -1,0 +1,42 @@
+{
+  "schema": "conform-run/1",
+  "worker": "83ac061d-b1ef-49b2-8ddb-cffa95f45918",
+  "subject": "guest-execution-bounding",
+  "evaluatedAt": "2026-10-22T01:00:20.851108+00:00",
+  "provider": "codex",
+  "model": "gpt-6.1-sol",
+  "pairs": [],
+  "declined": [
+    {
+      "subject": "guest-execution-bounding",
+      "context": "maths-calculus",
+      "reason": "withdrawn after review: reviewer (sonnet): The not-applicable anchor, calc-expr.ts:141, is a lexer line that rejects unread letters and does not show that guest execution is absent. The context also parses user formulas into a tree and evaluates them with closures (compile, build, evalNode), which is a small guest-expression evaluator. Its b"
+    }
+  ],
+  "consults": [
+    {
+      "ts": "2026-10-22T01:00:20.851108+00:00",
+      "bundle": "software-engineering",
+      "subjects": [
+        "guest-execution-bounding"
+      ],
+      "techniques": [
+        "back-edge-iteration-counter",
+        "bounded-shadow-backtrace",
+        "budget-tier-from-observed-output",
+        "cost-budget-cooperative-yield",
+        "count-host-reentry-in-recursion-depth",
+        "grace-for-the-uninterruptible-host-call",
+        "instruction-budget-for-fuzzing",
+        "nested-liveness-ceilings",
+        "one-terminator-many-armed-slots",
+        "terminate-from-outside-when-you-cannot-count",
+        "uncatchable-limit-errors"
+      ],
+      "deviations": 0,
+      "context": "maths-calculus",
+      "via": "curator-multi:codex",
+      "model": "gpt-6.1-sol"
+    }
+  ]
+}

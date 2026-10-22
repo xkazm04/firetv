@@ -180,9 +180,14 @@ test('leak: the limit, said, leaks; the question\'s own notation and the method 
 });
 
 test('leak parity: on lines with no variable, the leak check equals Calculus 1\'s limit at inf with the same f',()=>{
- const lines=['the limit is 1','it tends to 1','about 0.5','one half','minus one half','e','2.718','0','it is zero','it goes to infinity','the sequence diverges to infinity','compare the leading terms','divide through by the highest power','as the terms grow the ratio settles','the value is 0.999','1/2','-0.5','three halves','2.7','2.73','','   ','the answer is not 4','use the rule'];
+ const lines=['the limit is 1','it tends to 1','about 0.5','one half','minus one half','e','2.718','0','it is zero','it goes to infinity','the sequence diverges to infinity','compare the leading terms','divide through by the highest power','as the terms grow the ratio settles','the value is 0.999','1/2','-0.5','three halves','2.7','2.73','','   ','the answer is not 4','use the rule',
+  // said as algebra (calc.ts algebraSaid) and longer than six tokens (the long pass): a value no single token is
+  'three halves minus one','it comes to one minus one','two times one half','one plus one plus one minus three','e times one','the limit is e squared over e'];
  for(const spec of KEPT)for(const line of lines)
   assert.equal(C2.calc2LeaksCalc(spec,line),C.leaksCalc({shape:'limit',f:spec.f,at:'inf'},line),`${spec.f}: ${line}`);
+ // the same rule on a limit no fixture has: e^2 said in words
+ for(const line of ['The limit is e squared.','e to the power of 2','e times e'])
+  assert.equal(C.leaksCalc(SL('(1+2/x)^x'),line),true,line);
 });
 
 test('chain: a sequence-limit spec has no chain - every working line is null',()=>{

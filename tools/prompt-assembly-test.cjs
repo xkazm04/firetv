@@ -82,7 +82,6 @@ const BY_HAND={
  'src/lib/desk/mark.ts':1,
  'src/lib/desk/paperRead.ts':1,
  'src/lib/desk/read.ts':1,
- 'src/lib/desk/worked.ts':1,
  'src/lib/english/check.ts':1,
  'src/lib/english/conversation.ts':5,
 };

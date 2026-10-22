@@ -110,6 +110,9 @@ button, input, textarea { font: inherit; }
 .pparas b { flex: 1; text-align: center; font-family: var(--display); font-size: 16px; text-transform: uppercase; letter-spacing: .04em; }
 .pparas .pbtn { padding: 12px 14px; min-height: 48px; }
 .pkeep { display: flex; align-items: center; gap: 8px; font-size: 15px; }
+/* a radio or checkbox here is the glyph, not a text box: `.field input`'s 44 px goes to the label, which centres the two */
+.pkeep label, label.pkeep { display: flex; align-items: center; gap: 6px; min-height: 44px; }
+.pkeep input[type="radio"], .pkeep input[type="checkbox"] { flex: none; min-height: 0; padding: 0; margin: 0; }
 .pshelf { margin-top: 18px; display: grid; gap: 8px; }
 .pshelf ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .pshelf li { display: flex; align-items: center; gap: 8px; }

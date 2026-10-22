@@ -50,8 +50,19 @@ test('Adult mode shows progress, not a collection; Family always shows it', () =
   const { topicIn } = require(src('lib/library/paths.ts'));
   assert.equal(collectionOf(session(kid), 'maths')[0].label, topicIn('frac-equivalent').name, 'named from the path library');
 });
-test('the screens draw objects and never print a count of them', () => {
-  for (const f of ['maths/MathsCollection.tsx', 'essay/EssayCabinet.tsx', 'english/LingaKeys.tsx']) {
+/** Every screen file under desk/src that reads the collection (imports tv/collection or rules/collect), comments stripped before the match. */
+function collectionScreens() {
+  const out = [];
+  const walk = (d) => { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, e.name); if (e.isDirectory()) walk(p); else if (p.endsWith('.tsx')) out.push(p); } };
+  walk(path.join(root, 'src'));
+  const code = (t) => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+  return out.filter((p) => /from\s+["'](?:@\/tv\/collection|@\/lib\/rules\/collect|[./]+(?:tv\/)?collection|[./]+(?:lib\/)?rules\/collect)["']/.test(code(fs.readFileSync(p, 'utf8'))))
+    .map((p) => path.relative(path.join(root, 'src'), p).split(path.sep).join('/')).sort();
+}
+test('the screens draw objects and never print a count of them (every screen that reads the collection, found by its import)', () => {
+  const screens = collectionScreens();
+  for (const f of ['maths/MathsCollection.tsx', 'essay/EssayCabinet.tsx', 'english/LingaKeys.tsx']) assert.ok(screens.includes(f), `${f} reads the collection`);
+  for (const f of screens) {
     const t = fs.readFileSync(src(f), 'utf8');
     assert.doesNotMatch(t, /\{[^}]*\.length\s*\}/, `${f}: no {x.length} rendered`);
     assert.doesNotMatch(t, /counted\(|\bof \$\{/, `${f}: no "n of m"`);

@@ -73,4 +73,12 @@ class PenEngineThreadsTest {
 
         assertEquals(0, torn.get(), "torn reads in ${reads.get()} reads; first error: ${firstError.get()}")
     }
+
+    @Test
+    fun `nothing public writes the engine from outside its lock`() {
+        // Every public member holds the instance's lock (the class's own promise). A public setter
+        // is a write the lock never sees; the hold window is fixed at construction instead.
+        val setters = PenEngine::class.java.methods.filter { it.name.startsWith("set") }.map { it.name }
+        assertEquals(emptyList<String>(), setters)
+    }
 }

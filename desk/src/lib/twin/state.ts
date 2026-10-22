@@ -2,16 +2,17 @@
  * The twin's own small state, beside the learner's pieces (DESK_DATA_DIR/texts/<learner>/twin.json): the card's id,
  * kept stable across exports (SPEC 3), when the twin was first made, and the pieces the learner left out of the
  * exemplars (the review step, SPEC 14). It lives in the learner's text folder, so "Delete everything I kept" removes it
- * too (texts.ts deleteAll). Server only.
+ * too (texts.ts deleteAll). This file decides what the state is; the session's texts.ts does the writing (only the
+ * session writes, .ai/memory/0018). Server only.
  */
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
-import { dataDir } from "../dataDir";
+import { setAsideTwinFile, twinFileOf, writeTwinFile } from "../session/texts";
 
 export interface TwinState { cardId: string; createdAt: string; excluded: string[] }
 const LEARNER_ID = /^[A-Za-z0-9_-]{1,64}$/;
-const file = (learnerId: string) => path.join(dataDir(), "texts", learnerId, "twin.json");
+const file = twinFileOf;
 const why = (e: unknown) => (e instanceof Error ? e.message : String(e));
 
 /**
@@ -48,19 +49,17 @@ export function twinState(learnerId: string, now = new Date()): TwinState {
   const fresh: TwinState = { cardId: randomUUID(), createdAt: now.toISOString().replace(/\.\d{3}Z$/, "Z"), excluded: [] };
   if ("unread" in r) {
     // renamed beside itself, never written over: the old card id and left-out pieces stay the operator's to recover
-    const f = file(learnerId), to = `${f}.bad-${Date.now().toString(36)}`;
-    try { renameSync(f, to); }
+    const f = file(learnerId);
+    let to: string;
+    try { to = setAsideTwinFile(learnerId); }
     catch (e) { tell(`desk twin: ${f} was not used, ${r.unread}; not put aside (${why(e)}), so nothing is saved over it`); return fresh; }
     console.error(`desk twin: ${f} was not used, ${r.unread}; put aside as ${path.basename(to)}; a new card id was made`);
   }
   saveTwinState(learnerId, fresh);
   return fresh;
 }
-/** Written to a temporary name, then renamed over (texts.ts writePiece): a crash mid-write leaves the old state, never half a file. */
+/** Written whole through the session's texts.ts (a temporary name, then renamed over): a crash mid-write leaves the old state. */
 export function saveTwinState(learnerId: string, st: TwinState): void {
   if (!LEARNER_ID.test(learnerId)) throw new Error("no learner");
-  const f = file(learnerId), tmp = `${f}.${process.pid}.tmp`;
-  if (!existsSync(path.dirname(f))) mkdirSync(path.dirname(f), { recursive: true });
-  writeFileSync(tmp, JSON.stringify(st));
-  renameSync(tmp, f);
+  writeTwinFile(learnerId, JSON.stringify(st));
 }

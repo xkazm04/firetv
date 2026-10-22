@@ -235,3 +235,25 @@ test('value-1 / craft-1 (lite r3): an unsure item entered wrong never reads as a
  assert.match(page,/item\.entered/,'the phone tells an entered item from a ringed one');
  assert.match(page,/"answer" : "second go"/,'the aria-label names an unsure entry an answer, a ringed retry a second go');
 });
+
+test('case 8c: with every ringed item fixed on its second go, Tonight\'s Marked card does not send the learner to a first one to look at',()=>{
+ const {continueCard}=require(src('tv/mathsRows.ts'));
+ const {firstToLook}=require(src('tv/sheetRows.ts'));
+ const card=(practice)=>{seat(practice);return continueCard(store().getSession());};
+ // nothing fixed: the first one to look at is item 2, and the card says so
+ const open=card(markedSet());
+ assert.equal(open.focus,1);assert.match(open.cap,/first one to look at/);
+ // both ringed items held on their second go: nothing is left to look at, so Enter lands on Six more and the card says what is there
+ const fixed=markedSet({2:{second:'right'},4:{second:'right'}});
+ const done=card(fixed);
+ assert.equal(done.focus,firstToLook(fixed.items),'Enter lands where the sheet would');
+ assert.equal(done.focus,fixed.items.length,'that is the Six more stop, past the tiles');
+ assert.doesNotMatch(done.cap,/first one to look at/,'no first one to look at is promised when there is none');
+ assert.doesNotMatch(done.cap,/came back right/,'the record is the first attempt: two came back wrong');
+ assert.match(done.cap,/fixed/);
+ assert.match(done.d,/4 of 6 right/,'the hero still reads the first attempt');
+ // one fixed, one still to look at: the card keeps its line
+ assert.match(card(markedSet({2:{second:'right'}})).cap,/first one to look at/);
+ // every item right the first time: unchanged
+ assert.match(card(markedSet({2:{verdict:'right',slip:undefined},4:{verdict:'right',slip:undefined}})).cap,/All of the marked set came back right/);
+});

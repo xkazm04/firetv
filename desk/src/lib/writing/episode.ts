@@ -3,7 +3,8 @@
  * The client holds the episode between calls; every step checks the stage it comes from, so a step out of order is
  * refused with a desk sentence and changes nothing.
  */
-import { ESSAY_PARAGRAPH_MAX_CHARS, splitSentences } from "@/lib/rules/essay";
+import { ESSAY_PARAGRAPH_MAX_CHARS, LONG_SENTENCE_WORDS, paragraphStats, splitSentences } from "@/lib/rules/essay";
+import { focusOf, type Focus } from "./coach";
 import { promptById } from "./prompts";
 
 export type Stage = "start" | "write" | "coached" | "revised" | "finished";
@@ -15,6 +16,9 @@ export interface Episode {
   note?: string;
   revision?: string;
   finishedAt?: number;
+  /** Set when the episode finishes: the focus code picked for the draft, and whether the revision now meets it. */
+  focus?: Focus;
+  holds?: boolean;
 }
 
 export type Step = { ok: true; episode: Episode } | { ok: false; error: string };
@@ -52,10 +56,38 @@ export function revised(ep: Episode, revision: unknown): Step {
   const problem = draftProblem(revision);
   if (problem) return fail(problem);
   if ((revision as string).trim() === ep.draft) return fail("Change something in your paragraph before you finish.");
+  if (wordsOf(revision as string) === wordsOf(ep.draft ?? "")) return fail("Only spaces or punctuation changed. Change some of your words, then finish.");
   return { ok: true, episode: { ...ep, stage: "revised", revision: (revision as string).trim() } };
 }
 
 export function finished(ep: Episode, at: number): Step {
-  if (ep.stage !== "revised") return fail("Revise your paragraph once before you finish.");
-  return { ok: true, episode: { ...ep, stage: "finished", finishedAt: at } };
+  if (ep.stage !== "revised" || !ep.draft || !ep.revision) return fail("Revise your paragraph once before you finish.");
+  const focus = focusOf(ep.draft);
+  return { ok: true, episode: { ...ep, stage: "finished", finishedAt: at, focus, holds: focusHolds(focus, ep.revision) } };
+}
+
+/** The words of a text alone: lower-cased, with spaces and punctuation gone, so a revision that only moves those is the same words. */
+const wordsOf = (t: string): string => (t.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? []).join(" ");
+
+/** Whether the coached focus now holds in `text`, read with the same counts that picked it (coach.focusOf). */
+export function focusHolds(focus: Focus, text: string): boolean {
+  const ss = splitSentences(text), st = paragraphStats(ss);
+  if (focus === "length") return !ss.some((s) => s.words > LONG_SENTENCE_WORDS);
+  if (focus === "claim") return st.claims > 0;
+  if (focus === "link") return st.links > 0;
+  return st.evidence > 0;
+}
+
+const NEEDS: Record<Focus, [holds: string, still: string]> = {
+  claim: ["now states a claim", "still needs a claim"],
+  evidence: ["now gives evidence", "still needs evidence"],
+  link: ["now links back to the claim", "still needs a link back to the claim"],
+  length: ["no longer has a sentence that is too long", "still has a sentence that is too long"],
+};
+const ON: Record<Focus, string> = { claim: "the claim", evidence: "evidence", link: "the link", length: "sentence length" };
+
+/** The history line's second half; an episode that was never checked says so and claims no revision. */
+export function checkLine(ep: Pick<Episode, "focus" | "holds">): string {
+  if (!ep.focus || typeof ep.holds !== "boolean") return "coached; the revision was not checked";
+  return `coached on ${ON[ep.focus]}; the revision ${NEEDS[ep.focus][ep.holds ? 0 : 1]}`;
 }

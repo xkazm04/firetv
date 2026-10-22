@@ -37,6 +37,12 @@ seated ([DESIGN-STUDY-DESK.md](../DESIGN-STUDY-DESK.md)):
   ([DESIGN-ESSAY-MASTER.md](../DESIGN-ESSAY-MASTER.md); deadline walk rows 18-21 in
   [STICK-DEADLINE-WALK-2026-10-21.md](../concepts/STICK-DEADLINE-WALK-2026-10-21.md)).
 
+A fourth stop, **Writing**, stands on the landing whenever Essay Master is on the profile. It is a
+remote-driven Writing screen inside the TV page: the learner picks a prompt with the D-pad, types the
+paragraph and the revision on the phone through a named `writing` hand-off, and the coaching note and the
+saved line come back to the TV ([TV-WRITING-SCREEN-2026-10-21.md](../concepts/TV-WRITING-SCREEN-2026-10-21.md);
+merge 30f53e33).
+
 Around the three apps is a shell for the family: choosing who is studying, pairing a phone, a break
 timer, and a recap of the evening ([DESIGN-ON-AIR.md](../DESIGN-ON-AIR.md)).
 
@@ -95,11 +101,23 @@ The device is a Fire TV Stick 4K (model AFTKM, Fire OS 8, Android 11) with Amazo
   menu and its first placement question, and Essay Master's lens home and paragraph ask passed on the
   stick, with the phone side checked at 360 and 414 px
   ([STICK-DEADLINE-WALK-2026-10-21.md](../concepts/STICK-DEADLINE-WALK-2026-10-21.md); commit e4176983).
+- **Writing reached with the remote.** The stick loads only the TV page, and nothing on the remote could
+  drive the old /writing page; Writing is now a screen inside the TV page, so the remote reaches it
+  ([TV-WRITING-SCREEN-2026-10-21.md](../concepts/TV-WRITING-SCREEN-2026-10-21.md); merge 30f53e33).
 - **Smooth on the stick's GPU.** The idle landing went from 8.7 to 59 fps and lamp moves and Back from
   6-7 fps to 22-45 fps, with the same picture, after the landing's shadows were moved inside the
   drawing ([STICK-PERFORMANCE-2026-10-20.md](../concepts/STICK-PERFORMANCE-2026-10-20.md); commits
   c5dfc4cb, 9d5de46f, 51d960bf, 0260f23a, 40afd99c). No blank frame shows between the apps any more
   ([STICK-WHITE-FRAME-2026-10-20.md](../concepts/STICK-WHITE-FRAME-2026-10-20.md); commit 6c7d24f6).
+- **Module switching, passes 2 and 3** (2026-10-21). Pass 2 found that the switch stall is GPU raster, and
+  that the stage's `scale(.5)` made the stick raster every composited layer at four times its pixels (107 MB
+  of tiles on the landing against the WebView's 80 MB soft budget). Fitting the stage with `zoom` instead
+  shipped: the operator restored it outright (commit e9c62990), at the price of slightly different text
+  antialiasing ([STICK-PERFORMANCE-2026-10-21.md](../concepts/STICK-PERFORMANCE-2026-10-21.md); commit
+  f9a6da99). Pass 3 draws each world's sky, hills and side cliffs once into canvases (commits 7b07a9ba,
+  19f57b30, cc2cbf01, 640a931f). On the stick a lamp move's longest frame gap fell from 641-669 ms to
+  271-283 ms, and Back from 500-572 ms to 228-378 ms ("Pass 3: pre-rendered stills", "Before / after on the
+  stick"). The look is 45.7-46.6 dB against e9c62990.
 
 The repository's first product, a telestrator where a phone draws on a paused video frame, also ran on
 the same stick model over Wi-Fi on 2026-09-07: its live UI test passed 27 of 27 and its pen round-trip
@@ -111,10 +129,13 @@ p95 is 21.1 ms ([POC-FINDINGS.md](../POC-FINDINGS.md), section 7).
   a computer on the home network, not on the stick ([AGENTS.md](../../AGENTS.md), "What this repository is").
 - Linking the stick to a desk once needs one `adb` command carrying the TV link the desk prints at
   start ([STICK-APK-WALK-2026-10-20.md](../concepts/STICK-APK-WALK-2026-10-20.md), "Provisioning the TV key").
-- Each module switch still holds one 0.4-0.7 s stall while the stick rasters the arriving screen
-  ([STICK-PERFORMANCE-2026-10-20.md](../concepts/STICK-PERFORMANCE-2026-10-20.md), "Left open").
-- The Writing page cannot be reached from the stick yet, and the Math Buddy flow was not re-walked on
-  2026-10-21 ([STICK-DEADLINE-WALK-2026-10-21.md](../concepts/STICK-DEADLINE-WALK-2026-10-21.md), B1 and B3).
+- A module switch is shorter after pass 3 but not free: a lamp move's longest frame gap is still
+  271-283 ms and Back's 228-378 ms. Inside a module the pre-rendered bitmaps stay resident, about 46 MB more
+  GPU memory than before ([STICK-PERFORMANCE-2026-10-21.md](../concepts/STICK-PERFORMANCE-2026-10-21.md),
+  "GPU memory" and "Still open").
+- Writing on the TV was built and tested in code (`tools/writing-tv-test.cjs`); the 2026-10-21 deadline walk
+  predates it, and the Math Buddy flow was not re-walked that day
+  ([STICK-DEADLINE-WALK-2026-10-21.md](../concepts/STICK-DEADLINE-WALK-2026-10-21.md), B1 and B3).
 - The stick walks pressed the keys with `adb shell input keyevent`, which enters the same
   `dispatchKeyEvent` path as the remote; a press of the physical remote is still the operator's
   ([STICK-APK-WALK-2026-10-20.md](../concepts/STICK-APK-WALK-2026-10-20.md), "Open").

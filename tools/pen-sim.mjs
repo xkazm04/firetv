@@ -29,7 +29,8 @@ ws.on('message', (raw) => {
     seen.accepted = m.accepted;
     if (!m.accepted) {
       console.error('[pen-sim] pairing rejected:', m.reason);
-      process.exit(1);
+      // A refused PIN is a run that never started (2, as a missing PIN or socket), not a measured FAIL (1).
+      process.exit(2);
     }
   }
   if (m.type === 'state') {

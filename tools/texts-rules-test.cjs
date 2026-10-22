@@ -193,3 +193,61 @@ test('EM5-2 (recert-5/L1-helena-46-EM5-2): a new piece must name its format: non
   assert.equal(T.listPieces('ema')[0].format, 'email');
   T.deleteAll('ema');
 });
+
+test('route: a .docx from the PC page is read through the route\'s own inflater (rules/docx loads no zlib) and kept as a file version', async () => {
+  const zlib = require('node:zlib');
+  const xml = Buffer.from('<w:document><w:body><w:p><w:r><w:t>Sleep matters.</w:t></w:r></w:p><w:p><w:r><w:t>So start later.</w:t></w:r></w:p></w:body></w:document>');
+  const data = zlib.deflateRawSync(xml), name = Buffer.from('word/document.xml');
+  const lh = Buffer.alloc(30); lh.writeUInt32LE(0x04034b50, 0); lh.writeUInt16LE(8, 8); lh.writeUInt32LE(data.length, 18); lh.writeUInt32LE(xml.length, 22); lh.writeUInt16LE(name.length, 26);
+  const ch = Buffer.alloc(46); ch.writeUInt32LE(0x02014b50, 0); ch.writeUInt16LE(8, 10); ch.writeUInt32LE(data.length, 20); ch.writeUInt32LE(xml.length, 24); ch.writeUInt16LE(name.length, 28);
+  const end = Buffer.alloc(22); end.writeUInt32LE(0x06054b50, 0); end.writeUInt16LE(1, 8); end.writeUInt16LE(1, 10); end.writeUInt32LE(46 + name.length, 12); end.writeUInt32LE(30 + name.length + data.length, 16);
+  const docx = Buffer.concat([lh, name, data, ch, name, end]).toString('base64');
+  seat('ema'); await route.POST(req('POST', '', { notice: true }));
+  const r = await route.POST(req('POST', '', { docx, format: 'essay' })); assert.equal(r.status, 200, JSON.stringify(await r.clone().json()));
+  const p = T.getPiece('ema', (await r.json()).id);
+  assert.deepEqual(p.versions.map((v) => [v.source, v.text]), [['file', 'Sleep matters.\n\nSo start later.']]);
+  T.deleteAll('ema');
+});
+
+test('the Workroom diffs a piece once per version: an unchanged piece is not re-diffed on the next refresh, a new version is', () => {
+  // workroomOf runs on every keep and every /api/twin call; at the caps (50 pieces of 100 KB) a full re-diff took ~2.8 s of the server's one thread
+  const { workroomOf } = require(src('lib/twin/workroom.ts'));
+  const a = T.addPiece('memo', { text: 'One. Two.\n\nThree.', format: 'essay' }).value, b = T.addPiece('memo', { text: 'Four. Five.', format: 'essay' }).value;
+  T.addVersion('memo', a.id, { text: 'One. Two!\n\nThree.' }); T.addVersion('memo', b.id, { text: 'Four. Five. Six.' });
+  const diffOf = (w, id) => w.pieces.find((p) => p.id === id).diff;
+  const w1 = workroomOf('memo'), w2 = workroomOf('memo');
+  assert.deepEqual(diffOf(w1, b.id).sentences, { kept: 2, changed: 0, added: 1, removed: 0 });
+  assert.equal(diffOf(w2, a.id), diffOf(w1, a.id), 'the same version pair: the same diff, not a second LCS');
+  T.addVersion('memo', a.id, { text: 'One. Two!\n\nThree. Four.' });
+  const w3 = workroomOf('memo');
+  assert.deepEqual(diffOf(w3, a.id).sentences, { kept: 3, changed: 0, added: 1, removed: 0 }, 'a new version is diffed against the one before it');
+  assert.equal(diffOf(w3, b.id), diffOf(w1, b.id));
+  T.deleteAll('memo');
+});
+
+test('matchPiece reads each kept piece once: a shelf of 10 with no match costs 10 file reads, not 20', () => {
+  const id = 'mp-reads';
+  for (let i = 0; i < 10; i++) T.addPiece(id, { text: `# Piece ${i}\n\nA paragraph about thing ${i}.`, format: 'essay' }, 2000 + i);
+  const orig = fs.readFileSync, mine = path.join('texts', id); let n = 0;
+  fs.readFileSync = function (p, ...rest) { if (String(p).includes(mine)) n++; return orig.call(this, p, ...rest); };
+  let hit, same;
+  try { hit = T.matchPiece(id, 'Nothing like any of them at all.', 'essay'); same = T.matchPiece(id, '# Piece 4\n\nSomething else now.', 'essay'); }
+  finally { fs.readFileSync = orig; }
+  assert.equal(hit, null); assert.match(same, /^t-/, 'a heading still matches its piece');
+  assert.ok(n <= 10 + 10, `${n} reads for two matches over 10 pieces`);
+  assert.equal(T.getPiece(id, same).title, 'Piece 4');
+});
+
+test('a piece or a twin file that cannot be written leaves no temp file behind, and the route says so in a sentence (500)', async () => {
+  dispatch({ type: 'reset' }); seat('ema'); await route.POST(req('POST', '', { notice: true }));
+  const orig = fs.renameSync, mine = path.join('texts', 'ema'), temps = () => fs.readdirSync(folder('ema')).filter((f) => f.endsWith('.tmp'));
+  fs.renameSync = function (a, b) { if (String(b).includes(mine)) { const e = new Error('EPERM: operation not permitted, rename'); e.code = 'EPERM'; throw e; } return orig.call(this, a, b); };
+  let r;
+  try {
+    assert.throws(() => T.writeTwinFile('ema', '{}'));
+    r = await route.POST(req('POST', '', { text: 'A piece the disk refuses.', format: 'essay' }));
+  } finally { fs.renameSync = orig; }
+  assert.deepEqual(temps(), [], 'no temp file is left beside the pieces');
+  assert.equal(r.status, 500); assert.equal((await r.json()).error, T.TEXT_NOT_SAVED);
+  assert.equal(T.listPieces('ema').some((c) => c.title.includes('refuses')), false, 'and nothing was kept');
+});

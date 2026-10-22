@@ -159,8 +159,8 @@ export const THIN_STRONG_PASSES = 2;
  * A weak pass climbs one band at most and never into a say task by itself. The check stops at five tasks, at two
  * failures on A1 (a skip is not one), at two partials on one band, or once a band holds two passes with two failures
  * above it (or C2 holds two passes). The band is the highest one with more passes than failures; with none, one below
- * the lowest band tried, or the band of two partials. Confidence is high only with two strong passes at the band and
- * a real fail or partial above it (or C2); a band resting on weak passes or skips alone reads low.
+ * the lowest band tried, or the band of two partials. Confidence is high only with HIGH_STRONG_PASSES strong passes at
+ * the band and a real fail or partial above it (or C2); a band resting on weak passes or skips alone reads low.
  *
  * When the answers disagree (a pass above a lower real fail), a band more than one above the lowest failed band holds
  * only on a strong pass there (LG-48). The ladder cannot tell a lucky pass from an unlucky fail, and every near miss of

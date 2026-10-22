@@ -2,7 +2,8 @@
  * The desk boundary check (tools/desk-boundaries.cjs) holds the layering desk/AGENTS.md states: engines are a leaf
  * behind their entry modules, rules reach no engine or Node built-in, only engines spawn, only the session writes.
  * Each case builds a small desk/src tree in a scratch directory and proves one rule fires on it (and stays quiet on the
- * legal neighbour); the last cases run it on the real desk, which must be clean. No network, no model, no install.
+ * legal neighbour); the last cases run it on the real desk, which must raise nothing beyond the OWED breaks, each of
+ * which must still fire. No network, no model, no install.
  * Run directly: node tools/desk-boundaries-test.cjs
  */
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict');
@@ -18,8 +19,8 @@ const tree=(files)=>{
  for(const [rel,src] of Object.entries(files)){const f=path.join(root,'desk','src',rel);fs.mkdirSync(path.dirname(f),{recursive:true});fs.writeFileSync(f,src);}
  return root;
 };
-/** The problems a scratch tree raises, as `rule file` strings, with no write allow-list unless one is given. */
-const run=(files,allow={})=>B.check(tree(files),{allow}).problems;
+/** The problems a scratch tree raises, with no write allow-list and no owed break unless one is given. */
+const run=(files,allow={},owed=[])=>B.check(tree(files),{allow,owed}).problems;
 const rules=(ps)=>ps.map((p)=>`${p.rule} ${p.file.replace('desk/src/','')}`).sort();
 /** The minimal legal desk: an engine with an internal helper, a rule, a pipeline that calls the engine, a session. */
 const LEGAL={
@@ -105,8 +106,30 @@ test('case 10: every entry module and every allow-listed writer exists in the re
  }
 });
 
-test('case 11: the real desk keeps its layering',()=>{
+test('case 11: the real desk keeps its layering, beyond the breaks OWED names',()=>{
  const r=B.check();
  assert.ok(r.files>50,`only ${r.files} source files found under desk/src/`);
  assert.deepEqual(r.problems.map((p)=>`${p.rule}: ${p.file} ${p.detail}`),[]);
+ assert.equal(r.owed.length,B.OWED.length,'every OWED entry matches exactly one break on the real desk');
+});
+
+test('case 12: an owed break is reported, not failed; a new break of the same file still fails; an owed entry with no break left fails',()=>{
+ const files={...LEGAL,'lib/rules/zip.ts':'import { inflateRawSync } from "node:zlib";\nexport const unzip = (b: Buffer) => inflateRawSync(b);\n'};
+ const owed=[{rule:'rules-pure',file:'desk/src/lib/rules/zip.ts',detail:'node:zlib',why:'a parser, not a decision; moving it out of rules/ is the open question'}];
+ const r=B.check(tree(files),{allow:{},owed});
+ assert.deepEqual(r.problems,[]);
+ assert.deepEqual(r.owed.map((p)=>`${p.rule} ${p.file.replace('desk/src/','')}`),['rules-pure lib/rules/zip.ts']);
+ const worse={...files,'lib/rules/zip.ts':'import { inflateRawSync } from "node:zlib";\nimport { readFileSync } from "node:fs";\nexport const unzip = (p: string) => inflateRawSync(readFileSync(p));\n'};
+ assert.deepEqual(rules(run(worse,{},owed)),['rules-pure lib/rules/zip.ts']);
+ const gone=run(LEGAL,{},[{rule:'engines-leaf',file:'desk/src/lib/engines/text.ts',detail:'dataDir',why:'fixed since'}]);
+ assert.deepEqual(gone.map((p)=>`${p.rule} ${p.file.replace('desk/src/','')} ${/no longer fires/.test(p.detail)}`),['engines-leaf lib/engines/text.ts true']);
+});
+
+test('case 13: every OWED entry names a rule, a file that exists and a reason',()=>{
+ const REPO=path.resolve(__dirname,'..'),RULES=['engines-leaf','engine-internal','rules-pure','spawn-in-engines','state-in-session'];
+ for(const o of B.OWED){
+  assert.ok(RULES.includes(o.rule),`OWED names an unknown rule ${o.rule}`);
+  assert.ok(fs.existsSync(path.join(REPO,o.file)),`OWED lists ${o.file}, which does not exist`);
+  assert.ok(o.detail&&o.why&&o.why.length>20,`OWED's entry for ${o.file} gives no detail or no reason`);
+ }
 });

@@ -2,7 +2,7 @@
  * Calculus word problems and multi-part questions (v2 M3a), drawn by CODE from a seed with no model call.
  *
  * A multi-part question is not a new kind of item: it travels as consecutive practice items, one per part, each with
- * its own number, its own spec of one of the nine shapes (rules/calc) and its own printed line, and every part carries
+ * its own number, its own spec of one of the Calculus 1 shapes (rules/calc CALC_SHAPES) and its own printed line, and every part carries
  * the same `stem` and its `part` letter. So marking, typed answers, the snap read, attempts, the leak check, the pen and
  * the chain checker work per part exactly as they do for a single item: `checkAnswer(part.spec, answer)` decides every
  * mark. Nothing here adds a shape, a truth or a tolerance.

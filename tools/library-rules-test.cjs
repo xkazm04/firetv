@@ -34,6 +34,14 @@ test('VTT-3: a timing line without hours (mm:ss.ttt, as the WebVTT format allows
  assert.deepEqual(parseVtt(['WEBVTT','','01:00:02.000 --> 01:00:04.000','late line',''].join('\n')),[{t:3602,text:'late line'}],'an hour is still an hour');
 });
 
+test('VTT-4: a NOTE, STYLE or REGION block - its header line and every line under it, up to the blank line - is not caption text',()=>{
+ const raw=['WEBVTT','','STYLE','::cue { color: yellow }','','REGION','id:fred width:40%','',
+  '00:00:01.000 --> 00:00:04.000','first line','','NOTE this cue was checked','by hand in October','',
+  '00:00:05.000 --> 00:00:08.000','second line','','NOTE','a comment on two','lines of its own','',
+  '00:00:09.000 --> 00:00:10.000','third line',''].join('\n');
+ assert.deepEqual(parseVtt(raw),[{t:1,text:'first line'},{t:5,text:'second line'},{t:9,text:'third line'}]);
+});
+
 // ---- the vector cache ----
 const LESSON='jWpiMu5LNdg';
 const stamp=(s)=>`00:${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}.000`;
@@ -64,4 +72,43 @@ test('LATE-1: a transcript placed after the first pick is used by the next pick,
  fs.writeFileSync(path.join(data,'lessons',`${LATE}.en.vtt`),['WEBVTT\n',cue(0,'welcome to linear equations'),cue(50,'add the same to both sides'),cue(100,'divide to undo')].join('\n'));
  const b=await L.bestWindow(LATE,'divide');
  assert.ok(b&&b.t>0,'the late transcript seeks past 0:00: '+JSON.stringify(b));
+});
+
+test('MISSING-1: a lesson with no transcript on disk is said once in the server log, with the path it was looked for at',()=>{
+ const L=lib('library/lessons.ts'),ID='never-looked-up';
+ const lines=[];mock.method(console,'error',(...a)=>lines.push(a.join(' ')));
+ try{assert.deepEqual(L.lessonWindows(ID),[]);assert.deepEqual(L.lessonWindows(ID),[]);}finally{mock.restoreAll();}
+ const said=lines.filter((l)=>l.includes(`${ID}.en.vtt`));
+ assert.equal(said.length,1,'once, not on every pick: '+lines.join('|'));
+ assert.match(said[0],/no transcript/);
+});
+
+test('LATE-2: a transcript replaced while the desk runs is read again, not served from the first read',async()=>{
+ const L=lib('library/lessons.ts'),ID='u1SAo2GiX8A',f=path.join(data,'lessons',`${ID}.en.vtt`);
+ fs.writeFileSync(f,['WEBVTT\n',cue(0,'the old captions')].join('\n'));
+ assert.equal(L.lessonWindows(ID)[0].text,'the old captions');
+ assert.equal((await L.bestWindow(ID,'divide')).t,0,'one window: its vectors are built');
+ fs.writeFileSync(f,['WEBVTT\n',cue(0,'welcome back, captions fetched again'),cue(50,'divide both sides')].join('\n'));
+ const t=new Date(Date.now()+5000);fs.utimesSync(f,t,t);
+ assert.deepEqual(L.lessonWindows(ID).map((w)=>w.text),['welcome back, captions fetched again','divide both sides']);
+ const b=await L.bestWindow(ID,'divide');
+ assert.deepEqual([b.t,b.degraded],[50,undefined],'the new windows are embedded and the seek lands in them: '+JSON.stringify(b));
+});
+
+test('DEGRADED-1: an embedding engine that fails opens the picked lesson at its first window, said once, never a lost lesson',async()=>{
+ const L=lib('library/lessons.ts'),reg=lib('engines/registry.ts');
+ // a lesson whose vectors are not built yet: the build itself fails
+ const NEW='qsL_5Y8uWPU';
+ fs.writeFileSync(path.join(data,'lessons',`${NEW}.en.vtt`),['WEBVTT\n',cue(0,'how many solutions'),cue(50,'no solution at all'),cue(100,'infinitely many')].join('\n'));
+ reg.useProvider('embed',{name:'stub',run:async()=>{throw new Error('ollama is not running');}});
+ const lines=[];mock.method(console,'error',(...a)=>lines.push(a.join(' ')));
+ let built,query;
+ try{
+  built=await L.bestWindow(NEW,'no solution');
+  // a lesson already embedded (LATE-1): only the query's own embedding fails
+  query=await L.bestWindow('bAerID24QJ0','divide');
+ }finally{mock.restoreAll();}
+ assert.deepEqual(built,{t:0,text:'how many solutions',score:0,degraded:true},'the build failed: the lesson opens at its start, marked degraded');
+ assert.deepEqual(query,{t:0,text:'welcome to linear equations',score:0,degraded:true},'the query failed: the same');
+ assert.equal(lines.filter((l)=>/embedding engine/.test(l)).length,2,'each degraded seek is said once in the server log: '+lines.join('|'));
 });

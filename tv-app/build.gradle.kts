@@ -31,9 +31,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         compose = true
     }
@@ -41,6 +38,9 @@ android {
     // tested on the JVM, like core; anything that needs the device stays in androidTest.
     testOptions {
         unitTests.all { it.useJUnitPlatform() }
+        // The transports log through android.util.Log; on the JVM that is a stub, and a stub that
+        // throws would turn every log line into a test failure.
+        unitTests.isReturnDefaultValues = true
     }
     packaging {
         resources.excludes += setOf(
@@ -55,6 +55,10 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
+}
+
 dependencies {
     implementation(project(":core"))
 
@@ -62,7 +66,6 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
     implementation(libs.compose.foundation)
-    implementation(libs.compose.ui.tooling.preview)
     debugImplementation(libs.compose.ui.tooling)
     implementation(libs.tv.material)
     implementation(libs.androidx.activity.compose)
@@ -96,7 +99,7 @@ dependencies {
  */
 val companionAssetsDir = layout.buildDirectory.dir("generated/companionAssets").get().asFile
 
-val syncCompanion by tasks.registering(Copy::class) {
+val syncCompanion = tasks.register<Copy>("syncCompanion") {
     from(rootProject.layout.projectDirectory.dir("companion"))
     into(File(companionAssetsDir, "companion"))
 }

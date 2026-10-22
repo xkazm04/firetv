@@ -10,7 +10,7 @@
 import { appendFileSync, renameSync, statSync, unlinkSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import path from "node:path";
-import { priceOf } from "./prices";
+import { PRICE_BOOK, priceOf } from "./prices";
 import { dataDir } from "../dataDir";
 import type { EngineErrorKind, EngineKind, Usage } from "./types";
 
@@ -19,6 +19,8 @@ export interface UsageRow {
   v: 1; id: string; at: string; kind: EngineKind; use: string | null; prompt: string | null; provider: string; try: number; ok: boolean;
   error: EngineErrorKind | null; ms: number; tokens: Usage["tokens"]; notionalUsd: number | null;
   marginalUsd: number | null; basis: string;
+  /** The price book's asOf the row was costed with (prices.ts), so a later repricing leaves this row explicable. */
+  book: string;
 }
 
 const MAX_BYTES = 5 * 1024 * 1024;
@@ -35,19 +37,27 @@ export function meter(r: { kind: EngineKind; use?: string; prompt?: string; prov
     const row: UsageRow = {
       v: 1, id: randomUUID(), at: new Date(r.startedAt).toISOString(), kind: r.kind, use: r.use ?? null, prompt: r.prompt ?? null, provider: r.provider,
       try: r.try ?? 1, ok: r.ok, error: r.error, ms: r.ms, tokens: r.usage?.tokens ?? null, notionalUsd: r.usage?.notionalUsd ?? null,
-      marginalUsd: price.marginalUsd, basis: price.basis,
+      marginalUsd: price.marginalUsd, basis: price.basis, book: PRICE_BOOK.asOf,
     };
     const file = usageFile(), cap = Number(process.env.DESK_USAGE_MAX_BYTES) || MAX_BYTES;
     let size = 0;
     try { size = statSync(file).size; } catch { /* no file yet */ }
     if (size > cap) {
       const old = path.join(path.dirname(file), "usage.1.jsonl");
-      try { unlinkSync(old); } catch { /* none */ }
-      renameSync(file, old);
+      // a rotation that fails keeps the row: the file grows past its cap and says so, it never stops booking calls
+      try {
+        try { unlinkSync(old); } catch { /* none */ }
+        renameSync(file, old);
+      } catch (e) { say("could not be rotated", e); }
     }
     appendFileSync(file, JSON.stringify(row) + "\n");
   } catch (e) {
-    const why = String((e as { message?: unknown } | null)?.message ?? e).split(/\r?\n/)[0];
-    if (!logged.has(why)) { logged.add(why); console.error(`[engines] the usage ledger could not be written: ${why}`); }
+    say("could not be written", e);
   }
+}
+
+/** Said once per distinct reason, so a ledger that keeps failing does not flood the log. */
+function say(what: string, e: unknown): void {
+  const why = String((e as { message?: unknown } | null)?.message ?? e).split(/\r?\n/)[0];
+  if (!logged.has(why)) { logged.add(why); console.error(`[engines] the usage ledger ${what}: ${why}`); }
 }
