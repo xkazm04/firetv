@@ -26,6 +26,8 @@
 .band-left { left: -200px; top: 0; width: 760px; height: var(--stage-h); clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%); }
 .band-right { right: -200px; top: 0; width: 700px; height: var(--stage-h); clip-path: polygon(40% 0, 100% 0, 100% 100%, 0 100%); }
 .band-rule { left: 0; top: 0; width: var(--stage-w); height: 16px; }
+/* inside .safe the rule still runs along the stage's top edge, not 96 px in and off the right edge */
+.safe > .band-rule { left: -96px; top: -54px; }
 .band-wedge { left: 0; bottom: 0; width: 900px; height: 260px; clip-path: polygon(0 0, 100% 100%, 0 100%); }
 .band-low { left: -200px; top: 0; width: 900px; height: var(--stage-h); clip-path: polygon(0 55%, 100% 100%, 0 100%); }
 .band-divider { left: 760px; top: 0; width: 400px; height: var(--stage-h); clip-path: polygon(60% 0, 100% 0, 40% 100%, 0 100%); }

@@ -290,7 +290,8 @@
 @keyframes mb-caret { 50% { transform: translateY(-5px); } }
 
 /* ================= the side: the slip, and the taped card that is the caption slot ================= */
-.maths-tv .mb-side { position: absolute; left: 1290px; top: 152px; width: 534px; height: 770px; z-index: 5; display: flex; flex-direction: column; animation: mb-rise .3s var(--mb-ease) both; }
+.maths-tv .mb-side { position: absolute; left: 1290px; top: 152px; width: 534px; height: 770px; z-index: 5; display: flex; flex-direction: column; }
+/* no entrance of its own: the side is drawn in the same frame as the paper beside it, not 0.3 s behind it (film blink audit 2026-10-23: the page drew in two passes) */
 .maths-tv .mb-khead { display: flex; align-items: center; justify-content: space-between; height: 52px; }
 .maths-tv .mb-stitle { text-wrap: balance; font-family: var(--mb-serif); font-size: 54px; line-height: 1.04; font-weight: 560; letter-spacing: -.02em; font-variation-settings: "opsz" 144, "SOFT" 100; margin-top: 14px; color: var(--mb-cream-hi); }
 .maths-tv .mb-stitle em, .maths-tv .mb-title em, .maths-tv .mb-htitle em { font-style: italic; color: var(--mb-amber); }
@@ -567,6 +568,8 @@
 .maths-tv .mb-practice .mb-item .num { height: calc(var(--mb-sq) * 2); }
 .maths-tv .mb-practice .mb-row.q .rin { font-size: 52px; }
 .maths-tv .mb-practice .mb-row.gap { height: calc(var(--mb-sq) * .5); }
+/* a wrapped question keeps a margin on the paper's right edge, as a hand would: it never runs to the edge of the sheet */
+.maths-tv .mb-practice .mb-row[data-fit="wrap"] { padding-right: 48px; }
 
 /* ================= Sheet: the marked set, one item under the lamp ================= */
 .maths-tv .mb-item[data-focused="true"]::before { content: ""; position: absolute; left: 70px; right: 24px; top: -10px; bottom: -6px; border-radius: 14px; background: rgba(255, 197, 107, .22); box-shadow: 0 0 0 4px rgba(255, 177, 61, .75), 0 0 34px rgba(255, 177, 61, .45); }
@@ -664,10 +667,14 @@
 .maths-tv .mb-worked .mb-wans { display: flex; align-items: baseline; gap: 14px; color: var(--mb-pen-d); font-size: 44px; }
 .maths-tv .mb-worked .mb-wans .eq { font-family: var(--mb-hand); font-weight: 600; }
 .maths-tv .mb-steps { margin: 18px 0 0; padding-left: 34px; display: grid; gap: 10px; font-size: 28px; line-height: 1.2; }
-/* the worked paper holds three questions and three answers in the practice paper's room: questions at 44px, answers at 38px */
-.maths-tv .mb-worked .mb-row.q .rin { font-size: 44px; }
-.maths-tv .mb-worked .mb-wans { font-size: 38px; margin-bottom: 6px; }
+/* the worked paper holds three questions and three answers in the practice paper's room: questions at 36px, answers at 34px, so the third example is whole above the paper's foot */
+.maths-tv .mb-worked .mb-row.q .rin { font-size: 36px; }
+.maths-tv .mb-worked .mb-wans { font-size: 34px; margin-bottom: 6px; }
 .maths-tv .mb-worked .mb-paper { max-height: 780px; overflow: hidden; }
+/* the idea card is a long paragraph plus three steps: set a size down from the hint card so it ends above the side's foot (922), not off the stage */
+.maths-tv .mb-card[data-role="maths-idea"] { padding: 22px 30px; }
+.maths-tv .mb-card[data-role="maths-idea"] .ht { font-size: 28px; line-height: 1.24; }
+.maths-tv .mb-card[data-role="maths-idea"] .mb-steps { margin-top: 12px; gap: 4px; font-size: 28px; line-height: 1.16; }
 
 /* v2 M4a: a Calculus graph under the walk's card (maths/Plot.tsx) */
 .maths-tv .mb-plot { margin-top: 26px; padding: 14px; border-radius: 10px; background: var(--mb-paper); box-shadow: 0 10px 30px rgba(0, 0, 0, .35); transform: rotate(-.5deg); }

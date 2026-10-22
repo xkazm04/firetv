@@ -436,9 +436,9 @@ const DOORS: Array<{ id: Door; k: string; t: string }> = [
 function doorCaption(s: Session, door: Door): string {
   if (door === "teach") return "Pick a topic and the desk writes six questions to work on paper, then marks them from a photo.";
   if (door === "prepare") return pathEndsLine(s) ?? PREPARE_DOOR;
-  if (s.awaiting === "maths") return "Waiting for the Math Buddy page. Snap it on the phone — it appears here.";
-  if (tonightsSheet(s)) return "The sheet is already on the desk. Enter opens it, one problem at a time.";
-  return "Snap the sheet on the phone and the desk reads it, one problem at a time — hints, never the answer.";
+  if (s.awaiting === "maths") return "Waiting for the Math Buddy page. Snap it on the phone and it appears here.";
+  if (tonightsSheet(s)) return "The sheet is already on the desk. Select opens it, one problem at a time.";
+  return "Snap the sheet on the phone and the desk reads it, one problem at a time: hints, never the answer.";
 }
 
 function DoorArt({ id }: { id: Door }) {
@@ -605,7 +605,7 @@ const PREP = [
   "Writing six questions on this topic…",
   "Choosing numbers that are worth the working…",
   "Checking every one comes out clean…",
-  "Still writing. They will appear here — nothing to press.",
+  "Still writing. They will appear here, nothing to press.",
 ];
 export function Topics({ s, focus, busy: asked }: { s: Session; focus: number; busy: boolean }) {
   const st = topicStates(s);
@@ -792,9 +792,10 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
 
 /**
  * The room the Practice sheet has, in stage px: from its top (design/maths-lamplight.css .mb-practice, 150) to the
- * safe line (1026), less 12 px for the paper's tilt. All six questions are on it at once - there is nothing to pan to.
+ * top of the action row (.mb-acts, 946), less 12 px for the paper's tilt and 8 px of air, so Snap the sheet and Type
+ * my answers sit under the paper, not on it. All six questions are on it at once - there is nothing to pan to.
  */
-const PRACTICE_ROOM = 1026 - 150 - 12;
+const PRACTICE_ROOM = 946 - 150 - 12 - 8;
 
 export function PracticeScreen({ s, focus = 0 }: { s: Session; focus?: number }) {
   const p = s.practice;
@@ -1015,7 +1016,7 @@ export function PageScreen({ s, focus = 0 }: { s: Session; focus?: number }) {
     : hj?.phase === "failed" ? (hj.retry === false ? "No hint for this one." : "No hint that time. Select to try again.")
     : p.missing?.length ? missingLine(p.missing)
     : p.marked ? markedLine(p.marked.items)
-    : it ? `Number ${it.label ?? it.n} is under the lamp. Select for a hint — the next step, never the answer.` : "Nothing on this page could be read as a problem.");
+    : it ? `Number ${it.label ?? it.n} is under the lamp. Select for a hint: the next step, never the answer.` : "Nothing on this page could be read as a problem.");
   const band = (scale: number) => it ? { top: it.band[0] * scale, height: Math.max(8, (it.band[1] - it.band[0]) * scale) } : null;
   const menu = <div className="mb-status"><div className="mb-chip" data-role="maths-chip"><span className="mb-lab" style={{ marginLeft: 14 }}>Menu</span>{s.view === "band" ? "The photo" : "The problems"}</div><Chips s={s} learner={false} /></div>;
   if (s.view === "overview") {
@@ -1079,7 +1080,7 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
   const pick = s.jobs?.lesson?.key === h.key ? s.jobs.lesson : undefined;
   const pickFailed = pick?.phase === "failed" ? pick.error ?? "" : null;
   const like = likePill(s);
-  const noLesson = s.noLesson ? (pickFailed ? `${pickFailed} The hint is all there is this time.` : "No lesson in tonight’s library covers this one. The hint is all there is — and that is fine.") : null;
+  const noLesson = s.noLesson ? (pickFailed ? `${pickFailed} The hint is all there is this time.` : "No lesson in tonight’s library covers this one. The hint is all there is, and that is fine.") : null;
   return (<>
     <Top s={s} crumb={n !== undefined ? `Number ${n}` : p?.title} right={<Chips s={s} learner={false} />} />
     <div className="mb-hint-paper">
@@ -1132,7 +1133,7 @@ export function LessonScreen({ s }: { s: Session }) {
     <Top s={s} crumb="The lesson" right={<Chips s={s} learner={false} phone={false} />} />
     <div className="mb-screen" data-role="maths-sheet">
       {src ? <iframe ref={frame} src={src} width={1120} height={630} allow="autoplay; encrypted-media" title={l.title} onLoad={() => { if (paused) frame.current?.contentWindow?.postMessage(playerCommand(true), "*"); }} />
-        : <div className="none">This unit has no video yet — its theory screen is the lesson.</div>}
+        : <div className="none">This unit has no video yet. Its theory screen is the lesson.</div>}
     </div>
     <div className="mb-paused">{s.lessonPaused ? PAUSE : PLAY}<span>{s.lessonPaused ? "Paused · Play resumes · Back returns" : "Playing · Play pauses · Back returns"}</span></div>
     <aside className="mb-lesson-side">

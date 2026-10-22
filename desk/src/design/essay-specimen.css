@@ -121,10 +121,14 @@
 .essay-tv .em-ways { display: flex; gap: 30px; margin-top: 30px; }
 .essay-tv .em-ways div { display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .essay-tv .em-ways svg { width: 48px; height: 48px; }
-.essay-tv .em-caption { position: absolute; left: 1336px; top: 858px; width: 488px; height: 168px; }
+/* four lines of a lens promise plus the English-only line fit above the safe line (1026): the box starts higher and sets its text a size down */
+.essay-tv .em-caption { position: absolute; left: 1336px; top: 826px; width: 488px; height: 200px; overflow: hidden; }
+.essay-tv .em-caption .em-cap p { font-size: 32px; }
 
 /* the one caption slot: a citron label and one sentence */
-.essay-tv .em-cap { animation: em-rise .35s var(--em-ease) both; }
+/* a new caption settles in from a faint start, never from nothing: a swap has no blank frame */
+.essay-tv .em-cap { animation: em-cap-in .35s var(--em-ease) both; }
+@keyframes em-cap-in { from { opacity: .45; transform: translateY(6px); } }
 .essay-tv .em-cap > .em-lbl { color: var(--em-cit); }
 .essay-tv .em-cap p { margin: 10px 0 0; font-size: 34px; line-height: 1.2; font-weight: 500; font-variation-settings: "wdth" 92; }
 
@@ -291,3 +295,5 @@
 .essay-tv .em-wr-acts { position: absolute; left: 96px; bottom: 70px; display: flex; gap: 18px; }
 .essay-tv .em-act { font-size: 32px; font-weight: 600; padding: 16px 28px; border: 2px solid var(--em-hair); border-radius: 4px; }
 .essay-tv .em-act[data-focused="true"] { border-color: var(--em-cit); background: var(--em-cit); color: var(--em-bg); }
+/* four actions in a row (the read screen) end inside the 1824 safe line: a little less side room per pill */
+.essay-tv .em-acts .em-act { padding-inline: 22px; }

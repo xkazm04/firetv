@@ -40,6 +40,9 @@ export function EssayTV({ s, table }: { s: Session; table: boolean }) {
 // ---------------------------------------------------------------- the shell: brand, chips, caption
 
 /** The header chips: what Menu does here, the focus timer, the phone, the learner. Status, never a stop. */
+/** The phone chip's word: a joined phone that is not here now says so, rather than "Phone joined" over a TV that then asks for one (the pairing page's "Your phone is not here"). */
+const phoneWord = (s: Pick<Session, "joined" | "phonesLive" | "pin">) => !s.joined ? `PIN ${s.pin}` : s.phonesLive === 0 ? "Phone not here" : "Phone joined";
+
 function Top({ s, menu, lit }: { s: Session; menu: string; lit?: boolean }) {
   return (
     <div className="em-top">
@@ -47,7 +50,7 @@ function Top({ s, menu, lit }: { s: Session; menu: string; lit?: boolean }) {
       <div className={`em-pill${s.timer.running ? " run" : ""}`} data-role="essay-chip"><span className="em-lbl" style={{ fontSize: 20 }}>{s.timer.phase === "break" ? "Break" : "Focus"}</span><span className="em-t">{fmt(s.timer.left)}</span></div>
       {essayHandoffOf(s)
         ? <div className="em-pill lit" data-role="essay-onphone">{PHONE}<span>On your phone</span></div>
-        : <div className={`em-pill${lit ? " lit" : ""}`} data-role="essay-chip">{PHONE}<span>{s.joined ? "Phone joined" : `PIN ${s.pin}`}</span></div>}
+        : <div className={`em-pill${lit ? " lit" : ""}`} data-role="essay-chip">{PHONE}<span>{phoneWord(s)}</span></div>}
       <div className="em-pill" data-role="essay-chip"><span className="em-av">{s.learner?.name.charAt(0)}</span><span>{s.learner?.name}</span></div>
     </div>
   );
@@ -151,7 +154,8 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const cap = job?.phase === "running" ? { label: READING_LABEL, text: readingAPiece(a?.piece, job.start) ? PIECE_WAIT(a?.piece) : adultSay("The desk is reading your paragraph. It lands here.", adult) }
     : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ?? adultSay("The paragraph did not come back. Send it again from the phone.", adult) }
     : refused ? refused
-    : essayHandoffLine(s) ? { label: "On your phone", text: essayHandoffLine(s) as string }
+    // "Your turn", as Writing says it: the line itself already begins "On the phone:", and the header chip says On your phone
+    : essayHandoffLine(s) ? { label: "Your turn", text: essayHandoffLine(s) as string }
     : at === "plan" ? { label: "Start from the pattern", text: withEnglish(adult ? "Write the message yourself: one sentence for each slot, on the phone." : "Write the paragraph yourself: one sentence for each slot, on the phone.") }
     : at === "write" ? { label: "Write from a prompt", text: "Pick a prompt here, write one paragraph on the phone, get one note." }
     : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: summaryLine(a) }
@@ -195,7 +199,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
           <div className="em-lbl">{adultSay("First paragraph", adult)}</div>
           <h2 className="em-big">Nothing read</h2>
           <div className="em-ways">{["Paste", "Type", "Dictate"].map((w, k) => <div key={w}>{WAYS[k]}<span className="em-lbl">{w}</span></div>)}</div>
-          <div className="em-meta">{PHONE}{s.joined ? "Phone joined" : `PIN ${s.pin}`}</div>
+          <div className="em-meta">{PHONE}{phoneWord(s)}</div>
           <div className="em-door" data-role="essay-plan-door"><span>Start from the pattern</span>{at === "plan" && <span className="em-key">OK</span>}</div>
           {stops.includes("write") && <WriteDoor on={at === "write"} inside />}
         </div>
@@ -359,7 +363,8 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
   return (<>
     <Brand /><Top s={s} menu="Table" lit={lit} />
     <Rail a={a} cur={i} verdicts={verdicts} />
-    <Page key={sn.n} curtain={curtain} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} title={forensicTitle(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} wait={essayHandoffLine(s)} unruled={tieNotEnglish(unruledCaption(a.piece, sn.para ?? 0))} pending={paragraphPending(a.piece, sn.para ?? 0)} />
+    {/* no key: the page stays mounted when the sentence changes, so the swap is one frame to the next, never a blank frame fading back in (film blink audit 2026-10-23) */}
+    <Page curtain={curtain} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} title={forensicTitle(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} wait={essayHandoffLine(s)} unruled={tieNotEnglish(unruledCaption(a.piece, sn.para ?? 0))} pending={paragraphPending(a.piece, sn.para ?? 0)} />
     <nav className="em-acts">
       {stops.map((k, j) => (
         <div key={k} className={`em-pill em-act${j === 0 ? " prim" : ""}${stopAt(stops, s.focus) === k ? " is-focused" : ""}`} data-focused={stopAt(stops, s.focus) === k} {...(j === 0 ? { "data-role": "essay-primary" } : {})}>
