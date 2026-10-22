@@ -1,10 +1,12 @@
-plugins { id("com.android.application"); kotlin("android") }
+plugins { id("com.android.application") }
 val nativeJars by configurations.creating
 // Fire TV is arm only; -PemulatorAbi=true keeps x86_64 for emulator builds.
 val tvAbis = listOf("arm64-v8a", "armeabi-v7a") + if (providers.gradleProperty("emulatorAbi").isPresent) listOf("x86_64") else emptyList()
+kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }
 android {
     namespace = "dev.deathride.tv"
     compileSdk = 36
+    buildFeatures { resValues = true } // AGP 9 defaults it off; defaultConfig sets app_name and race_port
     defaultConfig {
         applicationId = providers.gradleProperty("appId").getOrElse("dev.deathride.campaign")
         resValue("string", "app_name", providers.gradleProperty("appLabel").getOrElse("Death Ride"))
@@ -22,10 +24,9 @@ android {
         }
     }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
-    kotlinOptions { jvmTarget = "17" }
     sourceSets["main"].assets.srcDir(rootProject.file("controller"))
     sourceSets["main"].assets.srcDir(rootProject.file("assets"))
-    sourceSets["main"].jniLibs.srcDir(layout.buildDirectory.dir("generated/natives"))
+    sourceSets["main"].jniLibs.srcDir(layout.buildDirectory.dir("generated/natives").get().asFile)
     // Runtime loads only phase2-states, story-art, regions, audio (+controller). The other phase2 bundles
     // are audit/test inputs (desktop AtlasAudit, tests read ../assets directly) and stay in the repo.
     androidResources { ignoreAssetsPattern = "!phase2-v1:!phase2-hud:!phase2-fusion" }
