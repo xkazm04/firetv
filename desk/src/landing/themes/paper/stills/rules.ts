@@ -10,7 +10,7 @@
 export type StillKind = "sky" | "soft" | "hill" | "hero";
 export interface Box { x: number; y: number; w: number; h: number }
 
-/** How far a layer at depth d travels when a world slides in or out (design/desk-landing.css, pp-in / pp-out). */
+/** How far a layer at depth d travels when a world slides in (design/desk-landing.css, pp-in). */
 export const slide = (d: number) => 1920 * Math.max(0.15, d);
 /** What the drawings span: the hills run -1400..3300 (shapes.tsx hillD), the sky's rect -460..2380 x -120..1200. */
 const ART = { x0: -1400, x1: 3300, y0: -120 };

@@ -69,14 +69,12 @@
 .pp .pp-layer[data-k="hero"] .pp-cast > :not(.pp-flat, .pp-each), .pp .pp-layer[data-k="hero"] .pp-cast > .pp-each > :not(.pp-flat, .pp-each),
 .pp .pp-layer[data-k="hero"] .pp-cast > .pp-each > .pp-each > :not(.pp-flat, .pp-each) { filter: drop-shadow(6px 12px 14px rgba(45, 25, 12, .32)); }
 .pp .pp-layer[data-k="soft"] .pp-cast > :not(.pp-flat, .pp-each), .pp .pp-layer[data-k="soft"] .pp-cast > .pp-each > :not(.pp-flat, .pp-each) { filter: drop-shadow(0 8px 10px rgba(45, 25, 12, .12)); }
-/* a world sliding in from the side the D-pad went, one sliding out the other way; layers travel by their own factor */
+/* a world sliding in from the side the D-pad went; layers travel by their own factor */
 .pp .pp-wset[data-mode="choose"] .pp-layer { animation: pp-in .7s var(--pp-ease) backwards; }
 .pp .pp-wset[data-mode="arrive"] .pp-layer { animation: pp-up .65s calc(.7s + var(--i) * .045s) var(--pp-ease) backwards; }
 .pp .pp-wset[data-mode="fade"] .pp-layer { animation: pp-up .56s calc(var(--i) * .04s) var(--pp-ease) backwards; }
-.pp .pp-wset[data-mode="leave"] .pp-layer { animation: pp-out .64s cubic-bezier(.4, 0, .2, 1) forwards; }
 @keyframes pp-in { from { translate: calc(var(--dir) * 1920px * max(.15, var(--d))) 24px; opacity: 0; } 62% { opacity: 1; } to { translate: 0 0; opacity: 1; } }
 @keyframes pp-up { from { translate: 0 90px; opacity: 0; } to { translate: 0 0; opacity: 1; } }
-@keyframes pp-out { 0%, 25% { translate: 0 0; opacity: 1; } to { translate: calc(var(--dir) * -1920px * max(.15, var(--d))) 0; opacity: 0; } }
 
 .pp .pp-title {
   position: absolute; left: 0; top: 0; z-index: 1; white-space: nowrap; line-height: 1; transform-origin: 0 0; pointer-events: none;
@@ -218,6 +216,6 @@
 /* reduced motion: everything is where it ends up, and the hand-off is a cut (app/tv/page.tsx does not wait) */
 @media (prefers-reduced-motion: reduce) {
   .pp *, .pp *::before, .pp *::after { animation: none !important; transition: none !important; }
-  .pp .pp-intro, .pp .pp-wset[data-mode="leave"] { display: none; }
+  .pp .pp-intro { display: none; }
   .pp .pp-marker { stroke-dasharray: none; }
 }

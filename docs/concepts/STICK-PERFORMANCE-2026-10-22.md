@@ -36,6 +36,10 @@ Kept: the last row, in `design/desk-landing.css` (`will-change` on `.pp-ledge-pa
 
 What it did not change: the first frame after the key (one 250-280 ms draw that waits on the GPU) is the same. That frame is the world swap: showing only the leaving world reproduces it, and removing the leaving world takes it to about 90-170 ms. Tried without effect on that frame: building the arriving world a layer at a time, fading the leaving world as a set, a crossfade, hiding the title, sky or grain.
 
+## The outgoing world is dropped (kept)
+
+On a lamp move the old world no longer slides out (`Paper.tsx` keeps no `prev`). Longest gap over 2 moves, 3 runs: 191-281 ms before, 174-180 ms after. The new world still slides in.
+
 ## What did not move the needle (measured, not kept)
 
 - Pausing the loops only during a lamp move.

@@ -34,7 +34,7 @@ const LEARNER_TONE = ["#e2603f", "#2f7a63", "#5a55c8", "#c9932d"];
 
 // ---------------------------------------------------------------- the world: layers that slide at their own speeds
 
-function WorldSet({ layers, back, mode, dir }: { layers: Layer[]; back: boolean; mode: "none" | "arrive" | "choose" | "fade" | "leave"; dir: number }) {
+function WorldSet({ layers, back, mode, dir }: { layers: Layer[]; back: boolean; mode: "none" | "arrive" | "choose" | "fade"; dir: number }) {
   return (
     <div className="pp-wset" data-mode={mode} style={{ "--dir": dir } as CSSProperties}>
       {layers.map((l, i) => l.back === back && (
@@ -295,24 +295,18 @@ function Intro() {
 
 export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
   const { world, apps, at } = view, unpaired = !view.phone.paired;
-  // the world that is leaving slides out while the new one slides in. The move's direction is kept after the leaving
-  // world goes: read from it, the lit world turned "fade" 0.72 s after each move and played its rise a second time
-  const [st, setSt] = useState<{ world: LandingApp | null; prev: { id: LandingApp; dir: number } | null; dir: number; seq: number }>({ world, prev: null, dir: 0, seq: 0 });
+  // the new world slides in from the side the D-pad went; the one it replaces is gone at once (a world sliding out beside
+  // it cost the stick a 250 ms freeze on the first frame of every move, docs/concepts/STICK-PERFORMANCE-2026-10-22.md)
+  const [st, setSt] = useState<{ world: LandingApp | null; dir: number; seq: number }>({ world, dir: 0, seq: 0 });
   if (st.world !== world) {
     const ids = apps.map((a) => a.id), was = st.world, dir = was && world && ids.includes(was) ? (ids.indexOf(world) > ids.indexOf(was) ? 1 : -1) : 0;
-    setSt({ world, prev: was && ids.includes(was) ? { id: was, dir } : null, dir, seq: st.seq + 1 });
+    setSt({ world, dir, seq: st.seq + 1 });
   }
-  useEffect(() => {
-    if (!st.prev) return;
-    const t = setTimeout(() => setSt((x) => (x.prev ? { ...x, prev: null } : x)), 720);
-    return () => clearTimeout(t);
-  }, [st.seq, st.prev]);
 
   // the world is drawn from an app's art; Writing's is the empty world (worldArt), never a world of its own
   const art = (id: LandingApp | null) => worldArt(apps.find((a) => a.id === id)?.art);
-  const artKey = JSON.stringify([art(st.world), st.prev && art(st.prev.id)]);
+  const artKey = JSON.stringify(art(st.world));
   const cur = useMemo(() => worldFor(art(st.world)), [st.world, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  const old = useMemo(() => (st.prev ? worldFor(art(st.prev.id)) : null), [st.prev, artKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const first = st.seq === 0, dir = st.dir;
   const scene = useRef<HTMLDivElement>(null);
   // after each world swap and when the art changes (a new world's loops start at their first style): one clock for the loops
@@ -334,12 +328,10 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
       {boot && <Intro />}
       <div className="pp-worlds">
         <div className="pp-host pp-back">
-          {old && <WorldSet key={`o${st.seq}`} layers={old} back mode="leave" dir={dir} />}
           <WorldSet key={`c${st.seq}`} layers={cur} back mode={mode} dir={dir} />
         </div>
         <Title name={name} unpaired={unpaired} seq={st.seq} still={first && !boot} />
         <div className="pp-host pp-front">
-          {old && <WorldSet key={`o${st.seq}`} layers={old} back={false} mode="leave" dir={dir} />}
           <WorldSet key={`c${st.seq}`} layers={cur} back={false} mode={mode} dir={dir} />
         </div>
       </div>
