@@ -93,7 +93,9 @@ const ambient = { anims: [] as Animation[], subs: new Set<(t: number) => void>()
 function ambientTick() {
   if (document.hidden) return;
   const t = document.timeline.currentTime as number;
-  for (const a of ambient.anims) if (a.playState === "paused") a.currentTime = t;
+  // no playState read here: on a CSS animation that getter flushes style, and after the first set every read flushed again
+  // (one style pass per loop per tick, about 25 ms of each 66 ms tick on the stick); the list is the paused set, built at sync
+  for (const a of ambient.anims) a.currentTime = t;
   for (const f of ambient.subs) f(t);
 }
 function ambientRun() {
