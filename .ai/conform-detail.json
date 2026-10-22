@@ -3437,6 +3437,57 @@
           "evidence": ".ai/doctor.mjs:174 Precondition does not hold: for multi-reader extensible contracts, must-ignore-unknown replaces version rejection gates and doctor issues only an advisory warning."
         }
       ]
+    },
+    "desk-platform/engines/structured-output": {
+      "context": "engines",
+      "subject": "structured-output",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T22:02:07.926Z",
+      "worker": "731723c1-d2b5-4ec1-89cd-1590bf91ba74",
+      "techniques": [
+        {
+          "technique": "answer-coverage-gating",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/engines/embed.ts:38 For embedding batches, the engine compares returned vectors against requested texts and rejects the whole batch unless every positional unit has a nonempty vector of the expected shape."
+        },
+        {
+          "technique": "constrained-decoding-is-a-shared-budget",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/vision.ts:45 Request assembly forwards one caller-owned constraint; no independently authored constraint contributions compete for admission in the inspected engines."
+        },
+        {
+          "technique": "enumerable-domain-decoding",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/text.ts:74 Isolated Claude calls deliberately bypass schema-constrained production, including schemas with closed enums; those domains remain prompt instructions followed by validation rather than decoder enforcement."
+        },
+        {
+          "technique": "extraction-observability",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/meter.ts:19 The ledger records call identity, prompt fingerprint, attempts and outcomes, but its complete row contract lacks extraction strategy, schema version and candidate-anomaly fields required to diagnose extraction drift."
+        },
+        {
+          "technique": "extraction-strategies",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/shape.ts:75 Extraction consists of fence stripping followed by one whole-text parse; stripFence only recognizes JSON or unlabelled fences, so a valid payload inside a wrongly labelled fence is rejected instead of recovered."
+        },
+        {
+          "technique": "op-grammar-allowlisting",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/engines/call.ts:50 The inspected engine core returns provider answers as data; it does not interpret model-proposed operation names or dispatch an operation list."
+        },
+        {
+          "technique": "output-budget-signal",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/vision.ts:56 Variable-size page extraction returns content without usage or a ceiling-share measurement; the separate length-stop rejection detects truncation but supplies no leading budget signal."
+        },
+        {
+          "technique": "schema-validation-and-repair",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/shape.ts:107 cutLong replaces an overlong string with a prefix, and answer() accepts the transformed artifact after revalidation; this changes content to satisfy the validator without an explicit modification outcome."
+        }
+      ]
     }
   }
 }
