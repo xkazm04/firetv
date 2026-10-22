@@ -986,7 +986,16 @@ test('optimize 2026-10-21: a set written by code says it is ready without a time
   const r=await asRole('/api/session/retry','phone',{kind:'practice',jobId:job.id});
   assert.equal(r.status,200);assert.equal(store.getSession().jobs.practice.phase,'done');assert.equal(store.getSession().practice.items.length,6);
  });
- test('ruling 10-22 (b): a phone practice retry with no id, an unknown id, a foreign, unowned, running or ready job is 409 NOT_ASKING',async()=>{
+ test('ruling 10-22 (a2): the phone client\'s own retry body (kind practice + the session\'s jobs.practice.id) runs a failed practice set, and the client source sends exactly that',async()=>{
+  const src_=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
+  assert(src_.includes('call("/api/session/retry", kind === "practice" ? { kind, jobId: s?.jobs?.practice?.id } : { kind })'),'phone retry sends jobId for practice only');
+  await failedSet();
+  stubText({items:()=>({items:STATED})});
+  const s=store.getSession();const body={kind:'practice',jobId:s.jobs?.practice?.id};
+  const r=await asRole('/api/session/retry','phone',body);
+  assert.equal(r.status,200);assert.equal(store.getSession().jobs.practice.phase,'done');assert.equal(store.getSession().practice.items.length,6);
+ });
+ test('ruling 10-22 (b):a phone practice retry with no id, an unknown id, a foreign, unowned, running or ready job is 409 NOT_ASKING',async()=>{
   let asked=0;
   const job=await failedSet();
   stubText({items:()=>{asked++;return {items:STATED};}});
