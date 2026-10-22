@@ -3,7 +3,7 @@
  * and CI means the same thing on the operator's Windows machine and on a Linux runner. `node tools/gradlew.cjs
  * :core:test` is `gradlew.bat :core:test` on Windows and `sh ./gradlew :core:test` elsewhere, run from the repo
  * root whatever the caller's directory, with the arguments passed through and Gradle's exit code kept.
- * It is the root build only: deathride/ has its own wrapper and is run from that directory.
+ * It is the root build only.
  */
 const { spawnSync } = require("node:child_process"), path = require("node:path");
 const root = path.resolve(__dirname, "..");

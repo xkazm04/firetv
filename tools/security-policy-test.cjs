@@ -32,7 +32,7 @@ function checklist(text){
  return out.filter(Boolean);
 }
 /** Repository paths a line cites in backticks. */
-const cited=(text)=>[...text.matchAll(/`([^`\s]+)`/g)].map((m)=>m[1]).filter((p)=>/^(\.github|\.ai|scripts|tools|desk|deathride|tv-app|core|companion)\//.test(p)||/^[A-Z][\w-]*\.md$/.test(p));
+const cited=(text)=>[...text.matchAll(/`([^`\s]+)`/g)].map((m)=>m[1]).filter((p)=>/^(\.github|\.ai|scripts|tools|desk|tv-app|core|companion)\//.test(p)||/^[A-Z][\w-]*\.md$/.test(p));
 /** A workflow's YAML with its comments removed: a step a comment describes (or one that was unwired) runs nothing. */
 const code=(yaml)=>yaml.split(/\r?\n/).filter((l)=>!/^\s*#/.test(l)).map((l)=>l.replace(/\s+#\s.*$/,'')).join('\n');
 const workflows=()=>fs.readdirSync(path.join(REPO,'.github','workflows')).filter((f)=>/\.ya?ml$/.test(f)).map((f)=>({f,text:code(read('.github','workflows',f))}));
@@ -94,7 +94,7 @@ test('case 6: the doctor\'s never-commit guardrail sees every secret file AGENTS
  try{
   fs.mkdirSync(path.join(tmp,'.ai'));
   for(const f of ['doctor.mjs','manifest.yaml','guardrails.yaml'])fs.copyFileSync(path.join(REPO,'.ai',f),path.join(tmp,'.ai',f));
-  const seeded=['desk/.env.local','desk/.env','deathride/app/release.jks','tv-app/upload.keystore','.env.local'];
+  const seeded=['desk/.env.local','desk/.env','stick-app/release.jks','tv-app/upload.keystore','.env.local'];
   for(const f of seeded){fs.mkdirSync(path.dirname(path.join(tmp,f)),{recursive:true});fs.writeFileSync(path.join(tmp,f),'SECRET=1\n');}
   const git=(...a)=>execFileSync('git',a,{cwd:tmp,stdio:['ignore','pipe','pipe'],encoding:'utf8'});
   git('init','-q');git('add','-f','--',...seeded);

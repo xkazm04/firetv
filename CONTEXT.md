@@ -7,7 +7,6 @@
 The three TV products in this repository and the glue between them:
 - the Telestrator PoC (`core/`, `tv-app/`, `companion/`)
 - the Study Desk prototype (`desk/`, with its rules suites in `tools/` and UAT in `uat/`)
-- the standalone Death Ride build (`deathride/`)
 
 It also owns the root Gradle build (`settings.gradle.kts`: `:core`, `:tv-app`, `:stick-app`; versions in
 `gradle/libs.versions.toml`) and the agent contract in `.ai/`.
@@ -22,7 +21,6 @@ It also owns the root Gradle build (`settings.gradle.kts`: `:core`, `:tv-app`, `
 - `companion/` is the single source of the phone page. The APK copies it at build time.
 - No live model call runs in any gate.
 - `desk/data/` and `desk/.env.local` are never committed or rewritten by a test.
-- `deathride/` is not included in the root Gradle build.
 
 ## Key files
 - `AGENTS.md`: canonical agent guidance (commands, map, constraints).
@@ -34,8 +32,7 @@ It also owns the root Gradle build (`settings.gradle.kts`: `:core`, `:tv-app`, `
 ## Data flow
 - Telestrator: phone PWA → WebSocket (LAN listen or relay dial-out) → `core` pen conversation → `tv-app` overlay on the paused frame.
 - Study Desk: phone and TV browsers → `desk/src/proxy.ts` → API routes → the session store → SSE back to the TV.
-- Death Ride: phone controller → the game's own server on port 8765 → `deathride/core` simulation.
 
 ## Decisions & memory
-- `.ai/memory/` (0002 onwards) records the repo-level decisions: the sports direction is closed, desk is a prototype, there are two transports, deathride is standalone, and the gate rules.
+- `.ai/memory/` (0002 onwards) records the repo-level decisions: the sports direction is closed, desk is a prototype, there are two transports, and the gate rules.
 - `docs/README.md` indexes the product docs and the owner decision records.

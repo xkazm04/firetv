@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Study Desk copy of deathride/tools/audio/elevenlabs.mjs (2026-10-21): same guards, its own ledger, output under desk/audio.
+// Study Desk audio tool (2026-10-21): guarded spend, its own ledger, output under desk/audio.
 // Port of Garden VR tools/audio/elevenlabs.mjs, read-only source consulted 2026-10-02.
 // No provider response bodies, request headers or environment contents are logged.
 import fs from 'node:fs';

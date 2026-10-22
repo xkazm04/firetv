@@ -1,6 +1,6 @@
 /**
- * The spend guards of tools/audio/elevenlabs.mjs (the desk's copy of deathride/tools/audio/elevenlabs.mjs, "same guards"),
- * held by the same cases as deathride/tools/audio/elevenlabs.test.mjs, retargeted to the desk copy: DESK_AUDIO_RESERVE,
+ * The spend guards of tools/audio/elevenlabs.mjs (guarded spend: reserve, ledger, output folder),
+ * held by cases on the desk copy: DESK_AUDIO_RESERVE,
  * output only under desk/audio. Every CLI case runs a copy of the tool in an os.mkdtemp folder with fetch replaced by a
  * stub (--import mock.mjs) and a fake key: no network, no credits, never desk/.env.local.
  * Run with npm test in desk/ (directly: node --test tools/audio/elevenlabs-test.mjs).

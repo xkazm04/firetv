@@ -172,6 +172,5 @@ Durable lessons from past runs are in `.ai/memory/` (format: [../.ai/memory/READ
   - `harness-drills.yml` runs on every PR and push to main:
     - the security policy check (`tools/security-policy-test.cjs`);
     - the SBOM converter suite;
-    - the Stick frame budget (`deathride/tools/frame-budget.mjs`, 0020);
     - the degraded-engine drill.
 - A human approves every merge (`.ai/guardrails.yaml`).

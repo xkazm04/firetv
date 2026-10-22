@@ -21,7 +21,6 @@ body:
       options:
         - "Telestrator: core/, tv-app/, companion/"
         - "Study Desk: desk/, uat/"
-        - "Death Ride: deathride/ (its own Gradle build)"
         - "Repo and agent harness: .ai/, .github/, scripts/, docs/"
     validations:
       required: true
@@ -60,7 +59,6 @@ body:
         - "tv-app/ or companion/: node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin"
         - "stick-app/ (or a desk fact it pins: keys.ts, proxy.ts, pairing, store): node tools/gradlew.cjs :stick-app:testDebugUnitTest"
         - "uat/driver: node --check uat/driver/linga-text.cjs"
-        - "deathride/: :core:test :link:test from deathride/"
         - ".ai/, .github/ or scripts/: node .ai/doctor.mjs --json then node scripts/doctor-gate.mjs"
         - "CHANGELOG.md: node tools/changelog-test.cjs"
         - "docs only: no gate (say so in the pull request)"
@@ -79,7 +77,6 @@ body:
         - label: "Never touch desk/data/ (tests use a temp DESK_DATA_DIR)"
         - label: "A TV surface follows On Air (docs/DESIGN-ON-AIR.md)"
         - label: "core/ stays free of Android imports"
-        - label: "deathride/ stays a separate build"
 
   - type: dropdown
     id: live-calls

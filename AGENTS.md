@@ -2,20 +2,18 @@
 
 This file is the **canonical** guidance for the whole repository (`guidance.canonical` in
 `.ai/manifest.yaml`). Each separate build has an overlay that adds only what is specific to it and
-defers to this file: `desk/AGENTS.md` for the Next.js app and `deathride/AGENTS.md` for the Death Ride
-build (each read through its own `CLAUDE.md`). `tools/guidance-overlay-test.cjs` fails when a separate
+defers to this file: `desk/AGENTS.md` for the Next.js app (read through its own `CLAUDE.md`). `tools/guidance-overlay-test.cjs` fails when a separate
 build has no overlay. The `.claude/<skill>/config.md` overlays add per-skill
 procedure on top. They never override the constraints below.
 
 ## What this repository is
 
-One repository, three products for a TV in the living room, sharing a phone-as-input idea:
+One repository, two products for a TV in the living room, sharing a phone-as-input idea:
 
 | Product | Where | What it is |
 |---|---|---|
 | **Telestrator** (the original PoC) | `core/`, `tv-app/`, `companion/`, `tools/` (live probes), `scripts/`, `fixtures/`, `vision/` | Android TV app: a phone draws on a paused video frame. Pure-JVM `core` + an Android `tv-app` with an embedded Ktor server. |
 | **Study Desk** (Linga English, Math Buddy, Essay Master) | `desk/`, `tools/*-test.cjs`, `uat/`, `prototype/` | A Next.js functional prototype of a homework desk on the TV. It is a design document to be rebuilt natively on Fire TV, not the shipping app. |
-| **Death Ride** | `deathride/` | A standalone Kotlin/libGDX combat racer for Fire TV. It is a **separate Gradle build** with its own wrapper and settings. |
 
 Product docs live in `docs/` (index: [docs/README.md](docs/README.md)). Durable decisions live in
 `.ai/memory/`. What changed in each product, by date, is in [CHANGELOG.md](CHANGELOG.md).
@@ -37,9 +35,8 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Build: tv APK | `node tools/gradlew.cjs :tv-app:assembleDebug` | Same prerequisites. |
 | Test: stick app | `node tools/gradlew.cjs :stick-app:testDebugUnitTest` | JVM tests of the stick's WebView APK; some pin desk facts (`desk/src/tv/keys.ts`, `proxy.ts`, pairing, store), so a desk rename can turn them red. Needs `local.properties` (SDK path). |
 | Full telestrator cycle | `./scripts/dev.ps1` | Unit, build, emulator, deploy, live UI test (PowerShell, Windows). |
-| Death Ride | `cd deathride` then `.\gradlew.bat :core:test`, `:link:test`, `:app:assembleDebug` | Its own build. Never run it through the root wrapper. Read `deathride/AGENTS.md` first (app id, gate, owner checks). |
 | Desk layering | `node tools/desk-boundaries.cjs` | Fails when `desk/src/` breaks its layering: engines are a leaf behind their entry modules, rules load no engine or Node built-in, only engines spawn, only the session writes (`.ai/memory/0018`). Of the three breaks main carried when it landed, one is left (`engines/meter.ts` loads `lib/dataDir.ts`): an `OWED` entry, printed, not failed, until the owner settles it. Its suite is `node tools/desk-boundaries-test.cjs`. |
-| Guidance overlays | `node tools/guidance-overlay-test.cjs` | Every separate build (`desk/`, `deathride/`) has an `AGENTS.md` + `CLAUDE.md` that defers to this file. |
+| Guidance overlays | `node tools/guidance-overlay-test.cjs` | Every separate build (`desk/`) has an `AGENTS.md` + `CLAUDE.md` that defers to this file. |
 | Commit provenance | `node tools/commit-provenance.cjs [<range>]` | The per-lane, per-agent authorship report, read from `Agent-Lane:` and `Co-Authored-By:` trailers. `--check <base>..<head>` lists AI commits that lack them (`.ai/memory/0019`). Its suite is `node tools/commit-provenance-test.cjs`. |
 | Model drift (live quality over time) | `node tools/model-drift.cjs --status --max-age 21` (no model); the live run is `scripts/model-drift.ps1` | The live run spends real calls and is the operator's. Its suite is `node tools/model-drift-test.cjs`. The pre-merge check is `node tools/model-drift-pr.cjs --base origin/main`, and its suite is `node tools/model-drift-pr-test.cjs`. See `uat/drift/README.md`. |
 | Changelog shape | `node tools/changelog-test.cjs` | A noticeable change adds a line under its product's `### Unreleased` in `CHANGELOG.md`. |
@@ -48,7 +45,6 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Security policy | `node tools/security-policy-test.cjs` | Fails while `SECURITY.md` is a template, names no private channel or response time, or ticks a guardrail no workflow runs. |
 | Degraded-engine drill | `node tools/engine-degraded-test.cjs` | Needs `desk/node_modules`. Puts each degraded engine answer in `tools/engine-degraded-fixtures.json` through the read and hint routes. Its `todo` rows are known gaps on the live surface. |
 | SBOM converter | `node tools/gradle-sbom-test.cjs` | `tools/gradle-sbom.cjs` turns Gradle's resolved dependency report into the CycloneDX SBOM that `sbom.yml` attests against the APK (`.ai/memory/0021`). |
-| Stick frame budget | `node deathride/tools/frame-budget.mjs [summary.json]`; its suite is `node deathride/tools/frame-budget-test.mjs` | Holds a Stick soak summary to `deathride/perf/frame-budget.json`, a ratchet over the accepted soak (`.ai/memory/0020`). The soak itself is a device run and is the operator's. |
 
 `gradle.properties` pins `org.gradle.java.home` to the operator's Android Studio JBR. On any
 other machine, pass `-Dorg.gradle.java.home=<a JDK 17>` or remove that line locally.
@@ -68,7 +64,6 @@ There is no linter or formatter wired yet. Match the surrounding style. Kotlin f
 | a TV screen (`desk/src/tv`, `desk/src/app/tv`, `desk/src/english/LingaTV.tsx`) | the desk gate, plus a Playwright capture against a second dev server (`next dev --webpack`, its own seeded `DESK_DATA_DIR`) |
 | `uat/driver` | `node --check uat/driver/linga-text.cjs` (a live LT run spends codex calls and is the operator's call) |
 | a file on the live surface (`node tools/model-drift-pr.cjs --surface`: the hint, read and pick pipelines, the rules they import, `desk/src/lib/engines/`, the lab bench) | the desk gate, plus a live drift record the operator takes on the branch (`scripts/model-drift.ps1`) and commits in the PR. Ask for it; never run it yourself (`.ai/memory/0017`). |
-| `deathride/` | that build's `:core:test :link:test` from `deathride/`, plus `:app:assembleDebug` when `app/` changed (`deathride/AGENTS.md`) |
 | a build root's guidance (`AGENTS.md`, `CLAUDE.md`, a new top-level build) | `node tools/guidance-overlay-test.cjs` |
 
 ## Architecture map
@@ -93,9 +88,6 @@ phone.
 The rules suites are `tools/*-test.cjs`. `uat/` is the Linga UAT overlay. `prototype/` holds static
 design pages that `prototype/build.py` builds.
 
-**Death Ride.**
-- `deathride/` holds the modules `core` (pure JVM simulation), `link`, `game`, `app` (Android) and `desktop`.
-- Its concept docs are in `docs/concepts/` and its evidence is in `deathride/evidence/`.
 
 **Shared.**
 - `vision/` holds the local vision-model client (Python) kept from the closed sports direction.
@@ -117,7 +109,6 @@ design pages that `prototype/build.py` builds.
 - **Never touch `desk/data/`** (real learner records). Tests set `DESK_DATA_DIR` to a temp directory.
 - The block between the `nextjs-agent-rules` markers in `desk/AGENTS.md` is written by `next dev`. Leave it as Next writes it.
 - Secrets come from environment variables, set locally in the gitignored `desk/.env.local` (`ELEVENLABS_API_KEY`, ...). Never commit `.env*`, keys or keystores. `.ai/guardrails.yaml` hard-fails the doctor if one is tracked.
-- `deathride/` is a separate build. Do not wire it into the root `settings.gradle.kts`.
 
 ## Working agreement (for agents)
 

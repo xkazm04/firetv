@@ -1,7 +1,7 @@
 # Repo guardrails: the shape rules AGENTS.md states, held by checks instead of by sentences.
 #  - layering: tools/desk-boundaries-test.cjs fails when desk/src/ breaks its layering (engines are a leaf behind their
 #    entry modules, rules load no engine or Node built-in, only engines spawn, only the session writes; .ai/memory/0018),
-#    and tools/guidance-overlay-test.cjs fails when a separate build (deathride/, desk/) has no AGENTS.md + CLAUDE.md
+#    and tools/guidance-overlay-test.cjs fails when a separate build (desk/) has no AGENTS.md + CLAUDE.md
 #    overlay deferring to the root AGENTS.md. Plain node, no install.
 #  - provenance (pull requests): tools/commit-provenance.cjs --check reads the pull request's commits and annotates every
 #    AI-marked commit that names its agent or its lane only in prose (.ai/memory/0019). It warns and passes today,

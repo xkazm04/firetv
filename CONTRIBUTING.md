@@ -1,6 +1,6 @@
 # Contributing to firetv
 
-This repository holds three products (the Telestrator PoC, the Study Desk prototype and Death Ride),
+This repository holds two products (the Telestrator PoC and the Study Desk prototype),
 and most changes are made by AI agents under a human owner. This file is the acceptance path: what
 a change must show before it lands. The commands and the architecture map live in
 [AGENTS.md](AGENTS.md), and this file does not repeat them.
@@ -30,7 +30,6 @@ The agent starts from the criteria, not from a restatement of them. Its pull req
 |---|---|
 | Study Desk | Node 24, then `npm ci --prefix desk`. Engine keys go in `desk/.env.local` (gitignored, see `desk/README.md`). The gate needs no keys. |
 | Telestrator | JDK 17, the Android SDK (`local.properties` with `sdk.dir`), and the fixture clip generated with ffmpeg (`fixtures/README.md`). `gradle.properties` pins the operator's JBR path; elsewhere, pass `-Dorg.gradle.java.home=<JDK 17>`. Live tests need `npm ci --prefix tools` and an emulator (`scripts/dev.ps1`). |
-| Death Ride | See `deathride/README.md`. It is a separate Gradle build, run from `deathride/`. |
 
 ## The verification gate
 
@@ -44,7 +43,6 @@ Run the gate for every surface you touched and record its exit code. The table i
 | `tv-app/`, `companion/` | `node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin` |
 | `stick-app/` | `node tools/gradlew.cjs :stick-app:testDebugUnitTest` |
 | a TV screen | the desk gate, plus a Playwright capture (or name the capture as owed) |
-| `deathride/` | `:core:test :link:test` from `deathride/` |
 
 `node .ai/doctor.mjs` checks the agent contract (`.ai/manifest.yaml`, memory, guidance). Its exit code is red by
 design on the human-owned `control.prepush` finding (`.github/workflows/ai-conformance.yml` only reports it

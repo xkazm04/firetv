@@ -30,7 +30,6 @@ In scope:
   - how `src/proxy.ts` classifies TV, phone and guest callers;
   - pairing (`src/lib/session/pairing.ts`);
   - anything that could expose a learner's records or an engine key.
-- **Death Ride** (`deathride/`): the phone-controller link (`link/`) and the race server the Stick opens on the LAN.
 - The CI workflows in `.github/workflows/`, which build and attest artifacts.
 
 Out of scope:

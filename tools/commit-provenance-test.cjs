@@ -15,7 +15,7 @@ const LEGACY_LANE=['fix: Added pre-merge live-record drift check workflow','','L
 const SESSION=['feat(desk): calculus course path','','Pushed after the gate.','','Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>'].join('\n');
 const STRUCTURED=['fix: Added desk boundary check','','Agent summary:','Added the check.','','Agent-Lane: ascent/loop-20261005160107-xkazm04-firetv','Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>','Ascent-Resolves: 346ff3cb-3fb0-440d-936c-d479023d2cdc'].join('\n');
 const HUMAN=['docs: owner decisions 2026-10-04','','Reviewed with Jane.','','Co-Authored-By: Jane Doe <jane@example.com>'].join('\n');
-const SUBJECT_ONLY='Merge branch deathride/tracks';
+const SUBJECT_ONLY='Merge branch feature/tracks';
 
 test('case 1: the trailer block is the last paragraph, and only when every line is a trailer or a continuation',()=>{
  assert.deepEqual(P.trailersOf(SESSION),[{key:'co-authored-by',value:'Claude Sonnet 5.5 <noreply@anthropic.com>'}]);

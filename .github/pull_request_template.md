@@ -2,7 +2,7 @@
 
 <!-- One or two sentences: the change, and the problem it solves. Link the card, backlog row or issue. -->
 
-**Product touched:** <!-- telestrator (core / tv-app / companion) · Study Desk (desk / uat) · Death Ride · repo tooling -->
+**Product touched:** <!-- telestrator (core / tv-app / companion) · Study Desk (desk / uat) · repo tooling -->
 
 ## Gates run
 

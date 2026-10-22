@@ -42,40 +42,15 @@ Family and Adult modes:
 - [concepts/ADULT-MODE-TAKE-TWO.md](concepts/ADULT-MODE-TAKE-TWO.md)
 - [concepts/ADULT-MODE-IMPLEMENTATION-PLAN.md](concepts/ADULT-MODE-IMPLEMENTATION-PLAN.md)
 
-## Death Ride (deathride/)
-
-- **Start here:** [concepts/DEATH-RIDE-STATUS.md](concepts/DEATH-RIDE-STATUS.md), then [concepts/DEATH-RIDE-PLAN.md](concepts/DEATH-RIDE-PLAN.md).
-- Phases: [PHASE1](concepts/DEATH-RIDE-PHASE1.md), [PHASE2](concepts/DEATH-RIDE-PHASE2.md).
-- Streams (the per-wave session reports are in `concepts/deathride/`):
-  - [abilities](concepts/DEATH-RIDE-ABILITIES.md)
-  - [AI pacing](concepts/DEATH-RIDE-AI-PACING.md)
-  - [drift](concepts/DEATH-RIDE-DRIFT.md)
-  - [HUD](concepts/DEATH-RIDE-HUD.md)
-  - [perf](concepts/DEATH-RIDE-PERF.md)
-  - [regions](concepts/DEATH-RIDE-REGIONS.md)
-  - [tracks](concepts/DEATH-RIDE-TRACKS-MASTER.md)
-  - [progression](concepts/DEATH-RIDE-PROGRESSION.md)
-  - campaign: [directions](concepts/DEATH-RIDE-CAMPAIGN-DIRECTIONS.md), [design v2](concepts/DEATH-RIDE-CAMPAIGN-DESIGN-V2.md), [implementation](concepts/DEATH-RIDE-CAMPAIGN-IMPL.md)
-  - art: [direction v2](concepts/DEATH-RIDE-ART-DIRECTION-V2.md), [story art](concepts/DEATH-RIDE-STORY-ART.md), [campaign art rework 2](concepts/DEATH-RIDE-CAMPAIGN-ART-REWORK2.md)
-  - audio: [philosophy](concepts/DEATH-RIDE-AUDIO.md), [brief](concepts/DEATH-RIDE-AUDIO-BRIEF.md)
-- Narrative:
-  - [narrative/STORY-BIBLE-V2.md](narrative/STORY-BIBLE-V2.md)
-  - [narrative/VOICE-BIBLES.md](narrative/VOICE-BIBLES.md)
-  - [narrative/WRITING-PROCESS.md](narrative/WRITING-PROCESS.md)
-  - research dossiers in `narrative/research/`
-- Backlog: [concepts/DEATH-RIDE-BACKLOG.md](concepts/DEATH-RIDE-BACKLOG.md).
-
 ## Decisions
 
 Decisions that are already settled. Read these before proposing to reopen one.
 
 | Where | What it records |
 |---|---|
-| [../.ai/memory/](../.ai/memory/) | Repo-level decisions and gotchas, one per file, append-only (`supersedes` replaces an older entry): sports direction closed, desk is a prototype, two transports, deathride standalone, the gate rules, worktree and shared-checkout gotchas. |
+| [../.ai/memory/](../.ai/memory/) | Repo-level decisions and gotchas, one per file, append-only (`supersedes` replaces an older entry): sports direction closed, desk is a prototype, two transports, the gate rules, worktree and shared-checkout gotchas. |
 | [PLATFORM-RISK.md](PLATFORM-RISK.md) | Why the TV transport is an interface (listen on LAN, or dial out to a relay). |
 | [USE-CASE-OPTIONS.md](USE-CASE-OPTIONS.md) | Which product directions were scored, and how. |
-| [concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md](concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md), [concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-04.md](concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-04.md) | Death Ride owner verdicts from the review pages. |
-| [narrative/FRAME-CHANGES.md](narrative/FRAME-CHANGES.md) | Death Ride story-frame changes, a decision record for the owner. |
 
 A new decision goes into `.ai/memory/` as the next `NNNN-slug.md` (format in
 [../.ai/memory/README.md](../.ai/memory/README.md)). Write a longer write-up here only when it

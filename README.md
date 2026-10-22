@@ -193,9 +193,3 @@ node tools/gradlew.cjs :core:test    # the core's unit tests
 
 The build needs `local.properties` and a generated fixture clip ([fixtures/README.md](fixtures/README.md)). The
 sports direction it was built for is closed ([docs/USE-CASE-OPTIONS.md](docs/USE-CASE-OPTIONS.md)).
-
-### Death Ride
-
-A Kotlin/libGDX combat racer for Fire TV, in `deathride/`. It is a separate Gradle build with its own wrapper.
-Start at [deathride/README.md](deathride/README.md) and [its status](docs/concepts/DEATH-RIDE-STATUS.md). From
-`deathride/`: `.\gradlew.bat :core:test :link:test`.

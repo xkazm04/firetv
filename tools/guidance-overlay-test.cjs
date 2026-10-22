@@ -3,7 +3,7 @@
  * Gradle build (it has a settings.gradle[.kts]) or its own npm project with a gate (its package.json declares a
  * `test` script) is gated from that directory, so an agent opening it needs a local AGENTS.md that names that gate
  * and defers to the root AGENTS.md (the canonical guidance, `guidance.canonical` in .ai/manifest.yaml), plus a
- * CLAUDE.md that loads it. Today that is desk/ and deathride/. Reads files only: no model, no network, nothing
+ * CLAUDE.md that loads it. Today that is desk/. Reads files only: no model, no network, nothing
  * written. Run directly: node tools/guidance-overlay-test.cjs
  */
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
@@ -34,7 +34,6 @@ test('case 1: the root AGENTS.md is the canonical guidance the overlays defer to
 
 test('case 2: the separate builds are found, so the overlay check cannot pass on an empty list',()=>{
  const dirs=roots.map((r)=>r.dir);
- assert.ok(dirs.includes('deathride'),'deathride/ (its own Gradle build) was not found: '+dirs.join(', '));
  assert.ok(dirs.includes('desk'),'desk/ (its own npm gate) was not found: '+dirs.join(', '));
 });
 

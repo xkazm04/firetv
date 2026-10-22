@@ -12,13 +12,6 @@ updates:
     groups:
       gradle-root-minor-patch: { update-types: [minor, patch] }
 
-  # Death Ride: a separate Gradle build with its own wrapper.
-  - package-ecosystem: gradle
-    directory: /deathride
-    schedule: { interval: weekly, day: monday }
-    groups:
-      gradle-deathride-minor-patch: { update-types: [minor, patch] }
-
   # Study Desk (Next.js, React).
   - package-ecosystem: npm
     directory: /desk
@@ -32,13 +25,6 @@ updates:
     schedule: { interval: weekly, day: monday }
     groups:
       tools-minor-patch: { update-types: [minor, patch] }
-
-  # Death Ride probes.
-  - package-ecosystem: npm
-    directory: /deathride/tools
-    schedule: { interval: weekly, day: monday }
-    groups:
-      deathride-tools-minor-patch: { update-types: [minor, patch] }
 
   # Workflow actions.
   - package-ecosystem: github-actions

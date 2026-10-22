@@ -6,7 +6,7 @@
 # There is no dependency-graph job: GitHub's dependency graph is switched off for this repository, and the
 # dependency-submission action fails on every run while it is ("The Dependency graph is disabled for this
 # repository"). Repository settings are the owner's to change. If the owner enables the graph, restore the job
-# from fc866ead (gradle/actions/dependency-submission@v4, once per Gradle root: "." and "deathride").
+# from fc866ead (gradle/actions/dependency-submission@v4, for the Gradle root ".").
 # gradle.properties pins the operator's local Android Studio JBR, which does not exist on a runner;
 # each job drops that one line from the checkout and uses the JDK that setup-java installs.
 name: supply-chain

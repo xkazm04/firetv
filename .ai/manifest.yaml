@@ -10,7 +10,7 @@ generatedFrom: [settings.gradle.kts, gradle/libs.versions.toml, desk/package.jso
 
 repo:
   name: firetv
-  purpose: "Three Fire TV products driven from a phone: the Telestrator PoC (core/, tv-app/, companion/), the Study Desk Next.js prototype (desk/) and the standalone Death Ride racer (deathride/)"
+  purpose: "Two Fire TV products driven from a phone: the Telestrator PoC (core/, tv-app/, companion/) and the Study Desk Next.js prototype (desk/)"
   languages: [kotlin, typescript, javascript, python]
   archetype: solo
 
@@ -20,7 +20,6 @@ repo:
 # Gradle goes through tools/gradlew.cjs so one command line works on Windows and Linux. Outside the
 # operator's machine, gradle.properties' org.gradle.java.home must be overridden (see AGENTS.md).
 # The tv-app build needs local.properties and the generated fixture clip (fixtures/README.md).
-# deathride/ is a separate Gradle build and is gated from its own directory.
 # evals is the deterministic AI-output subset of test-desk (model roles stubbed, no live call; see
 # docs/AI_HARNESS.md). It needs desk/node_modules. Every capability here runs through doctor --run
 # on demand (.github/workflows/capabilities-pr.yml, manual: issue #12) and weekly (capabilities.yml). CI never

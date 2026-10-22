@@ -8,7 +8,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {test}=require('node:test');
 const REPO=path.resolve(__dirname,'..');
 const FILE=path.join(REPO,'CHANGELOG.md');
-const SECTIONS=['Study Desk','Telestrator','Death Ride','Repo and agent harness'];
+const SECTIONS=['Study Desk','Telestrator','Repo and agent harness'];
 const src=fs.readFileSync(FILE,'utf8');
 const lines=src.split(/\r?\n/);
 
