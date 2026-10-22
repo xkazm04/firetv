@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # Main carried three breaks when the check landed; two are fixed. The one left (engines/meter.ts loads dataDir) is
       # an OWED entry in tools/desk-boundaries.cjs: printed, not failed, until the owner fixes or allows it. Any other
       # break fails, and so does an OWED entry whose break is gone.
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Provenance suite
