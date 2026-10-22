@@ -3704,7 +3704,8 @@ test('TL-12 case 2: Set up on the phone opens the prefs hand-off and navigates n
  assert.deepEqual(a.run,{ask:{kind:'prefs'}},'it opens ask prefs: no nav, no command');
  assert(!v.actions.some(x=>x.label==='Phone setup'),'the old label is gone');
  const src=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
- assert.match(src,/if\(r\.ask\)post\(\{type:"ask\.open",kind:r\.ask\.kind\}\)/,'the TV posts the ask the action names');
+ assert.match(src,/post\(\{type:"ask\.open",kind:r\.ask\.kind\}\)/,'the TV posts the ask the action names');
+ assert.match(src,/post\(\{type:"pair\.for",kind:r\.ask\.kind\}\)/,'with no phone live it asks for the pairing page instead (rules/pairBlock)');
 });
 test('TL-12 case 3: Add a topic, the goal and Pitch a scene open the words hand-off from the TV',()=>{
  const V=view(),adultPrefs={...defaultPreferences({type:'other'}),adultConfirmed:true};

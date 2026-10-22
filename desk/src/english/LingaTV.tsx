@@ -9,6 +9,7 @@ import { runningTake } from "@/lib/english/take";
 import { activeCheck, artOf, focusStep, lingaView, placeWords, NO_UI, progressDots, replyKey, TRY_TAG, tvStatus, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
 import { landingFocus } from "@/tv/landingRows";
 import { keyOf } from "@/tv/keys";
+import { blockedAsk } from "@/lib/rules/pairBlock";
 import { useEnglish } from "./useEnglish";
 import { useEnglishAudio } from "./useEnglishAudio";
 import { ART } from "./art";
@@ -35,13 +36,15 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
   useEffect(()=>{setUi(NO_UI);},[s.learner?.id]);
   const patch=(p:Partial<LingaUi>)=>setUi(u=>({...u,...p}));
   const cmd=(action:string)=>{void run(action);};
+  /** A phone joined for a hand-off the TV could not open alone: the held Select runs once more with the phone counted in (session.pairFor.ready). */
+  const phoneHere=useRef(false),resumedAt=useRef(0);
   /** Runs what the view says an action does: a local step, a focus, a nav, a command. */
   const go=(a:ViewAction)=>{
     const r=a.run;
     if(r.ui)patch(r.ui);
     if(r.focus!==undefined)post({type:"focus",focus:r.focus});
     if(r.nav){patch({menu:false});post({type:"nav",screen:r.nav.screen,...(r.nav.from?{from:r.nav.from}:{focus:r.nav.screen==="linga-talk"?-1:0})});}
-    if(r.ask)post({type:"ask.open",kind:r.ask.kind});
+    if(r.ask){if(!phoneHere.current&&blockedAsk(s,[{type:"ask.open",kind:r.ask.kind}])){post({type:"pair.for",kind:r.ask.kind});return;}post({type:"ask.open",kind:r.ask.kind});}
     // a phrase chosen with the remote answers the turn from the TV: the phone's reply ask closes with it, and is not asked again for this turn
     if(a.id==="pick-phrase"&&s.ask?.kind==="reply"&&!sentAndWorking){answered.current=want;post({type:"ask.cancel",id:s.ask.id});}
     if(r.command)void run(r.command.action,r.command.extra).then(ok=>{if(ok&&r.after)patch(r.after);});
@@ -63,6 +66,13 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
   },[menu,s.ask?.id,s.ask?.kind]);
   const {actions,waiting}=v,focus=s.focus,menuKey=v.footer.find(a=>a.id==="menu")!,repeat=v.footer.find(a=>a.id==="repeat");
   const cancel=(a:ViewAction)=>a.id==="cancel";
+  useEffect(()=>{
+    const pf=s.pairFor;
+    if(!pf?.ready||resumedAt.current===pf.at||s.screen!==pf.screen)return;
+    resumedAt.current=pf.at;post({type:"pair.clear"});
+    const a=actions[Math.max(0,focus)];
+    if(a&&!a.disabled&&!waiting){phoneHere.current=true;try{go(a);}finally{phoneHere.current=false;}}
+  });
   useEffect(()=>{
     const handler=(e:KeyboardEvent)=>{
       if(e.target instanceof HTMLElement&&e.target.closest(".bar"))return;

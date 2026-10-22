@@ -25,6 +25,7 @@ import { ESSAY_FONTS } from "@/essay/fonts";
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
 import { BRAND, TYPE_WORDS, profileRows, locate, onModules, yearOf } from "@/tv/profileRows";
 import { modeOf } from "@/lib/rules/mode";
+import { pairWords } from "@/lib/rules/pairBlock";
 const NAME = BRAND;
 
 function Rail({ s }: { s: Session }) {
@@ -55,6 +56,7 @@ export function Joined({ s }: { s: Session }) {
   </>);
 }
 export function Pair({ s }: { s: Session }) {
+  const pf = s.pairFor, words = pf ? pairWords(pf) : null;
   const url = s.phoneUrl + "?pin=" + s.pin;
   // qrcode's browser build draws the code; generated here so the store stays free of UI.
   const [svg, setSvg] = useState("");
@@ -63,19 +65,20 @@ export function Pair({ s }: { s: Session }) {
     <div className="band band-rule" />
     <div className="content-full" style={{ display: "grid", placeItems: "center", textAlign: "center" }}>
       <div style={{ maxWidth: 1100 }}>
-        <div className="eyebrow">Study Desk · pair a phone</div>
-        {s.joined && <div className="body" data-role="phones-here" style={{ marginTop: 16 }}>{s.phonesLive > 0 ? `${s.phonesLive} ${s.phonesLive === 1 ? "phone" : "phones"} here` : "No phone here"}</div>}
-        <div className="qr" style={{ margin: "40px auto 28px", width: 300, height: 300, background: "#fff", display: "grid", placeItems: "center" }} dangerouslySetInnerHTML={{ __html: svg }} />
+        <div className="eyebrow">{pf ? "Study Desk · needs a phone" : "Study Desk · pair a phone"}</div>
+        {pf && <div data-role="pair-for" data-kind={pf.kind} data-gone={pf.gone}><div className="title" style={{ marginTop: 16 }}>{words!.head}</div><div className="cap-text" style={{ margin: "12px auto 0" }}>{words!.sub}</div></div>}
+        {s.joined && !pf && <div className="body" data-role="phones-here" style={{ marginTop: 16 }}>{s.phonesLive > 0 ? `${s.phonesLive} ${s.phonesLive === 1 ? "phone" : "phones"} here` : "No phone here"}</div>}
+        <div className="qr" style={{ margin: pf ? "28px auto 20px" : "40px auto 28px", width: pf ? 260 : 300, height: pf ? 260 : 300, background: "#fff", display: "grid", placeItems: "center" }} dangerouslySetInnerHTML={{ __html: svg }} />
         <div className="lt" style={{ maxWidth: 560, margin: "0 auto" }}>
           <div className="tag">Code</div>
           <div className="txt" style={{ letterSpacing: ".3em", fontVariantNumeric: "tabular-nums" }}>{s.pin}</div>
         </div>
         <div className="body" style={{ color: "var(--mute)", marginTop: 24 }}>Scan, or open <span style={{ color: "var(--paper)" }}>{s.phoneUrl.replace(/^https?:\/\//, "")}</span> on your phone and type the code.</div>
         {/* paired: the two buttons stand under the address in the column, not on the safe edge where they cut its line (stick pass 2026-10-20) */}
-        {s.joined && <div data-role="pair-actions" style={{ display: "flex", gap: 24, justifyContent: "center", marginTop: 36 }}><button className="btn" data-focused={s.focus !== 1}>Pair another</button><button className="btn" data-focused={s.focus === 1}>Forget every phone</button></div>}
+        {s.joined && !pf && <div data-role="pair-actions" style={{ display: "flex", gap: 24, justifyContent: "center", marginTop: 36 }}><button className="btn" data-focused={s.focus !== 1}>Pair another</button><button className="btn" data-focused={s.focus === 1}>Forget every phone</button></div>}
       </div>
     </div>
-    <div className="ticker"><span>{s.joined && s.phonesLive > 0 ? "Ready for another phone" : "Waiting for a phone"}</span><i>·</i><span>code <b>{s.pin}</b></span><i>·</i><span>same Wi-Fi as the TV</span></div>
+    <div className="ticker"><span>{pf ? words!.out : s.joined && s.phonesLive > 0 ? "Ready for another phone" : "Waiting for a phone"}</span><i>·</i><span>code <b>{s.pin}</b></span><i>·</i><span>same Wi-Fi as the TV</span></div>
   </>);
 }
 

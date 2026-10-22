@@ -121,7 +121,7 @@ const stubNote=(note)=>reg.useProvider('text',{name:'stub',run:async()=>{noted++
 const call=(name,body,role='phone')=>require(src(`app/api/writing/${name}/route.ts`)).POST(new Request(`http://desk/api/writing/${name}`,{method:'POST',headers:{'x-desk-role':role},body:JSON.stringify(body)}));
 const seat=(writingTv,kind='writing')=>{
  store.dispatch({type:'reset'});store.dispatch({type:'profile.draft',patch:{id:'wtv-ema',name:'Ema',type:'high-school',age:16}});store.dispatch({type:'profile.save'});
- globalThis.__desk.session={...store.getSession(),screen:'writing',writingTv};
+ globalThis.__desk.session={...store.getSession(),screen:'writing',writingTv,phonesLive:1};
  if(kind)store.dispatch({type:'ask.open',kind});return store.getSession();
 };
 

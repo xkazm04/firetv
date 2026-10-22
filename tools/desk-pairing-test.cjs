@@ -931,6 +931,7 @@ const SAMPLES={
  'writing.pick':{type:'writing.pick',promptId:'screens'},'writing.clear':{type:'writing.clear'},'writing.busy':{type:'writing.busy',busy:true,by:'ema'},
  'writing.coached':{type:'writing.coached',draft:'a. b.',note:'n',by:'ema'},'writing.finished':{type:'writing.finished',revision:'a. c.',saved:'s',by:'ema'},
  'learner.reread':{type:'learner.reread',by:'ema'},
+ 'pair.for':{type:'pair.for',kind:'paragraph'},'pair.clear':{type:'pair.clear'},
 };
 // seats a learner, or changes nothing a slot holds: these are not owed a place in NEEDS_LEARNER
 const SEATS_OR_CLEARS=new Set(['learner.set','reset']);

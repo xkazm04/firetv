@@ -238,7 +238,7 @@ export type LobbyKey = (typeof LOBBY)[number];
  * page reads none of them (no file under app/phone reads the timer at all).
  */
 export const GUEST_BLANK = {
-  profiles: [], tasks: [], back: undefined, phonesLive: 0,
+  profiles: [], tasks: [], back: undefined, phonesLive: 0, pairFor: undefined,
   focus: 0, view: "band", timer: { left: 25 * 60, running: false, phase: "work" },
   pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
   hint: null, lesson: null, noLesson: false, lessonPaused: false, watch: null,

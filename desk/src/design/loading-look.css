@@ -1,0 +1,23 @@
+/*
+  The wait, in the module's own look (tv/look.ts decides which, tv/LookWait.tsx draws it). It borrows each module's
+  root (.maths-tv, .essay-tv, .linga-tv) so the ground, the lamp and the faces are the module's own; this file only
+  centres one fixed line on them. The paper and neutral grounds are plain: a wait that does not know the module yet
+  must not flash a brand. Sizes are for the 1920x1080 stage and clear the 22 px floor.
+*/
+.look-wait { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+.look-wait .look-line { position: relative; z-index: 1; font-size: 30px; letter-spacing: .08em; }
+/* the paper desk: the landing's warm ground, no theme chrome */
+.look-wait[data-look="paper"] { background: #f6ecd9; color: #5a4632; }
+.look-wait[data-look="paper"] .look-line { font-family: var(--body); font-weight: 600; }
+/* nothing known yet: the stage's own ink, without On Air's grid */
+.look-wait[data-look="neutral"] { background: var(--ink); color: var(--mute); }
+.look-wait[data-look="neutral"] .look-line { font-family: var(--body); font-weight: 500; }
+/* Math Buddy: the lamp on the night desk, the kicker's amber */
+.maths-tv.look-wait .look-line { font-size: 28px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--mb-amber); }
+/* Essay Master: mono caps on the dark ground */
+.essay-tv.look-wait .look-line { font-family: var(--em-mono); font-size: 24px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--em-mute); }
+/* Linga: its cream ground; the arch's own left/top offset (it normally sits in the safe area) is not wanted here */
+.linga-tv.look-wait { left: 0; top: 0; }
+.linga-tv.look-wait .look-line { font-family: var(--lo-serif); font-size: 36px; font-style: italic; letter-spacing: .02em; color: var(--lo-label); }
+@media (prefers-reduced-motion: no-preference) { .look-wait .look-line { animation: look-wait-in .4s .2s both; } }
+@keyframes look-wait-in { from { opacity: 0; } to { opacity: 1; } }
