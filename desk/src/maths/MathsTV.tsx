@@ -437,7 +437,7 @@ function doorCaption(s: Session, door: Door): string {
   if (door === "teach") return "Pick a topic and the desk writes six questions to work on paper, then marks them from a photo.";
   if (door === "prepare") return pathEndsLine(s) ?? PREPARE_DOOR;
   if (s.awaiting === "maths") return "Waiting for the Math Buddy page. Snap it on the phone and it appears here.";
-  if (tonightsSheet(s)) return "The sheet is already on the desk. Enter opens it, one problem at a time.";
+  if (tonightsSheet(s)) return "The sheet is already on the desk. Select opens it, one problem at a time.";
   return "Snap the sheet on the phone and the desk reads it, one problem at a time: hints, never the answer.";
 }
 

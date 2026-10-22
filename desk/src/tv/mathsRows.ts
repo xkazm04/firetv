@@ -120,7 +120,7 @@ export function continueCard(s: Session, now = Date.now()): Continue | null {
   const name = s.practice ? topicName(s.practice.topic) : "";
   if (s.practice && !s.practice.marked) return {
     k: "Still open", t: "Finish the set", d: `${s.practice.items.length} questions on ${name}, not marked yet.`,
-    cap: "Your questions are still on paper. Enter puts them back on screen, ready for the photo.",
+    cap: "Your questions are still on paper. Select puts them back on screen, ready for the photo.",
     go: "practice", pageIx: 0, focus: 0,
   };
   // a marked set is parked on its sheet until it is put away: Enter goes back to the first item to look at
@@ -137,7 +137,7 @@ export function continueCard(s: Session, now = Date.now()): Continue | null {
   const t = tonightsSheet(s, now);
   if (t && t.page.items.length > 0) { const p = t.page; return {
     k: "On the desk", t: "Back to the sheet", d: `${p.title} · ${p.items.length} problems read.`,
-    cap: "Tonight's sheet is still on the desk. Enter opens it at the first problem.",
+    cap: "Tonight's sheet is still on the desk. Select opens it at the first problem.",
     go: "page", pageIx: t.ix, focus: 0,
   }; }
   return null;
