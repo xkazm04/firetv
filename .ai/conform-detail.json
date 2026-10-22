@@ -3198,6 +3198,77 @@
         "at": "2026-10-22T00:41:33.281836+00:00",
         "reason": "reviewer (sonnet): The not-applicable anchor paperScore.ts:65 is the `const perItem = key.map(...)` line, which doesn't show that there is no LLM generator or uncertainty signal; the claim rests on a grep absence and on technique anchors that only show deterministic scoring."
       }
+    },
+    "desk-subjects/maths-calculus/guest-execution-bounding": {
+      "context": "maths-calculus",
+      "subject": "guest-execution-bounding",
+      "bundle": "software-engineering",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T01:00:20.851Z",
+      "techniques": [
+        {
+          "technique": "back-edge-iteration-counter",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/calc2.ts:158 The input-controlled numerical iteration count is validated directly; there are no guest loop forms requiring compiler-inserted counters."
+        },
+        {
+          "technique": "bounded-shadow-backtrace",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/calc-expr.ts:393 The interface refuses unreadable formulas rather than unwinding guest execution frames through internal handlers."
+        },
+        {
+          "technique": "budget-tier-from-observed-output",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/calc-expr.ts:502 This budget bounds one numerical integration algorithm, not optional versus essential guest work."
+        },
+        {
+          "technique": "cost-budget-cooperative-yield",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/calc-expr.ts:397 Evaluation accepts size-limited formulas, with no guest instruction dispatcher or resumable script execution."
+        },
+        {
+          "technique": "count-host-reentry-in-recursion-depth",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/calc-expr.ts:378 The exposed mathematical functions do not invoke guest-defined callbacks, accessors, or recursive functions."
+        },
+        {
+          "technique": "grace-for-the-uninterruptible-host-call",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/calc-expr.ts:379 Formula calls resolve to mathematical primitives, without externally terminated guest execution crossing expensive host-call boundaries."
+        },
+        {
+          "technique": "instruction-budget-for-fuzzing",
+          "verdict": "not-applicable",
+          "evidence": "tools/calc-course-test.cjs:44 The supplied tests exercise explicit mathematical cases, not generated guest programs capable of nontermination."
+        },
+        {
+          "technique": "nested-liveness-ceilings",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/calc-expr.ts:513 Nested work is host-authored numerical refinement under depth and evaluation checks, without foreign guest phases or deferred guest tasks."
+        },
+        {
+          "technique": "one-terminator-many-armed-slots",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/calc-expr.ts:405 Each formula is parsed locally; there are no foreign engine termination handles or armed deadlines to coordinate."
+        },
+        {
+          "technique": "terminate-from-outside-when-you-cannot-count",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/calc-expr.ts:364 The evaluator implements its own arithmetic tree operations rather than handing guest programs to an opaque third-party engine."
+        },
+        {
+          "technique": "uncatchable-limit-errors",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/calc-expr.ts:170 The formula grammar has no guest exception handlers that could catch and retry a host-imposed failure."
+        }
+      ],
+      "withdrawn": {
+        "worker": "83ac061d-b1ef-49b2-8ddb-cffa95f45918",
+        "state": "not-applicable",
+        "at": "2026-10-22T01:00:40.140097+00:00",
+        "reason": "reviewer (sonnet): The not-applicable anchor, calc-expr.ts:141, is a lexer line that rejects unread letters and does not show that guest execution is absent. The context also parses user formulas into a tree and evaluates them with closures (compile, build, evalNode), which is a small guest-expression evaluator. Its b"
+      }
     }
   }
 }
