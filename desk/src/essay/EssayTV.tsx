@@ -40,6 +40,9 @@ export function EssayTV({ s, table }: { s: Session; table: boolean }) {
 // ---------------------------------------------------------------- the shell: brand, chips, caption
 
 /** The header chips: what Menu does here, the focus timer, the phone, the learner. Status, never a stop. */
+/** The phone chip's word: a joined phone that is not here now says so, rather than "Phone joined" over a TV that then asks for one (the pairing page's "Your phone is not here"). */
+const phoneWord = (s: Pick<Session, "joined" | "phonesLive" | "pin">) => !s.joined ? `PIN ${s.pin}` : s.phonesLive === 0 ? "Phone not here" : "Phone joined";
+
 function Top({ s, menu, lit }: { s: Session; menu: string; lit?: boolean }) {
   return (
     <div className="em-top">
@@ -47,7 +50,7 @@ function Top({ s, menu, lit }: { s: Session; menu: string; lit?: boolean }) {
       <div className={`em-pill${s.timer.running ? " run" : ""}`} data-role="essay-chip"><span className="em-lbl" style={{ fontSize: 20 }}>{s.timer.phase === "break" ? "Break" : "Focus"}</span><span className="em-t">{fmt(s.timer.left)}</span></div>
       {essayHandoffOf(s)
         ? <div className="em-pill lit" data-role="essay-onphone">{PHONE}<span>On your phone</span></div>
-        : <div className={`em-pill${lit ? " lit" : ""}`} data-role="essay-chip">{PHONE}<span>{s.joined ? "Phone joined" : `PIN ${s.pin}`}</span></div>}
+        : <div className={`em-pill${lit ? " lit" : ""}`} data-role="essay-chip">{PHONE}<span>{phoneWord(s)}</span></div>}
       <div className="em-pill" data-role="essay-chip"><span className="em-av">{s.learner?.name.charAt(0)}</span><span>{s.learner?.name}</span></div>
     </div>
   );
@@ -196,7 +199,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
           <div className="em-lbl">{adultSay("First paragraph", adult)}</div>
           <h2 className="em-big">Nothing read</h2>
           <div className="em-ways">{["Paste", "Type", "Dictate"].map((w, k) => <div key={w}>{WAYS[k]}<span className="em-lbl">{w}</span></div>)}</div>
-          <div className="em-meta">{PHONE}{s.joined ? "Phone joined" : `PIN ${s.pin}`}</div>
+          <div className="em-meta">{PHONE}{phoneWord(s)}</div>
           <div className="em-door" data-role="essay-plan-door"><span>Start from the pattern</span>{at === "plan" && <span className="em-key">OK</span>}</div>
           {stops.includes("write") && <WriteDoor on={at === "write"} inside />}
         </div>
