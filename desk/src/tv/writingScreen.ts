@@ -38,11 +38,15 @@ export function writingAskOf(s: Pick<Session, "ask" | "screen">): Ask | null {
   return a && a.kind === "writing" && a.screen === "writing" && s.screen === "writing" ? a : null;
 }
 
-/** The three steps of an episode, for the progress line: how many are done. */
+/**
+ * The three steps of an episode, for the progress line: how many are done. Once the note has arrived (stage `coached`)
+ * both Write and Coached are reached, and the revision is the step under way; counting 1 there left Coached hollow on
+ * the TV beside the note it names (the demo film's stick take, 2026-10-22).
+ */
 export const WRITING_STEPS = ["Write", "Coached", "Revised and saved"] as const;
 export function writingDone(s: Pick<Session, "writingTv">): number {
   const ph = writingPhase(s);
-  return ph === "finished" ? 3 : ph === "coached" ? 1 : 0;
+  return ph === "finished" ? 3 : ph === "coached" ? 2 : 0;
 }
 
 /** The label of the phone action: what the phone will be asked for at this step. */
