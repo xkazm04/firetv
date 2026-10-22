@@ -114,7 +114,7 @@ export function Dots({ dots }: { dots: Dot[] }) {
 
 /** The arrow a focused action shows, and the phone badge on an action whose next step is speaking on the phone. */
 export const Arrow = () => <svg className="lo-arrow" viewBox="0 0 30 30" aria-hidden="true" focusable="false"><path d="M7 23L23 7M11 7h12v12" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round"/></svg>;
-export const OnYourPhone = () => <svg className="lo-phone" viewBox="0 0 300 44" aria-hidden="true" focusable="false">
+export const OnYourPhone = () => <svg className="lo-phone" viewBox="0 0 300 44" preserveAspectRatio="xMinYMid slice" aria-hidden="true" focusable="false">
   <rect x="7" y="2" width="22" height="39" rx="5" fill="none" stroke="currentColor" strokeWidth="3"/><path d="M14 7h8M15 35h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><path d="M18 14v11m-4-7v4m8-4v4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
   <text x="298" y="30" textAnchor="end" fill="currentColor">ON YOUR PHONE</text>
 </svg>;

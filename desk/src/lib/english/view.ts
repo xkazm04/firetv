@@ -279,10 +279,18 @@ export function askLine(s: Pick<Session, "ask">): string | null { const k = s.as
 /** The footer line of the Linga TV: what is happening now, else the phone hand-off it waits on, else who leads. */
 export const LEADS_LINE = "The remote leads";
 export function tvStatus(s: Pick<Session, "ask" | "conversation">, o: { waiting: boolean; onCheck: boolean; audio?: string }): string {
+  if (o.waiting && s.conversation?.pending?.startsWith(CUT_COMMAND)) return "Writing your notes…";
   if (o.waiting) return o.onCheck ? "Linga is thinking…" : "Preparing a reply…";
+  if (s.ask?.kind === "words" && s.ask.phase === "sent" && s.ask.screen === "linga-scenes") return "Shaping your scene…";
   if (s.conversation?.capture && !o.onCheck) return "Phone microphone active";
   return askLine(s) || o.audio || LEADS_LINE;
 }
+/** Cut's command id carries this prefix (useEnglish), so every screen can tell notes being written from a turn being prepared. */
+export const CUT_COMMAND = "cut:";
+export const CUT_WAIT = "Take a moment. Linga is writing up to three notes, each quoting your own words.";
+export const PITCH_WAIT = "Take a moment. Linga is turning your idea into a scene and a partner. It starts by itself.";
+/** A pitch the phone sent and the desk is shaping (v2 L3): the words hand-off from the situations screen, marked sent. */
+export function pitchShaping(s: Pick<Session, "ask">): boolean { return s.ask?.kind === "words" && s.ask.phase === "sent" && s.ask.screen === "linga-scenes"; }
 /** TL-12: which command the phone's words panel sends, from the screen that asked: the goal, a topic of the plan, a pitched scene. */
 export type WordsJob = "plan-goal" | "plan-add" | "pitch";
 export function wordsJob(s: Session): WordsJob | null {
@@ -566,6 +574,12 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     tag = `Situation ${i + 1} of ${scenes.length}`; title = scene.name; caption = scene.goal;
     hero = { kind: "scene", kicker: `${scene.partner} · ${scene.minutes} minutes`, title, who: "", said: "", subtitle: skillName(scene.skill), art: scene.id, small: false,
       partner: scene.partner, sentence: sentenceOf(scene.cue), illustration: artOf(scene.id, scene.skill, placeWords(scene)), band: level, minutes: scene.minutes, ...(isPitchId(scene.id) ? { own: true } : {}) };
+    if (pitchShaping(s)) {
+      // the phone sent a pitch (v2 L3): the shaping call takes 10-20 s, so the old card would stand there looking idle
+      tag = "Your own scene"; title = "Shaping your scene"; caption = PITCH_WAIT; captionTag = "Your pitch";
+      hero = { kind: "heading", kicker: "Your own scene", title };
+      actions = [];
+    } else
     actions = [act("start-situation", "Start this situation", scene.goal, cmd("start", { sceneId: scene.id, replace: true })), act("next-situation", "Next situation", `${scenes[(i + 1) % scenes.length].name}.`, { ui: { sceneIndex: (i + 1) % scenes.length } }), ...(modeOf(p, prefs) === "adult" ? [act("ask-pitch", "Pitch a scene", "Describe a scene in your own words on your phone. Linga shapes it and starts it now. Back cancels.", { ask: { kind: "words" } })] : [])];
   } else if (s.screen === "linga-cert") {
     // the plate (Family W10): what cert.ts issued, in words; no count, no score, no digit but the band's
@@ -637,7 +651,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId)!, note = c.cut?.notes[take.note];
     const said = last?.role === "partner" ? last.text : "", again = take.turns.some(t => t.role === "learner");
     const over = takeSpent(take);
-    tag = "Take Two"; captionTag = inFlight ? "Preparing" : over ? "Take done" : "Your line again";
+    tag = "Take Two"; captionTag = inFlight ? "Preparing" : over ? "Take done" : again ? "Your turn" : "Your line again";
     caption = over ? "That was the take. Go back to the notes when you are ready." : inFlight ? "Take a moment. Your partner is preparing the next turn." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : again ? "Carry on on your phone, or go back to the notes." : "Say your line again on your phone.";
     hero = { kind: "scene", kicker: `Take Two · ${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: note ? `“${note.quote}”` : "", art: c.sceneId, small: true, take: true,
       partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill, placeWords(scene)), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes };
@@ -656,12 +670,14 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       // one sentence. Each pin is the learner's own words, quoted exactly (notes.ts); a reading says it is one.
       const at = s.focus >= 0 && s.focus < notes.length ? s.focus : 0, label = (i: number) => notes[i].reading ? "A reading" : NOTE_LABEL[notes[i].kind];
       title = notes.length === 1 ? "A note on your take" : "Notes on your take";
-      caption = notes[at].note; captionTag = s.focus >= notes.length ? "What next" : label(at);
+      // the Take Two actions follow the note pins (below): focused, they light the pin they replay
+      const twoAt = mode === "adult" && s.focus >= notes.length && s.focus < 2 * notes.length ? s.focus - notes.length : -1;
+      caption = notes[at].note; captionTag = twoAt >= 0 ? "Take Two" : s.focus >= notes.length ? "What next" : label(at);
       // Take Two (v2 L4): a note that had its take is marked on its pin, and the take is drawn as a branch from its pin:
       // the focused pin's take, or else the latest one. The verdict is the picture: a struck quote, never a count.
       const takes = c.takes ?? [], taken = (i: number) => takes.find(t => t.note === i), shown = taken(at) ?? takes.at(-1);
       const branch = shown && { pin: shown.note, partner: c.partner, from: shown.turns[0]?.text ?? "", again: shown.turns.find(t => t.role === "learner")?.text ?? "" };
-      hero = { kind: "tape", kicker: `Cut · ${c.title}`, title, pins: notes.map((n, i) => { const t = taken(i); return { label: label(i), quote: n.quote, better: n.better ?? "", note: n.note, ...(t ? { mark: markOf(t.held) } : {}) }; }), selected: s.focus < notes.length ? s.focus : -1, data: counts, ...(branch ? { branch } : {}) };
+      hero = { kind: "tape", kicker: `Cut · ${c.title}`, title, pins: notes.map((n, i) => { const t = taken(i); return { label: label(i), quote: n.quote, better: n.better ?? "", note: n.note, ...(t ? { mark: markOf(t.held) } : {}) }; }), selected: s.focus < notes.length ? s.focus : twoAt, data: counts, ...(branch ? { branch } : {}) };
     } else if (rv?.used && yoursTonight(owned, rv.id, c.id)) {
       // L1: tonight's use made it the learner's own. The picture is their two quotes, the earlier scene's and tonight's,
       // under "Yours now"; no count and no data line, so no digit (the counts are on the phone).
@@ -700,9 +716,11 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId)!;
     const said = last?.role === "partner" ? last.text : "", hasReply = c.turns.some(t => t.role === "learner");
     const thinking = replayThinking(c);
-    caption = thinking ?? (inFlight ? "Take a moment. Your partner is preparing the next turn." : st === "paused" ? "The scene is paused. Resume when you are ready." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : c.cue || (said ? "Answer on your phone: speak or type." : "Preparing a situation that fits your goal."));
+    // Cut in flight (v2 L3): the call writes notes, it does not prepare a turn (useEnglish marks the command "cut:")
+    const cutInFlight = inFlight && !!c.pending?.startsWith(CUT_COMMAND);
+    caption = thinking ?? (cutInFlight ? CUT_WAIT : inFlight ? "Take a moment. Your partner is preparing the next turn." : st === "paused" ? "The scene is paused. Resume when you are ready." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : c.cue || (said ? "Answer on your phone: speak or type." : "Preparing a situation that fits your goal."));
     const help = helpOf(c);
-    captionTag = thinking ? "Thinking" : c.cue ? help.tag : inFlight ? "Preparing" : c.capture || said ? "Your turn" : "Preparing";
+    captionTag = thinking ? "Thinking" : cutInFlight ? "Cut" : c.cue ? help.tag : inFlight ? "Preparing" : c.capture || said ? "Your turn" : "Preparing";
     // The reply that used a taught phrase again: the next line says so, once. Before that the phrase is on no screen.
     const lastLearner = [...c.turns].reverse().find(t => t.role === "learner");
     if (c.review?.used && c.review.usedTurn === lastLearner?.id && st === "your-turn" && !c.cue && !c.capture) {
@@ -793,7 +811,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (job === "pitch" && modeOf(p, prefs) === "adult") phone.push(act("pitch-scene", "Pitch a scene in your own words on the phone", "Linga shapes the scene you describe and starts it now.", cmd("pitch"), { needs: "text" }));
   }
   // a check action the table (activity.ts) would refuse is drawn disabled, wherever it is offered
-  const saved = c && s.screen !== "linga-recap" ? (c.heldFixes ?? []).length : 0;
+  // inside Take Two nothing is recorded, so the scene's count of held fixes is not shown there (v2 L4)
+  const saved = c && s.screen !== "linga-recap" && !take ? (c.heldFixes ?? []).length : 0;
   const tabled = (a: ViewAction): ViewAction => { const x = a.run.command?.action; return lc && !a.disabled && x && isCheckCommand(x) && !checkAccepts(lc, x) ? { ...a, disabled: true } : a; };
   return { screen: menu ? "menu" : picking ? "linga-verdict" : s.screen, home, tag, title, captionTag, baseCaption, caption, error, hero, actions: actions.map(tabled), footer: footer.map(tabled), phone: phone.map(tabled), answer: answerOf(s, lc, c), spoken, audible, waiting, recap, details, saved, savedLine: savedLine(saved) };
 }

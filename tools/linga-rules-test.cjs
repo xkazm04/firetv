@@ -1887,7 +1887,7 @@ test('pitch case 5 (TL-12): the TV offers Pitch a scene in Adult mode only, as a
  assert.equal(first.title,'The dragon at the bank','no plan: the pitched scene leads the list');assert.equal(first.hero.own,true);
  assert.match(V.viewText(first),/Your own scene/);
  const authored=V.lingaView(scenes,{sceneIndex:1});assert.equal(authored.hero.own,undefined,'an authored situation is not marked');
- assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/h\.own\?"Your own scene · ":""/,'the TV card draws the mark');
+ assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/h\.own\?"Your own scene":h\.subtitle/,'the TV card draws the mark');
 });
 
 // ---- v2 L3: Cut and three notes (lib/english/notes.ts cleanNotes; turn.ts "cut")

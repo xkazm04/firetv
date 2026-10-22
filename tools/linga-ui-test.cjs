@@ -98,12 +98,12 @@ async function adultPass(){
  await event({type:'nav',screen:'landing',focus:1});
  await tv.goto(base+'/tv?key='+encodeURIComponent(key));await tv.waitForSelector('[data-role="desk-object"]');await tv.locator('.stage').click({position:{x:20,y:20}});await tv.keyboard.press('Enter');await tv.waitForSelector('.linga-tv');
  await phone.waitForSelector('.linga-phone');
- await check('A1 phone offers Pitch a scene in Adult mode',async()=>{await phone.getByLabel('Pitch a scene').waitFor({timeout:30000});return{pitchBox:true};});
+ await check('A1 phone offers Pitch a scene in Adult mode',async()=>{await phone.getByLabel(/Linga plays the other person/).waitFor({timeout:30000});return{pitchBox:true};});
  const SAIDLINES=['I am a translator and a dragon want open bank account.','He say the bank do not accept fire as money, so I explain him the rule.','Yesterday I go to the manager and I ask for a special agreement.'];
  let pitched=false;
  await check('A2 Pitch a scene: Linga shapes and starts it (real model)',async()=>{
-  await phone.getByLabel('Pitch a scene').fill('A dragon opens a bank account, and I translate for the dragon.');
-  await waitCommand(phone,()=>phone.getByRole('button',{name:'Play this scene',exact:true}).click(),'pitch');
+  await phone.getByLabel(/Linga plays the other person/).fill('A dragon opens a bank account, and I translate for the dragon.');
+  await waitCommand(phone,()=>phone.getByRole('button',{name:'Play it',exact:true}).click(),'pitch');
   const s=await current();assert.ok(s.conversation,'a conversation started');assert.ok(s.conversation.turns.length>=1,'the partner opened');pitched=true;
   await tv.waitForSelector('.linga-speaker');await tv.screenshot({path:path.join(out,'tv-pitch.png')});
   return{sceneId:s.conversation.sceneId,title:s.conversation.title,partner:s.conversation.partner,opening:s.conversation.turns[0]?.text};});
@@ -162,7 +162,7 @@ async function adultPass(){
   assert.notEqual(r.status,200,'a pitch was accepted for a Family-mode learner');return{status:r.status};});
  await check('A10 Family-mode 18+: the phone shows no Pitch box and the situation list has no adult scene',async()=>{
   await event({type:'subject',subject:'english'});await event({type:'nav',screen:'linga',focus:0});await phone.reload();await phone.getByRole('button',{name:'Linga',exact:true}).click();await phone.waitForSelector('.linga-phone');await phone.waitForTimeout(1500);
-  const pitch=await phone.getByLabel('Pitch a scene').count();
+  const pitch=await phone.getByLabel(/Linga plays the other person/).count();
   const opts=await phone.locator('.linga-phone select option').allTextContents();
   assert.equal(pitch,0,'a Pitch box is on the phone');assert.ok(!opts.some(o=>/Different tastes/.test(o)),'the adult scene is in the list: '+JSON.stringify(opts));return{pitchBoxes:pitch,options:opts};});
  skip('A11 spoken reply in Adult','speech is simulated only in the Family pass; no microphone or ASR is driven here');
