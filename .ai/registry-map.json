@@ -2408,7 +2408,11 @@
           "revision": 5,
           "changedAt": "2026-09-26",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "not-applicable",
+          "evidence": "desk/src/app/drop/page.tsx:113 Context and repository searches found no draggable, onDrop or dropzone matches, and the inspected context implements file selection, text submission and tap selection without a spatial placement operation.",
+          "evaluatedAt": "2026-10-22",
+          "evaluatedAgainst": "sha256-b2:31c96c1f832f7148",
+          "evaluatedRevision": 5
         },
         {
           "subject": "native-shell-integration",

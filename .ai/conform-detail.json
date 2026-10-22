@@ -3111,6 +3111,42 @@
           "evidence": "desk/src/essay/EssayTV.tsx:82 The action labels are English, so Czech infinitive and wording conventions do not apply."
         }
       ]
+    },
+    "desk-surfaces/phone-surface/drag-drop": {
+      "context": "phone-surface",
+      "subject": "drag-drop",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T00:20:24.882Z",
+      "worker": "5911ec6e-551d-48e2-a733-ef9035fc2d42",
+      "techniques": [
+        {
+          "technique": "cross-surface-handoff",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/app/phone/panelFor.ts:29 The handoff selects a phone panel from a session ask; no drag crosses surfaces."
+        },
+        {
+          "technique": "drag-lifecycle",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/app/phone/page.tsx:419 The inspected pointer handler immediately selects an item and draws a ring; it does not enter a placement mode."
+        },
+        {
+          "technique": "keyboard-alternatives",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/app/phone/page.tsx:933 The phone exposes commands as buttons; there is no drag operation requiring a keyboard equivalent."
+        },
+        {
+          "technique": "ownership-boundaries",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/app/drop/page.tsx:70 Keeping writing submits text to the desk; it does not assert a new arrangement through a drop."
+        },
+        {
+          "technique": "payload-and-identity",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/app/phone/page.tsx:75 The identity accompanies API answers to session asks; no drag payload or positional drop exists here."
+        }
+      ]
     }
   }
 }
