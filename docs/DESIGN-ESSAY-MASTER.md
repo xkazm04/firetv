@@ -143,6 +143,10 @@ write). The frame words ("For example,", "This shows") are never on a plate and 
 - The TV never asks for typing; Select on a slot says to say it on the phone. No model is called until *Read it*, and *Read it* with a slot empty only moves the caret to the first empty slot.
 - Phase 1 had deferred this (FAMILY-PHASE-1-PLAN.md, *Essay plan slots*); it is built on the Paragraph pattern alone.
 
+## Write from a prompt
+
+The lens home has a third door, the last stop in its list: *Write from a prompt*. With nothing read it sits under *Start from the pattern* in the first-paragraph card; with a paragraph read it sits beneath the last-paragraph card. It uses the same `em-door` look and the one citron focus ring, with the `OK` chip when the lamp is on it. OK opens the Writing screen (a coached paragraph: pick a prompt, write on the phone, one note, revise, saved), and Back from there returns to this stop. Adult mode has no such stop: the prompts are written for the school bands.
+
 ## What Specimen is not
 
 Not a broadcast (no band, no ticker, no red), not a dashboard (no percentages, no marks out of ten),

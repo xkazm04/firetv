@@ -31,7 +31,7 @@ export function WritingTV({ s }: { s: Session }) {
         </div>
         <div style={{ marginTop: 44 }}>
           <span className="cap">{lit ? lit.title : "Writing"}</span>
-          <div className="cap-text" data-role="writing-caption" aria-live="polite">{lit ? lit.ask : writingLine(s)} Select to pick it. Back goes to the desk.</div>
+          <div className="cap-text" data-role="writing-caption" aria-live="polite">{lit ? lit.ask : writingLine(s)} Select to pick it. Back goes to Essay Master.</div>
         </div>
       </main>
     </>);

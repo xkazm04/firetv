@@ -49,7 +49,7 @@ test('landing: Writing has no world of its own - its art draws the empty world, 
  assert.doesNotMatch(worlds,/writing/i,'the paper worlds are perf pass 3\'s: Writing borrows the empty world');
 });
 
-test('Writing screen: the prompt list is the band\'s, Up/Down walk it, Select picks, Back leaves for the landing',()=>{
+test('Writing screen: the prompt list is the band\'s, Up/Down walk it, Select picks, Back leaves for Essay Master',()=>{
  const s=base({screen:'writing',focus:0});
  assert.deepEqual(W.writingStops(s),W.writingPrompts(s).map((p)=>p.id));
  assert.deepEqual(W.writingPrompts(s).map((p)=>p.band),['teen','teen','teen'],'Ema is 16');
@@ -57,7 +57,7 @@ test('Writing screen: the prompt list is the band\'s, Up/Down walk it, Select pi
  assert.deepEqual(ev(s,'down'),[{type:'focus',focus:1}]);assert.deepEqual(ev(s,'right'),[{type:'focus',focus:1}]);
  assert.deepEqual(ev(s,'up'),[],'the first prompt stays');
  assert.deepEqual(ev({...s,focus:1},'select'),[{type:'writing.pick',promptId:W.writingPrompts(s)[1].id},{type:'focus',focus:0}]);
- assert.deepEqual(ev(s,'back'),[{type:'nav',screen:'landing',focus:rows.LANDING_REST}],'Back: the landing, the lamp where it rests (Writing is no stop)');
+ assert.deepEqual(ev(s,'back'),[{type:'nav',screen:'essaytype',focus:5}],'Back: the Essay Master lens home, the lamp on Write from a prompt');
  assert.deepEqual(ev(s,'menu'),[],'Menu on the list does nothing');
  const picked=press(s,'select');
  assert.deepEqual(picked.writingTv,{promptId:'screens',stage:'write'});assert.equal(W.writingPhase(picked),'write');
@@ -74,7 +74,7 @@ test('Writing screen: on the chosen prompt Select hands the typing to the phone 
  assert.deepEqual(ev(asking,'select'),[],'no second ask while one is open');
  assert.deepEqual(ev(asking,'back'),[{type:'ask.cancel',id:asking.ask.id}],'the first Back cancels the hand-off');
  assert.deepEqual(ev(asking,'menu'),[],'Menu does not drop the prompt under an open ask');
- assert.deepEqual(ev(s,'back'),[{type:'nav',screen:'landing',focus:rows.LANDING_REST}],'with none open, Back is the landing');
+ assert.deepEqual(ev(s,'back'),[{type:'nav',screen:'essaytype',focus:5}],'with none open, Back is Essay Master');
  assert.equal(reduce(asking,{type:'nav',screen:'landing',focus:rows.LANDING_REST}).ask,null,'leaving the screen closes the ask');
  // Another prompt: the list again, the lamp on the prompt that was chosen; Menu is the same
  assert.deepEqual(ev({...s,focus:1},'select'),[{type:'writing.clear'},{type:'focus',focus:0}],'the lamp back on the prompt\'s own row');

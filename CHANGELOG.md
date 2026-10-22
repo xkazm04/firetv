@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Essay Master's lens home has a door to Writing (Write from a prompt), so the screen has a way in again; Back from Writing returns there. A pair screen opened with a stale back of pair now leaves for the desk, and an empty maths page says what to do next. A new rules suite, tools/flow-audit-test.cjs, holds the keymap to no dead ends (Back leaves every screen, Back comes home, every screen has a door).
 - TV sizing research and audit ([docs/concepts/TV-BREAKPOINTS-2026-10-22.md](docs/concepts/TV-BREAKPOINTS-2026-10-22.md)): the 1920x1080 stage fit and 5% safe area already match the Fire TV, Android TV and Tizen guidance at 720p, 1080p, 4K and ultrawide; the two Essay TV labels that sat at 18 px are now 22 px.
 - Essay Master is the one writing tile on the landing: Writing is no longer a second tile beside it (it read as a duplicate). The Writing screen stays in code, off the desk, until it is folded into Essay Master.
 - Writing: the finish step re-reads the revision with the same code that picked the coaching focus. A revision that only moves spaces or punctuation is refused, the episode stores whether the focus now holds, and the history line says so ("coached on evidence; the revision now gives evidence" or "still needs evidence") instead of claiming a revision it did not check.

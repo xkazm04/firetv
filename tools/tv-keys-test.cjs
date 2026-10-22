@@ -171,8 +171,8 @@ test('essay 1: essayOwns names exactly the Essay Master screens (the lenses, the
 
 test('essay 2: the lens home is four lenses top to bottom, and Right reaches the last paragraph only when there is one',()=>{
  const {tvKey,lensStops}=keys();
- assert.equal(lensStops(session({screen:'essaytype'})).length,5,'nothing read: the plan is the fifth stop, no card to reach');
- assert.deepEqual(lensStops(essay({screen:'essaytype'})).at(-1),'last');
+ assert.equal(lensStops(session({screen:'essaytype'})).length,6,'nothing read: the plan is the fifth stop, no card to reach, and Write from a prompt the sixth');
+ assert.deepEqual(lensStops(essay({screen:'essaytype'})).slice(-2),['last','write']);
  const first=session({screen:'essaytype',subject:'essay',focus:0});
  assert.equal(focusAfter(first,tvKey(first,'down',LOCAL)),1);
  assert.equal(focusAfter(first,tvKey(first,'up',LOCAL)),0,'Up on the first lens stays');
@@ -184,7 +184,7 @@ test('essay 2: the lens home is four lenses top to bottom, and Right reaches the
  const card=essay({screen:'essaytype',focus:4});
  assert.equal(focusAfter(card,tvKey(card,'left',LOCAL)),ESSAY_TYPES.findIndex(t=>t.id==='argument'),'Left from the card lands on the lens it was read through');
  assert.deepEqual(tvKey(card,'select',LOCAL).events,[{type:'essay.at',n:null},{type:'nav',screen:'forensic',focus:0}],'the card opens its reading on the first faulty sentence');
- assert.deepEqual(tvKey(card,'down',LOCAL).events,[],'Up/Down do nothing on the card');
+ assert.deepEqual(tvKey(card,'up',LOCAL).events,[],'Up does nothing on the card; Down reaches Write from a prompt');
  assert.deepEqual(tvKey(s,'menu',LOCAL).events,[{type:'nav',screen:'playbook',focus:0,from:'essaytype'}]);
  assert.deepEqual(tvKey(s,'back',LOCAL).events,[{type:'nav',screen:'landing',focus:2}],'Back leaves the app for the landing, on Essay Master');
 });
@@ -768,13 +768,14 @@ test('plan case 5: Read it with all three written pushes one analyse call of the
 
 test('plan case 7 (keys): with nothing read the lens home ends in plan, and Select there opens an empty plan on the chosen lens',()=>{
  const {tvKey,lensStops}=keys();
- assert.equal(lensStops(session({screen:'essaytype'})).at(-1),'plan');
+ assert.deepEqual(lensStops(session({screen:'essaytype'})).slice(-2),['plan','write']);
  assert.equal(lensStops(essay({screen:'essaytype'})).includes('plan'),false,'a paragraph read: the last card takes the place');
  const home=session({screen:'essaytype',subject:'essay',focus:4,essayType:'argument'});
  assert.deepEqual(tvKey(home,'select',LOCAL).events,[{type:'essay.plan',lens:'argument'},{type:'nav',screen:'essayplan',focus:0,from:'essaytype'}]);
  const bottom=session({screen:'essaytype',subject:'essay',focus:3});
  assert.equal(focusAfter(bottom,tvKey(bottom,'down',LOCAL)),4,'Down from the last lens reaches the plan');
  assert.equal(focusAfter(home,tvKey(home,'up',LOCAL)),3,'Up returns to the last lens');
+ assert.equal(focusAfter(home,tvKey(home,'down',LOCAL)),5,'Down from the plan reaches Write from a prompt');
  assert.deepEqual(tvKey(session({screen:'essaytype',subject:'essay',focus:4}),'select',LOCAL).events[0],{type:'essay.plan',lens:ESSAY_TYPES[0].id},'no lens chosen: the first');
 });
 
@@ -1406,4 +1407,25 @@ test('optimize 2026-10-21: every screen of the store is drawn on the TV for ever
  // the check bites: the same page with one case gone leaves that screen blank for every subject
  const seeded=undrawn(page.replace(/case "break": return [^\n]*\n/,''));
  assert.deepEqual(seeded.gaps,['break/maths','break/english','break/essay']);
+});
+
+test('essay write door (2026-10-22): Write from a prompt is the last stop of the lens home; Down reaches it, Select opens Writing, Back from Writing returns to it, Adult mode has none',()=>{
+ const {tvKey,lensStops}=keys();
+ const bottom=session({screen:'essaytype',subject:'essay',focus:3});
+ assert.equal(focusAfter(bottom,tvKey(bottom,'down',LOCAL)),4,'nothing read: Down from the last lens is the plan');
+ const door=session({screen:'essaytype',subject:'essay',focus:5});
+ assert.equal(lensStops(door)[5],'write');
+ assert.equal(focusAfter(door,tvKey(door,'up',LOCAL)),4,'Up returns to the plan');
+ assert.deepEqual(tvKey(door,'select',LOCAL).events,[{type:'nav',screen:'writing',focus:0,from:'essaytype'}]);
+ const fin=session({screen:'essaytype',subject:'essay',focus:5,writingTv:{promptId:'screens',stage:'finished'}});
+ assert.deepEqual(tvKey(fin,'select',LOCAL).events,[{type:'writing.clear'},{type:'nav',screen:'writing',focus:0,from:'essaytype'}],'a finished episode starts over');
+ assert.deepEqual(tvKey(session({screen:'writing',subject:'essay'}),'back',LOCAL).events,[{type:'nav',screen:'essaytype',focus:5}],'Back from Writing: the lens home, the lamp on the door');
+ const read=essay({screen:'essaytype',focus:4});
+ assert.equal(focusAfter(read,tvKey(read,'down',LOCAL)),5,'a paragraph read: Down from the last card reaches the door');
+ const readDoor=essay({screen:'essaytype',focus:5});
+ assert.equal(focusAfter(readDoor,tvKey(readDoor,'up',LOCAL)),4,'Up returns to the last card');
+ assert.deepEqual(tvKey(session({screen:'essaytype',subject:'essay',focus:5}),'back',LOCAL).events,[{type:'nav',screen:'landing',focus:tvKey(session({screen:'essaytype',subject:'essay',focus:5}),'back',LOCAL).events[0].focus}],'Back from the door still leaves for the landing');
+ const adult=session({screen:'essaytype',subject:'essay',profiles:[{id:'ema',name:'Ema',type:'adult',age:40,system:'uk',modules:['maths','english','essay']}]});
+ const {isAdultHere}=keys();
+ if(isAdultHere(adult))assert.equal(lensStops(adult).includes('write'),false,'Adult mode: no school prompts, no door');
 });

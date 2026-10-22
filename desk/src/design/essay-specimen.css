@@ -112,6 +112,11 @@
 .essay-tv .em-door { display: flex; align-items: center; gap: 16px; margin-top: 20px; padding-top: 22px; border-top: 2px solid var(--em-hair); font-size: 34px; font-weight: 600; }
 .essay-tv .em-door svg { width: 62px; height: 36px; }
 .essay-tv .em-door .em-key { margin-left: auto; }
+.essay-tv .em-wdoor { margin-top: 18px; padding: 22px 28px; border: 2px solid var(--em-hair); border-radius: 4px; transition: border-color .3s, box-shadow .3s, transform .3s; }
+.essay-tv .em-wdoor.in { margin: 18px -28px -28px; border-width: 2px 0 0; border-radius: 0; padding: 22px 28px 26px; }
+.essay-tv .em-wdoor.is-focused { border-color: var(--em-bone); box-shadow: 0 0 0 4px var(--em-cit); transform: translateX(-6px); }
+.essay-tv .em-wdoor.in.is-focused { box-shadow: inset 0 0 0 4px var(--em-cit); transform: none; }
+.essay-tv .em-wdoor.is-focused .em-key { color: var(--em-bone); border-color: var(--em-bone); }
 .essay-tv .em-panel.is-focused .em-door .em-key { color: var(--em-bone); border-color: var(--em-bone); }
 .essay-tv .em-ways { display: flex; gap: 30px; margin-top: 30px; }
 .essay-tv .em-ways div { display: flex; flex-direction: column; align-items: center; gap: 10px; }

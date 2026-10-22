@@ -1,5 +1,7 @@
 # Writing on the TV (2026-10-21)
 
+> **Update 2026-10-22 (door).** Writing's door is now Essay Master's lens home: the last stop, "Write from a prompt" (under "Start from the pattern" with nothing read, beneath the last-paragraph card otherwise; not offered in Adult mode, whose prompts are the school bands'). OK there opens this screen; Back from Writing returns to that stop. `tools/flow-audit-test.cjs` holds it.
+
 > **Update 2026-10-22.** Writing is no longer a landing stop: Essay Master is the one writing tile on the desk (two tiles side by side read as a duplicate). The screen, its D-pad keys, the `writing` hand-off and the routes below stay in code, off the desk, until Writing is folded into Essay Master. Where this doc says Writing lies on the landing, read it as that earlier design.
 
 The operator's item (1) at the 13:20 to 14:00 say: the Writing screen inside /tv is the top priority, and the demo film depends on it. It closes walk blocker **B1** of [STICK-DEADLINE-WALK-2026-10-21.md](STICK-DEADLINE-WALK-2026-10-21.md) (rows 28 to 31). The stick loads only /tv, and nothing on the remote could drive /writing.

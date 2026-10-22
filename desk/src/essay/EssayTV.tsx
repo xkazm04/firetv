@@ -119,7 +119,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const standings = lensStandings(s.history, s.writing);
   const totals = writingTotals(standings, s.history);
   const stops = lensStops(s), at = stopAt(stops, focus);
-  const lens = at && at !== "last" && at !== "plan" ? at : null;
+  const lens = at && at !== "last" && at !== "plan" && at !== "write" ? at : null;
   const a = s.essay;
   const rows = useRef<HTMLDivElement>(null);
   const commit = useCommit(s.status);
@@ -153,6 +153,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
     : refused ? refused
     : essayHandoffLine(s) ? { label: "On your phone", text: essayHandoffLine(s) as string }
     : at === "plan" ? { label: "Start from the pattern", text: withEnglish(adult ? "Write the message yourself: one sentence for each slot, on the phone." : "Write the paragraph yourself: one sentence for each slot, on the phone.") }
+    : at === "write" ? { label: "Write from a prompt", text: "Pick a prompt here, write one paragraph on the phone, get one note." }
     : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: summaryLine(a) }
     : lens && chosen ? { label: `${lens.name} · chosen`, text: withEnglish(adult ? "Paste, type or dictate one message or email on the phone." : "Paste, type or dictate one paragraph on the phone.") }
     : lens ? { label: `${lens.name} reads`, text: withEnglish(adultSay(lens.promise, adult)) } : { label: "Essay Master", text: "Choose a lens." };
@@ -189,19 +190,25 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
       </div>
     </section>
     <aside className="em-side">
-      {a ? <LastParagraph a={a} focused={at === "last"} curtain={curtainOn(s)} /> : (
+      {a ? <><LastParagraph a={a} focused={at === "last"} curtain={curtainOn(s)} />{stops.includes("write") && <WriteDoor on={at === "write"} />}</> : (
         <div className={`em-panel${at === "plan" ? " is-focused" : ""}`} data-role="essay-specimen-card" data-focused={at === "plan"}>
           <div className="em-lbl">{adultSay("First paragraph", adult)}</div>
           <h2 className="em-big">Nothing read</h2>
           <div className="em-ways">{["Paste", "Type", "Dictate"].map((w, k) => <div key={w}>{WAYS[k]}<span className="em-lbl">{w}</span></div>)}</div>
           <div className="em-meta">{PHONE}{s.joined ? "Phone joined" : `PIN ${s.pin}`}</div>
           <div className="em-door" data-role="essay-plan-door"><span>Start from the pattern</span>{at === "plan" && <span className="em-key">OK</span>}</div>
+          {stops.includes("write") && <WriteDoor on={at === "write"} inside />}
         </div>
       )}
       <EssayCabinet s={s} />
     </aside>
     <div className="em-caption"><Caption label={cap.label} text={cap.text} /></div>
   </>);
+}
+
+/** The door to Writing: a prompt, one paragraph on the phone, one note. Inside the first-paragraph card, or beneath the last one's. */
+function WriteDoor({ on, inside }: { on: boolean; inside?: boolean }) {
+  return <div className={`em-door em-wdoor${inside ? " in" : ""}${on ? " is-focused" : ""}`} data-role="essay-write-door" data-focused={on}><span>Write from a prompt</span>{on && <span className="em-key">OK</span>}</div>;
 }
 
 /**

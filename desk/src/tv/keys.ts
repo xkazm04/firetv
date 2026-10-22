@@ -157,8 +157,15 @@ export const LENS_STOPS = ESSAY_TYPES;
  * Essay Master's home: the four lenses, then the last paragraph's card (Right) when a paragraph has been read - or, with
  * nothing read yet, the way to start from the pattern (Down from the last lens): the plan.
  */
-export type LensStop = (typeof ESSAY_TYPES)[number] | "last" | "plan";
-export function lensStops(s: Session): LensStop[] { return s.essay ? [...LENS_STOPS, "last"] : [...LENS_STOPS, "plan"]; }
+export type LensStop = (typeof ESSAY_TYPES)[number] | "last" | "plan" | "write";
+/**
+ * The last stop is the door to Writing ("Write from a prompt", 2026-10-22: Writing has no landing tile, this is its way in).
+ * Adult mode has none: the prompts are the school-age bands' (lib/writing/prompts), none is written for an adult writer.
+ */
+export function lensStops(s: Session): LensStop[] {
+  const head: LensStop[] = s.essay ? [...LENS_STOPS, "last"] : [...LENS_STOPS, "plan"];
+  return isAdultHere(s) ? head : [...head, "write"];
+}
 
 /** The plan screen's stops, top to bottom: one per slot, then Read it and Back. Select on a slot asks for the sentence on the phone. */
 export type PlanStop = "slot" | "read" | "back";
@@ -389,6 +396,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       // an app opened at a desk no one has sat down at asks who first: its work is somebody's (store.ts NEEDS_LEARNER)
       if (k === "select") {
         if (!s.learner) { o.nav("learner", 0, "landing"); return; }
+        // (dead since 2026-10-22: writingOn is false; Essay Master's lens home is Writing's door now)
         // Writing is no Subject: it opens its own screen, on the episode left there; a finished one starts over at the list
         if (at === "writing") { if (writingPhase(s) === "finished") o.ev({ type: "writing.clear" }); o.nav("writing", 0); return; }
         o.ev({ type: "subject", subject: at }); openWaiting(s, at, o);
@@ -401,7 +409,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   // the chosen prompt is Another prompt.
   writing: (s, k, _, o) => {
     const stops = writingStops(s), at = stopAt(stops, s.focus), ph = writingPhase(s), ask = writingAskOf(s);
-    if (k === "back") { if (ask?.phase === "open") { o.ev({ type: "ask.cancel", id: ask.id }); return; } o.nav("landing", landingFocus(s, "writing")); return; }
+    if (k === "back") { if (ask?.phase === "open") { o.ev({ type: "ask.cancel", id: ask.id }); return; } o.nav("essaytype", Math.max(0, lensStops(s).indexOf("write"))); return; }
     if (k === "up" || k === "left") o.move(stops.length, -1);
     if (k === "down" || k === "right") o.move(stops.length, 1);
     const another = () => { const ix = writingPrompts(s).findIndex((p) => p.id === s.writingTv?.promptId); o.ev({ type: "writing.clear" }); o.focus(Math.max(0, ix)); };
@@ -416,7 +424,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   pair: (s, k, _, o) => {
     // paired (TL-3): two buttons under the code - Pair another (stop 0, the code stays up) and Forget every phone (stop 1)
     if (s.joined) { if (k === "down") o.focus(1); if (k === "up") o.focus(0); if (k === "select" && s.focus === 1) o.ev({ type: "phones.forget" }); }
-    if (k === "back") { const to = s.back ?? "landing"; o.nav(to, to === "landing" ? landingFocus(s, "phone") : 0); }
+    if (k === "back") { const to = s.back && s.back !== "pair" ? s.back : "landing"; o.nav(to, to === "landing" ? landingFocus(s, "phone") : 0); }
   },
   // the desk is home: Select or Back rests the lamp there, as choosing a learner does (store.ts learner.set). With no one
   // seated, Select does what the screen says, "choose who is studying": the learner cards (stick pass 2026-10-20)
@@ -555,14 +563,23 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   // the lenses top to bottom; Right reaches the last paragraph's card, Select there opens its reading
   essaytype: (s, k, _, o) => {
     const stops = lensStops(s), at = stopAt(stops, s.focus);
-    if (at === "last") {
+    const side = stops.includes("plan") ? "plan" : "last"; // the side column's first stop
+    if (at === "write") {
+      // Writing's door: Up returns to the stop above it; Select opens the Writing screen (a finished episode starts over)
+      if (k === "up") o.focus(stops.indexOf(side));
       if (k === "left") o.focus(readingLens(s));
+      if (k === "select") { if (writingPhase(s) === "finished") o.ev({ type: "writing.clear" }); o.nav("writing", 0, "essaytype"); }
+    } else if (at === "last") {
+      if (k === "left") o.focus(readingLens(s));
+      if (k === "down" && stops.includes("write")) o.focus(stops.indexOf("write"));
       if (k === "select") { o.ev({ type: "essay.at", n: null }); o.nav("forensic"); }
     } else if (at === "plan") {
       if (k === "up") o.focus(LENS_STOPS.length - 1);
+      if (k === "down" && stops.includes("write")) o.focus(stops.indexOf("write"));
       if (k === "select") { const lens = LENS_STOPS.find((t) => t.id === s.essayType) ?? LENS_STOPS[0]; o.ev({ type: "essay.plan", lens: lens.id }); o.nav("essayplan", 0, "essaytype"); }
     } else if (at) {
-      if (k === "down" && stops.includes("plan") && stops.indexOf(at) === LENS_STOPS.length - 1) { o.focus(stops.indexOf("plan")); return; }
+      if (k === "down" && stops.indexOf(at) === LENS_STOPS.length - 1 && stops.includes("plan")) { o.focus(stops.indexOf("plan")); return; }
+      if (k === "down" && stops.indexOf(at) === LENS_STOPS.length - 1 && stops.includes("write")) { o.focus(stops.indexOf("write")); return; }
       if (k === "down") o.move(LENS_STOPS.length, 1); if (k === "up") o.move(LENS_STOPS.length, -1);
       if (k === "right" && stops.includes("last")) o.focus(stops.indexOf("last"));
       if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen — paste or dictate the paragraph on the phone` }); o.ev({ type: "ask.open", kind: "paragraph" }); }
