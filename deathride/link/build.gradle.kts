@@ -7,7 +7,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("io.ktor:ktor-server-cio:2.3.12")
     implementation("io.ktor:ktor-server-websockets:2.3.12")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
 }
 
 tasks.register("printTestClasspath") { dependsOn("testClasses"); doLast { println("CP=" + sourceSets.test.get().runtimeClasspath.asPath) } }
