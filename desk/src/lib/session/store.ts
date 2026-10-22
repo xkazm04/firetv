@@ -312,6 +312,15 @@ export interface Ask {
 }
 
 /**
+ * The phone-blocked intent (docs/concepts/PHONE-BLOCKER-PAIRING-2026-10-22.md): the TV asked for a hand-off while no phone was
+ * live, so it showed the pairing page instead. It remembers the screen and the lamp the learner was on, the hand-off they
+ * wanted (`kind`) and whether a phone had been paired before (`gone`: it is not here now). `ready` is set when a phone is
+ * live again: the session is back on `screen` at `focus` and the TV asks once to run the Select again (then pair.clear).
+ * It lives only while the pairing page is up (or `ready`); a nav elsewhere drops it.
+ */
+export interface PairFor { screen: Screen; focus: number; kind: AskKind; gone: boolean; at: number; ready?: boolean }
+
+/**
  * The Writing episode on the TV (docs/concepts/TV-WRITING-SCREEN-2026-10-21.md): the prompt the learner picked, then the
  * paragraph the phone sent and its one coaching note, then the revision and the line the save wrote. The steps are
  * lib/writing/episode's; only /api/writing/coach and /api/writing/finish move it past `write` (they are the server's
@@ -328,6 +337,8 @@ export interface Session {
   phonesLive: number;
   /** The hand-off the TV has open, or null (TL-5). */
   ask: Ask | null;
+  /** A hand-off the TV wanted while no phone was live: the pairing page is up for it (see PairFor). */
+  pairFor?: PairFor;
   /** Who is at the desk; null on a fresh desk until someone sits down (the place card asks "Whose desk?"). */
   learner: AtDesk | null;
   profiles: Profile[]; draft: Profile | null;
@@ -434,6 +445,8 @@ export type Event =
   | { type: "phone.presence"; live: number } | { type: "phones.forget" }
   // TL-5: the TV opens a hand-off (ask.open, TV only), the TV or a phone cancels it, the desk marks it answered (ask.sent, server only)
   | { type: "ask.open"; kind: AskKind; detail?: Ask["detail"] } | { type: "ask.cancel"; id: string } | { type: "ask.sent"; id: string }
+  // the TV wanted a hand-off with no phone live: the pairing page, remembering the screen and the wish; pair.clear drops it once resumed
+  | { type: "pair.for"; kind: AskKind } | { type: "pair.clear" }
   // Writing on the TV: the TV picks a prompt and clears the episode; the writing routes alone raise busy, coached and finished
   // (they are not in SHAPES, so no screen or phone can post them); `by` is the learner the work was for
   | { type: "writing.pick"; promptId: string } | { type: "writing.clear" }
@@ -487,6 +500,7 @@ const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { ty
   "topic.open": { topic: f.str, stay: maybe(f.bool) }, walk: { ix: f.int }, "practice.clear": {},
   status: { text: f.str, essayRefused: maybe(f.bool) }, "session.end": {}, reset: {},
   "ask.open": { kind: (v) => typeof v === "string" && ASK_KINDS.has(v), detail: maybe(askDetailOk) }, "ask.cancel": { id: f.name }, "ask.sent": { id: f.name },
+  "pair.for": { kind: (v) => typeof v === "string" && ASK_KINDS.has(v) }, "pair.clear": {},
   "writing.pick": { promptId: f.name }, "writing.clear": {},
 };
 /** Every type a screen or phone may post at all (the door's own list): what a caller's allowlist is checked against. */
@@ -767,7 +781,24 @@ function stamped(n: Session, now = Date.now()): Session {
 const TICK_MAX = 60;
 const tickOk = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v) && v > 0 && v <= TICK_MAX;
 
-export function reduce(s: Session, e: Event): Session { return stamped(step(dayed(s, e), e)); }
+export function reduce(s: Session, e: Event): Session { return stamped(settlePair(step(dayed(s, e), e))); }
+
+/**
+ * A phone is live again while the pairing page is up for a hand-off: the session goes back to the screen and the lamp the
+ * learner was on, and `ready` tells the TV to run its Select once more. No phone live: nothing changes.
+ */
+function resumePair(n: Session, joined = false): void {
+  const pf = n.pairFor;
+  if (!pf || pf.ready || n.screen !== "pair" || (n.phonesLive <= 0 && !joined)) return;
+  n.screen = pf.screen; n.focus = pf.focus; n.pairFor = { ...pf, ready: true };
+}
+/** pairFor lives while the pairing page is up (or resumed on the screen it names): any other place drops it. */
+function settlePair(n: Session): Session {
+  const pf = n.pairFor;
+  if (!pf || (pf.ready ? n.screen === pf.screen : n.screen === "pair")) return n;
+  const { pairFor: _gone, ...rest } = n;
+  return rest;
+}
 
 function step(s: Session, e: Event): Session {
   if (!s.learner && NEEDS_LEARNER.has(e.type)) return s;
@@ -777,10 +808,15 @@ function step(s: Session, e: Event): Session {
     // a join shows the Joined screen only to a TV waiting to be paired (no phone yet, or on the code, or already there);
     // mid-session a phone slips in silently - the learner's page stays. A draft in progress owns the screen: never the profile
     case "join": { const waiting = !s.joined || s.screen === "pair" || s.screen === "joined"; n.joined = true;
+      // a join for a wanted hand-off goes back to the screen at once (the bench's Fake phone has no stream); a returning phone does so on phone.presence
+      if (s.pairFor && s.screen === "pair") { resumePair(n, true); break; }
       if (waiting && s.screen !== "profile") { n.screen = "joined"; n.focus = 0; } break; }
     // a phone forgetting the desk drops its own cookie (the session route); the desk itself does not change
     case "leave": return s;
-    case "phone.presence": n.phonesLive = Math.max(0, Math.floor(e.live)); break;
+    case "phone.presence": n.phonesLive = Math.max(0, Math.floor(e.live)); resumePair(n); break;
+    case "pair.for": { if (s.phonesLive > 0 || s.screen === "pair") return s;
+      n.pairFor = { screen: s.screen, focus: s.focus, kind: e.kind, gone: s.joined, at: Date.now() }; n.ask = null; n.screen = "pair"; n.focus = 0; n.back = s.screen; break; }
+    case "pair.clear": { if (!s.pairFor) return s; delete n.pairFor; break; }
     case "phones.forget": return s;
     // the code on the TV turns over once a phone has joined with it (the session route raises this): a new pin, never the one just used
     case "pin.turn": { let pin = drawPin(); while (pin === s.pin) pin = drawPin(); n.pin = pin; break; }
@@ -1001,7 +1037,7 @@ function load(): Session {
     // a session.json written while the session carried the desk's notes on the learner: they are not the session's
     delete j.memory;
     const log = "log" in j ? keptLog(j.log) : undefined;
-    return settleOwners({ ...fresh(), ...j, ...(log === undefined ? {} : { log }), profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phonesLive: 0, ask: null, status: namesPhone(String(j.status ?? "")) ? "" : j.status ?? "", phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
+    return settleOwners({ ...fresh(), ...j, ...(log === undefined ? {} : { log }), profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phonesLive: 0, ask: null, pairFor: undefined, status: namesPhone(String(j.status ?? "")) ? "" : j.status ?? "", phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
   } catch (e) { return setAside(`its repair failed (${e instanceof Error ? e.message : e})`); }
 }
 /** The name an unusable session.json still has to be put aside as, when load() could not rename it; the store takes it over at startup. */

@@ -10,7 +10,7 @@ import type { Event, Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
 import { EssayTV } from "@/essay/EssayTV";
 import { WritingTV } from "@/writing/WritingTV";
-import { essayOwns, keyOf, landingAt, landingStops, lingaOwns, mathsOwns, paperOwns, runStep, tvKey, LOCAL, type LandingStop, type Local } from "@/tv/keys";
+import { essayOwns, keyOf, landingAt, landingStops, lingaOwns, mathsOwns, paperOwns, resumeStep, runStep, tvKey, LOCAL, type LandingStop, type Local } from "@/tv/keys";
 import { LandingTV, ZOOM_MS } from "@/landing/LandingTV";
 import { MathsTV } from "@/maths/MathsTV";
 import { LingaTV } from "@/english/LingaTV";
@@ -161,6 +161,17 @@ export default function TV() {
     };
     addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey);
   }, [post, apply]);
+
+  // a phone joined for a wish the TV could not carry out alone (session.pairFor.ready): run the held Select once (tv/keys resumeStep)
+  const resumed = useRef(0);
+  useEffect(() => {
+    const pf = s?.pairFor;
+    if (!s || !pf?.ready || resumed.current === pf.at || notTheTV(s) || lingaOwns(s)) return;
+    const step = resumeStep(s, local.current);
+    if (!step) return;
+    resumed.current = pf.at;
+    void runStep(step, { post, call, apply });
+  }, [s, post, apply]);
 
   return (
     <div className="bench" ref={bench}>

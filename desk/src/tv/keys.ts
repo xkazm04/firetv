@@ -22,6 +22,7 @@ import { LANDING_REST, essayWaiting, landingApps, landingAt, landingFocus, landi
 import { writingAskOf, writingPhase, writingPrompts, writingStops } from "@/tv/writingScreen";
 import { recapStops, ownReading } from "@/tv/recapRows";
 import { pastPathEnd, prepareStops } from "@/tv/prepareRows";
+import { blockedAsk } from "@/lib/rules/pairBlock";
 import { paperStopCount, paperTypeAt, paperView } from "@/tv/paperRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
@@ -415,7 +416,10 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   },
   pair: (s, k, _, o) => {
     // paired (TL-3): two buttons under the code - Pair another (stop 0, the code stays up) and Forget every phone (stop 1)
-    if (s.joined) { if (k === "down") o.focus(1); if (k === "up") o.focus(0); if (k === "select" && s.focus === 1) o.ev({ type: "phones.forget" }); }
+    // up for a wish the phone must answer (pairFor): no forget here, and Back gives the wish up on the screen and lamp it came from
+    const pf = s.pairFor;
+    if (s.joined && !pf) { if (k === "down") o.focus(1); if (k === "up") o.focus(0); if (k === "select" && s.focus === 1) o.ev({ type: "phones.forget" }); }
+    if (k === "back" && pf && !pf.ready) { o.nav(pf.screen, pf.focus); return; }
     if (k === "back") { const to = s.back ?? "landing"; o.nav(to, to === "landing" ? landingFocus(s, "phone") : 0); }
   },
   // the desk is home: Select or Back rests the lamp there, as choosing a learner does (store.ts learner.set). With no one
@@ -767,14 +771,29 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
  * to post in order, the calls to fire after them, and a patch for `local` to apply at once.
  * Under Linga (lingaOwns) it returns an empty step - LingaTV owns those keys.
  */
-export function tvKey(s: Session, key: Key, local: Local = LOCAL): Step {
+export function tvKey(s: Session, key: Key, local: Local = LOCAL, opts: { phoneHere?: boolean } = {}): Step {
   const o = new Out(s);
   if (lingaOwns(s)) return { events: [], calls: [], local: {} };
   // Play/Pause is the clock everywhere the clock is on screen; the lesson keeps it for the video, and the landing draws no clock.
   if (key === "play" && s.screen === "landing") return { events: [], calls: [], local: {} };
   if (key === "play" && s.screen !== "lesson") o.ev({ type: s.timer.running ? "timer.pause" : "timer.start" });
   else KEYMAP[s.screen]?.(s, key, local, o);
+  // a hand-off no phone can answer is the pairing page for that wish, not an ask nobody sees (rules/pairBlock): the whole step waits for the phone
+  const want = opts.phoneHere ? null : blockedAsk(s, o.events);
+  if (want) return { events: [{ type: "pair.for", kind: want }], calls: [], local: {} };
   return { events: o.events, calls: o.calls, local: o.local };
+}
+
+/**
+ * A phone joined for a wish (session.pairFor.ready): the Select that was held runs again, as if a phone had been here. The
+ * session is already back on the screen and the lamp it was pressed on. Null when there is nothing to resume.
+ */
+export function resumeStep(s: Session, local: Local = LOCAL): Step | null {
+  const pf = s.pairFor;
+  if (!pf?.ready || s.screen !== pf.screen) return null;
+  const { pairFor: _p, ...rest } = s;
+  const step = tvKey(rest as Session, "select", local, { phoneHere: true });
+  return { events: [{ type: "pair.clear" }, ...step.events], calls: step.calls, local: step.local };
 }
 
 /** The effects tvKey leaves to its caller. */
