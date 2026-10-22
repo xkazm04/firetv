@@ -7,7 +7,7 @@ design_doc: docs/DESIGN-ON-AIR.md       # the shell's; each app has its own, see
 screens_source: docs/STUDY-DESK-SCREENS.md   # rewritten from the code 2026-09-25; the code wins where they differ (see Screens)
 executor: opus
 stops_per_session: 3
-commit_format: "cx(S<n>): <screen> - <what changed>"   # no commit gate in this repo (checked 2026-09-25)
+commit_format: "<feat|fix>(desk-tv): <what changed> (cx S<n>)"   # no commit gate (re-checked 2026-10-22); the repo writes conventional types, so cx( is not used; trailers Co-Authored-By + Agent-Lane for an unattended run
 ---
 
 # /cx overlay - firetv (Study Desk)
@@ -113,3 +113,9 @@ plus a re-capture of the changed screen compared against the acceptance line in 
   defect; the ticker or the status line should say what the desk is doing.
 - **Withholding is the product** - any proposal that would put the answer, a verb form, or a
   rewritten sentence on screen is withdrawn on sight.
+
+## Skill improvement log
+
+- 2026-10-22: a full-flow ("no dead ends") walk is proved cheaper and stronger by a pure keymap audit than by driving screens: `tools/flow-audit-test.cjs` (Back leaves every screen, Back reaches the landing under every stale `back`, every screen has a live door) found the orphaned Writing screen and a stale-back loop that the captures could not. When `complete` walks a TV product, build that test at the first stop and hold the gate to it.
+- 2026-10-22: a capture executor that seeds server-only state into `session.json` needs the full shape (a Linga conversation without `preferences` crashed `lingaView`); give it the rules tests' fixtures to copy, not the Session type.
+- 2026-10-22: in-flight agents land on main mid-run; merge main into the walk's branch before the gate and before reporting their topics as open or closed.
