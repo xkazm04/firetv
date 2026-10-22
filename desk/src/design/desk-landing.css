@@ -167,8 +167,10 @@
 
 /* ----- Select: the world opens ----- */
 .pp .pp-zoom { position: absolute; inset: 0; z-index: 8; pointer-events: none; }
-.pp .pp-flood { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, var(--pp-hi) -20%, var(--pp-deep) 45%, var(--pp-deepLo) 100%); animation: pp-flood .52s cubic-bezier(.5, 0, .2, 1) backwards; }
-@keyframes pp-flood { from { clip-path: circle(0 at var(--ox) var(--oy)); } to { clip-path: circle(2400px at var(--ox) var(--oy)); } }
+/* the curtain covers the whole stage on its first frame: it grew as a clip-path circle, which the stick draws on the main
+   thread at a few frames a second, so the film showed 3-4 frames of a half-grown curtain over the old landing; the picture
+   and the name still settle in over it (docs/concepts/STICK-PERFORMANCE-2026-10-22.md) */
+.pp .pp-flood { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, var(--pp-hi) -20%, var(--pp-deep) 45%, var(--pp-deepLo) 100%); }
 .pp .pp-zscene { position: absolute; left: 0; top: 0; overflow: visible; }
 .pp .pp-zc { position: absolute; left: 0; right: 0; top: 0; height: 1080px; text-align: center; color: #fff8ea; }
 .pp .pp-halo { position: absolute; left: 610px; top: 60px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 236, 170, .34), rgba(255, 236, 170, 0) 66%); }
