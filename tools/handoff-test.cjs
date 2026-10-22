@@ -287,3 +287,23 @@ test('(f) a too-long body (413) and bad JSON (400) answer before any ask change;
  const tv=await english(failingTurn(o.id),'tv');assert.equal(tv.status,409);
  assert.equal(JSON.stringify(store.getSession().ask),frozen,'a TV command never marked the ask sent, so nothing re-opens');
 });
+
+// ---- craft-1: a phone that leaves the askId out never reaches the engine or the learner save, on any route that does either
+test('craft-1: worked and memory (TV-only work) refuse a phone with no askId, a wrong one, or even the id of an open ask: 409 NOT_ASKING, nothing runs',async()=>{
+ const open=seatAt('practice',{practice:PRACTICE()},'answers');const frozen=JSON.stringify(store.getSession());
+ for(const name of ['worked','memory']){
+  for(const body of [{topic:'fractions'},{},{topic:'fractions',askId:'not-the-ask'},{topic:'fractions',askId:open.ask.id}]){
+   const r=await call(name,body);assert.equal(r.status,409,`${name} ${Object.keys(body)}`);assert.equal((await r.json()).error,'The TV is not asking for that now.');
+   assert.equal(JSON.stringify(store.getSession()),frozen,`${name}: nothing ran, the session is untouched`);
+  }
+ }
+ assert.equal(store.getSession().jobs?.teach??null,null);assert.equal(store.getSession().jobs?.memory??null,null);
+});
+test('craft-1: every result route refuses a phone body with no askId even when no ask is open at all (409, session untouched)',async()=>{
+ for(const [name,spec] of Object.entries(ROUTES)){
+  spec.setup?.();
+  seatOpen(spec.screen,null,spec.extra?.());const frozen=JSON.stringify(store.getSession());
+  const r=await call(name,spec.body);assert.equal(r.status,409,`${name} with no ask open`);assert.equal((await r.json()).error,'The TV is not asking for that now.');
+  assert.equal(JSON.stringify(store.getSession()),frozen,`${name}: untouched`);
+ }
+});

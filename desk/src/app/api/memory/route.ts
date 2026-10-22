@@ -16,6 +16,7 @@ import { NextResponse } from "next/server";
 import { getSession, type Session } from "@/lib/session/store";
 import { writeMemory } from "@/lib/desk/memory";
 import { refused, runJob } from "@/lib/desk/job";
+import { withPhoneAsk } from "@/lib/session/phoneAsk";
 import { eveningOf, type Evening } from "@/tv/recapRows";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +27,9 @@ function evening(s: Session, who: string, topic: string | undefined, tonight: Ev
   return createHash("sha256").update(JSON.stringify([who, topic ?? null, items, s.log.hints, tonight.essay, tonight.linga])).digest("hex").slice(0, 16);
 }
 
-export async function POST() {
+/** Only the TV writes the evening's memory (tv/keys.ts, on leaving the desk): no ask answers it, so a phone is always turned back at the ask door (TL-11). */
+export function POST(req: Request) { return withPhoneAsk(req, [], () => post()); }
+async function post() {
   const s = getSession(), who = s.learner;
   // an evening no one sat at teaches the desk nothing about anyone
   if (!who) return NextResponse.json({ lines: [], asked: false });

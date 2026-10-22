@@ -9,9 +9,12 @@ import { teachTopic } from "@/lib/desk/worked";
 import { hasWorked } from "@/lib/library/worked";
 import { learnerSystem } from "@/lib/rules/school";
 import { refused, runJob } from "@/lib/desk/job";
+import { withPhoneAsk } from "@/lib/session/phoneAsk";
 
 export const dynamic = "force-dynamic";
-export async function POST(req: Request) {
+/** Only the TV opens a worked lesson (tv/keys.ts): no ask answers it, so a phone is always turned back at the ask door (TL-11). */
+export function POST(req: Request) { return withPhoneAsk(req, [], () => post(req)); }
+async function post(req: Request) {
   const body = (await req.json().catch(() => null)) as { topic?: unknown } | null;
   const topic = body && typeof body === "object" ? body.topic : undefined;
   if (!hasWorked(topic)) return NextResponse.json({ error: "There is no worked lesson for that topic yet." }, { status: 400 });
