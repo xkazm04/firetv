@@ -40,6 +40,7 @@ What it did not change: the first frame after the key (one 250-280 ms draw that 
 
 - Pausing the loops only during a lamp move.
 - Stills for the heroes' static parts (staircase, figure, key board, paragraph stack, page, pencil): GPU raster per move stayed about 600 ms. Reverted.
+- Flattening the leaving world (22 Oct, evening): (1) keying each world by its id so the old world's rastered DOM is reused instead of re-mounted as the leaving set; (2) animating the leaving set as one element with its layers static. Longest gap over 2 lamp moves, 3 runs each, same stick: base 191-281 ms, reuse 215-249 ms, one-element 270-277 ms. No gain; not kept.
 - A crossfade instead of the sliding layers, no stagger, no `will-change`, no title, no grain, no shadows: each within noise of the 250-300 ms start-of-move freeze.
 
 ## Left open
