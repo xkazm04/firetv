@@ -3345,6 +3345,47 @@
           "evidence": "tools/kpi-measure.cjs:213 Distinguishes missing data as null/no-reading from a measured zero."
         }
       ]
+    },
+    "desk-surfaces/landing/render-mount-pipeline": {
+      "context": "landing",
+      "subject": "render-mount-pipeline",
+      "bundle": "software-engineering",
+      "state": "not-applicable",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T21:44:36.542Z",
+      "worker": "9ad9c13e-6cca-40c2-b08d-4cfa0acfb665",
+      "techniques": [
+        {
+          "technique": "blueprint-then-mount",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/landing/themes/blueprint/drawings.tsx:22 Drawings produce ordinary React/SVG trees; the standard explicitly excludes layout managed by a document runtime or declarative toolkit."
+        },
+        {
+          "technique": "edge-sorted-incremental-mount",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/design/desk-landing.css:19 This fixed stage has no scrolling viewport that incrementally acquires or releases render units."
+        },
+        {
+          "technique": "mount-binders-versus-attach-binders",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/landing/themes/blueprint/Blueprint.tsx:112 The decorative animation uses React effect cleanup; there is no custom binder system or independently detached retained-host lifecycle."
+        },
+        {
+          "technique": "mount-references-across-features",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/landing/themes/blueprint/Blueprint.tsx:251 The app drawings remain in the mapped React tree and change transform or opacity; no visibility window competes with focus or transitions over mountedness."
+        },
+        {
+          "technique": "preempt-and-continue-shared-computation",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/landing/themes/blueprint/Blueprint.tsx:167 Title fitting reads browser layout inside useLayoutEffect, rather than joining a background layout computation with checkpoints and multiple waiter classes."
+        },
+        {
+          "technique": "recycle-by-content-type",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/tv/landingRows.ts:18 The landing displays a bounded set of app objects, with no heterogeneous scrolling item stream or recycling pool to key by leaf content type."
+        }
+      ]
     }
   }
 }
