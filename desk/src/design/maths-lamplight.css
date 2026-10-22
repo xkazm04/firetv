@@ -290,7 +290,8 @@
 @keyframes mb-caret { 50% { transform: translateY(-5px); } }
 
 /* ================= the side: the slip, and the taped card that is the caption slot ================= */
-.maths-tv .mb-side { position: absolute; left: 1290px; top: 152px; width: 534px; height: 770px; z-index: 5; display: flex; flex-direction: column; animation: mb-rise .3s var(--mb-ease) both; }
+.maths-tv .mb-side { position: absolute; left: 1290px; top: 152px; width: 534px; height: 770px; z-index: 5; display: flex; flex-direction: column; }
+/* no entrance of its own: the side is drawn in the same frame as the paper beside it, not 0.3 s behind it (film blink audit 2026-10-23: the page drew in two passes) */
 .maths-tv .mb-khead { display: flex; align-items: center; justify-content: space-between; height: 52px; }
 .maths-tv .mb-stitle { text-wrap: balance; font-family: var(--mb-serif); font-size: 54px; line-height: 1.04; font-weight: 560; letter-spacing: -.02em; font-variation-settings: "opsz" 144, "SOFT" 100; margin-top: 14px; color: var(--mb-cream-hi); }
 .maths-tv .mb-stitle em, .maths-tv .mb-title em, .maths-tv .mb-htitle em { font-style: italic; color: var(--mb-amber); }
