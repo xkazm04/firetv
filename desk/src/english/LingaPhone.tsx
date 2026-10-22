@@ -92,7 +92,7 @@ function ReplyPanel({ s, run, busy }: { s: Session; run: Run; busy: boolean }) {
 const WORDS: Record<WordsJob, { title: string; label: string; hint: string; max: number; send: string }> = {
   "plan-goal": { title: "Your topics", label: "What would you like to practise in English?", hint: "A situation you want to handle, or something you enjoy talking about. Any language is fine.", max: TOPIC_ASK_MAX, send: "Send" },
   "plan-add": { title: "Your topics", label: "Add a topic in your own words", hint: "Ordering food on holiday, talking about football…", max: TOPIC_ASK_MAX, send: "Send" },
-  pitch: { title: "Pitch a scene", label: "Pitch a scene", hint: "A dragon opens a bank account, and I translate…", max: PITCH_MAX, send: "Send" },
+  pitch: { title: "Pitch a scene", label: "Where are you, and who do you meet? Linga plays the other person.", hint: "A job interview at a fancy restaurant, and I know nothing about wine…", max: PITCH_MAX, send: "Play it" },
 };
 
 /** The words the TV asked for: one text field and Send, for a topic, the goal or a pitched scene. */
