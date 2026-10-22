@@ -3147,6 +3147,57 @@
           "evidence": "desk/src/app/phone/page.tsx:75 The identity accompanies API answers to session asks; no drag payload or positional drop exists here."
         }
       ]
+    },
+    "desk-subjects/maths-school/generator-uncertainty-scoring": {
+      "context": "maths-school",
+      "subject": "generator-uncertainty-scoring",
+      "bundle": "llm-observability",
+      "state": "unknown",
+      "evaluatedAt": "2026-10-22",
+      "evaluatedTs": "2026-10-22T00:41:08.767Z",
+      "techniques": [
+        {
+          "technique": "compare-gates-at-matched-coverage",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/paperScore.ts:81 This gate checks measured mapping accuracy against a reference key; it does not compare confidence scorers or recalibrated gates."
+        },
+        {
+          "technique": "generator-vs-itself",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/school.ts:2817 The school item generator uses seeded procedural randomness, not repeated model responses whose disagreement measures uncertainty."
+        },
+        {
+          "technique": "probability-calibration-is-not-agreement",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/paperScore.ts:75 Percentages describe observed reference-match counts, not model confidence or estimated correctness probabilities."
+        },
+        {
+          "technique": "score-source-ensembling",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/paperScore.ts:79 Aggregation sums empirical counts across papers; it does not combine judge and generator-confidence scores."
+        },
+        {
+          "technique": "score-source-kinds",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/school.ts:24 The scoring question has a mechanically computed truth condition, which the standard explicitly excludes from generator-uncertainty substitution."
+        },
+        {
+          "technique": "scorer-cost-class",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/school.ts:4 This school generator makes no serving-model call whose probabilities or additional samples could supply an uncertainty scorer."
+        },
+        {
+          "technique": "stated-distribution-over-closed-labels",
+          "verdict": "not-applicable",
+          "evidence": "desk/src/lib/rules/school.ts:2244 Closed verdicts and school slip labels are selected by mathematical rules, not by a model making a closed-set decision."
+        }
+      ],
+      "withdrawn": {
+        "worker": "a6965f06-e5d3-40f7-8639-b5ca57b9f9e3",
+        "state": "not-applicable",
+        "at": "2026-10-22T00:41:33.281836+00:00",
+        "reason": "reviewer (sonnet): The not-applicable anchor paperScore.ts:65 is the `const perItem = key.map(...)` line, which doesn't show that there is no LLM generator or uncertainty signal; the claim rests on a grep absence and on technique anchors that only show deterministic scoring."
+      }
     }
   }
 }
