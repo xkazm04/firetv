@@ -17,6 +17,8 @@ import { LingaTV } from "@/english/LingaTV";
 import { spokenLine } from "@/lib/desk/spoken";
 import { useDeskSound } from "@/tv/useDeskSound";
 import { LingaTestBar } from "@/english/LingaTestBar";
+import { LookWait } from "@/tv/LookWait";
+import { LOOK_KEY, READING_LINE, WAIT_LINE, lookOfWait, lookToRemember, parseLook, type Look } from "@/tv/look";
 
 /**
  * The bench's display. "tv" is the television: a 1920×1080 stage, what the device, the captures and the tests see.
@@ -70,6 +72,15 @@ export default function TV() {
       if ("speechSynthesis" in window) window.speechSynthesis.cancel();
     }
   }, [s?.screen, s?.subject]);
+
+  // the look a wait is drawn in (tv/look.ts): the module the TV last drew, remembered by this browser, so the first paint before the session
+  // arrives is that module's ground and not On Air's grid; neutral until it is known
+  const [look, setLook] = useState<Look>("neutral");
+  useEffect(() => { try { setLook(parseLook(localStorage.getItem(LOOK_KEY))); } catch { /* storage refused: the wait stays neutral */ } }, []);
+  useEffect(() => {
+    const next = lookToRemember(s, look); if (next === look) return;
+    setLook(next); try { localStorage.setItem(LOOK_KEY, next); } catch { /* not remembered */ }
+  }, [s?.screen, s?.subject]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [display, setDisplay] = useState<Display>("tv");
   useEffect(() => {
@@ -192,9 +203,9 @@ export default function TV() {
         <div className="stage" ref={stage} tabIndex={0} data-display={shown}>
           {!connected && <div role="alert" data-role="link-lost" style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 50, padding: "18px 0", textAlign: "center", fontSize: 40, background: "#7A1E12", color: "#FFE3DD" }}>Lost the desk link. Reconnecting.</div>}
           {/* The landing (the desk), Essay Master (Specimen) and Math Buddy (Lamplight) draw the whole stage, no On Air grid or band; each keeps the 5% margins itself */}
-          {s && notTheTV(s) ? <NotThisTV /> : s && s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && (mathsOwns(s) || paperOwns(s)) ? <MathsTV s={s} busy={loc.busy} ask={loc.prepareAsk} /> : <>
+          {!s ? <LookWait look={look} line={WAIT_LINE[look]} /> : notTheTV(s) ? <NotThisTV /> : lookOfWait(s) ? <LookWait look={lookOfWait(s)!} line={READING_LINE} /> : s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : (mathsOwns(s) || paperOwns(s)) ? <MathsTV s={s} busy={loc.busy} ask={loc.prepareAsk} /> : <>
             <div className="grid" />
-            <div className="safe">{s ? lingaOwns(s) ? <LingaTV s={s} post={postOnly} voice={voice}/> : <ScreenFor s={s} /> : null}</div>
+            <div className="safe">{lingaOwns(s) ? <LingaTV s={s} post={postOnly} voice={voice}/> : <ScreenFor s={s} />}</div>
           </>}
         </div>
       </div>
