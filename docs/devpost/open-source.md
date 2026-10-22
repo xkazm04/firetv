@@ -13,7 +13,7 @@ The fields of the Open Source mini-challenge form.
 
 `firetv` is the whole source of Study Desk, a homework desk on the Fire TV that the TV leads and a phone
 assists ([description.md](description.md)), together with the two other products built in the same
-repository: a telestrator where a phone draws on a paused video frame, and the Death Ride racer
+repository: a telestrator where a phone draws on a paused video frame
 ([AGENTS.md](../../AGENTS.md), "What this repository is"). The parts most reusable by other Fire TV builders:
 
 - **`stick-app/`**: a dependency-free Fire OS app that wraps a LAN web page in a fullscreen WebView and
@@ -35,8 +35,8 @@ repository: a telestrator where a phone draws on a paused video frame, and the D
 - The key bridge maps each Android key code to the name a web page already handles, dispatches a `keydown`
   and `keyup`, and reads `defaultPrevented` back; the mapping and the address rules are plain JVM code with
   JUnit tests (`stick-app/src/test/kotlin/dev/studydesk/stick/KeyBridgeTest.kt`, `DeskTest.kt`).
-- The desk keeps its decisions in code and its models behind one provider seam, so its 104 rules suites
-  (`tools/*-test.cjs`) run with no live model call ([AGENTS.md](../../AGENTS.md), "Commands" and "Constraints").
+- The desk keeps its decisions in code and its models behind one provider seam, so its 100 rules suites
+  (`npm run test:rules`, 2,583 tests) run with no live model call ([AGENTS.md](../../AGENTS.md), "Commands" and "Constraints").
 - Every on-device claim is recorded with its method and captures in `docs/concepts/STICK-*.md`.
 
 ## Why
@@ -48,5 +48,5 @@ friction log and the feature requests are written so the next builder does not h
 
 ## Before submitting
 
-- The repository needs an open-source licence file that GitHub detects. There was none when this was
-  written (2026-10-21); it is outside this folder's scope.
+- Licence: the repository has an MIT `LICENSE`, and GitHub detects it (`gh api repos/xkazm04/firetv/license`
+  returned `MIT` on 2026-10-22).
