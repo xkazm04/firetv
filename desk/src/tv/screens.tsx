@@ -113,7 +113,7 @@ export function Units({ s, focus }: { s: Session; focus: number }) {
 
 // ---- T3 Page ----
 export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" }) {
-  const p = s.pages[s.pageIx]; if (!p) return <main className="content-full"><div className="title">No page yet</div></main>;
+  const p = s.pages[s.pageIx]; if (!p) return <main className="content-full"><div className="title">No page yet</div><div className="cap-text" data-role="page-empty" style={{ marginTop: 24 }}>Back to Tonight, then choose I have homework and snap the sheet on the phone.</div></main>;
   const it = p.items[s.itemIx];
   const W = 1728, H = 520, scale = W / p.w;
   const bh = it ? (it.band[1] - it.band[0]) * scale : 0;

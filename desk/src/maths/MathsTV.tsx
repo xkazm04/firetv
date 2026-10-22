@@ -1007,7 +1007,7 @@ export function PageScreen({ s, focus = 0 }: { s: Session; focus?: number }) {
   const p = s.pages[s.pageIx];
   const it = p?.items[s.itemIx];
   const pan = usePaper(`${s.pageIx}|${s.itemIx}|${p?.items.length}|${s.view}`);
-  if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No page yet" /></h1></>;
+  if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No page yet" /></h1><p className="mb-cap" data-role="maths-empty" style={{ position: "static", width: "auto", minHeight: 0, marginTop: 26, fontSize: 32 }}>Back to Tonight, then choose I have homework and snap the sheet on the phone.</p></>;
   const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
   const line = handoffLine(s) ?? (s.reading ? "Reading the page… the problems appear here all at once when it is read."
     : read?.phase === "failed" ? failedReadLine("maths", read.retry)
