@@ -988,7 +988,7 @@ test('optimize 2026-10-21: a set written by code says it is ready without a time
  });
  test('ruling 10-22 (a2): the phone client\'s own retry body (kind practice + the session\'s jobs.practice.id) runs a failed practice set, and the client source sends exactly that',async()=>{
   const src_=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
-  assert(src_.includes('call("/api/session/retry", kind === "practice" ? { kind, jobId: s?.jobs?.practice?.id } : { kind })'),'phone retry sends jobId for practice only');
+  assert(src_.includes('call("/api/session/retry", kind === "practice" || kind === "teach" ? { kind, jobId: s?.jobs?.[kind]?.id } : { kind })'),'phone retry sends jobId for practice and teach only');
   await failedSet();
   stubText({items:()=>({items:STATED})});
   const s=store.getSession();const body={kind:'practice',jobId:s.jobs?.practice?.id};
@@ -1017,6 +1017,48 @@ test('optimize 2026-10-21: a set written by code says it is ready without a time
   stubText({items:()=>({items:STATED})});
   assert.equal((await asRole('/api/session/retry','tv',{kind:'practice'})).status,200);
   assert.equal(store.getSession().jobs.practice.phase,'done');
+ });
+
+ // ---- operator ruling 10-22 extended to worked (teach): the seated learner's phone retries its own failed lesson; craft-1 still refuses a direct phone POST ----
+ const W=require(src('lib/desk/worked.ts'));const realTeach=W.teachTopic;
+ const failedTeach=async()=>{blank();stubText({other:()=>({idea:'It is about sharing equally.'})});W.teachTopic=async()=>{throw new Error('boom');};
+  assert.equal((await post('worked',{topic:'frac-equivalent'})).status,502);W.teachTopic=realTeach;return store.getSession().jobs.teach;};
+ const patchTeach=(patch)=>{const s=store.getSession();globalThis.__desk.session={...s,jobs:{...s.jobs,teach:{...s.jobs.teach,...patch}}};};
+ test('ruling 10-22 (e): a phone retry naming the seated learner\'s own failed worked lesson (teach) runs it, and the client body does exactly that',async()=>{
+  try{
+   const job=await failedTeach();assert.equal(job.phase,'failed');assert.equal(job.by,store.getSession().learner.id,'the job is the seated learner\'s');
+   const s=store.getSession();const body={kind:'teach',jobId:s.jobs?.teach?.id};
+   const r=await asRole('/api/session/retry','phone',body);
+   assert.equal(r.status,200);assert.equal(store.getSession().jobs.teach.phase,'done');assert(store.getSession().worked,'the lesson is on the desk');
+  }finally{W.teachTopic=realTeach;}
+ });
+ test('ruling 10-22 (f): a phone teach retry with no id, an unknown id, another learner\'s, an unowned, running, ready or final job, or no one seated is 409 NOT_ASKING; a direct phone POST /api/worked is still 409',async()=>{
+  let asked=0;
+  try{
+   const job=await failedTeach();
+   W.teachTopic=async(...a)=>{asked++;return realTeach(...a);};
+   const refuse=async(url,body,why)=>{const r=await asRole(url,'phone',body);assert.equal(r.status,409,why);assert.equal((await r.json()).error,NOT_ASKING,why);};
+   await refuse('/api/worked',{topic:'frac-equivalent'},'direct phone POST');
+   await refuse('/api/session/retry',{kind:'teach'},'no id');
+   await refuse('/api/session/retry',{kind:'teach',jobId:'nope'},'unknown id');
+   await refuse('/api/session/retry',{kind:'practice',jobId:job.id},'the teach id under another kind');
+   patchTeach({by:'someone-else'});await refuse('/api/session/retry',{kind:'teach',jobId:job.id},'another learner\'s job');
+   patchTeach({by:undefined});await refuse('/api/session/retry',{kind:'teach',jobId:job.id},'job with no owner');
+   patchTeach({by:job.by,phase:'running'});await refuse('/api/session/retry',{kind:'teach',jobId:job.id},'running job');
+   patchTeach({phase:'done'});await refuse('/api/session/retry',{kind:'teach',jobId:job.id},'ready job');
+   patchTeach({phase:'failed',retry:false});await refuse('/api/session/retry',{kind:'teach',jobId:job.id},'job that will not change');
+   patchTeach({retry:true});store.dispatch({type:'reset'});await refuse('/api/session/retry',{kind:'teach',jobId:job.id},'no seated learner');
+   assert.equal(asked,0,'no lesson was written');
+  }finally{W.teachTopic=realTeach;}
+ });
+ test('ruling 10-22 (g): the TV\'s worked POST and the TV\'s teach retry work as before (no jobId needed)',async()=>{
+  try{
+   blank();stubText({other:()=>({idea:'It is about sharing equally.'})});
+   assert.equal((await asRole('/api/worked','tv',{topic:'frac-equivalent'})).status,200);
+   const job=await failedTeach();assert.equal(job.phase,'failed');
+   assert.equal((await asRole('/api/session/retry','tv',{kind:'teach'})).status,200);
+   assert.equal(store.getSession().jobs.teach.phase,'done');
+  }finally{W.teachTopic=realTeach;}
  });
 }
 

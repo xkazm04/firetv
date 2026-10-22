@@ -12,7 +12,7 @@ import { refused, runJob } from "@/lib/desk/job";
 import { withPhoneAsk } from "@/lib/session/phoneAsk";
 
 export const dynamic = "force-dynamic";
-/** Only the TV opens a worked lesson (tv/keys.ts): no ask answers it, so a phone is always turned back at the ask door (TL-11). */
+/** Only the TV opens a worked lesson (tv/keys.ts): no ask answers it, so a direct phone POST is turned back at the ask door (TL-11). A phone reaches this route only through /api/session/retry, naming the seated learner's own failed teach job (operator ruling 10-22), which runs it in-process without the phone role. */
 export function POST(req: Request) { return withPhoneAsk(req, [], () => post(req)); }
 async function post(req: Request) {
   const body = (await req.json().catch(() => null)) as { topic?: unknown } | null;
