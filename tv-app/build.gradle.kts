@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "dev.telestrator.tv"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "dev.telestrator.tv"
