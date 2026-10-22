@@ -124,7 +124,9 @@
 .essay-tv .em-caption { position: absolute; left: 1336px; top: 858px; width: 488px; height: 168px; }
 
 /* the one caption slot: a citron label and one sentence */
-.essay-tv .em-cap { animation: em-rise .35s var(--em-ease) both; }
+/* a new caption settles in from a faint start, never from nothing: a swap has no blank frame */
+.essay-tv .em-cap { animation: em-cap-in .35s var(--em-ease) both; }
+@keyframes em-cap-in { from { opacity: .45; transform: translateY(6px); } }
 .essay-tv .em-cap > .em-lbl { color: var(--em-cit); }
 .essay-tv .em-cap p { margin: 10px 0 0; font-size: 34px; line-height: 1.2; font-weight: 500; font-variation-settings: "wdth" 92; }
 

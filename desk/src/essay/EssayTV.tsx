@@ -359,7 +359,8 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
   return (<>
     <Brand /><Top s={s} menu="Table" lit={lit} />
     <Rail a={a} cur={i} verdicts={verdicts} />
-    <Page key={sn.n} curtain={curtain} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} title={forensicTitle(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} wait={essayHandoffLine(s)} unruled={tieNotEnglish(unruledCaption(a.piece, sn.para ?? 0))} pending={paragraphPending(a.piece, sn.para ?? 0)} />
+    {/* no key: the page stays mounted when the sentence changes, so the swap is one frame to the next, never a blank frame fading back in (film blink audit 2026-10-23) */}
+    <Page curtain={curtain} sn={sn} n={N} place={forensicPlace(a.sentences, i, a.piece)} lead={forensicLead(a)} title={forensicTitle(a)} v={v} lens={lens} type={a.type} inked={holds} job={job} wait={essayHandoffLine(s)} unruled={tieNotEnglish(unruledCaption(a.piece, sn.para ?? 0))} pending={paragraphPending(a.piece, sn.para ?? 0)} />
     <nav className="em-acts">
       {stops.map((k, j) => (
         <div key={k} className={`em-pill em-act${j === 0 ? " prim" : ""}${stopAt(stops, s.focus) === k ? " is-focused" : ""}`} data-focused={stopAt(stops, s.focus) === k} {...(j === 0 ? { "data-role": "essay-primary" } : {})}>
