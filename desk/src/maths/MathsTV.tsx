@@ -91,6 +91,9 @@ const ICON = {
   paper: <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7 4h12l6 6v18H7z" /><path d="M11 16h10M11 21h6" /><path d="M19 4v6h6" /></svg>,
   six: <svg viewBox="0 0 46 46" fill="currentColor"><rect x="7" y="7" width="13" height="9" rx="2" /><rect x="26" y="7" width="13" height="9" rx="2" /><rect x="7" y="19" width="13" height="9" rx="2" /><rect x="26" y="19" width="13" height="9" rx="2" /><rect x="7" y="31" width="13" height="9" rx="2" /><rect x="26" y="31" width="13" height="9" rx="2" /></svg>,
   away: <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 18h7l2 4h6l2-4h7v9H4z" /><path d="M16 4v12M11 11l5 5 5-5" /></svg>,
+  // Snap the sheet is a photo, Type my answers is typing: a camera and a keyboard, not the page and the hint bulb (stick walk 2026-10-23)
+  camera: <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 11h6l2.5-3.5h7L22 11h6v15H4z" /><circle cx="16" cy="18" r="4.5" /></svg>,
+  keys: <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3.5" y="8.5" width="25" height="15" rx="2.5" /><path d="M8.5 13.5h1M13.5 13.5h1M18 13.5h1M22.5 13.5h1M11 19h10" /></svg>,
   back: <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M26 16H8M14 9l-7 7 7 7" /></svg>,
 };
 const SLIP_MARK = <svg viewBox="0 0 26 22"><path d="M4 18 L12 4 M10 19 L20 6" /></svg>;
@@ -830,8 +833,8 @@ export function PracticeScreen({ s, focus = 0 }: { s: Session; focus?: number })
       </div>
     </aside>
     <div className="mb-acts">
-      <Act icon={ICON.paper} label="Snap the sheet" focused={stopAt(PRACTICE_STOPS, focus) === "sheet"} primary />
-      <Act icon={ICON.hint} label="Type my answers" focused={stopAt(PRACTICE_STOPS, focus) === "answers"} />
+      <Act icon={ICON.camera} label="Snap the sheet" focused={stopAt(PRACTICE_STOPS, focus) === "sheet"} primary />
+      <Act icon={ICON.keys} label="Type my answers" focused={stopAt(PRACTICE_STOPS, focus) === "answers"} />
     </div>
   </>);
 }
