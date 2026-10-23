@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Essay Master: when a reading fails (for example with no text engine signed in), the lens home and the paragraph plan say what to do next after the reason (Select a lens to send it again from the phone; Press OK on Read it), instead of only why it failed ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Essay Master's Workroom (Adult mode), with nothing kept yet, names the code to join with on the PC page, instead of "join with the code" on a screen that shows none ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Linga's learning map names the chapter each door goes to with its number (Previous chapter on chapter 1: "Chapter 8: Handle friction."), so the wrap to the last chapter is not a surprise ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Math Buddy's lessons list is called Lessons in its header, as the Menu chip that opens it says, instead of Units; the calendar's caption says Back returns to the lessons ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
