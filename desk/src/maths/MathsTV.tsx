@@ -194,7 +194,10 @@ function usePaper(dep: unknown, room?: number) {
       // the pan
       const cur = paper.querySelector<HTMLElement>('[data-cur="true"]');
       const WH = el.parentElement?.offsetHeight ?? 778, PH = paper.offsetHeight;
-      const top = cur ? cur.offsetTop : 0;
+      // one line of the paper stays above the lit one (the sheet's heading over the first), so the list never opens with its
+      // title cut under the window's top fade (TV polish wave 3: "Lessons on file" was half gone on the lessons list)
+      const above = cur?.previousElementSibling as HTMLElement | null | undefined;
+      const top = cur ? (above ?? cur).offsetTop : 0;
       const ty = PH <= WH ? 0 : Math.max(WH - PH - 10, Math.min(20, 40 - top));
       el.style.transform = `translateY(${ty}px)`;
     };
