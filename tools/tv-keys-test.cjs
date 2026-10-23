@@ -328,6 +328,9 @@ test('TL-3: Select on the paired phone stop opens pair with the landing behind i
  assert.deepEqual(tvKey(pair,'down',LOCAL).events,[{type:'focus',focus:1}]);
  assert.deepEqual(tvKey({...pair,focus:1},'select',LOCAL).events,[{type:'phones.forget'}]);
  assert.deepEqual(tvKey({...pair,focus:1},'up',LOCAL).events,[{type:'focus',focus:0}]);
+ // stick walk 2026-10-22: the two buttons stand side by side, so Right reaches Forget and Left comes back
+ assert.deepEqual(tvKey(pair,'right',LOCAL).events,[{type:'focus',focus:1}],'Right: Forget every phone');
+ assert.deepEqual(tvKey({...pair,focus:1},'left',LOCAL).events,[{type:'focus',focus:0}],'Left: Pair another');
  assert.deepEqual(tvKey({...pair,joined:false,focus:1},'select',LOCAL).events,[],'unpaired: no forget');
  assert.deepEqual(tvKey({...pair,focus:1},'back',LOCAL).events.map(e=>e.screen),['landing'],'Back still leaves');
 });
