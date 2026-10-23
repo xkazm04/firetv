@@ -29,6 +29,9 @@ Every address below follows it.
 
 ## Open the TV
 
+> **The TV does not use the mouse.** Clicking does nothing. Use the keyboard: **arrow keys** to move, **Enter** to
+> choose, **Backspace** or **Escape** to go back, **M** for the menu.
+
 Open that exact link in a desktop browser and make the window full screen (F11). The key makes this browser the
 desk's TV, then leaves the address. If the TV says "Not this desk's TV", open the printed link again.
 

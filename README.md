@@ -38,6 +38,9 @@ The terminal prints the TV link:
 TV: http://<your-ip>:3000/tv?key=...
 ```
 
+> **The TV does not use the mouse.** Clicking does nothing. Use the keyboard: **arrow keys** to move, **Enter** to
+> choose, **Backspace** or **Escape** to go back, **M** for the menu.
+
 **2. Open the TV.** Open that exact link in a desktop browser and make the window full screen (F11). The key
 makes this browser the desk's TV (a cookie), and then leaves the address. If you open `/tv` without the key, it
 says "Not this desk's TV": open the printed link again. The keyboard is the remote: arrows are the D-pad, Enter is

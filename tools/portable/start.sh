@@ -13,5 +13,6 @@ echo
 echo "  Study Desk on port $PORT, data in $DESK_DATA_DIR"
 echo "  Open the TV: link below in a desktop browser, full screen (F11)."
 echo "  On this computer, http://localhost:$PORT/tv?key=... with the same key works too."
+echo "  The TV ignores the mouse: use the arrow keys, Enter, and Backspace for Back."
 echo "  Stop the desk with Ctrl+C."
 exec node app/server.js

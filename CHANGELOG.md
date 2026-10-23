@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- The portable zip and README say plainly that the TV ignores the mouse: INSTALL.md and README carry a callout, and start.cmd and start.sh print the keys to use ([README.md](README.md)).
 - Math Buddy's Teach me something ruler: the edge with more topics to show is clear under its arrow, and a strand label the faded edges would cut ("EQUAT", "NS") is hidden until it stands whole, as on Get ready for school ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - The browser TV's bench bar stays on one line down to a 1024 px window too: under 1240 px it drops its own name and tightens again, so Fullscreen no longer falls to a second row ([README.md](README.md)).
 - The browser TV: a click on a bench bar button (Fake phone, Clock ×60, Voice) no longer takes the keyboard, so the arrow keys and Enter keep driving the TV afterwards; on Linga they had stopped working until the stage was clicked ([README.md](README.md)).
