@@ -4,6 +4,11 @@
 
 A desktop browser tab plays the TV, and your phone (or a second tab) plays the phone.
 
+**No build:** download `study-desk-portable.zip` from the [latest release](https://github.com/xkazm04/firetv/releases/latest),
+unzip it and run `start.cmd` (Windows) or `sh start.sh` (macOS, Linux). It needs only Node.js 24, plus the Claude CLI
+below for the model features, and it opens on a demo learner, Nell. Its `INSTALL.md` has the rest
+([tools/portable/INSTALL.md](tools/portable/INSTALL.md)). To make the zip yourself: `npm --prefix desk run package:portable`.
+
 **You need:**
 
 - **Node.js 24** (`node -v`). CI uses 24.
