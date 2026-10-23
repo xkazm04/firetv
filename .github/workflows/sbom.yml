@@ -59,7 +59,7 @@ jobs:
         run: node tools/gradle-sbom-test.cjs
       - name: Write the CycloneDX SBOM
         run: node tools/gradle-sbom.cjs dist/tv-app-deps.txt --name tv-app-debug --version "$SHA" > dist/tv-app-debug.cdx.json
-      - uses: actions/attest-sbom@v2
+      - uses: actions/attest-sbom@v4
         with:
           subject-path: dist/apk/tv-app-debug.apk
           sbom-path: dist/tv-app-debug.cdx.json
