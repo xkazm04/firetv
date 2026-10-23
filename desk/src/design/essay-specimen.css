@@ -55,7 +55,9 @@
 
 /* ---- focus: a blinking text caret and a citron ring - one focused thing on screen ---- */
 .essay-tv .em-caret { position: absolute; background: var(--em-cit); opacity: 0; }
-.essay-tv .is-focused > .em-caret { opacity: 1; animation: em-caret 1.05s steps(1) infinite; }
+/* the caret blinks six times and then stands lit: an endless blink kept the Fire TV stick drawing the lens screen at idle
+   (TV polish wave 2; not measured on the stick). With no fill mode it ends on its own opacity, 1 */
+.essay-tv .is-focused > .em-caret { opacity: 1; animation: em-caret 1.05s steps(1) 6; }
 
 /* ================= the lens home ================= */
 .essay-tv .em-stack { position: absolute; left: 96px; top: 176px; width: 1180px; height: 800px; }
@@ -171,7 +173,7 @@
 .essay-tv .em-g .em-solid { color: var(--em-bone); }
 .essay-tv .em-g .em-hatch { color: transparent; background: var(--em-hatch); -webkit-background-clip: text; background-clip: text; }
 .essay-tv .em-g .em-gink { position: absolute; left: 0; top: 0; color: var(--em-cit); clip-path: inset(-20px calc(100% - var(--em-f)) -20px -20px); --em-f: 0%; }
-.essay-tv .em-g .em-cursor { position: absolute; left: -26px; top: 10%; bottom: 6%; width: 12px; background: var(--em-cit); animation: em-caret 1.05s steps(1) infinite; }
+.essay-tv .em-g .em-cursor { position: absolute; left: -26px; top: 10%; bottom: 6%; width: 12px; background: var(--em-cit); animation: em-caret 1.05s steps(1) 6; }
 .essay-tv .em-l2 { padding-left: 1.67em; }
 .essay-tv .em-hook { position: absolute; left: .11em; top: .03em; width: 1.33em; height: .78em; overflow: visible; }
 /* its own size is 28 px, so its place is measured in the move's size, not in em */
