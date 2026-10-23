@@ -93,7 +93,9 @@ const ambient = { anims: [] as Animation[], subs: new Set<(t: number) => void>()
 function ambientTick() {
   if (document.hidden) return;
   const t = document.timeline.currentTime as number;
-  for (const a of ambient.anims) if (a.playState === "paused") a.currentTime = t;
+  // no playState read here: on a CSS animation that getter flushes style, and after the first set every read flushed again
+  // (one style pass per loop per tick, about 25 ms of each 66 ms tick on the stick); the list is the paused set, built at sync
+  for (const a of ambient.anims) a.currentTime = t;
   for (const f of ambient.subs) f(t);
 }
 function ambientRun() {
@@ -254,7 +256,7 @@ function Chrome({ view }: { view: LandingView }) {
 /** Where the light for a hand-off starts: the tile, the second action or the postcard that was Selected. */
 function originOf(view: LandingView, stop: LandingStop): [number, number] {
   if (stop === "place") return [1560, 991];
-  if (stop === "phone") return [1524, 438];
+  if (stop === "phone") return [1588, 420];
   const { pitch, cx } = railOf(view.apps.length), i = Math.max(0, view.apps.findIndex((a) => a.id === stop));
   return [Math.round(cx + i * pitch), 900];
 }

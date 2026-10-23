@@ -52,3 +52,27 @@ On a lamp move the old world no longer slides out (`Paper.tsx` keeps no `prev`).
 - The 250-300 ms freeze at the start of a lamp move is the arriving screen's style, layout and GPU raster (about 600 ms of raster per move). Hiding the whole shelf cut raster to about 200 ms in one run, but the per-element follow-ups did not reproduce, so the shelf's cost is not attributed to a single piece.
 - 15 fps ambient motion: the slowest loops (clouds, bobs) read as smooth; the fast ones (voice bars, bell) step. The clock is `AMBIENT_MS` in `Paper.tsx`.
 - `window.mjs`'s "fps in the 1.2 s window" now counts the ambient clock's 15 frames too, so it reads lower than before for the same transition; compare the longest gap.
+
+## Pass of 23 Oct (night): the ambient clock, the pairing card, the Select curtain
+
+Same stick, a production build (`next build --webpack`) on its own port through `adb reverse`, the film's open state (Nell seated, no phone paired). Each hold took the shared stick lock and gave the stick back to the desk it was on. A run is 4 lamp moves (right, right, left, left); per move, in the 1.2 s after the key: the longest frame gap, the GPU raster (the union of `RendererRasterWorker` slices on the GPU thread) and the page's main thread (`ThreadControllerImpl::RunTask` on `CrRendererMain`). 3 runs = 12 moves.
+
+| Build | Longest gap, median / max | Raster per move, median | Main thread per move, median |
+|---|---|---|---|
+| main (a380b2d6) | 173 / 201 ms | 327 ms | 830 ms |
+| + the clock no longer reads `playState` (kept) | 160 / 179 ms | 337 ms | 614 ms |
+
+**Where a move's time goes now.** One draw about 200 ms after the key waits about 180 ms on a sync token (the arriving world's raster), and a second one about 450 ms after the key waits about 115-165 ms (more of the same batch). The page's own work in the move is one 70 ms task (React commit, 33 ms of style). Before this pass, every 66 ms tick of the ambient clock also cost about 25 ms of main thread: `Animation.playState` on a CSS animation flushes style, and each `currentTime` set made the next read flush again. The tick now sets the list it built at sync.
+
+**Kept:**
+- the clock fix above (`Paper.tsx` `ambientTick`);
+- the pairing postcard is 472 x 448 at x 1352, top 196 (was 556 x 540 at x 1246): the unpaired title is fitted to x 160-1220, so the card stands about 120 px clear of every name at 1920 x 1080; the code is 124 px (was 136) and the address 30 px;
+- the Select curtain (`.pp-flood`) is opaque on its first frame instead of growing as a `clip-path` circle, which the stick drew on the main thread at a few frames a second (the film showed 3-4 frames of a half-grown curtain over the landing). Select into Math Buddy and Back, 3 runs each, grow vs flat: longest gap on Select 265-299 vs 269-292 ms, on Back 280-318 vs 283-293 ms; GPU raster on Select 585-660 vs 508-621 ms.
+
+**Tried and dropped (measured on the stick):**
+- Every app's world kept mounted, the hidden ones parked at opacity 0 with `will-change: opacity` so a move only shows a world already rastered. Raster per move 337 to 288 ms, but the longest gap did not move (median 159, max 187 ms) and GL memory at rest rose to 143 MB against the WebView's 160 MB hard limit. The arriving world still waits about 175 ms on raster: a parked layer is rastered at rest and rastered again once its slide-in animation starts. Parking the layers on a paused copy of the slide-in animation (so they are "animating" while parked) did not change it either.
+- The title animated as one element instead of letter by letter: longest gap within 5-15 ms of the base, inside the noise.
+- The shelf, a piece at a time (CSS laid over the page, one run of 4 moves each): with the whole rail of tiles hidden the gap falls to 105-140 ms and raster to about 255 ms, so the rail is the shelf's cost; hiding the caption, the actions, the tile filter, or giving each tile name its own layer moved nothing. Taking the tiles' box-shadows and filter off saved about 45 ms of raster. Moving the tile's shadow and the lamp's rings onto two layers under the window (so a move changes only transform, opacity and filter) saved about 30 ms of raster in one run, and with `contain: strict` on the world layers, the shelf and the chrome, a 3-run build measured longest gap 163 / 214 ms and raster 328 ms: no better than the clock fix alone. Not kept.
+- No `will-change` on the world layers: raster per move rose to 360-495 ms.
+
+**Left open:** the arriving world's raster (about 300 ms over two draws) is still the freeze, and the rail of tiles is the largest piece of it after the world. The 15 fps ambient clock is unchanged; ticking the fast loops (voice bars, bell) faster would draw the whole scene at that rate again, which is a cost to weigh, not a fix.
