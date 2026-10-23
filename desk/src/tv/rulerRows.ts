@@ -52,9 +52,10 @@ export const STRIP_INSET = 36;
 /**
  * A strip label's width per character for WHOLE labels (Family W7 batch 3): the live capture measured "EQUATIONS" at 150 px,
  * 16.7 px a character with the tracking after the last letter, over LABEL_CH's 16 - enough to cut a label that exactly
- * fills its room. 17 keeps a whole label whole.
+ * fills its room. 17 kept "EQUATIONS" whole but not the wide letters: "GEOMETRY" measures 140 px and "MORE GEOMETRY" 222 (TV
+ * polish wave 3, 1920 x 1080), which 17 a character cut to "GEOMET…". 18 keeps every school strand whole.
  */
-export const STRIP_CH = 17;
+export const STRIP_CH = 18;
 
 type RulerTopic = Pick<PathTopic, "id" | "strand">;
 
@@ -139,6 +140,17 @@ export function rulerModel(topics: RulerTopic[], states: Record<string, TopicSta
     topics: topics.map((t, i) => ({ id: t.id, sx: slots[i].sx, sw: slots[i].sw, x: slots[i].sx + 6, w: slots[i].sw - 12, state: states[t.id] ?? "later" })),
     end,
   };
+}
+
+/** How far in from a window edge with more to show a strand label must start to be whole (design/maths-lamplight.css .mb-rwin). */
+export const RULER_FADE = 150;
+/**
+ * Whether a strand's label stands whole on the stage of a panning ruler: one the window's faded edges would cut to a
+ * fragment ("EQUAT", "NS") is hidden instead (TV polish wave 3). A ruler that does not pan shows every label.
+ */
+export function strandClear(m: Pick<RulerModel, "offset" | "more">, g: Pick<RulerStrand, "labelX" | "labelW" | "label">): boolean {
+  const x = g.labelX - m.offset, w = Math.min(g.labelW || Infinity, g.label.length * LABEL_CH);
+  return !(m.more.l && x < RULER_FADE) && !(m.more.r && x + w > TRACK - RULER_FADE);
 }
 
 /**

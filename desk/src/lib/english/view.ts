@@ -149,7 +149,7 @@ export type Hero =
   /** `yours` (L1): the learner's owned phrases on home, no count and no digit; Family draws them as Open Door objects, Adult as a progress line (X2) */
   | { kind: "intro"; kicker: string; title: string; subtitle: string; art: ArtKey; nameTag: string; yours?: { phrases: string[]; style: "objects" | "list" } }
   /** `spoke`: a second mark, the band the learner's say answers showed, when conversations start below `band` (S2) */
-  | { kind: "ladder"; kicker: string; title: string; band: Band; note: string; spoke?: Band }
+  | { kind: "ladder"; kicker: string; title: string; band: Band; note: string; spoke?: Band; noteLabel?: string }
   | { kind: "message"; kicker: string; text: string; note: string }
   | { kind: "heading"; kicker: string; title: string }
   | { kind: "choices"; kicker: string; prompt: string; options: string[]; small: boolean }
@@ -561,6 +561,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const said = spoke && spokenTasks(placement.tasks).every(t => t.mode === "text") ? "wrote" : "spoke";
     tag = "Your level"; title = `${b} · ${BAND_NAME[b]}`;
     hero = { kind: "ladder", kicker: self ? "Self-chosen" : spoke ? `Understood ${b} · ${said} ${spoke} · not a certificate` : "Linga's read · not a certificate", title, band: b, note: (!self && quotesLearner(placement.summary, placement.tasks) ? "" : placement.summary) || BAND_CAN[b], ...(spoke ? { spoke } : {}) };
+    // the level's own description is no read of Linga's: a self-chosen level (or a read with no summary) labels it as the level's
+    if (hero.kind === "ladder" && hero.note === BAND_CAN[b]) hero.noteLabel = "At this level";
     // The shared TV never headlines a learner's own error (delegate ruling 2026-10-17, recert-4/LT-sofie-11-J1-2): the caption
     // leads with the better form the check offers (line.ts focusParts), and the learner's words stay on the phone.
     const line = self ? undefined : focusParts(placement.focus, placement.tasks).line;
@@ -580,7 +582,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     caption = lc.pending ? (lc.topics.length ? "Take a moment. Linga is finding another topic." : "Take a moment. Linga is picking conversations for your level and interests.") : lc.error || "Add a topic in your own words on the phone."; captionTag = lc.pending ? "Preparing" : "Your topics";
     actions = lc.pending ? [act("cancel", "Cancel & come back later", "Stop here. Your topics so far are kept.", cmd("check-leave"))]
       : lc.topics.length ? [act("agree", "Agree to these topics", "Save these as your plan. Linga starts with the first one.", cmd("plan-agree")), ...lc.topics.map(t => act("swap", "Swap this topic", t.why, cmd("plan-swap", { topicId: t.id }))), act("renew", "All new topics", "Replace every topic with a fresh set.", cmd("plan-renew")), ...(lc.topics.length < PLAN_MAX ? [act("ask-topic", "Add a topic", "Type a topic in your own words on your phone. Linga adds a conversation for it. Back cancels.", { ask: { kind: "words" } })] : [])]
-      : [act("retry", "Try again", "Ask Linga for topics again.", cmd("check-retry"))];
+      // nothing came back (no text engine, a bad reply): Try again, or leave with the level kept, so Back is not the only way out
+      : [act("retry", "Try again", "Ask Linga for topics again.", cmd("check-retry")), act("not-now", "Not now", "Leave for now. Your level is kept, and Linga picks your topics when you come back.", cmd("check-leave"))];
   } else if (s.screen === "linga-scenes") {
     const i = sceneIndex % scenes.length, scene = scenes[i];
     tag = `Situation ${i + 1} of ${scenes.length}`; title = scene.name; caption = scene.goal;
@@ -784,7 +787,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const close = { menu: false }, checkPartWay = !!lc && (lc.stage === "about" || lc.stage === "tasks");
     actions = [
       // no scene running (the welcome, the level, a finished scene): there is no scene to go back to
-      act("menu-back", rehearsing ? "Back to the scene" : "Close the menu", "Return to where you were.", { ui: close, focus: -1 }),
+      // opened over the level picker, the menu closes back onto it, on the band that was lit (TV polish wave 3: it fell to the welcome)
+      act("menu-back", rehearsing ? "Back to the scene" : "Close the menu", "Return to where you were.", { ui: close, focus: picking ? 0 : -1 }),
       act("learning-map", "Learning map", "Explore the abilities you can practise and your progress in each.", go("linga-map")),
       chooseSituation("Choose a new scene; your existing evidence stays saved."),
       act("my-level", "My level", l.placement ? `${l.placement.band} · ${BAND_NAME[l.placement.band]}. See it, find it again, or pick it yourself.` : "Find your level with three questions and a few short tasks.", l.placement ? go("linga-verdict") : { ...cmd("check-start"), ui: close }),
@@ -797,6 +801,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       act("sentence-help", "Sentence help", "Open Say it on the phone for help with a particular sentence.", go("sentence")),
       ...(rehearsing ? [act("finish", "Finish rehearsal", "End this scene and save a recap.", { ...cmd("finish"), ui: close }, { disabled: refused("finish") })] : []),
     ];
+    // every way on from the menu but its Close leaves the picker behind
+    actions = actions.map(a => (a.id === "menu-back" || !picking ? a : { ...a, run: { ...a.run, ui: { ...a.run.ui, picking: null } } }));
     tag = "Your controls"; captionTag = "Your choice"; title = "Make it work for you";
     hero = { kind: "menu", kicker: "Linga", title, entries: actions.map(a => a.label), selected: s.focus };
     caption = actions[Math.max(0, s.focus)]?.help ?? actions[0].help;
@@ -811,7 +817,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   if (error) { caption = error; captionTag = "Try again"; }
 
   const footer = [
-    act("menu", "Menu", menu ? "Close the menu." : "Open the menu.", { ui: { menu: !menu, picking: null }, focus: 0 }),
+    act("menu", "Menu", menu ? "Close the menu." : "Open the menu.", { ui: { menu: !menu }, focus: 0 }),
     ...(c && !isHome && !onCheck ? [act("repeat", "Repeat audio", "Hear the last line again.", cmd("repeat"), { disabled: refused("repeat") })] : []),
   ];
 
@@ -876,7 +882,7 @@ export function viewText(v: LingaView): string {
   const said = (text: string, who: string) => text === spoken ? `${who} says (spoken on the TV, written on the phone): "${text}"` : `On screen: "${text}"`;
   switch (h.kind) {
     case "intro": out.push(`${h.kicker}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.yours ? [`${h.yours.style === "list" ? "Phrases you own" : "Yours"}: ${h.yours.phrases.map(x => `"${x}"`).join(" · ")}`] : [])); break;
-    case "ladder": out.push(h.kicker, `Ladder A1 A2 B1 B2 C1 C2, marker on ${h.band}${h.spoke ? `, second mark on ${h.spoke}` : ""}.`, ...(h.note ? [`Linga says: ${h.note}`] : [])); break;
+    case "ladder": out.push(h.kicker, `Ladder A1 A2 B1 B2 C1 C2, marker on ${h.band}${h.spoke ? `, second mark on ${h.spoke}` : ""}.`, ...(h.note ? [`${h.noteLabel ?? "Linga says"}: ${h.note}`] : [])); break;
     case "message": out.push(h.kicker, ...(h.text ? [said(h.text, v.spoken.speaker)] : []), ...(h.note ? [`The words, now shown: ${h.note}`] : [])); break;
     case "heading": out.push(h.kicker, h.title); break;
     case "choices": out.push(h.kicker, h.prompt, ...h.options.map((x, i) => `  option ${i}: ${x}`)); break;

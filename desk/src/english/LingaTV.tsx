@@ -84,7 +84,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
         const open=s.ask&&LINGA_ASKS.has(s.ask.kind)?s.ask:null;
         if(open&&sentAndWorking)return;
         if(open){if(open.kind==="reply")answered.current=want;post({type:"ask.cancel",id:open.id});if(open.kind!=="reply")return;}
-        if(menu){patch({menu:false});post({type:"focus",focus:-1});}
+        if(menu){patch({menu:false});post({type:"focus",focus:picking?0:-1});}
         else if(picking){patch({picking:null});post({type:"focus",focus:0});}
         else if(home)post({type:"nav",screen:"landing",focus:landingFocus(s,"english")});
         else if(s.screen==="linga-check"&&lc)cmd("check-leave");
@@ -136,7 +136,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       <section className="lo-head"><Kicker text={h.kicker}/><Title text={h.title}/>{caption}</section>
       {/* the card and the steps share one column: a longer sentence lowers the steps instead of covering them */}
       <div className="lo-stage">
-        {h.note&&<SentenceCard className={`lo-note-card${h.note.length>110?" lo-wide":""}`} label="Linga says" text={h.note} role="linga-note"/>}
+        {h.note&&<SentenceCard className={`lo-note-card${h.note.length>110?" lo-wide":""}`} label={h.noteLabel??"Linga says"} text={h.note} role="linga-note"/>}
         <BandSteps band={h.band} spoke={h.spoke}/>
       </div>
       {nav}

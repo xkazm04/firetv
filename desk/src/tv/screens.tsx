@@ -446,7 +446,10 @@ function RecapEssay({ t }: { t: EssayTile }) {
 function picksLine(p: Profile) {
   const join = (a: string[]) => (a.length > 1 ? a.slice(0, -1).join(", ") + " and " + a[a.length - 1] : a[0] ?? "");
   const on = p.modules.map((m) => NAME[m]);
-  const who = p.type === "other" ? "for someone who just wants to learn" : `for a ${p.age ? `${p.age}-year-old` : TYPE_WORDS[p.type].toLowerCase()} student`;
+  // non-breaking hyphens (U+2011): the caption never breaks "11-year-" from "old"
+  const kind = p.age ? `${p.age}\u2011year\u2011old` : TYPE_WORDS[p.type].toLowerCase();
+  // "an 11-year-old", "an 8-year-old", "an elementary school student": the article follows the sound
+  const who = p.type === "other" ? "for someone who just wants to learn" : `for ${/^(8|11\u2011|18\u2011|[aeiou])/i.test(kind) ? "an" : "a"} ${kind} student`;
   return on.length ? `${join(on)} on, ${who}.` : `Nothing on yet, ${who}.`;
 }
 export function Learner({ s, focus }: { s: Session; focus: number }) {

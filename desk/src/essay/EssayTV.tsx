@@ -233,7 +233,7 @@ export function EssayPlan({ s }: { s: Session }) {
     : job?.phase === "failed" ? { label: "Not read", text: job.error ? `${job.error} Press OK on Read it to send it again.` : adultSay("The paragraph did not come back. Press OK on Read it to send it again.", adult) }
     : refused ? refused
     : essayHandoffOf(s) && here >= 0 ? { label: `Slot ${here + 1} · ${defs[here]?.label ?? ""}`, text: s.phonesLive === 0 ? "No phone is connected. Back: cancel." : "On the phone. Back cancels." }
-    : here >= 0 ? { label: `Slot ${here + 1} · ${defs[here]?.label ?? ""}`, text: fit ?? (slots[here] ? "Written. Say it again on the phone to change it." : "Say it on the phone.") }
+    : here >= 0 ? { label: `Slot ${here + 1} · ${defs[here]?.label ?? ""}`, text: fit ?? (slots[here] ? "Written. OK writes it again on your phone." : "OK writes this sentence on your phone.") }
     : at === "read" ? { label: "Read it", text: done ? adultSay("The desk reads your paragraph through the ", adult) + (ESSAY_TYPES.find((t) => t.id === s.essayPlan?.lens)?.name ?? "Structure") + " lens." : "A slot is still to write. OK takes you to it." }
     : { label: "Your plan", text: "Back to the lenses. What you wrote stays." };
   const acts: Array<{ k: string; word: string; on: boolean; off?: boolean }> = [

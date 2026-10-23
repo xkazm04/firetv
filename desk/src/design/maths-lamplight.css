@@ -57,7 +57,9 @@
 /* ---- the lamp: one warm pool on the desk; it breathes, and never needs to ---- */
 .maths-tv .mb-lamp { position: absolute; left: -360px; top: -300px; width: 1560px; height: 1320px; pointer-events: none; opacity: .9;
   background: radial-gradient(closest-side at 50% 52%, rgba(255, 205, 125, .40), rgba(255, 177, 61, .20) 38%, rgba(255, 160, 60, .07) 66%, transparent 100%); }
-.maths-tv .mb-lamp i { position: absolute; inset: 0; background: radial-gradient(closest-side at 50% 52%, rgba(255, 226, 170, .22), transparent 55%); animation: mb-breathe 7s ease-in-out infinite; }
+/* the lamp, the ruler marker's halo, a waiting door and the slot caret breathe a few times and then rest: a looping animation keeps
+   the stick drawing 60 frames a second on a still screen (STICK-PERFORMANCE-2026-10-22; TV polish wave 3 measured 245 frames in 4 s on Get ready) */
+.maths-tv .mb-lamp i { position: absolute; inset: 0; background: radial-gradient(closest-side at 50% 52%, rgba(255, 226, 170, .22), transparent 55%); animation: mb-breathe 7s ease-in-out 2 forwards; }
 .maths-tv[data-lamp="paper"] .mb-lamp { left: -300px; top: -280px; width: 1760px; height: 1420px; opacity: .85; }
 .maths-tv[data-lamp="blank"] .mb-lamp { left: -520px; top: -180px; }
 .maths-tv[data-lamp="wide"] .mb-lamp { left: 80px; top: -380px; width: 1760px; height: 1400px; opacity: .7; }
@@ -280,7 +282,7 @@
 .maths-tv .err.k-missing > .mk.under { left: 0; top: 100%; width: 100%; height: .32em; margin-top: .06em; }
 .maths-tv .mx .slot { width: 2.3em; height: .9em; margin: 0 .22em; vertical-align: -.16em; animation: mb-open .52s var(--mb-ease) .2s both; }
 .maths-tv .slot > .mk.box { left: 0; top: 0; width: 100%; height: 100%; }
-.maths-tv .slot > .mk.caret { left: 50%; top: 100%; width: .7em; height: .46em; margin: .16em 0 0 -.35em; animation: mb-draw .52s cubic-bezier(.4, .1, .3, 1) .7s both, mb-caret 1.4s ease-in-out 1.3s infinite; }
+.maths-tv .slot > .mk.caret { left: 50%; top: 100%; width: .7em; height: .46em; margin: .16em 0 0 -.35em; animation: mb-draw .52s cubic-bezier(.4, .1, .3, 1) .7s both, mb-caret 1.4s ease-in-out 1.3s 6; }
 /* a line the data can only place as a line: a wavy pen line under all of it */
 .maths-tv .err.k-line > .mk.wave { left: -.1em; top: 100%; width: calc(100% + .2em); height: .24em; margin-top: .04em; }
 .maths-tv .tick { width: .72em; height: .56em; margin-left: .45em; vertical-align: -.02em; }
@@ -411,7 +413,7 @@
   box-shadow: 0 0 0 4px rgba(255, 214, 150, .55), 0 24px 70px rgba(255, 166, 50, .5), 0 30px 60px rgba(0, 0, 0, .45); }
 .maths-tv .mb-door[data-focused="true"] .art, .maths-tv .mb-door[data-focused="true"] .mb-kick { color: var(--mb-navy); }
 .maths-tv .mb-doors[data-dim="true"] .mb-door:not([data-focused="true"]) { opacity: .62; }
-.maths-tv .mb-door[data-waiting="true"] .art { animation: mb-breathe 2.4s ease-in-out infinite; }
+.maths-tv .mb-door[data-waiting="true"] .art { animation: mb-breathe 2.4s ease-in-out 6 forwards; }
 .maths-tv .mb-doors.wide { left: 600px; top: 282px; width: 1224px; height: 400px; }
 .maths-tv .mb-doors.wide .mb-door { flex-direction: row; align-items: center; gap: 22px; padding: 28px 34px; }
 .maths-tv .mb-doors.wide .mb-door .art { height: auto; flex: 0 0 250px; }
@@ -467,7 +469,7 @@
 .maths-tv .mb-marker .nd { position: absolute; left: -3px; top: 30px; width: 6px; height: 88px; border-radius: 3px; background: linear-gradient(180deg, #FFE0A0, var(--mb-amber-2)); box-shadow: 0 0 0 1.5px rgba(40, 22, 5, .7), 0 0 18px var(--mb-amber-2), 0 0 40px rgba(255, 177, 61, .7); }
 .maths-tv .mb-marker .mc { position: absolute; top: 0; left: 0; transform: translateX(-50%); height: 34px; padding: 0 14px; border-radius: 17px; display: flex; align-items: center; font-size: 21px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--mb-navy); background: linear-gradient(180deg, #FFE0A0, var(--mb-amber-2)); box-shadow: 0 0 24px rgba(255, 177, 61, .8); white-space: nowrap; }
 .maths-tv .mb-marker[data-start="true"] .mc { transform: translateX(-14px); }
-.maths-tv .mb-marker .halo { position: absolute; left: -90px; top: -40px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 190, 90, .35), transparent); animation: mb-breathe 5s ease-in-out infinite; }
+.maths-tv .mb-marker .halo { position: absolute; left: -90px; top: -40px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 190, 90, .35), transparent); animation: mb-breathe 5s ease-in-out 3 forwards; }
 .maths-tv .mb-flag .nd { position: absolute; left: -2px; top: 30px; width: 4px; height: 88px; background: repeating-linear-gradient(180deg, var(--mb-sky) 0 8px, transparent 8px 13px); filter: drop-shadow(0 0 1.5px rgba(8, 16, 48, .95)) drop-shadow(0 0 10px rgba(143, 184, 255, .6)); }
 .maths-tv .mb-flag .mc { position: absolute; top: 0; text-transform: uppercase; height: 34px; padding: 0 14px; border-radius: 17px; display: flex; align-items: center; font-size: 21px; font-weight: 800; letter-spacing: .16em; color: var(--mb-sky); border: 2px solid var(--mb-sky); background: rgba(10, 18, 52, .85); white-space: nowrap; transform: translateX(-50%); }
 .maths-tv .mb-flag[data-end="true"] .mc { transform: translateX(-100%) translateX(2px); }
@@ -479,6 +481,9 @@
 .maths-tv .mb-ruler.big .mb-major { top: 60px; height: 40px; }
 .maths-tv .mb-ruler.big .mb-major.start { height: 96px; }
 .maths-tv .mb-ruler.big .mb-strand { top: 90px; }
+/* a panning ruler's strand label the faded edges would cut to a fragment is hidden until it is whole (rulerRows strandClear) */
+.maths-tv .mb-strand { transition: opacity .3s; }
+.maths-tv .mb-strand[data-clear="false"] { opacity: 0; }
 .maths-tv .mb-ruler.big .mb-topic { top: 40px; height: 320px; }
 .maths-tv .mb-ruler.big .mb-groove { top: 82px; height: 24px; border-radius: 12px; }
 .maths-tv .mb-ruler.big .mb-slips { top: 50px; }
@@ -497,9 +502,10 @@
    under the lamp like the paper - the window clips it to the ruler's 1728 px (the safe zone), an edge with more to
    show fades and carries a chevron, the focused topic takes a wide slot so its whole name fits (useNameFit) */
 .maths-tv .mb-rwin { position: absolute; left: 0; right: 0; top: -40px; bottom: -24px; overflow: hidden; }
-.maths-tv .mb-rwin[data-l="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 150px); mask-image: linear-gradient(90deg, transparent 0, #000 150px); }
-.maths-tv .mb-rwin[data-r="true"] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 150px), transparent 100%); mask-image: linear-gradient(90deg, #000 calc(100% - 150px), transparent 100%); }
-.maths-tv .mb-rwin[data-l="true"][data-r="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 150px, #000 calc(100% - 150px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 150px, #000 calc(100% - 150px), transparent 100%); }
+/* the Topics ruler's edge with more to show is clear under its 64 px chevron, as Get ready for school's is (TV polish wave 3) */
+.maths-tv .mb-rwin[data-l="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px); mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px); }
+.maths-tv .mb-rwin[data-r="true"] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); mask-image: linear-gradient(90deg, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); }
+.maths-tv .mb-rwin[data-l="true"][data-r="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); }
 .maths-tv .mb-rtrack { position: absolute; left: 0; top: 40px; height: 400px; transition: transform .76s var(--mb-ease); }
 .maths-tv .mb-ruler[data-pan="true"] .mb-topic { transition: left .76s var(--mb-ease), width .76s var(--mb-ease), opacity .3s, background .3s, box-shadow .3s, transform .3s var(--mb-ease); }
 .maths-tv .mb-ruler[data-pan="true"] .mb-tn { font-size: 34px; line-height: 1.08; -webkit-line-clamp: 3; }
@@ -554,7 +560,9 @@
 .maths-tv .mb-pwin[data-r="true"] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); mask-image: linear-gradient(90deg, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); }
 .maths-tv .mb-pwin[data-l="true"][data-r="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); }
 .maths-tv .mb-ptrack { position: absolute; left: 0; top: 0; height: 100%; transition: transform .76s var(--mb-ease); }
-.maths-tv .mb-pstrand span { display: inline-block; transition: margin-left .76s var(--mb-ease); }
+.maths-tv .mb-pstrand span { display: inline-block; transition: margin-left .76s var(--mb-ease), opacity .3s; }
+/* a heading the fades would cut to a fragment is hidden until it is whole on the stage (prepareRows clear) */
+.maths-tv .mb-pstrand[data-clear="false"] span { opacity: 0; }
 .maths-tv .mb-pstrand { position: absolute; top: 18px; padding-bottom: 10px; font-size: 20px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: rgba(245, 238, 223, .72); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 2px solid rgba(245, 238, 223, .18); }
 .maths-tv .mb-unit2 { position: absolute; top: 76px; height: 264px; border-radius: 24px; padding: 26px 26px 24px; display: flex; flex-direction: column;
   background: linear-gradient(170deg, rgba(245, 238, 223, .075), rgba(245, 238, 223, .03)); border: 1.5px solid rgba(245, 238, 223, .13); color: rgba(245, 238, 223, .86); opacity: .7;

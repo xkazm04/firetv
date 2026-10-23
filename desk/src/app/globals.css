@@ -21,6 +21,8 @@ button, input, textarea { font: inherit; }
 .bar .status { margin-left: auto; flex: 1 1 0; min-width: 0; text-align: right; color: #FFB4A8; max-width: 60ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* a laptop window (1280-1500 px): the bar stays one line, so the stage is not shrunk by a second row of buttons */
 @media (max-width: 1500px) { .bar { gap: 6px 10px; font-size: 12px; } .bar button { padding: 3px 7px; } }
+/* a smaller window (1024-1240 px): the bar drops its own name and tightens again, still one line (TV polish wave 3) */
+@media (max-width: 1240px) { .bar > b { display: none; } .bar { gap: 4px 6px; padding: 8px 10px; font-size: 11px; } .bar kbd { padding: 1px 4px; } .bar button { padding: 3px 5px; } }
 .frame { position: relative; flex: 1; min-height: 0; overflow: hidden; }
 
 /* ---- phone ---- */

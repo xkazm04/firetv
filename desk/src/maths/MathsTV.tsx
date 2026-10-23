@@ -17,7 +17,7 @@ import { hasWorked } from "@/lib/library/worked";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
 import { markOf, type Mark as ItemMark } from "@/lib/rules/marks";
-import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
+import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel, strandClear } from "@/tv/rulerRows";
 import { MathsCollection } from "./MathsCollection";
 import { Plot } from "./Plot";
 import { CALC_SHAPES, type CalcSpec } from "@/lib/rules/calc";
@@ -194,7 +194,10 @@ function usePaper(dep: unknown, room?: number) {
       // the pan
       const cur = paper.querySelector<HTMLElement>('[data-cur="true"]');
       const WH = el.parentElement?.offsetHeight ?? 778, PH = paper.offsetHeight;
-      const top = cur ? cur.offsetTop : 0;
+      // one line of the paper stays above the lit one (the sheet's heading over the first), so the list never opens with its
+      // title cut under the window's top fade (TV polish wave 3: "Lessons on file" was half gone on the lessons list)
+      const above = cur?.previousElementSibling as HTMLElement | null | undefined;
+      const top = cur ? (above ?? cur).offsetTop : 0;
       const ty = PH <= WH ? 0 : Math.max(WH - PH - 10, Math.min(20, 40 - top));
       el.style.transform = `translateY(${ty}px)`;
     };
@@ -328,7 +331,7 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
     {m.topics.map((t, i) => i > 0 && <div key={"m" + t.id} className="mb-major" style={{ left: t.sx - 1.5 }} />)}
     <div className="mb-major" style={{ left: m.end - 1.5 }} />
     {/* keyed by place: a strand may appear twice on a path (Equations), as on the strip */}
-    {m.strands.map((g, i) => <div key={`s${i}`} className="mb-strand" style={clampStrands ? { left: g.labelX, maxWidth: g.labelW } : { left: g.labelX }}>{g.label}</div>)}
+    {m.strands.map((g, i) => <div key={`s${i}`} className="mb-strand" data-clear={strandClear(m, g)} style={clampStrands ? { left: g.labelX, maxWidth: g.labelW } : { left: g.labelX }}>{g.label}</div>)}
     {topics.map((t, i) => {
       const sk = skills[t.id], box = m.topics[i];
       const state = sk?.secure ? "secure" : usualSeen(s, t.id) ? "prog" : "unseen";
@@ -688,7 +691,7 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
     <div className="mb-prep" data-role="maths-prepare" data-asking={asking || undefined}>
       <div className="mb-pwin" data-l={m.more.l || undefined} data-r={m.more.r || undefined}>
         <div className="mb-ptrack" style={{ width: m.trackWidth, transform: `translateX(${-m.offset}px)` }}>
-          {m.strands.map((g) => <div key={"g" + g.strand} className="mb-pstrand" style={{ left: g.x, width: g.w }}><span style={{ marginLeft: g.labelX - g.x }}>{g.strand}</span></div>)}
+          {m.strands.map((g) => <div key={"g" + g.strand} className="mb-pstrand" data-clear={g.clear} style={{ left: g.x, width: g.w }}><span style={{ marginLeft: g.labelX - g.x }}>{g.strand}</span></div>)}
           {m.cards.map((c, i) => {
             const u = stops[i];
             return (
