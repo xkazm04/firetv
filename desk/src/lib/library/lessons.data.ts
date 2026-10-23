@@ -20,14 +20,14 @@ export const LESSONS: Lesson[] = [
   { id: "2ZzuZvz33X0", subject: "maths", unit: 6, title: "Solving a quadratic equation by factoring", minutes: 6, concepts: ["quadratic equation", "solve by factoring", "zero product"], youtube: "2ZzuZvz33X0" },
   { id: "uzyd_mIJaoc", subject: "maths", unit: 7, title: "The substitution method", minutes: 5, concepts: ["system of equations", "substitution"], youtube: "uzyd_mIJaoc" },
   { id: "V7H1oUHXPkg", subject: "maths", unit: 8, title: "Solving linear systems by substitution", minutes: 9, concepts: ["system of equations", "substitution", "word problem"], youtube: "V7H1oUHXPkg" },
-  { id: "en-5", subject: "english", unit: 5, title: "Past simple — regular and irregular", minutes: 10, concepts: ["past simple", "irregular verbs", "-ed"] },
+  { id: "en-5", subject: "english", unit: 5, title: "Past simple: regular and irregular", minutes: 10, concepts: ["past simple", "irregular verbs", "-ed"] },
   { id: "en-6", subject: "english", unit: 6, title: "Past simple vs present perfect", minutes: 12, concepts: ["past simple", "present perfect", "finished time", "open time", "since", "for", "yesterday"] },
   { id: "en-7", subject: "english", unit: 7, title: "Time markers: yesterday, since, for, already", minutes: 8, concepts: ["time markers", "since", "for", "already", "yet"] },
   { id: "en-8", subject: "english", unit: 8, title: "Questions in the past", minutes: 9, concepts: ["did", "questions", "past simple"] },
-  { id: "es-1", subject: "essay", unit: 1, title: "Thesis — one sentence that takes a side", minutes: 6, concepts: ["thesis", "claim"] },
-  { id: "es-2", subject: "essay", unit: 2, title: "Paragraph — claim, evidence, link", minutes: 8, concepts: ["paragraph", "claim", "evidence", "link"] },
-  { id: "es-3", subject: "essay", unit: 3, title: "Order — which argument goes first", minutes: 5, concepts: ["order", "strongest argument"] },
-  { id: "es-4", subject: "essay", unit: 4, title: "Conclusion — deliver what the introduction promised", minutes: 5, concepts: ["conclusion"] },
+  { id: "es-1", subject: "essay", unit: 1, title: "Thesis: one sentence that takes a side", minutes: 6, concepts: ["thesis", "claim"] },
+  { id: "es-2", subject: "essay", unit: 2, title: "Paragraph: claim, evidence, link", minutes: 8, concepts: ["paragraph", "claim", "evidence", "link"] },
+  { id: "es-3", subject: "essay", unit: 3, title: "Order: which argument goes first", minutes: 5, concepts: ["order", "strongest argument"] },
+  { id: "es-4", subject: "essay", unit: 4, title: "Conclusion: deliver what the introduction promised", minutes: 5, concepts: ["conclusion"] },
 ];
 
 /**
@@ -35,7 +35,7 @@ export const LESSONS: Lesson[] = [
  * the move a faulty sentence falls back to when its reading carries no fix of its own.
  */
 export const ESSAY_TYPES = [
-  { id: "structure", name: "Structure", promise: "Which sentence does which job — claim, evidence, link — and what is missing.", lesson: "para" },
+  { id: "structure", name: "Structure", promise: "Which sentence does which job (claim, evidence, link), and what is missing.", lesson: "para" },
   { id: "argument", name: "Argument", promise: "Does the paragraph take a side, and does every sentence push the same way?", lesson: "thesis" },
   { id: "evidence", name: "Evidence", promise: "What here is a fact a reader can check, and what is only an opinion.", lesson: "para" },
   { id: "language", name: "Language", promise: "Sentence length, rhythm, connectors, repeated words.", lesson: "split" },
