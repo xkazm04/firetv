@@ -7,10 +7,15 @@ Design rules: [../docs/DESIGN-ON-AIR.md](../docs/DESIGN-ON-AIR.md).
 
 ## Run
 
+First time, from a fresh clone: `npm ci`, then `cp .env.example .env.local` (every line is optional; the example
+turns on `DESK_VISION_ENGINE=claude-cli` so a page is read without Ollama). The step-by-step quickstart, with no
+Fire TV, is at the top of the [root README](../README.md#quickstart-5-minutes-no-fire-tv).
+
 ```
 npm run dev              # http://localhost:3000
+npm run build && npm run start -- -H 0.0.0.0 -p 3000   # the production build; any free port works
 npm run dev:https        # the same over HTTPS for this PC's LAN address, so a phone's microphone works (docs/DESK-HTTPS-ON-THE-LAN.md)
-npm test                 # the gate: type check, then the rules suites (node ../tools/run-rules.cjs --jobs 4 runs them four at a time)
+npm test                 # needs `npm --prefix ../tools ci` once; the gate: type check, then the rules suites (node ../tools/run-rules.cjs --jobs 4 runs them four at a time)
 npm run measure          # the KPI readings, as numbers (--json for a machine)
 ```
 
@@ -20,7 +25,8 @@ npm run measure          # the KPI readings, as numbers (--json for a machine)
   TV (a cookie; the key leaves the address). Without it /tv says "Not this desk's TV". The key is kept
   in `data/pairing.json` (under `DESK_DATA_DIR` when set), so a scripted capture reads it from there.
 - **/phone** — the phone. Open on a real phone on the same Wi-Fi at `http://<this PC's IP>:3000/phone`
-  (the landing page prints the address), or in a second browser window. Without a camera, the
+  (the landing page prints the address), or in a second browser tab at `http://localhost:3000/phone`: give
+  that tab a different host name from the TV tab (cookies are per host), or it is the TV again. Without a camera, the
   Capture screen offers three sample pages. A phone joins by giving the server the code the TV shows
   (scan the QR, or type it); the server checks it and remembers that phone until the session is reset.
   Until then the phone sees only the lobby, and every API route but the session's own answers 401
@@ -51,7 +57,7 @@ npm run measure          # the KPI readings, as numbers (--json for a machine)
 No model is needed for any of this: keeping pieces, the portrait, the Workroom and the card are all code. (The Claude
 CLI is needed only if you also want Essay Master's lens readings of a piece.)
 
-1. In `desk/`: `npm install`, then `npm run dev`. The terminal prints `TV: http://<ip>:3000/tv?key=...`.
+1. In `desk/`: `npm ci`, then `npm run dev`. The terminal prints `TV: http://<ip>:3000/tv?key=...`.
 2. **The TV:** open that address in a browser window at 1920×1080 (or the Fire TV's browser). Arrows move, Enter
    selects, Backspace is Back, M is Menu.
 3. **A phone to name the learner:** in a second window (or a phone on the same Wi-Fi) open `http://<ip>:3000/phone`
@@ -117,7 +123,7 @@ it does not test microphone hardware. Other engine caches keep their existing lo
 | text — hints, lesson pick, explanations, essay verdicts | Claude Code CLI, headless (`claude -p`) | `CLAUDE_BIN`, `CLAUDE_FAST_MODEL`, `CLAUDE_BEST_MODEL` |
 | vision — reading a captured page | `qwen3.8:27b` on Ollama; or the Claude CLI, or codex | `DESK_VISION_ENGINE` (`ollama`, the default, `claude-cli` or `codex`), `OLLAMA_HOST`, `OLLAMA_VISION_MODEL`, `CLAUDE_VISION_MODEL` (default: `CLAUDE_BEST_MODEL`, sonnet) |
 | embeddings — lesson segment retrieval | `nomic-embed-text` on Ollama | `OLLAMA_EMBED_MODEL` |
-| voice out — the TV speaks | ElevenLabs | `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID` |
+| voice out — the TV speaks | Piper on this PC, else ElevenLabs, else the browser's own speech | `PIPER_BIN`, `PIPER_VOICE`, `ELEVENLABS_API_KEY`, `ELEVENLABS_VOICE_ID` |
 | voice in — the phone listens | browser speech recognition | — |
 
 `DESK_VISION_ENGINE=claude-cli` reads a page with no Ollama: the photo goes to `claude -p` inline on stdin (stream-json),
@@ -126,7 +132,7 @@ the model gets no tool and no file permission, and it runs on the subscription l
 `codex` is wired the same way (the photo as a temp file, `--image`) but has not been run live. The engine check
 (`/api/smoke`) names the vision provider and says what to fix.
 
-`.env.local` holds the keys and is not committed. Timings measured 2026-09-07: a page read ~25 s
+`.env.local` holds the keys and is not committed; [.env.example](.env.example) lists every setting. Timings measured 2026-09-07: a page read ~25 s
 (the vision model is 17 GB and loads on first use, ~45 s once), a hint 2–8 s, a lesson pick a few
 seconds plus a one-time ~1 min to embed the transcripts (cached in `data/embeddings.json`).
 
