@@ -1408,7 +1408,10 @@ test('thinking case 2: no text() caller outside the conversation asks for thinki
  // and the evening's memory note (M4, 2026-10-09): a few plain sentences from counts, as the TV's recap also asks for it, held to nothing by the phone's End session.
  // and the Writing coach's one note (2026-10-21, 15778925): code picks the focus and holds the note to two sentences and
  // 240 characters (lib/writing/coach.ts), falling back to its own line, so a hasty note costs the model's wording only.
- assert.deepEqual(callers,['src/lib/desk/items.ts','src/lib/desk/memory.ts','src/lib/desk/worked.ts','src/lib/english/conversation.ts','src/lib/writing/coach.ts']);
+ // and the lesson pick behind a hint (2026-10-22, the demo film's stick take: "Finding the lesson…" never settled while the
+ // hint was on screen): code holds the answer to an id from the menu it offered (else no lesson) and runs the why through
+ // the hint's leak check (lib/desk/pick.ts), so a hasty pick costs a lesson or a 'none', never an answer on the TV.
+ assert.deepEqual(callers,['src/lib/desk/items.ts','src/lib/desk/memory.ts','src/lib/desk/pick.ts','src/lib/desk/worked.ts','src/lib/english/conversation.ts','src/lib/writing/coach.ts']);
  const items=fs.readFileSync(path.join(root,'src/lib/desk/items.ts'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
  assert.equal((items.match(/thinking\s*:\s*false/g)||[]).length,1,'items.ts asks for thinking off once: the Calculus spec writer');
  assert.match(items.split('function askCalc')[1]??'',/thinking:\s*false/,'and that one is in askCalc, not the school question writer');

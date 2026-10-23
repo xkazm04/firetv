@@ -141,6 +141,32 @@ test('case 5: a lesson pick that fails or comes back without a lesson ends as "n
  }
 });
 
+// The demo film's stick take (2026-10-22): the hint screen read "Finding the lesson…" for the whole hint window. The pick
+// starts only once the hint lands, and it asked haiku with hidden reasoning and the CLI's extra structured-output turn
+// (52-90 s, a third of calls timing out at the 90 s text default). A menu choice is a short call: thinking off, the JSON
+// asked for directly, and a deadline of its own, so a pick that still hangs ends as "No lesson this time", not a wait.
+test('case 5L: the lesson pick is a short call - thinking off, isolated, its own deadline under the text default - and a timed-out pick ends the wait',async()=>{
+ const {EngineError}=require(src('lib/engines/types.ts'));
+ const {PICK_TIMEOUT_MS}=require(src('lib/desk/pick.ts'));const {DEADLINE_MS}=require(src('lib/engines/call.ts'));
+ let seen=null;
+ onPage();
+ stubText({hint:()=>({hint:'Look at the +3.',what_to_try_next:'Undo it.'}),lesson:(req)=>{seen=req;throw new EngineError('timeout','stub','stub timeout');}});
+ assert.equal((await post('hint',{})).status,200);await drain();
+ assert(seen,'the lesson pick was asked');
+ assert.equal(seen.thinking,false,'no hidden reasoning on a menu choice');
+ assert.equal(seen.isolated,true,'the JSON is asked for directly, without the CLI\'s extra structured-output turn');
+ assert.equal(seen.timeoutMs,PICK_TIMEOUT_MS);
+ assert(PICK_TIMEOUT_MS<=30000&&PICK_TIMEOUT_MS<DEADLINE_MS.text,'the pick gives up well before the text default');
+ const s=store.getSession();
+ assert.equal(s.jobs.lesson.phase,'failed');deskWorded(s.jobs.lesson.error);
+ assert.equal(s.noLesson,true,'the chip reads "No lesson this time", not "Finding the lesson…"');assert.equal(s.lesson,null);
+ // and a pick that answers, isolated, still lands its lesson
+ onPage();
+ stubText({hint:()=>({hint:'Look at the +3.',what_to_try_next:'Undo it.'}),lesson:()=>({lesson:LESSON,why:'chosen because your problem needs one step undone'})});
+ assert.equal((await post('hint',{})).status,200);await drain();
+ assert.equal(store.getSession().lesson?.id,LESSON);assert.equal(store.getSession().noLesson,false);
+});
+
 test('case 6: a hint that throws answers 502 with an error, and the TV stays on the page',async()=>{
  onPage();
  stubText({hint:()=>{throw new Error('boom');}});
