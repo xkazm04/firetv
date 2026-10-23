@@ -90,6 +90,16 @@ export function clampLabel(name: string, room: number, ch = LABEL_CH): string {
   return n > 0 ? `${name.slice(0, n).trimEnd()}…` : "";
 }
 
+/**
+ * The label a strand's bar carries: its name the first time the path reaches it, "More <name>" when the path comes back to
+ * it after another strand (the school path: Equations and Geometry and data are each two bars, by year), so the ruler does
+ * not read the same word twice. `seen` is the names already labelled, in path order.
+ */
+export function strandLabel(name: string, seen: Set<string>): string {
+  const again = seen.has(name); seen.add(name);
+  return again ? `More ${name.charAt(0).toLowerCase()}${name.slice(1)}` : name;
+}
+
 /** The strands, in path order, over the slots they cover. */
 function strandsOver(topics: RulerTopic[], slots: Array<{ sx: number; sw: number }>, inset: number, gap: number): RulerStrand[] {
   const out: RulerStrand[] = [];
@@ -98,7 +108,8 @@ function strandsOver(topics: RulerTopic[], slots: Array<{ sx: number; sw: number
     if (last && topics[i - 1]?.strand === t.strand) { last.w += slots[i].sw; return; }
     out.push({ name: t.strand, x: slots[i].sx, w: slots[i].sw, labelX: 0, labelW: 0, label: "" });
   });
-  for (const g of out) { g.labelX = g.x + inset; g.labelW = Math.max(0, g.w - inset - gap); g.label = clampLabel(g.name, g.labelW); }
+  const seen = new Set<string>();
+  for (const g of out) { g.labelX = g.x + inset; g.labelW = Math.max(0, g.w - inset - gap); g.label = clampLabel(strandLabel(g.name, seen), g.labelW); }
   return out;
 }
 
@@ -249,8 +260,10 @@ export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prer
   const width = TRACK - PAD * 2;
   const groups: Array<{ name: string; ids: string[] }> = [];
   topics.forEach((t, i) => { const last = groups[groups.length - 1]; if (last && topics[i - 1]?.strand === t.strand) last.ids.push(t.id); else groups.push({ name: t.strand, ids: [t.id] }); });
+  // a strand the path comes back to is labelled "More ..." (strandLabel); `name` stays the strand's own
+  const seen = new Set<string>(), shown = groups.map((g) => strandLabel(g.name, seen));
   // each bar's floor: MIN_SEG, or the room its label needs whole, when all of those fit the strip together
-  const needs = groups.map((g) => Math.max(MIN_SEG, Math.ceil(labelNeed(g.name, STRIP_CH)) + STRIP_INSET));
+  const needs = groups.map((_g, i) => Math.max(MIN_SEG, Math.ceil(labelNeed(shown[i], STRIP_CH)) + STRIP_INSET));
   const floor = needs.reduce((a, b) => a + b, 0) <= width ? needs : groups.map(() => MIN_SEG);
   // proportional widths; a bar under its floor is held at it and the rest share what is left, until none is under
   const fixed = new Set<number>();
@@ -270,7 +283,7 @@ export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prer
   const segments: StripSegment[] = groups.map((g, i) => {
     const x = bounds[i], sw = bounds[i + 1] - bounds[i], n = g.ids.filter((id) => secure.has(id)).length, up = g.ids.filter((id) => stretched(id)).length;
     const labelX = x + 18, labelW = Math.max(0, sw - STRIP_INSET);
-    const lines = wrapLabel(g.name, labelW, STRIP_CH) ?? [clampLabel(g.name, labelW, STRIP_CH)];
+    const lines = wrapLabel(shown[i], labelW, STRIP_CH) ?? [clampLabel(shown[i], labelW, STRIP_CH)];
     return { name: g.name, count: g.ids.length, secure: n, share: n / g.ids.length, stretch: up, stretchShare: up / g.ids.length, x, w: sw, labelX, labelW, label: lines.join(" "), lines };
   });
   const fi = school ? afterLastSecure(topics.map((t) => t.id), (id) => secure.has(id)) : topics.findIndex((t) => !secure.has(t.id) && t.prereq.every((p) => secure.has(p)));

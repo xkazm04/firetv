@@ -22,7 +22,7 @@ const firstSecure=(topics,n)=>Object.fromEntries(topics.map((t,i)=>[t.id,i<n?'se
 // ---------------------------------------------------------------- 1. the school ruler is drawn as it was
 
 test('ruler model 1: N = 17 (the school path since v2 M2b; 15 since W7 batch 3) - the small ruler keeps today\'s formulas; the big Topics ruler pans',()=>{
- const {rulerModel,needleX,flagX,clampLabel,TRACK,PAD,MIN_SPAN,FOCUS_SPAN,STRIP_AFTER}=RR();
+ const {rulerModel,needleX,flagX,clampLabel,strandLabel,TRACK,PAD,MIN_SPAN,FOCUS_SPAN,STRIP_AFTER}=RR();
  assert.equal(TRACK,1728,'the ruler is the stage less its two 96 px safe margins');assert.equal(PAD,26,'26 px each end, the 52 px margins');
  // W5b put 'Add and subtract fractions' first in its own strand; W7 batch 1 made the Fractions strand four units; W7
  // batch 2 put the Decimals and percent strand after one-step equations; W7 batch 3 put Ratio and rates and Geometry and
@@ -40,7 +40,7 @@ test('ruler model 1: N = 17 (the school path since v2 M2b; 15 since W7 batch 3) 
   assert.equal(m.trackWidth,26*2+(N-1)*MIN_SPAN+FOCUS_SPAN);
   const f=m.topics[focus];assert.ok(f.sx-m.offset>=0&&f.sx+f.sw-m.offset<=1728,`focus ${focus}: the focused topic is on the stage`);
   assert.deepEqual(m.strands.map((s)=>s.name),STRANDS);
-  for(const g of m.strands)assert.equal(g.label,clampLabel(g.name,g.labelW),`${g.name}: its label fits its strand`);
+  {const seen=new Set();for(const g of m.strands)assert.equal(g.label,clampLabel(strandLabel(g.name,seen),g.labelW),`${g.name}: its label fits its strand`);}
   assert.equal(needleX(m,1,0.5),m.topics[1].sx+0.5*m.topics[1].sw,'the needle is part way through its slot');
  }
  for(const big of [false])for(const focus of [undefined,...Array.from({length:N},(_,i)=>i)]){
@@ -55,7 +55,7 @@ test('ruler model 1: N = 17 (the school path since v2 M2b; 15 since W7 batch 3) 
   });
   assert.equal(m.end-1.5,26+N*span-1.5,'the end tick');
   assert.deepEqual(m.strands.map((s)=>s.name),STRANDS);
-  m.strands.forEach((g,i)=>{assert.equal(g.labelX,26+FROM[i]*span+20,`${g.name} starts at slot ${FROM[i]}`);assert.equal(g.label,clampLabel(g.name,g.labelW));});
+  {const seen=new Set();m.strands.forEach((g,i)=>{assert.equal(g.labelX,26+FROM[i]*span+20,`${g.name} starts at slot ${FROM[i]}`);assert.equal(g.label,clampLabel(strandLabel(g.name,seen),g.labelW));});}
   assert.equal(m.strands[0].label,'Fractions','the fractions strand over the first four slots, unclamped');
   for(const [fr,fill] of [[0,0],[0,0.4],[1,0.7],[2,1],[3,1],[5,0.5],[6,1],[9,0.3],[10,1],[12,0.5],[14,1]])assert.equal(needleX(m,fr,fill),26+(fr+fill)*span,`needle at ${fr}+${fill}`);
   for(const exp of Array.from({length:N+3},(_,i)=>i-1))assert.equal(flagX(m,exp),26+Math.max(0,Math.min(N,exp))*span,`school tick at ${exp}`);

@@ -212,13 +212,13 @@ test('6: the strand strip at seventeen topics - seven bars (Equations twice, Geo
  // 'Equations' whole), so three bars are held at 189 px and the other four share what is left; the Geometry and data bars take 185 px
  assert.equal(S0.segments.reduce((a,g)=>a+g.w,0),1728-52);
  const one=S0.segments[1];assert.equal(one.w,Math.ceil(RR.labelNeed('Equations',RR.STRIP_CH))+RR.STRIP_INSET,'the one-topic bar is as wide as its label');assert.equal(one.w,189);
- assert.deepEqual(S0.segments.map((g)=>g.w),[370,189,369,189,185,189,185],'measured: the labels\' floors hold, the rest share what is left');
+ assert.deepEqual(S0.segments.map((g)=>g.w),[340,189,340,189,172,189,257],'measured: the labels\' floors hold, the rest share what is left');
  S0.segments.forEach((g,i)=>{assert.ok(g.w>=RR.MIN_SEG,`${g.name} at least ${RR.MIN_SEG} px`);assert.ok(g.w>=Math.ceil(RR.labelNeed(g.name,RR.STRIP_CH))+RR.STRIP_INSET,`${g.name}: room for its label`);if(i)assert.equal(g.x,S0.segments[i-1].x+S0.segments[i-1].w);});
- for(const g of S0.segments){
-  assert.equal(g.label,g.name,`${g.name}: whole, never clamped`);assert.equal(g.lines.join(' '),g.name);assert.ok(g.lines.length<=RR.STRIP_LINES);
+ {const seen=new Set();for(const g of S0.segments){const shown=RR.strandLabel(g.name,seen);
+  assert.equal(g.label,shown,`${g.name}: whole, never clamped`);assert.equal(g.lines.join(' '),shown);assert.ok(g.lines.length<=RR.STRIP_LINES);
   for(const l of g.lines)assert.ok(l.length*RR.STRIP_CH<=g.labelW,`${g.name}: "${l}" fits ${g.labelW} px`);
- }
- assert.deepEqual(S0.segments.map((g)=>g.lines),[['Fractions'],['Equations'],['Decimals and','percent'],['Ratio and','rates'],['Geometry','and data'],['Equations'],['Geometry','and data']]);
+ }}
+ assert.deepEqual(S0.segments.map((g)=>g.lines),[['Fractions'],['Equations'],['Decimals and','percent'],['Ratio and','rates'],['Geometry','and data'],['More','equations'],['More geometry','and data']]);
  // inked by share: fractions all secure and one-step; the conversion alone of the four; nothing after
  const S1=RR.stripModel(SCHOOL,stripStates([E,O,F,MD,ONE,DC]),true);
  assert.deepEqual(S1.segments.map((g)=>g.share),[1,1,0.25,0,0,0,0]);

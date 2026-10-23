@@ -13,6 +13,7 @@ import type { SchoolSystem, Session } from "@/lib/session/store";
 import { PATHS, expectedOn, learnerPath, topicsOf, type PathTopic } from "@/lib/library/paths";
 import { systemOf } from "@/tv/profileRows";
 import { topGeneratorFor } from "@/lib/rules/school";
+import { strandLabel } from "@/tv/rulerRows";
 
 /** A topic's school year as the learner's school system says it. Handed a year, never a topic: a course topic has none. */
 export const SYS_WORD: Record<SchoolSystem, (y: NonNullable<PathTopic["year"]>) => string> = {
@@ -144,13 +145,13 @@ export interface PrepareModel {
  * (the window's middle), clamped so neither end shows a gap - the Topics ruler's pan, for cards.
  */
 export function prepareModel(groups: PrepareGroup[], focus: number): PrepareModel {
-  const cards: PrepareCard[] = [], strands: PrepareStrand[] = [];
+  const cards: PrepareCard[] = [], strands: PrepareStrand[] = [], seen = new Set<string>();
   let x = EDGE;
   groups.forEach((g, gi) => {
     if (gi > 0) x += GROUP_GAP - CARD_GAP;
     const x0 = x;
     for (const u of g.units) { cards.push({ id: u.id, x, w: CARD, group: gi }); x += CARD + CARD_GAP; }
-    strands.push({ strand: g.strand, x: x0, w: x - CARD_GAP - x0, labelX: x0 });
+    strands.push({ strand: strandLabel(g.strand, seen), x: x0, w: x - CARD_GAP - x0, labelX: x0 });
   });
   const end = cards.length ? cards[cards.length - 1].x + CARD : EDGE;
   const trackWidth = Math.max(WINDOW, end + EDGE);
