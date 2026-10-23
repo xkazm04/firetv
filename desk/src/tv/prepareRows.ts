@@ -130,7 +130,11 @@ export const HEAD_CH = 17;
 
 export interface PrepareCard { id: string; x: number; w: number; group: number }
 /** A strand over its cards (x, w) and where its heading starts (`labelX`): at the strand's start, or kept on the stage past the fade. */
-export interface PrepareStrand { strand: string; x: number; w: number; labelX: number }
+/**
+ * `clear` is false for a heading the window's fades would cut to a fragment ("IONS", "DECI"): one that could not be kept past
+ * the left fade, or that starts inside the right one. It is hidden, not shown in part (TV polish wave 3).
+ */
+export interface PrepareStrand { strand: string; x: number; w: number; labelX: number; clear: boolean }
 export interface PrepareModel {
   cards: PrepareCard[];
   strands: PrepareStrand[];
@@ -151,7 +155,7 @@ export function prepareModel(groups: PrepareGroup[], focus: number): PrepareMode
     if (gi > 0) x += GROUP_GAP - CARD_GAP;
     const x0 = x;
     for (const u of g.units) { cards.push({ id: u.id, x, w: CARD, group: gi }); x += CARD + CARD_GAP; }
-    strands.push({ strand: strandLabel(g.strand, seen), x: x0, w: x - CARD_GAP - x0, labelX: x0 });
+    strands.push({ strand: strandLabel(g.strand, seen), x: x0, w: x - CARD_GAP - x0, labelX: x0, clear: true });
   });
   const end = cards.length ? cards[cards.length - 1].x + CARD : EDGE;
   const trackWidth = Math.max(WINDOW, end + EDGE);
@@ -160,5 +164,10 @@ export function prepareModel(groups: PrepareGroup[], focus: number): PrepareMode
   const offset = c ? Math.max(0, Math.min(trackWidth - WINDOW, c.x + c.w / 2 - WINDOW / 2)) : 0;
   // a strand that starts off the stage keeps its heading on it, past the left fade, as long as the heading still fits over its cards
   if (offset > 0) for (const s of strands) s.labelX = Math.max(s.x, Math.min(offset + FADE, s.x + s.w - s.strand.length * HEAD_CH));
-  return { cards, strands, trackWidth, offset, more: { l: offset > 0, r: offset < trackWidth - WINDOW } };
+  const more = { l: offset > 0, r: offset < trackWidth - WINDOW };
+  for (const s of strands) {
+    const w = s.strand.length * HEAD_CH;
+    s.clear = !(more.l && s.labelX < offset + FADE) && !(more.r && s.labelX + w > offset + WINDOW - FADE);
+  }
+  return { cards, strands, trackWidth, offset, more };
 }

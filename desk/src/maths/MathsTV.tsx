@@ -688,7 +688,7 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
     <div className="mb-prep" data-role="maths-prepare" data-asking={asking || undefined}>
       <div className="mb-pwin" data-l={m.more.l || undefined} data-r={m.more.r || undefined}>
         <div className="mb-ptrack" style={{ width: m.trackWidth, transform: `translateX(${-m.offset}px)` }}>
-          {m.strands.map((g) => <div key={"g" + g.strand} className="mb-pstrand" style={{ left: g.x, width: g.w }}><span style={{ marginLeft: g.labelX - g.x }}>{g.strand}</span></div>)}
+          {m.strands.map((g) => <div key={"g" + g.strand} className="mb-pstrand" data-clear={g.clear} style={{ left: g.x, width: g.w }}><span style={{ marginLeft: g.labelX - g.x }}>{g.strand}</span></div>)}
           {m.cards.map((c, i) => {
             const u = stops[i];
             return (
