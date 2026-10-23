@@ -31,7 +31,8 @@ function launcher(): { cmd: string; pre: string[] } {
   return js ? { cmd: process.execPath, pre: [js] } : { cmd: "codex", pre: [] };
 }
 
-type CodexRequest = TextRequest & { effort?: string };
+/** `images`: paths to image files attached to the message (`codex exec -i`), for the vision engine's codex provider. */
+type CodexRequest = TextRequest & { effort?: string; images?: string[] };
 
 /** codex exec. It only produces the answer; text() and codexText() parse and check it, as for every provider. */
 export const codexCli: Provider<CodexRequest, unknown> = {
@@ -46,6 +47,8 @@ export const codexCli: Provider<CodexRequest, unknown> = {
       const args = ["exec", "-m", model, "--ephemeral", "--skip-git-repo-check", "-s", "read-only", "--color", "never",
         "-c", `model_reasoning_effort="${req.effort ?? process.env.UAT_CODEX_EFFORT ?? "medium"}"`, "-o", last];
       if (req.schema) { const file = path.join(dir, "schema.json"); await writeFile(file, JSON.stringify(req.schema)); args.push("--output-schema", file); }
+      // --image=<file>, one value each: `-i` takes several values and would swallow the stdin "-" after it
+      for (const image of req.images ?? []) args.push(`--image=${image}`);
       args.push("-");
       const message = `${req.system}\n\n---\n\n${req.prompt}${req.schema ? "\n\nReturn only the JSON object." : ""}`;
       const { cmd, pre } = launcher();
