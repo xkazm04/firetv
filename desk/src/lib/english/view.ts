@@ -784,7 +784,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const close = { menu: false }, checkPartWay = !!lc && (lc.stage === "about" || lc.stage === "tasks");
     actions = [
       // no scene running (the welcome, the level, a finished scene): there is no scene to go back to
-      act("menu-back", rehearsing ? "Back to the scene" : "Close the menu", "Return to where you were.", { ui: close, focus: -1 }),
+      // opened over the level picker, the menu closes back onto it, on the band that was lit (TV polish wave 3: it fell to the welcome)
+      act("menu-back", rehearsing ? "Back to the scene" : "Close the menu", "Return to where you were.", { ui: close, focus: picking ? 0 : -1 }),
       act("learning-map", "Learning map", "Explore the abilities you can practise and your progress in each.", go("linga-map")),
       chooseSituation("Choose a new scene; your existing evidence stays saved."),
       act("my-level", "My level", l.placement ? `${l.placement.band} · ${BAND_NAME[l.placement.band]}. See it, find it again, or pick it yourself.` : "Find your level with three questions and a few short tasks.", l.placement ? go("linga-verdict") : { ...cmd("check-start"), ui: close }),
@@ -797,6 +798,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       act("sentence-help", "Sentence help", "Open Say it on the phone for help with a particular sentence.", go("sentence")),
       ...(rehearsing ? [act("finish", "Finish rehearsal", "End this scene and save a recap.", { ...cmd("finish"), ui: close }, { disabled: refused("finish") })] : []),
     ];
+    // every way on from the menu but its Close leaves the picker behind
+    actions = actions.map(a => (a.id === "menu-back" || !picking ? a : { ...a, run: { ...a.run, ui: { ...a.run.ui, picking: null } } }));
     tag = "Your controls"; captionTag = "Your choice"; title = "Make it work for you";
     hero = { kind: "menu", kicker: "Linga", title, entries: actions.map(a => a.label), selected: s.focus };
     caption = actions[Math.max(0, s.focus)]?.help ?? actions[0].help;
@@ -811,7 +814,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   if (error) { caption = error; captionTag = "Try again"; }
 
   const footer = [
-    act("menu", "Menu", menu ? "Close the menu." : "Open the menu.", { ui: { menu: !menu, picking: null }, focus: 0 }),
+    act("menu", "Menu", menu ? "Close the menu." : "Open the menu.", { ui: { menu: !menu }, focus: 0 }),
     ...(c && !isHome && !onCheck ? [act("repeat", "Repeat audio", "Hear the last line again.", cmd("repeat"), { disabled: refused("repeat") })] : []),
   ];
 
