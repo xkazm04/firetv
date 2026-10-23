@@ -186,6 +186,8 @@ adb connect <stick-ip>:5555
 adb -s <stick-ip>:5555 install -r stick-app/build/outputs/apk/debug/stick-app-debug.apk
 ```
 
+With the downloaded release APK, install `study-desk-firetv.apk` instead of the build path.
+
 **3. Make the stick the desk's TV.** Pair it once with the `TV:` link the desk printed:
 
 ```sh
