@@ -3690,6 +3690,14 @@ test('stick walk 2026-10-23: a pitched tavern, pub or restaurant draws the café
  assert.equal(V.artOf('pitch-x','relate','A publisher meets an author'),'start','publisher is not a pub');
 });
 
+test('stick walk 2026-10-23: the sentence to take with you drops a pitched cue\'s wrapping straight quotes and writes the rest as the authored cues are',()=>{
+ const V=view();
+ assert.equal(V.sentenceOf('Try: "I don\'t know much about wine yet..."'),'I don\'t know much about wine yet…');
+ assert.equal(V.sentenceOf('Try asking: Which way should I go?'),'Which way should I go?','an authored cue is unchanged');
+ assert.equal(V.sentenceOf('Try: Is "cheers" polite here?'),'Is “cheers” polite here?','an inner pair turns curly');
+ assert.equal(V.sentenceOf('Try: I enjoy this because…'),'I enjoy this because…');
+});
+
 test('F19 (stick pass 2026-10-20): a generated scene draws the picture of its place, or the neutral one, never its skill\'s',()=>{
  const V=view();
  const cafe={id:'plan-cafe',name:'A hot drink at the café',goal:'Order a hot drink and ask what it costs.',partner:'Ana · Barista',skill:'request',audience:'all',minutes:'6–8',premise:'A fictional café in town.',cue:'Try: I want a hot drink.',quiz:{question:'Ana asks: What would you like?',options:['I want a hot drink.','I am seven.'],correct:0}};

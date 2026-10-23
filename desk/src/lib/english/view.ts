@@ -60,8 +60,16 @@ export function artOf(sceneId: string, skill: SkillId, words = ""): ArtKey {
   if (AUTHORED_SCENES.some(x => x.id === sceneId)) return SKILL_ART[skill];
   return PLACE_ART.find(([re]) => re.test(words))?.[1] ?? NEUTRAL_ART;
 }
-/** The sentence to take with you: a scene's cue without its "Try…:" lead. */
-export function sentenceOf(cue: string): string { return cue.replace(/^Try(?: [a-z]+)?:\s*/, ""); }
+/**
+ * The sentence to take with you: a scene's cue without its "Try…:" lead. A pitched scene's cue can arrive wrapped in the
+ * model's straight quotes ("I don't know much about wine yet..."): the card is the quote, so a wrapping pair goes, any
+ * other straight pair turns curly and three dots become an ellipsis, as the authored cues are written (stick walk 2026-10-23).
+ */
+export function sentenceOf(cue: string): string {
+  const line = cue.replace(/^Try(?: [a-z]+)?:\s*/, "").trim();
+  const bare = /^["“]([^"“”]*)["”]$/.exec(line)?.[1] ?? line;
+  return bare.replace(/"([^"]*)"/g, "“$1”").replace(/\.\.\./g, "…");
+}
 
 /** The six states of Linga home, in the order they are decided. */
 export const HOME_STATES = ["resume", "check-part-way", "no-placement", "no-plan", "plan-done", "next-topic"] as const;
