@@ -492,7 +492,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       }
       case "no-placement":
         tag = "Welcome"; title = "Let's find your level"; caption = "Three questions about you, then a few short tasks. About seven minutes, answered on your phone.";
-        hero = intro("Before your first conversation", "A1 to C2 · about 7 minutes", "check", "Your first step");
+        // the data line follows the lit door, as the caption does: the seven minutes are Find my level's, not the picker's
+        hero = intro("Before your first conversation", s.focus === 1 ? "A1 to C2 · you choose" : "A1 to C2 · about 7 minutes", "check", "Your first step");
         actions = [act("find-level", "Find my level", caption, cmd("check-start")), act("pick-level", "I'll pick my level", "Choose a level from A1 to C2 yourself. Linga can find it with you later.", pickAt(level))];
         break;
       case "no-plan": {

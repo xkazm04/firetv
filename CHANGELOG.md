@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Linga's welcome: with I'll pick my level lit, the line under the caption reads "A1 to C2 · you choose" instead of the level check's "about 7 minutes" ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - A desk no one is seated at no longer offers the same action twice: the big button stays Choose who is studying and the card under it is Add a learner, which opens the switcher with the lamp on Add a learner ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - A portable package, `dist/study-desk-portable.zip` (`npm run package:portable` in desk/): a built desk that starts with only Node.js 24 and opens on a demo learner seeded by the new `npm run seed:demo`, which refuses desk/data ([tools/portable/INSTALL.md](tools/portable/INSTALL.md)).
 - Essay Master: when a reading fails (for example with no text engine signed in), the lens home and the paragraph plan say what to do next after the reason (Select a lens to send it again from the phone; Press OK on Read it), instead of only why it failed ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
