@@ -117,7 +117,8 @@ function Chips({ s, clock = true, phone = true, learner = true, menu }: { s: Ses
       {handoffOf(s)
         ? <div className="mb-glyph" data-role="maths-onphone">{PHONE}<span className="mb-lab">On your phone</span></div>
         : phone && (s.joined
-        ? <div className="mb-glyph" data-role="maths-chip">{PHONE}<span className="mb-lab">Phone</span></div>
+        // the words Essay Master's chip uses (EssayTV phoneWord): a paired phone that is not here now says so
+        ? <div className="mb-glyph" data-role="maths-chip">{PHONE}<span className="mb-lab">{s.phonesLive === 0 ? "Phone not here" : "Phone joined"}</span></div>
         : <div className="mb-glyph" data-role="maths-chip">{PHONE}<span className="mb-lab">Pin</span><span className="pin">{s.pin}</span></div>)}
       {clock && (
         <div className="mb-chip mb-clock" data-role="maths-chip" data-running={run}>
