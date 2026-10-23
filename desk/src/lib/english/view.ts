@@ -627,7 +627,9 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     tag = `Chapter ${chapter % 8 + 1} of 8`; title = skill.name; caption = skill.goal;
     hero = { kind: "track", kicker: `Your progress · ${PROGRESS_LABEL[progress]}`, title, progress, subtitle: typed > 0 ? `${typed} written practice observations · typed and spoken both count` : "", illustration: SKILL_ART[skill.id] };
     // Next first (the map opens on chapter 1, where Previous wraps to 8); each caption names the chapter it goes to, not its goal, which reads as this chapter's
-    actions = [act("next-chapter", "Next chapter", `${ENGLISH_SKILLS[(chapter + 1) % 8].name}.`, { ui: { chapter: (chapter + 1) % 8 } }), act("previous-chapter", "Previous chapter", `${ENGLISH_SKILLS[(chapter + 7) % 8].name}.`, { ui: { chapter: (chapter + 7) % 8 } })];
+    // with its number, so Previous on chapter 1 reads "Chapter 8: ..." and the wrap is not a surprise (stick walk 2026-10-23)
+    const to = (n: number) => `Chapter ${n + 1}: ${ENGLISH_SKILLS[n].name}.`;
+    actions = [act("next-chapter", "Next chapter", to((chapter + 1) % 8), { ui: { chapter: (chapter + 1) % 8 } }), act("previous-chapter", "Previous chapter", to((chapter + 7) % 8), { ui: { chapter: (chapter + 7) % 8 } })];
   } else if (c && s.screen === "linga-moment" && c.moment) {
     const m = c.moment, r = m.kind === "fix" ? m.repair : undefined; tag = "A moment";
     const back = act("back", "Back to the conversation", backHelp(c), cmd("moment-done"), { disabled: refused("moment-done") });
