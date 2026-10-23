@@ -1,0 +1,47 @@
+{
+  "v": 1,
+  "at": "2026-10-23T07:41:07.386Z",
+  "mode": "live",
+  "commit": "5ca59c30",
+  "providers": {
+    "vision": "claude-cli/sonnet",
+    "text": "claude-cli/haiku"
+  },
+  "read": {
+    "maths": {
+      "of": 10,
+      "found": 10,
+      "exact": 10,
+      "selects": 10,
+      "error": null
+    },
+    "essay": {
+      "of": 4,
+      "found": 4,
+      "exact": 4,
+      "selects": 4,
+      "error": null
+    }
+  },
+  "hints": {
+    "of": 12,
+    "leaked": 1,
+    "reasked": 1,
+    "reached": 0,
+    "latex": 0,
+    "errors": 0
+  },
+  "retrieval": {
+    "of": 9,
+    "right": 8,
+    "errors": 0
+  },
+  "verdicts": {
+    "A": "pass",
+    "B": "pass",
+    "C": "pass"
+  },
+  "against": "2026-10-23-1.json",
+  "alerts": [],
+  "notes": []
+}
