@@ -1157,12 +1157,12 @@ export function Units({ s, focus }: { s: Session; focus: number }) {
   const pan = usePaper(focus);
   // a path with no lessons on file (Calculus 1): one honest line, nothing to focus; Back still goes home
   if (!list.length) return (<>
-    <Top s={s} crumb="Units" />
+    <Top s={s} crumb="Lessons" />
     <h1 className="mb-title" data-role="maths-title" style={{ top: 150 }}><Amber text="Lessons on file" /></h1>
     <Caption text={`${noLessonsLine(learnerPath(s))} Back returns to Tonight.`} />
   </>);
   return (<>
-    <Top s={s} crumb="Units" />
+    <Top s={s} crumb="Lessons" />
     <div className="mb-win" style={{ top: 146, height: 880 }}>
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
@@ -1194,7 +1194,7 @@ export function Calendar({ s, focus }: { s: Session; focus: number }) {
   if (!list.length) return (<>
     <Top s={s} crumb="Lessons on file" />
     <h1 className="mb-title" data-role="maths-title" style={{ top: 150 }}>Where you <em>are</em></h1>
-    <Caption text={`${noLessonsLine(learnerPath(s))} Back returns to the units.`} top={960} />
+    <Caption text={`${noLessonsLine(learnerPath(s))} Back returns to the lessons.`} top={960} />
   </>);
   return (<>
     <Top s={s} crumb="Lessons on file" />
@@ -1214,7 +1214,7 @@ export function Calendar({ s, focus }: { s: Session; focus: number }) {
         ...Array.from({ length: 3 - (b - a) }, (_, k) => <div key={w + k} />),
       ])}
     </div>
-    <Caption text={`${done ? `${done} of ${list.length} lessons watched` : "No lesson watched yet"}. Select opens the lesson; Back returns to the units.`} top={960} />
+    <Caption text={`${done ? `${done} of ${list.length} lessons watched` : "No lesson watched yet"}. Select opens the lesson; Back returns to the lessons.`} top={960} />
   </>);
 }
 

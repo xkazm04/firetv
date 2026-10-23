@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Math Buddy's lessons list is called Lessons in its header, as the Menu chip that opens it says, instead of Units; the calendar's caption says Back returns to the lessons ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Math Buddy's Still open card: a set with fractions no longer has its thumbnail rows run into each other; the small sheet sets each fraction on the line (54/63) ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Math Buddy's practice sheet draws a camera on Snap the sheet and a keyboard on Type my answers, instead of a page and the hint bulb ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - A browser that opens /tv without the key now reads how to become the TV: open the link the desk printed in its terminal when it started (it ends in /tv?key=...), instead of only "Open the TV address the desk printed" ([README.md](README.md)).
