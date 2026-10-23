@@ -41,6 +41,9 @@ export const SKILL_ART: Record<SkillId, SceneArt> = { contact: "meet", describe:
 const PLACE_ART: ReadonlyArray<[RegExp, SceneArt]> = [
   [/\b(?:caf[eé]|coffee|barista|tea ?shop)(?![a-z])/i, "date"],
   [/\bhotels?\b/i, "booking"],
+  // a pub, tavern or restaurant is a table with drinks too: the café table, not the neutral door (stick walk 2026-10-23);
+  // after the hotel, so a bar in a hotel keeps the hotel desk
+  [/\b(?:pub|tavern|restaurant|diner)s?\b/i, "date"],
   [/\b(?:classroom|teacher)s?\b/i, "teacher"],
   [/\binterview/i, "interview"],
   [/\b(?:moon|rover)s?\b/i, "rover"],

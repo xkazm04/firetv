@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- A pitched Linga scene set in a tavern, pub or restaurant draws the café table instead of the neutral way-in picture ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Linga's level picker: with a level lit, Higher and Lower say where they go (Up to B2, Down to A2), so the caption is no longer read as the lit level ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - The Writing screen's caption sits on the stage's lower edge, as On Air's other captions do, so the prompt list and the chosen prompt no longer leave the lower half of the TV empty ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Teach me something opens Topics on the first topic, where the Tonight ruler's needle stands, for a learner past the school path's end with nothing secure, instead of on Probability; Get ready for school still opens on the last topic ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).

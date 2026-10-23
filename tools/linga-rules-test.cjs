@@ -3683,6 +3683,13 @@ test('stick walk 2026-10-23 (K2): with B1 lit, Higher and Lower say where they g
  assert.equal(V.lingaView(sessionOf(Object.values(SWEEP)[0]),{picking:'C2'}).actions.find(a=>a.id==='higher').help,'C2 is the top level.');
 });
 
+test('stick walk 2026-10-23: a pitched tavern, pub or restaurant draws the café table; a hotel bar keeps the hotel desk',()=>{
+ const V=view();
+ for(const w of ['A quiet evening at the tavern · Bran · Innkeeper','Order at the village pub · Sam · Barman','Book a table at a restaurant · Lu · Waiter'])assert.equal(V.artOf('pitch-x','relate',w),'date',w);
+ assert.equal(V.artOf('pitch-x','relate','The bar of the Grand Hotel · Ivo · Receptionist'),'booking','the hotel row comes first');
+ assert.equal(V.artOf('pitch-x','relate','A publisher meets an author'),'start','publisher is not a pub');
+});
+
 test('F19 (stick pass 2026-10-20): a generated scene draws the picture of its place, or the neutral one, never its skill\'s',()=>{
  const V=view();
  const cafe={id:'plan-cafe',name:'A hot drink at the café',goal:'Order a hot drink and ask what it costs.',partner:'Ana · Barista',skill:'request',audience:'all',minutes:'6–8',premise:'A fictional café in town.',cue:'Try: I want a hot drink.',quiz:{question:'Ana asks: What would you like?',options:['I want a hot drink.','I am seven.'],correct:0}};
