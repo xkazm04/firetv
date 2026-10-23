@@ -780,7 +780,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const rehearsing = c && c.phase !== "finished";
     const close = { menu: false }, checkPartWay = !!lc && (lc.stage === "about" || lc.stage === "tasks");
     actions = [
-      act("menu-back", "Back to the scene", "Return to where you were.", { ui: close, focus: -1 }),
+      // no scene running (the welcome, the level, a finished scene): there is no scene to go back to
+      act("menu-back", rehearsing ? "Back to the scene" : "Close the menu", "Return to where you were.", { ui: close, focus: -1 }),
       act("learning-map", "Learning map", "Explore the abilities you can practise and your progress in each.", go("linga-map")),
       chooseSituation("Choose a new scene; your existing evidence stays saved."),
       act("my-level", "My level", l.placement ? `${l.placement.band} · ${BAND_NAME[l.placement.band]}. See it, find it again, or pick it yourself.` : "Find your level with three questions and a few short tasks.", l.placement ? go("linga-verdict") : { ...cmd("check-start"), ui: close }),
