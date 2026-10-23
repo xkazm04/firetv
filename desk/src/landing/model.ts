@@ -159,7 +159,7 @@ export function primaryLabel(name: string | null, kind: WaitKind | null): string
 }
 
 /**
- * What Select's hand-off names for a stop: the app, the second action in the words the shelf shows ("Choose who" while
+ * What Select's hand-off names for a stop: the app, the second action in the words the shelf shows ("Add a learner" while
  * no one is seated, "Someone else" with someone), or the phone. Every theme takes its hand-off words from here.
  */
 export function handoffName(v: Pick<LandingView, "apps" | "place">, stop: LandingStop): string {
@@ -191,7 +191,8 @@ export function landingView(s: Session, lastApp: LandingApp | null = null): Land
     stops, at, apps, world, learner, caption,
     phone: { paired: s.joined, pin: s.pin, url: s.phoneUrl.replace(/^https?:\/\//, "") },
     primary: primaryLabel(learner?.name ?? null, wApp?.kind ?? null),
-    place: learner ? "Someone else" : "Choose who",
+    // no one seated: the big button chooses who, so the card offers the other way in (tv/keys opens the switcher on Add)
+    place: learner ? "Someone else" : "Add a learner",
     empty: apps.length === 0,
   };
   return { ...view, say: sayOf(view) };

@@ -675,7 +675,7 @@ const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "
   // tonight's list and the lesson's pause are a learner's (MathsSlot tasks, lessonPaused): seat() replaces them on the first sit-down
   "task.add", "task.done", "lesson.pause"]);
 /** What a route answers when work is asked for and no one is at the desk to own it. */
-export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's desk (Down to Choose who).";
+export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's desk (Select Choose who is studying).";
 /** The status when a paper's rows were fine but the learner file could not be written (App Master ruling 11): the disk failed, not the rows. */
 export const PAPER_NOT_SAVED = "That paper was not saved: the desk could not write it to the learner file, so progress was not saved. Send it again.";
 /** The most pages a learner holds, in the session and in each away slot (HF3): every page carries its photo, and every event rewrites the whole session. A new page past it drops the oldest whole. */

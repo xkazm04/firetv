@@ -88,7 +88,7 @@ test('view 4: the actions say what Select does; the phone carries the real code 
  assert.equal(f.at,'phone','a fresh unpaired desk rests on the phone');assert.match(f.caption.sub,/four digits/);
  assert.equal(landingView(SCENARIOS.returning()).phone.paired,true);
  const nb=landingView(SCENARIOS.nobody());
- assert.deepEqual([nb.learner,nb.primary,nb.place],[null,'Choose who is studying','Choose who'],'no one at the desk: an app asks who first');
+ assert.deepEqual([nb.learner,nb.primary,nb.place],[null,'Choose who is studying','Add a learner'],'no one at the desk: an app asks who first, the card adds someone');
  assert.equal(primaryLabel('Ema','marked'),'Continue as Ema');
  // the lamp is drawn, not focused: `say` is what a screen reader hears for the stop it is on, in the words the eye reads
  assert.equal(landingView(SCENARIOS.returning()).say,'Math Buddy. Marked. Two-step equations · 3 of 4 right. The marked set is still on the desk. Continue as Ema.');
@@ -114,15 +114,15 @@ test('paper 1: the default look draws each scenario with its hooks and its real 
  assert.match(f,/class="pp-sr">No phone paired</);assert.match(html('returning'),/class="pp-sr">Phone paired</,'the phone chip says its state in words, not only in its drawing');
  assert.match(html('nobody'),/Whose desk\?/);
  const z=html('returning','maths');assert.match(z,/data-role="desk-zoom"[^>]*data-app="maths"/,'Select plays the hand-off of the lit app');assert.match(z,/Opening/);
- // the hand-off names the second action as the shelf does: "Choose who" with no one seated, "Someone else" with someone
+ // the hand-off names the second action as the shelf does: "Add a learner" with no one seated, "Someone else" with someone
  const {handoffName}=model(),zw=(k,id)=>{const h=draw(themes().THEMES[id],landingView(SCENARIOS[k]()),'place');
   // the hand-off's own words only: paper's desk-zoom block, blueprint's launch word
   const m=id==='paper'?h.match(/data-role="desk-zoom"[\s\S]*?(?=data-role="desk-announce")/):h.match(/class="bp-launch"[^>]*><div class="op">[^<]*/);
   assert.ok(m,`${id}: a hand-off is drawn`);return m[0];};
- assert.equal(handoffName(landingView(SCENARIOS.nobody()),'place'),'Choose who');assert.equal(handoffName(landingView(SCENARIOS.returning()),'place'),'Someone else');
+ assert.equal(handoffName(landingView(SCENARIOS.nobody()),'place'),'Add a learner');assert.equal(handoffName(landingView(SCENARIOS.returning()),'place'),'Someone else');
  assert.equal(handoffName(landingView(SCENARIOS.returning()),'english'),'Linga');assert.equal(handoffName(landingView(SCENARIOS.firstRun()),'phone'),'Pair a phone');
  for(const id of ['paper','blueprint']){
-  assert.match(zw('nobody',id),/Choose who/,`${id}: no one seated, the hand-off says what the shelf said`);assert.doesNotMatch(zw('nobody',id),/Someone else/,`${id}: not "Someone else" at an empty desk`);
+  assert.match(zw('nobody',id),/Add a learner/,`${id}: no one seated, the hand-off says what the shelf said`);assert.doesNotMatch(zw('nobody',id),/Someone else/,`${id}: not "Someone else" at an empty desk`);
   assert.match(zw('returning',id),/Someone else/,`${id}: someone seated`);
  }
  assert.doesNotMatch(r,/dangerouslySetInnerHTML|<script/);

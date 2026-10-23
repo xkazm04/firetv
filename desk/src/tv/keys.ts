@@ -386,7 +386,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "back") { to(restStop(s)); return; }
     if (at === "place") {
       if (k === "up") to(apps ? Math.floor((apps - 1) / 2) : stops.indexOf("phone"));
-      if (k === "select") o.nav("learner", 0, "landing");
+      // a desk no one sits at: the card says Add a learner (the big button already chooses who), so the lamp opens on Add
+      if (k === "select") o.nav("learner", s.learner ? 0 : learnerStops(s).indexOf("add"), "landing");
     } else if (at === "phone") {
       if (k === "down" || k === "left") to(apps ? apps - 1 : stops.indexOf("place"));
       if (k === "select") o.nav("pair", 0, "landing");
