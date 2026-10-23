@@ -73,3 +73,6 @@ prototype/identity/on-air.html
 
 # Java Flight Recorder dumps carry the whole process environment (tokens included)
 *.jfr
+
+# The portable package (tools/package-portable.mjs): staged tree and zip
+/dist/

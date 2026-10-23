@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "seed:demo": "node scripts/seed-demo.mjs",
+    "package:portable": "node ../tools/package-portable.mjs",
     "measure": "node ../tools/kpi-measure.cjs",
     "bench": "node ../tools/lab-bench.cjs",
     "pretest": "node ../tools/worktree-preflight.cjs",
