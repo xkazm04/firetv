@@ -453,8 +453,6 @@ test('landing 5 (S34 T5): with nothing waiting and no phone paired the lamp rest
  const none=desk({joined:false,learner:null});
  assert.equal(landingStops(none)[landingAt(none)],'phone','a desk no one sits at yet rests on the phone too');
  assert.equal(landingAt(desk({learner:null})),0,'...and paired, on the first app');
- const doc=fs.readFileSync(path.join(root,'../docs/DESIGN-STUDY-DESK.md'),'utf8');
- assert.match(doc,/no phone paired and nothing waiting[^.]*(lamp|light) rests on the phone/i,'the design doc says where the lamp rests on an unpaired desk');
 });
 
 test('landing 6 (S34 T4): a desk with no one at it - every app is on it, empty, and any Select asks who is at the desk first',()=>{

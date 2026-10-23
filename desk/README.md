@@ -2,8 +2,8 @@
 
 The homework desk on the TV, as a working Next.js app on this PC. It is the design document for
 the real thing: every page, flow, prompt and rule table here is meant to be rebuilt natively on
-Fire TV with AWS behind it. Plan and page map: [../docs/DESK-PROTOTYPE-PLAN.md](../docs/DESK-PROTOTYPE-PLAN.md).
-Design rules: [../docs/DESIGN-ON-AIR.md](../docs/DESIGN-ON-AIR.md).
+Fire TV with AWS behind it. Plan and page map: ../docs/DESK-PROTOTYPE-PLAN.md.
+Design rules: ../docs/DESIGN-ON-AIR.md.
 
 ## Run
 
@@ -107,7 +107,7 @@ and managed policies. They generate JSON directly and validate it in the service
 after 60 seconds; failures keep the phone draft available for retry. This is a turn-based web
 prototype, not a streaming speech engine.
 
-Plan and verification: [Linga implementation](../docs/LINGA-IMPLEMENTATION-PLAN.md).
+Plan and verification: Linga implementation.
 The isolated logic/service checks run as part of `npm test` in `desk/` (`npm run test:rules` alone,
 or `node tools/linga-rules-test.cjs` from the repository root).
 For the browser integration check, start a separate server with `DESK_DATA_DIR` pointing to a

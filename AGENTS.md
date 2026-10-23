@@ -15,7 +15,7 @@ One repository, two products for a TV in the living room, sharing a phone-as-inp
 | **Telestrator** (the original PoC) | `core/`, `tv-app/`, `companion/`, `tools/` (live probes), `scripts/`, `fixtures/`, `vision/` | Android TV app: a phone draws on a paused video frame. Pure-JVM `core` + an Android `tv-app` with an embedded Ktor server. |
 | **Study Desk** (Linga English, Math Buddy, Essay Master) | `desk/`, `tools/*-test.cjs`, `uat/`, `prototype/` | A Next.js functional prototype of a homework desk on the TV. It is a design document to be rebuilt natively on Fire TV, not the shipping app. |
 
-Product docs live in `docs/` (index: [docs/README.md](docs/README.md)). Durable decisions live in
+Product docs live in `docs/` (index: docs/README.md). Durable decisions live in
 `.ai/memory/`. What changed in each product, by date, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Commands
@@ -122,7 +122,7 @@ design pages that `prototype/build.py` builds.
 
 ## Tooling in use
 
-- The harness index is [docs/AI_HARNESS.md](docs/AI_HARNESS.md). It lists the evals (which ones gate and which are live), where prompts live, the runbooks and the review gate.
+- The harness index is docs/AI_HARNESS.md. It lists the evals (which ones gate and which are live), where prompts live, the runbooks and the review gate.
 - Skills, with their overlays in `.claude/<skill>/config.md`:
   - `/scan-sweep` (quality sweeps and challenge runs)
   - `/uat` (Linga acceptance; LT runs on codex)

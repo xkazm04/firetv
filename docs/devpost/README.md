@@ -10,7 +10,7 @@ products used are named.
 | [product-feedback.md](product-feedback.md) | Product feedback (required): one section per Amazon product or tool used |
 | [friction-log.md](friction-log.md) | The friction log (optional): eleven entries, each with its source |
 | [feature-requests.md](feature-requests.md) | Feature requests (optional): each tied to a friction-log entry |
-| [open-source.md](open-source.md) | The Open Source mini-challenge fields |
+| open-source.md | The Open Source mini-challenge fields |
 
 **Built inside the window.** The repository's first commit is 273f4f1f on 2026-09-06
 (`git log --reverse`), after the submission window opened on 2026-08-31. The Study Desk's first commit

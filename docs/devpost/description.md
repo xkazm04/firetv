@@ -14,31 +14,31 @@ the learner and a parent sit on the sofa and look at one big screen, driven by t
 The phone assists: it joins the desk once, and after that it is the camera, the keyboard and the
 microphone, used only when the TV asks for one of them. The TV adds what a phone app cannot: two
 people looking at one page from the sofa, the phone pointed at the paper instead of held in the hand,
-and the work kept away from the phone's notifications ([STUDY-DESK-SCOPE.md](../STUDY-DESK-SCOPE.md), section 1).
+and the work kept away from the phone's notifications (STUDY-DESK-SCOPE.md, section 1).
 
 Its stance is the opposite of the answer apps: **it never puts the answer on screen**. Hints withhold
 the answer, and a verdict on the learner's work is decided by code, not by a model
-([AGENTS.md](../../AGENTS.md), "Constraints"; [STUDY-DESK-SCOPE.md](../STUDY-DESK-SCOPE.md), section 2).
+([AGENTS.md](../../AGENTS.md), "Constraints"; STUDY-DESK-SCOPE.md, section 2).
 
 The landing ("Small Worlds") holds three apps, each drawn as a small world in layered paper. The one
 in the light fills the screen and its shelf shows what that app has waiting for the learner who is
-seated ([DESIGN-STUDY-DESK.md](../DESIGN-STUDY-DESK.md)):
+seated (DESIGN-STUDY-DESK.md):
 
 - **Math Buddy.** Tonight's homework: the phone photographs the sheet, the TV shows the working in
   the learner's own hand and marks each error inside the line, by kind
-  ([DESIGN-MATH-BUDDY.md](../DESIGN-MATH-BUDDY.md)). The model marks the work and must show its own
+  (DESIGN-MATH-BUDDY.md). The model marks the work and must show its own
   solution; the desk re-checks that solution itself, and where the two disagree no verdict reaches the
-  screen ([STUDY-DESK-SCOPE.md](../STUDY-DESK-SCOPE.md), "Overturned 2026-09-08"; `desk/src/lib/desk/verify.ts`).
+  screen (STUDY-DESK-SCOPE.md, "Overturned 2026-09-08"; `desk/src/lib/desk/verify.ts`).
   It also has lessons with a video that Play/Pause controls from the remote, and "Get ready for
   school" ([STICK-APK-WALK-2026-10-20.md](../concepts/STICK-APK-WALK-2026-10-20.md), the TL-1 lesson rows and the re-walk's M6 row).
 - **Linga (English).** A conversation is a place you step into: the learner rehearses a situation
   in English with a partner on the TV, answers on the phone, and gets one coaching note
-  ([DESIGN-LINGA.md](../DESIGN-LINGA.md), [LINGA-CONVERSATION-DESIGN.md](../LINGA-CONVERSATION-DESIGN.md)).
+  (DESIGN-LINGA.md, LINGA-CONVERSATION-DESIGN.md).
   A short placement conversation ends in a band from A1 to C2 that the learner can see, instead of
-  asking them to guess their level ([LINGA-PLACEMENT-DESIGN.md](../LINGA-PLACEMENT-DESIGN.md)).
+  asking them to guess their level (LINGA-PLACEMENT-DESIGN.md).
 - **Essay Master.** "The type is the diagram": the learner sends a paragraph from the phone, and the
   TV reads it through lenses (structure, argument and others) set large enough to read from the sofa
-  ([DESIGN-ESSAY-MASTER.md](../DESIGN-ESSAY-MASTER.md); deadline walk rows 18-21 in
+  (DESIGN-ESSAY-MASTER.md; deadline walk rows 18-21 in
   [STICK-DEADLINE-WALK-2026-10-21.md](../concepts/STICK-DEADLINE-WALK-2026-10-21.md)).
 
 Essay Master is the one writing tile on the landing. Writing is not a second tile. It opens from Essay
@@ -54,7 +54,7 @@ phone is for. When the phone joins, the TV goes back to the same screen and runs
 learner's module look, not a grey grid (commit 0b128a73).
 
 Around the three apps is a shell for the family: choosing who is studying, pairing a phone, a break
-timer, and a recap of the evening ([DESIGN-ON-AIR.md](../DESIGN-ON-AIR.md)).
+timer, and a recap of the evening (DESIGN-ON-AIR.md).
 
 ## How it is used
 
@@ -132,7 +132,7 @@ The device is a Fire TV Stick 4K (model AFTKM, Fire OS 8, Android 11) with Amazo
 
 The repository's first product, a telestrator where a phone draws on a paused video frame, also ran on
 the same stick model over Wi-Fi on 2026-09-07: its live UI test passed 27 of 27 and its pen round-trip
-p95 is 21.1 ms ([POC-FINDINGS.md](../POC-FINDINGS.md), section 7).
+p95 is 21.1 ms (POC-FINDINGS.md, section 7).
 
 ## Honest limits
 

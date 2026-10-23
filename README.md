@@ -77,7 +77,7 @@ on the first start. Set `DESK_DATA_DIR` to keep them elsewhere. Delete that fold
 desk then mints a new TV key.
 
 **Camera and microphone on a phone.** A phone browser allows them only over https. `npm run dev:https` starts
-the desk in dev mode with a local certificate for your LAN address ([docs/DESK-HTTPS-ON-THE-LAN.md](docs/DESK-HTTPS-ON-THE-LAN.md)).
+the desk in dev mode with a local certificate for your LAN address (docs/DESK-HTTPS-ON-THE-LAN.md).
 
 **Development.** `npm run dev` runs the same app with hot reload. If a page opened by IP never comes alive in dev
 mode, add your LAN pattern to `allowedDevOrigins` in `desk/next.config.ts`.
@@ -98,7 +98,7 @@ working Next.js app (`desk/`), shown on a Fire TV Stick through a small WebView 
 ## Why the TV leads and the phone assists
 
 For a single student who just wants the answer, a phone app is faster, and Study Desk does not compete there
-([docs/STUDY-DESK-SCOPE.md](docs/STUDY-DESK-SCOPE.md), section 1). The TV adds what a phone cannot:
+(docs/STUDY-DESK-SCOPE.md, section 1). The TV adds what a phone cannot:
 
 - **Two people, one page.** A parent and a child see the same work without crowding a 6-inch screen.
 - **The phone becomes a camera and a keyboard, not a viewer.** It stays on the desk, and the TV is where you read.
@@ -112,21 +112,21 @@ split is [docs/concepts/TV-LED-PAIRED-EXPERIENCE-DESIGN-2026-10-19.md](docs/conc
 
 ## The modules
 
-The TV landing ([docs/DESIGN-STUDY-DESK.md](docs/DESIGN-STUDY-DESK.md)) shows whose desk it is and which app to open.
+The TV landing (docs/DESIGN-STUDY-DESK.md) shows whose desk it is and which app to open.
 
 - **Linga (English).** Eight written situations: introductions, interests, a children's adventure, teamwork,
   bookings, interviews, adult dates (excluded from child profiles), and everyday disagreements. The learner
   replies on the phone by typing or speaking, asks for a cue or coaching, and replays the moment. A level check
-  places the learner from A1 to C2. Design: [docs/DESIGN-LINGA.md](docs/DESIGN-LINGA.md),
-  [docs/LINGA-PLACEMENT-DESIGN.md](docs/LINGA-PLACEMENT-DESIGN.md).
+  places the learner from A1 to C2. Design: docs/DESIGN-LINGA.md,
+  docs/LINGA-PLACEMENT-DESIGN.md.
 - **Math Buddy.** Two course paths: School maths (seventeen topics with school-year bands) and Calculus 1 (a
   first university course). The phone captures a page of working. The desk marks errors inside the line, by
   kind, and gives hints that never state the answer. Calculus items are decided in code by an expression engine
-  ([docs/MATH-COURSE-PATHS.md](docs/MATH-COURSE-PATHS.md)). Design: [docs/DESIGN-MATH-BUDDY.md](docs/DESIGN-MATH-BUDDY.md).
+  (docs/MATH-COURSE-PATHS.md). Design: docs/DESIGN-MATH-BUDDY.md.
 - **Essay Master.** Reads a paragraph through lenses such as Structure, Argument and Evidence, and names the move
   that would fix a sentence. In Adult mode it opens on the Workroom: the learner's own texts,
   with versions, and a downloadable Twin Card ([desk/README.md](desk/README.md), "Trying the twin"). Design:
-  [docs/DESIGN-ESSAY-MASTER.md](docs/DESIGN-ESSAY-MASTER.md).
+  docs/DESIGN-ESSAY-MASTER.md.
 - **Writing.** One coached writing episode on a browser page (`/writing`): pick a prompt, write a paragraph,
   read one coaching note, revise once, finish (`desk/src/writing/WritingEpisode.tsx`).
 
@@ -144,7 +144,7 @@ The TV landing ([docs/DESIGN-STUDY-DESK.md](docs/DESIGN-STUDY-DESK.md)) shows wh
   session (`desk/src/lib/session/store.ts`) is the only state: the phone posts events, and the TV renders the
   session over server-sent events. `desk/src/proxy.ts` classifies every API caller as TV, phone or guest.
   Decisions live in `desk/src/lib/rules/`, the pipelines live in `desk/src/lib/desk/`, and every TV screen is
-  drawn to the On Air rules ([docs/DESIGN-ON-AIR.md](docs/DESIGN-ON-AIR.md)).
+  drawn to the On Air rules (docs/DESIGN-ON-AIR.md).
 - **The stick APK** (`stick-app/`, package `dev.studydesk.stick`). The Fire TV's Silk browser passes only
   Play/Pause to a web page, and keeps the D-pad, Select, Back and Menu for its own cursor. The APK is one
   fullscreen WebView on the desk's `/tv` page that hands each remote button to the page as a key event. It finds
@@ -215,22 +215,22 @@ Everything here was built inside the window (`git log --reverse`).
 
 ## Design docs
 
-- All docs, by product: [docs/README.md](docs/README.md)
-- The landing: [docs/DESIGN-STUDY-DESK.md](docs/DESIGN-STUDY-DESK.md). The shell's rules: [docs/DESIGN-ON-AIR.md](docs/DESIGN-ON-AIR.md)
-- Linga: [docs/DESIGN-LINGA.md](docs/DESIGN-LINGA.md), [docs/LINGA-CONVERSATION-DESIGN.md](docs/LINGA-CONVERSATION-DESIGN.md)
-- Math Buddy: [docs/DESIGN-MATH-BUDDY.md](docs/DESIGN-MATH-BUDDY.md), [docs/MATH-COURSE-PATHS.md](docs/MATH-COURSE-PATHS.md)
-- Essay Master: [docs/DESIGN-ESSAY-MASTER.md](docs/DESIGN-ESSAY-MASTER.md)
-- Scope and screens: [docs/STUDY-DESK-SCOPE.md](docs/STUDY-DESK-SCOPE.md), [docs/STUDY-DESK-SCREENS.md](docs/STUDY-DESK-SCREENS.md)
+- All docs, by product: docs/README.md
+- The landing: docs/DESIGN-STUDY-DESK.md. The shell's rules: docs/DESIGN-ON-AIR.md
+- Linga: docs/DESIGN-LINGA.md, docs/LINGA-CONVERSATION-DESIGN.md
+- Math Buddy: docs/DESIGN-MATH-BUDDY.md, docs/MATH-COURSE-PATHS.md
+- Essay Master: docs/DESIGN-ESSAY-MASTER.md
+- Scope and screens: docs/STUDY-DESK-SCOPE.md, docs/STUDY-DESK-SCREENS.md
 - On the stick: [docs/concepts/STICK-APK-WALK-2026-10-20.md](docs/concepts/STICK-APK-WALK-2026-10-20.md),
   [docs/concepts/STICK-DEADLINE-WALK-2026-10-21.md](docs/concepts/STICK-DEADLINE-WALK-2026-10-21.md),
   [docs/concepts/STICK-PERFORMANCE-2026-10-20.md](docs/concepts/STICK-PERFORMANCE-2026-10-20.md)
 - The Devpost submission: [docs/devpost/](docs/devpost/)
-- How agents work in this repository: [AGENTS.md](AGENTS.md), [docs/AI_HARNESS.md](docs/AI_HARNESS.md). How a
+- How agents work in this repository: [AGENTS.md](AGENTS.md), docs/AI_HARNESS.md. How a
   change is accepted: [CONTRIBUTING.md](CONTRIBUTING.md). What changed: [CHANGELOG.md](CHANGELOG.md)
 
 ## Licence
 
-MIT, see [LICENSE](LICENSE). Third-party assets are listed in [docs/licensing/ASSET-AUDIT.md](docs/licensing/ASSET-AUDIT.md).
+MIT, see [LICENSE](LICENSE). Third-party assets are listed in docs/licensing/ASSET-AUDIT.md.
 
 ## Other products in this repository
 
@@ -240,14 +240,14 @@ They share the idea that the TV shows and the phone is the input. Each has its o
 
 An Android TV app where a phone draws on a paused video frame. It was built first, to prove that the whole
 toolchain runs on one Windows machine and ends in a real UI test. It does
-([docs/POC-FINDINGS.md](docs/POC-FINDINGS.md)).
+(docs/POC-FINDINGS.md).
 
 - The phone draws, and the stroke appears over the video on the TV, anchored to the paused frame. Seek away and
   the drawing leaves with its frame; seek back and it returns.
 - Tools: freehand, arrow, circle, spotlight, name tag and eraser, in five colours. Undo and redo use an operation
   log. Transport from the phone: play/pause, frame step, slow motion and scrub. Review mode jumps between drawn moments.
 - Two transports behind one interface: the TV listens on the LAN, or dials out to a relay
-  ([docs/PLATFORM-RISK.md](docs/PLATFORM-RISK.md)). Pairing uses a QR code and a PIN.
+  (docs/PLATFORM-RISK.md). Pairing uses a QR code and a PIN.
 
 | Path | What |
 |---|---|
@@ -255,7 +255,7 @@ toolchain runs on one Windows machine and ends in a real UI test. It does
 | `tv-app/` | The Android app: Media3 player, Compose overlay, embedded Ktor server, QR pairing, D-pad input. |
 | `companion/` | The phone PWA, copied into the APK at build time. |
 | `tools/` | Live probes: `live-ui-test.mjs` (Playwright, the real PWA, the real TV, pixel assertions, 29 checks), `relay-test.mjs` (the same APK with no listening socket, 13 checks), `pen-sim.mjs`, `latency-probe.mjs`. |
-| `vision/` | The local vision-model client ([docs/FRAME-ANALYSIS-LESSONS.md](docs/FRAME-ANALYSIS-LESSONS.md)). |
+| `vision/` | The local vision-model client (docs/FRAME-ANALYSIS-LESSONS.md). |
 
 ```powershell
 ./scripts/dev.ps1                    # unit, build, boot emulator, deploy, live UI test
@@ -264,4 +264,4 @@ node tools/gradlew.cjs :core:test    # the core's unit tests
 ```
 
 The build needs `local.properties` and a generated fixture clip ([fixtures/README.md](fixtures/README.md)). The
-sports direction it was built for is closed ([docs/USE-CASE-OPTIONS.md](docs/USE-CASE-OPTIONS.md)).
+sports direction it was built for is closed (docs/USE-CASE-OPTIONS.md).
