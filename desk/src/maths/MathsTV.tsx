@@ -17,7 +17,7 @@ import { hasWorked } from "@/lib/library/worked";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
 import { markOf, type Mark as ItemMark } from "@/lib/rules/marks";
-import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
+import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel, strandClear } from "@/tv/rulerRows";
 import { MathsCollection } from "./MathsCollection";
 import { Plot } from "./Plot";
 import { CALC_SHAPES, type CalcSpec } from "@/lib/rules/calc";
@@ -331,7 +331,7 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
     {m.topics.map((t, i) => i > 0 && <div key={"m" + t.id} className="mb-major" style={{ left: t.sx - 1.5 }} />)}
     <div className="mb-major" style={{ left: m.end - 1.5 }} />
     {/* keyed by place: a strand may appear twice on a path (Equations), as on the strip */}
-    {m.strands.map((g, i) => <div key={`s${i}`} className="mb-strand" style={clampStrands ? { left: g.labelX, maxWidth: g.labelW } : { left: g.labelX }}>{g.label}</div>)}
+    {m.strands.map((g, i) => <div key={`s${i}`} className="mb-strand" data-clear={strandClear(m, g)} style={clampStrands ? { left: g.labelX, maxWidth: g.labelW } : { left: g.labelX }}>{g.label}</div>)}
     {topics.map((t, i) => {
       const sk = skills[t.id], box = m.topics[i];
       const state = sk?.secure ? "secure" : usualSeen(s, t.id) ? "prog" : "unseen";

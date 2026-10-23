@@ -481,6 +481,9 @@
 .maths-tv .mb-ruler.big .mb-major { top: 60px; height: 40px; }
 .maths-tv .mb-ruler.big .mb-major.start { height: 96px; }
 .maths-tv .mb-ruler.big .mb-strand { top: 90px; }
+/* a panning ruler's strand label the faded edges would cut to a fragment is hidden until it is whole (rulerRows strandClear) */
+.maths-tv .mb-strand { transition: opacity .3s; }
+.maths-tv .mb-strand[data-clear="false"] { opacity: 0; }
 .maths-tv .mb-ruler.big .mb-topic { top: 40px; height: 320px; }
 .maths-tv .mb-ruler.big .mb-groove { top: 82px; height: 24px; border-radius: 12px; }
 .maths-tv .mb-ruler.big .mb-slips { top: 50px; }
@@ -499,9 +502,10 @@
    under the lamp like the paper - the window clips it to the ruler's 1728 px (the safe zone), an edge with more to
    show fades and carries a chevron, the focused topic takes a wide slot so its whole name fits (useNameFit) */
 .maths-tv .mb-rwin { position: absolute; left: 0; right: 0; top: -40px; bottom: -24px; overflow: hidden; }
-.maths-tv .mb-rwin[data-l="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 150px); mask-image: linear-gradient(90deg, transparent 0, #000 150px); }
-.maths-tv .mb-rwin[data-r="true"] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 150px), transparent 100%); mask-image: linear-gradient(90deg, #000 calc(100% - 150px), transparent 100%); }
-.maths-tv .mb-rwin[data-l="true"][data-r="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 150px, #000 calc(100% - 150px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 150px, #000 calc(100% - 150px), transparent 100%); }
+/* the Topics ruler's edge with more to show is clear under its 64 px chevron, as Get ready for school's is (TV polish wave 3) */
+.maths-tv .mb-rwin[data-l="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px); mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px); }
+.maths-tv .mb-rwin[data-r="true"] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); mask-image: linear-gradient(90deg, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); }
+.maths-tv .mb-rwin[data-l="true"][data-r="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); }
 .maths-tv .mb-rtrack { position: absolute; left: 0; top: 40px; height: 400px; transition: transform .76s var(--mb-ease); }
 .maths-tv .mb-ruler[data-pan="true"] .mb-topic { transition: left .76s var(--mb-ease), width .76s var(--mb-ease), opacity .3s, background .3s, box-shadow .3s, transform .3s var(--mb-ease); }
 .maths-tv .mb-ruler[data-pan="true"] .mb-tn { font-size: 34px; line-height: 1.08; -webkit-line-clamp: 3; }

@@ -142,6 +142,17 @@ export function rulerModel(topics: RulerTopic[], states: Record<string, TopicSta
   };
 }
 
+/** How far in from a window edge with more to show a strand label must start to be whole (design/maths-lamplight.css .mb-rwin). */
+export const RULER_FADE = 150;
+/**
+ * Whether a strand's label stands whole on the stage of a panning ruler: one the window's faded edges would cut to a
+ * fragment ("EQUAT", "NS") is hidden instead (TV polish wave 3). A ruler that does not pan shows every label.
+ */
+export function strandClear(m: Pick<RulerModel, "offset" | "more">, g: Pick<RulerStrand, "labelX" | "labelW" | "label">): boolean {
+  const x = g.labelX - m.offset, w = Math.min(g.labelW || Infinity, g.label.length * LABEL_CH);
+  return !(m.more.l && x < RULER_FADE) && !(m.more.r && x + w > TRACK - RULER_FADE);
+}
+
 /**
  * The learner's needle: at topic `frontier` (`rulerFrontier`), `fill` of the way through it (its estimate; 1 when it
  * is secure). A frontier past the last topic is the end of the ruler.
