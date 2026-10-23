@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Teach me something opens Topics on the first topic, where the Tonight ruler's needle stands, for a learner past the school path's end with nothing secure, instead of on Probability; Get ready for school still opens on the last topic ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - No em dash left in the TV's own lines: the lens-chosen status, the Reading caption's start line, the tense rule and the time-word question now use a colon, comma or semicolon (Essay Master's Structure lens promise is on the live surface and is left) ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - On the pair page, Right reaches Forget every phone and Left comes back to Pair another, as the two buttons stand side by side; Down and Up still work ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - The phone's paragraph panel has one send for a single paragraph, Analyse on the TV: the bottom bar no longer adds a second Read this beside it (several paragraphs keep Read all and This paragraph only) ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).

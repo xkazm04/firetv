@@ -831,13 +831,14 @@ test('essay 4 (6c, E4-b): Rewrite on a sentence of a paragraph the desk did not 
 const learnerOf=(system,age,extra={})=>session({profiles:[{id:'ema',name:'Ema',type:'high-school',age,system,modules:['maths'],...extra}]});
 const secureRec=(topic)=>({topic,seen:6,right:6,estimate:0.9,secure:true,lastSeen:1,slips:[]});
 
-test('MB-B19 1: past the path\'s end with nothing secure, Topics and Get ready for school open on the last topic, and one line says the path ends',()=>{
+test('MB-B19 1: past the path\'s end with nothing secure, Get ready for school opens on the last topic, Teach me something on the first (the ruler\'s needle, stick walk 2026-10-23), and one line says the path ends',()=>{
  const {topicsFocus,tvKey}=keys();
  const PR=require(path.join(root,'src/tv/prepareRows.ts'));
  const {topicsOf}=require(path.join(root,'src/lib/library/paths.ts'));
  for(const [system,age] of [['cz',18],['uk',17]]){
   const s=learnerOf(system,age),topics=topicsOf('school'),last=topics[topics.length-1];
-  assert.equal(topicsFocus(s),topics.length-1,`${system} ${age}: Topics`);
+  assert.equal(topicsFocus(s),0,`${system} ${age}: Topics opens on the first topic, not Probability`);
+  assert.deepEqual(tvKey({...s,screen:'tonight',focus:1},'select',LOCAL).events.at(-1),{type:'nav',screen:'topics',focus:0},`${system} ${age}: the Teach door`);
   const ix=PR.prepareStops(s).findIndex((u)=>u.id===last.id);
   assert.ok(ix>0);
   const open=tvKey({...s,screen:'tonight',focus:2},'select',LOCAL);

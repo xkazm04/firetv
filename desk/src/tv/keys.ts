@@ -244,10 +244,10 @@ export function topicStops(s: Pick<Session, "profiles" | "learner">): readonly P
 export function topicsFocus(s: Pick<Session, "profiles" | "learner" | "skills">): number {
   const path = learnerPath(s), done = Object.values(s.skills ?? {}).filter((r) => r?.secure).map((r) => r.topic);
   const next = done.length ? frontierOn(path, done) : undefined;
-  if (next) return Math.max(0, topicsOf(path).findIndex((t) => t.id === next.id));
-  // a learner past the path's end with nothing secure opens on its last topic, not the first step
-  const last = done.length ? null : pastPathEnd(s);
-  return last ? Math.max(0, topicsOf(path).findIndex((t) => t.id === last.id)) : 0;
+  // nothing secure opens on the first topic, where the Tonight ruler's needle stands, for every learner: a learner past the
+  // path's end opened on its last topic (Probability), whose own line says most people do equivalent fractions first (stick
+  // walk 2026-10-23; revises PE1's Topics half). Get ready for school still opens on the last topic (prepareDoorFocus).
+  return next ? Math.max(0, topicsOf(path).findIndex((t) => t.id === next.id)) : 0;
 }
 /** Where Get ready for school opens: the first unit, or for a learner past the path's end the stop of its last topic. */
 function prepareDoorFocus(s: Pick<Session, "profiles" | "learner">): number {
