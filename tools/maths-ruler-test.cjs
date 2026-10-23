@@ -138,7 +138,7 @@ test('ruler model 4: the focused name is fitted from 44 px down to 34 px in 2 px
 
 test('strip 1: segment widths follow the topic counts, none under 96 px nor under the room its label needs whole in two lines, and sum to the strip',()=>{
  const {stripModel,labelNeed,STRIP_AFTER,MIN_SEG,STRIP_LINES,STRIP_INSET,STRIP_CH}=RR();
- assert.equal(STRIP_AFTER,8);assert.equal(MIN_SEG,96);assert.equal(STRIP_LINES,2);assert.equal(STRIP_INSET,36);assert.equal(STRIP_CH,17);
+ assert.equal(STRIP_AFTER,8);assert.equal(MIN_SEG,96);assert.equal(STRIP_LINES,2);assert.equal(STRIP_INSET,36);assert.equal(STRIP_CH,18);
  const topics=calc(),m=stripModel(topics,{});
  assert.equal(m.width,1728-52);assert.equal(m.x0,26);
  assert.deepEqual(m.segments.map(g=>g.count),[3,3,6,4,5,1]);

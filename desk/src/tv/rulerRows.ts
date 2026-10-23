@@ -52,9 +52,10 @@ export const STRIP_INSET = 36;
 /**
  * A strip label's width per character for WHOLE labels (Family W7 batch 3): the live capture measured "EQUATIONS" at 150 px,
  * 16.7 px a character with the tracking after the last letter, over LABEL_CH's 16 - enough to cut a label that exactly
- * fills its room. 17 keeps a whole label whole.
+ * fills its room. 17 kept "EQUATIONS" whole but not the wide letters: "GEOMETRY" measures 140 px and "MORE GEOMETRY" 222 (TV
+ * polish wave 3, 1920 x 1080), which 17 a character cut to "GEOMET…". 18 keeps every school strand whole.
  */
-export const STRIP_CH = 17;
+export const STRIP_CH = 18;
 
 type RulerTopic = Pick<PathTopic, "id" | "strand">;
 

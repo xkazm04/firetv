@@ -211,8 +211,8 @@ test('6: the strand strip at seventeen topics - seven bars (Equations twice, Geo
  // v2 M2b: at seventeen topics the two-topic Equations bar and the Ratio and rates bar fall under their labels' need too (189 px,
  // 'Equations' whole), so three bars are held at 189 px and the other four share what is left; the Geometry and data bars take 185 px
  assert.equal(S0.segments.reduce((a,g)=>a+g.w,0),1728-52);
- const one=S0.segments[1];assert.equal(one.w,Math.ceil(RR.labelNeed('Equations',RR.STRIP_CH))+RR.STRIP_INSET,'the one-topic bar is as wide as its label');assert.equal(one.w,189);
- assert.deepEqual(S0.segments.map((g)=>g.w),[340,189,340,189,172,189,257],'measured: the labels\' floors hold, the rest share what is left');
+ const one=S0.segments[1];assert.equal(one.w,Math.ceil(RR.labelNeed('Equations',RR.STRIP_CH))+RR.STRIP_INSET,'the one-topic bar is as wide as its label');assert.equal(one.w,198);
+ assert.deepEqual(S0.segments.map((g)=>g.w),[316,198,316,198,180,198,270],'measured: the labels\' floors hold, the rest share what is left');
  S0.segments.forEach((g,i)=>{assert.ok(g.w>=RR.MIN_SEG,`${g.name} at least ${RR.MIN_SEG} px`);assert.ok(g.w>=Math.ceil(RR.labelNeed(g.name,RR.STRIP_CH))+RR.STRIP_INSET,`${g.name}: room for its label`);if(i)assert.equal(g.x,S0.segments[i-1].x+S0.segments[i-1].w);});
  {const seen=new Set();for(const g of S0.segments){const shown=RR.strandLabel(g.name,seen);
   assert.equal(g.label,shown,`${g.name}: whole, never clamped`);assert.equal(g.lines.join(' '),shown);assert.ok(g.lines.length<=RR.STRIP_LINES);

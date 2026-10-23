@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Math Buddy's Tonight ruler shows Geometry and data and More geometry and data whole, instead of "GEOMET…" and "MORE GEOMETR…": a strip label is measured at 18 px a character ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Get ready for school hides a strand heading the window's faded edges would cut to a fragment ("IONS", "DECI"), and shows it again once it stands whole ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - The landing of a desk no one is seated at: the lit Add a learner card grows to the right and is only as wide as its words, so it no longer covers the Essay Master label in a 1280 x 720 window ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Essay Master's lens home: the Language lens's wave plays four times and then rests, instead of keeping the TV redrawing for as long as the lens is lit.
