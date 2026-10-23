@@ -97,7 +97,7 @@
 .essay-tv .em-w.is-focused[data-k="argument"] .em-type { transform: skewX(-9deg) translateX(18px); }
 .essay-tv .em-w.is-focused[data-k="argument"] .em-arrow { opacity: 1; transform: none; }
 .essay-tv .em-w.is-focused[data-k="evidence"] .em-hl { width: var(--em-hw); }
-.essay-tv .em-w.is-focused[data-k="language"] .em-type span { animation: em-wave 1.6s ease-in-out infinite; animation-delay: calc(var(--n) * 90ms); }
+.essay-tv .em-w.is-focused[data-k="language"] .em-type span { animation: em-wave 1.6s ease-in-out 4; animation-delay: calc(var(--n) * 90ms); }
 .essay-tv .em-w[data-k="book"] .em-type .em-sol { animation: none; }
 /* Select floods the chosen word with citron */
 .essay-tv .em-w.commit .em-type .em-sol { color: var(--em-cit); animation: em-commit 1.1s var(--em-ease); }

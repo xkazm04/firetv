@@ -22,6 +22,8 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Essay Master's lens home: the Language lens's wave plays four times and then rests, instead of keeping the TV redrawing for as long as the lens is lit.
+- Math Buddy's ruler, Tonight strip and Get ready for school label a strand the school path comes back to as "More equations" or "More geometry and data", so the same word no longer appears twice on one ruler.
 - Linga's Sentence help keeps Linga's look (its cream ground, serif and plum button) instead of switching to On Air's grey grid and red band; the screen and its keys are unchanged ([docs/concepts/LOADING-STATES-THEMING-2026-10-22.md](docs/concepts/LOADING-STATES-THEMING-2026-10-22.md)).
 - Essay Master's caret blinks six times and then stays lit instead of blinking forever, so an idle lens screen has no animation left running (the stick's idle redraw is not re-measured) ([docs/concepts/STICK-PERFORMANCE-2026-10-22.md](docs/concepts/STICK-PERFORMANCE-2026-10-22.md)).
 - Get ready for school: the faded edge with more units to show is clear under its arrow, so the arrow no longer sits on the first card's name ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
