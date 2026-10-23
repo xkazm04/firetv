@@ -31,7 +31,7 @@ jobs:
     env:
       SHA: ${{ github.event.workflow_run.head_sha }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
       - uses: actions/setup-java@v6
@@ -44,7 +44,7 @@ jobs:
       - name: Drop the operator's local JDK pin
         run: sed -i '/^org.gradle.java.home=/d' gradle.properties
       - name: The APK this SBOM describes (built, checksummed and provenance-attested by supply-chain)
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: tv-app-debug-${{ github.event.workflow_run.head_sha }}
           path: dist/apk
@@ -59,7 +59,7 @@ jobs:
         run: node tools/gradle-sbom-test.cjs
       - name: Write the CycloneDX SBOM
         run: node tools/gradle-sbom.cjs dist/tv-app-deps.txt --name tv-app-debug --version "$SHA" > dist/tv-app-debug.cdx.json
-      - uses: actions/attest-sbom@v2
+      - uses: actions/attest-sbom@v4
         with:
           subject-path: dist/apk/tv-app-debug.apk
           sbom-path: dist/tv-app-debug.cdx.json
@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-node@v7
