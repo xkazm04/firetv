@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- The browser TV's bench bar stays on one line in a laptop window (1280 to 1500 px wide), so the stage is not shrunk by a second row of buttons, and a long status line is cut short instead of wrapping ([README.md](README.md)).
 - Math Buddy's phone chip says Phone joined, or Phone not here when the paired phone is gone, as Essay Master's does, instead of a bare Phone ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - After the pairing page opened for a wish (a phone was needed and none was here), the screen it came from keeps its own Back: a paper opened from Math Buddy's home returns there once the phone joins or the wish is given up, instead of to Get ready for school ([docs/concepts/PHONE-BLOCKER-PAIRING-2026-10-22.md](docs/concepts/PHONE-BLOCKER-PAIRING-2026-10-22.md)).
 - Linga's menu names its first door Close the menu when no scene is running (the welcome, the level picker, a finished scene) instead of Back to the scene ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
