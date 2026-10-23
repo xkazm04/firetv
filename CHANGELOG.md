@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Math Buddy's lamp, the ruler marker's halo, a waiting door and the answer caret breathe a few times and then rest, so a still Math Buddy screen stops redrawing on the stick (Get ready for school: 245 frames in 4 s before, 0 after the rest) ([docs/concepts/STICK-PERFORMANCE-2026-10-22.md](docs/concepts/STICK-PERFORMANCE-2026-10-22.md)).
 - Math Buddy's lessons list (and every paper that slides under the lamp) keeps one line above the lit one in view, so the list opens with its "Lessons on file" heading whole instead of half under the top fade ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - The learner switcher's caption reads "for an 11-year-old student" (not "a 11-year-old") and no longer breaks the age across two lines ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Linga's topics, when none came back (no text engine, or a reply it could not use), offer Not now beside Try again, which leaves for Linga's home with the level kept ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
