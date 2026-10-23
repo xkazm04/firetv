@@ -1,5 +1,86 @@
 # Study Desk: homework on the TV, with the phone as the pen
 
+## Quickstart (5 minutes, no Fire TV)
+
+A desktop browser tab plays the TV, and your phone (or a second tab) plays the phone.
+
+**You need:**
+
+- **Node.js 24** (`node -v`). CI uses 24.
+- **The Claude Code CLI, signed in**, for hints, Linga's dialogue and essay readings. Install it with
+  `npm install -g @anthropic-ai/claude-code`, run `claude` once and log in, then quit it. No API key is needed:
+  the desk calls `claude -p` on your own sign-in. Without the CLI the desk still opens, but those features fail.
+- Nothing else. No Ollama, no keys, no Android tools.
+
+**1. Install and start the desk.**
+
+```sh
+git clone https://github.com/xkazm04/firetv
+cd firetv/desk
+npm ci
+cp .env.example .env.local      # cmd.exe: copy .env.example .env.local
+npm run build
+npm run start -- -H 0.0.0.0 -p 3000
+```
+
+`.env.local` from the example sets `DESK_VISION_ENGINE=claude-cli`, so Math Buddy reads a photographed page with
+the Claude CLI too, and you do not need Ollama. If port 3000 is busy, use another (`-p 3640`); every address
+below follows it. On Windows, allow Node.js on private networks when the firewall asks, or a phone cannot connect.
+
+The terminal prints the TV link:
+
+```
+TV: http://<your-ip>:3000/tv?key=...
+```
+
+**2. Open the TV.** Open that exact link in a desktop browser and make the window full screen (F11). The key
+makes this browser the desk's TV (a cookie), and then leaves the address. If you open `/tv` without the key, it
+says "Not this desk's TV": open the printed link again. The keyboard is the remote: arrows are the D-pad, Enter is
+Select, Backspace or Escape is Back, M is Menu, Space is Play/Pause.
+
+**3. Pair a phone.** The TV shows a 4-digit code and an address.
+
+- **A real phone** on the same Wi-Fi: open `http://<your-ip>:3000/phone` (or scan the QR code on the TV) and type
+  the code.
+- **No phone:** open a second tab at `http://localhost:3000/phone` and type the code there. Use `localhost` for
+  this tab, not the IP in the TV link: cookies are kept per host name, so the two tabs stay two devices.
+
+The phone says "Joined" and the TV says "Paired".
+
+**4. Try it.** On the TV, Select "Choose who is studying" and add a learner (you type the name on the phone).
+Then open Math Buddy, Linga or Essay Master from the TV. When the TV asks for a photo, the phone's Capture screen
+offers three sample pages, so no camera is needed. A real phone on plain http cannot use its camera or
+microphone; see "Camera and microphone on a phone" below.
+
+**5. Check the engines.** In the TV tab, open `http://<your-ip>:3000/api/smoke`. It lists the five engines, the
+provider each would use, whether it answers and what to fix, in about two seconds with no model call. With the
+quickstart setup, `text` and `vision` say ok, and the other three say what is missing. That is fine: see below.
+
+**What works with what.**
+
+| Feature | Needs |
+|---|---|
+| Opening every screen, pairing, the Adult-mode Workroom and Twin Card | nothing |
+| Hints, Linga's dialogue and coaching, essay readings, writing coaching | the Claude CLI, signed in |
+| Reading a photographed page | `DESK_VISION_ENGINE=claude-cli` (the quickstart), or Ollama with `ollama pull qwen3.8:27b` (17 GB) |
+| Picking a lesson video for a mistake | Ollama with `ollama pull nomic-embed-text`. The lesson transcripts are not in the repository (Khan Academy licence), so a picked lesson opens at 0:00 with no captions |
+| The TV's voice | nothing: the browser's own speech. Piper or an ElevenLabs key sound better |
+| Speech to text | nothing on the phone (browser recognition, needs https on a real phone) |
+
+**Where your data goes.** The desk keeps learners, sessions and the TV key in `desk/data/` (gitignored), created
+on the first start. Set `DESK_DATA_DIR` to keep them elsewhere. Delete that folder to start from scratch; the
+desk then mints a new TV key.
+
+**Camera and microphone on a phone.** A phone browser allows them only over https. `npm run dev:https` starts
+the desk in dev mode with a local certificate for your LAN address ([docs/DESK-HTTPS-ON-THE-LAN.md](docs/DESK-HTTPS-ON-THE-LAN.md)).
+
+**Development.** `npm run dev` runs the same app with hot reload. If a page opened by IP never comes alive in dev
+mode, add your LAN pattern to `allowedDevOrigins` in `desk/next.config.ts`.
+
+**Tests.** Once, install the test tools: `npm --prefix tools ci` (one suite needs `ws` and `playwright` from
+there). Then `npm --prefix desk test` runs the type check and every rules suite, with no live model call, in
+about five minutes ([AGENTS.md](AGENTS.md)).
+
 ## What Study Desk is
 
 Study Desk turns the living-room TV into a homework desk for a family. The TV shows the work, large enough
@@ -69,71 +150,51 @@ The TV landing ([docs/DESIGN-STUDY-DESK.md](docs/DESIGN-STUDY-DESK.md)) shows wh
   | Engine | Provider | Needs |
   |---|---|---|
   | text: hints, explanations, Linga dialogue, essay readings | Claude Code CLI, headless (`claude -p`) | the `claude` CLI, signed in; optional `CLAUDE_BIN`, `CLAUDE_FAST_MODEL`, `CLAUDE_BEST_MODEL` |
-  | vision: reading a captured page | Ollama, `qwen3.8:27b` | Ollama running; optional `OLLAMA_HOST`, `OLLAMA_VISION_MODEL` |
+  | vision: reading a captured page | Ollama, `qwen3.8:27b`; or the Claude CLI with `DESK_VISION_ENGINE=claude-cli` | Ollama running, or the `claude` CLI signed in; optional `OLLAMA_HOST`, `OLLAMA_VISION_MODEL`, `CLAUDE_VISION_MODEL` |
   | embed: lesson retrieval | Ollama, `nomic-embed-text` | Ollama running; optional `OLLAMA_EMBED_MODEL` |
   | speak: the TV's voice | Piper on the machine, else ElevenLabs, else the browser's own speech | `PIPER_BIN` + `PIPER_VOICE`, or `ELEVENLABS_API_KEY` |
   | listen: speech to text | a local faster-whisper server, or ElevenLabs | `STT_URL`; the phone also listens in the browser |
 
-## Set up and run
+## On a real Fire TV
 
-You need Node.js 24 (the version CI uses, `.github/workflows/quality.yml`). The phone and the TV must be on the
-same Wi-Fi as the computer that runs the desk, and port 3000 must be reachable from that network.
+Start the desk as in the quickstart, on port 3000 (the stick looks for the desk on 3000, 3001, 3107, 8080 and 80;
+on any other port, type the address on its setup screen). The Fire TV and the computer must be on the same
+network, and that port must be reachable from it.
 
-**1. Install and start the desk.**
+**Why an APK.** The Fire TV's Silk browser can open `/tv`, but it passes only Play/Pause to a web page and keeps
+the D-pad, Select, Back and Menu for its own cursor, so you cannot drive the desk with the remote there. The stick
+APK (`stick-app/`, package `dev.studydesk.stick`) is one fullscreen WebView on `/tv` that hands every remote
+button to the page. There is no prebuilt APK in the repository: you build it.
 
-```sh
-cd desk
-npm ci
-npm run build
-npm run start -- -H 0.0.0.0 -p 3000
-```
-
-For development, `npm run dev` runs the same app on :3000 with hot reload. If a page opened by IP never comes
-alive in dev mode, add your LAN pattern to `allowedDevOrigins` in `desk/next.config.ts` ([desk/README.md](desk/README.md)).
-
-At every start, the desk prints its TV link: `TV: http://<ip>:3000/tv?key=...`.
-
-**2. Open the TV.** Open that link once in the TV's browser (or in a desktop window at 1920×1080). The key makes
-that browser the desk's TV with a cookie. Without it, `/tv` says "Not this desk's TV". On a keyboard, the arrows
-are the D-pad, Enter is Select, Backspace or Escape is Back, M is Menu, and Space is Play/Pause.
-
-**3. Pair the phone.** On the phone, open `http://<ip>:3000/phone` (the TV shows the address and a QR code). Then
-type the 4-digit code the TV shows. Without a camera, the Capture screen offers three sample pages. A phone
-needs https for the camera and the microphone. `npm run dev:https` starts the desk with a local certificate
-([docs/DESK-HTTPS-ON-THE-LAN.md](docs/DESK-HTTPS-ON-THE-LAN.md)).
-
-**4. Sideload the stick APK (Fire TV).** You need JDK 17 and the Android SDK (`local.properties` with `sdk.dir`).
-`gradle.properties` pins the operator's JBR, so on another machine pass `-Dorg.gradle.java.home=<a JDK 17>`
-([CONTRIBUTING.md](CONTRIBUTING.md)). On the stick, turn on ADB debugging (Settings → My Fire TV → Developer
-options) and read its address (Settings → My Fire TV → About → Network). Then, from the repository root:
+**1. Build the APK.** You need JDK 17 and the Android SDK, with `local.properties` at the repository root holding
+`sdk.dir=<path to the Android SDK>`. `gradle.properties` pins the author's JBR, so on another machine pass
+`-Dorg.gradle.java.home=<a JDK 17>` ([CONTRIBUTING.md](CONTRIBUTING.md)). From the repository root:
 
 ```sh
 node tools/gradlew.cjs :stick-app:assembleDebug
+```
+
+**2. Install it.** On the stick, turn on ADB debugging (Settings, My Fire TV, Developer options) and read its
+address (Settings, My Fire TV, About, Network). Then:
+
+```sh
 adb connect <stick-ip>:5555
 adb -s <stick-ip>:5555 install -r stick-app/build/outputs/apk/debug/stick-app-debug.apk
 ```
 
-Open "Study Desk" from the stick's launcher. It searches its network on :3000 for the desk. If it finds none, it
-asks for the address on a setup screen driven by the remote. To make the stick the desk's TV, pair it once with
-the `TV:` link the desk printed:
+**3. Make the stick the desk's TV.** Pair it once with the `TV:` link the desk printed:
 
 ```sh
-adb -s <stick-ip>:5555 shell am start -n dev.studydesk.stick/.StickActivity --es url "'http://<ip>:3000/tv?key=<key>'"
+adb -s <stick-ip>:5555 shell am start -n dev.studydesk.stick/.StickActivity --es url "'http://<your-ip>:3000/tv?key=<key>'"
 ```
 
-The stick keeps only `host:port`, never the key. From then on, it opens the TV page from the launcher.
+The stick keeps only `host:port`, never the key. From then on, open "Study Desk" from the stick's launcher. If it
+cannot find the desk, it asks for the address on a setup screen driven by the remote.
 
-**5. Check the engines.** Open `http://<ip>:3000/api/smoke` from the TV browser. It lists the five engines, the
-provider each would use, whether it answers and what to fix, with no model call. Add `?live=1` to run them for real.
+**4. Pair the phone** as in the quickstart, and check the engines at `http://<your-ip>:3000/api/smoke` from a
+browser that has opened the TV link. A paired phone gets 403 there, and any other browser 401.
 
-**Keys and the no-key path.** No API key is required. The text engine is the Claude Code CLI on its own sign-in.
-Vision and embeddings run on a local Ollama. Without Piper or an ElevenLabs key, the TV speaks with the
-browser's own speech. Keys go in the gitignored `desk/.env.local`. The Adult-mode Workroom, keeping texts, the
-portrait and the Twin Card need no model at all ([desk/README.md](desk/README.md), "Trying the twin"). The desk
-keeps its records in a local, gitignored data folder. Set `DESK_DATA_DIR` to keep them somewhere else.
-
-**Tests.** `npm --prefix desk test` runs the type check and then every rules suite, with no live model call
-([AGENTS.md](AGENTS.md)).
+The walk on a real stick: [docs/concepts/STICK-APK-WALK-2026-10-20.md](docs/concepts/STICK-APK-WALK-2026-10-20.md).
 
 ## Built during the hackathon window
 
