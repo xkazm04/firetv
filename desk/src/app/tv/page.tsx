@@ -28,6 +28,13 @@ import { LOOK_KEY, READING_LINE, WAIT_LINE, lookOfWait, lookToRemember, parseLoo
 type Display = "tv" | "desk";
 const STAGE: Record<Display, { w: number; h: number }> = { tv: { w: 1920, h: 1080 }, desk: { w: 2880, h: 1620 } };
 
+/**
+ * An On Air screen Linga opens and keeps as its own (Sentence help, from Linga's menu): drawn on Linga's ground and in its
+ * type (design/linga.css .lo-onair) instead of On Air's grey grid, so the menu's door does not switch looks. The screen and
+ * its keys stay On Air's.
+ */
+const lingaLooks = (s: Session) => s.screen === "sentence" && s.subject === "english";
+
 export default function TV() {
   const { s, connected, post } = useSession();
   const postOnly = useCallback(async (e: Event) => { await post(e); }, [post]);
@@ -203,7 +210,7 @@ export default function TV() {
         <div className="stage" ref={stage} tabIndex={0} data-display={shown}>
           {!connected && <div role="alert" data-role="link-lost" style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 50, padding: "18px 0", textAlign: "center", fontSize: 40, background: "#7A1E12", color: "#FFE3DD" }}>Lost the desk link. Reconnecting.</div>}
           {/* The landing (the desk), Essay Master (Specimen) and Math Buddy (Lamplight) draw the whole stage, no On Air grid or band; each keeps the 5% margins itself */}
-          {!s ? <LookWait look={look} line={WAIT_LINE[look]} /> : notTheTV(s) ? <NotThisTV /> : lookOfWait(s) ? <LookWait look={lookOfWait(s)!} line={READING_LINE} /> : s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : (mathsOwns(s) || paperOwns(s)) ? <MathsTV s={s} busy={loc.busy} ask={loc.prepareAsk} /> : <>
+          {!s ? <LookWait look={look} line={WAIT_LINE[look]} /> : notTheTV(s) ? <NotThisTV /> : lookOfWait(s) ? <LookWait look={lookOfWait(s)!} line={READING_LINE} /> : s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : (mathsOwns(s) || paperOwns(s)) ? <MathsTV s={s} busy={loc.busy} ask={loc.prepareAsk} /> : lingaLooks(s) ? <div className="linga-tv lo-onair" data-view={s.screen}><div className="safe"><ScreenFor s={s} /></div></div> : <>
             <div className="grid" />
             <div className="safe">{lingaOwns(s) ? <LingaTV s={s} post={postOnly} voice={voice}/> : <ScreenFor s={s} />}</div>
           </>}

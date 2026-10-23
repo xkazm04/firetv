@@ -461,10 +461,11 @@ test('landing 6 (S34 T4): a desk with no one at it - every app is on it, empty, 
  assert.deepEqual(landingStops(none()),['maths','english','essay','place','phone'],'no profile to read: all three apps lie on the desk');
  assert.deepEqual(deskWaiting(none()).map(w=>w.empty),['Not started','Not started','Nothing read'],'no one\'s work: each object says so in two words');
  for(const f of [0,1,2])assert.deepEqual(tvKey(none({focus:f}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'an app opens the learner switcher first, never the app');
- assert.deepEqual(tvKey(none({focus:3}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'the place card opens the switcher');
+ {const d=none({focus:3});assert.deepEqual(tvKey(d,'select',LOCAL).events,[{type:'nav',screen:'learner',focus:d.profiles.length,from:'landing'}],'the place card, Add a learner, opens the switcher with the lamp on Add');}
+ assert.deepEqual(tvKey(desk({focus:3}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'with someone seated, Someone else opens it on the first card');
  {const m=tvKey(none({focus:0}),'menu',LOCAL);assert.deepEqual([m.events,m.calls],[[],[]],'no one\'s evening to end');}
  const {landingView}=require(path.join(root,'src/landing/model.ts'));
- {const v=landingView(none()),w=landingView(desk());assert.deepEqual([v.place,v.primary],['Choose who','Choose who is studying'],'the second action invites when no one sits at the desk');assert.deepEqual([w.place,w.primary],['Someone else','Start as Ema'],'and offers someone else when one does');}
+ {const v=landingView(none()),w=landingView(desk());assert.deepEqual([v.place,v.primary],['Add a learner','Choose who is studying'],'no one at the desk: the big button chooses who, the card adds someone, so the two never read as one action twice');assert.deepEqual([w.place,w.primary],['Someone else','Start as Ema'],'and offers someone else when one does');}
 });
 
 test('GUARD: the landing rows stay free of the filesystem-backed session modules',()=>{

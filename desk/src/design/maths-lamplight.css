@@ -548,9 +548,11 @@
 .maths-tv .mb-cell2[data-dim="true"] { opacity: .45; }
 .maths-tv .mb-prep { position: absolute; left: 96px; top: 596px; width: 1728px; height: 430px; z-index: 4; }
 .maths-tv .mb-pwin { position: absolute; inset: 0; overflow: hidden; }
-.maths-tv .mb-pwin[data-l="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 150px); mask-image: linear-gradient(90deg, transparent 0, #000 150px); }
-.maths-tv .mb-pwin[data-r="true"] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 150px), transparent 100%); mask-image: linear-gradient(90deg, #000 calc(100% - 150px), transparent 100%); }
-.maths-tv .mb-pwin[data-l="true"][data-r="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 150px, #000 calc(100% - 150px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 150px, #000 calc(100% - 150px), transparent 100%); }
+/* the edge with more to show is fully clear under its 64 px chevron (to 88 px) before it ramps in, so the arrow never sits
+   on a faded card's name (TV polish wave 2) */
+.maths-tv .mb-pwin[data-l="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px); mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px); }
+.maths-tv .mb-pwin[data-r="true"] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); mask-image: linear-gradient(90deg, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); }
+.maths-tv .mb-pwin[data-l="true"][data-r="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, transparent 88px, #000 220px, #000 calc(100% - 220px), transparent calc(100% - 88px), transparent 100%); }
 .maths-tv .mb-ptrack { position: absolute; left: 0; top: 0; height: 100%; transition: transform .76s var(--mb-ease); }
 .maths-tv .mb-pstrand span { display: inline-block; transition: margin-left .76s var(--mb-ease); }
 .maths-tv .mb-pstrand { position: absolute; top: 18px; padding-bottom: 10px; font-size: 20px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: rgba(245, 238, 223, .72); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-bottom: 2px solid rgba(245, 238, 223, .18); }

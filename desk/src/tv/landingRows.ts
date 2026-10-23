@@ -116,13 +116,15 @@ export function mathsWaiting(s: Session): MathsWaiting {
   }
   if (cont && cont.go === "practice" && p) {
     const name = topicIn(p.topic)?.name ?? p.topic;
+    // the headline already names the topic: the line under it says only where the set stands (one line, not cont.d's
+    // "6 questions on <topic>, not marked yet.", which repeated the name and wrapped to a one-word last line)
     return { ...base, kind: "resume", at: null, tab: cont.k, title: name,
-      lines: p.items.map((i) => ({ n: i.n, question: i.question, voice: "print" })), line: cont.d };
+      lines: p.items.map((i) => ({ n: i.n, question: i.question, voice: "print" })), line: `${p.items.length} ${p.items.length === 1 ? "question" : "questions"} on paper, not marked yet.` };
   }
   if (cont && cont.go === "page") {
     const pg = s.pages[cont.pageIx];
     return { ...base, kind: "resume", at: null, tab: cont.k, title: pg?.title ?? "",
-      lines: (pg?.items ?? []).map((i) => ({ n: i.n, question: i.text, voice: "print" })), line: cont.d };
+      lines: (pg?.items ?? []).map((i) => ({ n: i.n, question: i.text, voice: "print" })), line: pg ? `${pg.items.length} ${pg.items.length === 1 ? "problem" : "problems"} read, still on the desk.` : cont.d };
   }
   if (past) return { ...base, kind: "last", at: past.at, tab: "", title: past.label, empty: "Nothing open", line: `Last time: ${past.label} · ${past.detail}.` };
   return { ...base, kind: "none", at: null, tab: "", title: "", empty: "Not started", line: BLURB_ONE.maths };

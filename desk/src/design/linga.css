@@ -758,3 +758,22 @@
 .linga-tv .lo-yours-text { overflow: hidden; color: var(--lo-sentence); font-family: var(--lo-serif); font-size: 26px; line-height: 1.2; white-space: nowrap; text-overflow: ellipsis; }
 .linga-tv .lo-yours-list > span:last-child { font-family: var(--lo-serif); font-weight: 400; }
 .linga-print .linga-owned td:last-child { font-family: Georgia, "Times New Roman", serif; }
+
+/* ---------------------------------------------------------------- an On Air screen in Linga's look
+   Sentence help (Linga's menu) opens On Air's Your sentence screen; app/tv/page.tsx draws it inside a .linga-tv root with
+   .lo-onair, and only its type and colours change here: Linga's ground and serif, its plum action, no red band. The layout
+   and the keys stay On Air's. */
+.linga-tv.lo-onair { left: 0; top: 0; }
+.linga-tv.lo-onair .safe { z-index: 1; }
+.linga-tv.lo-onair .band { display: none; }
+.linga-tv.lo-onair .eyebrow { color: var(--lo-overline); font-family: var(--lo-sans); font-weight: 900; letter-spacing: 4px; }
+.linga-tv.lo-onair .title { font-family: var(--lo-serif); font-size: 78px; font-weight: 400; letter-spacing: -2.7px; line-height: 1.08; text-transform: none; color: var(--lo-ink); }
+.linga-tv.lo-onair .cap { border-radius: 6px; background: var(--lo-plum); color: var(--lo-cream); font-family: var(--lo-sans); font-size: 22px; font-weight: 900; letter-spacing: 4px; }
+.linga-tv.lo-onair .cap-text { color: var(--lo-caption); font-family: var(--lo-sans); font-size: 38px; }
+.linga-tv.lo-onair .sent { font-family: var(--lo-serif); color: var(--lo-sentence); }
+.linga-tv.lo-onair .tok[data-k="tense"] { border-bottom-color: var(--lo-mark); } .linga-tv.lo-onair .tok[data-k="marker"] { border-bottom-color: var(--lo-amber); }
+.linga-tv.lo-onair .tok::after { font-family: var(--lo-sans); color: var(--lo-label); }
+.linga-tv.lo-onair .lt .tag { background: var(--lo-plum); color: var(--lo-cream); font-family: var(--lo-sans); }
+.linga-tv.lo-onair .lt .txt { background: var(--lo-card); color: var(--lo-ink); border-right-color: var(--lo-rule); backdrop-filter: none; }
+.linga-tv.lo-onair .btn { border: 2px solid var(--lo-plum-line); border-radius: 12px; padding: 20px 36px; color: var(--lo-plum-ink); font-family: var(--lo-sans); font-size: 34px; letter-spacing: 0; text-transform: none; }
+.linga-tv.lo-onair .btn[data-focused="true"] { border-color: var(--lo-plum); background: var(--lo-plum); color: var(--lo-cream); box-shadow: 0 0 0 8px rgba(82, 38, 59, .15), 0 16px 35px rgba(80, 34, 51, .2); transform: translateX(13px); }
