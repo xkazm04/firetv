@@ -116,6 +116,8 @@
 
 /* ---- the action pills: an icon disc, a word; the focused one is lit amber ---- */
 .maths-tv .mb-acts { position: absolute; left: 96px; right: 96px; top: 946px; height: 80px; display: flex; gap: 26px; z-index: 8; align-items: center; }
+/* a caption in the action row (the paper screen): beside the buttons, two lines at most inside the row's 80 px */
+.maths-tv .mb-actcap { flex: 1; min-width: 0; margin-left: 12px; font-size: 30px; line-height: 1.2; font-weight: 500; color: rgba(245, 238, 223, .9); text-wrap: balance; max-height: 72px; overflow: hidden; animation: mb-rise .32s var(--mb-ease) both; }
 .maths-tv .mb-act { height: 80px; border-radius: 40px; display: flex; align-items: center; gap: 16px; padding: 0 34px 0 14px; white-space: nowrap; background: rgba(245, 238, 223, .06); border: 1.5px solid rgba(245, 238, 223, .16); color: rgba(245, 238, 223, .86); font: inherit; font-size: 34px; font-weight: 700;
   transition: transform .26s var(--mb-ease), background .26s, box-shadow .26s, color .26s, border-color .26s; }
 .maths-tv .mb-act .ic { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 197, 107, .12); color: var(--mb-amber); flex: 0 0 56px; transition: background .26s, color .26s; }

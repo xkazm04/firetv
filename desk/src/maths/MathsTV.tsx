@@ -783,8 +783,8 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
         </aside>
       </div>
     )}
-    <div className="mb-acts"><Act icon={ICON.paper} label="Type a paper" focused={onType} primary={v.empty} /></div>
-    <Caption text={handoffLine(s) ?? paperCaption(v)} top={930} />
+    {/* the caption stands beside Type a paper, in the action row: under the list (290-910) there is no room for a line above the row (stick walk 2026-10-23) */}
+    <div className="mb-acts"><Act icon={ICON.paper} label="Type a paper" focused={onType} primary={v.empty} /><div className="mb-actcap" key={handoffLine(s) ?? paperCaption(v)}>{handoffLine(s) ?? paperCaption(v)}</div></div>
   </>);
 }
 
