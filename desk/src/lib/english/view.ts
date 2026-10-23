@@ -456,8 +456,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     hero = { kind: "ladder", kicker: "Self-chosen · Linga can find it with you any time", title, band: picking, note: "" };
     actions = [
       act("this-is-my-level", "This is my level", BAND_CAN[picking], { command: { action: "level-self", extra: { band: picking } }, after: { picking: null } }),
-      act("lower", "Lower", picking === "A1" ? "A1 is the first level." : `${shift(picking, -1)} · ${BAND_CAN[shift(picking, -1)]}`, { ui: { picking: shift(picking, -1) } }),
-      act("higher", "Higher", picking === "C2" ? "C2 is the top level." : `${shift(picking, 1)} · ${BAND_CAN[shift(picking, 1)]}`, { ui: { picking: shift(picking, 1) } }),
+      act("lower", "Lower", picking === "A1" ? "A1 is the first level." : `Down to ${shift(picking, -1)}. ${BAND_CAN[shift(picking, -1)]}`, { ui: { picking: shift(picking, -1) } }),
+      act("higher", "Higher", picking === "C2" ? "C2 is the top level." : `Up to ${shift(picking, 1)}. ${BAND_CAN[shift(picking, 1)]}`, { ui: { picking: shift(picking, 1) } }),
       act("picker-back", "Not sure · go back", "Go back without choosing. Linga can find your level with you instead.", { ui: { picking: null }, focus: 0 }),
     ];
   } else if (isHome) {

@@ -3674,6 +3674,15 @@ test('F15 (stick pass 2026-10-20): at rest (focus -1) the first action is drawn 
  assert.match(src,/actions\[Math\.max\(0,focus\)\]/,'and Select at rest takes the first action');
 });
 
+test('stick walk 2026-10-23 (K2): with B1 lit, Higher and Lower say where they go, so their caption is not read as the lit level',()=>{
+ const V=view();
+ const v=V.lingaView(sessionOf(Object.values(SWEEP)[0]),{picking:'B1'});
+ assert.match(v.title,/^B1 /);
+ const help=id=>v.actions.find(a=>a.id===id)?.help;
+ assert.match(help('higher'),/^Up to B2\. You /);assert.match(help('lower'),/^Down to A2\. You /);
+ assert.equal(V.lingaView(sessionOf(Object.values(SWEEP)[0]),{picking:'C2'}).actions.find(a=>a.id==='higher').help,'C2 is the top level.');
+});
+
 test('F19 (stick pass 2026-10-20): a generated scene draws the picture of its place, or the neutral one, never its skill\'s',()=>{
  const V=view();
  const cafe={id:'plan-cafe',name:'A hot drink at the café',goal:'Order a hot drink and ask what it costs.',partner:'Ana · Barista',skill:'request',audience:'all',minutes:'6–8',premise:'A fictional café in town.',cue:'Try: I want a hot drink.',quiz:{question:'Ana asks: What would you like?',options:['I want a hot drink.','I am seven.'],correct:0}};
