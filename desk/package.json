@@ -7,6 +7,8 @@
     "dev:https": "node ../tools/desk-dev-https.cjs",
     "build": "next build",
     "start": "next start",
+    "seed:demo": "node scripts/seed-demo.mjs",
+    "package:portable": "node ../tools/package-portable.mjs",
     "measure": "node ../tools/kpi-measure.cjs",
     "bench": "node ../tools/lab-bench.cjs",
     "pretest": "node ../tools/worktree-preflight.cjs",
@@ -115,6 +117,7 @@
     "tv-look-test.cjs",
     "flow-audit-test.cjs",
     "vision-engine-test.cjs",
+    "seed-demo-test.cjs",
     "harness-rules-test.cjs"
   ],
   "dependencies": {
