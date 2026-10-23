@@ -50,6 +50,9 @@ export function barItems(st: BarState): BarItem[] {
   if (!st.ask) return [{ id: "recap", label: "Recap" }, { id: "more", label: "More" }];
   if (st.ask.phase === "sent") return [{ id: "primary", label: "Sent", disabled: true }, { id: "more", label: "More" }];
   if (PANEL_SUBMITS.has(st.ask.kind)) return [{ id: "cancel", label: "Cancel" }];
+  // one paragraph: the panel's own "Analyse on the TV" sends it, so a bar "Read this" beside it was the same button twice (stick walk 2026-10-22).
+  // Several paragraphs keep the bar's "Read all": the panel then offers only "This paragraph only", a different send.
+  if (st.ask.kind === "paragraph" && (st.primary?.paragraphs ?? 1) <= 1) return [{ id: "cancel", label: "Cancel" }];
   return [{ id: "cancel", label: "Cancel" }, { id: "primary", label: primaryLabel(st.ask.kind, st.primary), disabled: !!st.primaryOff }];
 }
 

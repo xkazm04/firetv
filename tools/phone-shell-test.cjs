@@ -39,6 +39,14 @@ test('TL-10: an ask open is Cancel and its primary; an ask sent is a disabled Se
  assert.deepEqual(sent.map(i=>[i.id,i.label,!!i.disabled]),[['primary','Sent',true],['more','More',false]]);
 });
 
+test('stick walk 2026-10-22: one paragraph has one send, the panel button Analyse on the TV; the bar holds Cancel alone, several paragraphs keep Read all',()=>{
+ const {barItems}=B();
+ for(const primary of [undefined,{paragraphs:1},{paragraphs:0}])
+  assert.deepEqual(barItems({joined:true,ask:{kind:'paragraph',phase:'open'},primary}).map(i=>i.id),['cancel']);
+ assert.deepEqual(barItems({joined:true,ask:{kind:'paragraph',phase:'open'},primary:{paragraphs:2}}).map(i=>i.label),['Cancel','Read all']);
+ assert.match(flat(PAGE),/"Analyse on the TV"/,'the panel keeps its named send');
+});
+
 test('TL-10: in every state the bar holds three items or fewer and every label is 12 characters or fewer',()=>{
  const {barItems,BAR_MAX_ITEMS,BAR_MAX_LABEL}=B();
  assert.equal(BAR_MAX_ITEMS,3);assert.equal(BAR_MAX_LABEL,12);

@@ -244,10 +244,10 @@ export function topicStops(s: Pick<Session, "profiles" | "learner">): readonly P
 export function topicsFocus(s: Pick<Session, "profiles" | "learner" | "skills">): number {
   const path = learnerPath(s), done = Object.values(s.skills ?? {}).filter((r) => r?.secure).map((r) => r.topic);
   const next = done.length ? frontierOn(path, done) : undefined;
-  if (next) return Math.max(0, topicsOf(path).findIndex((t) => t.id === next.id));
-  // a learner past the path's end with nothing secure opens on its last topic, not the first step
-  const last = done.length ? null : pastPathEnd(s);
-  return last ? Math.max(0, topicsOf(path).findIndex((t) => t.id === last.id)) : 0;
+  // nothing secure opens on the first topic, where the Tonight ruler's needle stands, for every learner: a learner past the
+  // path's end opened on its last topic (Probability), whose own line says most people do equivalent fractions first (stick
+  // walk 2026-10-23; revises PE1's Topics half). Get ready for school still opens on the last topic (prepareDoorFocus).
+  return next ? Math.max(0, topicsOf(path).findIndex((t) => t.id === next.id)) : 0;
 }
 /** Where Get ready for school opens: the first unit, or for a learner past the path's end the stop of its last topic. */
 function prepareDoorFocus(s: Pick<Session, "profiles" | "learner">): number {
@@ -424,9 +424,10 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   },
   pair: (s, k, _, o) => {
     // paired (TL-3): two buttons under the code - Pair another (stop 0, the code stays up) and Forget every phone (stop 1)
-    // up for a wish the phone must answer (pairFor): no forget here, and Back gives the wish up on the screen and lamp it came from
+    // up for a wish the phone must answer (pairFor): no forget here, and Back gives the wish up on the screen and lamp it came from.
+    // The two stand side by side (screens.tsx pair-actions), so Right and Left walk them; Down and Up still do (stick walk 2026-10-22)
     const pf = s.pairFor;
-    if (s.joined && !pf) { if (k === "down") o.focus(1); if (k === "up") o.focus(0); if (k === "select" && s.focus === 1) o.ev({ type: "phones.forget" }); }
+    if (s.joined && !pf) { if (k === "right" || k === "down") o.focus(1); if (k === "left" || k === "up") o.focus(0); if (k === "select" && s.focus === 1) o.ev({ type: "phones.forget" }); }
     if (k === "back" && pf && !pf.ready) { o.nav(pf.screen, pf.focus); return; }
     if (k === "back") { const to = s.back && s.back !== "pair" ? s.back : "landing"; o.nav(to, to === "landing" ? landingFocus(s, "phone") : 0); }
   },
@@ -586,7 +587,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (k === "down" && stops.indexOf(at) === LENS_STOPS.length - 1 && stops.includes("write")) { o.focus(stops.indexOf("write")); return; }
       if (k === "down") o.move(LENS_STOPS.length, 1); if (k === "up") o.move(LENS_STOPS.length, -1);
       if (k === "right" && stops.includes("last")) o.focus(stops.indexOf("last"));
-      if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen — paste or dictate the paragraph on the phone` }); o.ev({ type: "ask.open", kind: "paragraph" }); }
+      if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen: paste or dictate the paragraph on the phone` }); o.ev({ type: "ask.open", kind: "paragraph" }); }
     }
     if (k === "menu") o.nav("playbook", 0, "essaytype");
     // Adult mode: Back from the lens home returns to the Workroom, so it stays reachable once a reading is on the desk (recert-6/L1-helena-46-EM5-2)

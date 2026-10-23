@@ -1468,7 +1468,7 @@ test('E3-c: refusalCaption captions a refusal dispatched as one, and reads no wo
   assert.equal(ER.refusalCaption({status:'something later',essayRefused:l}),null,n+': a later status ends it');
  }
  assert.deepEqual(ER.refusalCaption({status:'That is 7 paragraphs and change.',essayRefused:'That is 7 paragraphs and change.'}),{label:'Not read',text:'That is 7 paragraphs and change.'},'a new refusal line needs no recogniser');
- for(const x of [KEYS.planStatus(0),KEYS.rewriteStatus(2),'structure lens chosen \u2014 paste or dictate the paragraph on the phone','reading your paragraph \u2014 structure lens…','reading your piece, 3 paragraphs \u2014 argument lens…','',null,undefined,42])
+ for(const x of [KEYS.planStatus(0),KEYS.rewriteStatus(2),'structure lens chosen: paste or dictate the paragraph on the phone','reading your paragraph, structure lens…','reading your piece, 3 paragraphs, argument lens…','',null,undefined,42])
   assert.equal(ER.refusalCaption({status:x}),null,String(x));
 });
 test('E3-c: the analyse route dispatches an essay refusal as one; the English sentence refusal and a plain status are not',async()=>{
@@ -1898,8 +1898,8 @@ test('EM3-1: the forensic page names the paragraph it is on and leads with where
 });
 test('EM3-3: a run that starts "reading your piece" is a piece from the first second, a paragraph run is not',()=>{
  const R=require(path.join(root,'src/lib/rules/essay.ts'));
- assert.equal(R.readingAPiece(undefined,'reading your piece, 4 paragraphs — structure lens…'),true);
- assert.equal(R.readingAPiece(undefined,'reading your paragraph — structure lens…'),false);
+ assert.equal(R.readingAPiece(undefined,'reading your piece, 4 paragraphs, structure lens…'),true);
+ assert.equal(R.readingAPiece(undefined,'reading your paragraph, structure lens…'),false);
  assert.equal(R.readingAPiece({paragraphs:2,read:[],failed:[]},undefined),true);
  const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
  assert.match(tv,/readingAPiece\(a\?\.piece, job\.start\)/);

@@ -41,6 +41,9 @@ export const SKILL_ART: Record<SkillId, SceneArt> = { contact: "meet", describe:
 const PLACE_ART: ReadonlyArray<[RegExp, SceneArt]> = [
   [/\b(?:caf[eé]|coffee|barista|tea ?shop)(?![a-z])/i, "date"],
   [/\bhotels?\b/i, "booking"],
+  // a pub, tavern or restaurant is a table with drinks too: the café table, not the neutral door (stick walk 2026-10-23);
+  // after the hotel, so a bar in a hotel keeps the hotel desk
+  [/\b(?:pub|tavern|restaurant|diner)s?\b/i, "date"],
   [/\b(?:classroom|teacher)s?\b/i, "teacher"],
   [/\binterview/i, "interview"],
   [/\b(?:moon|rover)s?\b/i, "rover"],
@@ -57,8 +60,16 @@ export function artOf(sceneId: string, skill: SkillId, words = ""): ArtKey {
   if (AUTHORED_SCENES.some(x => x.id === sceneId)) return SKILL_ART[skill];
   return PLACE_ART.find(([re]) => re.test(words))?.[1] ?? NEUTRAL_ART;
 }
-/** The sentence to take with you: a scene's cue without its "Try…:" lead. */
-export function sentenceOf(cue: string): string { return cue.replace(/^Try(?: [a-z]+)?:\s*/, ""); }
+/**
+ * The sentence to take with you: a scene's cue without its "Try…:" lead. A pitched scene's cue can arrive wrapped in the
+ * model's straight quotes ("I don't know much about wine yet..."): the card is the quote, so a wrapping pair goes, any
+ * other straight pair turns curly and three dots become an ellipsis, as the authored cues are written (stick walk 2026-10-23).
+ */
+export function sentenceOf(cue: string): string {
+  const line = cue.replace(/^Try(?: [a-z]+)?:\s*/, "").trim();
+  const bare = /^["“]([^"“”]*)["”]$/.exec(line)?.[1] ?? line;
+  return bare.replace(/"([^"]*)"/g, "“$1”").replace(/\.\.\./g, "…");
+}
 
 /** The six states of Linga home, in the order they are decided. */
 export const HOME_STATES = ["resume", "check-part-way", "no-placement", "no-plan", "plan-done", "next-topic"] as const;
@@ -456,8 +467,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     hero = { kind: "ladder", kicker: "Self-chosen · Linga can find it with you any time", title, band: picking, note: "" };
     actions = [
       act("this-is-my-level", "This is my level", BAND_CAN[picking], { command: { action: "level-self", extra: { band: picking } }, after: { picking: null } }),
-      act("lower", "Lower", picking === "A1" ? "A1 is the first level." : `${shift(picking, -1)} · ${BAND_CAN[shift(picking, -1)]}`, { ui: { picking: shift(picking, -1) } }),
-      act("higher", "Higher", picking === "C2" ? "C2 is the top level." : `${shift(picking, 1)} · ${BAND_CAN[shift(picking, 1)]}`, { ui: { picking: shift(picking, 1) } }),
+      act("lower", "Lower", picking === "A1" ? "A1 is the first level." : `Down to ${shift(picking, -1)}. ${BAND_CAN[shift(picking, -1)]}`, { ui: { picking: shift(picking, -1) } }),
+      act("higher", "Higher", picking === "C2" ? "C2 is the top level." : `Up to ${shift(picking, 1)}. ${BAND_CAN[shift(picking, 1)]}`, { ui: { picking: shift(picking, 1) } }),
       act("picker-back", "Not sure · go back", "Go back without choosing. Linga can find your level with you instead.", { ui: { picking: null }, focus: 0 }),
     ];
   } else if (isHome) {

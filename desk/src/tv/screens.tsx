@@ -188,7 +188,7 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
       </div>
       {h.rule && (
         <dl className="rule" style={{ marginTop: 32 }}>
-          <dt>Tense</dt><dd>{h.rule.name} — because of {h.rule.tenseReason}</dd>
+          <dt>Tense</dt><dd>{h.rule.name}, because of {h.rule.tenseReason}</dd>
           <dt>Used for</dt><dd>{h.rule.when}</dd>
           <dt>Find it</dt><dd>{h.rule.findIt}</dd>
           {h.rule.warning && <div className="warn">{h.rule.warning}</div>}
@@ -310,7 +310,7 @@ export function HeadToHead({ s }: { s: Session }) {
         <div style={{ marginTop: 26, display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>{["since", "for", "already", "ever"].map((m) => <span key={m} className="chan" style={{ border: "2px solid var(--english)", color: "var(--english)", padding: "6px 14px" }}>{m}</span>)}</div>
         <div className="headline" style={{ marginTop: 40, fontSize: 44 }}>{perfect[0]}<b style={{ color: "var(--english)" }}>{perfect[1]}</b>{perfect[2]}</div>
       </div>
-      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, textAlign: "center" }}><span className="cap">The question to ask</span><div className="cap-text" style={{ margin: "18px auto 0" }}>Is the time <b>closed</b> or still <b>open</b>? Find the time word first — the tense follows.</div></div>
+      <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, textAlign: "center" }}><span className="cap">The question to ask</span><div className="cap-text" style={{ margin: "18px auto 0" }}>Is the time <b>closed</b> or still <b>open</b>? Find the time word first; the tense follows.</div></div>
     </main>
   </>);
 }

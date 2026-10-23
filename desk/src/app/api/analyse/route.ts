@@ -85,7 +85,7 @@ function readPiece(who: { id: string }, text: string, type: AnalysisType, age: n
     // and the Sunday page are read again (store.ts REHYDRATE)
     if (goes()) dispatch({ type: "essay.progress", analysis: done, owner: who.id });
     return done;
-  }, { key: "essay", start: `reading your piece, ${paragraphs} paragraphs — ${type} lens…`, done: (a) => a.summary.slice(0, 120) });
+  }, { key: "essay", start: `reading your piece, ${paragraphs} paragraphs, ${type} lens…`, done: (a) => a.summary.slice(0, 120) });
 }
 
 /** The ask a phone's reading answers, by its kind (TV-led design, section 2.2): a sentence, a paragraph or piece, a rewrite. */
@@ -209,6 +209,6 @@ async function post(req: Request) {
     const a = await analyseEssay(body.text, body.type, who.id, age, { mode, task: taskFor(body), assignment: assignmentOf(body) }, hasFormat(body.format) ? body.format : undefined);
     dispatch({ type: "essay.set", analysis: a, owner: who.id });
     return a;
-  }, { key: "essay", start: `reading your paragraph — ${body.type} lens…`, done: (a) => a.summary.slice(0, 120) });
+  }, { key: "essay", start: `reading your paragraph, ${body.type} lens…`, done: (a) => a.summary.slice(0, 120) });
   return r.ok ? NextResponse.json(r.value) : refused(r);
 }

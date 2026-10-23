@@ -3674,6 +3674,30 @@ test('F15 (stick pass 2026-10-20): at rest (focus -1) the first action is drawn 
  assert.match(src,/actions\[Math\.max\(0,focus\)\]/,'and Select at rest takes the first action');
 });
 
+test('stick walk 2026-10-23 (K2): with B1 lit, Higher and Lower say where they go, so their caption is not read as the lit level',()=>{
+ const V=view();
+ const v=V.lingaView(sessionOf(Object.values(SWEEP)[0]),{picking:'B1'});
+ assert.match(v.title,/^B1 /);
+ const help=id=>v.actions.find(a=>a.id===id)?.help;
+ assert.match(help('higher'),/^Up to B2\. You /);assert.match(help('lower'),/^Down to A2\. You /);
+ assert.equal(V.lingaView(sessionOf(Object.values(SWEEP)[0]),{picking:'C2'}).actions.find(a=>a.id==='higher').help,'C2 is the top level.');
+});
+
+test('stick walk 2026-10-23: a pitched tavern, pub or restaurant draws the café table; a hotel bar keeps the hotel desk',()=>{
+ const V=view();
+ for(const w of ['A quiet evening at the tavern · Bran · Innkeeper','Order at the village pub · Sam · Barman','Book a table at a restaurant · Lu · Waiter'])assert.equal(V.artOf('pitch-x','relate',w),'date',w);
+ assert.equal(V.artOf('pitch-x','relate','The bar of the Grand Hotel · Ivo · Receptionist'),'booking','the hotel row comes first');
+ assert.equal(V.artOf('pitch-x','relate','A publisher meets an author'),'start','publisher is not a pub');
+});
+
+test('stick walk 2026-10-23: the sentence to take with you drops a pitched cue\'s wrapping straight quotes and writes the rest as the authored cues are',()=>{
+ const V=view();
+ assert.equal(V.sentenceOf('Try: "I don\'t know much about wine yet..."'),'I don\'t know much about wine yet…');
+ assert.equal(V.sentenceOf('Try asking: Which way should I go?'),'Which way should I go?','an authored cue is unchanged');
+ assert.equal(V.sentenceOf('Try: Is "cheers" polite here?'),'Is “cheers” polite here?','an inner pair turns curly');
+ assert.equal(V.sentenceOf('Try: I enjoy this because…'),'I enjoy this because…');
+});
+
 test('F19 (stick pass 2026-10-20): a generated scene draws the picture of its place, or the neutral one, never its skill\'s',()=>{
  const V=view();
  const cafe={id:'plan-cafe',name:'A hot drink at the café',goal:'Order a hot drink and ask what it costs.',partner:'Ana · Barista',skill:'request',audience:'all',minutes:'6–8',premise:'A fictional café in town.',cue:'Try: I want a hot drink.',quiz:{question:'Ana asks: What would you like?',options:['I want a hot drink.','I am seven.'],correct:0}};

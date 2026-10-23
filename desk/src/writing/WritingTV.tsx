@@ -10,6 +10,9 @@ import { promptById } from "@/lib/writing/prompts";
 import { stopAt } from "@/tv/keys";
 import { phoneActionLabel, writingAskOf, writingDone, writingLine, writingPhase, writingPrompts, writingStops, WRITING_STEPS } from "@/tv/writingScreen";
 
+/** The caption sits on the stage's lower edge, as On Air's other captions do, so the lower half is not left empty (stick walk 2026-10-23); a tall screen (the note) only pushes it down as before. */
+const COLUMN = { display: "flex", flexDirection: "column" } as const, CAPTION = { marginTop: "auto", paddingTop: 30 } as const;
+
 const ACTION_WORDS = { another: { k: "Start over", t: "Another prompt", d: "Back to the list. Nothing is saved until the revision is." } } as const;
 
 export function WritingTV({ s }: { s: Session }) {
@@ -18,7 +21,7 @@ export function WritingTV({ s }: { s: Session }) {
     const prompts = writingPrompts(s), lit = prompts.find((p) => p.id === at);
     return (<>
       <div className="band band-corner" />
-      <main className="content-full" data-role="writing-tv" data-phase="list">
+      <main className="content-full" data-role="writing-tv" data-phase="list" style={COLUMN}>
         <div className="eyebrow">Writing · one paragraph, one note</div>
         <div className="title">Pick a prompt</div>
         <div className="cards" style={{ gridTemplateColumns: `repeat(${Math.max(2, prompts.length)}, 1fr)`, marginTop: 150 }}>
@@ -29,7 +32,7 @@ export function WritingTV({ s }: { s: Session }) {
             </div>
           ))}
         </div>
-        <div style={{ marginTop: 44 }}>
+        <div style={CAPTION}>
           <span className="cap">{lit ? lit.title : "Writing"}</span>
           <div className="cap-text" data-role="writing-caption" aria-live="polite">{lit ? lit.ask : writingLine(s)} Select to pick it. Back goes to Essay Master.</div>
         </div>
@@ -39,7 +42,7 @@ export function WritingTV({ s }: { s: Session }) {
   const ep = s.writingTv!, prompt = promptById(ep.promptId), done = writingDone(s), ask = writingAskOf(s);
   return (<>
     <div className="band band-corner" />
-    <main className="content-full" data-role="writing-tv" data-phase={ph} data-asking={ask ? ask.phase : undefined} data-busy={ep.busy || undefined}>
+    <main className="content-full" data-role="writing-tv" data-phase={ph} data-asking={ask ? ask.phase : undefined} data-busy={ep.busy || undefined} style={COLUMN}>
       <div className="eyebrow">Writing · {prompt?.title ?? "your prompt"}</div>
       <div className="cap-text" data-role="writing-ask" style={{ maxWidth: 1180, fontSize: 40, lineHeight: 1.3, marginTop: 18 }}>{prompt?.ask}</div>
       <ol data-role="writing-progress" aria-label="Progress" style={{ display: "flex", gap: 28, listStyle: "none", padding: 0, margin: "34px 0 0", fontSize: 30 }}>
@@ -67,7 +70,7 @@ export function WritingTV({ s }: { s: Session }) {
               <div className="d">{ph === "finished" ? "Pick the next prompt." : ACTION_WORDS.another.d}</div>
             </div>)}
       </div>
-      <div style={{ marginTop: 30 }}>
+      <div style={CAPTION}>
         <span className="cap">{ph === "finished" ? "Saved" : ph === "coached" ? "Coached" : "Your turn"}</span>
         <div className="cap-text" data-role="writing-caption" aria-live="polite">{writingLine(s)}</div>
       </div>
