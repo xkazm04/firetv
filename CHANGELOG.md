@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- The browser TV's bench bar stays on one line down to a 1024 px window too: under 1240 px it drops its own name and tightens again, so Fullscreen no longer falls to a second row ([README.md](README.md)).
 - The browser TV: a click on a bench bar button (Fake phone, Clock ×60, Voice) no longer takes the keyboard, so the arrow keys and Enter keep driving the TV afterwards; on Linga they had stopped working until the stage was clicked ([README.md](README.md)).
 - Essay Master's paragraph plan: a lit slot's caption says OK writes this sentence on your phone, as the Write on my phone button beside it does, instead of "Say it on the phone." ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Linga's level screen labels the level's own description "At this level" for a level the learner picked, instead of "Linga says", which read as Linga's verdict ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
