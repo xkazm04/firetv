@@ -587,7 +587,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (k === "down" && stops.indexOf(at) === LENS_STOPS.length - 1 && stops.includes("write")) { o.focus(stops.indexOf("write")); return; }
       if (k === "down") o.move(LENS_STOPS.length, 1); if (k === "up") o.move(LENS_STOPS.length, -1);
       if (k === "right" && stops.includes("last")) o.focus(stops.indexOf("last"));
-      if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen — paste or dictate the paragraph on the phone` }); o.ev({ type: "ask.open", kind: "paragraph" }); }
+      if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen: paste or dictate the paragraph on the phone` }); o.ev({ type: "ask.open", kind: "paragraph" }); }
     }
     if (k === "menu") o.nav("playbook", 0, "essaytype");
     // Adult mode: Back from the lens home returns to the Workroom, so it stays reachable once a reading is on the desk (recert-6/L1-helena-46-EM5-2)
