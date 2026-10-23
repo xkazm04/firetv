@@ -193,7 +193,9 @@ export default function TV() {
 
   return (
     <div className="bench" ref={bench}>
-      <div className="bar">
+      {/* a click on a bench button does not take the keyboard focus: Linga ignores keys aimed at the bar, and Enter would press
+          the button again, so the remote's keys kept working only after a click on the stage (TV polish wave 3) */}
+      <div className="bar" onMouseDown={(e) => { if ((e.target as HTMLElement).closest("button")) e.preventDefault(); }}>
         <b>Study Desk · TV</b>
         <span><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> D-pad · <kbd>Enter</kbd> Select · <kbd>Backspace</kbd> Back · <kbd>M</kbd> Menu · <kbd>Space</kbd> Play/Pause</span>
         <button aria-pressed={voice} onClick={() => setVoice((v) => !v)}>Voice</button>
