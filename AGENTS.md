@@ -46,8 +46,8 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Degraded-engine drill | `node tools/engine-degraded-test.cjs` | Needs `desk/node_modules`. Puts each degraded engine answer in `tools/engine-degraded-fixtures.json` through the read and hint routes. Its `todo` rows are known gaps on the live surface. |
 | SBOM converter | `node tools/gradle-sbom-test.cjs` | `tools/gradle-sbom.cjs` turns Gradle's resolved dependency report into the CycloneDX SBOM that `sbom.yml` attests against the APK (`.ai/memory/0021`). |
 
-`gradle.properties` pins `org.gradle.java.home` to the operator's Android Studio JBR. On any
-other machine, pass `-Dorg.gradle.java.home=<a JDK 17>` or remove that line locally.
+Gradle runs on the JDK in `JAVA_HOME` (nothing pins it in `gradle.properties`). `:core` asks for a
+JDK 17 toolchain; `org.gradle.java.installations.paths` adds Android Studio's JBR to where Gradle looks.
 
 There is no linter or formatter wired yet. Match the surrounding style. Kotlin follows
 `kotlin.code.style=official`.

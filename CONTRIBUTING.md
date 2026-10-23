@@ -29,7 +29,7 @@ The agent starts from the criteria, not from a restatement of them. Its pull req
 | Product | One-time setup |
 |---|---|
 | Study Desk | Node 24, then `npm ci --prefix desk`. Engine keys go in `desk/.env.local` (gitignored, see `desk/README.md`). The gate needs no keys. |
-| Telestrator | JDK 17, the Android SDK (`local.properties` with `sdk.dir`), and the fixture clip generated with ffmpeg (`fixtures/README.md`). `gradle.properties` pins the operator's JBR path; elsewhere, pass `-Dorg.gradle.java.home=<JDK 17>`. Live tests need `npm ci --prefix tools` and an emulator (`scripts/dev.ps1`). |
+| Telestrator | JDK 17, the Android SDK (`local.properties` with `sdk.dir`), and the fixture clip generated with ffmpeg (`fixtures/README.md`). Gradle uses the JDK in `JAVA_HOME` (set it to a JDK 17; nothing is pinned in `gradle.properties`). Live tests need `npm ci --prefix tools` and an emulator (`scripts/dev.ps1`). |
 
 ## The verification gate
 

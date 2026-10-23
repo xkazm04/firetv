@@ -164,11 +164,15 @@ network, and that port must be reachable from it.
 **Why an APK.** The Fire TV's Silk browser can open `/tv`, but it passes only Play/Pause to a web page and keeps
 the D-pad, Select, Back and Menu for its own cursor, so you cannot drive the desk with the remote there. The stick
 APK (`stick-app/`, package `dev.studydesk.stick`) is one fullscreen WebView on `/tv` that hands every remote
-button to the page. There is no prebuilt APK in the repository: you build it.
+button to the page. There is no APK in the repository itself, but a prebuilt debug-signed one is on the
+[v1.0-hackathon release](https://github.com/xkazm04/firetv/releases/tag/v1.0-hackathon)
+([study-desk-firetv.apk](https://github.com/xkazm04/firetv/releases/download/v1.0-hackathon/study-desk-firetv.apk)):
+with it, skip step 1 and no Android SDK is needed, only `adb`.
 
 **1. Build the APK.** You need JDK 17 and the Android SDK, with `local.properties` at the repository root holding
-`sdk.dir=<path to the Android SDK>`. `gradle.properties` pins the author's JBR, so on another machine pass
-`-Dorg.gradle.java.home=<a JDK 17>` ([CONTRIBUTING.md](CONTRIBUTING.md)). From the repository root:
+`sdk.dir=<path to the Android SDK>`. Gradle runs on the JDK in `JAVA_HOME`, so point it at a JDK 17 (Android
+Studio's bundled `jbr` folder is one). On Windows prefer `JAVA_HOME` over `-Dorg.gradle.java.home=`: through
+`tools/gradlew.cjs` a path with a space in it is split. From the repository root:
 
 ```sh
 node tools/gradlew.cjs :stick-app:assembleDebug
