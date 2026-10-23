@@ -580,7 +580,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     caption = lc.pending ? (lc.topics.length ? "Take a moment. Linga is finding another topic." : "Take a moment. Linga is picking conversations for your level and interests.") : lc.error || "Add a topic in your own words on the phone."; captionTag = lc.pending ? "Preparing" : "Your topics";
     actions = lc.pending ? [act("cancel", "Cancel & come back later", "Stop here. Your topics so far are kept.", cmd("check-leave"))]
       : lc.topics.length ? [act("agree", "Agree to these topics", "Save these as your plan. Linga starts with the first one.", cmd("plan-agree")), ...lc.topics.map(t => act("swap", "Swap this topic", t.why, cmd("plan-swap", { topicId: t.id }))), act("renew", "All new topics", "Replace every topic with a fresh set.", cmd("plan-renew")), ...(lc.topics.length < PLAN_MAX ? [act("ask-topic", "Add a topic", "Type a topic in your own words on your phone. Linga adds a conversation for it. Back cancels.", { ask: { kind: "words" } })] : [])]
-      : [act("retry", "Try again", "Ask Linga for topics again.", cmd("check-retry"))];
+      // nothing came back (no text engine, a bad reply): Try again, or leave with the level kept, so Back is not the only way out
+      : [act("retry", "Try again", "Ask Linga for topics again.", cmd("check-retry")), act("not-now", "Not now", "Leave for now. Your level is kept, and Linga picks your topics when you come back.", cmd("check-leave"))];
   } else if (s.screen === "linga-scenes") {
     const i = sceneIndex % scenes.length, scene = scenes[i];
     tag = `Situation ${i + 1} of ${scenes.length}`; title = scene.name; caption = scene.goal;

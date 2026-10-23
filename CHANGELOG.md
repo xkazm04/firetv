@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Linga's topics, when none came back (no text engine, or a reply it could not use), offer Not now beside Try again, which leaves for Linga's home with the level kept ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Linga's menu opened over the level picker closes back onto the picker, on the band that was lit, with Close the menu or Back, instead of dropping to the welcome ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Math Buddy's Tonight ruler shows Geometry and data and More geometry and data whole, instead of "GEOMET…" and "MORE GEOMETR…": a strip label is measured at 18 px a character ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - Get ready for school hides a strand heading the window's faded edges would cut to a fragment ("IONS", "DECI"), and shows it again once it stands whole ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
