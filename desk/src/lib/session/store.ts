@@ -318,7 +318,9 @@ export interface Ask {
  * live again: the session is back on `screen` at `focus` and the TV asks once to run the Select again (then pair.clear).
  * It lives only while the pairing page is up (or `ready`); a nav elsewhere drops it.
  */
-export interface PairFor { screen: Screen; focus: number; kind: AskKind; gone: boolean; at: number; ready?: boolean }
+export interface PairFor { screen: Screen; focus: number; kind: AskKind; gone: boolean; at: number; ready?: boolean;
+  /** the `back` of the screen it came from, put back when the wish resumes or is given up (a paper opened from Tonight still returns there) */
+  back?: Screen }
 
 /**
  * The Writing episode on the TV (docs/concepts/TV-WRITING-SCREEN-2026-10-21.md): the prompt the learner picked, then the
@@ -791,6 +793,7 @@ function resumePair(n: Session, joined = false): void {
   const pf = n.pairFor;
   if (!pf || pf.ready || n.screen !== "pair" || (n.phonesLive <= 0 && !joined)) return;
   n.screen = pf.screen; n.focus = pf.focus; n.pairFor = { ...pf, ready: true };
+  if (pf.back) n.back = pf.back; else delete n.back;
 }
 /** pairFor lives while the pairing page is up (or resumed on the screen it names): any other place drops it. */
 function settlePair(n: Session): Session {
@@ -815,7 +818,7 @@ function step(s: Session, e: Event): Session {
     case "leave": return s;
     case "phone.presence": n.phonesLive = Math.max(0, Math.floor(e.live)); resumePair(n); break;
     case "pair.for": { if (s.phonesLive > 0 || s.screen === "pair") return s;
-      n.pairFor = { screen: s.screen, focus: s.focus, kind: e.kind, gone: s.joined, at: Date.now() }; n.ask = null; n.screen = "pair"; n.focus = 0; n.back = s.screen; break; }
+      n.pairFor = { screen: s.screen, focus: s.focus, kind: e.kind, gone: s.joined, at: Date.now(), ...(s.back ? { back: s.back } : {}) }; n.ask = null; n.screen = "pair"; n.focus = 0; n.back = s.screen; break; }
     case "pair.clear": { if (!s.pairFor) return s; delete n.pairFor; break; }
     case "phones.forget": return s;
     // the code on the TV turns over once a phone has joined with it (the session route raises this): a new pin, never the one just used
@@ -828,6 +831,8 @@ function step(s: Session, e: Event): Session {
     case "nav": if (s.ask && e.screen !== s.ask.screen) n.ask = null;
       if (!s.learner && !UNSEATED_SCREENS.has(e.screen)) { n.screen = "learner"; n.focus = 0; n.back = "landing"; break; }
       n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from;
+      // Back on the pairing page gives the wish up: the screen it came from gets its own back again, not "pair"'s
+      else if (s.screen === "pair" && s.pairFor && !s.pairFor.ready && e.screen === s.pairFor.screen) { if (s.pairFor.back) n.back = s.pairFor.back; else delete n.back; }
       // the paper's aim (MB-B40): set by the recovery row's Select, kept between Get ready for school and its lesson, else gone
       { const aim = e.aim && e.screen === "prepare" ? e.aim : AIM_KEEPS.has(s.screen) && AIM_KEEPS.has(e.screen) ? s.paperAim ?? null : null;
         if (aim !== (s.paperAim ?? null)) n.paperAim = aim; } break;

@@ -225,7 +225,7 @@ function NotThisTV() {
     <main className="content-full" data-role="not-this-tv" style={{ display: "grid", placeItems: "center", textAlign: "center" }}>
       <div style={{ maxWidth: 1200 }}>
         <div className="title">Not this desk&rsquo;s TV</div>
-        <div className="cap-text" style={{ marginInline: "auto" }}>Open the TV address the desk printed.</div>
+        <div className="cap-text" style={{ marginInline: "auto" }}>Open the TV link the desk printed in its terminal when it started (it ends in /tv?key=&hellip;). That link makes this browser the desk&rsquo;s TV.</div>
       </div>
     </main>
   </>);

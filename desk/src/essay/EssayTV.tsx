@@ -152,7 +152,8 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const adult = adultSeat(s), english = ENGLISH_ONLY_STATEMENT;
   const withEnglish = (text: string) => english ? `${text} ${english}` : text;
   const cap = job?.phase === "running" ? { label: READING_LABEL, text: readingAPiece(a?.piece, job.start) ? PIECE_WAIT(a?.piece) : adultSay("The desk is reading your paragraph. It lands here.", adult) }
-    : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ?? adultSay("The paragraph did not come back. Send it again from the phone.", adult) }
+    // the run's reason says what failed, never what to do (desk/job.ts jobError): the TV adds its own way on (stick walk 2026-10-23)
+    : job?.phase === "failed" && (chosen || !a) ? { label: NOT_READ_LABEL, text: job.error ? `${job.error} Select a lens to send it again from the phone.` : adultSay("The paragraph did not come back. Send it again from the phone.", adult) }
     : refused ? refused
     // "Your turn", as Writing says it: the line itself already begins "On the phone:", and the header chip says On your phone
     : essayHandoffLine(s) ? { label: "Your turn", text: essayHandoffLine(s) as string }
@@ -229,7 +230,7 @@ export function EssayPlan({ s }: { s: Session }) {
   const fit = here >= 0 && slots[here] ? planFit(defs, here, slots[here]) : null;
   const refused = refusalCaption(s), adult = adultSeat(s);
   const cap = job?.phase === "running" ? { label: "Reading", text: adultSay("The desk is reading your paragraph. It lands here.", adult) }
-    : job?.phase === "failed" ? { label: "Not read", text: job.error ?? adultSay("The paragraph did not come back. Press OK on Read it to send it again.", adult) }
+    : job?.phase === "failed" ? { label: "Not read", text: job.error ? `${job.error} Press OK on Read it to send it again.` : adultSay("The paragraph did not come back. Press OK on Read it to send it again.", adult) }
     : refused ? refused
     : essayHandoffOf(s) && here >= 0 ? { label: `Slot ${here + 1} · ${defs[here]?.label ?? ""}`, text: s.phonesLive === 0 ? "No phone is connected. Back: cancel." : "On the phone. Back cancels." }
     : here >= 0 ? { label: `Slot ${here + 1} · ${defs[here]?.label ?? ""}`, text: fit ?? (slots[here] ? "Written. Say it again on the phone to change it." : "Say it on the phone.") }

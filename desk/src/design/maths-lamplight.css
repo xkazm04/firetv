@@ -116,6 +116,8 @@
 
 /* ---- the action pills: an icon disc, a word; the focused one is lit amber ---- */
 .maths-tv .mb-acts { position: absolute; left: 96px; right: 96px; top: 946px; height: 80px; display: flex; gap: 26px; z-index: 8; align-items: center; }
+/* a caption in the action row (the paper screen): beside the buttons, two lines at most inside the row's 80 px */
+.maths-tv .mb-actcap { flex: 1; min-width: 0; margin-left: 12px; font-size: 30px; line-height: 1.2; font-weight: 500; color: rgba(245, 238, 223, .9); text-wrap: balance; max-height: 72px; overflow: hidden; animation: mb-rise .32s var(--mb-ease) both; }
 .maths-tv .mb-act { height: 80px; border-radius: 40px; display: flex; align-items: center; gap: 16px; padding: 0 34px 0 14px; white-space: nowrap; background: rgba(245, 238, 223, .06); border: 1.5px solid rgba(245, 238, 223, .16); color: rgba(245, 238, 223, .86); font: inherit; font-size: 34px; font-weight: 700;
   transition: transform .26s var(--mb-ease), background .26s, box-shadow .26s, color .26s, border-color .26s; }
 .maths-tv .mb-act .ic { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 197, 107, .12); color: var(--mb-amber); flex: 0 0 56px; transition: background .26s, color .26s; }
@@ -349,6 +351,11 @@
 .maths-tv .mb-srow .n { width: 64px; text-align: center; font-weight: 700; font-size: 28px; color: rgba(39, 48, 74, .55); flex: none; }
 .maths-tv .mb-srow .qx { padding-left: 22px; font-size: 31px; line-height: 1; white-space: nowrap; overflow: hidden; max-width: 360px; }
 .maths-tv .mb-srow .qx .mx.hand { font-size: 35px; }
+/* a stacked fraction is about 62 px tall at the 28 px floor and a thumbnail row is 43: in the continue card's sheet it is set
+   on the line as a slashed fraction (4/7), so the rows of a set with fractions no longer run into each other (stick walk 2026-10-23) */
+.maths-tv .mb-srow .mx .mf { flex-direction: row; align-items: baseline; top: 0; vertical-align: baseline; margin: 0 .06em; }
+.maths-tv .mb-srow .mx .mf .fnu, .maths-tv .mb-srow .mx .mf .fde { padding: 0; }
+.maths-tv .mb-srow .mx .mf .fb { align-self: center; width: .07em; height: .9em; min-height: 0; margin: 0 .08em; transform: rotate(22deg); }
 .maths-tv .mb-readline { position: absolute; left: 70px; right: 14px; height: 42px; border-radius: 8px;
   background: linear-gradient(90deg, rgba(255, 197, 107, 0), rgba(255, 190, 90, .55) 8%, rgba(255, 190, 90, .5) 85%, rgba(255, 197, 107, 0));
   box-shadow: 0 0 26px rgba(255, 177, 61, .55); mix-blend-mode: multiply; }

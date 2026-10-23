@@ -114,6 +114,21 @@ test('Back on the pairing page gives the wish up: the screen and lamp it came fr
  assert.deepEqual(tvKey({...s,focus:1},'select',LOCAL).events,[]);
 });
 
+test('the pairing detour keeps each screen its own Back: a paper opened from Tonight returns to Tonight after the phone joins or the wish is given up (stick walk 2026-10-23)',()=>{
+ const {tvKey}=keys();
+ const s0=session({screen:'paper',back:'tonight',focus:99,joined:false});
+ const s=store.reduce(s0,tvKey(s0,'select',LOCAL).events[0]);
+ assert.equal(s.screen,'pair');assert.equal(s.pairFor.back,'tonight');
+ const joined=store.reduce(s,{type:'join'});
+ assert.equal(joined.screen,'paper');assert.equal(joined.back,'tonight');
+ assert.deepEqual(tvKey({...joined,ask:null,pairFor:undefined,focus:0},'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}]);
+ const gaveUp=store.reduce(s,tvKey(s,'back',LOCAL).events[0]);
+ assert.equal(gaveUp.screen,'paper');assert.equal(gaveUp.back,'tonight');assert.equal(gaveUp.pairFor,undefined);
+ // a screen that had no back of its own gets none back
+ const t=store.reduce(session({screen:'sentence',subject:'english',focus:1}),{type:'pair.for',kind:'sentence'});
+ assert.equal(t.back,'sentence');assert.equal(store.reduce(t,{type:'join'}).back,undefined);
+});
+
 test('without a wish the pair screen is what it was: Back to where it opened, the two buttons when paired',()=>{
  const {tvKey}=keys();
  const s=session({screen:'pair',back:'landing',focus:1});

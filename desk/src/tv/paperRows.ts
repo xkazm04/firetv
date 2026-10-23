@@ -119,7 +119,7 @@ export function paperBiggest(v: PaperView): PaperTopic | null {
 
 /** The caption: where to start, or how to enter a paper. */
 export function paperCaption(v: PaperView): string {
-  if (v.empty) return "Select Type a paper to enter the marks. The desk shows where they were lost.";
+  if (v.empty) return "Select Type a paper: the phone takes the marks, question by question.";
   if (!v.topics.length && !v.off.length) {
     if (v.lost === 1) return "1 mark was lost on a question that names no statement. Name the statement it tests when the paper is typed.";
     if (v.lost > 1) return `${v.lost} marks were lost on questions that name no statement. Name the statement each one tests when the paper is typed.`;

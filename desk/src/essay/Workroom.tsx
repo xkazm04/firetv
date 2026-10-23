@@ -42,7 +42,7 @@ export function WorkroomScreen({ s, focus }: { s: Session; focus: number }) {
             {p.diff && <Pips d={p.diff.sentences} />}
           </li>))}
         </ol>
-      ) : <p className="em-wr-empty">Nothing kept yet. On a PC, open <b>{drop}</b>, join with the code, and keep a few of your messages or emails.</p>}
+      ) : <p className="em-wr-empty">Nothing kept yet. On a PC, open <b>{drop}</b>, join with the code <b>{s.pin}</b>, and keep a few of your messages or emails.</p>}
     </section>
     <aside className="em-twin" data-role="essay-twin">
       <div className="em-lbl">Your twin</div>

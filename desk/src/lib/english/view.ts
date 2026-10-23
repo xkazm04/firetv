@@ -627,7 +627,9 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     tag = `Chapter ${chapter % 8 + 1} of 8`; title = skill.name; caption = skill.goal;
     hero = { kind: "track", kicker: `Your progress · ${PROGRESS_LABEL[progress]}`, title, progress, subtitle: typed > 0 ? `${typed} written practice observations · typed and spoken both count` : "", illustration: SKILL_ART[skill.id] };
     // Next first (the map opens on chapter 1, where Previous wraps to 8); each caption names the chapter it goes to, not its goal, which reads as this chapter's
-    actions = [act("next-chapter", "Next chapter", `${ENGLISH_SKILLS[(chapter + 1) % 8].name}.`, { ui: { chapter: (chapter + 1) % 8 } }), act("previous-chapter", "Previous chapter", `${ENGLISH_SKILLS[(chapter + 7) % 8].name}.`, { ui: { chapter: (chapter + 7) % 8 } })];
+    // with its number, so Previous on chapter 1 reads "Chapter 8: ..." and the wrap is not a surprise (stick walk 2026-10-23)
+    const to = (n: number) => `Chapter ${n + 1}: ${ENGLISH_SKILLS[n].name}.`;
+    actions = [act("next-chapter", "Next chapter", to((chapter + 1) % 8), { ui: { chapter: (chapter + 1) % 8 } }), act("previous-chapter", "Previous chapter", to((chapter + 7) % 8), { ui: { chapter: (chapter + 7) % 8 } })];
   } else if (c && s.screen === "linga-moment" && c.moment) {
     const m = c.moment, r = m.kind === "fix" ? m.repair : undefined; tag = "A moment";
     const back = act("back", "Back to the conversation", backHelp(c), cmd("moment-done"), { disabled: refused("moment-done") });
@@ -780,7 +782,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const rehearsing = c && c.phase !== "finished";
     const close = { menu: false }, checkPartWay = !!lc && (lc.stage === "about" || lc.stage === "tasks");
     actions = [
-      act("menu-back", "Back to the scene", "Return to where you were.", { ui: close, focus: -1 }),
+      // no scene running (the welcome, the level, a finished scene): there is no scene to go back to
+      act("menu-back", rehearsing ? "Back to the scene" : "Close the menu", "Return to where you were.", { ui: close, focus: -1 }),
       act("learning-map", "Learning map", "Explore the abilities you can practise and your progress in each.", go("linga-map")),
       chooseSituation("Choose a new scene; your existing evidence stays saved."),
       act("my-level", "My level", l.placement ? `${l.placement.band} · ${BAND_NAME[l.placement.band]}. See it, find it again, or pick it yourself.` : "Find your level with three questions and a few short tasks.", l.placement ? go("linga-verdict") : { ...cmd("check-start"), ui: close }),

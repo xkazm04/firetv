@@ -18,7 +18,9 @@ button, input, textarea { font: inherit; }
 .bar kbd { font-family: var(--display); font-size: 12px; background: #1B222B; color: #F2F3F5; padding: 2px 6px; border: 1px solid #2A323D; }
 .bar button { background: transparent; color: #F2F3F5; border: 1px solid #2A323D; padding: 4px 10px; cursor: pointer; }
 .bar button[aria-pressed="true"] { border-color: #E23D28; box-shadow: 3px 3px 0 #E23D28; }
-.bar .status { margin-left: auto; color: #FFB4A8; max-width: 60ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar .status { margin-left: auto; flex: 1 1 0; min-width: 0; text-align: right; color: #FFB4A8; max-width: 60ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* a laptop window (1280-1500 px): the bar stays one line, so the stage is not shrunk by a second row of buttons */
+@media (max-width: 1500px) { .bar { gap: 6px 10px; font-size: 12px; } .bar button { padding: 3px 7px; } }
 .frame { position: relative; flex: 1; min-height: 0; overflow: hidden; }
 
 /* ---- phone ---- */

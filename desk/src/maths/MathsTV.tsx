@@ -91,6 +91,9 @@ const ICON = {
   paper: <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7 4h12l6 6v18H7z" /><path d="M11 16h10M11 21h6" /><path d="M19 4v6h6" /></svg>,
   six: <svg viewBox="0 0 46 46" fill="currentColor"><rect x="7" y="7" width="13" height="9" rx="2" /><rect x="26" y="7" width="13" height="9" rx="2" /><rect x="7" y="19" width="13" height="9" rx="2" /><rect x="26" y="19" width="13" height="9" rx="2" /><rect x="7" y="31" width="13" height="9" rx="2" /><rect x="26" y="31" width="13" height="9" rx="2" /></svg>,
   away: <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 18h7l2 4h6l2-4h7v9H4z" /><path d="M16 4v12M11 11l5 5 5-5" /></svg>,
+  // Snap the sheet is a photo, Type my answers is typing: a camera and a keyboard, not the page and the hint bulb (stick walk 2026-10-23)
+  camera: <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 11h6l2.5-3.5h7L22 11h6v15H4z" /><circle cx="16" cy="18" r="4.5" /></svg>,
+  keys: <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3.5" y="8.5" width="25" height="15" rx="2.5" /><path d="M8.5 13.5h1M13.5 13.5h1M18 13.5h1M22.5 13.5h1M11 19h10" /></svg>,
   back: <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M26 16H8M14 9l-7 7 7 7" /></svg>,
 };
 const SLIP_MARK = <svg viewBox="0 0 26 22"><path d="M4 18 L12 4 M10 19 L20 6" /></svg>;
@@ -117,7 +120,8 @@ function Chips({ s, clock = true, phone = true, learner = true, menu }: { s: Ses
       {handoffOf(s)
         ? <div className="mb-glyph" data-role="maths-onphone">{PHONE}<span className="mb-lab">On your phone</span></div>
         : phone && (s.joined
-        ? <div className="mb-glyph" data-role="maths-chip">{PHONE}<span className="mb-lab">Phone</span></div>
+        // the words Essay Master's chip uses (EssayTV phoneWord): a paired phone that is not here now says so
+        ? <div className="mb-glyph" data-role="maths-chip">{PHONE}<span className="mb-lab">{s.phonesLive === 0 ? "Phone not here" : "Phone joined"}</span></div>
         : <div className="mb-glyph" data-role="maths-chip">{PHONE}<span className="mb-lab">Pin</span><span className="pin">{s.pin}</span></div>)}
       {clock && (
         <div className="mb-chip mb-clock" data-role="maths-chip" data-running={run}>
@@ -783,8 +787,8 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
         </aside>
       </div>
     )}
-    <div className="mb-acts"><Act icon={ICON.paper} label="Type a paper" focused={onType} primary={v.empty} /></div>
-    <Caption text={handoffLine(s) ?? paperCaption(v)} top={930} />
+    {/* the caption stands beside Type a paper, in the action row: under the list (290-910) there is no room for a line above the row (stick walk 2026-10-23) */}
+    <div className="mb-acts"><Act icon={ICON.paper} label="Type a paper" focused={onType} primary={v.empty} /><div className="mb-actcap" key={handoffLine(s) ?? paperCaption(v)}>{handoffLine(s) ?? paperCaption(v)}</div></div>
   </>);
 }
 
@@ -829,8 +833,8 @@ export function PracticeScreen({ s, focus = 0 }: { s: Session; focus?: number })
       </div>
     </aside>
     <div className="mb-acts">
-      <Act icon={ICON.paper} label="Snap the sheet" focused={stopAt(PRACTICE_STOPS, focus) === "sheet"} primary />
-      <Act icon={ICON.hint} label="Type my answers" focused={stopAt(PRACTICE_STOPS, focus) === "answers"} />
+      <Act icon={ICON.camera} label="Snap the sheet" focused={stopAt(PRACTICE_STOPS, focus) === "sheet"} primary />
+      <Act icon={ICON.keys} label="Type my answers" focused={stopAt(PRACTICE_STOPS, focus) === "answers"} />
     </div>
   </>);
 }
@@ -1153,12 +1157,12 @@ export function Units({ s, focus }: { s: Session; focus: number }) {
   const pan = usePaper(focus);
   // a path with no lessons on file (Calculus 1): one honest line, nothing to focus; Back still goes home
   if (!list.length) return (<>
-    <Top s={s} crumb="Units" />
+    <Top s={s} crumb="Lessons" />
     <h1 className="mb-title" data-role="maths-title" style={{ top: 150 }}><Amber text="Lessons on file" /></h1>
     <Caption text={`${noLessonsLine(learnerPath(s))} Back returns to Tonight.`} />
   </>);
   return (<>
-    <Top s={s} crumb="Units" />
+    <Top s={s} crumb="Lessons" />
     <div className="mb-win" style={{ top: 146, height: 880 }}>
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
@@ -1190,7 +1194,7 @@ export function Calendar({ s, focus }: { s: Session; focus: number }) {
   if (!list.length) return (<>
     <Top s={s} crumb="Lessons on file" />
     <h1 className="mb-title" data-role="maths-title" style={{ top: 150 }}>Where you <em>are</em></h1>
-    <Caption text={`${noLessonsLine(learnerPath(s))} Back returns to the units.`} top={960} />
+    <Caption text={`${noLessonsLine(learnerPath(s))} Back returns to the lessons.`} top={960} />
   </>);
   return (<>
     <Top s={s} crumb="Lessons on file" />
@@ -1210,7 +1214,7 @@ export function Calendar({ s, focus }: { s: Session; focus: number }) {
         ...Array.from({ length: 3 - (b - a) }, (_, k) => <div key={w + k} />),
       ])}
     </div>
-    <Caption text={`${done ? `${done} of ${list.length} lessons watched` : "No lesson watched yet"}. Select opens the lesson; Back returns to the units.`} top={960} />
+    <Caption text={`${done ? `${done} of ${list.length} lessons watched` : "No lesson watched yet"}. Select opens the lesson; Back returns to the lessons.`} top={960} />
   </>);
 }
 
