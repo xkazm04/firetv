@@ -149,7 +149,7 @@ export type Hero =
   /** `yours` (L1): the learner's owned phrases on home, no count and no digit; Family draws them as Open Door objects, Adult as a progress line (X2) */
   | { kind: "intro"; kicker: string; title: string; subtitle: string; art: ArtKey; nameTag: string; yours?: { phrases: string[]; style: "objects" | "list" } }
   /** `spoke`: a second mark, the band the learner's say answers showed, when conversations start below `band` (S2) */
-  | { kind: "ladder"; kicker: string; title: string; band: Band; note: string; spoke?: Band }
+  | { kind: "ladder"; kicker: string; title: string; band: Band; note: string; spoke?: Band; noteLabel?: string }
   | { kind: "message"; kicker: string; text: string; note: string }
   | { kind: "heading"; kicker: string; title: string }
   | { kind: "choices"; kicker: string; prompt: string; options: string[]; small: boolean }
@@ -561,6 +561,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const said = spoke && spokenTasks(placement.tasks).every(t => t.mode === "text") ? "wrote" : "spoke";
     tag = "Your level"; title = `${b} · ${BAND_NAME[b]}`;
     hero = { kind: "ladder", kicker: self ? "Self-chosen" : spoke ? `Understood ${b} · ${said} ${spoke} · not a certificate` : "Linga's read · not a certificate", title, band: b, note: (!self && quotesLearner(placement.summary, placement.tasks) ? "" : placement.summary) || BAND_CAN[b], ...(spoke ? { spoke } : {}) };
+    // the level's own description is no read of Linga's: a self-chosen level (or a read with no summary) labels it as the level's
+    if (hero.kind === "ladder" && hero.note === BAND_CAN[b]) hero.noteLabel = "At this level";
     // The shared TV never headlines a learner's own error (delegate ruling 2026-10-17, recert-4/LT-sofie-11-J1-2): the caption
     // leads with the better form the check offers (line.ts focusParts), and the learner's words stay on the phone.
     const line = self ? undefined : focusParts(placement.focus, placement.tasks).line;
@@ -880,7 +882,7 @@ export function viewText(v: LingaView): string {
   const said = (text: string, who: string) => text === spoken ? `${who} says (spoken on the TV, written on the phone): "${text}"` : `On screen: "${text}"`;
   switch (h.kind) {
     case "intro": out.push(`${h.kicker}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.yours ? [`${h.yours.style === "list" ? "Phrases you own" : "Yours"}: ${h.yours.phrases.map(x => `"${x}"`).join(" · ")}`] : [])); break;
-    case "ladder": out.push(h.kicker, `Ladder A1 A2 B1 B2 C1 C2, marker on ${h.band}${h.spoke ? `, second mark on ${h.spoke}` : ""}.`, ...(h.note ? [`Linga says: ${h.note}`] : [])); break;
+    case "ladder": out.push(h.kicker, `Ladder A1 A2 B1 B2 C1 C2, marker on ${h.band}${h.spoke ? `, second mark on ${h.spoke}` : ""}.`, ...(h.note ? [`${h.noteLabel ?? "Linga says"}: ${h.note}`] : [])); break;
     case "message": out.push(h.kicker, ...(h.text ? [said(h.text, v.spoken.speaker)] : []), ...(h.note ? [`The words, now shown: ${h.note}`] : [])); break;
     case "heading": out.push(h.kicker, h.title); break;
     case "choices": out.push(h.kicker, h.prompt, ...h.options.map((x, i) => `  option ${i}: ${x}`)); break;

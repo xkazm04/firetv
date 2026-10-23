@@ -136,7 +136,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       <section className="lo-head"><Kicker text={h.kicker}/><Title text={h.title}/>{caption}</section>
       {/* the card and the steps share one column: a longer sentence lowers the steps instead of covering them */}
       <div className="lo-stage">
-        {h.note&&<SentenceCard className={`lo-note-card${h.note.length>110?" lo-wide":""}`} label="Linga says" text={h.note} role="linga-note"/>}
+        {h.note&&<SentenceCard className={`lo-note-card${h.note.length>110?" lo-wide":""}`} label={h.noteLabel??"Linga says"} text={h.note} role="linga-note"/>}
         <BandSteps band={h.band} spoke={h.spoke}/>
       </div>
       {nav}
