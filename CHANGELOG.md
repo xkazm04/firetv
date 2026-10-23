@@ -22,6 +22,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 `desk/` and `uat/`: the Next.js functional prototype of a homework desk on the TV (Linga English, Math Buddy, Essay Master).
 
 ### Unreleased
+- Linga's Sentence help keeps Linga's look (its cream ground, serif and plum button) instead of switching to On Air's grey grid and red band; the screen and its keys are unchanged ([docs/concepts/LOADING-STATES-THEMING-2026-10-22.md](docs/concepts/LOADING-STATES-THEMING-2026-10-22.md)).
 - Essay Master's caret blinks six times and then stays lit instead of blinking forever, so an idle lens screen has no animation left running (the stick's idle redraw is not re-measured) ([docs/concepts/STICK-PERFORMANCE-2026-10-22.md](docs/concepts/STICK-PERFORMANCE-2026-10-22.md)).
 - Get ready for school: the faded edge with more units to show is clear under its arrow, so the arrow no longer sits on the first card's name ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
 - The landing's Math Buddy caption for a set still on paper no longer repeats the topic under its own headline: it reads "6 questions on paper, not marked yet." on one line (a snapped sheet: "8 problems read, still on the desk.") ([docs/concepts/STICK-WALK-2026-10-23.md](docs/concepts/STICK-WALK-2026-10-23.md)).
