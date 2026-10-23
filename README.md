@@ -167,8 +167,9 @@ APK (`stick-app/`, package `dev.studydesk.stick`) is one fullscreen WebView on `
 button to the page. There is no prebuilt APK in the repository: you build it.
 
 **1. Build the APK.** You need JDK 17 and the Android SDK, with `local.properties` at the repository root holding
-`sdk.dir=<path to the Android SDK>`. `gradle.properties` pins the author's JBR, so on another machine pass
-`-Dorg.gradle.java.home=<a JDK 17>` ([CONTRIBUTING.md](CONTRIBUTING.md)). From the repository root:
+`sdk.dir=<path to the Android SDK>`. Gradle runs on the JDK in `JAVA_HOME`, so point it at a JDK 17 (Android
+Studio's bundled `jbr` folder is one). On Windows prefer `JAVA_HOME` over `-Dorg.gradle.java.home=`: through
+`tools/gradlew.cjs` a path with a space in it is split. From the repository root:
 
 ```sh
 node tools/gradlew.cjs :stick-app:assembleDebug

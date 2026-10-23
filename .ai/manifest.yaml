@@ -17,8 +17,8 @@ repo:
 # Capabilities, not tools. Add keys freely; older readers ignore unknown ones.
 # `verified` is a claim the doctor's --run writes back: true once it has actually run the command
 # and it passed, false when the run fails (a stale true never outlives a broken command).
-# Gradle goes through tools/gradlew.cjs so one command line works on Windows and Linux. Outside the
-# operator's machine, gradle.properties' org.gradle.java.home must be overridden (see AGENTS.md).
+# Gradle goes through tools/gradlew.cjs so one command line works on Windows and Linux. Gradle runs on
+# JAVA_HOME; :core needs a JDK 17 toolchain it can find (see AGENTS.md).
 # The tv-app build needs local.properties and the generated fixture clip (fixtures/README.md).
 # evals is the deterministic AI-output subset of test-desk (model roles stubbed, no live call; see
 # docs/AI_HARNESS.md). It needs desk/node_modules. Every capability here runs through doctor --run
